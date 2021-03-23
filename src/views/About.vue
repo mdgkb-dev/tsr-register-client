@@ -2,8 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <div id="container">
-        <h1>Home</h1>
-        <div>{{ info }}</div>
+        <h1>About</h1>
       </div>
     </ion-content>
   </ion-page>
@@ -14,19 +13,10 @@ import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home",
+  name: "About",
   components: {
     IonContent,
     IonPage,
-  },
-  data() {
-    return {
-      info: null,
-    };
-  },
-  async mounted() {
-    const response = await fetch("http://localhost:3003/document");
-    this.info = await response.json();
   },
 });
 </script>
