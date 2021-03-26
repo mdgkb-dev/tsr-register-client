@@ -1,24 +1,12 @@
 <template>
-  <ion-page>
-    <ion-content :fullscreen="true">
-      <div id="container">
-        <h1>Home</h1>
-        <div>{{ info }}</div>
-      </div>
-    </ion-content>
-  </ion-page>
+  <h1>HOME</h1>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Home",
-  components: {
-    IonContent,
-    IonPage,
-  },
   data() {
     return {
       info: null,

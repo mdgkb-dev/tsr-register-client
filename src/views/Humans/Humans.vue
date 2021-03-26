@@ -1,23 +1,18 @@
 <template>
-  <ion-page>
-    <ion-content :fullscreen="true">
-      <div id="container">
-        <h1>About</h1>
-      </div>
-    </ion-content>
-  </ion-page>
+  <h1>{{ humans }}</h1>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
-
+import { mapState } from "vuex";
 export default defineComponent({
-  name: "About",
-  components: {
-    IonContent,
-    IonPage,
-  },
+  name: "Home",
+  computed: mapState({
+    humans: (state: any) => state.humans.all
+  }),
+  created() {
+    this.$store.dispatch("humans/getAllHumans");
+  }
 });
 </script>
 
