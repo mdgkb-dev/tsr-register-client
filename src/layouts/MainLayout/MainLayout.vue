@@ -53,8 +53,8 @@ body > .el-container {
 
 <script>
 // import MainHeader from "@/layouts/MainHeader";
-import MainAside from "@/layouts/MainAside";
-import MainHeader from "@/layouts/MainHeader";
+import MainAside from "./MainAside";
+import MainHeader from "./MainHeader";
 export default {
   name: "MainLayout",
   components: { MainHeader, MainAside },
