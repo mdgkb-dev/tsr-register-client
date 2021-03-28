@@ -2,8 +2,8 @@
   <el-form ref="form" :model="editHuman" label-width="120px">
     <el-form-item label="Activity name">
       <el-input v-model="editHuman.name"></el-input>
-      <el-input v-model="editHuman"></el-input>
-      <el-input v-model="editHuman"></el-input>
+      <el-input v-model="editHuman.surname"></el-input>
+      <el-input v-model="editHuman.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Activity zone">
       <el-select
@@ -30,11 +30,11 @@
     </el-form-item>
     <el-form-item label="Контакты">
       <el-input v-model="editHuman.contactEmail"></el-input>
-      <el-input v-model="editHuman.contactPhone"></el-input>
+      <el-input v-model="contactPhone"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Edit</el-button>
-      <el-button>Cancel</el-button>
+      <el-button type="primary" @click="onSubmit">Create</el-button>
+      <el-button @click="close">Cancel</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -46,13 +46,17 @@ export default defineComponent({
 
   data() {
     return {
-      editHuman: JSON.parse(this.human)
+      editHuman: this.human
     };
   },
   props: ["human"],
   methods: {
     onSubmit() {
-      this.$store.dispatch("humans/editHuman");
+      this.$store.dispatch("humans/editHuman", this.editHuman);
+    },
+    close() {
+      console.log("clse child");
+      this.$emit("close");
     }
   }
 });

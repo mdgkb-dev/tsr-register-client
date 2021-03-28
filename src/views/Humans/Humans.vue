@@ -1,19 +1,19 @@
 <template>
   <div>
-    <!--    <create-human v-model="dialogVisible" :name="name" />-->
-    <el-dialog title="CreateHuman" v-loading="humanEditLoading" width="30%">
-      <edit-human :human="human"></edit-human>
-    </el-dialog>
     <el-button-group>
       <el-button
         type="primary"
         icon="el-icon-document"
-        @click.stop="dialogVisible = true"
+        @click="humanCreate = true"
         >Create</el-button
       >
     </el-button-group>
 
-    <el-table :data="humans.humans" style="width: 100%">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="humans.humans"
+      style="width: 100%"
+    >
       <el-table-column prop="id" label="№" width="150" />
       <el-table-column prop="name" label="Имя" width="150" />
       <el-table-column prop="surname" label="Фамилия" width="150" />
@@ -34,15 +34,22 @@
       <el-table-column prop="contact.email" label="Эл.почта" width="150" />
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
-          <el-button @click.stop="this.edit(scope.row)" type="text" size="small"
+          <el-button @click="this.edit(scope.row.id)" type="text" size="small"
             >Редактировать</el-button
           >
+          <el-button @click="this.delete(scope.row.id)" type="text" size="small"
+            >Удалить</el-button
+          >
         </template>
-        <!--        <el-button @click="handleClick" type="text" size="small"-->
-        <!--          >Удалить</el-button-->
-        <!--        >-->
       </el-table-column>
     </el-table>
+
+    <el-dialog title="CreateHuman" v-model="humanCreate" width="30%">
+      <create-human v-model="dialogVisible" @close="close" />
+    </el-dialog>
+    <el-dialog title="EditHuman" v-model="humanEdit" width="30%">
+      <edit-human :human="human" @close="close" />
+    </el-dialog>
   </div>
 </template>
 
@@ -53,13 +60,13 @@ import EditHuman from "./EditHuman.vue";
 import { mapActions, mapState } from "vuex";
 export default defineComponent({
   name: "Humans",
-  components: { EditHuman },
+  components: { CreateHuman, EditHuman },
   data() {
     return {
       human: {},
       dialogVisible: false,
       humanEdit: false,
-      humanEditLoading: false,
+      humanCreate: false,
       humanRow: null
     };
   },
@@ -69,17 +76,16 @@ export default defineComponent({
   },
   methods: {
     ...mapActions("humans", ["getAllHumans"]),
-    openModal(row: any) {
-      console.log(row);
-      this.dialogVisible = true;
-      this.humanRow = row;
-    },
     edit(id: number) {
+      this.human = this.$store.getters["humans/getHumanById"](id);
       this.humanEdit = true;
-      this.humanEditLoading = false;
-      const func = this.$store.getters.getHumanById;
-      console.log(func);
-      this.human = func;
+    },
+    delete(id: number) {
+      this.$store.dispatch("humans/deleteHuman", id);
+    },
+    close() {
+      this.humanEdit = false;
+      this.humanCreate = false;
     }
   },
   async mounted() {
