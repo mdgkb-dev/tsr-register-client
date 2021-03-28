@@ -1,3 +1,4 @@
+<script src="../store/modules/humans/humans.ts"></script>
 <template>
   <h1>HOME</h1>
 </template>
@@ -9,13 +10,9 @@ export default defineComponent({
   name: "Home",
   data() {
     return {
-      info: null,
+      info: null
     };
-  },
-  async mounted() {
-    const response = await fetch("http://localhost:3003/document");
-    this.info = await response.json();
-  },
+  }
 });
 </script>
 
