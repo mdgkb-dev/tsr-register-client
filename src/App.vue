@@ -11,6 +11,7 @@
 import { defineComponent } from "vue";
 import MainLayout from "./layouts/MainLayout/MainLayout.vue";
 import LoginLayout from "./layouts/LoginLayout/LoginLayout.vue";
+import store from "@/store";
 
 export default defineComponent({
   name: "App",
@@ -20,6 +21,11 @@ export default defineComponent({
   },
   computed: {
     layout() {
+      if (store.getters.isAuthenticated) {
+        this.$store.commit("setLayout", "main-layout");
+      } else {
+        this.$store.commit("setLayout", "login-layout");
+      }
       return this.$store.getters.layout;
     }
   }

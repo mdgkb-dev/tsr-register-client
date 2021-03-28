@@ -1,17 +1,17 @@
-<template>
+<Patients>
   <div>
     <el-button-group>
       <el-button
         type="primary"
         icon="el-icon-document"
-        @click="humanCreate = true"
+        @click="patientCreate = true"
         >Create</el-button
       >
     </el-button-group>
 
     <el-table
       :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="humans.humans"
+      :data="patients.patients"
       style="width: 100%"
     >
       <el-table-column prop="id" label="№" width="150" />
@@ -44,48 +44,47 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="CreateHuman" v-model="humanCreate" width="30%">
-      <create-human v-model="dialogVisible" @close="close" />
+    <el-dialog title="Createpatient" v-model="patientCreate" width="30%">
+      <create-patient v-model="dialogVisible" @close="close" />
     </el-dialog>
-    <el-dialog title="EditHuman" v-model="humanEdit" width="30%">
-      <edit-human :human="human" @close="close" />
+    <el-dialog title="Editpatient" v-model="patientEdit" width="30%">
+      <edit-patient :patient="patient" @close="close" />
     </el-dialog>
   </div>
-</template>
+</Patients>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CreateHuman from "./CreateModal.vue";
-import EditHuman from "./EditForm.vue";
+import CreateModal from "./CreateModal.vue";
+import EditModal from "./EditModal.vue";
 import { mapActions, mapState } from "vuex";
 export default defineComponent({
-  name: "Humans",
-  components: { CreateHuman, EditHuman },
+  name: "Users",
+  components: { CreateModal, EditModal },
   data() {
     return {
-      human: {},
+      patient: {},
       dialogVisible: false,
-      humanEdit: false,
-      humanCreate: false,
-      humanRow: null
+      patientEdit: false,
+      patientCreate: false,
+      patientRow: null
     };
   },
-
   computed: {
-    ...mapState(["humans"]) // this getter would return the Promise
+    ...mapState(["patients"])
   },
   methods: {
-    ...mapActions("humans", ["getAll"]),
+    ...mapActions("patients", ["getAll"]),
     edit(id: number) {
-      this.human = this.$store.getters["humans/getById"](id);
-      this.humanEdit = true;
+      this.patient = this.$store.getters["patients/getById"](id);
+      this.patientEdit = true;
     },
     delete(id: number) {
-      this.$store.dispatch("humans/delete", id);
+      this.$store.dispatch("patients/delete", id);
     },
     close() {
-      this.humanEdit = false;
-      this.humanCreate = false;
+      this.patientEdit = false;
+      this.patientCreate = false;
     }
   },
   async mounted() {

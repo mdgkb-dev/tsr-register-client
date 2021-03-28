@@ -42,7 +42,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "EditHuman",
+  name: "EditModal",
 
   data() {
     return {

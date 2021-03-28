@@ -1,21 +1,55 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import Humans from "../views/Humans/Humans.vue";
+import Patients from "../views/Patients/Patients.vue";
+import Login from "../views/Login/Login.vue";
+import store from "../store";
+
+const ifNotAuthenticated = (to: any, from: any, next: any) => {
+  if (!store.getters.isAuthenticated) {
+    next();
+    return;
+  }
+  next("/");
+};
+
+const ifAuthenticated = (to: any, from: any, next: any) => {
+  if (store.getters.isAuthenticated) {
+    next();
+    return;
+  }
+  next("/login");
+};
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/home"
+    redirect: "/home",
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/home",
     name: "Home",
-    component: Home
+    component: Home,
+    beforeEnter: ifAuthenticated
   },
   {
     path: "/humans",
     name: "Humans",
-    component: Humans
+    component: Humans,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: "/patients",
+    name: "Patients",
+    component: Patients,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    beforeEnter: ifNotAuthenticated
   }
 ];
 

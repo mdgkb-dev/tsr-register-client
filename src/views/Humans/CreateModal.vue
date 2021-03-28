@@ -39,7 +39,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "CreateHuman",
+  name: "CreateModal",
 
   data() {
     return {

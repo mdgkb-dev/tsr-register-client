@@ -1,6 +1,7 @@
 const state = () => ({
   items: []
 });
+const api = "patient/";
 
 const getters = {
   items: (state: any) => {
@@ -18,7 +19,7 @@ const mutations = {
   create: (state: any, payload: any) => {
     state.items.push(payload);
   },
-  edit: (state: any, payload: any) => {
+  update: (state: any, payload: any) => {
     const item = state.items.find((item: any) => item.id === payload.recordId);
     Object.assign(item, payload);
   },
@@ -32,11 +33,11 @@ const mutations = {
 
 const actions = {
   getAll: async (context: any) => {
-    const res = await fetch(process.env.VUE_APP_BASE_URL + "human");
+    const res = await fetch(process.env.VUE_APP_BASE_URL + api);
     context.commit("set", await res.json());
   },
   create: async (context: any, payload: any) => {
-    const res = await fetch(process.env.VUE_APP_BASE_URL + "human", {
+    const res = await fetch(process.env.VUE_APP_BASE_URL + api, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -45,17 +46,17 @@ const actions = {
   },
   edit: async (context: any, payload: any) => {
     const res = await fetch(
-      process.env.VUE_APP_BASE_URL + `human/${payload.id}`,
+      process.env.VUE_APP_BASE_URL + `${api}${payload.id}`,
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       }
     );
-    context.commit("editHuman", res.json());
+    context.commit("update", res.json());
   },
   delete: async (context: any, id: any) => {
-    await fetch(process.env.VUE_APP_BASE_URL + `human/${id}`, {
+    await fetch(process.env.VUE_APP_BASE_URL + `${api}${id}`, {
       method: "DELETE"
     });
     context.commit("delete", id);
