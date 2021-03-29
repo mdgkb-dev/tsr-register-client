@@ -1,33 +1,35 @@
 const state = () => ({
-  items: []
+  patients: []
 });
 const api = "patient/";
 
 const getters = {
-  items: (state: any) => {
-    return state.items;
+  patients: (state: any) => {
+    return state.patients;
   },
   getById: (state: any) => (id: number) => {
-    return state.items.find((human: any) => human.id === id);
+    return state.patients.find((human: any) => human.id === id);
   }
 };
 
 const mutations = {
   set: (state: any, payload: any) => {
-    state.items = payload;
+    state.patients = payload;
   },
   create: (state: any, payload: any) => {
-    state.items.push(payload);
+    state.patients.push(payload);
   },
   update: (state: any, payload: any) => {
-    const item = state.items.find((item: any) => item.id === payload.recordId);
+    const item = state.patients.find(
+      (item: any) => item.id === payload.recordId
+    );
     Object.assign(item, payload);
   },
   delete: (state: any, payload: any) => {
     const i = state.someArrayofObjects
       .map((item: any) => item.id)
       .indexOf(payload);
-    state.items.splice(i, 1);
+    state.patients.splice(i, 1);
   }
 };
 

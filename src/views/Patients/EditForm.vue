@@ -1,13 +1,13 @@
 <template>
-  <el-form ref="form" :model="editHuman" label-width="120px">
+  <el-form ref="form" :model="edit" label-width="120px">
     <el-form-item label="Activity name">
-      <el-input v-model="editHuman.name"></el-input>
-      <el-input v-model="editHuman.surname"></el-input>
-      <el-input v-model="editHuman.patronymic"></el-input>
+      <el-input v-model="edit.human.name"></el-input>
+      <el-input v-model="edit.human.surname"></el-input>
+      <el-input v-model="edit.human.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Activity zone">
       <el-select
-        v-model="editHuman.gender"
+        v-model="edit.human.gender"
         placeholder="please select your zone"
       >
         <el-option label="Мужчина" value="male"></el-option>
@@ -19,18 +19,18 @@
         <el-date-picker
           type="date"
           placeholder="Pick a date"
-          v-model="editHuman.dateBirth"
+          v-model="edit.human.dateBirth"
           style="width: 100%;"
         ></el-date-picker>
       </el-col>
     </el-form-item>
     <el-form-item label="Адреса">
-      <el-input v-model="editHuman.addressRegistration"></el-input>
-      <el-input v-model="editHuman.addressResidential"></el-input>
+      <el-input v-model="edit.human.addressRegistration"></el-input>
+      <el-input v-model="edit.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="editHuman.contactEmail"></el-input>
-      <el-input v-model="contactPhone"></el-input>
+      <el-input v-model="edit.human.contactEmail"></el-input>
+      <el-input v-model="edit.human.contactPhone"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -42,20 +42,19 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 export default defineComponent({
-  name: "EditModal",
+  name: "EditForm",
 
   data() {
     return {
-      editHuman: this.human
+      edit: this.item
     };
   },
-  props: ["human"],
+  props: ["item"],
   methods: {
     onSubmit() {
-      this.$store.dispatch("humans/editHuman", this.editHuman);
+      this.$store.dispatch("patients/edit", this.edit);
     },
     close() {
-      console.log("clse child");
       this.$emit("close");
     }
   }

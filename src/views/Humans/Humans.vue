@@ -5,7 +5,7 @@
         type="primary"
         icon="el-icon-document"
         @click="humanCreate = true"
-        >Create</el-button
+        >Создать человека</el-button
       >
     </el-button-group>
 

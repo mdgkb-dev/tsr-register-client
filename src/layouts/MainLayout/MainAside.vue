@@ -1,6 +1,3 @@
-<script src="../../store/index.ts"></script>
-<script src="../../store/modules/auth/auth.ts"></script>
-<script src="../../router/index.ts"></script>
 <template>
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu lass="el-menu-vertical-demo">
@@ -69,6 +66,21 @@ export default {
           name: "Humans",
           title: "Персоналии",
           link: "/humans"
+        },
+        {
+          name: "Patients",
+          title: "Пациенты",
+          link: "/patients"
+        },
+        {
+          name: "Representatives",
+          title: "Представители",
+          link: "/representatives"
+        },
+        {
+          name: "Documents",
+          title: "Документы",
+          link: "/documents"
         }
       ]
     };

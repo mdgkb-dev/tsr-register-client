@@ -1,4 +1,5 @@
-<script src="../../store/modules/users/users.ts"></script>
+<script src="../../router/index.ts"></script>
+<script src="../../store/modules/auth/auth.ts"></script>
 <template>
   <div>
     <el-button-group>
@@ -30,10 +31,10 @@
     </el-table>
 
     <el-dialog title="CreateHuman" v-model="modalCreate" width="30%">
-      <create-human v-model="dialogVisible" @close="close" />
+      <create-form v-model="dialogVisible" @close="close" />
     </el-dialog>
     <el-dialog title="EditHuman" v-model="modalEdit" width="30%">
-      <edit-human :item="item" @close="close" />
+      <edit-form :item="item" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -45,11 +46,10 @@ import EditForm from "./EditForm.vue";
 import { mapActions, mapState } from "vuex";
 export default defineComponent({
   name: "Humans",
-  components: { CreateFormn, EditForm },
+  components: { CreateForm, EditForm },
   data() {
     return {
       item: {},
-      dialogVisible: false,
       modalCreate: false,
       modalEdit: false
     };

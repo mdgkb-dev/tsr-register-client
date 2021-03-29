@@ -29,8 +29,13 @@ export default {
   },
   methods: {
     async onSubmit() {
-      await this.$store.dispatch("login", this.login);
-      await this.$router.push("/");
+      try {
+        await this.$store.dispatch("auth/login", this.login);
+        await this.$router.push("/");
+        this.$store.commit("setLayout", "main-layout");
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 };

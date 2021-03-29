@@ -27,7 +27,7 @@
     </el-form-item>
     <el-form-item label="Контакты">
       <el-input v-model="edit.contactEmail"></el-input>
-      <el-input v-model="contactPhone"></el-input>
+      <el-input v-model="edit.contactPhone"></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -42,10 +42,10 @@ export default defineComponent({
   name: "EditForm",
   data() {
     return {
-      edit: this.human
+      edit: this.item
     };
   },
-  props: ["human"],
+  props: ["item"],
   methods: {
     onSubmit() {
       this.$store.dispatch("humans/edit", this.edit);

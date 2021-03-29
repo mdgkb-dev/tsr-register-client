@@ -1,11 +1,11 @@
-<Patients>
+<template>
   <div>
     <el-button-group>
       <el-button
         type="primary"
         icon="el-icon-document"
-        @click="patientCreate = true"
-        >Create</el-button
+        @click="modalCreate = true"
+        >Создать пациента</el-button
       >
     </el-button-group>
 
@@ -15,23 +15,31 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="№" width="150" />
-      <el-table-column prop="name" label="Имя" width="150" />
-      <el-table-column prop="surname" label="Фамилия" width="150" />
-      <el-table-column prop="patronymic" label="Отчество" width="150" />
-      <el-table-column prop="dateBirth" label="Дата рождения" width="150" />
-      <el-table-column prop="gender" label="Пол" width="150" />
+      <el-table-column prop="human.name" label="Имя" width="150" />
+      <el-table-column prop="human.surname" label="Фамилия" width="150" />
+      <el-table-column prop="human.patronymic" label="Отчество" width="150" />
       <el-table-column
-        prop="addressRegistration"
+        prop="human.dateBirth"
+        label="Дата рождения"
+        width="150"
+      />
+      <el-table-column prop="human.gender" label="Пол" width="150" />
+      <el-table-column
+        prop="human.addressRegistration"
         label="Адрес регистрации"
         width="150"
       />
       <el-table-column
-        prop="addressResidential"
+        prop="human.addressResidential"
         label="Адрес проживания"
         width="150"
       />
-      <el-table-column prop="contact.phone" label="Телефон" width="150" />
-      <el-table-column prop="contact.email" label="Эл.почта" width="150" />
+      <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
+      <el-table-column
+        prop="human.contact.email"
+        label="Эл.почта"
+        width="150"
+      />
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
@@ -44,30 +52,28 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="Createpatient" v-model="patientCreate" width="30%">
-      <create-patient v-model="dialogVisible" @close="close" />
+    <el-dialog title="Создать Пациента" v-model="modalCreate" width="30%">
+      <create-form v-model="modalCreate" @close="close" />
     </el-dialog>
-    <el-dialog title="Editpatient" v-model="patientEdit" width="30%">
-      <edit-patient :patient="patient" @close="close" />
+    <el-dialog title="Отредактировать пациента" v-model="modalEdit" width="30%">
+      <edit-form :item="item" @close="close" />
     </el-dialog>
   </div>
-</Patients>
+</template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import CreateModal from "./CreateModal.vue";
-import EditModal from "./EditModal.vue";
+import CreateForm from "./CreateForm.vue";
+import EditForm from "./EditForm.vue";
 import { mapActions, mapState } from "vuex";
 export default defineComponent({
-  name: "Users",
-  components: { CreateModal, EditModal },
+  name: "Patients",
+  components: { CreateForm, EditForm },
   data() {
     return {
-      patient: {},
-      dialogVisible: false,
-      patientEdit: false,
-      patientCreate: false,
-      patientRow: null
+      item: {},
+      modalCreate: false,
+      modalEdit: false
     };
   },
   computed: {
@@ -76,15 +82,15 @@ export default defineComponent({
   methods: {
     ...mapActions("patients", ["getAll"]),
     edit(id: number) {
-      this.patient = this.$store.getters["patients/getById"](id);
-      this.patientEdit = true;
+      this.item = this.$store.getters["patients/getById"](id);
+      this.modalEdit = true;
     },
     delete(id: number) {
       this.$store.dispatch("patients/delete", id);
     },
     close() {
-      this.patientEdit = false;
-      this.patientCreate = false;
+      this.modalEdit = false;
+      this.modalCreate = false;
     }
   },
   async mounted() {

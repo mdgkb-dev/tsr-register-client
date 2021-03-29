@@ -14,10 +14,11 @@ const ifNotAuthenticated = (to: any, from: any, next: any) => {
 };
 
 const ifAuthenticated = (to: any, from: any, next: any) => {
-  if (store.getters.isAuthenticated) {
+  if (localStorage.getItem("user-token")) {
     next();
     return;
   }
+  store.commit("setLayout", "login-layout");
   next("/login");
 };
 
