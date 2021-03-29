@@ -1,29 +1,28 @@
 const state = () => ({
-  patients: []
+  representatives: []
 });
-const api = "patient/";
+const api = "representative/";
 
 const getters = {
-  getPatientsNames: (state: any) => {
-    return state.patients;
-  },
-  patients: (state: any) => {
-    return state.patients;
+  representatives: (state: any) => {
+    return state.representatives;
   },
   getById: (state: any) => (id: number) => {
-    return state.patients.find((human: any) => human.id === id);
+    return state.representatives.find(
+      (representative: any) => representative.id === id
+    );
   }
 };
 
 const mutations = {
   set: (state: any, payload: any) => {
-    state.patients = payload;
+    state.representatives = payload;
   },
   create: (state: any, payload: any) => {
-    state.patients.push(payload);
+    state.representatives.push(payload);
   },
   update: (state: any, payload: any) => {
-    const item = state.patients.find(
+    const item = state.representatives.find(
       (item: any) => item.id === payload.recordId
     );
     Object.assign(item, payload);
@@ -32,7 +31,7 @@ const mutations = {
     const i = state.someArrayofObjects
       .map((item: any) => item.id)
       .indexOf(payload);
-    state.patients.splice(i, 1);
+    state.representatives.splice(i, 1);
   }
 };
 

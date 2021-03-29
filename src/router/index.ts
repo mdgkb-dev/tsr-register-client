@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import Humans from "../views/Humans/Humans.vue";
 import Patients from "../views/Patients/Patients.vue";
+import Representatives from "../views/Representatives/Representatives.vue";
 import Login from "../views/Login/Login.vue";
 import store from "../store";
 
@@ -44,6 +45,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/patients",
     name: "Patients",
     component: Patients,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: "/representatives",
+    name: "Representatives",
+    component: Representatives,
     beforeEnter: ifAuthenticated
   },
   {
