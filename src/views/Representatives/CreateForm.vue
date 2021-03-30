@@ -55,11 +55,11 @@
         :options="types"
         v-model="representative.representativeToPatient.type"
       ></el-cascader>
-      ><el-button @click.prevent="removeDomain(item)">Delete</el-button>
+      ><el-button @click.prevent="remove(item)">Delete</el-button>
     </el-form-item>
 
     <el-form-item>
-      <el-button @click="addDomain">New domain</el-button>
+      <el-button @click="add">Добавить пациента</el-button>
     </el-form-item>
 
     <el-form-item>
@@ -120,18 +120,6 @@ export default defineComponent({
     },
     close() {
       this.$emit("close");
-    },
-    removeDomain(item: any) {
-      const index = this.representative.representativeToPatient.indexOf(item);
-      if (index !== -1) {
-        this.representative.representativeToPatient.splice(index, 1);
-      }
-    },
-    addDomain() {
-      this.representative.representativeToPatient.push({
-        patientId: null,
-        type: ""
-      });
     }
   },
   async mounted() {

@@ -1,7 +1,4 @@
 <template>
-  <!--  <MainLayout>-->
-  <!--    <router-view />-->
-  <!--  </MainLayout>-->
   <component v-bind:is="layout">
     <router-view />
   </component>

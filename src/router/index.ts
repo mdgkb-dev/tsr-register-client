@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Humans from "../views/Humans/Humans.vue";
 import Patients from "../views/Patients/Patients.vue";
 import Representatives from "../views/Representatives/Representatives.vue";
+import Documents from "../views/Documents/Documents.vue";
 import Login from "../views/Login/Login.vue";
 import store from "../store";
 
@@ -51,6 +52,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/representatives",
     name: "Representatives",
     component: Representatives,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: "/documents",
+    name: "Documents",
+    component: Documents,
     beforeEnter: ifAuthenticated
   },
   {
