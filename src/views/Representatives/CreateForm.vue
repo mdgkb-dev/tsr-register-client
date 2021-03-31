@@ -1,4 +1,5 @@
 <template>
+  {{ options }}
   <el-form ref="representative" :model="representative" label-width="120px">
     <el-form-item label="Имя">
       <el-input label="Имя" v-model="representative.human.name"></el-input>
@@ -41,21 +42,21 @@
 
     <el-form-item
       v-for="item in representative.representativeToPatient"
-      :key="item"
+      :key="item.patientId"
       v-model="representative.representativeToPatient"
     >
       <el-cascader
         placeholder="Выберите пациента"
         :options="options"
         filterable
-        v-model="representative.representativeToPatient.patientId"
+        v-model="item.patient.id"
       ></el-cascader>
       <el-cascader
         placeholder="Выберите роль представителя"
         :options="types"
-        v-model="representative.representativeToPatient.type"
+        v-model="item.type"
       ></el-cascader>
-      ><el-button @click.prevent="remove(item)">Delete</el-button>
+      ><el-button @click.prevent="remove(item)">Удалить пациента</el-button>
     </el-form-item>
 
     <el-form-item>
@@ -77,11 +78,10 @@ export default defineComponent({
 
   data() {
     return {
-      documentsOptions: [{}],
       options: [{}],
       types: [
-        { label: "Отец", value: "father" },
-        { label: "Мать", value: "mother" }
+        { label: "Отец", value: "мать" },
+        { label: "Мать", value: "отец" }
       ],
       representative: {
         human: {
@@ -102,7 +102,7 @@ export default defineComponent({
         },
         representativeToPatient: [
           {
-            patientId: null,
+            patient: { id: null },
             type: ""
           }
         ]
@@ -110,39 +110,64 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters("patients", ["patients"]),
-    ...mapGetters("documents", ["documents"])
+    ...mapGetters("patients", ["patients"])
   },
   methods: {
     ...mapActions({
       patientsGetAll: "patients/getAll",
-      patientsCreate: "patients/create",
-      documentsGetAll: "documents/getAll",
-      documentsCreate: "documents/create"
+      patientsCreate: "patients/create"
     }),
     onSubmit() {
+      for (const item of this.representative.representativeToPatient) {
+        item.patient.id = (item.patient.id as any)[0];
+        item.type = (item.type as any)[0];
+      }
+
       this.$store.dispatch("representatives/create", this.representative);
+      this.representative = {
+        human: {
+          surname: "",
+          patronymic: "",
+          gender: "",
+          dateBirth: "",
+          addressRegistration: "",
+          addressResidential: "",
+          contact: {
+            email: "",
+            phone: ""
+          }
+        },
+        contact: {
+          email: "",
+          phone: ""
+        },
+        representativeToPatient: [
+          {
+            patient: { id: null },
+            type: ""
+          }
+        ]
+      };
       this.$emit("close");
     },
     close() {
       this.$emit("close");
+    },
+    add() {
+      this.representative.representativeToPatient.push({
+        patient: { id: null },
+        type: ""
+      });
     }
   },
   async mounted() {
     await this.patientsGetAll();
     for (const item of this.patients) {
       this.options.push({
-        label: `${item.surname} ${item.name} ${item.patronymic}`,
+        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
         value: item.id
       });
     }
-    // await this.documentsGetAll();
-    // for (const item of this.documents) {
-    //   this.documentsOptions.push({
-    //     label: item.name,
-    //     value: item.id
-    //   });
-    // }
   }
 });
 </script>

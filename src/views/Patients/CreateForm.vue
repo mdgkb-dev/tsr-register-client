@@ -61,7 +61,6 @@ export default defineComponent({
   methods: {
     onSubmit() {
       this.$store.dispatch("patients/create", this.patient);
-      console.log((this.$refs["form"] as any).fields);
       this.patient = {
         human: {
           surname: "",

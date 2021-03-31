@@ -28,9 +28,9 @@ const mutations = {
     Object.assign(item, payload);
   },
   delete: (state: any, payload: any) => {
-    const i = state.someArrayofObjects
-      .map((item: any) => item.id)
-      .indexOf(payload);
+    const i = state.representatives.findIndex(
+      (item: any) => item.id == payload
+    );
     state.representatives.splice(i, 1);
   }
 };
@@ -46,7 +46,7 @@ const actions = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
-    context.commit("create", res.json());
+    context.commit("create", await res.json());
   },
   edit: async (context: any, payload: any) => {
     const res = await fetch(
@@ -57,7 +57,7 @@ const actions = {
         body: JSON.stringify(payload)
       }
     );
-    context.commit("update", res.json());
+    context.commit("update", await res.json());
   },
   delete: async (context: any, id: any) => {
     await fetch(process.env.VUE_APP_BASE_URL + `${api}${id}`, {

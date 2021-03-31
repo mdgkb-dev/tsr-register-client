@@ -31,8 +31,6 @@ const mutations = {
   },
   delete: (state: any, payload: any) => {
     const i = state.patients.findIndex((item: any) => item.id == payload);
-    console.log(payload);
-    console.log(i);
     state.patients.splice(i, 1);
   }
 };
@@ -62,11 +60,9 @@ const actions = {
     context.commit("update", await res.json());
   },
   delete: async (context: any, id: any) => {
-    console.log("before delete");
     await fetch(process.env.VUE_APP_BASE_URL + `${api}${id}`, {
       method: "DELETE"
     });
-    console.log("after delete");
     context.commit("delete", id);
   }
 };
