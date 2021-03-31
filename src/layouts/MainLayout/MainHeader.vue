@@ -1,13 +1,9 @@
 <template>
-  <el-header style="text-align: right; font-size: 12px">
-    <el-dropdown>
-      <i class="el-icon-setting" style="margin-right: 15px"></i>
-      <el-dropdown-item @click="this.logout()">Выйти</el-dropdown-item>
-    </el-dropdown>
-    <span>{{ this.userName }}</span>
-  </el-header>
+  <el-col :span="23"></el-col>
+  <el-col :span="1">
+    <el-button @click="this.logout()">Выйти</el-button></el-col
+  >
 </template>
-<style></style>
 <script>
 import { mapState } from "vuex";
 
@@ -35,3 +31,10 @@ export default {
   }
 };
 </script>
+
+<style>
+.h {
+  display: flex;
+  justify-content: right;
+}
+</style>

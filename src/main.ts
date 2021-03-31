@@ -5,6 +5,8 @@ import ElementPlus from "element-plus";
 import store from "./store";
 import "element-plus/lib/theme-chalk/index.css";
 
+import "@/assets/global.css";
+
 const app = createApp(App)
   .use(ElementPlus)
   .use(store)

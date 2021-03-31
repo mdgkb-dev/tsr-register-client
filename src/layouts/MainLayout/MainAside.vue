@@ -1,6 +1,6 @@
 <template>
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu lass="el-menu-vertical-demo">
+    <el-menu>
       <el-menu-item-group :router="true">
         <el-menu :router="true">
           <div v-for="item in links" v-bind:key="item.title">
@@ -37,10 +37,6 @@
   line-height: 160px;
 }
 
-body > .el-container {
-  margin-bottom: 40px;
-}
-
 .el-container:nth-child(5) .el-aside,
 .el-container:nth-child(6) .el-aside {
   line-height: 260px;
@@ -57,16 +53,6 @@ export default {
   data() {
     return {
       links: [
-        {
-          name: "Home",
-          title: "Домой",
-          link: "/home"
-        },
-        {
-          name: "Humans",
-          title: "Персоналии",
-          link: "/humans"
-        },
         {
           name: "Patients",
           title: "Пациенты",

@@ -1,4 +1,3 @@
-<script src="../store/modules/humans/humans.ts"></script>
 <template>
   <h1>HOME</h1>
 </template>

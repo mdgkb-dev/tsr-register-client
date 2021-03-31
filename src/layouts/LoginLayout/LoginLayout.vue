@@ -1,11 +1,11 @@
 <template>
-  <el-container>
-    <el-header>Header</el-header>
-    <el-main>
+  <div class="container">
+    <el-header></el-header>
+    <el-main class="container">
       <slot />
     </el-main>
-    <el-footer>Footer</el-footer>
-  </el-container>
+    <el-footer></el-footer>
+  </div>
 </template>
 
 <script>
