@@ -63,8 +63,8 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -77,6 +77,7 @@ export default defineComponent({
 
   data() {
     return {
+      documentsOptions: [{}],
       options: [{}],
       types: [
         { label: "Отец", value: "father" },
@@ -109,27 +110,39 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters("patients", ["patients"])
+    ...mapGetters("patients", ["patients"]),
+    ...mapGetters("documents", ["documents"])
   },
   methods: {
-    ...mapActions("patients", ["getAll", "create"]),
+    ...mapActions({
+      patientsGetAll: "patients/getAll",
+      patientsCreate: "patients/create",
+      documentsGetAll: "documents/getAll",
+      documentsCreate: "documents/create"
+    }),
     onSubmit() {
-      console.log(this.representative);
       this.$store.dispatch("representatives/create", this.representative);
-      // this.$emit("close");
+      this.$emit("close");
     },
     close() {
       this.$emit("close");
     }
   },
   async mounted() {
-    await this.getAll();
+    await this.patientsGetAll();
     for (const item of this.patients) {
       this.options.push({
         label: `${item.surname} ${item.name} ${item.patronymic}`,
         value: item.id
       });
     }
+    // await this.documentsGetAll();
+    // for (const item of this.documents) {
+    //   this.documentsOptions.push({
+    //     label: item.name,
+    //     value: item.id
+    //   });
+    // }
   }
 });
 </script>

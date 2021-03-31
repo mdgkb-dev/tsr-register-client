@@ -88,7 +88,7 @@ export default defineComponent({
     delete(id: number) {
       this.$store.dispatch("patients/delete", id);
     },
-    close() {
+    async close() {
       this.modalEdit = false;
       this.modalCreate = false;
     }
