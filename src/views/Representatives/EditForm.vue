@@ -29,10 +29,33 @@
       <el-input v-model="edit.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="edit.human.contactEmail"></el-input>
-      <el-input v-model="edit.human.contactPhone"></el-input>
+      <el-input v-model="edit.contact.phone"></el-input>
+      <el-input v-model="edit.contact.email"></el-input>
     </el-form-item>
     <el-form-item>
+      <el-form-item
+        v-for="item in edit.representativeToPatient"
+        :key="item.patientId"
+        v-model="edit.representativeToPatient"
+      >
+        <el-cascader
+          placeholder="Выберите пациента"
+          :options="options"
+          filterable
+          v-model="item.patient.id"
+        ></el-cascader>
+        <el-cascader
+          placeholder="Выберите роль представителя"
+          :options="types"
+          v-model="item.type"
+        ></el-cascader>
+        ><el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button @click="add">Добавить пациента</el-button>
+      </el-form-item>
+
       <el-button type="primary" @click="onSubmit">Create</el-button>
       <el-button @click="close">Cancel</el-button>
     </el-form-item>
@@ -41,21 +64,54 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { mapActions, mapGetters } from "vuex";
 export default defineComponent({
   name: "EditForm",
 
   data() {
     return {
+      options: [{}],
+      types: [
+        { label: "Отец", value: "мать" },
+        { label: "Мать", value: "отец" }
+      ],
       edit: this.item
     };
   },
   props: ["item"],
+  computed: {
+    ...mapGetters("patients", ["patients"])
+  },
   methods: {
+    ...mapActions({
+      patientsGetAll: "patients/getAll",
+      patientsCreate: "patients/create"
+    }),
     onSubmit() {
+      for (const item of this.edit.representativeToPatient) {
+        item.patient.id = (item.patient.id as any)[0];
+        item.type = (item.type as any)[0];
+      }
       this.$store.dispatch("patients/edit", this.edit);
+      this.$emit("close");
     },
     close() {
       this.$emit("close");
+    },
+    add() {
+      this.edit.representativeToPatient.push({
+        patient: { id: null },
+        type: ""
+      });
+    }
+  },
+  async mounted() {
+    await this.patientsGetAll();
+    for (const item of this.patients) {
+      this.options.push({
+        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+        value: item.id
+      });
     }
   }
 });
