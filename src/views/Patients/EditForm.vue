@@ -29,12 +29,12 @@
       <el-input v-model="edit.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="edit.human.contactEmail"></el-input>
-      <el-input v-model="edit.human.contactPhone"></el-input>
+      <el-input v-model="edit.human.contact.email"></el-input>
+      <el-input v-model="edit.human.contact.phone"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button type="primary" @click="onSubmit">Отредактировать</el-button>
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -53,6 +53,7 @@ export default defineComponent({
   methods: {
     onSubmit() {
       this.$store.dispatch("patients/edit", this.edit);
+      this.$emit("close");
     },
     close() {
       this.$emit("close");
