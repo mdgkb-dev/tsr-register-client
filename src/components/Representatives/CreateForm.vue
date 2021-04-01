@@ -129,7 +129,7 @@ export default class CreateForm extends Vue {
 
     for (const patient of this.patients) {
       this.options.push({
-        label: `${patient.surname} ${patient.name} ${patient.patronymic}`,
+        label: `${patient.human.surname} ${patient.human.name} ${patient.human.patronymic}`,
         value: patient.id,
       });
     }

@@ -106,8 +106,10 @@ export default class RepresentativesList extends Vue {
 
   item: IItem = {
     patient: {
+      id: '',
       name: '',
       surname: '',
+      dateBirth: '',
       patronymic: '',
       gender: '',
       addressRegistration: '',
