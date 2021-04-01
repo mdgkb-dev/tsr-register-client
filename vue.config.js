@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   lintOnSave: false,
   devServer: {
     proxy: process.env.DEV_BACKEND_URL,
