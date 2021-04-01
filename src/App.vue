@@ -1,7 +1,4 @@
 <template>
-  <!--  <MainLayout>-->
-  <!--    <router-view />-->
-  <!--  </MainLayout>-->
   <component :is="layout">
     <router-view />
   </component>

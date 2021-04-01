@@ -4,6 +4,7 @@ import HomePage from '../components/HomePage.vue';
 import HumansList from '../components/Humans/HumansList.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
 import RepresentativesList from '../components/Representatives/RepresentativesList.vue';
+import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginForm from '../components/Login/LoginForm.vue';
 import store from '../store';
 
@@ -52,6 +53,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/representatives',
     name: 'Representatives',
     component: RepresentativesList,
+    beforeEnter: ifAuthenticated
+  },
+  {
+    path: '/documents',
+    name: 'Documents',
+    component: DocumentsList,
     beforeEnter: ifAuthenticated
   },
   {

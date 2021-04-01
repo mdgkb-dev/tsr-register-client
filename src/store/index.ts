@@ -4,6 +4,7 @@ import humans from './modules/humans';
 import auth from './modules/auth';
 import patients from './modules/patients';
 import representatives from './modules/representatives';
+import documents from './modules/documents';
 
 export default createStore({
   state: {
@@ -26,5 +27,6 @@ export default createStore({
     auth,
     patients,
     representatives,
+    documents,
   },
 });
