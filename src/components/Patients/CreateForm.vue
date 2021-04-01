@@ -30,8 +30,8 @@
       <el-input v-model="patient.human.contact.phone"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -57,10 +57,38 @@ export default class CreateForm extends Vue {
 
   onSubmit(): void {
     this.$store.dispatch('patients/create', this.patient);
+    this.patient = {
+      human: {
+        surname: '',
+        patronymic: '',
+        gender: '',
+        dateBirth: '',
+        addressRegistration: '',
+        addressResidential: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
+      },
+    };
     this.$emit('close');
   }
 
   close(): void {
+    this.patient = {
+      human: {
+        surname: '',
+        patronymic: '',
+        gender: '',
+        dateBirth: '',
+        addressRegistration: '',
+        addressResidential: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
+      },
+    };
     this.$emit('close');
   }
 }
