@@ -63,8 +63,8 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -78,19 +78,24 @@ import IOption from '../../interfaces/patients/IOption';
 
 @Options({
   computed: {
-    ...mapGetters({
-      patients: 'patients/patients',
-    }),
+    ...mapGetters('patients', ['patients']),
+    ...mapGetters('documents', ['documents']),
+  },
+  methods: {
     ...mapActions({
-      getAll: 'patients/getAll',
-      create: 'patients/create',
+      patientsGetAll: 'patients/getAll',
+      patientsCreate: 'patients/create',
+      documentsGetAll: 'documents/getAll',
+      documentsCreate: 'documents/create',
     }),
   },
 })
 export default class CreateForm extends Vue {
   patients!: IPatient[];
 
-  getAll!: () => Promise<void>;
+  patientsGetAll!: () => Promise<void>;
+
+  documentsOptions = [{}];
 
   options: IOption[] = [];
 
@@ -125,7 +130,7 @@ export default class CreateForm extends Vue {
   };
 
   async mounted(): Promise<void> {
-    await this.getAll();
+    await this.patientsGetAll();
 
     for (const patient of this.patients) {
       this.options.push({
@@ -133,12 +138,18 @@ export default class CreateForm extends Vue {
         value: patient.id,
       });
     }
+    // await this.documentsGetAll();
+    // for (const item of this.documents) {
+    //   this.documentsOptions.push({
+    //     label: item.name,
+    //     value: item.id
+    //   });
+    // }
   }
 
   onSubmit(): void {
-    console.log(this.representative);
     this.$store.dispatch('representatives/create', this.representative);
-    // this.$emit("close");
+    this.$emit('close');
   }
 
   close(): void {
