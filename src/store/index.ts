@@ -1,22 +1,30 @@
-import Vuex from "vuex";
-import humans from "./modules/humans/humans";
-import auth from "./modules/auth/auth";
-import patients from "./modules/patients/patients";
-import representatives from "./modules/representatives/representatives";
+import { createStore } from 'vuex';
 
-export default new Vuex.Store({
+import humans from './modules/humans';
+import auth from './modules/auth';
+import patients from './modules/patients';
+import representatives from './modules/representatives';
+
+export default createStore({
   state: {
-    layout: "main-layout"
-  },
-  modules: { humans, auth, patients, representatives },
-  mutations: {
-    setLayout(state, payload) {
-      state.layout = payload;
-    }
+    layout: 'main-layout',
   },
   getters: {
     layout(state) {
       return state.layout;
     }
-  }
+  },
+  mutations: {
+    setLayout(state, payload) {
+      state.layout = payload;
+    }
+  },
+  actions: {
+  },
+  modules: {
+    humans,
+    auth,
+    patients,
+    representatives,
+  },
 });

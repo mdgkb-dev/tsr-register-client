@@ -125,6 +125,13 @@ dist
 # Visual Studio Code
 .vscode/*
 
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Windows
 Thumbs.db
 Thumbs.db:encryptable
@@ -152,3 +159,4 @@ log.txt
 /platforms
 /plugins
 /www
+

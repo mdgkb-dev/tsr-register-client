@@ -1,69 +1,70 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
-import Humans from "../views/Humans/Humans.vue";
-import Patients from "../views/Patients/Patients.vue";
-import Representatives from "../views/Representatives/Representatives.vue";
-import Login from "../views/Login/Login.vue";
-import store from "../store";
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+
+import HomePage from '../components/HomePage.vue';
+import HumansList from '../components/Humans/HumansList.vue';
+import PatientsList from '../components/Patients/PatientsList.vue';
+import RepresentativesList from '../components/Representatives/RepresentativesList.vue';
+import LoginForm from '../components/Login/LoginForm.vue';
+import store from '../store';
 
 const ifNotAuthenticated = (to: any, from: any, next: any) => {
   if (!store.getters.isAuthenticated) {
     next();
     return;
   }
-  next("/");
+  next('/');
 };
 
 const ifAuthenticated = (to: any, from: any, next: any) => {
-  if (localStorage.getItem("user-token")) {
+  if (localStorage.getItem('user-token')) {
     next();
     return;
   }
-  store.commit("setLayout", "login-layout");
-  next("/login");
+  store.commit('setLayout', 'login-layout');
+  next('/login');
 };
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    redirect: "/home",
+    path: '/',
+    redirect: '/home',
     beforeEnter: ifAuthenticated
   },
   {
-    path: "/home",
-    name: "Home",
-    component: Home,
+    path: '/home',
+    name: 'Home',
+    component: HomePage,
     beforeEnter: ifAuthenticated
   },
   {
-    path: "/humans",
-    name: "Humans",
-    component: Humans,
+    path: '/humans',
+    name: 'Humans',
+    component: HumansList,
     beforeEnter: ifAuthenticated
   },
   {
-    path: "/patients",
-    name: "Patients",
-    component: Patients,
+    path: '/patients',
+    name: 'Patients',
+    component: PatientsList,
     beforeEnter: ifAuthenticated
   },
   {
-    path: "/representatives",
-    name: "Representatives",
-    component: Representatives,
+    path: '/representatives',
+    name: 'Representatives',
+    component: RepresentativesList,
     beforeEnter: ifAuthenticated
   },
   {
-    path: "/login",
-    name: "Login",
-    component: Login,
+    path: '/login',
+    name: 'Login',
+    component: LoginForm,
     beforeEnter: ifNotAuthenticated
   }
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
 export default router;
