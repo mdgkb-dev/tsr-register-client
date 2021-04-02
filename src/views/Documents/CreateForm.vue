@@ -5,7 +5,6 @@
     </el-form-item>
 
     <el-form-item
-      label="Поля документа"
       v-for="field in item.documentFields"
       :key="field.name"
       v-model="item.documentFields"

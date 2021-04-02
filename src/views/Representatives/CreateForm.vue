@@ -1,5 +1,4 @@
 <template>
-  {{ options }}
   <el-form ref="representative" :model="representative" label-width="120px">
     <el-form-item label="Имя">
       <el-input label="Имя" v-model="representative.human.name"></el-input>
@@ -63,6 +62,30 @@
       <el-button @click="add">Добавить пациента</el-button>
     </el-form-item>
 
+    <!--    <el-form-item-->
+    <!--      v-for="document in documents"-->
+    <!--      :key="document"-->
+    <!--      v-model="representative.representativeToPatient"-->
+    <!--    >-->
+    <!--      <h3>{{ document.name }}</h3>-->
+
+    <!--      <el-form-item v-for="field in document.documentFields" :key="field">-->
+    <!--        <span>{{ field.name }}</span>-->
+    <!--        <div v-if="field.type === `string`">-->
+    <!--          <el-input-->
+    <!--            label="field.name"-->
+    <!--            v-model="representative.human.documentFieldToHuman[0].valueString"-->
+    <!--          ></el-input>-->
+    <!--        </div>-->
+    <!--        <div v-else-if="field.type === `number`">-->
+    <!--          <el-input-number-->
+    <!--            label="field.name"-->
+    <!--            v-model="representative.human.documentFieldToHuman[0].valueNumber"-->
+    <!--          ></el-input-number>-->
+    <!--        </div>-->
+    <!--      </el-form-item>-->
+    <!--    </el-form-item>-->
+
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Создать</el-button>
       <el-button @click="close">Отмена</el-button>
@@ -79,6 +102,7 @@ export default defineComponent({
   data() {
     return {
       options: [{}],
+      count: 0,
       types: [
         { label: "Отец", value: "мать" },
         { label: "Мать", value: "отец" }
@@ -94,7 +118,13 @@ export default defineComponent({
           contact: {
             email: "",
             phone: ""
-          }
+          },
+          documentFieldToHuman: [
+            {
+              valueString: "",
+              valueNumber: ""
+            }
+          ]
         },
         contact: {
           email: "",
@@ -110,12 +140,14 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters("patients", ["patients"])
+    ...mapGetters("patients", ["patients"]),
+    ...mapGetters("documents", ["documents"])
   },
   methods: {
     ...mapActions({
       patientsGetAll: "patients/getAll",
-      patientsCreate: "patients/create"
+      patientsCreate: "patients/create",
+      documentsGetAll: "documents/getAll"
     }),
     onSubmit() {
       for (const item of this.representative.representativeToPatient) {
@@ -135,7 +167,13 @@ export default defineComponent({
           contact: {
             email: "",
             phone: ""
-          }
+          },
+          documentFieldToHuman: [
+            {
+              valueString: "",
+              valueNumber: ""
+            }
+          ]
         },
         contact: {
           email: "",
@@ -151,6 +189,7 @@ export default defineComponent({
       this.$emit("close");
     },
     close() {
+      this.count = 0;
       this.$emit("close");
     },
     add() {
@@ -158,15 +197,31 @@ export default defineComponent({
         patient: { id: null },
         type: ""
       });
+    },
+    remove(item: any) {
+      const index = this.representative.representativeToPatient.indexOf(item);
+      if (index !== -1) {
+        this.representative.representativeToPatient.splice(index, 1);
+      }
     }
   },
   async mounted() {
     await this.patientsGetAll();
+    this.options.splice(0, 1);
     for (const item of this.patients) {
       this.options.push({
         label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
         value: item.id
       });
+    }
+    await this.documentsGetAll();
+    for (const item of this.documents) {
+      for (const field of this.documents.documentFields) {
+        this.representative.human.documentFieldToHuman.push({
+          valueString: "",
+          valueNumber: ""
+        });
+      }
     }
   }
 });
