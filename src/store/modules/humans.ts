@@ -40,7 +40,7 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
-      context.commit("create", res.json());
+      context.commit("create", await res.json());
     },
     edit: async (context: any, payload: any) => {
       const res = await fetch(
@@ -51,7 +51,7 @@ export default {
           body: JSON.stringify(payload)
         }
       );
-      context.commit("editHuman", res.json());
+      context.commit("editHuman", await res.json());
     },
     delete: async (context: any, id: any) => {
       await fetch(process.env.VUE_APP_BASE_URL + `human/${id}`, {
