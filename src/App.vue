@@ -1,17 +1,15 @@
 <template>
   <component :is="layout">
-  <component v-bind:is="layout">
     <router-view />
   </component>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 import MainLayout from './views/Main/MainLayout.vue';
 import LoginLayout from './views/Login/LoginLayout.vue';
 
-export default defineComponent({
-  name: "App",
+@Options({
   components: {
     MainLayout,
     LoginLayout,

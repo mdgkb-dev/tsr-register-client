@@ -1,10 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-button-group>
-      <el-button
-        type="primary"
-        icon="el-icon-document"
-        @click="modalCreate = true"
+      <el-button type="primary" icon="el-icon-document" @click="modalCreate = true"
         >Создать представителя</el-button
       >
     </el-button-group>
@@ -28,20 +25,12 @@
           </el-card>
         </template>
       </el-table-column>
-       <el-table-column prop="human.surname" label="Фамилия" width="150" />
+      <el-table-column prop="human.surname" label="Фамилия" width="150" />
       <el-table-column prop="human.name" label="Имя" width="150" />
       <el-table-column prop="human.patronymic" label="Отчество" width="150" />
       <el-table-column prop="human.gender" label="Пол" width="150" />
-      <el-table-column
-        prop="human.addressRegistration"
-        label="Адрес регистрации"
-        width="150"
-      />
-      <el-table-column
-        prop="human.addressResidential"
-        label="Адрес проживания"
-        width="150"
-      />
+      <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
+      <el-table-column prop="human.addressResidential" label="Адрес проживания" width="150" />
       <el-table-column prop="contact.phone" label="Телефон" width="150" />
       <el-table-column prop="contact.email" label="Эл.почта" width="150" />
       <el-table-column fixed="right" label="Operations" width="120">
@@ -49,9 +38,7 @@
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
             >Редактировать</el-button
           >
-          <el-button @click="this.delete(scope.row.id)" type="text" size="small"
-            >Удалить</el-button
-          >
+          <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -107,6 +94,7 @@ export default class RepresentativesList extends Vue {
         phone: '',
         email: '',
       },
+      documentFields: [],
     },
   };
 

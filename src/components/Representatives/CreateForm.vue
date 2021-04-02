@@ -2,20 +2,11 @@
   <el-form ref="representative" :model="representative" label-width="120px">
     <el-form-item label="Имя">
       <el-input label="Имя" v-model="representative.human.name"></el-input>
-      <el-input
-        label="Фамилия"
-        v-model="representative.human.surname"
-      ></el-input>
-      <el-input
-        label="Отчество"
-        v-model="representative.human.patronymic"
-      ></el-input>
+      <el-input label="Фамилия" v-model="representative.human.surname"></el-input>
+      <el-input label="Отчество" v-model="representative.human.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Пол">
-      <el-select
-        v-model="representative.human.gender"
-        placeholder="Выберите пол"
-      >
+      <el-select v-model="representative.human.gender" placeholder="Выберите пол">
         <el-option label="Мужчина" value="male"></el-option>
         <el-option label="Женщина" value="female"></el-option>
       </el-select>
@@ -178,21 +169,21 @@ export default class CreateForm extends Vue {
 
     await this.documentsGetAll();
 
-    for (const item of this.documents) {
-      for (const field of this.documents.documentFields) {
-        this.representative.human.documentFieldToHuman.push({
-          valueString: '',
-          valueNumber: '',
-        });
-      }
-    }
+    // for (const item of this.documents) {
+    //   for (const field of this.documents.documentFields) {
+    //     this.representative.human.documentFieldToHuman.push({
+    //       valueString: '',
+    //       valueNumber: '',
+    //     });
+    //   }
+    // }
   }
 
   onSubmit(): void {
-    for (const item of this.representative.representativeToPatient) {
-      item.patient.id = (item.patient.id as any)[0];
-      item.type = (item.type as any)[0];
-    }
+    // for (const item of this.representative.representativeToPatient) {
+    //   item.patient.id = (item.patient.id as any)[0];
+    //   item.type = (item.type as any)[0];
+    // }
 
     this.$store.dispatch('representatives/create', this.representative);
     this.representative = {
@@ -207,6 +198,7 @@ export default class CreateForm extends Vue {
           email: '',
           phone: '',
         },
+        documentFieldToHuman: [],
       },
       contact: {
         email: '',
