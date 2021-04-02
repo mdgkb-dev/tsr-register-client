@@ -29,10 +29,33 @@
       <el-input v-model="edit.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="edit.human.contactEmail"></el-input>
-      <el-input v-model="edit.human.contactPhone"></el-input>
+      <el-input v-model="edit.contact.phone"></el-input>
+      <el-input v-model="edit.contact.email"></el-input>
     </el-form-item>
     <el-form-item>
+      <el-form-item
+        v-for="item in edit.representativeToPatient"
+        :key="item.patientId"
+        v-model="edit.representativeToPatient"
+      >
+        <el-cascader
+          placeholder="Выберите пациента"
+          :options="options"
+          filterable
+          v-model="item.patient.id"
+        ></el-cascader>
+        <el-cascader
+          placeholder="Выберите роль представителя"
+          :options="types"
+          v-model="item.type"
+        ></el-cascader>
+        ><el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button @click="add">Добавить пациента</el-button>
+      </el-form-item>
+
       <el-button type="primary" @click="onSubmit">Create</el-button>
       <el-button @click="close">Cancel</el-button>
     </el-form-item>
@@ -41,21 +64,69 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
+import { mapGetters, mapActions } from 'vuex';
+
+import IPatient from '../../interfaces/patients/IPatient';
+import IRepresentetive from '../../interfaces/representatives/IRepresentative';
 
 @Options({
   props: ['item'],
+  computed: {
+    ...mapGetters('patients', ['patients']),
+  },
+  methods: {
+    ...mapActions({
+      patientsGetAll: 'patients/getAll',
+      patientsCreate: 'patients/create',
+    }),
+  },
 })
 export default class EditForm extends Vue {
-  item!: string;
+  item!: IRepresentetive;
+
+  patients!: IPatient[];
+
+  patientsGetAll!: () => Promise<void>;
 
   edit = this.item;
 
+  options = [{}];
+
+  types = [
+    { label: 'Отец', value: 'отец' },
+    { label: 'Мать', value: 'мать' },
+  ];
+
+  async mounted(): Promise<void> {
+    await this.patientsGetAll();
+    for (const item of this.patients) {
+      this.options.push({
+        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+        value: item.id,
+      });
+    }
+  }
+
   onSubmit(): void {
+    for (const item of this.edit.representativeToPatient) {
+      item.patient.id = (item.patient.id as any)[0];
+      item.type = (item.type as any)[0];
+    }
+
     this.$store.dispatch('patients/edit', this.edit);
+    this.$emit('close');
   }
 
   close(): void {
     this.$emit('close');
+  }
+
+  add(): void {
+    this.edit.representativeToPatient.push({
+      id: '',
+      type: '',
+      patient: { id: '' },
+    });
   }
 }
 </script>
