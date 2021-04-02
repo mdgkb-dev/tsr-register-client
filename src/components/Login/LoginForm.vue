@@ -1,19 +1,27 @@
 <template>
-  <el-form :inline="true" :model="login" class="demo-form-inline">
-    <el-form-item label="">
-      <el-input v-model="login.login" placeholder="Логин"></el-input>
-    </el-form-item>
-    <el-form-item label="">
-      <el-input
-        placeholder="Пароль"
-        v-model="login.password"
-        show-password
-      ></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Войти</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="login">
+    <el-card class="box-card">
+      <el-form class="login-form" :model="login">
+        <div class="card-header">
+          <h1>Войти в систему</h1>
+          <el-button class="button" type="text">Забыли пароль?</el-button>
+        </div>
+        <el-form-item label="">
+          <el-input v-model="login.login" placeholder="Логин"></el-input>
+        </el-form-item>
+        <el-form-item label="">
+          <el-input
+            placeholder="Пароль"
+            v-model="login.password"
+            show-password
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">Войти</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -36,3 +44,26 @@ export default class LoginForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.login {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 150px;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 40px;
+}
+.login-form {
+  width: 400px;
+}
+</style>

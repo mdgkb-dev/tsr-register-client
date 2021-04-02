@@ -15,5 +15,6 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
+    'quotes': [2, 'single', { 'avoidEscape': true }],
   },
 };

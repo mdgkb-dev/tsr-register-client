@@ -13,7 +13,7 @@ const ifNotAuthenticated = (to: any, from: any, next: any) => {
     next();
     return;
   }
-  next('/');
+  next('/patients');
 };
 
 const ifAuthenticated = (to: any, from: any, next: any) => {
@@ -28,7 +28,7 @@ const ifAuthenticated = (to: any, from: any, next: any) => {
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/patients',
     beforeEnter: ifAuthenticated
   },
   {

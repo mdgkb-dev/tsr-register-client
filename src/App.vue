@@ -27,3 +27,15 @@ export default class App extends Vue {
   }
 }
 </script>
+
+<style>
+.container {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+el-table {
+  width: 100%;
+}
+</style>

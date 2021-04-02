@@ -1,6 +1,6 @@
 <template>
   <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu lass="el-menu-vertical-demo">
+    <el-menu>
       <el-menu-item-group :router="true">
         <el-menu :router="true">
           <div v-for="item in links" v-bind:key="item.title">
@@ -19,16 +19,6 @@ import { Vue } from 'vue-class-component';
 
 export default class MainSidePanel extends Vue {
   links = [
-    {
-      name: 'Home',
-      title: 'Домой',
-      link: '/home',
-    },
-    {
-      name: 'Humans',
-      title: 'Персоналии',
-      link: '/humans',
-    },
     {
       name: 'Patients',
       title: 'Пациенты',
@@ -69,10 +59,6 @@ export default class MainSidePanel extends Vue {
   color: #333;
   text-align: center;
   line-height: 160px;
-}
-
-body > .el-container {
-  margin-bottom: 40px;
 }
 
 .el-container:nth-child(5) .el-aside,
