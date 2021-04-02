@@ -1,37 +1,32 @@
 <template>
   <el-form ref="form" :model="edit" label-width="120px">
-    <el-form-item label="Activity name">
+    <el-form-item label="Название документа">
       <el-input v-model="edit.name"></el-input>
-      <el-input v-model="edit.surname"></el-input>
-      <el-input v-model="edit.patronymic"></el-input>
     </el-form-item>
-    <el-form-item label="Activity zone">
-      <el-select v-model="edit.gender" placeholder="please select your zone">
-        <el-option label="Мужчина" value="male"></el-option>
-        <el-option label="Женщина" value="female"></el-option>
-      </el-select>
+
+    <el-form-item
+      v-for="field in edit.documentFields"
+      :key="field.name"
+      v-model="edit.documentFields"
+    >
+      <el-form-item label="Название поля">
+        <el-input v-model="field.name"></el-input>
+      </el-form-item>
+      <el-cascader
+        placeholder="Выберите тип поля"
+        :options="options"
+        v-model="field.type"
+      ></el-cascader>
+      ><el-button @click.prevent="remove(edit)">Delete</el-button>
     </el-form-item>
-    <el-form-item label="Activity time">
-      <el-col :span="11">
-        <el-date-picker
-          type="date"
-          placeholder="Pick a date"
-          v-model="edit.dateBirth"
-          style="width: 100%"
-        ></el-date-picker>
-      </el-col>
-    </el-form-item>
-    <el-form-item label="Адреса">
-      <el-input v-model="edit.addressRegistration"></el-input>
-      <el-input v-model="edit.addressResidential"></el-input>
-    </el-form-item>
-    <el-form-item label="Контакты">
-      <el-input v-model="edit.contactEmail"></el-input>
-      <el-input v-model="edit.contactPhone"></el-input>
-    </el-form-item>
+
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button @click="add">Добавить поля</el-button>
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -49,12 +44,32 @@ export default class EditForm extends Vue {
 
   edit: IHuman = this.item;
 
+  options = [
+    { label: 'Строка', value: 'string' },
+    { label: 'Число', value: 'number' },
+    { label: 'Дата', value: 'date' },
+  ];
+
   onSubmit(): void {
     this.$store.dispatch('humans/edit', this.edit);
   }
 
   close(): void {
     this.$emit('close');
+  }
+
+  remove(item: any): void {
+    const index = this.edit.documentFields.indexOf(item);
+    if (index !== -1) {
+      this.edit.documentFields.splice(index, 1);
+    }
+  }
+
+  add(): void {
+    this.edit.documentFields.push({
+      name: '',
+      type: '',
+    });
   }
 }
 </script>

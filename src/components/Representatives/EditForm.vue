@@ -1,6 +1,7 @@
 <template>
   <el-form ref="form" :model="edit" label-width="120px">
     <el-form-item label="Activity name">
+      <el-input v-model="edit.human.id"></el-input>
       <el-input v-model="edit.human.name"></el-input>
       <el-input v-model="edit.human.surname"></el-input>
       <el-input v-model="edit.human.patronymic"></el-input>
@@ -35,7 +36,7 @@
     <el-form-item>
       <el-form-item
         v-for="item in edit.representativeToPatient"
-        :key="item.patientId"
+        :key="item.patient.id"
         v-model="edit.representativeToPatient"
       >
         <el-cascader
@@ -56,8 +57,10 @@
         <el-button @click="add">Добавить пациента</el-button>
       </el-form-item>
 
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button @click="close">Cancel</el-button>
+      <el-button type="primary" @click="onSubmit"
+        >Сохранить изменения</el-button
+      >
+      <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -99,18 +102,37 @@ export default class EditForm extends Vue {
 
   async mounted(): Promise<void> {
     await this.patientsGetAll();
+    this.options.splice(0, 1);
+
     for (const item of this.patients) {
       this.options.push({
         label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
         value: item.id,
+        human: item.human,
       });
+
+      item.human = {
+        id: '',
+        name: '',
+        surname: '',
+        patronymic: '',
+        gender: '',
+        dateBirth: '',
+        addressRegistration: '',
+        addressResidential: '',
+        contact: {
+          phone: '',
+          email: '',
+        },
+        documentFields: [],
+      };
     }
   }
 
   onSubmit(): void {
     for (const item of this.edit.representativeToPatient) {
-      item.patient.id = (item.patient.id as any)[0];
-      item.type = (item.type as any)[0];
+      item.patient.id = item.patient.id as any;
+      item.type = item.type as any;
     }
 
     this.$store.dispatch('patients/edit', this.edit);

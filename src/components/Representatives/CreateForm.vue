@@ -1,5 +1,4 @@
 <template>
-  {{ options }}
   <el-form ref="representative" :model="representative" label-width="120px">
     <el-form-item label="Имя">
       <el-input label="Имя" v-model="representative.human.name"></el-input>
@@ -63,6 +62,30 @@
       <el-button @click="add">Добавить пациента</el-button>
     </el-form-item>
 
+    <!--    <el-form-item-->
+    <!--      v-for="document in documents"-->
+    <!--      :key="document"-->
+    <!--      v-model="representative.representativeToPatient"-->
+    <!--    >-->
+    <!--      <h3>{{ document.name }}</h3>-->
+
+    <!--      <el-form-item v-for="field in document.documentFields" :key="field">-->
+    <!--        <span>{{ field.name }}</span>-->
+    <!--        <div v-if="field.type === `string`">-->
+    <!--          <el-input-->
+    <!--            label="field.name"-->
+    <!--            v-model="representative.human.documentFieldToHuman[0].valueString"-->
+    <!--          ></el-input>-->
+    <!--        </div>-->
+    <!--        <div v-else-if="field.type === `number`">-->
+    <!--          <el-input-number-->
+    <!--            label="field.name"-->
+    <!--            v-model="representative.human.documentFieldToHuman[0].valueNumber"-->
+    <!--          ></el-input-number>-->
+    <!--        </div>-->
+    <!--      </el-form-item>-->
+    <!--    </el-form-item>-->
+
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Создать</el-button>
       <el-button @click="close">Отмена</el-button>
@@ -76,24 +99,35 @@ import { mapGetters, mapActions } from 'vuex';
 
 import IPatient from '../../interfaces/patients/IPatient';
 import IOption from '../../interfaces/patients/IOption';
+// TODO: По всей видимости, должен быть интерфейс документа.
+// import IDocument from '../../interfaces/documents/'
 
 @Options({
   computed: {
     ...mapGetters('patients', ['patients']),
+    ...mapGetters('documents', ['documents']),
   },
   methods: {
     ...mapActions({
       patientsGetAll: 'patients/getAll',
       patientsCreate: 'patients/create',
+      documentsGetAll: 'documents/getAll',
     }),
   },
 })
 export default class CreateForm extends Vue {
   patients!: IPatient[];
 
+  // TODO: Дописать интерфейс.
+  // documents!: ?
+
   patientsGetAll!: () => Promise<void>;
 
+  documentsGetAll!: () => Promise<void>;
+
   options: IOption[] = [];
+
+  count = 0;
 
   types = [
     { label: 'Отец', value: 'отец' },
@@ -112,6 +146,12 @@ export default class CreateForm extends Vue {
         email: '',
         phone: '',
       },
+      documentFieldToHuman: [
+        {
+          valueString: '',
+          valueNumber: '',
+        },
+      ],
     },
     contact: {
       email: '',
@@ -127,12 +167,24 @@ export default class CreateForm extends Vue {
 
   async mounted(): Promise<void> {
     await this.patientsGetAll();
+    this.options.splice(0, 1);
 
     for (const patient of this.patients) {
       this.options.push({
         label: `${patient.human.surname} ${patient.human.name} ${patient.human.patronymic}`,
         value: patient.id,
       });
+    }
+
+    await this.documentsGetAll();
+
+    for (const item of this.documents) {
+      for (const field of this.documents.documentFields) {
+        this.representative.human.documentFieldToHuman.push({
+          valueString: '',
+          valueNumber: '',
+        });
+      }
     }
   }
 
@@ -171,6 +223,7 @@ export default class CreateForm extends Vue {
   }
 
   close(): void {
+    this.count = 0;
     this.$emit('close');
   }
 
@@ -179,6 +232,13 @@ export default class CreateForm extends Vue {
       patient: { id: null },
       type: '',
     });
+  }
+
+  remove(item: any): void {
+    const index = this.representative.representativeToPatient.indexOf(item);
+    if (index !== -1) {
+      this.representative.representativeToPatient.splice(index, 1);
+    }
   }
 }
 </script>
