@@ -1,4 +1,5 @@
 <template>
+  {{ options }}
   <el-form ref="representative" :model="representative" label-width="120px">
     <el-form-item label="Имя">
       <el-input label="Имя" v-model="representative.human.name"></el-input>
@@ -41,21 +42,21 @@
 
     <el-form-item
       v-for="item in representative.representativeToPatient"
-      :key="item"
+      :key="item.patientId"
       v-model="representative.representativeToPatient"
     >
       <el-cascader
         placeholder="Выберите пациента"
         :options="options"
         filterable
-        v-model="representative.representativeToPatient.patientId"
+        v-model="item.patient.id"
       ></el-cascader>
       <el-cascader
         placeholder="Выберите роль представителя"
         :options="types"
-        v-model="representative.representativeToPatient.type"
+        v-model="item.type"
       ></el-cascader>
-      ><el-button @click.prevent="remove(item)">Delete</el-button>
+      ><el-button @click.prevent="remove(item)">Удалить пациента</el-button>
     </el-form-item>
 
     <el-form-item>
@@ -79,14 +80,11 @@ import IOption from '../../interfaces/patients/IOption';
 @Options({
   computed: {
     ...mapGetters('patients', ['patients']),
-    ...mapGetters('documents', ['documents']),
   },
   methods: {
     ...mapActions({
       patientsGetAll: 'patients/getAll',
       patientsCreate: 'patients/create',
-      documentsGetAll: 'documents/getAll',
-      documentsCreate: 'documents/create',
     }),
   },
 })
@@ -95,13 +93,11 @@ export default class CreateForm extends Vue {
 
   patientsGetAll!: () => Promise<void>;
 
-  documentsOptions = [{}];
-
   options: IOption[] = [];
 
   types = [
-    { label: 'Отец', value: 'father' },
-    { label: 'Мать', value: 'mother' },
+    { label: 'Отец', value: 'отец' },
+    { label: 'Мать', value: 'мать' },
   ];
 
   representative = {
@@ -123,7 +119,7 @@ export default class CreateForm extends Vue {
     },
     representativeToPatient: [
       {
-        patientId: null,
+        patient: { id: null },
         type: '',
       },
     ],
@@ -138,22 +134,51 @@ export default class CreateForm extends Vue {
         value: patient.id,
       });
     }
-    // await this.documentsGetAll();
-    // for (const item of this.documents) {
-    //   this.documentsOptions.push({
-    //     label: item.name,
-    //     value: item.id
-    //   });
-    // }
   }
 
   onSubmit(): void {
+    for (const item of this.representative.representativeToPatient) {
+      item.patient.id = (item.patient.id as any)[0];
+      item.type = (item.type as any)[0];
+    }
+
     this.$store.dispatch('representatives/create', this.representative);
+    this.representative = {
+      human: {
+        surname: '',
+        patronymic: '',
+        gender: '',
+        dateBirth: '',
+        addressRegistration: '',
+        addressResidential: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
+      },
+      contact: {
+        email: '',
+        phone: '',
+      },
+      representativeToPatient: [
+        {
+          patient: { id: null },
+          type: '',
+        },
+      ],
+    };
     this.$emit('close');
   }
 
   close(): void {
     this.$emit('close');
+  }
+
+  add(): void {
+    this.representative.representativeToPatient.push({
+      patient: { id: null },
+      type: '',
+    });
   }
 }
 </script>
