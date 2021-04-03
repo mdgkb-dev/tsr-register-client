@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="modalCreate = true"
+      <el-button type="primary" icon="el-icon-document" @click="this.create"
         >Создать представителя</el-button
       >
     </el-button-group>
@@ -43,11 +43,13 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="Создать представителя" v-model="modalCreate" width="30%">
-      <CreateForm v-model="modalCreate" @close="close" />
-    </el-dialog>
-    <el-dialog title="Отредактировать пациента" v-model="modalEdit" width="30%">
-      <EditForm :item="item" @close="close" />
+    <el-dialog v-model="modalVisible" width="50%">
+      <ModalForm
+        :item="item"
+        :is-create-form="isCreateForm"
+        :modal-title="modalTitle"
+        @close="close"
+      />
     </el-dialog>
   </div>
 </template>
@@ -56,15 +58,12 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import IItem from '../../interfaces/representatives/IItem';
-
-import CreateForm from './CreateForm.vue';
-import EditForm from './EditForm.vue';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import ModalForm from './ModalForm.vue';
 
 @Options({
   components: {
-    CreateForm,
-    EditForm,
+    ModalForm,
   },
   computed: {
     ...mapState('representatives', ['representatives']),
@@ -80,27 +79,29 @@ export default class RepresentativesList extends Vue {
 
   getAll!: () => Promise<void>;
 
-  item: IItem = {
-    patient: {
-      id: '',
+  item: IRepresentative = {
+    human: {
+      id: undefined,
       name: '',
       surname: '',
-      dateBirth: '',
       patronymic: '',
       gender: '',
+      dateBirth: '',
       addressRegistration: '',
       addressResidential: '',
       contact: {
-        phone: '',
         email: '',
+        phone: '',
       },
-      documentFields: [],
     },
+    representativeToPatient: [],
   };
 
-  modalCreate = false;
+  isCreateForm = false;
 
-  modalEdit = false;
+  modalVisible = false;
+
+  modalTitle = '';
 
   async mounted(): Promise<void> {
     await this.getAll();
@@ -108,7 +109,32 @@ export default class RepresentativesList extends Vue {
 
   edit(id: number): void {
     this.item = this.$store.getters['representatives/getById'](id);
-    this.modalEdit = true;
+    this.isCreateForm = false;
+    this.modalTitle = 'Редактировать представителя';
+    this.modalVisible = true;
+  }
+
+  create(): void {
+    this.item = {
+      human: {
+        id: undefined,
+        name: '',
+        surname: '',
+        patronymic: '',
+        gender: '',
+        dateBirth: '',
+        addressRegistration: '',
+        addressResidential: '',
+        contact: {
+          email: '',
+          phone: '',
+        },
+      },
+      representativeToPatient: [],
+    };
+    this.isCreateForm = true;
+    this.modalVisible = true;
+    this.modalTitle = 'Создать представителя';
   }
 
   delete(id: number): void {
@@ -116,8 +142,7 @@ export default class RepresentativesList extends Vue {
   }
 
   close(): void {
-    this.modalEdit = false;
-    this.modalCreate = false;
+    this.modalVisible = false;
   }
 }
 </script>

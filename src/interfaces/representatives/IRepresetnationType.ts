@@ -1,7 +1,8 @@
 export default interface IRepresentationType {
-  id: string;
-  type: string,
-  patient: {
-    id: string;
-  },
+  id?: number;
+  type: string;
+  patientId?: number;
+  patient?: {
+    id?: number;
+  };
 }

@@ -2,7 +2,7 @@ import IContact from './IContact';
 import IField from '../documents/IField';
 
 export default interface IHuman {
-  id: string;
+  id?: number;
   name: string;
   surname: string;
   patronymic: string;
@@ -11,5 +11,5 @@ export default interface IHuman {
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
-  documentFields: IField[];
+  documentFields?: IField[];
 }

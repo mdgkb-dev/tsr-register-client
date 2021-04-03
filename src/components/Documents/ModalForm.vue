@@ -1,13 +1,14 @@
 <template>
-  <el-form ref="form" :model="edit" label-width="120px">
+  <el-form ref="form" :model="editDocument" label-width="120px">
+    <h1>{{ modalTitle }}</h1>
     <el-form-item label="Название документа">
-      <el-input v-model="edit.name"></el-input>
+      <el-input v-model="editDocument.name"></el-input>
     </el-form-item>
 
     <el-form-item
-      v-for="field in edit.documentFields"
+      v-for="field in editDocument.documentFields"
       :key="field.name"
-      v-model="edit.documentFields"
+      v-model="editDocument.documentFields"
     >
       <el-form-item label="Название поля">
         <el-input v-model="field.name"></el-input>
@@ -17,7 +18,7 @@
         :options="options"
         v-model="field.type"
       ></el-cascader>
-      ><el-button @click.prevent="remove(edit)">Delete</el-button>
+      ><el-button @click.prevent="remove(editDocument)">Delete</el-button>
     </el-form-item>
 
     <el-form-item>
@@ -34,15 +35,17 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 
-import IHuman from '../../interfaces/humans/IHuman';
+import IDocument from '@/interfaces/documents/IDocument';
 
 @Options({
-  props: ['item'],
+  props: ['document', 'is-create-form', 'modal-title'],
 })
-export default class EditForm extends Vue {
-  item!: IHuman;
+export default class ModalForm extends Vue {
+  document!: IDocument;
 
-  edit: IHuman = this.item;
+  isCreateForm!: boolean;
+
+  editDocument = this.document;
 
   options = [
     { label: 'Строка', value: 'string' },
@@ -51,7 +54,12 @@ export default class EditForm extends Vue {
   ];
 
   onSubmit(): void {
-    this.$store.dispatch('humans/edit', this.edit);
+    if (this.isCreateForm) {
+      this.$store.dispatch('documents/create', this.editDocument);
+    } else {
+      this.$store.dispatch('documents/edit', this.editDocument);
+    }
+    this.$emit('close');
   }
 
   close(): void {
@@ -59,17 +67,22 @@ export default class EditForm extends Vue {
   }
 
   remove(item: any): void {
-    const index = this.edit.documentFields.indexOf(item);
+    const index = this.editDocument.documentFields!.indexOf(item);
     if (index !== -1) {
-      this.edit.documentFields.splice(index, 1);
+      this.editDocument.documentFields!.splice(index, 1);
     }
   }
 
   add(): void {
-    this.edit.documentFields.push({
+    console.log(this.editDocument);
+    this.editDocument.documentFields!.push({
       name: '',
       type: '',
     });
+  }
+
+  beforeUpdate(): void {
+    this.editDocument = this.document;
   }
 }
 </script>

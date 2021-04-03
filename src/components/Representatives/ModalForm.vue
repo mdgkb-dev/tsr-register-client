@@ -1,16 +1,13 @@
 <template>
   <el-form ref="form" :model="edit" label-width="120px">
+    <h1>{{ modalTitle }}</h1>
     <el-form-item label="Activity name">
-      <el-input v-model="edit.human.id"></el-input>
       <el-input v-model="edit.human.name"></el-input>
       <el-input v-model="edit.human.surname"></el-input>
       <el-input v-model="edit.human.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Activity zone">
-      <el-select
-        v-model="edit.human.gender"
-        placeholder="please select your zone"
-      >
+      <el-select v-model="edit.human.gender" placeholder="please select your zone">
         <el-option label="Мужчина" value="male"></el-option>
         <el-option label="Женщина" value="female"></el-option>
       </el-select>
@@ -30,36 +27,47 @@
       <el-input v-model="edit.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="edit.contact.phone"></el-input>
-      <el-input v-model="edit.contact.email"></el-input>
+      <el-input v-model="edit.human.contact.phone"></el-input>
+      <el-input v-model="edit.human.contact.email"></el-input>
     </el-form-item>
     <el-form-item>
       <el-form-item
-        v-for="item in edit.representativeToPatient"
-        :key="item.patient.id"
+        v-for="(item, index) in edit.representativeToPatient"
+        :key="index"
         v-model="edit.representativeToPatient"
       >
-        <el-cascader
+        <el-select
           placeholder="Выберите пациента"
-          :options="options"
-          filterable
-          v-model="item.patient.id"
-        ></el-cascader>
-        <el-cascader
+          v-model="edit.representativeToPatient[index].patientId"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="Number(item.value)"
+          >
+          </el-option>
+        </el-select>
+        <el-select
           placeholder="Выберите роль представителя"
-          :options="types"
-          v-model="item.type"
-        ></el-cascader>
-        ><el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+          v-model="edit.representativeToPatient[index].type"
+        >
+          <el-option
+            v-for="item in types"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+        <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
       </el-form-item>
 
       <el-form-item>
         <el-button @click="add">Добавить пациента</el-button>
       </el-form-item>
 
-      <el-button type="primary" @click="onSubmit"
-        >Сохранить изменения</el-button
-      >
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
@@ -73,7 +81,7 @@ import IPatient from '../../interfaces/patients/IPatient';
 import IRepresentetive from '../../interfaces/representatives/IRepresentative';
 
 @Options({
-  props: ['item'],
+  props: ['item', 'is-create-form', 'modal-title'],
   computed: {
     ...mapGetters('patients', ['patients']),
   },
@@ -84,8 +92,10 @@ import IRepresentetive from '../../interfaces/representatives/IRepresentative';
     }),
   },
 })
-export default class EditForm extends Vue {
+export default class ModalForm extends Vue {
   item!: IRepresentetive;
+
+  isCreateForm!: boolean;
 
   patients!: IPatient[];
 
@@ -103,40 +113,30 @@ export default class EditForm extends Vue {
   async mounted(): Promise<void> {
     await this.patientsGetAll();
     this.options.splice(0, 1);
-
     for (const item of this.patients) {
       this.options.push({
         label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
         value: item.id,
         human: item.human,
       });
-
-      item.human = {
-        id: '',
-        name: '',
-        surname: '',
-        patronymic: '',
-        gender: '',
-        dateBirth: '',
-        addressRegistration: '',
-        addressResidential: '',
-        contact: {
-          phone: '',
-          email: '',
-        },
-        documentFields: [],
-      };
     }
   }
 
   onSubmit(): void {
     for (const item of this.edit.representativeToPatient) {
-      item.patient.id = item.patient.id as any;
-      item.type = item.type as any;
+      item.patient = undefined;
+    }
+    if (this.isCreateForm) {
+      this.$store.dispatch('representatives/create', this.edit);
+    } else {
+      this.$store.dispatch('representatives/edit', this.edit);
     }
 
-    this.$store.dispatch('patients/edit', this.edit);
     this.$emit('close');
+  }
+
+  beforeUpdate(): void {
+    this.edit = this.item;
   }
 
   close(): void {
@@ -145,10 +145,17 @@ export default class EditForm extends Vue {
 
   add(): void {
     this.edit.representativeToPatient.push({
-      id: '',
+      id: undefined,
       type: '',
-      patient: { id: '' },
+      patientId: undefined,
     });
+  }
+
+  remove(item: any): void {
+    const index = this.edit.representativeToPatient.indexOf(item);
+    if (index !== -1) {
+      this.edit.representativeToPatient.splice(index, 1);
+    }
   }
 }
 </script>

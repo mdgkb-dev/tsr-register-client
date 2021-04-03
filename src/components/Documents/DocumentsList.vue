@@ -1,12 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-button-group>
-      <el-button
-        type="primary"
-        icon="el-icon-document"
-        @click="modalCreate = true"
-        >Создать документ</el-button
-      >
+      <el-button type="primary" icon="el-icon-document" @click="create">Создать документ</el-button>
     </el-button-group>
 
     <el-table
@@ -22,11 +17,7 @@
                 <span>Поля документа</span>
               </div>
             </template>
-            <div
-              v-for="item in props.row.documentFields"
-              :key="item.id"
-              class="text item"
-            >
+            <div v-for="item in props.row.documentFields" :key="item.id" class="text item">
               {{ item.name }}
             </div>
           </el-card>
@@ -39,18 +30,18 @@
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
             >Редактировать</el-button
           >
-          <el-button @click="this.delete(scope.row.id)" type="text" size="small"
-            >Удалить</el-button
-          >
+          <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="Создать документ" v-model="modalCreate" width="30%">
-      <create-form v-model="modalCreate" @close="close" />
-    </el-dialog>
-    <el-dialog title="Отредактировать документ" v-model="modalEdit" width="30%">
-      <edit-form :item="item" @close="close" />
+    <el-dialog v-model="modalVisible" width="50%">
+      <modalForm
+        :document="document"
+        :is-create-form="isCreateForm"
+        :modalTitle="modalTitle"
+        @close="close"
+      />
     </el-dialog>
   </div>
 </template>
@@ -59,13 +50,12 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import CreateForm from './CreateForm.vue';
-import EditForm from './EditForm.vue';
+import IDocument from '@/interfaces/documents/IDocument';
+import ModalForm from './ModalForm.vue';
 
 @Options({
   components: {
-    CreateForm,
-    EditForm,
+    ModalForm,
   },
   computed: {
     ...mapState('documents', ['documents']),
@@ -79,19 +69,34 @@ export default class DocumentsList extends Vue {
 
   getAll!: () => Promise<void>;
 
-  item = {};
+  document: IDocument = {
+    name: '',
+    documentFields: [],
+  };
 
-  modalCreate = false;
+  isCreateForm = false;
 
-  modalEdit = false;
+  modalVisible = false;
+
+  modalTitle = '';
 
   async mounted(): Promise<void> {
     await this.getAll();
   }
 
   edit(id: number): void {
-    this.item = this.$store.getters['documents/getById'](id);
-    this.modalEdit = true;
+    this.document = this.$store.getters['documents/getById'](id);
+    this.modalVisible = true;
+  }
+
+  create(): void {
+    this.document = {
+      name: '',
+      documentFields: [],
+    };
+    this.isCreateForm = true;
+    this.modalVisible = true;
+    this.modalTitle = 'Создать документ';
   }
 
   delete(id: number): void {
@@ -99,8 +104,7 @@ export default class DocumentsList extends Vue {
   }
 
   close(): void {
-    this.modalEdit = false;
-    this.modalCreate = false;
+    this.modalVisible = false;
   }
 }
 </script>
