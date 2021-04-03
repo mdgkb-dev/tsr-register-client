@@ -45,7 +45,7 @@
 
     <el-dialog v-model="modalVisible" width="50%">
       <ModalForm
-        :item="item"
+        :representative="representative"
         :is-create-form="isCreateForm"
         :modal-title="modalTitle"
         @close="close"
@@ -79,7 +79,7 @@ export default class RepresentativesList extends Vue {
 
   getAll!: () => Promise<void>;
 
-  item: IRepresentative = {
+  representative: IRepresentative = {
     human: {
       id: undefined,
       name: '',
@@ -108,14 +108,14 @@ export default class RepresentativesList extends Vue {
   }
 
   edit(id: number): void {
-    this.item = this.$store.getters['representatives/getById'](id);
+    this.representative = this.$store.getters['representatives/getById'](id);
     this.isCreateForm = false;
     this.modalTitle = 'Редактировать представителя';
     this.modalVisible = true;
   }
 
   create(): void {
-    this.item = {
+    this.representative = {
       human: {
         id: undefined,
         name: '',

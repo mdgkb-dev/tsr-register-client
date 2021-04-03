@@ -1,5 +1,5 @@
 import IContact from './IContact';
-import IField from '../documents/IField';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 
 export default interface IHuman {
   id?: number;
@@ -11,5 +11,5 @@ export default interface IHuman {
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
-  documentFields?: IField[];
+  documentFieldToHuman?: IDocumentFieldValue[];
 }

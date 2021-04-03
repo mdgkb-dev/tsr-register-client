@@ -1,13 +1,13 @@
 <template>
-  <el-form ref="form" :model="edit" label-width="120px">
+  <el-form ref="form" :model="editRepresentative" label-width="120px">
     <h1>{{ modalTitle }}</h1>
     <el-form-item label="Activity name">
-      <el-input v-model="edit.human.name"></el-input>
-      <el-input v-model="edit.human.surname"></el-input>
-      <el-input v-model="edit.human.patronymic"></el-input>
+      <el-input v-model="editRepresentative.human.name"></el-input>
+      <el-input v-model="editRepresentative.human.surname"></el-input>
+      <el-input v-model="editRepresentative.human.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Activity zone">
-      <el-select v-model="edit.human.gender" placeholder="please select your zone">
+      <el-select v-model="editRepresentative.human.gender" placeholder="please select your zone">
         <el-option label="Мужчина" value="male"></el-option>
         <el-option label="Женщина" value="female"></el-option>
       </el-select>
@@ -17,28 +17,28 @@
         <el-date-picker
           type="date"
           placeholder="Pick a date"
-          v-model="edit.human.dateBirth"
+          v-model="editRepresentative.human.dateBirth"
           style="width: 100%"
         ></el-date-picker>
       </el-col>
     </el-form-item>
     <el-form-item label="Адреса">
-      <el-input v-model="edit.human.addressRegistration"></el-input>
-      <el-input v-model="edit.human.addressResidential"></el-input>
+      <el-input v-model="editRepresentative.human.addressRegistration"></el-input>
+      <el-input v-model="editRepresentative.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Контакты">
-      <el-input v-model="edit.human.contact.phone"></el-input>
-      <el-input v-model="edit.human.contact.email"></el-input>
+      <el-input v-model="editRepresentative.human.contact.phone"></el-input>
+      <el-input v-model="editRepresentative.human.contact.email"></el-input>
     </el-form-item>
     <el-form-item>
       <el-form-item
-        v-for="(item, index) in edit.representativeToPatient"
+        v-for="(item, index) in editRepresentative.representativeToPatient"
         :key="index"
-        v-model="edit.representativeToPatient"
+        v-model="editRepresentative.representativeToPatient"
       >
         <el-select
           placeholder="Выберите пациента"
-          v-model="edit.representativeToPatient[index].patientId"
+          v-model="editRepresentative.representativeToPatient[index].patientId"
         >
           <el-option
             v-for="item in options"
@@ -50,7 +50,7 @@
         </el-select>
         <el-select
           placeholder="Выберите роль представителя"
-          v-model="edit.representativeToPatient[index].type"
+          v-model="editRepresentative.representativeToPatient[index].type"
         >
           <el-option
             v-for="item in types"
@@ -70,6 +70,30 @@
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
+
+    <el-form-item
+      v-for="document in documents"
+      :key="document"
+      v-model="editRepresentative.representativeToPatient"
+    >
+      <h3>{{ document.name }}</h3>
+
+      <el-form-item v-for="field in document.documentFields" :key="field">
+        <span>{{ field.name }}</span>
+        <div v-if="field.type === `string`">
+          <el-input
+            label="field.name"
+            v-model="editRepresentative.human.documentFieldToHuman[0].valueString"
+          ></el-input>
+        </div>
+        <div v-else-if="field.type === `number`">
+          <el-input-number
+            label="field.name"
+            v-model="editRepresentative.human.documentFieldToHuman[0].valueNumber"
+          ></el-input-number>
+        </div>
+      </el-form-item>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -77,31 +101,38 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapGetters, mapActions } from 'vuex';
 
+import IDocument from '@/interfaces/documents/IDocument';
 import IPatient from '../../interfaces/patients/IPatient';
 import IRepresentetive from '../../interfaces/representatives/IRepresentative';
 
 @Options({
-  props: ['item', 'is-create-form', 'modal-title'],
+  props: ['representative', 'is-create-form', 'modal-title'],
   computed: {
     ...mapGetters('patients', ['patients']),
+    ...mapGetters('documents', ['documents']),
   },
   methods: {
     ...mapActions({
       patientsGetAll: 'patients/getAll',
       patientsCreate: 'patients/create',
+      documentsGetAll: 'documents/getAll',
     }),
   },
 })
 export default class ModalForm extends Vue {
-  item!: IRepresentetive;
+  representative!: IRepresentetive;
 
   isCreateForm!: boolean;
 
   patients!: IPatient[];
 
+  documents!: IDocument[];
+
   patientsGetAll!: () => Promise<void>;
 
-  edit = this.item;
+  documentsGetAll!: () => Promise<void>;
+
+  editRepresentative = this.representative;
 
   options = [{}];
 
@@ -120,23 +151,34 @@ export default class ModalForm extends Vue {
         human: item.human,
       });
     }
+
+    await this.documentsGetAll();
+    for (const document of this.documents) {
+      for (const field of document.documentFields!) {
+        this.representative.human.documentFieldToHuman!.push({
+          documentFieldId: field.id!,
+          valueString: '',
+          valueNumber: undefined,
+        });
+      }
+    }
   }
 
   onSubmit(): void {
-    for (const item of this.edit.representativeToPatient) {
+    for (const item of this.editRepresentative.representativeToPatient) {
       item.patient = undefined;
     }
     if (this.isCreateForm) {
-      this.$store.dispatch('representatives/create', this.edit);
+      this.$store.dispatch('representatives/create', this.editRepresentative);
     } else {
-      this.$store.dispatch('representatives/edit', this.edit);
+      this.$store.dispatch('representatives/edit', this.editRepresentative);
     }
 
     this.$emit('close');
   }
 
   beforeUpdate(): void {
-    this.edit = this.item;
+    this.editRepresentative = this.representative;
   }
 
   close(): void {
@@ -144,7 +186,7 @@ export default class ModalForm extends Vue {
   }
 
   add(): void {
-    this.edit.representativeToPatient.push({
+    this.editRepresentative.representativeToPatient.push({
       id: undefined,
       type: '',
       patientId: undefined,
@@ -152,9 +194,9 @@ export default class ModalForm extends Vue {
   }
 
   remove(item: any): void {
-    const index = this.edit.representativeToPatient.indexOf(item);
+    const index = this.editRepresentative.representativeToPatient.indexOf(item);
     if (index !== -1) {
-      this.edit.representativeToPatient.splice(index, 1);
+      this.editRepresentative.representativeToPatient.splice(index, 1);
     }
   }
 }
