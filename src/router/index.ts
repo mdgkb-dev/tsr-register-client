@@ -7,6 +7,8 @@ import RepresentativesList from '../components/Representatives/RepresentativesLi
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginForm from '../components/Login/LoginForm.vue';
 import store from '../store';
+import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
+import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
 
 const ifNotAuthenticated = (to: any, from: any, next: any) => {
   if (!store.getters.isAuthenticated) {
@@ -29,44 +31,56 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/patients',
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/home',
     name: 'Home',
     component: HomePage,
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/humans',
     name: 'Humans',
     component: HumansList,
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/patients',
     name: 'Patients',
     component: PatientsList,
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/representatives',
     name: 'Representatives',
     component: RepresentativesList,
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/documents',
     name: 'Documents',
     component: DocumentsList,
-    beforeEnter: ifAuthenticated
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/insurance-companies',
+    name: 'InsuranceCompanies',
+    component: InsuranceCompaniesList,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/anthropometry',
+    name: 'Anthropometry',
+    component: AnthropometryList,
+    beforeEnter: ifAuthenticated,
   },
   {
     path: '/login',
     name: 'Login',
     component: LoginForm,
-    beforeEnter: ifNotAuthenticated
-  }
+    beforeEnter: ifNotAuthenticated,
+  },
 ];
 
 const router = createRouter({

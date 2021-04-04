@@ -34,6 +34,16 @@ export default class MainSidePanel extends Vue {
       title: 'Документы',
       link: '/documents',
     },
+    {
+      name: 'InsuranceCompanies',
+      title: 'Страховые Компании',
+      link: '/insurance-companies',
+    },
+    {
+      name: 'Anthropometry',
+      title: 'Антропометрия',
+      link: '/anthropometry',
+    },
   ];
 }
 </script>

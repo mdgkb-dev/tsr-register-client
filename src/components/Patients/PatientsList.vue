@@ -83,6 +83,7 @@ export default class PatientsList extends Vue {
         phone: '',
       },
     },
+    anthropometryData: [],
   };
 
   modalVisible = false;
@@ -120,6 +121,7 @@ export default class PatientsList extends Vue {
           phone: '',
         },
       },
+      anthropometryData: [],
     };
     this.isCreateForm = true;
     this.modalTitle = 'Создать пациента';
