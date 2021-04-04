@@ -8,7 +8,7 @@ export default {
       return state.anthropometry;
     },
     getById: (state: any) => (id: number) => {
-      return state.anthropometry.find((human: any) => human.id === id);
+      return state.anthropometry.find((item: any) => item.id === id);
     },
   },
   mutations: {
@@ -19,15 +19,11 @@ export default {
       state.anthropometry.push(payload);
     },
     edit: (state: any, payload: any) => {
-      const anthropometry = state.anthropometry.find(
-        (anthropometry: any) => anthropometry.id === payload.recordId
-      );
-      Object.assign(anthropometry, payload);
+      const item = state.anthropometry.find((item: any) => item.id === payload.recordId);
+      Object.assign(item, payload);
     },
     delete: (state: any, payload: any) => {
-      const i = state.someArrayofObjects
-        .map((anthropometry: any) => anthropometry.id)
-        .indexOf(payload);
+      const i = state.anthropometry.findIndex((anthropometry: any) => anthropometry.id == payload);
       state.anthropometry.splice(i, 1);
     },
   },
@@ -50,7 +46,7 @@ export default {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      context.commit('editHuman', await res.json());
+      context.commit('edit', await res.json());
     },
     delete: async (context: any, id: any) => {
       await fetch(process.env.VUE_APP_BASE_URL + `anthropometry/${id}`, {

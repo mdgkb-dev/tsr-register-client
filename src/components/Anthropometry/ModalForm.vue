@@ -29,9 +29,10 @@ export default class ModalForm extends Vue {
 
   onSubmit(): void {
     if (this.isCreateForm) {
-      this.$store.dispatch('insuranceCompanies/create', this.editAnthropometry);
+      this.$store.dispatch('anthropometry/create', this.editAnthropometry);
     } else {
-      this.$store.dispatch('insuranceCompanies/edit', this.editAnthropometry);
+      console.log(this.editAnthropometry);
+      this.$store.dispatch('anthropometry/edit', this.editAnthropometry);
     }
     this.$emit('close');
   }

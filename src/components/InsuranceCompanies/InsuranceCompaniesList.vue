@@ -25,7 +25,7 @@
 
     <el-dialog v-model="modalVisible" width="50%">
       <modalForm
-        :insuranceCompany="insuranceCompany"
+        :insurance="insuranceCompany"
         :is-create-form="isCreateForm"
         :modalTitle="modalTitle"
         @close="close"
@@ -72,7 +72,9 @@ export default class InsuranceCompanies extends Vue {
   }
 
   edit(id: number): void {
-    this.insuranceCompanies = this.$store.getters['insuranceCompanies/getById'](id);
+    this.insuranceCompany = this.$store.getters['insuranceCompanies/getById'](id);
+    this.isCreateForm = false;
+    this.modalTitle = 'Редактировать компанию';
     this.modalVisible = true;
   }
 
@@ -86,7 +88,7 @@ export default class InsuranceCompanies extends Vue {
   }
 
   delete(id: number): void {
-    this.$store.dispatch('documents/delete', id);
+    this.$store.dispatch('insuranceCompanies/delete', id);
   }
 
   close(): void {

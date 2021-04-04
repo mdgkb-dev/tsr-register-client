@@ -8,7 +8,7 @@ export default {
       return state.insuranceCompanies;
     },
     getById: (state: any) => (id: number) => {
-      return state.insuranceCompanies.find((human: any) => human.id === id);
+      return state.insuranceCompanies.find((insuranceCompany: any) => insuranceCompany.id === id);
     },
   },
   mutations: {
@@ -25,9 +25,9 @@ export default {
       Object.assign(insuranceCompany, payload);
     },
     delete: (state: any, payload: any) => {
-      const i = state.someArrayofObjects
-        .map((insuranceCompany: any) => insuranceCompany.id)
-        .indexOf(payload);
+      const i = state.insuranceCompanies.findIndex(
+        (insuranceCompany: any) => insuranceCompany.id == payload
+      );
       state.insuranceCompanies.splice(i, 1);
     },
   },

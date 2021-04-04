@@ -34,15 +34,52 @@
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
+
+    <div v-if="mount">
+      <h2>Антропометрия</h2>
+      <el-form-item v-for="param in anthropometry" :key="param">
+        <h3>{{ param.name }}</h3>
+        <el-form-item>
+          <el-button @click="add(param.id)">Добавить изменение</el-button>
+        </el-form-item>
+        <template v-for="(item, i) in patient.anthropometryData">
+          <div v-if="item.anthropometryId === param.id">
+            <el-form-item label="Дата">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="Дата изменения"
+                  v-model="patient.anthropometryData[i].date"
+                  style="width: 100%"
+                ></el-date-picker>
+              </el-col>
+            </el-form-item>
+            <el-form-item label="Значение">
+              <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
+            </el-form-item>
+          </div>
+        </template>
+      </el-form-item>
+    </div>
   </el-form>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import IPatient from '@/interfaces/patients/IPatient';
+import { mapActions, mapGetters } from 'vuex';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
+  computed: {
+    ...mapGetters('anthropometry', ['anthropometry']),
+  },
+  methods: {
+    ...mapActions({
+      anthropometryGetAll: 'anthropometry/getAll',
+    }),
+  },
 })
 export default class ModalForm extends Vue {
   patient!: IPatient;
@@ -51,6 +88,12 @@ export default class ModalForm extends Vue {
 
   editPatient = this.patient;
 
+  anthropometryGetAll!: () => Promise<void>;
+
+  anthropometry!: IAnthropometry[];
+
+  mount = false;
+
   onSubmit(): void {
     if (this.isCreateForm) {
       this.$store.dispatch('patients/create', this.editPatient);
@@ -58,6 +101,25 @@ export default class ModalForm extends Vue {
       this.$store.dispatch('patients/edit', this.editPatient);
     }
     this.$emit('close');
+  }
+
+  async mounted(): Promise<void> {
+    await this.anthropometryGetAll();
+    this.mount = true;
+  }
+
+  add(paramId: number): void {
+    this.patient.anthropometryData.push({
+      anthropometryId: paramId,
+      date: '',
+    });
+  }
+
+  remove(item: any): void {
+    const index = this.patient.anthropometryData.indexOf(item);
+    if (index !== -1) {
+      this.patient.anthropometryData.splice(index, 1);
+    }
   }
 
   close(): void {

@@ -86,7 +86,7 @@
           ref="upload"
           :file-list="editRepresentative.human.documentScan"
         >
-          <el-button size="small" type="primary">Click to upload</el-button>
+          <el-button size="small" type="primary">Загрузить файл</el-button>
           <template #tip>
             <div class="el-upload__tip">jpg/png files with a size less than 500kb</div>
           </template>

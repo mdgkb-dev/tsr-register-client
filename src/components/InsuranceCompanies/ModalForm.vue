@@ -4,9 +4,9 @@
     <el-form-item label="Название документа">
       <el-input v-model="editInsuranceCompany.name"></el-input>
     </el-form-item>
-
+    {{ editInsuranceCompany }}
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
@@ -18,14 +18,14 @@ import { Vue, Options } from 'vue-class-component';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 @Options({
-  props: ['insuranceCompany', 'is-create-form', 'modal-title'],
+  props: ['insurance', 'is-create-form', 'modal-title'],
 })
 export default class ModalForm extends Vue {
-  insuranceCompany!: IInsuranceCompany;
+  insurance!: IInsuranceCompany;
 
   isCreateForm!: boolean;
 
-  editInsuranceCompany = this.insuranceCompany;
+  editInsuranceCompany = this.insurance;
 
   onSubmit(): void {
     if (this.isCreateForm) {
@@ -36,8 +36,12 @@ export default class ModalForm extends Vue {
     this.$emit('close');
   }
 
+  close(): void {
+    this.$emit('close');
+  }
+
   beforeUpdate(): void {
-    this.editInsuranceCompany = this.insuranceCompany;
+    this.editInsuranceCompany = this.insurance;
   }
 }
 </script>
