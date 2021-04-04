@@ -32,7 +32,6 @@ export default {
   actions: {
     getAll: async (context: any) => {
       const res = await fetch(process.env.VUE_APP_BASE_URL + api);
-      console.log(res);
       context.commit('set', await res.json());
     },
     create: async (context: any, payload: any) => {

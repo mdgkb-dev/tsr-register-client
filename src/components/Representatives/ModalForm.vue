@@ -70,30 +70,51 @@
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
+    <div v-if="mount">
+      <h2>Документы</h2>
+      <el-form-item v-for="(document, i) in documents" :key="document">
+        <h3>{{ document.name }}</h3>
 
-    <el-form-item
-      v-for="document in documents"
-      :key="document"
-      v-model="editRepresentative.representativeToPatient"
-    >
-      <h3>{{ document.name }}</h3>
+        <!--        -->
+        <!--        -->
+        <!--        -->
+        <el-upload
+          action=""
+          :limit="3"
+          :http-request="upload"
+          :data="document"
+          ref="upload"
+          :file-list="editRepresentative.human.documentScan"
+        >
+          <el-button size="small" type="primary">Click to upload</el-button>
+          <template #tip>
+            <div class="el-upload__tip">jpg/png files with a size less than 500kb</div>
+          </template>
+        </el-upload>
 
-      <el-form-item v-for="field in document.documentFields" :key="field">
-        <span>{{ field.name }}</span>
-        <div v-if="field.type === `string`">
-          <el-input
-            label="field.name"
-            v-model="editRepresentative.human.documentFieldToHuman[0].valueString"
-          ></el-input>
-        </div>
-        <div v-else-if="field.type === `number`">
-          <el-input-number
-            label="field.name"
-            v-model="editRepresentative.human.documentFieldToHuman[0].valueNumber"
-          ></el-input-number>
-        </div>
+        <!--        -->
+        <!--        -->
+        <!--        -->
+        <el-form-item
+          v-for="(field, j) in document.documentFields"
+          :key="field.documentFieldToHuman"
+        >
+          <span>{{ field.name }}</span>
+          <div v-if="field.type === 'string'">
+            <el-input
+              label="field.name"
+              v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueString"
+            ></el-input>
+          </div>
+          <div v-else-if="field.type === 'number'">
+            <el-input-number
+              label="field.name"
+              v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueNumber"
+            ></el-input-number>
+          </div>
+        </el-form-item>
       </el-form-item>
-    </el-form-item>
+    </div>
   </el-form>
 </template>
 
@@ -102,6 +123,8 @@ import { Vue, Options } from 'vue-class-component';
 import { mapGetters, mapActions } from 'vuex';
 
 import IDocument from '@/interfaces/documents/IDocument';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
+import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IPatient from '../../interfaces/patients/IPatient';
 import IRepresentetive from '../../interfaces/representatives/IRepresentative';
 
@@ -116,6 +139,7 @@ import IRepresentetive from '../../interfaces/representatives/IRepresentative';
       patientsGetAll: 'patients/getAll',
       patientsCreate: 'patients/create',
       documentsGetAll: 'documents/getAll',
+      documentsUpload: 'documents/upload',
     }),
   },
 })
@@ -128,9 +152,15 @@ export default class ModalForm extends Vue {
 
   documents!: IDocument[];
 
+  offset: number[] = [0];
+
   patientsGetAll!: () => Promise<void>;
 
+  mount = false;
+
   documentsGetAll!: () => Promise<void>;
+
+  documentsUpload!: () => Promise<void>;
 
   editRepresentative = this.representative;
 
@@ -152,16 +182,23 @@ export default class ModalForm extends Vue {
       });
     }
 
-    await this.documentsGetAll();
-    for (const document of this.documents) {
-      for (const field of document.documentFields!) {
-        this.representative.human.documentFieldToHuman!.push({
-          documentFieldId: field.id!,
-          valueString: '',
-          valueNumber: undefined,
-        });
+    if (this.editRepresentative.human.documentFieldToHuman?.length === 0) {
+      let sum = 0;
+      await this.documentsGetAll();
+
+      for (const document of this.documents) {
+        sum += document.documentFields!.length;
+        this.offset.push(sum);
+        for (const field of document.documentFields!) {
+          const obj = {} as IDocumentFieldValue;
+          obj.valueString = '';
+          obj.valueNumber = 0;
+          obj.documentFieldId = field.id!;
+          this.editRepresentative.human.documentFieldToHuman!.push(obj);
+        }
       }
     }
+    this.mount = true;
   }
 
   onSubmit(): void {
@@ -193,11 +230,31 @@ export default class ModalForm extends Vue {
     });
   }
 
+  getIdx(i: number, j: number): number {
+    return this.offset[i] + j;
+  }
+
   remove(item: any): void {
     const index = this.editRepresentative.representativeToPatient.indexOf(item);
     if (index !== -1) {
       this.editRepresentative.representativeToPatient.splice(index, 1);
     }
+  }
+
+  async upload(file: any): Promise<void> {
+    const res = await this.$store.dispatch('documents/upload', file);
+    const resFile = await res.json();
+    if (this.editRepresentative.human.documentScan?.length === 0) {
+      this.editRepresentative.human.documentScan = [];
+    }
+    this.editRepresentative.human.documentScan!.push({
+      file: {
+        originalFileName: resFile.originalFileName,
+        file: resFile.filename,
+      },
+      documentId: file.data.id,
+      humanId: this.editRepresentative.human.id,
+    });
   }
 }
 </script>

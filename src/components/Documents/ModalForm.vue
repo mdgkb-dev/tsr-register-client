@@ -74,7 +74,6 @@ export default class ModalForm extends Vue {
   }
 
   add(): void {
-    console.log(this.editDocument);
     this.editDocument.documentFields!.push({
       name: '',
       type: '',
