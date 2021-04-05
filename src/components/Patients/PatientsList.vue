@@ -31,7 +31,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="Отредактировать пациента" v-model="modalVisible" width="50%">
+    <el-dialog v-model="modalVisible" width="50%">
       <ModalForm
         :patient="patient"
         :modalTitle="modalTitle"
