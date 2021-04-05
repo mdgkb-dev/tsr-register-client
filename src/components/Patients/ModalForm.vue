@@ -30,10 +30,6 @@
       <el-input v-model="editPatient.human.contact.email"></el-input>
       <el-input v-model="editPatient.human.contact.phone"></el-input>
     </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
-      <el-button @click="close">Отмена</el-button>
-    </el-form-item>
 
     <div v-if="mount">
       <h2>Антропометрия</h2>
@@ -91,6 +87,10 @@
         </el-form-item>
       </el-form-item>
     </div>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+      <el-button @click="close">Отмена</el-button>
+    </el-form-item>
   </el-form>
 </template>
 

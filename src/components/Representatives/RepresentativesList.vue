@@ -43,7 +43,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%">
+    <el-dialog v-model="modalVisible" width="80%">
       <ModalForm
         :representative="representative"
         :is-create-form="isCreateForm"

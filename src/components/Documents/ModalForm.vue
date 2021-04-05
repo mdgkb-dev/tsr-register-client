@@ -1,32 +1,44 @@
 <template>
-  <el-form ref="form" :model="editDocument" label-width="120px">
-    <h1>{{ modalTitle }}</h1>
-    <el-form-item label="Название документа">
-      <el-input v-model="editDocument.name"></el-input>
-    </el-form-item>
+  <h2>{{ modalTitle }}</h2>
+  <el-form ref="form" :model="editDocument" label-width="150px">
+    <el-row>
+      <el-col :span="6"></el-col>
+      <el-col :span="12">
+        <el-form-item label="Название документа">
+          <el-input v-model="editDocument.name"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6"></el-col>
+    </el-row>
 
     <el-form-item
-      v-for="field in editDocument.documentFields"
-      :key="field.name"
+      v-for="(field, i) in editDocument.documentFields"
+      :key="i"
       v-model="editDocument.documentFields"
     >
       <el-form-item label="Название поля">
-        <el-input v-model="field.name"></el-input>
+        <el-input v-model="editDocument.documentFields[i].name"></el-input>
       </el-form-item>
-      <el-cascader
-        placeholder="Выберите тип поля"
-        :options="options"
-        v-model="field.type"
-      ></el-cascader>
-      ><el-button @click.prevent="remove(editDocument)">Delete</el-button>
+
+      <el-select placeholder="Выберите тип поля" v-model="editDocument.documentFields[i].type">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
+
+      ><el-button @click.prevent="remove(field)">Удалить поле</el-button>
     </el-form-item>
 
     <el-form-item>
-      <el-button @click="add">Добавить поля</el-button>
+      <el-button @click="add">Добавить поле</el-button>
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Создать</el-button>
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>

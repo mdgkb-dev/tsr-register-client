@@ -86,6 +86,8 @@ export default class DocumentsList extends Vue {
 
   edit(id: number): void {
     this.document = this.$store.getters['documents/getById'](id);
+    this.isCreateForm = false;
+    this.modalTitle = 'Отредактировать документ';
     this.modalVisible = true;
   }
 

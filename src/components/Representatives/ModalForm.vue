@@ -1,120 +1,161 @@
 <template>
-  <el-form ref="form" :model="editRepresentative" label-width="120px">
-    <h1>{{ modalTitle }}</h1>
-    <el-form-item label="Activity name">
-      <el-input v-model="editRepresentative.human.name"></el-input>
-      <el-input v-model="editRepresentative.human.surname"></el-input>
-      <el-input v-model="editRepresentative.human.patronymic"></el-input>
-    </el-form-item>
-    <el-form-item label="Activity zone">
-      <el-select v-model="editRepresentative.human.gender" placeholder="please select your zone">
-        <el-option label="Мужчина" value="male"></el-option>
-        <el-option label="Женщина" value="female"></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="Activity time">
-      <el-col :span="11">
-        <el-date-picker
-          type="date"
-          placeholder="Pick a date"
-          v-model="editRepresentative.human.dateBirth"
-          style="width: 100%"
-        ></el-date-picker>
+  <h2>{{ modalTitle }}</h2>
+  <el-form ref="form" :model="editRepresentative" label-width="150px">
+    <el-row>
+      <el-col>
+        <h3>Личная информация</h3>
       </el-col>
-    </el-form-item>
-    <el-form-item label="Адреса">
-      <el-input v-model="editRepresentative.human.addressRegistration"></el-input>
-      <el-input v-model="editRepresentative.human.addressResidential"></el-input>
-    </el-form-item>
-    <el-form-item label="Контакты">
-      <el-input v-model="editRepresentative.human.contact.phone"></el-input>
-      <el-input v-model="editRepresentative.human.contact.email"></el-input>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="Имя">
+            <el-input label="name" v-model="editRepresentative.human.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Фамилия">
+            <el-input v-model="editRepresentative.human.surname"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Отчество">
+            <el-input v-model="editRepresentative.human.patronymic"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Пол">
+            <el-select v-model="editRepresentative.human.gender" placeholder="Выберите пол">
+              <el-option label="Мужчина" value="male"></el-option>
+              <el-option label="Женщина" value="female"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Дата рождения">
+            <el-date-picker
+              type="date"
+              v-model="editRepresentative.human.dateBirth"
+              style="width: 100%"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="Адрес регистрации">
+            <el-input v-model="editRepresentative.human.addressRegistration"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Адрес проживания">
+            <el-input v-model="editRepresentative.human.addressResidential"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-form-item label="Телефон">
+          <el-input v-model="editRepresentative.human.contact.phone"></el-input>
+        </el-form-item>
+        <el-form-item label="Email">
+          <el-input v-model="editRepresentative.human.contact.email"></el-input>
+        </el-form-item>
+      </el-row>
+    </el-row>
+    <h3>Подопечные представителя</h3>
+    <el-row>
+      <el-form-item>
+        <el-row>
+          <el-form-item
+            v-for="(item, index) in editRepresentative.representativeToPatient"
+            :key="index"
+            v-model="editRepresentative.representativeToPatient"
+          >
+            <el-space direction="horizontal" alignment="start" :size="1">
+              <span>Пациент</span>
+              <el-col :span="12">
+                <el-select v-model="editRepresentative.representativeToPatient[index].patientId">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="Number(item.value)"
+                  >
+                  </el-option>
+                </el-select>
+              </el-col>
+
+              <span>Роль представителя</span>
+              <el-col :span="11">
+                <el-select v-model="editRepresentative.representativeToPatient[index].type">
+                  <el-option
+                    v-for="item in types"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="1">
+                <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+              </el-col>
+            </el-space>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item>
+            <el-button @click="add">Добавить пациента</el-button>
+          </el-form-item>
+        </el-row>
+      </el-form-item>
+    </el-row>
+    <h2>Документы</h2>
+    <el-form-item v-for="(document, i) in documents" :key="document" v-if="mount">
+      <el-row>
+        <h3>{{ document.name }}</h3>
+
+        <el-row>
+          <el-form-item
+            v-for="(field, j) in document.documentFields"
+            :key="field.documentFieldToHuman"
+          >
+            <el-col>
+              <span>{{ field.name }}</span>
+              <div v-if="field.type === 'string'">
+                <el-input
+                  label="field.name"
+                  v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueString"
+                ></el-input>
+              </div>
+              <div v-else-if="field.type === 'number'">
+                <el-input-number
+                  label="field.name"
+                  v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueNumber"
+                ></el-input-number>
+              </div>
+            </el-col>
+          </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-upload
+            action=""
+            :limit="3"
+            :http-request="upload"
+            :data="document"
+            ref="upload"
+            :file-list="editRepresentative.human.documentScan"
+          >
+            <el-button size="small" type="primary">Загрузить файл</el-button>
+          </el-upload>
+        </el-row>
+      </el-row>
     </el-form-item>
     <el-form-item>
-      <el-form-item
-        v-for="(item, index) in editRepresentative.representativeToPatient"
-        :key="index"
-        v-model="editRepresentative.representativeToPatient"
-      >
-        <el-select
-          placeholder="Выберите пациента"
-          v-model="editRepresentative.representativeToPatient[index].patientId"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="Number(item.value)"
-          >
-          </el-option>
-        </el-select>
-        <el-select
-          placeholder="Выберите роль представителя"
-          v-model="editRepresentative.representativeToPatient[index].type"
-        >
-          <el-option
-            v-for="item in types"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-        <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button @click="add">Добавить пациента</el-button>
-      </el-form-item>
-
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
-    <div v-if="mount">
-      <h2>Документы</h2>
-      <el-form-item v-for="(document, i) in documents" :key="document">
-        <h3>{{ document.name }}</h3>
-
-        <!--        -->
-        <!--        -->
-        <!--        -->
-        <el-upload
-          action=""
-          :limit="3"
-          :http-request="upload"
-          :data="document"
-          ref="upload"
-          :file-list="editRepresentative.human.documentScan"
-        >
-          <el-button size="small" type="primary">Загрузить файл</el-button>
-          <template #tip>
-            <div class="el-upload__tip">jpg/png files with a size less than 500kb</div>
-          </template>
-        </el-upload>
-
-        <!--        -->
-        <!--        -->
-        <!--        -->
-        <el-form-item
-          v-for="(field, j) in document.documentFields"
-          :key="field.documentFieldToHuman"
-        >
-          <span>{{ field.name }}</span>
-          <div v-if="field.type === 'string'">
-            <el-input
-              label="field.name"
-              v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueString"
-            ></el-input>
-          </div>
-          <div v-else-if="field.type === 'number'">
-            <el-input-number
-              label="field.name"
-              v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueNumber"
-            ></el-input-number>
-          </div>
-        </el-form-item>
-      </el-form-item>
-    </div>
   </el-form>
 </template>
 
@@ -182,18 +223,22 @@ export default class ModalForm extends Vue {
       });
     }
 
-    if (this.editRepresentative.human.documentFieldToHuman?.length === 0) {
-      let sum = 0;
-      await this.documentsGetAll();
+    let sum = 0;
+    await this.documentsGetAll();
 
-      for (const document of this.documents) {
-        sum += document.documentFields!.length;
-        this.offset.push(sum);
-        for (const field of document.documentFields!) {
-          const obj = {} as IDocumentFieldValue;
-          obj.valueString = '';
-          obj.valueNumber = 0;
-          obj.documentFieldId = field.id!;
+    for (const document of this.documents) {
+      sum += document.documentFields!.length;
+      this.offset.push(sum);
+      for (const field of document.documentFields!) {
+        const obj = {} as IDocumentFieldValue;
+        obj.valueString = '';
+        obj.valueNumber = 0;
+        obj.documentFieldId = field.id!;
+
+        const item = this.editRepresentative.human.documentFieldToHuman?.find(i => {
+          return i.documentFieldId === field.id;
+        });
+        if (item === undefined) {
           this.editRepresentative.human.documentFieldToHuman!.push(obj);
         }
       }
@@ -219,6 +264,7 @@ export default class ModalForm extends Vue {
   }
 
   close(): void {
+    this.mount = false;
     this.$emit('close');
   }
 
@@ -258,3 +304,17 @@ export default class ModalForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.el-row {
+  margin-bottom: 40px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+</style>
