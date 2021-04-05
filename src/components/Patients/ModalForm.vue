@@ -69,7 +69,7 @@
         >
           <el-select
             placeholder="Выберите компанию"
-            v-model="editPatient.human.insuranceCompanyToHuman[index].humanId"
+            v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
           >
             <el-option
               v-for="item in options"
@@ -83,11 +83,11 @@
             label="Введите номер страховки"
             v-model="editPatient.human.insuranceCompanyToHuman[index].number"
           ></el-input>
-          <!--          <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>-->
+          <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
         </el-form-item>
 
         <el-form-item>
-          <!--          <el-button @click="addInsurance">Добавить страховку</el-button>-->
+          <el-button @click="addInsurance">Добавить страховку</el-button>
         </el-form-item>
       </el-form-item>
     </div>
@@ -170,13 +170,15 @@ export default class ModalForm extends Vue {
     }
   }
 
-  // addInsurance(humanId: number, insuranceCompanyId: number): void {
-  //   // this.patient.human.insuranceCompanyToHuman.push({
-  //   //   number: '',
-  //   // });
-  // }
+  addInsurance(humanId: number, insuranceCompanyId: number): void {
+    this.patient.human.insuranceCompanyToHuman.push({
+      number: '',
+      insuranceCompanyId: undefined,
+      humanId: undefined,
+    });
+  }
 
-  removeInusurance(item: any): void {
+  removeInsurance(item: any): void {
     const index = this.patient.human.insuranceCompanyToHuman.indexOf(item);
     if (index !== -1) {
       this.patient.human.insuranceCompanyToHuman.splice(index, 1);
