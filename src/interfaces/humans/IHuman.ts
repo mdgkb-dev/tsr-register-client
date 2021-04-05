@@ -15,5 +15,5 @@ export default interface IHuman {
   contact: IContact;
   documentFieldToHuman?: IDocumentFieldValue[];
   documentScan?: IDocumentScan[];
-  insuranceCompanyToHuman?: IInsuranceCompanyToHuman[];
+  insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 }

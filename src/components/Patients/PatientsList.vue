@@ -82,6 +82,7 @@ export default class PatientsList extends Vue {
         email: '',
         phone: '',
       },
+      insuranceCompanyToHuman: [],
     },
     anthropometryData: [],
   };
@@ -120,6 +121,7 @@ export default class PatientsList extends Vue {
           email: '',
           phone: '',
         },
+        insuranceCompanyToHuman: [],
       },
       anthropometryData: [],
     };

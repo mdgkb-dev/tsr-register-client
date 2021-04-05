@@ -60,6 +60,36 @@
           </div>
         </template>
       </el-form-item>
+      <h2>Страховки</h2>
+      <el-form-item>
+        <el-form-item
+          v-for="(item, index) in editPatient.human.insuranceCompanyToHuman"
+          :key="index"
+          v-model="editPatient.human.insuranceCompanyToHuman"
+        >
+          <el-select
+            placeholder="Выберите компанию"
+            v-model="editPatient.human.insuranceCompanyToHuman[index].humanId"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="Number(item.value)"
+            >
+            </el-option>
+          </el-select>
+          <el-input
+            label="Введите номер страховки"
+            v-model="editPatient.human.insuranceCompanyToHuman[index].number"
+          ></el-input>
+          <!--          <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>-->
+        </el-form-item>
+
+        <el-form-item>
+          <!--          <el-button @click="addInsurance">Добавить страховку</el-button>-->
+        </el-form-item>
+      </el-form-item>
     </div>
   </el-form>
 </template>
@@ -69,15 +99,18 @@ import { Vue, Options } from 'vue-class-component';
 import IPatient from '@/interfaces/patients/IPatient';
 import { mapActions, mapGetters } from 'vuex';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
   computed: {
     ...mapGetters('anthropometry', ['anthropometry']),
+    ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
   },
   methods: {
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
+      insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
     }),
   },
 })
@@ -90,9 +123,15 @@ export default class ModalForm extends Vue {
 
   anthropometryGetAll!: () => Promise<void>;
 
+  insuranceCompaniesGetAll!: () => Promise<void>;
+
   anthropometry!: IAnthropometry[];
 
+  insuranceCompanies!: IInsuranceCompany[];
+
   mount = false;
+
+  options = [{}];
 
   onSubmit(): void {
     if (this.isCreateForm) {
@@ -105,6 +144,15 @@ export default class ModalForm extends Vue {
 
   async mounted(): Promise<void> {
     await this.anthropometryGetAll();
+    await this.insuranceCompaniesGetAll();
+
+    this.options.splice(0, 1);
+    for (const item of this.insuranceCompanies) {
+      this.options.push({
+        label: `${item.name}`,
+        value: item.id,
+      });
+    }
     this.mount = true;
   }
 
@@ -119,6 +167,19 @@ export default class ModalForm extends Vue {
     const index = this.patient.anthropometryData.indexOf(item);
     if (index !== -1) {
       this.patient.anthropometryData.splice(index, 1);
+    }
+  }
+
+  // addInsurance(humanId: number, insuranceCompanyId: number): void {
+  //   // this.patient.human.insuranceCompanyToHuman.push({
+  //   //   number: '',
+  //   // });
+  // }
+
+  removeInusurance(item: any): void {
+    const index = this.patient.human.insuranceCompanyToHuman.indexOf(item);
+    if (index !== -1) {
+      this.patient.human.insuranceCompanyToHuman.splice(index, 1);
     }
   }
 

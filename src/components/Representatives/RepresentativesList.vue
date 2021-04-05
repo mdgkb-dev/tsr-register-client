@@ -94,6 +94,7 @@ export default class RepresentativesList extends Vue {
         phone: '',
       },
       documentFieldToHuman: [],
+      insuranceCompanyToHuman: [],
     },
     representativeToPatient: [],
   };
@@ -132,6 +133,7 @@ export default class RepresentativesList extends Vue {
         },
         documentFieldToHuman: [],
         documentScan: [],
+        insuranceCompanyToHuman: [],
       },
       representativeToPatient: [],
     };
