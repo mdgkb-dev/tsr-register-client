@@ -1,8 +1,6 @@
 <template>
   <el-col :span="23"></el-col>
-  <el-col :span="1">
-    <el-button @click="this.logout()">Выйти</el-button></el-col
-  >
+  <el-col :span="1"> <el-button @click="logout()">Выйти</el-button></el-col>
 </template>
 
 <script lang="ts">
@@ -18,7 +16,6 @@ export default class MainHeader extends Vue {
   userName = '';
 
   mounted(): void {
-    this.userName = this.$store.getters['auth/getUserName'];
     this.userName = this.$store.getters['auth/getUserName'];
   }
 

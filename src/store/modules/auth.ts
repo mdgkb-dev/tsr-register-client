@@ -7,9 +7,15 @@ export default {
     hasLoadedOnce: false,
   },
   getters: {
-    getUserName: (state: any) => { return state.user },
-    isAuthenticated: (state: any) => { return !!state.token },
-    authStatus: (state: any) => { return state.status },
+    getUserName: (state: any) => {
+      return state.user;
+    },
+    isAuthenticated: (state: any) => {
+      return !!state.token;
+    },
+    authStatus: (state: any) => {
+      return state.status;
+    },
   },
   mutations: {
     login: (state: any, payload: any) => {
@@ -18,20 +24,22 @@ export default {
       state.user = payload.user;
       state.token = payload.token.token;
       state.hasLoadedOnce = true;
-    }
+    },
   },
   actions: {
     login: async (context: any, payload: any) => {
       const res = await fetch(process.env.VUE_APP_BASE_URL + 'login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       context.commit('login', await res.json());
     },
     logout: () => {
+      console.log(localStorage.getItem('user-token'));
       localStorage.removeItem('user-token');
-    }
+      console.log(localStorage.getItem('user-token'));
+    },
   },
 };

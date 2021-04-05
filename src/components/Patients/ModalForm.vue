@@ -82,6 +82,7 @@
                     style="width: 100%"
                   ></el-date-picker>
                 </el-col>
+                <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
               </el-form-item>
               <el-form-item label="Значение">
                 <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
