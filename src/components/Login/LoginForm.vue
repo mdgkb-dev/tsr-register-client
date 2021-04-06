@@ -1,23 +1,23 @@
 <template>
   <div class="login">
     <el-card class="box-card">
-      <el-form class="login-form" :model="login">
+      <el-form class="login-form" @submit.prevent="submitForm" :model="loginForm">
         <div class="card-header">
           <h1>Войти в систему</h1>
           <el-button class="button" type="text">Забыли пароль?</el-button>
         </div>
         <el-form-item label="">
-          <el-input v-model="login.login" placeholder="Логин"></el-input>
+          <el-input v-model="loginForm.login" placeholder="Логин"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-input
             placeholder="Пароль"
-            v-model="login.password"
+            v-model="loginForm.password"
             show-password
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">Войти</el-button>
+          <el-button type="primary">Войти</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -28,14 +28,14 @@
 import { Vue } from 'vue-class-component';
 
 export default class LoginForm extends Vue {
-  login = {
+  loginForm = {
     login: '',
     password: '',
   };
 
-  async onSubmit(): Promise<void> {
+  async submitForm(): Promise<void> {
     try {
-      await this.$store.dispatch('auth/login', this.login);
+      await this.$store.dispatch('auth/login', this.loginForm);
       await this.$router.push('/');
       this.$store.commit('setLayout', 'main-layout');
     } catch (e) {
