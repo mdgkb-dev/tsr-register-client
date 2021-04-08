@@ -1,131 +1,103 @@
 <template>
-  <h1>{{ modalTitle }}</h1>
-  <el-form ref="form" :model="editPatient" label-width="150px">
-    <el-row>
-      <el-col>
-        <h3>Личная информация</h3>
-      </el-col>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="Имя">
-            <el-input v-model="editPatient.human.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-form-item label="Фамилия">
-          <el-col :span="8">
-            <el-input v-model="editPatient.human.surname"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="Отчество">
-          <el-col :span="8">
-            <el-input v-model="editPatient.human.patronymic"></el-input>
-          </el-col>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="Пол">
-            <el-select v-model="editPatient.human.gender" placeholder="Выберите пол">
-              <el-option label="Мужчина" value="male"></el-option>
-              <el-option label="Женщина" value="female"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Дата рождения">
-            <el-col :span="11">
-              <el-date-picker
-                type="date"
-                placeholder="Pick a date"
-                v-model="editPatient.human.dateBirth"
-                style="width: 100%"
-              ></el-date-picker>
-            </el-col>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="12">
-          <el-form-item label="Адрес регистрации">
-            <el-input v-model="editPatient.human.addressRegistration"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Адрес проживания">
-            <el-input v-model="editPatient.human.addressResidential"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-form-item label="Телефон">
-          <el-input v-model="editPatient.human.contact.phone"></el-input>
-        </el-form-item>
-        <el-form-item label="Email">
-          <el-input v-model="editPatient.human.contact.email"></el-input>
-        </el-form-item>
-      </el-row>
-      <div v-if="mount">
-        <h2>Антропометрия</h2>
-        <el-form-item v-for="param in anthropometry" :key="param">
-          <h3>{{ param.name }}</h3>
-          <el-form-item>
-            <el-button @click="add(param.id)">Добавить изменение</el-button>
-          </el-form-item>
-          <template v-for="(item, i) in patient.anthropometryData">
-            <div v-if="item.anthropometryId === param.id">
-              <el-form-item label="Дата">
-                <el-col :span="11">
-                  <el-date-picker
-                    type="date"
-                    placeholder="Дата изменения"
-                    v-model="patient.anthropometryData[i].date"
-                    style="width: 100%"
-                  ></el-date-picker>
-                </el-col>
-                <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
-              </el-form-item>
-              <el-form-item label="Значение">
-                <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
-              </el-form-item>
-            </div>
-          </template>
-        </el-form-item>
-        <h2>Страховки</h2>
-        <el-form-item>
-          <el-form-item
-            v-for="(item, index) in editPatient.human.insuranceCompanyToHuman"
-            :key="index"
-            v-model="editPatient.human.insuranceCompanyToHuman"
-          >
-            <el-select
-              placeholder="Выберите компанию"
-              v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="Number(item.value)"
-              >
-              </el-option>
-            </el-select>
-            <el-input
-              label="Введите номер страховки"
-              v-model="editPatient.human.insuranceCompanyToHuman[index].number"
-            ></el-input>
-            <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
-          </el-form-item>
+  <!-- <h1>{{ modalTitle }}</h1> -->
+  <el-form ref="form" :model="editPatient" label-width="10vw" label-position="right">
+    <h3>Личная информация</h3>
+    <el-form-item label="Фамилия">
+      <el-input v-model="editPatient.human.surname"></el-input>
+    </el-form-item>
+    <el-form-item label="Имя">
+      <el-input v-model="editPatient.human.name"></el-input>
+    </el-form-item>
+    <el-form-item label="Отчество">
+      <el-input v-model="editPatient.human.patronymic"></el-input>
+    </el-form-item>
+    <el-form-item label="Пол">
+      <el-select v-model="editPatient.human.gender" placeholder="Выберите пол">
+        <el-option label="Мужчина" value="male"></el-option>
+        <el-option label="Женщина" value="female"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="Дата рождения">
+      <el-date-picker
+        type="date"
+        placeholder="Pick a date"
+        v-model="editPatient.human.dateBirth"
+      ></el-date-picker>
+    </el-form-item>
+    <el-form-item label="Адрес регистрации">
+      <el-input v-model="editPatient.human.addressRegistration"></el-input>
+    </el-form-item>
+    <el-form-item label="Адрес проживания">
+      <el-input v-model="editPatient.human.addressResidential"></el-input>
+    </el-form-item>
+    <el-form-item label="Телефон">
+      <el-input v-model="editPatient.human.contact.phone"></el-input>
+    </el-form-item>
+    <el-form-item label="Email">
+      <el-input v-model="editPatient.human.contact.email"></el-input>
+    </el-form-item>
 
-          <el-form-item>
-            <el-button @click="addInsurance">Добавить страховку</el-button>
-          </el-form-item>
+    <div v-if="mount">
+      <h3>Антропометрия</h3>
+      <el-form-item v-for="param in anthropometry" :key="param">
+        <h3>{{ param.name }}</h3>
+        <el-form-item>
+          <el-button @click="add(param.id)">Добавить изменение</el-button>
         </el-form-item>
-      </div>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Сохранить</el-button>
-        <el-button @click="close">Отмена</el-button>
+        <template v-for="(item, i) in patient.anthropometryData">
+          <div v-if="item.anthropometryId === param.id">
+            <el-form-item label="Дата">
+              <el-col :span="11">
+                <el-date-picker
+                  type="date"
+                  placeholder="Дата изменения"
+                  v-model="patient.anthropometryData[i].date"
+                  style="width: 100%"
+                ></el-date-picker>
+              </el-col>
+              <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
+            </el-form-item>
+            <el-form-item label="Значение">
+              <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
+            </el-form-item>
+          </div>
+        </template>
       </el-form-item>
-    </el-row>
+      <h3>Страховки</h3>
+      <el-form-item>
+        <el-form-item
+          v-for="(item, index) in editPatient.human.insuranceCompanyToHuman"
+          :key="index"
+          v-model="editPatient.human.insuranceCompanyToHuman"
+        >
+          <el-select
+            placeholder="Выберите компанию"
+            v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="Number(item.value)"
+            >
+            </el-option>
+          </el-select>
+          <el-input
+            label="Введите номер страховки"
+            v-model="editPatient.human.insuranceCompanyToHuman[index].number"
+          ></el-input>
+          <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="addInsurance">Добавить страховку</el-button>
+        </el-form-item>
+      </el-form-item>
+    </div>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+      <el-button @click="close">Отмена</el-button>
+    </el-form-item>
   </el-form>
 </template>
 

@@ -1,9 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="this.create"
-        >Создать пациента</el-button
-      >
+      <el-button type="primary" icon="el-icon-document" @click="create">Добавить пациента</el-button>
     </el-button-group>
 
     <el-table
@@ -31,13 +29,8 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%">
-      <ModalForm
-        :patient="patient"
-        :modalTitle="modalTitle"
-        :is-create-form="isCreateForm"
-        @close="close"
-      />
+    <el-dialog v-model="modalVisible" width="85vw" top="3vh" :title="modalTitle" center>
+      <ModalForm :patient="patient" :is-create-form="isCreateForm" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -126,7 +119,7 @@ export default class PatientsList extends Vue {
       anthropometryData: [],
     };
     this.isCreateForm = true;
-    this.modalTitle = 'Создать пациента';
+    this.modalTitle = 'Добавление пациента';
 
     this.modalVisible = true;
   }
