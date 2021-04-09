@@ -38,4 +38,9 @@ export default class App extends Vue {
 el-table {
   width: 100%;
 }
+
+.el-form-item__label {
+  word-break: normal;
+}
+
 </style>

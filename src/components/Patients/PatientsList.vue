@@ -119,7 +119,7 @@ export default class PatientsList extends Vue {
       anthropometryData: [],
     };
     this.isCreateForm = true;
-    this.modalTitle = 'Добавление пациента';
+    this.modalTitle = 'Информация о пациенте';
 
     this.modalVisible = true;
   }
