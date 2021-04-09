@@ -52,10 +52,10 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
+import IFilter from '@/interfaces/filters/IFilter';
 import IPatient from '../../interfaces/patients/IPatient';
 
 import ModalForm from './ModalForm.vue';
-import IFilter from '@/interfaces/filters/IFilter';
 
 @Options({
   components: {
@@ -116,7 +116,7 @@ export default class PatientsList extends Vue {
 
   edit(id: number): void {
     this.patient = this.$store.getters['patients/getById'](id);
-    console.log(this.patient);
+    console.log(this.patients);
     this.isCreateForm = false;
     this.modalTitle = 'Редактировать пациента';
 

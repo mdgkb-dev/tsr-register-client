@@ -1,6 +1,7 @@
 <template>
   <h1>{{ modalTitle }}</h1>
   <el-form ref="form" :model="editPatient" label-width="150px">
+    {{ editPatient }}
     <el-row>
       <el-col>
         <h3>Личная информация</h3>
@@ -71,21 +72,22 @@
           <el-form-item>
             <el-button @click="add(param.id)">Добавить изменение</el-button>
           </el-form-item>
-          <template v-for="(item, i) in patient.anthropometryData">
+          <template v-for="(item, i) in editPatient.anthropometryData">
+            {{ editPatient.anthropometryData[i] }}
             <div v-if="item.anthropometryId === param.id">
               <el-form-item label="Дата">
                 <el-col :span="11">
                   <el-date-picker
                     type="date"
                     placeholder="Дата изменения"
-                    v-model="patient.anthropometryData[i].date"
+                    v-model="editPatient.anthropometryData[i].date"
                     style="width: 100%"
                   ></el-date-picker>
                 </el-col>
                 <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
               </el-form-item>
               <el-form-item label="Значение">
-                <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
+                <el-input-number v-model="editPatient.anthropometryData[i].value"></el-input-number>
               </el-form-item>
             </div>
           </template>
@@ -105,7 +107,7 @@
                 v-for="item in options"
                 :key="item.value"
                 :label="item.label"
-                :value="Number(item.value)"
+                :value="item.value"
               >
               </el-option>
             </el-select>
@@ -135,6 +137,7 @@ import IPatient from '@/interfaces/patients/IPatient';
 import { mapActions, mapGetters } from 'vuex';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
+import IInsuranceCompanyOption from '@/interfaces/insuranceCompanies/IInsuranceCompanyOption';
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
@@ -166,7 +169,7 @@ export default class ModalForm extends Vue {
 
   mount = false;
 
-  options = [{}];
+  options!: IInsuranceCompanyOption[];
 
   onSubmit(): void {
     if (this.isCreateForm) {
@@ -180,14 +183,14 @@ export default class ModalForm extends Vue {
   async mounted(): Promise<void> {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
-
-    this.options.splice(0, 1);
+    this.options = [];
     for (const item of this.insuranceCompanies) {
       this.options.push({
         label: `${item.name}`,
-        value: item.id,
+        value: `${item.id}`,
       });
     }
+    console.log(this.options);
     this.mount = true;
   }
 
@@ -195,6 +198,7 @@ export default class ModalForm extends Vue {
     this.patient.anthropometryData.push({
       anthropometryId: paramId,
       date: '',
+      value: 0,
     });
   }
 
