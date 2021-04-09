@@ -1,7 +1,7 @@
 export default interface IDocumentFieldValue {
-  id?: number;
-  humanId?: number;
-  documentFieldId: number;
+  id?: string;
+  humanId?: string;
+  documentFieldId?: string;
   valueString?: string;
   valueNumber?: number;
 }

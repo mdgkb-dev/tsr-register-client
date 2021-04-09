@@ -1,4 +1,4 @@
 export default interface IAnthropometry {
-  id?: number;
+  id?: string;
   name: string;
 }

@@ -68,5 +68,18 @@ export default {
         body: formData,
       });
     },
+
+    download: async (context: any, filePath: string): Promise<void> => {
+      const res = await fetch(process.env.VUE_APP_BASE_URL + `${api}download/${filePath}`, {
+        method: 'GET',
+      });
+      const fileURL = window.URL.createObjectURL(new Blob([await res.blob()]));
+      const fileLink = document.createElement('a');
+      fileLink.href = fileURL;
+      fileLink.setAttribute('download', 'file.pdf');
+      document.body.appendChild(fileLink);
+      fileLink.click();
+      return;
+    },
   },
 };

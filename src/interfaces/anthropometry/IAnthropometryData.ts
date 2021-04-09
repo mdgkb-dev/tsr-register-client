@@ -1,7 +1,7 @@
 export default interface IAnthropometryData {
-  id?: number;
-  anthropometryId?: number;
-  patientId?: number;
+  id?: string;
+  anthropometryId?: string;
+  patientId?: string;
   value?: number;
   date: string;
 }

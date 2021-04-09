@@ -4,7 +4,6 @@
     <el-form-item label="Название документа">
       <el-input v-model="editInsuranceCompany.name"></el-input>
     </el-form-item>
-    {{ editInsuranceCompany }}
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>

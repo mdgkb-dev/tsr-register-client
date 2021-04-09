@@ -12,7 +12,13 @@
       style="width: 100%"
     >
       <el-table-column prop="id" label="№" width="150" />
-      <el-table-column prop="human.name" label="Имя" width="150" />
+      <el-table-column
+        prop="human.name"
+        label="Имя"
+        width="150"
+        :filters="filters"
+        :filter-method="filterHandler"
+      />
       <el-table-column prop="human.surname" label="Фамилия" width="150" />
       <el-table-column prop="human.patronymic" label="Отчество" width="150" />
       <el-table-column prop="human.dateBirth" label="Дата рождения" width="150" />
@@ -31,7 +37,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%">
+    <el-dialog v-model="modalVisible" width="50%" :close-on-click-modal="false">
       <ModalForm
         :patient="patient"
         :modalTitle="modalTitle"
@@ -49,6 +55,7 @@ import { mapState, mapActions } from 'vuex';
 import IPatient from '../../interfaces/patients/IPatient';
 
 import ModalForm from './ModalForm.vue';
+import IFilter from '@/interfaces/filters/IFilter';
 
 @Options({
   components: {
@@ -87,6 +94,8 @@ export default class PatientsList extends Vue {
     anthropometryData: [],
   };
 
+  filters!: IFilter[];
+
   modalVisible = false;
 
   modalTitle = '';
@@ -95,6 +104,14 @@ export default class PatientsList extends Vue {
 
   async mounted(): Promise<void> {
     await this.getAll();
+    this.filters = [];
+    for (const patient of this.patients) {
+      this.filters.push({
+        text: patient.human.name,
+        value: patient.human.name,
+      });
+    }
+    console.log(this.filters);
   }
 
   edit(id: number): void {
@@ -133,6 +150,12 @@ export default class PatientsList extends Vue {
 
   delete(id: number): void {
     this.$store.dispatch('patients/delete', id);
+  }
+
+  filterHandler(value: string, row: any, column: any) {
+    const property = column['property'];
+    console.log(row[property]);
+    return row[property] === value;
   }
 
   close(): void {

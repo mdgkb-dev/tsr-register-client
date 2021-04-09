@@ -191,7 +191,7 @@ export default class ModalForm extends Vue {
     this.mount = true;
   }
 
-  add(paramId: number): void {
+  add(paramId: string): void {
     this.patient.anthropometryData.push({
       anthropometryId: paramId,
       date: '',

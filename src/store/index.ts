@@ -7,6 +7,7 @@ import representatives from './modules/representatives';
 import documents from './modules/documents';
 import insuranceCompanies from './modules/insuranceCompanies';
 import anthropometry from './modules/anthropometry';
+import documentScans from './modules/documentScans';
 
 export default createStore({
   state: {
@@ -31,5 +32,6 @@ export default createStore({
     documents,
     insuranceCompanies,
     anthropometry,
+    documentScans,
   },
 });

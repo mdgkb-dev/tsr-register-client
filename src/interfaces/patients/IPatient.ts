@@ -2,7 +2,7 @@ import IHuman from '../humans/IHuman';
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 
 export default interface IPatient {
-  id?: number;
+  id?: string;
   human: IHuman;
   anthropometryData: IAnthropometryData[];
 }

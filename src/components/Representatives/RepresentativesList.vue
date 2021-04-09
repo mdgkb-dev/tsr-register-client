@@ -132,7 +132,7 @@ export default class RepresentativesList extends Vue {
           phone: '',
         },
         documentFieldToHuman: [],
-        documentScan: [],
+        documentScans: [],
         insuranceCompanyToHuman: [],
       },
       representativeToPatient: [],

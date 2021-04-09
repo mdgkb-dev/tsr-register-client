@@ -4,7 +4,7 @@ import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 
 export default interface IHuman {
-  id?: number;
+  id?: string;
   name: string;
   surname: string;
   patronymic: string;
@@ -14,6 +14,6 @@ export default interface IHuman {
   addressResidential: string;
   contact: IContact;
   documentFieldToHuman?: IDocumentFieldValue[];
-  documentScan?: IDocumentScan[];
+  documentScans?: IDocumentScan[];
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 }

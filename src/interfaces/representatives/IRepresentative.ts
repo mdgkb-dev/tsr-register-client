@@ -3,7 +3,7 @@ import IRepresetnationType from './IRepresetnationType';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 
 export default interface IRepresentative {
-  id?: number;
+  id?: string;
   human: IHuman;
   representativeToPatient: IRepresetnationType[];
 }

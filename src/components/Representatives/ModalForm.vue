@@ -111,27 +111,24 @@
       </el-form-item>
     </el-row>
     <h2>Документы</h2>
-    <el-form-item v-for="(document, i) in documents" :key="document" v-if="mount">
+    <el-form-item v-for="document in documents" :key="document" v-if="mount">
       <el-row>
         <h3>{{ document.name }}</h3>
 
         <el-row>
-          <el-form-item
-            v-for="(field, j) in document.documentFields"
-            :key="field.documentFieldToHuman"
-          >
+          <el-form-item v-for="(field, j) in document.documentFields" :key="j">
             <el-col>
               <span>{{ field.name }}</span>
               <div v-if="field.type === 'string'">
                 <el-input
                   label="field.name"
-                  v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueString"
+                  v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
                 ></el-input>
               </div>
               <div v-else-if="field.type === 'number'">
                 <el-input-number
                   label="field.name"
-                  v-model="editRepresentative.human.documentFieldToHuman[getIdx(i, j)].valueNumber"
+                  v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
                 ></el-input-number>
               </div>
             </el-col>
@@ -142,10 +139,13 @@
           <el-upload
             action=""
             :limit="3"
+            :on-preview="download"
+            :on-success="onSuccess"
+            :on-remove="onRemove"
             :http-request="upload"
             :data="document"
-            ref="upload"
-            :file-list="editRepresentative.human.documentScan"
+            ref="uploadFile"
+            :file-list="documentsScans[document.id]"
           >
             <el-button size="small" type="primary">Загрузить файл</el-button>
           </el-upload>
@@ -180,18 +180,26 @@ import IRepresentetive from '../../interfaces/representatives/IRepresentative';
       patientsGetAll: 'patients/getAll',
       patientsCreate: 'patients/create',
       documentsGetAll: 'documents/getAll',
-      documentsUpload: 'documents/upload',
+      documentScansUpload: 'documentScans/upload',
     }),
   },
 })
 export default class ModalForm extends Vue {
   representative!: IRepresentetive;
 
+  $refs!: {
+    uploadFile: any;
+  };
+
   isCreateForm!: boolean;
 
   patients!: IPatient[];
 
   documents!: IDocument[];
+
+  documentsScans!: { [id: string]: IDocumentScan[] };
+
+  documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
 
   offset: number[] = [0];
 
@@ -212,7 +220,7 @@ export default class ModalForm extends Vue {
     { label: 'Мать', value: 'мать' },
   ];
 
-  async mounted(): Promise<void> {
+  async init(): Promise<void> {
     await this.patientsGetAll();
     this.options.splice(0, 1);
     for (const item of this.patients) {
@@ -226,30 +234,69 @@ export default class ModalForm extends Vue {
     let sum = 0;
     await this.documentsGetAll();
 
+    this.documentsScans = {};
+    this.documentsValues = {};
+
     for (const document of this.documents) {
       sum += document.documentFields!.length;
       this.offset.push(sum);
-      for (const field of document.documentFields!) {
-        const obj = {} as IDocumentFieldValue;
-        obj.valueString = '';
-        obj.valueNumber = 0;
-        obj.documentFieldId = field.id!;
 
-        const item = this.editRepresentative.human.documentFieldToHuman?.find(i => {
+      this.documentsScans[document.id as string] = [];
+      this.documentsValues[document.id as string] = {};
+
+      for (const field of document.documentFields!) {
+        let item = this.editRepresentative.human.documentFieldToHuman?.find(i => {
           return i.documentFieldId === field.id;
         });
+
         if (item === undefined) {
-          this.editRepresentative.human.documentFieldToHuman!.push(obj);
+          item = {
+            id: field.id,
+            valueString: undefined,
+            valueNumber: 0,
+            documentFieldId: field.id,
+          };
         }
+        this.documentsValues[document.id as string][field.id as string] = item!;
       }
     }
+
+    for (const scan of this.editRepresentative.human.documentScans!) {
+      this.documentsScans[scan.documentId!].push({
+        id: scan.id as string,
+        documentId: scan.documentId,
+        url: scan.id as string,
+        name: scan.name as string,
+      });
+    }
+
     this.mount = true;
+  }
+
+  async mounted(): Promise<void> {
+    await this.init();
   }
 
   onSubmit(): void {
     for (const item of this.editRepresentative.representativeToPatient) {
       item.patient = undefined;
     }
+
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        this.editRepresentative.human.documentScans?.push(scan);
+      }
+    }
+
+    this.editRepresentative.human.documentFieldToHuman = [];
+    for (const document in this.documentsValues) {
+      for (const field in this.documentsValues[document]) {
+        this.editRepresentative.human.documentFieldToHuman.push(
+          this.documentsValues[document][field]
+        );
+      }
+    }
+
     if (this.isCreateForm) {
       this.$store.dispatch('representatives/create', this.editRepresentative);
     } else {
@@ -259,11 +306,14 @@ export default class ModalForm extends Vue {
     this.$emit('close');
   }
 
-  beforeUpdate(): void {
+  async beforeUpdate(): Promise<void> {
     this.editRepresentative = this.representative;
+    await this.init();
   }
 
   close(): void {
+    this.documentsValues = {};
+    this.documentsScans = {};
     this.mount = false;
     this.$emit('close');
   }
@@ -276,10 +326,6 @@ export default class ModalForm extends Vue {
     });
   }
 
-  getIdx(i: number, j: number): number {
-    return this.offset[i] + j;
-  }
-
   remove(item: any): void {
     const index = this.editRepresentative.representativeToPatient.indexOf(item);
     if (index !== -1) {
@@ -287,20 +333,45 @@ export default class ModalForm extends Vue {
     }
   }
 
-  async upload(file: any): Promise<void> {
-    const res = await this.$store.dispatch('documents/upload', file);
-    const resFile = await res.json();
-    if (this.editRepresentative.human.documentScan?.length === 0) {
-      this.editRepresentative.human.documentScan = [];
-    }
-    this.editRepresentative.human.documentScan!.push({
-      file: {
-        originalFileName: resFile.originalFileName,
-        file: resFile.filename,
-      },
-      documentId: file.data.id,
-      humanId: this.editRepresentative.human.id,
+  async upload(file: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file.file);
+    formData.append('documentId', file.data.id);
+    const res = await this.$store.dispatch('documentScans/upload', formData);
+    const re = await res.json();
+    this.documentsScans[file.data.id].push({
+      id: re.id as string,
+      documentId: re.documentId,
     });
+    return re;
+  }
+
+  onSuccess(res: any, file: any, fileList: any): void {
+    file.url = res.id;
+  }
+
+  async onRemove(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/delete', file.id);
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        if (scan.id === file.id) {
+          const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
+          this.documentsScans[document].splice(i, 1);
+          console.log(this.documentsScans);
+        }
+      }
+    }
+
+    for (const scan of this.editRepresentative.human.documentScans!) {
+      const i = this.editRepresentative.human.documentScans!.findIndex(
+        (item: any) => item.id === file.id
+      );
+      this.editRepresentative.human.documentScans!.splice(i, 1);
+    }
+  }
+
+  async download(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/download', file);
   }
 }
 </script>
@@ -316,5 +387,10 @@ export default class ModalForm extends Vue {
 .row-bg {
   padding: 10px 0;
   background-color: #f9fafc;
+}
+
+.modal-wrapper {
+  width: 100%;
+  height: 100%;
 }
 </style>

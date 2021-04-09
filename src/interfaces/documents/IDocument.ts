@@ -1,7 +1,7 @@
 import IDocumentField from './IDocumentField';
 
 export default interface IDocument {
-  id?: number;
+  id?: string;
   name: string;
   documentFields?: IDocumentField[];
 }

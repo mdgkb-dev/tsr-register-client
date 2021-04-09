@@ -21,7 +21,8 @@ export default {
       state.representatives.push(payload);
     },
     update: (state: any, payload: any) => {
-      const item = state.representatives.find((item: any) => item.id === payload.recordId);
+      console.log(payload);
+      const item = state.representatives.find((item: any) => item.id === payload.id);
       Object.assign(item, payload);
     },
     delete: (state: any, payload: any) => {
