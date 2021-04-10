@@ -163,5 +163,15 @@ export default class PatientsList extends Vue {
   close(): void {
     this.modalVisible = false;
   }
+
+  // // Declared as computed property getter
+  // get fullName() {
+  //   return this.firstName + ' ' + this.lastName;
+  // }
+  //
+  // // Declared as computed property setter
+  // set name(value: IPatient) {
+  //   retuvalue.human.name = this.lastName = splitted[1] || '';
+  // }
 }
 </script>

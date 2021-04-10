@@ -1,12 +1,19 @@
 <template>
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+  <el-aside width="220px" style="background-color: rgb(238, 241, 246)">
+    <el-avatar :size="large" :src="circleUrl"></el-avatar>
+
     <el-menu>
       <el-menu-item-group :router="true">
-        <el-menu :router="true">
-          <div v-for="item in links" v-bind:key="item.title">
-            <el-menu-item :index="item.link" :route="{ name: item.name }">{{
-              item.title
-            }}</el-menu-item>
+        <el-menu :router="true" :default-openeds="[0]">
+          <div v-for="(menu, i) in menuItems" :key="menu.title">
+            <el-submenu :index="i">
+              <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
+              <div v-for="(item, j) in menu.links" v-bind:key="item.title">
+                <el-menu-item :index="i + '-' + j" :route="{ name: item.name }">{{
+                  item.title
+                }}</el-menu-item>
+              </div>
+            </el-submenu>
           </div>
         </el-menu>
       </el-menu-item-group>
@@ -18,36 +25,50 @@
 import { Vue } from 'vue-class-component';
 
 export default class MainSidePanel extends Vue {
-  links = [
+  circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+
+  menuItems = [
     {
-      name: 'Patients',
-      title: 'Пациенты',
-      link: '/patients',
+      title: 'Персоналии',
+      class: 'el-icon-user-solid',
+      links: [
+        {
+          name: 'Patients',
+          title: 'Пациенты',
+          link: '/patients',
+        },
+        {
+          name: 'Representatives',
+          title: 'Представители',
+          link: '/representatives',
+        },
+      ],
     },
     {
-      name: 'Representatives',
-      title: 'Представители',
-      link: '/representatives',
-    },
-    {
-      name: 'Documents',
-      title: 'Документы',
-      link: '/documents',
-    },
-    {
-      name: 'InsuranceCompanies',
-      title: 'Страховые Компании',
-      link: '/insurance-companies',
-    },
-    {
-      name: 'Anthropometry',
-      title: 'Антропометрия',
-      link: '/anthropometry',
-    },
-    {
-      name: 'Mkb',
-      title: 'МКБ10',
-      link: '/mkb',
+      title: 'Справочники',
+      class: 'el-icon-notebook-2',
+      links: [
+        {
+          name: 'Mkb',
+          title: 'МКБ10',
+          link: '/mkb',
+        },
+        {
+          name: 'Documents',
+          title: 'Документы',
+          link: '/documents',
+        },
+        {
+          name: 'InsuranceCompanies',
+          title: 'Страховые Компании',
+          link: '/insurance-companies',
+        },
+        {
+          name: 'Anthropometry',
+          title: 'Антропометрия',
+          link: '/anthropometry',
+        },
+      ],
     },
   ];
 }
