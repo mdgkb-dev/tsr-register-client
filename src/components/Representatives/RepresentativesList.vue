@@ -147,6 +147,7 @@ export default class RepresentativesList extends Vue {
   }
 
   close(): void {
+    this.isCreateForm = false;
     this.modalVisible = false;
   }
 }

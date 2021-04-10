@@ -111,51 +111,54 @@
       </el-form-item>
     </el-row>
     <h2>Документы</h2>
-    <el-form-item v-for="document in documents" :key="document" v-if="mount">
-      <el-row>
-        <h3>{{ document.name }}</h3>
-
+    <div v-if="mount">
+      <el-form-item v-for="doc in documents" :key="doc">
         <el-row>
-          <el-form-item v-for="(field, j) in document.documentFields" :key="j">
-            <el-col>
-              <span>{{ field.name }}</span>
-              <div v-if="field.type === 'string'">
-                <el-input
-                  label="field.name"
-                  v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
-                ></el-input>
-              </div>
-              <div v-else-if="field.type === 'number'">
-                <el-input-number
-                  label="field.name"
-                  v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
-                ></el-input-number>
-              </div>
-            </el-col>
-          </el-form-item>
-        </el-row>
+          <h3>{{ doc.name }}</h3>
 
-        <el-row>
-          <el-upload
-            action=""
-            :limit="3"
-            :on-preview="download"
-            :on-success="onSuccess"
-            :on-remove="onRemove"
-            :http-request="upload"
-            :data="document"
-            ref="uploadFile"
-            :file-list="documentsScans[document.id]"
-          >
-            <el-button size="small" type="primary">Загрузить файл</el-button>
-          </el-upload>
+          <el-row>
+            <el-form-item v-for="(field, j) in doc.documentFields" :key="field.id">
+              {{ documentsValues[`${doc.id}`][field.id] }}
+              <el-col>
+                <span>{{ field.name }}</span>
+                <div v-if="field.type === 'string'">
+                  <el-input
+                    label="field.name"
+                    v-model="documentsValues[`${doc.id}`][field.id].valueString"
+                  ></el-input>
+                </div>
+                <div v-else-if="field.type === 'number'">
+                  <el-input-number
+                    label="field.name"
+                    v-model="documentsValues[`${doc.id}`][`${field.id}`].valueNumber"
+                  ></el-input-number>
+                </div>
+              </el-col>
+            </el-form-item>
+          </el-row>
+
+          <el-row>
+            <el-upload
+              action=""
+              :limit="3"
+              :on-preview="download"
+              :on-success="onSuccess"
+              :on-remove="onRemove"
+              :http-request="upload"
+              :data="doc"
+              ref="uploadFile"
+              :file-list="documentsScans[doc.id]"
+            >
+              <el-button size="small" type="primary">Загрузить файл</el-button>
+            </el-upload>
+          </el-row>
         </el-row>
-      </el-row>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
-      <el-button @click="close">Отмена</el-button>
-    </el-form-item>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+        <el-button @click="close">Отмена</el-button>
+      </el-form-item>
+    </div>
   </el-form>
 </template>
 
@@ -236,7 +239,6 @@ export default class ModalForm extends Vue {
 
     this.documentsScans = {};
     this.documentsValues = {};
-
     for (const document of this.documents) {
       sum += document.documentFields!.length;
       this.offset.push(sum);
@@ -252,12 +254,12 @@ export default class ModalForm extends Vue {
         if (item === undefined) {
           item = {
             id: field.id,
-            valueString: undefined,
+            valueString: '',
             valueNumber: 0,
             documentFieldId: field.id,
           };
         }
-        this.documentsValues[document.id as string][field.id as string] = item!;
+        this.documentsValues[document.id as string][field.id as string] = item;
       }
     }
 
@@ -312,6 +314,7 @@ export default class ModalForm extends Vue {
   }
 
   close(): void {
+    console.log(this.options);
     this.documentsValues = {};
     this.documentsScans = {};
     this.mount = false;
