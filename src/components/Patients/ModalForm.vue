@@ -122,6 +122,35 @@
             <el-button @click="addInsurance">Добавить страховку</el-button>
           </el-form-item>
         </el-form-item>
+
+        <h2>Диагнозы</h2>
+        <el-form-item v-if="diagnosisMount">
+          <el-form-item
+            v-for="(item, index) in editPatient.mkbToPatient"
+            :key="index"
+            v-model="editPatient.mkbToPatient"
+          >
+            <el-select
+              placeholder="Выберите диагноз"
+              filterable
+              v-model="editPatient.mkbToPatient[index].mkbId"
+            >
+              <el-option
+                v-for="item in mkbOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <el-checkbox v-model="editPatient.mkbToPatient[index].primary">Первичный</el-checkbox>
+            <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+          </el-form-item>
+        </el-form-item>
       </div>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Сохранить</el-button>
@@ -137,18 +166,21 @@ import IPatient from '@/interfaces/patients/IPatient';
 import { mapActions, mapGetters } from 'vuex';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IInsuranceCompanyOption from '@/interfaces/insuranceCompanies/IInsuranceCompanyOption';
+import IMkb from '@/interfaces/mkb/IMkb';
+import IOption from '@/interfaces/shared/IOption';
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
   computed: {
     ...mapGetters('anthropometry', ['anthropometry']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
+    ...mapGetters('mkb', ['mkb']),
   },
   methods: {
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
+      mkbGetAll: 'mkb/getAll',
     }),
   },
 })
@@ -163,13 +195,21 @@ export default class ModalForm extends Vue {
 
   insuranceCompaniesGetAll!: () => Promise<void>;
 
+  mkbGetAll!: () => Promise<void>;
+
   anthropometry!: IAnthropometry[];
 
   insuranceCompanies!: IInsuranceCompany[];
 
+  mkb!: IMkb[];
+
   mount = false;
 
-  options!: IInsuranceCompanyOption[];
+  options!: IOption[];
+
+  mkbOptions!: IOption[];
+
+  diagnosisMount = false;
 
   onSubmit(): void {
     if (this.isCreateForm) {
@@ -183,6 +223,8 @@ export default class ModalForm extends Vue {
   async mounted(): Promise<void> {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
+    await this.mkbGetAll();
+
     this.options = [];
     for (const item of this.insuranceCompanies) {
       this.options.push({
@@ -190,8 +232,18 @@ export default class ModalForm extends Vue {
         value: `${item.id}`,
       });
     }
-    console.log(this.options);
+    console.log(this.mkb);
+    this.mkb = this.mkb.slice(1, 100);
+
+    this.mkbOptions = [];
+    for (const item of this.mkb) {
+      this.mkbOptions.push({
+        label: `${item.class} ${item.groupName} ${item.subGroupName} ${item.diagnosisName} ${item.subDiagnosisName}`,
+        value: `${item.id}`,
+      });
+    }
     this.mount = true;
+    this.diagnosisMount = true;
   }
 
   add(paramId: string): void {
@@ -221,6 +273,21 @@ export default class ModalForm extends Vue {
     const index = this.patient.human.insuranceCompanyToHuman.indexOf(item);
     if (index !== -1) {
       this.patient.human.insuranceCompanyToHuman.splice(index, 1);
+    }
+  }
+
+  addDiagnosis(): void {
+    this.patient.mkbToPatient.push({
+      primary: false,
+      mkbId: '',
+      patientId: '',
+    });
+  }
+
+  removeDiagnosis(item: any): void {
+    const index = this.patient.mkbToPatient.indexOf(item);
+    if (index !== -1) {
+      this.patient.mkbToPatient.splice(index, 1);
     }
   }
 

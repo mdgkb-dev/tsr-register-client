@@ -9,6 +9,7 @@ import LoginForm from '../components/Login/LoginForm.vue';
 import store from '../store';
 import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
 import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
+import MkbList from '@/components/Mkb/MkbList.vue';
 
 const ifNotAuthenticated = (to: any, from: any, next: any) => {
   if (!store.getters.isAuthenticated) {
@@ -73,6 +74,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/anthropometry',
     name: 'Anthropometry',
     component: AnthropometryList,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/mkb',
+    name: 'Mkb',
+    component: MkbList,
     beforeEnter: ifAuthenticated,
   },
   {

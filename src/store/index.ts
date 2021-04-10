@@ -8,6 +8,7 @@ import documents from './modules/documents';
 import insuranceCompanies from './modules/insuranceCompanies';
 import anthropometry from './modules/anthropometry';
 import documentScans from './modules/documentScans';
+import mkb from './modules/mkb';
 
 export default createStore({
   state: {
@@ -33,5 +34,6 @@ export default createStore({
     insuranceCompanies,
     anthropometry,
     documentScans,
+    mkb,
   },
 });

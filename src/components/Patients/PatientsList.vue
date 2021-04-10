@@ -92,6 +92,7 @@ export default class PatientsList extends Vue {
       insuranceCompanyToHuman: [],
     },
     anthropometryData: [],
+    mkbToPatient: [],
   };
 
   filters!: IFilter[];
@@ -141,6 +142,7 @@ export default class PatientsList extends Vue {
         insuranceCompanyToHuman: [],
       },
       anthropometryData: [],
+      mkbToPatient: [],
     };
     this.isCreateForm = true;
     this.modalTitle = 'Создать пациента';
