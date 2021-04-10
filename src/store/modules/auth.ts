@@ -3,6 +3,7 @@ export default {
   state: {
     token: localStorage.getItem('user-token') || '',
     status: '',
+    errorMessage: '',
     user: '',
     hasLoadedOnce: false,
   },
@@ -16,15 +17,23 @@ export default {
     authStatus: (state: any) => {
       return state.status;
     },
+    errorMessage: (state: any) => {
+      return state.errorMessage;
+    }
   },
   mutations: {
     login: (state: any, payload: any) => {
       localStorage.setItem('user-token', payload.token.token);
       state.status = 'success';
+      state.errorMessage = '';
       state.user = payload.user;
       state.token = payload.token.token;
       state.hasLoadedOnce = true;
     },
+    setLoginError: (state: any, errorMessage: string): void => {
+      state.status = 'error';
+      state.errorMessage = errorMessage;
+    }
   },
   actions: {
     login: async (context: any, payload: any) => {
@@ -34,7 +43,12 @@ export default {
         body: JSON.stringify(payload),
       });
 
-      context.commit('login', await res.json());
+      if (res.status === 200) {
+        context.commit('login', await res.json());
+        return;
+      }
+
+      context.commit('setLoginError', await res.text());
     },
     logout: () => {
       console.log(localStorage.getItem('user-token'));

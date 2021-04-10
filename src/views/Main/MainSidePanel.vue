@@ -74,7 +74,7 @@ export default class MainSidePanel extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
