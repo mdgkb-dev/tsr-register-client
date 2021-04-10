@@ -1,4 +1,4 @@
-q`<template>
+<template>
   <div class="container">
     <el-header></el-header>
     <el-main class="container">
