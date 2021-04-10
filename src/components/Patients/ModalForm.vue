@@ -385,3 +385,23 @@ export default class ModalForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.center-allign {
+  text-align: center;
+  margin-left: 0vw !important;
+}
+
+.error-message {
+  text-align: left;
+  padding-left: 5px;
+}
+
+.wrong-input {
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(252, 191, 102);
+  border-radius: 6px;
+  height: 40px;
+}
+</style>
