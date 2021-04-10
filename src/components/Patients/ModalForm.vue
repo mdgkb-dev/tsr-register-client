@@ -1,5 +1,11 @@
 <template>
-  <el-form ref="form" :model="editPatient" label-width="10vw" label-position="right">
+  <el-form
+    ref="form"
+    :model="editPatient"
+    @submit.prevent="submitForm"
+    label-width="10vw"
+    label-position="right"
+  >
     <h3>Личная информация</h3>
     <el-form-item label="Фамилия" label-width="20vw">
       <el-input
@@ -67,10 +73,30 @@
       <el-input v-model="editPatient.human.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Телефон" label-width="20vw">
-      <el-input v-model="editPatient.human.contact.phone"></el-input>
+      <el-input
+        v-model="v$.editPatient.human.contact.phone.$model"
+        :class="{ 'wrong-input': v$.editPatient.human.contact.phone.$errors.length > 0 }"
+      ></el-input>
+      <div
+        :class="['error-message']"
+        v-for="(error, phoneIndex) of v$.editPatient.human.contact.phone.$errors"
+        :key="phoneIndex"
+      >
+        {{ error.$message }}
+      </div>
     </el-form-item>
     <el-form-item label="Email" label-width="20vw">
-      <el-input v-model="editPatient.human.contact.email"></el-input>
+      <el-input
+        v-model="v$.editPatient.human.contact.email.$model"
+        :class="{ 'wrong-input': v$.editPatient.human.contact.email.$errors.length > 0 }"
+      ></el-input>
+      <div
+        :class="['error-message']"
+        v-for="(error, emailIndex) of v$.editPatient.human.contact.email.$errors"
+        :key="emailIndex"
+      >
+        {{ error.$message }}
+      </div>
     </el-form-item>
 
     <div v-if="mount">
@@ -136,7 +162,28 @@
       </el-form-item>
     </div>
     <div class="center-allign">
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+      <el-button
+        type="primary"
+        native-type="submit"
+        :disabled="
+          !v$.editPatient.human.surname.$dirty ||
+          (v$.editPatient.human.surname.$dirty &&
+            v$.editPatient.human.surname.$errors.length > 0) ||
+          !v$.editPatient.human.name.$dirty ||
+          (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
+          !v$.editPatient.human.patronymic.$dirty ||
+          (v$.editPatient.human.patronymic.$dirty &&
+            v$.editPatient.human.patronymic.$errors.length > 0) ||
+          !v$.editPatient.human.dateBirth.$dirty ||
+          (v$.editPatient.human.dateBirth.$dirty &&
+            v$.editPatient.human.dateBirth.$errors.length > 0) ||
+          (v$.editPatient.human.contact.phone.$dirty &&
+            v$.editPatient.human.contact.phone.$errors.length > 0) ||
+          (v$.editPatient.human.contact.email.$dirty &&
+            v$.editPatient.human.contact.email.$errors.length > 0)
+        "
+        >Сохранить</el-button
+      >
       <el-button @click="close">Отмена</el-button>
     </div>
   </el-form>
@@ -146,13 +193,14 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 import useVuelidate from '@vuelidate/core';
-import { required, helpers } from '@vuelidate/validators';
+import { required, email, helpers } from '@vuelidate/validators';
 
 import IPatient from '@/interfaces/patients/IPatient';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 const russianLettersValidator = (value: unknown) => /^[А-Яа-яЁё \-]+$/.test(String(value));
+const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
@@ -193,6 +241,20 @@ const russianLettersValidator = (value: unknown) => /^[А-Яа-яЁё \-]+$/.tes
         dateBirth: {
           required: helpers.withMessage('Пожалуйста, выберите дату рождения.', required),
         },
+        contact: {
+          phone: {
+            phoneValidator: helpers.withMessage(
+              'Пожалуйста, используйте только цифры формата: 79151234567',
+              phoneValidator
+            ),
+          },
+          email: {
+            email: helpers.withMessage(
+              'Пожалуста, введите корректный email формата: name@host.domain',
+              email
+            ),
+          },
+        },
       },
     },
   },
@@ -218,7 +280,7 @@ export default class ModalForm extends Vue {
 
   v$ = useVuelidate();
 
-  onSubmit(): void {
+  submitForm(): void {
     if (this.isCreateForm) {
       this.$store.dispatch('patients/create', this.editPatient);
     } else {
