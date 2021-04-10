@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="mount">
     <el-button-group>
       <el-button type="primary" icon="el-icon-document" @click="this.create"
         >Создать пациента</el-button
@@ -11,23 +11,42 @@
       :data="patients"
       style="width: 100%"
     >
-      <el-table-column prop="id" label="№" width="150" />
-      <el-table-column
-        prop="human.name"
-        label="Имя"
-        width="150"
-        :filters="filters"
-        :filter-method="filterHandler"
-      />
-      <el-table-column prop="human.surname" label="Фамилия" width="150" />
-      <el-table-column prop="human.patronymic" label="Отчество" width="150" />
+      <el-table-column width="150" label="ФИО">
+        <template #default="scope">
+          {{ fullName(scope.row.human) }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" label="Пол">
+        <template #default="scope">
+          {{ gender(scope.row.human) }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" label="Вес, Рост">
+        <template #default="scope">
+          {{ anthropometryTotal(scope.row) }}
+        </template>
+      </el-table-column>
       <el-table-column prop="human.dateBirth" label="Дата рождения" width="150" />
-      <el-table-column prop="human.gender" label="Пол" width="150" />
+      <el-table-column width="150" label="Законные представители">
+        <template #default="scope">
+          <div v-for="rep in scope.row.representativeToPatient">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="
+                `${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`
+              "
+              placement="top-end"
+            >
+              <el-tag size="small">{{ rep.type }}</el-tag>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
-      <el-table-column prop="human.addressResidential" label="Адрес проживания" width="150" />
       <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
       <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
-      <el-table-column fixed="right" label="Operations" width="120">
+      <el-table-column fixed="right" label="" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
             >Редактировать</el-button
@@ -56,6 +75,8 @@ import IFilter from '@/interfaces/filters/IFilter';
 import IPatient from '../../interfaces/patients/IPatient';
 
 import ModalForm from './ModalForm.vue';
+import IHuman from '@/interfaces/humans/IHuman';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 @Options({
   components: {
@@ -63,17 +84,23 @@ import ModalForm from './ModalForm.vue';
   },
   computed: {
     ...mapState('patients', ['patients']),
+    ...mapState('anthropometry', ['anthropometry']),
   },
   methods: {
     ...mapActions({
       getAll: 'patients/getAll',
+      getAllAnthropometry: 'anthropometry/getAll',
     }),
   },
 })
 export default class PatientsList extends Vue {
   getAll!: () => Promise<void>;
 
+  getAllAnthropometry!: () => Promise<void>;
+
   patients!: IPatient[];
+
+  anthropometry!: IAnthropometry[];
 
   patient: IPatient = {
     human: {
@@ -93,6 +120,7 @@ export default class PatientsList extends Vue {
     },
     anthropometryData: [],
     mkbToPatient: [],
+    representativeToPatient: [],
   };
 
   filters!: IFilter[];
@@ -103,7 +131,10 @@ export default class PatientsList extends Vue {
 
   isCreateForm = false;
 
+  mount = false;
+
   async mounted(): Promise<void> {
+    await this.getAllAnthropometry();
     await this.getAll();
     this.filters = [];
     for (const patient of this.patients) {
@@ -112,12 +143,11 @@ export default class PatientsList extends Vue {
         value: patient.human.name,
       });
     }
-    console.log(this.filters);
+    this.mount = true;
   }
 
   edit(id: number): void {
     this.patient = this.$store.getters['patients/getById'](id);
-    console.log(this.patients);
     this.isCreateForm = false;
     this.modalTitle = 'Редактировать пациента';
 
@@ -143,6 +173,7 @@ export default class PatientsList extends Vue {
       },
       anthropometryData: [],
       mkbToPatient: [],
+      representativeToPatient: [],
     };
     this.isCreateForm = true;
     this.modalTitle = 'Создать пациента';
@@ -164,14 +195,26 @@ export default class PatientsList extends Vue {
     this.modalVisible = false;
   }
 
-  // // Declared as computed property getter
-  // get fullName() {
-  //   return this.firstName + ' ' + this.lastName;
-  // }
-  //
-  // // Declared as computed property setter
-  // set name(value: IPatient) {
-  //   retuvalue.human.name = this.lastName = splitted[1] || '';
-  // }
+  get fullName() {
+    return (human: IHuman) => `${human.surname} ${human.name} ${human.patronymic}`;
+  }
+
+  get gender() {
+    return (human: IHuman) => (human.gender === 'male' ? 'М' : 'Ж');
+  }
+
+  get anthropometryTotal() {
+    return (patient: IPatient) => {
+      let total = '';
+      for (const antro of patient.anthropometryData) {
+        for (const item of this.anthropometry) {
+          if (antro.anthropometryId === item.id) {
+            total = `${total} ${item.name}: ${antro.value} \n`;
+          }
+        }
+      }
+      return total;
+    };
+  }
 }
 </script>

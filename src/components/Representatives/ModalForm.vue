@@ -73,13 +73,14 @@
           >
             <el-space direction="horizontal" alignment="start" :size="1">
               <span>Пациент</span>
+              {{ editRepresentative.representativeToPatient[index].patientId }}
               <el-col :span="12">
                 <el-select v-model="editRepresentative.representativeToPatient[index].patientId">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="Number(item.value)"
+                    :value="item.value"
                   >
                   </el-option>
                 </el-select>

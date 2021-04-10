@@ -1,7 +1,6 @@
 <template>
   <h1>{{ modalTitle }}</h1>
   <el-form ref="form" :model="editPatient" label-width="150px">
-    {{ editPatient }}
     <el-row>
       <el-col>
         <h3>Личная информация</h3>
@@ -73,7 +72,6 @@
             <el-button @click="add(param.id)">Добавить изменение</el-button>
           </el-form-item>
           <template v-for="(item, i) in editPatient.anthropometryData">
-            {{ editPatient.anthropometryData[i] }}
             <div v-if="item.anthropometryId === param.id">
               <el-form-item label="Дата">
                 <el-col :span="11">
