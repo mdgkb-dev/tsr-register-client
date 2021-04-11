@@ -121,6 +121,55 @@
           </el-form-item>
         </el-form-item>
 
+        <!--      -->
+        <!--      -->
+        <!--      -->
+        <h2>Документы</h2>
+        <el-form-item v-for="document in documents" :key="document" v-if="mount">
+          <el-row>
+            <h3>{{ document.name }}</h3>
+
+            <el-row>
+              <el-form-item v-for="(field, j) in document.documentFields" :key="j">
+                <el-col>
+                  <span>{{ field.name }}</span>
+                  <div v-if="field.type === 'string'">
+                    <el-input
+                      label="field.name"
+                      v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
+                    ></el-input>
+                  </div>
+                  <div v-else-if="field.type === 'number'">
+                    <el-input-number
+                      label="field.name"
+                      v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
+                    ></el-input-number>
+                  </div>
+                </el-col>
+              </el-form-item>
+            </el-row>
+
+            <el-row>
+              <el-upload
+                action=""
+                :limit="3"
+                :on-preview="download"
+                :on-success="onSuccess"
+                :on-remove="onRemove"
+                :http-request="upload"
+                :data="document"
+                ref="uploadFile"
+                :file-list="documentsScans[document.id]"
+              >
+                <el-button size="small" type="primary">Загрузить файл</el-button>
+              </el-upload>
+            </el-row>
+          </el-row>
+        </el-form-item>
+        <!--      -->
+        <!--      -->
+        <!--      -->
+
         <h2>Диагнозы</h2>
         <el-form-item v-if="diagnosisMount">
           <el-form-item
@@ -166,6 +215,9 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IMkb from '@/interfaces/mkb/IMkb';
 import IOption from '@/interfaces/shared/IOption';
+import IDocument from '@/interfaces/documents/IDocument';
+import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 
 @Options({
   props: ['patient', 'is-create-form', 'modalTitle'],
@@ -173,12 +225,15 @@ import IOption from '@/interfaces/shared/IOption';
     ...mapGetters('anthropometry', ['anthropometry']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('mkb', ['mkb']),
+    ...mapGetters('documents', ['documents']),
   },
   methods: {
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       mkbGetAll: 'mkb/getAll',
+      documentsGetAll: 'documents/getAll',
+      documentScansUpload: 'documentScans/upload',
     }),
   },
 })
@@ -189,6 +244,10 @@ export default class ModalForm extends Vue {
 
   editPatient = this.patient;
 
+  documents!: IDocument[];
+
+  documentsScans!: { [id: string]: IDocumentScan[] };
+
   anthropometryGetAll!: () => Promise<void>;
 
   insuranceCompaniesGetAll!: () => Promise<void>;
@@ -198,6 +257,12 @@ export default class ModalForm extends Vue {
   anthropometry!: IAnthropometry[];
 
   insuranceCompanies!: IInsuranceCompany[];
+
+  documentsGetAll!: () => Promise<void>;
+
+  documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
+
+  offset: number[] = [0];
 
   mkb!: IMkb[];
 
@@ -210,6 +275,19 @@ export default class ModalForm extends Vue {
   diagnosisMount = false;
 
   onSubmit(): void {
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        this.editPatient.human.documentScans?.push(scan);
+      }
+    }
+
+    this.editPatient.human.documentFieldToHuman = [];
+    for (const document in this.documentsValues) {
+      for (const field in this.documentsValues[document]) {
+        this.editPatient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+      }
+    }
+
     if (this.isCreateForm) {
       this.$store.dispatch('patients/create', this.editPatient);
     } else {
@@ -240,8 +318,48 @@ export default class ModalForm extends Vue {
         value: `${item.id}`,
       });
     }
-    this.mount = true;
-    this.diagnosisMount = true;
+
+    let sum = 0;
+    await this.documentsGetAll();
+
+    this.documentsScans = {};
+    this.documentsValues = {};
+
+    for (const document of this.documents) {
+      sum += document.documentFields!.length;
+      this.offset.push(sum);
+
+      this.documentsScans[document.id as string] = [];
+      this.documentsValues[document.id as string] = {};
+
+      for (const field of document.documentFields!) {
+        let item = this.editPatient.human.documentFieldToHuman?.find(i => {
+          return i.documentFieldId === field.id;
+        });
+
+        if (item === undefined) {
+          item = {
+            id: field.id,
+            valueString: undefined,
+            valueNumber: 0,
+            documentFieldId: field.id,
+          };
+        }
+        this.documentsValues[document.id as string][field.id as string] = item!;
+      }
+
+      for (const scan of this.editPatient.human.documentScans!) {
+        this.documentsScans[scan.documentId!].push({
+          id: scan.id as string,
+          documentId: scan.documentId,
+          url: scan.id as string,
+          name: scan.name as string,
+        });
+      }
+
+      this.mount = true;
+      this.diagnosisMount = true;
+    }
   }
 
   add(paramId: string): void {
@@ -290,11 +408,54 @@ export default class ModalForm extends Vue {
   }
 
   close(): void {
+    this.documentsValues = {};
+    this.documentsScans = {};
+    this.mount = false;
     this.$emit('close');
   }
 
   beforeUpdate(): void {
     this.editPatient = this.patient;
+  }
+
+  //  документы
+  async upload(file: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file.file);
+    formData.append('documentId', file.data.id);
+    const res = await this.$store.dispatch('documentScans/upload', formData);
+    const re = await res.json();
+    this.documentsScans[file.data.id].push({
+      id: re.id as string,
+      documentId: re.documentId,
+    });
+    return re;
+  }
+
+  onSuccess(res: any, file: any, fileList: any): void {
+    file.url = res.id;
+  }
+
+  async onRemove(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/delete', file.id);
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        if (scan.id === file.id) {
+          const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
+          this.documentsScans[document].splice(i, 1);
+          console.log(this.documentsScans);
+        }
+      }
+    }
+
+    for (const scan of this.editPatient.human.documentScans!) {
+      const i = this.editPatient.human.documentScans!.findIndex((item: any) => item.id === file.id);
+      this.editPatient.human.documentScans!.splice(i, 1);
+    }
+  }
+
+  async download(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/download', file);
   }
 }
 </script>

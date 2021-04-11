@@ -43,9 +43,27 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column width="150" label="Диагнозы">
+        <template #default="scope">
+          <div v-for="mkbToPatient in scope.row.mkbToPatient">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="mkbToPatient.mkb ? mkbToPatient.mkb.diagnosisName : ''"
+              placement="top-end"
+            >
+              <el-tag size="small">{{
+                mkbToPatient.mkb ? mkbToPatient.mkb.diagnosisName.slice(0, 3) : ''
+              }}</el-tag>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+
       <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
       <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
       <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
+
       <el-table-column fixed="right" label="" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
@@ -77,6 +95,7 @@ import IPatient from '../../interfaces/patients/IPatient';
 import ModalForm from './ModalForm.vue';
 import IHuman from '@/interfaces/humans/IHuman';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
 
 @Options({
   components: {
@@ -187,7 +206,6 @@ export default class PatientsList extends Vue {
 
   filterHandler(value: string, row: any, column: any) {
     const property = column['property'];
-    console.log(row[property]);
     return row[property] === value;
   }
 

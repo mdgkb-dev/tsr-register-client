@@ -1,6 +1,6 @@
 <template>
   <el-col :span="23"></el-col>
-  <el-col :span="1"> <el-button @click="logout()">Выйти</el-button></el-col>
+  <!--  <el-col :span="1"> <el-button @click="logout()">Выйти</el-button></el-col>-->
 </template>
 
 <script lang="ts">

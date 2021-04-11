@@ -18,6 +18,9 @@
         </el-menu>
       </el-menu-item-group>
     </el-menu>
+    <div style="margin-top: 50vh">
+      <el-button @click="logout()">Выйти</el-button>
+    </div>
   </el-aside>
 </template>
 
