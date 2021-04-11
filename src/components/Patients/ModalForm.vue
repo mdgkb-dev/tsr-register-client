@@ -105,18 +105,18 @@
         <el-form-item :label="param.name">
           <el-button @click="add(param.id)">Добавить изменение</el-button>
         </el-form-item>
-        <template v-for="(item, i) in patient.anthropometryData">
+        <template v-for="(item, i) in editPatient.anthropometryData">
           <div v-if="item.anthropometryId === param.id">
             <el-form-item label="Дата" label-width="12vw">
               <el-date-picker
                 type="date"
                 placeholder="Дата изменения"
-                v-model="patient.anthropometryData[i].date"
+                v-model="editPatient.anthropometryData[i].date"
                 style="width: 10vw"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="Значение" label-width="12vw">
-              <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
+              <el-input-number v-model="editPatient.anthropometryData[i].value"></el-input-number>
             </el-form-item>
             <el-form-item label-width="12vw">
               <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
@@ -140,18 +140,14 @@
             placeholder="Выберите компанию"
             v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
           >
-            <el-select
-              placeholder="Выберите компанию"
-              v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="Номер" label-width="12vw">
           <el-input
@@ -163,112 +159,110 @@
         <el-form-item label-width="12vw">
           <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
         </el-form-item>
-        </el-form-item>
+      </el-form-item>
 
-        <!--      -->
-        <!--      -->
-        <!--      -->
-        <h2>Документы</h2>
-        <el-form-item v-for="document in documents" :key="document" v-if="mount">
+      <!--      -->
+      <!--      -->
+      <!--      -->
+      <h2>Документы</h2>
+      <el-form-item v-for="document in documents" :key="document" v-if="mount">
+        <el-row>
+          <h3>{{ document.name }}</h3>
+
           <el-row>
-            <h3>{{ document.name }}</h3>
-
-            <el-row>
-              <el-form-item v-for="(field, j) in document.documentFields" :key="j">
-                <el-col>
-                  <span>{{ field.name }}</span>
-                  <div v-if="field.type === 'string'">
-                    <el-input
-                      label="field.name"
-                      v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
-                    ></el-input>
-                  </div>
-                  <div v-else-if="field.type === 'number'">
-                    <el-input-number
-                      label="field.name"
-                      v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
-                    ></el-input-number>
-                  </div>
-                </el-col>
-              </el-form-item>
-            </el-row>
-
-            <el-row>
-              <el-upload
-                action=""
-                :limit="3"
-                :on-preview="download"
-                :on-success="onSuccess"
-                :on-remove="onRemove"
-                :http-request="upload"
-                :data="document"
-                ref="uploadFile"
-                :file-list="documentsScans[document.id]"
-              >
-                <el-button size="small" type="primary">Загрузить файл</el-button>
-              </el-upload>
-            </el-row>
+            <el-form-item v-for="(field, j) in document.documentFields" :key="j">
+              <el-col>
+                <span>{{ field.name }}</span>
+                <div v-if="field.type === 'string'">
+                  <el-input
+                    label="field.name"
+                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
+                  ></el-input>
+                </div>
+                <div v-else-if="field.type === 'number'">
+                  <el-input-number
+                    label="field.name"
+                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
+                  ></el-input-number>
+                </div>
+              </el-col>
+            </el-form-item>
           </el-row>
-        </el-form-item>
-        <!--      -->
-        <!--      -->
-        <!--      -->
 
-        <h2>Диагнозы</h2>
-        <el-form-item v-if="diagnosisMount">
-          <el-form-item
-            v-for="(item, index) in editPatient.mkbToPatient"
-            :key="index"
-            v-model="editPatient.mkbToPatient"
-          >
-            <el-select
-              placeholder="Выберите диагноз"
-              filterable
-              v-model="editPatient.mkbToPatient[index].mkbId"
+          <el-row>
+            <el-upload
+              action=""
+              :limit="3"
+              :on-preview="download"
+              :on-success="onSuccess"
+              :on-remove="onRemove"
+              :http-request="upload"
+              :data="document"
+              ref="uploadFile"
+              :file-list="documentsScans[document.id]"
             >
-              <el-option
-                v-for="item in mkbOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-            <el-checkbox v-model="editPatient.mkbToPatient[index].primary">Первичный</el-checkbox>
-            <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
-          </el-form-item>
+              <el-button size="small" type="primary">Загрузить файл</el-button>
+            </el-upload>
+          </el-row>
+        </el-row>
+      </el-form-item>
+      <!--      -->
+      <!--      -->
+      <!--      -->
 
-          <el-form-item>
-            <el-button @click="addDiagnosis">Добавить диагноз</el-button>
-          </el-form-item>
+      <h2>Диагнозы</h2>
+      <el-form-item v-if="diagnosisMount">
+        <el-form-item
+          v-for="(item, index) in editPatient.mkbToPatient"
+          :key="index"
+          v-model="editPatient.mkbToPatient"
+        >
+          <el-select
+            placeholder="Выберите диагноз"
+            filterable
+            v-model="editPatient.mkbToPatient[index].mkbId"
+          >
+            <el-option
+              v-for="item in mkbOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <el-checkbox v-model="editPatient.mkbToPatient[index].primary">Первичный</el-checkbox>
+          <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
         </el-form-item>
-      </div>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Сохранить</el-button>
-        <el-button @click="close">Отмена</el-button>
 
+        <el-form-item>
+          <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+        </el-form-item>
       </el-form-item>
     </div>
+    <el-form-item>
+      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+      <el-button @click="close">Отмена</el-button>
+    </el-form-item>
     <div class="center-allign">
       <el-button
         type="primary"
         native-type="submit"
         :disabled="
           !v$.editPatient.human.surname.$dirty ||
-          (v$.editPatient.human.surname.$dirty &&
-            v$.editPatient.human.surname.$errors.length > 0) ||
-          !v$.editPatient.human.name.$dirty ||
-          (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
-          !v$.editPatient.human.patronymic.$dirty ||
-          (v$.editPatient.human.patronymic.$dirty &&
-            v$.editPatient.human.patronymic.$errors.length > 0) ||
-          !v$.editPatient.human.dateBirth.$dirty ||
-          (v$.editPatient.human.dateBirth.$dirty &&
-            v$.editPatient.human.dateBirth.$errors.length > 0) ||
-          (v$.editPatient.human.contact.phone.$dirty &&
-            v$.editPatient.human.contact.phone.$errors.length > 0) ||
-          (v$.editPatient.human.contact.email.$dirty &&
-            v$.editPatient.human.contact.email.$errors.length > 0)
+            (v$.editPatient.human.surname.$dirty &&
+              v$.editPatient.human.surname.$errors.length > 0) ||
+            !v$.editPatient.human.name.$dirty ||
+            (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
+            !v$.editPatient.human.patronymic.$dirty ||
+            (v$.editPatient.human.patronymic.$dirty &&
+              v$.editPatient.human.patronymic.$errors.length > 0) ||
+            !v$.editPatient.human.dateBirth.$dirty ||
+            (v$.editPatient.human.dateBirth.$dirty &&
+              v$.editPatient.human.dateBirth.$errors.length > 0) ||
+            (v$.editPatient.human.contact.phone.$dirty &&
+              v$.editPatient.human.contact.phone.$errors.length > 0) ||
+            (v$.editPatient.human.contact.email.$dirty &&
+              v$.editPatient.human.contact.email.$errors.length > 0)
         "
         >Сохранить</el-button
       >
@@ -319,21 +313,21 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           required: helpers.withMessage('Пожалуйста, введите фамилию.', required),
           russianLettersValidator: helpers.withMessage(
             'Фамилия может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         name: {
           required: helpers.withMessage('Пожалуйста, введите имя.', required),
           russianLettersValidator: helpers.withMessage(
             'Имя может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         patronymic: {
           required: helpers.withMessage('Пожалуйста, введите отчество.', required),
           russianLettersValidator: helpers.withMessage(
             'Отчество может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         dateBirth: {
@@ -343,13 +337,13 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           phone: {
             phoneValidator: helpers.withMessage(
               'Пожалуйста, используйте только цифры формата: 79151234567',
-              phoneValidator,
+              phoneValidator
             ),
           },
           email: {
             email: helpers.withMessage(
               'Пожалуста, введите корректный email формата: name@host.domain',
-              email,
+              email
             ),
           },
         },
@@ -383,7 +377,6 @@ export default class ModalForm extends Vue {
 
   mkbGetAll!: () => Promise<void>;
 
-
   documentsGetAll!: () => Promise<void>;
 
   documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
@@ -392,10 +385,12 @@ export default class ModalForm extends Vue {
 
   // Local state.
   editPatient = this.patient;
+
   mount = false;
 
-
   diagnosisMount = false;
+
+  v$ = useVuelidate();
 
   onSubmit(): void {
     for (const document in this.documentsScans) {
@@ -419,24 +414,21 @@ export default class ModalForm extends Vue {
     this.$emit('close');
   }
 
-  v$ = useVuelidate();
-
   // Lifecycle methods.
   async mounted(): Promise<void> {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();
-
+    await this.documentsGetAll();
     this.options = [];
+
     for (const item of this.insuranceCompanies) {
       this.options.push({
         label: `${item.name}`,
         value: `${item.id}`,
       });
     }
-    console.log(this.mkb);
     this.mkb = this.mkb.slice(1, 100);
-
     this.mkbOptions = [];
     for (const item of this.mkb) {
       this.mkbOptions.push({
@@ -446,7 +438,6 @@ export default class ModalForm extends Vue {
     }
 
     let sum = 0;
-    await this.documentsGetAll();
 
     this.documentsScans = {};
     this.documentsValues = {};
@@ -473,21 +464,20 @@ export default class ModalForm extends Vue {
         }
         this.documentsValues[document.id as string][field.id as string] = item!;
       }
-
-      for (const scan of this.editPatient.human.documentScans!) {
-        this.documentsScans[scan.documentId!].push({
-          id: scan.id as string,
-          documentId: scan.documentId,
-          url: scan.id as string,
-          name: scan.name as string,
-        });
-      }
-
-      this.mount = true;
-      this.diagnosisMount = true;
     }
-  }
 
+    console.log(this.editPatient.human);
+    for (const scan of this.editPatient.human.documentScans!) {
+      this.documentsScans[scan.documentId!].push({
+        id: scan.id as string,
+        documentId: scan.documentId,
+        url: scan.id as string,
+        name: scan.name as string,
+      });
+    }
+    this.mount = true;
+    this.diagnosisMount = true;
+  }
 
   // Methods.
   submitForm(): void {
@@ -500,7 +490,7 @@ export default class ModalForm extends Vue {
   }
 
   add(paramId: string): void {
-    this.patient.anthropometryData.push({
+    this.editPatient.anthropometryData.push({
       anthropometryId: paramId,
       date: '',
       value: 0,
@@ -508,14 +498,14 @@ export default class ModalForm extends Vue {
   }
 
   remove(item: any): void {
-    const index = this.patient.anthropometryData.indexOf(item);
+    const index = this.editPatient.anthropometryData.indexOf(item);
     if (index !== -1) {
-      this.patient.anthropometryData.splice(index, 1);
+      this.editPatient.anthropometryData.splice(index, 1);
     }
   }
 
   addInsurance(humanId: number, insuranceCompanyId: number): void {
-    this.patient.human.insuranceCompanyToHuman.push({
+    this.editPatient.human.insuranceCompanyToHuman.push({
       number: '',
       insuranceCompanyId: undefined,
       humanId: undefined,
@@ -523,14 +513,14 @@ export default class ModalForm extends Vue {
   }
 
   removeInsurance(item: any): void {
-    const index = this.patient.human.insuranceCompanyToHuman.indexOf(item);
+    const index = this.editPatient.human.insuranceCompanyToHuman.indexOf(item);
     if (index !== -1) {
-      this.patient.human.insuranceCompanyToHuman.splice(index, 1);
+      this.editPatient.human.insuranceCompanyToHuman.splice(index, 1);
     }
   }
 
   addDiagnosis(): void {
-    this.patient.mkbToPatient.push({
+    this.editPatient.mkbToPatient.push({
       primary: false,
       mkbId: '',
       patientId: '',
@@ -538,9 +528,9 @@ export default class ModalForm extends Vue {
   }
 
   removeDiagnosis(item: any): void {
-    const index = this.patient.mkbToPatient.indexOf(item);
+    const index = this.editPatient.mkbToPatient.indexOf(item);
     if (index !== -1) {
-      this.patient.mkbToPatient.splice(index, 1);
+      this.editPatient.mkbToPatient.splice(index, 1);
     }
   }
 
@@ -550,7 +540,6 @@ export default class ModalForm extends Vue {
     this.mount = false;
     this.$emit('close');
   }
-
 
   //  документы
   async upload(file: any): Promise<any> {
@@ -577,7 +566,6 @@ export default class ModalForm extends Vue {
         if (scan.id === file.id) {
           const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
           this.documentsScans[document].splice(i, 1);
-          console.log(this.documentsScans);
         }
       }
     }

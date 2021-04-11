@@ -95,6 +95,7 @@ export default class RepresentativesList extends Vue {
       },
       documentFieldToHuman: [],
       insuranceCompanyToHuman: [],
+      documentScans: [],
     },
     representativeToPatient: [],
   };
