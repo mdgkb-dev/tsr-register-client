@@ -161,7 +161,7 @@
         </el-form-item>
       </el-form-item>
     </div>
-    <div class="center-allign">
+    <div class="center-align">
       <el-button
         type="primary"
         native-type="submit"
@@ -387,11 +387,6 @@ export default class ModalForm extends Vue {
 </script>
 
 <style scoped>
-.center-allign {
-  text-align: center;
-  margin-left: 0vw !important;
-}
-
 .error-message {
   text-align: left;
   padding-left: 5px;

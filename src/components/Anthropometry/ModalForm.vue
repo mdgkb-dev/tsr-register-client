@@ -1,14 +1,14 @@
 <template>
   <el-form ref="form" :model="editAnthropometry" label-width="120px">
     <h1>{{ modalTitle }}</h1>
-    <el-form-item label="Название документа">
+    <el-form-item label="Название параметра"  label-width="20vw">
       <el-input v-model="editAnthropometry.name"></el-input>
     </el-form-item>
 
-    <el-form-item>
+    <div class="center-align">
       <el-button type="primary" @click="onSubmit">Создать</el-button>
       <el-button @click="close">Отмена</el-button>
-    </el-form-item>
+    </div>
   </el-form>
 </template>
 

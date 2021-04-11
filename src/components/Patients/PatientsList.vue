@@ -37,13 +37,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%" :close-on-click-modal="false">
-      <ModalForm
-        :patient="patient"
-        :modalTitle="modalTitle"
-        :is-create-form="isCreateForm"
-        @close="close"
-      />
+    <el-dialog
+      v-model="modalVisible"
+      :close-on-click-modal="false"
+      width="85vw"
+      top="3vh"
+      :title="modalTitle"
+      center
+    >
+      <ModalForm :patient="patient" :is-create-form="isCreateForm" @close="close" />
     </el-dialog>
   </div>
 </template>
