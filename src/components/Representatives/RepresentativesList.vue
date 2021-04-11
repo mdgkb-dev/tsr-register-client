@@ -25,15 +25,38 @@
           </el-card>
         </template>
       </el-table-column>
-      <el-table-column prop="human.surname" label="Фамилия" width="150" />
-      <el-table-column prop="human.name" label="Имя" width="150" />
-      <el-table-column prop="human.patronymic" label="Отчество" width="150" />
-      <el-table-column prop="human.gender" label="Пол" width="150" />
+      <el-table-column width="150" label="ФИО">
+        <template #default="scope">
+          {{ fullName(scope.row.human) }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" label="Пол">
+        <template #default="scope">
+          {{ gender(scope.row.human) }}
+        </template>
+      </el-table-column>
+
       <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
-      <el-table-column prop="human.addressResidential" label="Адрес проживания" width="150" />
-      <el-table-column prop="contact.phone" label="Телефон" width="150" />
-      <el-table-column prop="contact.email" label="Эл.почта" width="150" />
-      <el-table-column fixed="right" label="Operations" width="120">
+      <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
+      <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
+      <el-table-column width="150" label="Привязанные дети">
+        <template #default="scope">
+          <div v-for="rep in scope.row.representativeToPatient">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="
+                `${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`
+              "
+              placement="top-end"
+            >
+              <el-tag size="small">{{ children(rep) }}</el-tag>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column fixed="right" label="" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small"
             >Редактировать</el-button
@@ -60,6 +83,9 @@ import { mapState, mapActions } from 'vuex';
 
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import ModalForm from './ModalForm.vue';
+import IHuman from '@/interfaces/humans/IHuman';
+import IPatient from '@/interfaces/patients/IPatient';
+import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
 
 @Options({
   components: {
@@ -149,6 +175,19 @@ export default class RepresentativesList extends Vue {
 
   close(): void {
     this.modalVisible = false;
+  }
+
+  get fullName() {
+    return (human: IHuman) => `${human.surname} ${human.name} ${human.patronymic}`;
+  }
+
+  get gender() {
+    return (human: IHuman) => (human.gender === 'male' ? 'М' : 'Ж');
+  }
+
+  get children() {
+    return (representative: IRepresetnationType) =>
+      representative.patient!.human.gender === 'male' ? 'Сын' : 'Дочь';
   }
 }
 </script>
