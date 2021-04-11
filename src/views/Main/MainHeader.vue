@@ -18,12 +18,6 @@ export default class MainHeader extends Vue {
   mounted(): void {
     this.userName = this.$store.getters['auth/getUserName'];
   }
-
-  async logout(): Promise<void> {
-    await this.$store.dispatch('auth/logout');
-    this.$store.commit('setLayout', 'login-layout');
-    await this.$router.push('/login');
-  }
 }
 </script>
 

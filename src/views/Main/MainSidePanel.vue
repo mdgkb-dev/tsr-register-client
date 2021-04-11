@@ -24,7 +24,7 @@
   </el-aside>
 </template>
 
-<script>
+<script lang="ts">
 import { Vue } from 'vue-class-component';
 
 export default class MainSidePanel extends Vue {
@@ -74,6 +74,12 @@ export default class MainSidePanel extends Vue {
       ],
     },
   ];
+
+  async logout(): Promise<void> {
+    await this.$store.dispatch('auth/logout');
+    this.$store.commit('setLayout', 'login-layout');
+    await this.$router.push('/login');
+  }
 }
 </script>
 

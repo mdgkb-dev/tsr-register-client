@@ -1,7 +1,7 @@
 <template>
   <el-form ref="form" :model="editInsuranceCompany" label-width="120px">
     <h1>{{ modalTitle }}</h1>
-    <el-form-item label="Название документа">
+    <el-form-item label="Название компании">
       <el-input v-model="editInsuranceCompany.name"></el-input>
     </el-form-item>
     <el-form-item>

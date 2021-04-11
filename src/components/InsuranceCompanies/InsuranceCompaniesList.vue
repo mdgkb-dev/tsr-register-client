@@ -11,7 +11,7 @@
       :data="insuranceCompanies"
       style="width: 100%"
     >
-      <el-table-column prop="№" label="№" width="150" />
+      <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column prop="name" label="Название страховой компании" width="150" />
       <el-table-column label="Действия" width="120">
         <template #default="scope">
