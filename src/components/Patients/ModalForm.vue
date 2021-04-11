@@ -105,18 +105,18 @@
         <el-form-item :label="param.name">
           <el-button @click="add(param.id)">Добавить изменение</el-button>
         </el-form-item>
-        <template v-for="(item, i) in patient.anthropometryData">
+        <template v-for="(item, i) in editPatient.anthropometryData">
           <div v-if="item.anthropometryId === param.id">
             <el-form-item label="Дата" label-width="12vw">
               <el-date-picker
                 type="date"
                 placeholder="Дата изменения"
-                v-model="patient.anthropometryData[i].date"
+                v-model="editPatient.anthropometryData[i].date"
                 style="width: 10vw"
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="Значение" label-width="12vw">
-              <el-input-number v-model="patient.anthropometryData[i].value"></el-input-number>
+              <el-input-number v-model="editPatient.anthropometryData[i].value"></el-input-number>
             </el-form-item>
             <el-form-item label-width="12vw">
               <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
@@ -144,7 +144,7 @@
               v-for="item in options"
               :key="item.value"
               :label="item.label"
-              :value="Number(item.value)"
+              :value="item.value"
             >
             </el-option>
           </el-select>
@@ -160,27 +160,107 @@
           <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
         </el-form-item>
       </el-form-item>
+
+      <!--      -->
+      <!--      -->
+      <!--      -->
+      <h2>Документы</h2>
+      <el-form-item v-for="document in documents" :key="document" v-if="mount">
+        <el-row>
+          <h3>{{ document.name }}</h3>
+
+          <el-row>
+            <el-form-item v-for="(field, j) in document.documentFields" :key="j">
+              <el-col>
+                <span>{{ field.name }}</span>
+                <div v-if="field.type === 'string'">
+                  <el-input
+                    label="field.name"
+                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
+                  ></el-input>
+                </div>
+                <div v-else-if="field.type === 'number'">
+                  <el-input-number
+                    label="field.name"
+                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
+                  ></el-input-number>
+                </div>
+              </el-col>
+            </el-form-item>
+          </el-row>
+
+          <el-row>
+            <el-upload
+              action=""
+              :limit="3"
+              :on-preview="download"
+              :on-success="onSuccess"
+              :on-remove="onRemove"
+              :http-request="upload"
+              :data="document"
+              ref="uploadFile"
+              :file-list="documentsScans[document.id]"
+            >
+              <el-button size="small" type="primary">Загрузить файл</el-button>
+            </el-upload>
+          </el-row>
+        </el-row>
+      </el-form-item>
+      <!--      -->
+      <!--      -->
+      <!--      -->
+
+      <h2>Диагнозы</h2>
+      <el-form-item v-if="diagnosisMount">
+        <el-form-item
+          v-for="(item, index) in editPatient.mkbToPatient"
+          :key="index"
+          v-model="editPatient.mkbToPatient"
+        >
+          <el-select
+            placeholder="Выберите диагноз"
+            filterable
+            v-model="editPatient.mkbToPatient[index].mkbId"
+          >
+            <el-option
+              v-for="item in mkbOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <el-checkbox v-model="editPatient.mkbToPatient[index].primary">Первичный</el-checkbox>
+          <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+        </el-form-item>
+      </el-form-item>
     </div>
     <div class="center-align">
       <el-button
         type="primary"
         native-type="submit"
         :disabled="
-          !v$.editPatient.human.surname.$dirty ||
-          (v$.editPatient.human.surname.$dirty &&
-            v$.editPatient.human.surname.$errors.length > 0) ||
-          !v$.editPatient.human.name.$dirty ||
-          (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
-          !v$.editPatient.human.patronymic.$dirty ||
-          (v$.editPatient.human.patronymic.$dirty &&
-            v$.editPatient.human.patronymic.$errors.length > 0) ||
-          !v$.editPatient.human.dateBirth.$dirty ||
-          (v$.editPatient.human.dateBirth.$dirty &&
-            v$.editPatient.human.dateBirth.$errors.length > 0) ||
-          (v$.editPatient.human.contact.phone.$dirty &&
-            v$.editPatient.human.contact.phone.$errors.length > 0) ||
-          (v$.editPatient.human.contact.email.$dirty &&
-            v$.editPatient.human.contact.email.$errors.length > 0)
+          (isCreateForm &&
+            (!v$.editPatient.human.surname.$dirty ||
+              (v$.editPatient.human.surname.$dirty &&
+                v$.editPatient.human.surname.$errors.length > 0) ||
+              !v$.editPatient.human.name.$dirty ||
+              (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
+              !v$.editPatient.human.patronymic.$dirty ||
+              (v$.editPatient.human.patronymic.$dirty &&
+                v$.editPatient.human.patronymic.$errors.length > 0) ||
+              !v$.editPatient.human.dateBirth.$dirty ||
+              (v$.editPatient.human.dateBirth.$dirty &&
+                v$.editPatient.human.dateBirth.$errors.length > 0) ||
+              (v$.editPatient.human.contact.phone.$dirty &&
+                v$.editPatient.human.contact.phone.$errors.length > 0) ||
+              (v$.editPatient.human.contact.email.$dirty &&
+                v$.editPatient.human.contact.email.$errors.length > 0))) ||
+          (!isCreateForm && v$.$errors.length > 0)
         "
         >Сохранить</el-button
       >
@@ -200,6 +280,9 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IMkb from '@/interfaces/mkb/IMkb';
 import IOption from '@/interfaces/shared/IOption';
+import IDocument from '@/interfaces/documents/IDocument';
+import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 
 const russianLettersValidator = (value: unknown) => /^[А-Яа-яЁё \-]+$/.test(String(value));
 const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
@@ -210,12 +293,15 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
     ...mapGetters('anthropometry', ['anthropometry']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('mkb', ['mkb']),
+    ...mapGetters('documents', ['documents']),
   },
   methods: {
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       mkbGetAll: 'mkb/getAll',
+      documentsGetAll: 'documents/getAll',
+      documentScansUpload: 'documentScans/upload',
     }),
   },
   validations: {
@@ -279,14 +365,24 @@ export default class ModalForm extends Vue {
 
   patient!: IPatient;
 
+  documents!: IDocument[];
+
+  documentsScans!: { [id: string]: IDocumentScan[] };
+
   anthropometryGetAll!: () => Promise<void>;
 
   insuranceCompaniesGetAll!: () => Promise<void>;
 
   mkbGetAll!: () => Promise<void>;
 
+  documentsGetAll!: () => Promise<void>;
+
+  offset: number[] = [0];
+
   // Local state.
   editPatient = this.patient;
+
+  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
 
   mount = false;
 
@@ -294,22 +390,43 @@ export default class ModalForm extends Vue {
 
   v$ = useVuelidate();
 
+  onSubmit(): void {
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        this.editPatient.human.documentScans?.push(scan);
+      }
+    }
+
+    this.editPatient.human.documentFieldToHuman = [];
+    for (const document in this.documentsValues) {
+      for (const field in this.documentsValues[document]) {
+        this.editPatient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+      }
+    }
+
+    if (this.isCreateForm) {
+      this.$store.dispatch('patients/create', this.editPatient);
+    } else {
+      this.$store.dispatch('patients/edit', this.editPatient);
+    }
+    this.$emit('close');
+  }
+
   // Lifecycle methods.
   async mounted(): Promise<void> {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();
-
+    await this.documentsGetAll();
     this.options = [];
+
     for (const item of this.insuranceCompanies) {
       this.options.push({
         label: `${item.name}`,
         value: `${item.id}`,
       });
     }
-    console.log(this.mkb);
     this.mkb = this.mkb.slice(1, 100);
-
     this.mkbOptions = [];
     for (const item of this.mkb) {
       this.mkbOptions.push({
@@ -317,12 +434,46 @@ export default class ModalForm extends Vue {
         value: `${item.id}`,
       });
     }
+
+    let sum = 0;
+
+    this.documentsScans = {};
+    this.documentsValues = {};
+
+    for (const document of this.documents) {
+      sum += document.documentFields!.length;
+      this.offset.push(sum);
+
+      this.documentsScans[document.id as string] = [];
+      this.documentsValues[document.id as string] = {};
+
+      for (const field of document.documentFields!) {
+        let item = this.editPatient.human.documentFieldToHuman?.find(i => {
+          return i.documentFieldId === field.id;
+        });
+
+        if (item === undefined) {
+          item = {
+            id: field.id,
+            valueString: undefined,
+            valueNumber: 0,
+            documentFieldId: field.id,
+          };
+        }
+        this.documentsValues[document.id as string][field.id as string] = item!;
+      }
+    }
+
+    for (const scan of this.editPatient.human.documentScans!) {
+      this.documentsScans[scan.documentId!].push({
+        id: scan.id as string,
+        documentId: scan.documentId,
+        url: scan.id as string,
+        name: scan.name as string,
+      });
+    }
     this.mount = true;
     this.diagnosisMount = true;
-  }
-
-  beforeUpdate(): void {
-    this.editPatient = this.patient;
   }
 
   // Methods.
@@ -336,7 +487,7 @@ export default class ModalForm extends Vue {
   }
 
   add(paramId: string): void {
-    this.patient.anthropometryData.push({
+    this.editPatient.anthropometryData.push({
       anthropometryId: paramId,
       date: '',
       value: 0,
@@ -344,14 +495,14 @@ export default class ModalForm extends Vue {
   }
 
   remove(item: any): void {
-    const index = this.patient.anthropometryData.indexOf(item);
+    const index = this.editPatient.anthropometryData.indexOf(item);
     if (index !== -1) {
-      this.patient.anthropometryData.splice(index, 1);
+      this.editPatient.anthropometryData.splice(index, 1);
     }
   }
 
   addInsurance(humanId: number, insuranceCompanyId: number): void {
-    this.patient.human.insuranceCompanyToHuman.push({
+    this.editPatient.human.insuranceCompanyToHuman.push({
       number: '',
       insuranceCompanyId: undefined,
       humanId: undefined,
@@ -359,14 +510,14 @@ export default class ModalForm extends Vue {
   }
 
   removeInsurance(item: any): void {
-    const index = this.patient.human.insuranceCompanyToHuman.indexOf(item);
+    const index = this.editPatient.human.insuranceCompanyToHuman.indexOf(item);
     if (index !== -1) {
-      this.patient.human.insuranceCompanyToHuman.splice(index, 1);
+      this.editPatient.human.insuranceCompanyToHuman.splice(index, 1);
     }
   }
 
   addDiagnosis(): void {
-    this.patient.mkbToPatient.push({
+    this.editPatient.mkbToPatient.push({
       primary: false,
       mkbId: '',
       patientId: '',
@@ -374,14 +525,56 @@ export default class ModalForm extends Vue {
   }
 
   removeDiagnosis(item: any): void {
-    const index = this.patient.mkbToPatient.indexOf(item);
+    const index = this.editPatient.mkbToPatient.indexOf(item);
     if (index !== -1) {
-      this.patient.mkbToPatient.splice(index, 1);
+      this.editPatient.mkbToPatient.splice(index, 1);
     }
   }
 
   close(): void {
+    this.documentsValues = {};
+    this.documentsScans = {};
+    this.mount = false;
     this.$emit('close');
+  }
+
+  //  документы
+  async upload(file: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('file', file.file);
+    formData.append('documentId', file.data.id);
+    const res = await this.$store.dispatch('documentScans/upload', formData);
+    const re = await res.json();
+    this.documentsScans[file.data.id].push({
+      id: re.id as string,
+      documentId: re.documentId,
+    });
+    return re;
+  }
+
+  onSuccess(res: any, file: any, fileList: any): void {
+    file.url = res.id;
+  }
+
+  async onRemove(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/delete', file.id);
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        if (scan.id === file.id) {
+          const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
+          this.documentsScans[document].splice(i, 1);
+        }
+      }
+    }
+
+    for (const scan of this.editPatient.human.documentScans!) {
+      const i = this.editPatient.human.documentScans!.findIndex((item: any) => item.id === file.id);
+      this.editPatient.human.documentScans!.splice(i, 1);
+    }
+  }
+
+  async download(file: any): Promise<void> {
+    await this.$store.dispatch('documentScans/download', file);
   }
 }
 </script>

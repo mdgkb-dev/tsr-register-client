@@ -73,13 +73,14 @@
           >
             <el-space direction="horizontal" alignment="start" :size="1">
               <span>Пациент</span>
+              {{ editRepresentative.representativeToPatient[index].patientId }}
               <el-col :span="12">
                 <el-select v-model="editRepresentative.representativeToPatient[index].patientId">
                   <el-option
                     v-for="item in options"
                     :key="item.value"
                     :label="item.label"
-                    :value="Number(item.value)"
+                    :value="item.value"
                   >
                   </el-option>
                 </el-select>
@@ -185,11 +186,12 @@ import IRepresentetive from '../../interfaces/representatives/IRepresentative';
   },
 })
 export default class ModalForm extends Vue {
-  representative!: IRepresentetive;
-
   $refs!: {
     uploadFile: any;
   };
+
+  // Types.
+  representative!: IRepresentetive;
 
   isCreateForm!: boolean;
 
@@ -197,19 +199,21 @@ export default class ModalForm extends Vue {
 
   documents!: IDocument[];
 
-  documentsScans!: { [id: string]: IDocumentScan[] };
-
-  documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
-
   offset: number[] = [0];
 
   patientsGetAll!: () => Promise<void>;
 
-  mount = false;
-
   documentsGetAll!: () => Promise<void>;
 
   documentsUpload!: () => Promise<void>;
+
+  // Local state.
+
+  documentsScans: { [id: string]: IDocumentScan[] } = {};
+
+  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
+
+  mount = false;
 
   editRepresentative = this.representative;
 
