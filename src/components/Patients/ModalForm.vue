@@ -239,35 +239,33 @@
         </el-form-item>
       </el-form-item>
     </div>
-    <div class="center-allign">
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+    <div class="center-align">
+      <el-button
+        type="primary"
+        native-type="submit"
+        :disabled="
+          (isCreateForm &&
+            (!v$.editPatient.human.surname.$dirty ||
+              (v$.editPatient.human.surname.$dirty &&
+                v$.editPatient.human.surname.$errors.length > 0) ||
+              !v$.editPatient.human.name.$dirty ||
+              (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
+              !v$.editPatient.human.patronymic.$dirty ||
+              (v$.editPatient.human.patronymic.$dirty &&
+                v$.editPatient.human.patronymic.$errors.length > 0) ||
+              !v$.editPatient.human.dateBirth.$dirty ||
+              (v$.editPatient.human.dateBirth.$dirty &&
+                v$.editPatient.human.dateBirth.$errors.length > 0) ||
+              (v$.editPatient.human.contact.phone.$dirty &&
+                v$.editPatient.human.contact.phone.$errors.length > 0) ||
+              (v$.editPatient.human.contact.email.$dirty &&
+                v$.editPatient.human.contact.email.$errors.length > 0))) ||
+          (!isCreateForm && v$.$errors.length > 0)
+        "
+        >Сохранить</el-button
+      >
       <el-button @click="close">Отмена</el-button>
     </div>
-    <!--    <div class="center-allign">-->
-    <!--      <el-button-->
-    <!--        type="primary"-->
-    <!--        native-type="submit"-->
-    <!--        :disabled="-->
-    <!--          !v$.editPatient.human.surname.$dirty ||-->
-    <!--            (v$.editPatient.human.surname.$dirty &&-->
-    <!--              v$.editPatient.human.surname.$errors.length > 0) ||-->
-    <!--            !v$.editPatient.human.name.$dirty ||-->
-    <!--            (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||-->
-    <!--            !v$.editPatient.human.patronymic.$dirty ||-->
-    <!--            (v$.editPatient.human.patronymic.$dirty &&-->
-    <!--              v$.editPatient.human.patronymic.$errors.length > 0) ||-->
-    <!--            !v$.editPatient.human.dateBirth.$dirty ||-->
-    <!--            (v$.editPatient.human.dateBirth.$dirty &&-->
-    <!--              v$.editPatient.human.dateBirth.$errors.length > 0) ||-->
-    <!--            (v$.editPatient.human.contact.phone.$dirty &&-->
-    <!--              v$.editPatient.human.contact.phone.$errors.length > 0) ||-->
-    <!--            (v$.editPatient.human.contact.email.$dirty &&-->
-    <!--              v$.editPatient.human.contact.email.$errors.length > 0)-->
-    <!--        "-->
-    <!--        >Сохранить</el-button-->
-    <!--      >-->
-    <!--      <el-button @click="close">Отмена</el-button>-->
-    <!--    </div>-->
   </el-form>
 </template>
 
@@ -313,21 +311,21 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           required: helpers.withMessage('Пожалуйста, введите фамилию.', required),
           russianLettersValidator: helpers.withMessage(
             'Фамилия может содержать только русские буквы.',
-            russianLettersValidator
+            russianLettersValidator,
           ),
         },
         name: {
           required: helpers.withMessage('Пожалуйста, введите имя.', required),
           russianLettersValidator: helpers.withMessage(
             'Имя может содержать только русские буквы.',
-            russianLettersValidator
+            russianLettersValidator,
           ),
         },
         patronymic: {
           required: helpers.withMessage('Пожалуйста, введите отчество.', required),
           russianLettersValidator: helpers.withMessage(
             'Отчество может содержать только русские буквы.',
-            russianLettersValidator
+            russianLettersValidator,
           ),
         },
         dateBirth: {
@@ -337,13 +335,13 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           phone: {
             phoneValidator: helpers.withMessage(
               'Пожалуйста, используйте только цифры формата: 79151234567',
-              phoneValidator
+              phoneValidator,
             ),
           },
           email: {
             email: helpers.withMessage(
               'Пожалуста, введите корректный email формата: name@host.domain',
-              email
+              email,
             ),
           },
         },
@@ -580,23 +578,3 @@ export default class ModalForm extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.center-allign {
-  text-align: center;
-  margin-left: 0vw !important;
-}
-
-.error-message {
-  text-align: left;
-  padding-left: 5px;
-}
-
-.wrong-input {
-  border-style: solid;
-  border-width: 2px;
-  border-color: rgb(252, 191, 102);
-  border-radius: 6px;
-  height: 40px;
-}
-</style>

@@ -23,11 +23,17 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%">
-      <modalForm
+    <el-dialog
+      v-model="modalVisible"
+      :close-on-click-modal="false"
+      width="85vw"
+      top="3vh"
+      :title="modalTitle"
+      center
+    >
+      <ModalForm
         :anthropometry="anthropometryItem"
         :is-create-form="isCreateForm"
-        :modalTitle="modalTitle"
         @close="close"
       />
     </el-dialog>

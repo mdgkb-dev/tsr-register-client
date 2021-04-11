@@ -75,13 +75,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="modalVisible" width="50%" :close-on-click-modal="false">
-      <ModalForm
-        :patient="patient"
-        :modalTitle="modalTitle"
-        :is-create-form="isCreateForm"
-        @close="close"
-      />
+    <el-dialog
+      v-model="modalVisible"
+      :close-on-click-modal="false"
+      width="85vw"
+      top="3vh"
+      :title="modalTitle"
+      center
+    >
+      <ModalForm :patient="patient" :is-create-form="isCreateForm" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -90,13 +92,13 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import IFilter from '@/interfaces/filters/IFilter';
-import IPatient from '../../interfaces/patients/IPatient';
-
 import ModalForm from './ModalForm.vue';
-import IHuman from '@/interfaces/humans/IHuman';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+
+import IFilter from '@/interfaces/filters/IFilter';
 import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IHuman from '@/interfaces/humans/IHuman';
+import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
   components: {
