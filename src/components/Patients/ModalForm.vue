@@ -239,35 +239,35 @@
         </el-form-item>
       </el-form-item>
     </div>
-    <el-form-item>
+    <div class="center-allign">
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
-    </el-form-item>
-    <div class="center-allign">
-      <el-button
-        type="primary"
-        native-type="submit"
-        :disabled="
-          !v$.editPatient.human.surname.$dirty ||
-            (v$.editPatient.human.surname.$dirty &&
-              v$.editPatient.human.surname.$errors.length > 0) ||
-            !v$.editPatient.human.name.$dirty ||
-            (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||
-            !v$.editPatient.human.patronymic.$dirty ||
-            (v$.editPatient.human.patronymic.$dirty &&
-              v$.editPatient.human.patronymic.$errors.length > 0) ||
-            !v$.editPatient.human.dateBirth.$dirty ||
-            (v$.editPatient.human.dateBirth.$dirty &&
-              v$.editPatient.human.dateBirth.$errors.length > 0) ||
-            (v$.editPatient.human.contact.phone.$dirty &&
-              v$.editPatient.human.contact.phone.$errors.length > 0) ||
-            (v$.editPatient.human.contact.email.$dirty &&
-              v$.editPatient.human.contact.email.$errors.length > 0)
-        "
-        >Сохранить</el-button
-      >
-      <el-button @click="close">Отмена</el-button>
     </div>
+    <!--    <div class="center-allign">-->
+    <!--      <el-button-->
+    <!--        type="primary"-->
+    <!--        native-type="submit"-->
+    <!--        :disabled="-->
+    <!--          !v$.editPatient.human.surname.$dirty ||-->
+    <!--            (v$.editPatient.human.surname.$dirty &&-->
+    <!--              v$.editPatient.human.surname.$errors.length > 0) ||-->
+    <!--            !v$.editPatient.human.name.$dirty ||-->
+    <!--            (v$.editPatient.human.name.$dirty && v$.editPatient.human.name.$errors.length > 0) ||-->
+    <!--            !v$.editPatient.human.patronymic.$dirty ||-->
+    <!--            (v$.editPatient.human.patronymic.$dirty &&-->
+    <!--              v$.editPatient.human.patronymic.$errors.length > 0) ||-->
+    <!--            !v$.editPatient.human.dateBirth.$dirty ||-->
+    <!--            (v$.editPatient.human.dateBirth.$dirty &&-->
+    <!--              v$.editPatient.human.dateBirth.$errors.length > 0) ||-->
+    <!--            (v$.editPatient.human.contact.phone.$dirty &&-->
+    <!--              v$.editPatient.human.contact.phone.$errors.length > 0) ||-->
+    <!--            (v$.editPatient.human.contact.email.$dirty &&-->
+    <!--              v$.editPatient.human.contact.email.$errors.length > 0)-->
+    <!--        "-->
+    <!--        >Сохранить</el-button-->
+    <!--      >-->
+    <!--      <el-button @click="close">Отмена</el-button>-->
+    <!--    </div>-->
   </el-form>
 </template>
 
@@ -379,12 +379,12 @@ export default class ModalForm extends Vue {
 
   documentsGetAll!: () => Promise<void>;
 
-  documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
-
   offset: number[] = [0];
 
   // Local state.
   editPatient = this.patient;
+
+  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
 
   mount = false;
 
@@ -466,7 +466,6 @@ export default class ModalForm extends Vue {
       }
     }
 
-    console.log(this.editPatient.human);
     for (const scan of this.editPatient.human.documentScans!) {
       this.documentsScans[scan.documentId!].push({
         id: scan.id as string,

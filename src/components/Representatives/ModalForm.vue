@@ -186,11 +186,12 @@ import IRepresentetive from '../../interfaces/representatives/IRepresentative';
   },
 })
 export default class ModalForm extends Vue {
-  representative!: IRepresentetive;
-
   $refs!: {
     uploadFile: any;
   };
+
+  // Types.
+  representative!: IRepresentetive;
 
   isCreateForm!: boolean;
 
@@ -198,19 +199,21 @@ export default class ModalForm extends Vue {
 
   documents!: IDocument[];
 
-  documentsScans!: { [id: string]: IDocumentScan[] };
-
-  documentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
-
   offset: number[] = [0];
 
   patientsGetAll!: () => Promise<void>;
 
-  mount = false;
-
   documentsGetAll!: () => Promise<void>;
 
   documentsUpload!: () => Promise<void>;
+
+  // Local state.
+
+  documentsScans: { [id: string]: IDocumentScan[] } = {};
+
+  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
+
+  mount = false;
 
   editRepresentative = this.representative;
 
