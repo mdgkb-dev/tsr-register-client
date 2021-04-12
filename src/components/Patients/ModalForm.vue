@@ -567,9 +567,3 @@ export default class ModalForm extends Vue {
   }
 }
 </script>
-
-<style scoped>
-.remove-margin-bottom {
-  margin-bottom: 0px;
-}
-</style>

@@ -49,6 +49,10 @@ export default class App extends Vue {
   padding-left: 5px;
 }
 
+.remove-margin-bottom {
+  margin-bottom: 0px !important;
+}
+
 .wrong-input {
   border-style: solid;
   border-width: 2px;

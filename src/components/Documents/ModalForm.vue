@@ -1,46 +1,42 @@
 <template>
   <h2>{{ modalTitle }}</h2>
-  <el-form ref="form" :model="editDocument" label-width="150px">
-    <el-row>
-      <el-col :span="6"></el-col>
-      <el-col :span="12">
-        <el-form-item label="Название документа">
-          <el-input v-model="editDocument.name"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6"></el-col>
-    </el-row>
+  <el-form ref="form" :model="editDocument" label-width="10vw">
+    <el-form-item label="Название документа" label-width="20vw">
+      <el-input v-model="editDocument.name"></el-input>
+    </el-form-item>
+    <el-form-item label-width="20vw" class="remove-margin-bottom">
+      <el-button @click="add">Добавить поле</el-button>
+    </el-form-item>
 
     <el-form-item
       v-for="(field, i) in editDocument.documentFields"
       :key="i"
       v-model="editDocument.documentFields"
     >
-      <el-form-item label="Название поля">
+      <el-form-item label="Название поля" label-width="12vw">
         <el-input v-model="editDocument.documentFields[i].name"></el-input>
       </el-form-item>
 
-      <el-select placeholder="Выберите тип поля" v-model="editDocument.documentFields[i].type">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-
-      ><el-button @click.prevent="remove(field)">Удалить поле</el-button>
+      <el-form-item label="Тип поля" label-width="12vw">
+        <el-select placeholder="Выберите тип поля" v-model="editDocument.documentFields[i].type">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label-width="12vw">
+        <el-button @click.prevent="remove(field)">Удалить поле</el-button>
+      </el-form-item>
     </el-form-item>
 
-    <el-form-item>
-      <el-button @click="add">Добавить поле</el-button>
-    </el-form-item>
-
-    <el-form-item>
+    <div class="center-align">
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
-    </el-form-item>
+    </div>
   </el-form>
 </template>
 
