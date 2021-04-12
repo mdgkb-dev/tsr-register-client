@@ -55,7 +55,7 @@
     <el-form-item label="Дата рождения" label-width="20vw">
       <el-date-picker
         type="date"
-        placeholder="Pick a date"
+        placeholder="Выберете дату"
         v-model="v$.editPatient.human.dateBirth.$model"
       ></el-date-picker>
       <div
@@ -164,47 +164,36 @@
       <!--      -->
       <!--      -->
       <!--      -->
-      <h2>Документы</h2>
+      <h3>Документы</h3>
       <el-form-item v-for="document in documents" :key="document" v-if="mount">
-        <el-row>
-          <h3>{{ document.name }}</h3>
+        <h3>{{ document.name }}</h3>
+        <div v-for="(field, j) in document.documentFields" :key="j">
+          <el-form-item label-width="12vw" :label="field.name" v-if="field.type === 'string'">
+            <el-input
+              v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'number'">
+            <el-input-number
+              label="field.name"
+              v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
+            ></el-input-number>
+          </el-form-item>
+        </div>
 
-          <el-row>
-            <el-form-item v-for="(field, j) in document.documentFields" :key="j">
-              <el-col>
-                <span>{{ field.name }}</span>
-                <div v-if="field.type === 'string'">
-                  <el-input
-                    label="field.name"
-                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
-                  ></el-input>
-                </div>
-                <div v-else-if="field.type === 'number'">
-                  <el-input-number
-                    label="field.name"
-                    v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
-                  ></el-input-number>
-                </div>
-              </el-col>
-            </el-form-item>
-          </el-row>
-
-          <el-row>
-            <el-upload
-              action=""
-              :limit="3"
-              :on-preview="download"
-              :on-success="onSuccess"
-              :on-remove="onRemove"
-              :http-request="upload"
-              :data="document"
-              ref="uploadFile"
-              :file-list="documentsScans[document.id]"
-            >
-              <el-button size="small" type="primary">Загрузить файл</el-button>
-            </el-upload>
-          </el-row>
-        </el-row>
+        <el-upload
+          action=""
+          :limit="3"
+          :on-preview="download"
+          :on-success="onSuccess"
+          :on-remove="onRemove"
+          :http-request="upload"
+          :data="document"
+          ref="uploadFile"
+          :file-list="documentsScans[document.id]"
+        >
+          <el-button size="small" type="primary">Загрузить изображение документа</el-button>
+        </el-upload>
       </el-form-item>
       <!--      -->
       <!--      -->
@@ -260,7 +249,7 @@
                 v$.editPatient.human.contact.phone.$errors.length > 0) ||
               (v$.editPatient.human.contact.email.$dirty &&
                 v$.editPatient.human.contact.email.$errors.length > 0))) ||
-          (!isCreateForm && v$.$errors.length > 0)
+            (!isCreateForm && v$.$errors.length > 0)
         "
         >Сохранить</el-button
       >
@@ -311,21 +300,21 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           required: helpers.withMessage('Пожалуйста, введите фамилию.', required),
           russianLettersValidator: helpers.withMessage(
             'Фамилия может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         name: {
           required: helpers.withMessage('Пожалуйста, введите имя.', required),
           russianLettersValidator: helpers.withMessage(
             'Имя может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         patronymic: {
           required: helpers.withMessage('Пожалуйста, введите отчество.', required),
           russianLettersValidator: helpers.withMessage(
             'Отчество может содержать только русские буквы.',
-            russianLettersValidator,
+            russianLettersValidator
           ),
         },
         dateBirth: {
@@ -335,13 +324,13 @@ const phoneValidator = (value: unknown) => /^(7[0-9]+)*$/.test(String(value));
           phone: {
             phoneValidator: helpers.withMessage(
               'Пожалуйста, используйте только цифры формата: 79151234567',
-              phoneValidator,
+              phoneValidator
             ),
           },
           email: {
             email: helpers.withMessage(
               'Пожалуста, введите корректный email формата: name@host.domain',
-              email,
+              email
             ),
           },
         },
