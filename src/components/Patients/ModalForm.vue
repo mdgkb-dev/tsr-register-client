@@ -126,7 +126,7 @@
       </el-form-item>
       <h3>Страховки</h3>
 
-      <el-form-item label-width="20vw">
+      <el-form-item label-width="20vw" class="remove-margin-bottom">
         <el-button @click="addInsurance">Добавить страховку</el-button>
       </el-form-item>
 
@@ -199,7 +199,7 @@
       <!--      -->
       <!--      -->
 
-      <h2>Диагнозы</h2>
+      <h3>Диагнозы</h3>
       <el-form-item v-if="diagnosisMount">
         <el-form-item
           v-for="(item, index) in editPatient.mkbToPatient"
@@ -249,7 +249,7 @@
                 v$.editPatient.human.contact.phone.$errors.length > 0) ||
               (v$.editPatient.human.contact.email.$dirty &&
                 v$.editPatient.human.contact.email.$errors.length > 0))) ||
-            (!isCreateForm && v$.$errors.length > 0)
+          (!isCreateForm && v$.$errors.length > 0)
         "
         >Сохранить</el-button
       >
@@ -567,3 +567,9 @@ export default class ModalForm extends Vue {
   }
 }
 </script>
+
+<style scoped>
+.remove-margin-bottom {
+  margin-bottom: 0px;
+}
+</style>
