@@ -1,8 +1,17 @@
 <template>
-  <h2>{{ modalTitle }}</h2>
-  <el-form ref="form" :model="editDocument" label-width="10vw">
+  <el-form ref="form" :model="editDocument" @submit.prevent="submitForm" label-width="10vw">
     <el-form-item label="Название документа" label-width="20vw">
-      <el-input v-model="editDocument.name"></el-input>
+      <el-input
+        v-model="v$.editDocument.name.$model"
+        :class="{ 'wrong-input': v$.editDocument.name.$errors.length > 0 }"
+      ></el-input>
+      <div
+        :class="['error-message']"
+        v-for="(error, documentIndex) of v$.editDocument.name.$errors"
+        :key="documentIndex"
+      >
+        {{ error.$message }}
+      </div>
     </el-form-item>
     <el-form-item label-width="20vw" class="remove-margin-bottom">
       <el-button @click="add">Добавить поле</el-button>
@@ -33,8 +42,16 @@
       </el-form-item>
     </el-form-item>
 
-    <div class="center-align">
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+    <div class="center-align add-margin-top">
+      <el-button
+        type="primary"
+        native-type="submit"
+        :disabled="
+          (isCreateForm && (!v$.$dirty || (v$.$dirty && v$.$errors.length > 0))) ||
+          (!isCreateForm && v$.$errors.length > 0)
+        "
+        >Сохранить</el-button
+      >
       <el-button @click="close">Отмена</el-button>
     </div>
   </el-form>
@@ -42,11 +59,20 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
+import useVuelidate from '@vuelidate/core';
+import { required, helpers } from '@vuelidate/validators';
 
 import IDocument from '@/interfaces/documents/IDocument';
 
 @Options({
   props: ['document', 'is-create-form', 'modal-title'],
+  validations: {
+    editDocument: {
+      name: {
+        required: helpers.withMessage('Пожалуйста, введите название документа.', required),
+      },
+    },
+  },
 })
 export default class ModalForm extends Vue {
   document!: IDocument;
@@ -61,7 +87,9 @@ export default class ModalForm extends Vue {
     { label: 'Дата', value: 'date' },
   ];
 
-  onSubmit(): void {
+  v$ = useVuelidate();
+
+  submitForm(): void {
     if (this.isCreateForm) {
       this.$store.dispatch('documents/create', this.editDocument);
     } else {
@@ -82,10 +110,15 @@ export default class ModalForm extends Vue {
   }
 
   add(): void {
-    this.editDocument.documentFields!.push({
+    this.editDocument.documentFields.push({
       name: '',
       type: '',
     });
+
+    console.log(this.editDocument.documentFields);
+    console.log('>>>>>>>>>>>>>>');
+    console.log(this.v$);
+    console.log('>>>>>>>>>>>>>>');
   }
 
   beforeUpdate(): void {
