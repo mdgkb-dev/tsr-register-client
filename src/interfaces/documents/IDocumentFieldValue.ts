@@ -4,4 +4,5 @@ export default interface IDocumentFieldValue {
   documentFieldId?: string;
   valueString?: string;
   valueNumber?: number;
+  valueDate?: number;
 }

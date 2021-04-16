@@ -179,6 +179,22 @@
               v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
             ></el-input-number>
           </el-form-item>
+          <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'date'">
+            <el-form-item label-width="20vw">
+              <el-date-picker
+                type="date"
+                placeholder="Выберете дату"
+                v-model="v$.editPatient.human.dateBirth.$model"
+              ></el-date-picker>
+              <div
+                :class="['error-message']"
+                v-for="(error, dateBirthIndex) of v$.editPatient.human.dateBirth.$errors"
+                :key="dateBirthIndex"
+              >
+                {{ error.$message }}
+              </div>
+            </el-form-item>
+          </el-form-item>
         </div>
 
         <el-upload
@@ -368,7 +384,6 @@ export default class ModalForm extends Vue {
 
   offset: number[] = [0];
 
-  // Local state.
   editPatient = this.patient;
 
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};

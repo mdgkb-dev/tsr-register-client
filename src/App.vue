@@ -22,7 +22,6 @@ export default class App extends Vue {
     } else {
       this.$store.commit('setLayout', 'login-layout');
     }
-
     return this.$store.getters.layout;
   }
 }
@@ -60,5 +59,4 @@ export default class App extends Vue {
 el-table {
   width: 100%;
 }
-
 </style>
