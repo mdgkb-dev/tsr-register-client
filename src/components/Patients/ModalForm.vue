@@ -7,113 +7,22 @@
     label-width="10vw"
     label-position="right"
   >
-    <HumanForm :human="editPatient.human" :is-create-form="isCreateForm" />
-
+    <HumanForm :human="editPatient.human" />
     <div v-if="mount">
-      <AnthropometryForm :anthropometry="anthropometry" />
-      <h3>Страховки</h3>
-
-      <el-form-item label-width="20vw">
-        <el-button @click="addInsurance">Добавить страховку</el-button>
-      </el-form-item>
-
-      <el-form-item
-        v-for="(item, index) in editPatient.human.insuranceCompanyToHuman"
-        :key="index"
-        v-model="editPatient.human.insuranceCompanyToHuman"
-      >
-        <el-form-item label="Компания" label-width="12vw">
-          <el-select
-            placeholder="Выберите компанию"
-            v-model="editPatient.human.insuranceCompanyToHuman[index].insuranceCompanyId"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Номер" label-width="12vw">
-          <el-input
-            label="Введите номер страховки"
-            v-model="editPatient.human.insuranceCompanyToHuman[index].number"
-          ></el-input>
-        </el-form-item>
-
-        <el-form-item label-width="12vw">
-          <el-button @click.prevent="removeInsurance(item)">Удалить страховку</el-button>
-        </el-form-item>
-      </el-form-item>
-
-      <!--      -->
-      <!--      -->
-      <!--      -->
-      <h3>Документы</h3>
-      <el-form-item v-for="document in documents" :key="document" v-if="mount">
-        <h3>{{ document.name }}</h3>
-        <div v-for="(field, j) in document.documentFields" :key="j">
-          <el-form-item label-width="12vw" :label="field.name" v-if="field.type === 'string'">
-            <el-input
-              v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'number'">
-            <el-input-number
-              label="field.name"
-              v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
-            ></el-input-number>
-          </el-form-item>
-        </div>
-
-        <el-upload
-          action=""
-          :limit="3"
-          :on-preview="download"
-          :on-success="onSuccess"
-          :on-remove="onRemove"
-          :http-request="upload"
-          :data="document"
-          ref="uploadFile"
-          :file-list="documentsScans[document.id]"
-        >
-          <el-button size="small" type="primary">Загрузить изображение документа</el-button>
-        </el-upload>
-      </el-form-item>
-      <!--      -->
-      <!--      -->
-      <!--      -->
-
-      <h2>Диагнозы</h2>
-      <el-form-item v-if="diagnosisMount">
-        <el-form-item
-          v-for="(item, index) in editPatient.mkbToPatient"
-          :key="index"
-          v-model="editPatient.mkbToPatient"
-        >
-          <el-select
-            placeholder="Выберите диагноз"
-            filterable
-            v-model="editPatient.mkbToPatient[index].mkbId"
-          >
-            <el-option
-              v-for="item in mkbOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-          <el-checkbox v-model="editPatient.mkbToPatient[index].primary">Первичный</el-checkbox>
-          <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button @click="addDiagnosis">Добавить диагноз</el-button>
-        </el-form-item>
-      </el-form-item>
+      <AnthropometryForm
+        :inAnthropometry="anthropometry"
+        :inAnthropometryData="editPatient.anthropometryData"
+      />
+      <InsuranceForm
+        :inInsuranceCompaniesOptions="insuranceCompaniesOptions"
+        :inInsuranceCompanyToHuman="editPatient.human.insuranceCompanyToHuman"
+      />
+      <DocumentForm
+        :inDocuments="documents"
+        :inDocumentsScans="documentsScans"
+        :inDocumentsValues="documentsValues"
+      />
+      <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="editPatient.mkbToPatient" />
     </div>
     <div class="center-align">
       <el-button type="primary" native-type="submit">Сохранить</el-button>
@@ -127,7 +36,10 @@ import { Vue, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import HumanForm from '@/components/HumanForm.vue';
+import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
+import DocumentForm from '@/components/DocumentForm.vue';
+import MkbForm from '@/components/Patients/MkbForm.vue';
 
 import IPatient from '@/interfaces/patients/IPatient';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
@@ -142,6 +54,9 @@ import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
   components: {
     HumanForm,
     AnthropometryForm,
+    InsuranceForm,
+    DocumentForm,
+    MkbForm,
   },
   props: ['patient', 'is-create-form', 'modalTitle'],
   computed: {
@@ -164,7 +79,9 @@ export default class ModalForm extends Vue {
   $refs!: {
     form: any;
   };
+
   // Types.
+
   anthropometry!: IAnthropometry[];
 
   mkb!: IMkb[];
@@ -175,7 +92,7 @@ export default class ModalForm extends Vue {
 
   insuranceCompanies!: IInsuranceCompany[];
 
-  options!: IOption[];
+  insuranceCompaniesOptions!: IOption[];
 
   patient!: IPatient;
 
@@ -239,10 +156,10 @@ export default class ModalForm extends Vue {
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();
     await this.documentsGetAll();
-    this.options = [];
+    this.insuranceCompaniesOptions = [];
 
     for (const item of this.insuranceCompanies) {
-      this.options.push({
+      this.insuranceCompaniesOptions.push({
         label: `${item.name}`,
         value: `${item.id}`,
       });
@@ -299,8 +216,6 @@ export default class ModalForm extends Vue {
 
   // Methods.
   submitForm(): void {
-    console.log(this.$refs.form);
-    console.log('submitForm');
     this.$refs.form.validate((val: any) => {
       console.log(val);
     });
@@ -313,95 +228,11 @@ export default class ModalForm extends Vue {
     // this.$emit('close');
   }
 
-  add(paramId: string): void {
-    this.editPatient.anthropometryData.push({
-      anthropometryId: paramId,
-      date: '',
-      value: 0,
-    });
-  }
-
-  remove(item: any): void {
-    const index = this.editPatient.anthropometryData.indexOf(item);
-    if (index !== -1) {
-      this.editPatient.anthropometryData.splice(index, 1);
-    }
-  }
-
-  addInsurance(humanId: number, insuranceCompanyId: number): void {
-    this.editPatient.human.insuranceCompanyToHuman.push({
-      number: '',
-      insuranceCompanyId: undefined,
-      humanId: undefined,
-    });
-  }
-
-  removeInsurance(item: any): void {
-    const index = this.editPatient.human.insuranceCompanyToHuman.indexOf(item);
-    if (index !== -1) {
-      this.editPatient.human.insuranceCompanyToHuman.splice(index, 1);
-    }
-  }
-
-  addDiagnosis(): void {
-    this.editPatient.mkbToPatient.push({
-      primary: false,
-      mkbId: '',
-      patientId: '',
-    });
-  }
-
-  removeDiagnosis(item: any): void {
-    const index = this.editPatient.mkbToPatient.indexOf(item);
-    if (index !== -1) {
-      this.editPatient.mkbToPatient.splice(index, 1);
-    }
-  }
-
   close(): void {
     this.documentsValues = {};
     this.documentsScans = {};
     this.mount = false;
     this.$emit('close');
-  }
-
-  //  документы
-  async upload(file: any): Promise<any> {
-    const formData = new FormData();
-    formData.append('file', file.file);
-    formData.append('documentId', file.data.id);
-    const res = await this.$store.dispatch('documentScans/upload', formData);
-    const re = await res.json();
-    this.documentsScans[file.data.id].push({
-      id: re.id as string,
-      documentId: re.documentId,
-    });
-    return re;
-  }
-
-  onSuccess(res: any, file: any, fileList: any): void {
-    file.url = res.id;
-  }
-
-  async onRemove(file: any): Promise<void> {
-    await this.$store.dispatch('documentScans/delete', file.id);
-    for (const document in this.documentsScans) {
-      for (const scan of this.documentsScans[document]) {
-        if (scan.id === file.id) {
-          const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
-          this.documentsScans[document].splice(i, 1);
-        }
-      }
-    }
-
-    for (const scan of this.editPatient.human.documentScans!) {
-      const i = this.editPatient.human.documentScans!.findIndex((item: any) => item.id === file.id);
-      this.editPatient.human.documentScans!.splice(i, 1);
-    }
-  }
-
-  async download(file: any): Promise<void> {
-    await this.$store.dispatch('documentScans/download', file);
   }
 }
 </script>

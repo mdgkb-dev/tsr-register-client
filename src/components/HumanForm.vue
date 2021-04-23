@@ -42,7 +42,7 @@ import { Vue, Options } from 'vue-class-component';
 import IHuman from '@/interfaces/humans/IHuman';
 
 @Options({
-  props: ['human', 'is-create-form'],
+  props: ['human'],
 })
 export default class HumanForm extends Vue {
   // Types.
