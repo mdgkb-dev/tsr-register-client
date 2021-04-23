@@ -221,12 +221,12 @@ export default class ModalForm extends Vue {
       console.log(val);
     });
 
-    // if (this.isCreateForm) {
-    //   this.$store.dispatch('patients/create', this.editPatient);
-    // } else {
-    //   this.$store.dispatch('patients/edit', this.editPatient);
-    // }
-    // this.$emit('close');
+    if (this.isCreateForm) {
+      this.$store.dispatch('patients/create', this.editPatient);
+    } else {
+      this.$store.dispatch('patients/edit', this.editPatient);
+    }
+    this.$emit('close');
   }
 
   close(): void {
