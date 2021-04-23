@@ -12,6 +12,13 @@
           v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
         ></el-input-number>
       </el-form-item>
+      <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'date'">
+        <el-date-picker
+          type="date"
+          placeholder="Выберете дату"
+          v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"
+        ></el-date-picker>
+      </el-form-item>
     </div>
 
     <el-upload
@@ -70,7 +77,7 @@ export default class DocumentForm extends Vue {
   }
 
   onSuccess(res: any, file: any, fileList: any): void {
-    // file.url = res.id;
+    file.url = res.id;
   }
 
   async onRemove(file: any): Promise<void> {

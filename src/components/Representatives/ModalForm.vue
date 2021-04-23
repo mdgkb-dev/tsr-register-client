@@ -126,6 +126,7 @@ export default class ModalForm extends Vue {
             id: field.id,
             valueString: undefined,
             valueNumber: 0,
+            valueDate: null,
             documentFieldId: field.id,
           };
         }
