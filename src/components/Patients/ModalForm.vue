@@ -121,10 +121,11 @@ export default class ModalForm extends Vue {
 
   rules = {
     human: {
-      surname: [
-        { required: true, message: 'Please input Activity name', trigger: 'blur' },
-        { min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur' },
-      ],
+      surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      name: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      patronymic: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      gender: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      dateBirth: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
     },
   };
 
