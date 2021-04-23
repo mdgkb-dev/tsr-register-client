@@ -232,7 +232,7 @@ export default class PatientsList extends Vue {
       for (const antro of patient.anthropometryData) {
         for (const item of this.anthropometry) {
           if (antro.anthropometryId === item.id) {
-            total = `${total} ${item.name}: ${antro.value} \n`;
+            total = `${total} ${item.name}: ${antro.value} ${item.measure}. \n`;
           }
         }
       }

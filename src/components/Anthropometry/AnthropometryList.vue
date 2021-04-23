@@ -31,11 +31,7 @@
       :title="modalTitle"
       center
     >
-      <ModalForm
-        :anthropometry="anthropometryItem"
-        :is-create-form="isCreateForm"
-        @close="close"
-      />
+      <ModalForm :anthropometry="anthropometryItem" :is-create-form="isCreateForm" @close="close" />
     </el-dialog>
   </div>
 </template>
@@ -65,6 +61,7 @@ export default class Anthropometry extends Vue {
 
   anthropometryItem: IAnthropometry = {
     name: '',
+    measure: '',
   };
 
   isCreateForm = false;
@@ -85,6 +82,7 @@ export default class Anthropometry extends Vue {
   create(): void {
     this.anthropometryItem = {
       name: '',
+      measure: '',
     };
     this.isCreateForm = true;
     this.modalVisible = true;
