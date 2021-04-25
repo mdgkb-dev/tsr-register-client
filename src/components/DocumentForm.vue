@@ -67,7 +67,7 @@ export default class DocumentForm extends Vue {
     const formData = new FormData();
     formData.append('file', file.file);
     formData.append('documentId', file.data.id);
-    const res = await this.$store.dispatch('documentsScans/upload', formData);
+    const res = await this.$store.dispatch('documentScans/upload', formData);
     const re = await res.json();
     this.documentsScans[file.data.id].push({
       id: re.id as string,
@@ -81,7 +81,7 @@ export default class DocumentForm extends Vue {
   }
 
   async onRemove(file: any): Promise<void> {
-    await this.$store.dispatch('documentsScans/delete', file.id);
+    await this.$store.dispatch('documentScans/delete', file.id);
     for (const document in this.documentsScans) {
       for (const scan of this.documentsScans[document]) {
         if (scan.id === file.id) {
@@ -98,7 +98,7 @@ export default class DocumentForm extends Vue {
   }
 
   async download(file: any): Promise<void> {
-    await this.$store.dispatch('documentsScans/download', file);
+    await this.$store.dispatch('documentScans/download', file);
   }
 }
 </script>

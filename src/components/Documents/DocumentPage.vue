@@ -24,6 +24,10 @@
         </el-option>
       </el-select>
 
+      <el-form-item label="Порядковый номер поля" label-width="12vw">
+        <el-input-number v-model="document.documentFields[i].order"></el-input-number>
+      </el-form-item>
+
       ><el-button @click.prevent="remove(field)">Удалить поле</el-button>
     </el-form-item>
 
@@ -42,6 +46,7 @@
 import { Vue, Options } from 'vue-class-component';
 
 import Document from '@/classes/documents/Document';
+import DocumentField from '@/classes/documents/DocumentField';
 
 export default class DocumentPage extends Vue {
   isEditMode!: boolean;
@@ -73,10 +78,7 @@ export default class DocumentPage extends Vue {
   }
 
   add(): void {
-    this.document.documentFields!.push({
-      name: '',
-      type: '',
-    });
+    this.document.documentFields!.push(new DocumentField());
   }
 
   // Lifecycle methods.

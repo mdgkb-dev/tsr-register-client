@@ -68,13 +68,13 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/representatives/new',
-    name: 'CreatePatient',
+    name: 'CreateRepresentative',
     component: RepresentativePage,
     beforeEnter: ifAuthenticated,
   },
   {
     path: '/representatives/:representativeId',
-    name: 'EditPatient',
+    name: 'EditRepresentative',
     component: RepresentativePage,
     beforeEnter: ifAuthenticated,
   },
