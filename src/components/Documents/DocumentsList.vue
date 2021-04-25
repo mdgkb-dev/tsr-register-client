@@ -34,15 +34,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog v-model="modalVisible" width="50%">
-      <modalForm
-        :document="document"
-        :is-create-form="isCreateForm"
-        :modalTitle="modalTitle"
-        @close="close"
-      />
-    </el-dialog>
   </div>
 </template>
 
@@ -51,7 +42,7 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IDocument from '@/interfaces/documents/IDocument';
-import ModalForm from './ModalForm.vue';
+import ModalForm from './DocumentPage.vue';
 
 @Options({
   components: {
@@ -69,44 +60,20 @@ export default class DocumentsList extends Vue {
 
   getAll!: () => Promise<void>;
 
-  document: IDocument = {
-    name: '',
-    documentFields: [],
-  };
-
-  isCreateForm = false;
-
-  modalVisible = false;
-
-  modalTitle = '';
-
   async mounted(): Promise<void> {
     await this.getAll();
   }
 
-  edit(id: number): void {
-    this.document = this.$store.getters['documents/getById'](id);
-    this.isCreateForm = false;
-    this.modalTitle = 'Отредактировать документ';
-    this.modalVisible = true;
+  edit(id: string): void {
+    this.$router.push(`/documents/${id}`);
   }
 
   create(): void {
-    this.document = {
-      name: '',
-      documentFields: [],
-    };
-    this.isCreateForm = true;
-    this.modalVisible = true;
-    this.modalTitle = 'Создать документ';
+    this.$router.push('/documents/new');
   }
 
   delete(id: number): void {
     this.$store.dispatch('documents/delete', id);
-  }
-
-  close(): void {
-    this.modalVisible = false;
   }
 }
 </script>

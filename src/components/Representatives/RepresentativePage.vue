@@ -1,5 +1,5 @@
 <template>
-  <h2>{{ modalTitle }}</h2>
+  <h2>{{ title }}</h2>
   <el-form ref="form" :model="representative" label-width="150px">
     <div v-if="mount">
       <HumanForm :human="representative.human" />
@@ -88,6 +88,8 @@ export default class RepresentativePage extends Vue {
 
   patientsOptions = [{}];
 
+  title = '';
+
   types = [
     { label: 'Отец', value: 'отец' },
     { label: 'Мать', value: 'мать' },
@@ -96,8 +98,10 @@ export default class RepresentativePage extends Vue {
   async mounted(): Promise<void> {
     if (!this.$route.params.representativeId) {
       this.isEditMode = false;
+      this.title = 'Создать представителя';
     } else {
       this.isEditMode = true;
+      this.title = 'Редактировать представителя';
       const response = await fetch(
         process.env.VUE_APP_BASE_URL + `representative/${this.$route.params.representativeId}`
       );

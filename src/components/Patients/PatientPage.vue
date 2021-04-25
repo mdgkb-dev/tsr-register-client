@@ -1,4 +1,5 @@
 <template>
+  <h2>{{ title }}</h2>
   <el-form
     ref="form"
     :model="patient"
@@ -117,6 +118,8 @@ export default class ModalForm extends Vue {
 
   diagnosisMount = false;
 
+  title = '';
+
   rules = {
     human: {
       surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
@@ -131,8 +134,10 @@ export default class ModalForm extends Vue {
   async created(): Promise<void> {
     if (!this.$route.params.patientId) {
       this.isEditMode = false;
+      this.title = 'Создать пациента';
     } else {
       this.isEditMode = true;
+      this.title = 'Редактировать пациента';
       const response = await fetch(
         process.env.VUE_APP_BASE_URL + `patient/${this.$route.params.patientId}`
       );

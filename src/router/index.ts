@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import HomePage from '../components/HomePage.vue';
-import HumansList from '../components/Humans/HumansList.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
 import PatientPage from '../components/Patients/PatientPage.vue';
 import RepresentativesList from '../components/Representatives/RepresentativesList.vue';
@@ -12,6 +11,7 @@ import store from '../store';
 import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
 import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
+import DocumentPage from '@/components/Documents/DocumentPage.vue';
 
 const ifNotAuthenticated = (to: any, from: any, next: any) => {
   if (!store.getters.isAuthenticated) {
@@ -40,12 +40,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/home',
     name: 'Home',
     component: HomePage,
-    beforeEnter: ifAuthenticated,
-  },
-  {
-    path: '/humans',
-    name: 'Humans',
-    component: HumansList,
     beforeEnter: ifAuthenticated,
   },
   {
@@ -88,6 +82,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/documents',
     name: 'Documents',
     component: DocumentsList,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/documents/new',
+    name: 'CreateDocument',
+    component: DocumentPage,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/documents/:documentId',
+    name: 'EditDocument',
+    component: DocumentPage,
     beforeEnter: ifAuthenticated,
   },
   {
