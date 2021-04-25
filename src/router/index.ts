@@ -3,7 +3,9 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import HomePage from '../components/HomePage.vue';
 import HumansList from '../components/Humans/HumansList.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
+import PatientPage from '../components/Patients/PatientPage.vue';
 import RepresentativesList from '../components/Representatives/RepresentativesList.vue';
+import RepresentativePage from '../components/Representatives/RepresentativePage.vue';
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginForm from '../components/Login/LoginForm.vue';
 import store from '../store';
@@ -53,9 +55,33 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: ifAuthenticated,
   },
   {
+    path: '/patients/new',
+    name: 'CreatePatient',
+    component: PatientPage,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/patients/:patientId',
+    name: 'EditPatient',
+    component: PatientPage,
+    beforeEnter: ifAuthenticated,
+  },
+  {
     path: '/representatives',
     name: 'Representatives',
     component: RepresentativesList,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/representatives/new',
+    name: 'CreatePatient',
+    component: RepresentativePage,
+    beforeEnter: ifAuthenticated,
+  },
+  {
+    path: '/representatives/:representativeId',
+    name: 'EditPatient',
+    component: RepresentativePage,
     beforeEnter: ifAuthenticated,
   },
   {

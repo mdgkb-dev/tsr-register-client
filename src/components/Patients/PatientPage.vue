@@ -1,32 +1,31 @@
 <template>
   <el-form
     ref="form"
-    :model="editPatient"
+    :model="patient"
     :rules="rules"
     @submit.prevent="submitForm"
     label-width="10vw"
     label-position="right"
   >
-    <HumanForm :human="editPatient.human" />
     <div v-if="mount">
+      <HumanForm :human="patient.human" />
       <AnthropometryForm
         :inAnthropometry="anthropometry"
-        :inAnthropometryData="editPatient.anthropometryData"
+        :inAnthropometryData="patient.anthropometryData"
       />
       <InsuranceForm
         :inInsuranceCompaniesOptions="insuranceCompaniesOptions"
-        :inInsuranceCompanyToHuman="editPatient.human.insuranceCompanyToHuman"
+        :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman"
       />
       <DocumentForm
         :inDocuments="documents"
         :inDocumentsScans="documentsScans"
         :inDocumentsValues="documentsValues"
       />
-      <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="editPatient.mkbToPatient" />
+      <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
     </div>
     <div class="center-align">
       <el-button type="primary" native-type="submit">Сохранить</el-button>
-      <el-button @click="close">Отмена</el-button>
     </div>
   </el-form>
 </template>
@@ -41,7 +40,6 @@ import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import MkbForm from '@/components/Patients/MkbForm.vue';
 
-import IPatient from '@/interfaces/patients/IPatient';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IMkb from '@/interfaces/mkb/IMkb';
@@ -49,6 +47,7 @@ import IOption from '@/interfaces/shared/IOption';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
+import Patient from '@/classes/patients/Patient';
 
 @Options({
   components: {
@@ -58,15 +57,16 @@ import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
     DocumentForm,
     MkbForm,
   },
-  props: ['patient', 'is-create-form', 'modalTitle'],
   computed: {
     ...mapGetters('anthropometry', ['anthropometry']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('mkb', ['mkb']),
     ...mapGetters('documents', ['documents']),
+    // ...mapGetters('patients', ['patient']),
   },
   methods: {
     ...mapActions({
+      patientGet: 'patients/get',
       anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       mkbGetAll: 'mkb/getAll',
@@ -88,13 +88,11 @@ export default class ModalForm extends Vue {
 
   mkbOptions!: IOption[];
 
-  isCreateForm!: boolean;
+  isEditMode!: boolean;
 
   insuranceCompanies!: IInsuranceCompany[];
 
   insuranceCompaniesOptions!: IOption[];
-
-  patient!: IPatient;
 
   documents!: IDocument[];
 
@@ -111,7 +109,7 @@ export default class ModalForm extends Vue {
   offset: number[] = [0];
 
   // Local state.
-  editPatient = this.patient;
+  patient = new Patient();
 
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
 
@@ -129,30 +127,18 @@ export default class ModalForm extends Vue {
     },
   };
 
-  onSubmit(): void {
-    for (const document in this.documentsScans) {
-      for (const scan of this.documentsScans[document]) {
-        this.editPatient.human.documentScans?.push(scan);
-      }
-    }
-
-    this.editPatient.human.documentFieldToHuman = [];
-    for (const document in this.documentsValues) {
-      for (const field in this.documentsValues[document]) {
-        this.editPatient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
-      }
-    }
-
-    if (this.isCreateForm) {
-      this.$store.dispatch('patients/create', this.editPatient);
-    } else {
-      this.$store.dispatch('patients/edit', this.editPatient);
-    }
-    this.$emit('close');
-  }
-
   // Lifecycle methods.
-  async mounted(): Promise<void> {
+  async created(): Promise<void> {
+    if (!this.$route.params.patientId) {
+      this.isEditMode = false;
+    } else {
+      this.isEditMode = true;
+      const response = await fetch(
+        process.env.VUE_APP_BASE_URL + `patient/${this.$route.params.patientId}`
+      );
+      this.patient = await response.json();
+    }
+
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();
@@ -165,6 +151,7 @@ export default class ModalForm extends Vue {
         value: `${item.id}`,
       });
     }
+
     this.mkb = this.mkb.slice(1, 100);
     this.mkbOptions = [];
     for (const item of this.mkb) {
@@ -187,7 +174,7 @@ export default class ModalForm extends Vue {
       this.documentsValues[document.id as string] = {};
 
       for (const field of document.documentFields!) {
-        let item = this.editPatient.human.documentFieldToHuman?.find(i => {
+        let item = this.patient.human.documentFieldToHuman?.find(i => {
           return i.documentFieldId === field.id;
         });
 
@@ -203,7 +190,7 @@ export default class ModalForm extends Vue {
       }
     }
 
-    for (const scan of this.editPatient.human.documentScans!) {
+    for (const scan of this.patient.human.documentScans!) {
       this.documentsScans[scan.documentId!].push({
         id: scan.id as string,
         documentId: scan.documentId,
@@ -217,23 +204,28 @@ export default class ModalForm extends Vue {
 
   // Methods.
   submitForm(): void {
+    for (const document in this.documentsScans) {
+      for (const scan of this.documentsScans[document]) {
+        this.patient.human.documentScans?.push(scan);
+      }
+    }
+
+    this.patient.human.documentFieldToHuman = [];
+    for (const document in this.documentsValues) {
+      for (const field in this.documentsValues[document]) {
+        this.patient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+      }
+    }
+
+    if (this.isEditMode) {
+      this.$store.dispatch('patients/edit', this.patient);
+    } else {
+      this.$store.dispatch('patients/create', this.patient);
+    }
+
     this.$refs.form.validate((val: any) => {
       console.log(val);
     });
-
-    if (this.isCreateForm) {
-      this.$store.dispatch('patients/create', this.editPatient);
-    } else {
-      this.$store.dispatch('patients/edit', this.editPatient);
-    }
-    this.$emit('close');
-  }
-
-  close(): void {
-    this.documentsValues = {};
-    this.documentsScans = {};
-    this.mount = false;
-    this.$emit('close');
   }
 }
 </script>

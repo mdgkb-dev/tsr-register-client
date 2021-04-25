@@ -1,18 +1,21 @@
 <template>
   <h2>{{ modalTitle }}</h2>
-  <el-form ref="form" :model="editRepresentative" label-width="150px">
-    <HumanForm :human="editRepresentative.human" />
+  <el-form ref="form" :model="representative" label-width="150px">
+    <div v-if="mount">
+      <HumanForm :human="representative.human" />
 
-    <DocumentForm
-      :inDocuments="documents"
-      :inDocumentsScans="documentsScans"
-      :inDocumentsValues="documentsValues"
-    />
-    <RepresentativeToPatientForm
-      :inRepresentativeToPatient="editRepresentative.representativeToPatient"
-      :inTypes="types"
-      :inPatients="patientsOptions"
-    />
+      <DocumentForm
+        :inDocuments="documents"
+        :inDocumentsScans="documentsScans"
+        :inDocumentsValues="documentsValues"
+      />
+
+      <RepresentativeToPatientForm
+        :inRepresentativeToPatient="representative.representativeToPatient"
+        :inTypes="types"
+        :inPatients="patientsOptions"
+      />
+    </div>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
@@ -32,6 +35,7 @@ import IRepresentative from '../../interfaces/representatives/IRepresentative';
 import HumanForm from '@/components/HumanForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
+import Representative from '@/classes/representatives/Representative';
 
 @Options({
   components: {
@@ -53,15 +57,12 @@ import RepresentativeToPatientForm from '@/components/Representatives/Representa
     }),
   },
 })
-export default class ModalForm extends Vue {
+export default class RepresentativePage extends Vue {
   $refs!: {
     uploadFile: any;
   };
 
-  // Types.
-  representative!: IRepresentative;
-
-  isCreateForm!: boolean;
+  isEditMode!: boolean;
 
   patients!: IPatient[];
 
@@ -83,7 +84,7 @@ export default class ModalForm extends Vue {
 
   mount = false;
 
-  editRepresentative = this.representative;
+  representative = new Representative();
 
   patientsOptions = [{}];
 
@@ -92,7 +93,17 @@ export default class ModalForm extends Vue {
     { label: 'Мать', value: 'мать' },
   ];
 
-  async init(): Promise<void> {
+  async mounted(): Promise<void> {
+    if (!this.$route.params.representativeId) {
+      this.isEditMode = false;
+    } else {
+      this.isEditMode = true;
+      const response = await fetch(
+        process.env.VUE_APP_BASE_URL + `representative/${this.$route.params.representativeId}`
+      );
+      this.representative = await response.json();
+    }
+
     await this.patientsGetAll();
     this.patientsOptions.splice(0, 1);
     for (const item of this.patients) {
@@ -117,7 +128,7 @@ export default class ModalForm extends Vue {
       this.documentsValues[document.id as string] = {};
 
       for (const field of document.documentFields!) {
-        let item = this.editRepresentative.human.documentFieldToHuman?.find(i => {
+        let item = this.representative.human.documentFieldToHuman?.find(i => {
           return i.documentFieldId === field.id;
         });
 
@@ -134,7 +145,7 @@ export default class ModalForm extends Vue {
       }
     }
 
-    for (const scan of this.editRepresentative.human.documentScans!) {
+    for (const scan of this.representative.human.documentScans!) {
       this.documentsScans[scan.documentId!].push({
         id: scan.id as string,
         documentId: scan.documentId,
@@ -146,49 +157,29 @@ export default class ModalForm extends Vue {
     this.mount = true;
   }
 
-  async mounted(): Promise<void> {
-    await this.init();
-  }
-
   onSubmit(): void {
-    for (const item of this.editRepresentative.representativeToPatient) {
+    for (const item of this.representative.representativeToPatient) {
       item.patient = undefined;
     }
 
     for (const document in this.documentsScans) {
       for (const scan of this.documentsScans[document]) {
-        this.editRepresentative.human.documentScans?.push(scan);
+        this.representative.human.documentScans?.push(scan);
       }
     }
 
-    this.editRepresentative.human.documentFieldToHuman = [];
+    this.representative.human.documentFieldToHuman = [];
     for (const document in this.documentsValues) {
       for (const field in this.documentsValues[document]) {
-        this.editRepresentative.human.documentFieldToHuman.push(
-          this.documentsValues[document][field]
-        );
+        this.representative.human.documentFieldToHuman.push(this.documentsValues[document][field]);
       }
     }
 
-    if (this.isCreateForm) {
-      this.$store.dispatch('representatives/create', this.editRepresentative);
+    if (this.isEditMode) {
+      this.$store.dispatch('representatives/edit', this.representative);
     } else {
-      this.$store.dispatch('representatives/edit', this.editRepresentative);
+      this.$store.dispatch('representatives/create', this.representative);
     }
-
-    this.$emit('close');
-  }
-
-  async beforeUpdate(): Promise<void> {
-    this.editRepresentative = this.representative;
-    await this.init();
-  }
-
-  close(): void {
-    this.documentsValues = {};
-    this.documentsScans = {};
-    this.mount = false;
-    this.$emit('close');
   }
 }
 </script>

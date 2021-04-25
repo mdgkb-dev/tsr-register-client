@@ -74,25 +74,12 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog
-      v-model="modalVisible"
-      :close-on-click-modal="false"
-      width="85vw"
-      top="3vh"
-      :title="modalTitle"
-      center
-    >
-      <ModalForm :patient="patient" :is-create-form="isCreateForm" @close="close" />
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
-
-import ModalForm from './ModalForm.vue';
 
 import IFilter from '@/interfaces/filters/IFilter';
 import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
@@ -101,9 +88,6 @@ import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
-  components: {
-    ModalForm,
-  },
   computed: {
     ...mapState('patients', ['patients']),
     ...mapState('anthropometry', ['anthropometry']),
@@ -124,37 +108,9 @@ export default class PatientsList extends Vue {
 
   anthropometry!: IAnthropometry[];
 
-  patient: IPatient = {
-    human: {
-      id: undefined,
-      name: '',
-      surname: '',
-      patronymic: '',
-      gender: '',
-      dateBirth: '',
-      addressRegistration: '',
-      addressResidential: '',
-      contact: {
-        email: '',
-        phone: '',
-      },
-      insuranceCompanyToHuman: [],
-      documentScans: [],
-    },
-    anthropometryData: [],
-    mkbToPatient: [],
-    representativeToPatient: [],
-  };
+  mount = false;
 
   filters!: IFilter[];
-
-  modalVisible = false;
-
-  modalTitle = '';
-
-  isCreateForm = false;
-
-  mount = false;
 
   async mounted(): Promise<void> {
     await this.getAllAnthropometry();
@@ -170,39 +126,11 @@ export default class PatientsList extends Vue {
   }
 
   edit(id: number): void {
-    this.patient = this.$store.getters['patients/getById'](id);
-    this.isCreateForm = false;
-    this.modalTitle = 'Редактировать пациента';
-
-    this.modalVisible = true;
+    this.$router.push(`/patients/${id}`);
   }
 
   create(): void {
-    this.patient = {
-      human: {
-        id: undefined,
-        name: '',
-        surname: '',
-        patronymic: '',
-        gender: '',
-        dateBirth: '',
-        addressRegistration: '',
-        addressResidential: '',
-        contact: {
-          email: '',
-          phone: '',
-        },
-        insuranceCompanyToHuman: [],
-        documentScans: [],
-      },
-      anthropometryData: [],
-      mkbToPatient: [],
-      representativeToPatient: [],
-    };
-    this.isCreateForm = true;
-    this.modalTitle = 'Создать пациента';
-
-    this.modalVisible = true;
+    this.$router.push('/patients/new');
   }
 
   delete(id: number): void {
@@ -212,10 +140,6 @@ export default class PatientsList extends Vue {
   filterHandler(value: string, row: any, column: any) {
     const property = column['property'];
     return row[property] === value;
-  }
-
-  close(): void {
-    this.modalVisible = false;
   }
 
   get fullName() {

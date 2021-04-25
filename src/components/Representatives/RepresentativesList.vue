@@ -66,21 +66,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog
-      v-model="modalVisible"
-      :close-on-click-modal="false"
-      width="85vw"
-      top="3vh"
-      :title="modalTitle"
-      center
-    >
-      <ModalForm
-        :representative="representative"
-        :is-create-form="isCreateForm"
-        @close="close"
-      />
-    </el-dialog>
   </div>
 </template>
 
@@ -89,7 +74,7 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import ModalForm from './ModalForm.vue';
+import ModalForm from './RepresentativePage.vue';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
@@ -112,76 +97,20 @@ export default class RepresentativesList extends Vue {
 
   getAll!: () => Promise<void>;
 
-  representative: IRepresentative = {
-    human: {
-      id: undefined,
-      name: '',
-      surname: '',
-      patronymic: '',
-      gender: '',
-      dateBirth: '',
-      addressRegistration: '',
-      addressResidential: '',
-      contact: {
-        email: '',
-        phone: '',
-      },
-      documentFieldToHuman: [],
-      insuranceCompanyToHuman: [],
-      documentScans: [],
-    },
-    representativeToPatient: [],
-  };
-
-  isCreateForm = false;
-
-  modalVisible = false;
-
-  modalTitle = '';
-
   async mounted(): Promise<void> {
     await this.getAll();
   }
 
   edit(id: number): void {
-    this.representative = this.$store.getters['representatives/getById'](id);
-    this.isCreateForm = false;
-    this.modalTitle = 'Редактировать представителя';
-    this.modalVisible = true;
+    this.$router.push(`/representatives/${id}`);
   }
 
   create(): void {
-    this.representative = {
-      human: {
-        id: undefined,
-        name: '',
-        surname: '',
-        patronymic: '',
-        gender: '',
-        dateBirth: '',
-        addressRegistration: '',
-        addressResidential: '',
-        contact: {
-          email: '',
-          phone: '',
-        },
-        documentFieldToHuman: [],
-        documentScans: [],
-        insuranceCompanyToHuman: [],
-      },
-      representativeToPatient: [],
-    };
-    this.isCreateForm = true;
-    this.modalVisible = true;
-    this.modalTitle = 'Создать представителя';
+    this.$router.push('/representatives/new');
   }
 
   delete(id: number): void {
     this.$store.dispatch('representatives/delete', id);
-  }
-
-  close(): void {
-    this.modalVisible = false;
   }
 
   get fullName() {
