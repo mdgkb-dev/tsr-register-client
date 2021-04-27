@@ -20,7 +20,6 @@ export default class Human implements IHuman {
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 
   constructor() {
-    this.id = '';
     this.name = '';
     this.surname = '';
     this.patronymic = '';

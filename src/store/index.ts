@@ -9,6 +9,7 @@ import insuranceCompanies from './modules/insuranceCompanies';
 import anthropometry from './modules/anthropometry';
 import documentScans from './modules/documentScans';
 import mkb from './modules/mkb';
+import disabilities from './modules/disabilities';
 
 export default createStore({
   state: {
@@ -35,5 +36,6 @@ export default createStore({
     anthropometry,
     documentScans,
     mkb,
+    disabilities,
   },
 });

@@ -8,7 +8,6 @@ export default class AnthropometryDate implements IAnthropometryData {
   date: string;
 
   constructor() {
-    this.id = '';
     this.anthropometryId = '';
     this.patientId = '';
     this.value = 0;

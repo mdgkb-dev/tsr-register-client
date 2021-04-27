@@ -7,7 +7,6 @@ export default class Document implements IDocument {
   documentFields?: IDocumentField[];
 
   constructor() {
-    this.id = '';
     this.name = '';
     this.documentFields = [];
   }

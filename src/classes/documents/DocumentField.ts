@@ -9,7 +9,6 @@ export default class DocumentField implements IDocumentField {
   documentFieldToHuman?: IDocumentFieldValue[];
 
   constructor() {
-    this.id = '';
     this.name = '';
     this.type = '';
     this.order = 0;

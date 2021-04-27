@@ -24,6 +24,7 @@
         :inDocumentsValues="documentsValues"
       />
       <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
+      <DisabilityForm :inDisabilities="patient.disabilities" />
     </div>
     <div class="center-align">
       <el-button type="primary" native-type="submit">Сохранить</el-button>
@@ -40,6 +41,7 @@ import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import MkbForm from '@/components/Patients/MkbForm.vue';
+import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
@@ -49,6 +51,7 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import Patient from '@/classes/patients/Patient';
+import IDisability from '@/interfaces/disabilities/IDisability';
 
 @Options({
   components: {
@@ -57,13 +60,14 @@ import Patient from '@/classes/patients/Patient';
     InsuranceForm,
     DocumentForm,
     MkbForm,
+    DisabilityForm,
   },
   computed: {
     ...mapGetters('anthropometry', ['anthropometry']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('mkb', ['mkb']),
     ...mapGetters('documents', ['documents']),
-    // ...mapGetters('patients', ['patient']),
+    ...mapGetters('disabilities', ['disabilities']),
   },
   methods: {
     ...mapActions({
@@ -73,6 +77,7 @@ import Patient from '@/classes/patients/Patient';
       mkbGetAll: 'mkb/getAll',
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
+      disabilitiesGetAll: 'disabilities/getAll',
     }),
   },
 })
@@ -84,6 +89,8 @@ export default class ModalForm extends Vue {
   // Types.
 
   anthropometry!: IAnthropometry[];
+
+  disabilities!: IDisability[];
 
   mkb!: IMkb[];
 
@@ -106,6 +113,8 @@ export default class ModalForm extends Vue {
   mkbGetAll!: () => Promise<void>;
 
   documentsGetAll!: () => Promise<void>;
+
+  disabilitiesGetAll!: () => Promise<void>;
 
   offset: number[] = [0];
 
@@ -150,6 +159,11 @@ export default class ModalForm extends Vue {
     await this.documentsGetAll();
     this.insuranceCompaniesOptions = [];
 
+    for (const disability of this.patient.disabilities) {
+      if (!disability.edvs) {
+        disability.edvs = [];
+      }
+    }
     for (const item of this.insuranceCompanies) {
       this.insuranceCompaniesOptions.push({
         label: `${item.name}`,

@@ -8,7 +8,6 @@ export default class DocumentScan implements IDocumentScan {
   name?: string;
 
   constructor() {
-    this.id = '';
     this.name = '';
     this.documentId = '';
     this.humanId = '';

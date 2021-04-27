@@ -6,7 +6,6 @@ export default class Anthropometry implements IAnthropometry {
   measure: string;
 
   constructor() {
-    this.id = '';
     this.name = '';
     this.measure = '';
   }

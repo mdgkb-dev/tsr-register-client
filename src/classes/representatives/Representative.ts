@@ -9,7 +9,6 @@ export default class Representative implements IRepresentative {
   representativeToPatient: IRepresetnationType[];
 
   constructor() {
-    this.id = '';
     this.human = new Human();
     this.representativeToPatient = [];
   }
