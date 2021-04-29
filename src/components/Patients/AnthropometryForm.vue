@@ -1,5 +1,4 @@
 <template>
-  <h3>Антропометрия</h3>
   <el-form-item v-for="param in inAnthropometry" :key="param">
     <el-form-item :label="param.name">
       <el-button @click="add(param.id)">Добавить изменение</el-button>

@@ -1,5 +1,4 @@
 <template>
-  <h3>Документы</h3>
   <el-form-item v-for="document in documents" :key="document">
     <h3>{{ document.name }}</h3>
     <div v-for="(field, j) in document.documentFields" :key="j">

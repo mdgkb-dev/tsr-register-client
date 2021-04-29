@@ -10,6 +10,7 @@
       :default-sort="{ prop: 'id', order: 'ascending' }"
       :data="patients"
       style="width: 100%"
+      @row-dblclick="edit"
     >
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column width="150" label="ФИО">
@@ -67,9 +68,7 @@
 
       <el-table-column fixed="right" label="" width="120">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small"
-            >Редактировать</el-button
-          >
+          <el-button @click="edit(scope.row)" type="text" size="small">Редактировать</el-button>
           <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
@@ -100,6 +99,10 @@ import IPatient from '@/interfaces/patients/IPatient';
   },
 })
 export default class PatientsList extends Vue {
+  $message!: {
+    error: any;
+  };
+
   getAll!: () => Promise<void>;
 
   getAllAnthropometry!: () => Promise<void>;
@@ -113,8 +116,13 @@ export default class PatientsList extends Vue {
   filters!: IFilter[];
 
   async mounted(): Promise<void> {
-    await this.getAllAnthropometry();
-    await this.getAll();
+    try {
+      await this.getAllAnthropometry();
+      await this.getAll();
+    } catch (e) {
+      this.$message.error(e.toString());
+      return;
+    }
     this.filters = [];
     for (const patient of this.patients) {
       this.filters.push({
@@ -125,8 +133,8 @@ export default class PatientsList extends Vue {
     this.mount = true;
   }
 
-  edit(id: number): void {
-    this.$router.push(`/patients/${id}`);
+  edit(row: any): void {
+    this.$router.push(`/patients/${row.id}`);
   }
 
   create(): void {

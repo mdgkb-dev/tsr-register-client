@@ -1,5 +1,4 @@
 <template>
-  <h3>Личная информация</h3>
   <el-form-item label="Фамилия" label-width="20vw" prop="human.surname">
     <el-input v-model="editHuman.surname"></el-input>
   </el-form-item>

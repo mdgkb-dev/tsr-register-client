@@ -1,35 +1,79 @@
 <template>
-  <h2>{{ title }}</h2>
-  <el-form
-    ref="form"
-    :model="patient"
-    :rules="rules"
-    @submit.prevent="submitForm"
-    label-width="10vw"
-    label-position="right"
-  >
-    <div v-if="mount">
-      <HumanForm :human="patient.human" />
-      <AnthropometryForm
-        :inAnthropometry="anthropometry"
-        :inAnthropometryData="patient.anthropometryData"
-      />
-      <InsuranceForm
-        :inInsuranceCompaniesOptions="insuranceCompaniesOptions"
-        :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman"
-      />
-      <DocumentForm
-        :inDocuments="documents"
-        :inDocumentsScans="documentsScans"
-        :inDocumentsValues="documentsValues"
-      />
-      <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
-      <DisabilityForm :inDisabilities="patient.disabilities" />
-    </div>
-    <div class="center-align">
-      <el-button type="primary" native-type="submit">Сохранить</el-button>
-    </div>
-  </el-form>
+  <el-collapse>
+    <h2>{{ title }}</h2>
+    <el-form
+      ref="form"
+      :model="patient"
+      :rules="rules"
+      @submit.prevent="submitForm"
+      label-width="10vw"
+      label-position="right"
+    >
+      <div v-if="mount">
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Паспортные данные
+            </h2>
+          </template>
+          <HumanForm :human="patient.human" />
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Антропометрия
+            </h2>
+          </template>
+          <AnthropometryForm
+            :inAnthropometry="anthropometry"
+            :inAnthropometryData="patient.anthropometryData"
+          />
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Страховки
+            </h2>
+          </template>
+          <InsuranceForm
+            :inInsuranceCompaniesOptions="insuranceCompaniesOptions"
+            :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman"
+          />
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Документы
+            </h2>
+          </template>
+          <DocumentForm
+            :inDocuments="documents"
+            :inDocumentsScans="documentsScans"
+            :inDocumentsValues="documentsValues"
+          />
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Диагнозы
+            </h2>
+          </template>
+          <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
+        </el-collapse-item>
+        <el-collapse-item>
+          <template #title>
+            <h2 class="collapseHeader">
+              Инвалидность
+            </h2>
+          </template>
+          <DisabilityForm :inDisabilities="patient.disabilities" />
+        </el-collapse-item>
+      </div>
+      <div class="center-align">
+        <el-button type="primary" native-type="submit">Сохранить</el-button>
+      </div>
+    </el-form>
+  </el-collapse>
 </template>
 
 <script lang="ts">
@@ -84,6 +128,11 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 export default class ModalForm extends Vue {
   $refs!: {
     form: any;
+    message: any;
+  };
+
+  $message!: {
+    error: any;
   };
 
   // Types.
@@ -129,6 +178,8 @@ export default class ModalForm extends Vue {
 
   title = '';
 
+  error = '';
+
   rules = {
     human: {
       surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
@@ -148,7 +199,7 @@ export default class ModalForm extends Vue {
       this.isEditMode = true;
       this.title = 'Редактировать пациента';
       const response = await fetch(
-        process.env.VUE_APP_BASE_URL + `patient/${this.$route.params.patientId}`
+        `${process.env.VUE_APP_BASE_URL}/patient/${this.$route.params.patientId}`
       );
       this.patient = await response.json();
     }
@@ -222,7 +273,7 @@ export default class ModalForm extends Vue {
   }
 
   // Methods.
-  submitForm(): void {
+  async submitForm(): Promise<void> {
     for (const document in this.documentsScans) {
       for (const scan of this.documentsScans[document]) {
         this.patient.human.documentScans?.push(scan);
@@ -236,15 +287,22 @@ export default class ModalForm extends Vue {
       }
     }
 
-    if (this.isEditMode) {
-      this.$store.dispatch('patients/edit', this.patient);
-    } else {
-      this.$store.dispatch('patients/create', this.patient);
+    try {
+      if (this.isEditMode) {
+        await this.$store.dispatch('patients/edit', this.patient);
+      } else {
+        await this.$store.dispatch('patients/create', this.patient);
+      }
+    } catch (e) {
+      this.$message.error(e.toString());
+      return;
     }
 
     this.$refs.form.validate((val: any) => {
       console.log(val);
     });
+
+    this.$router.push('/patients');
   }
 }
 </script>

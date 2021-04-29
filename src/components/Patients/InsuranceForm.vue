@@ -1,6 +1,4 @@
 <template>
-  <h3>Страховки</h3>
-
   <el-form-item label-width="20vw">
     <el-button @click="addInsurance">Добавить страховку</el-button>
   </el-form-item>

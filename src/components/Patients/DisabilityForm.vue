@@ -1,5 +1,4 @@
 <template>
-  <h3>Инвалидность</h3>
   <el-button @click="addDisability()">Добавить изменение</el-button>
   <el-form-item v-for="disability in disabilities" :key="disability">
     <el-form-item label-width="12vw" label="Дата начала инвалидности ">

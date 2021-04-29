@@ -1,5 +1,4 @@
 <template>
-  <h2>Диагнозы</h2>
   <el-form-item>
     <el-form-item v-for="(item, index) in mkbToPatient" :key="index" v-model="mkbToPatient">
       <el-select placeholder="Выберите диагноз" filterable v-model="mkbToPatient[index].mkbId">
