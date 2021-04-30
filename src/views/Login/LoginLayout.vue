@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <el-header></el-header>
+    <el-header>
+      <el-menu-item index="/login">Войти</el-menu-item>
+      <el-menu-item index="/register">Зарегистрироваться</el-menu-item>
+    </el-header>
     <el-main class="container">
       <slot />
     </el-main>

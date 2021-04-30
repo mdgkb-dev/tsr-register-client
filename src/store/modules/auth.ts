@@ -1,59 +1,145 @@
+import Cookies from 'js-cookie';
+import IAuthState from '@/interfaces/states/IAuthState';
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
+import IUserLogin from '@/interfaces/users/IUserLogin';
+import IUserRegister from '@/interfaces/users/IUserRegister';
+
 export default {
   namespaced: true,
   state: {
-    token: localStorage.getItem('user-token') || '',
-    status: '',
-    errorMessage: '',
-    user: '',
-    hasLoadedOnce: false,
+    userId: '',
+    userlogin: '',
+    userRegion: '',
+    isAuthorized: false,
+    authorizationError: '',
   },
   getters: {
-    getUserName: (state: any) => {
-      return state.user;
+    getUserId: (state: IAuthState) => {
+      return state.userId;
     },
-    isAuthenticated: (state: any) => {
-      return !!state.token;
+    getUserLogin: (state: IAuthState) => {
+      return state.userlogin;
     },
-    authStatus: (state: any) => {
-      return state.status;
+    getUserRegion: (state: IAuthState) => {
+      return state.userRegion;
     },
-    errorMessage: (state: any) => {
-      return state.errorMessage;
-    }
+    isAuthorized: (state: IAuthState) => {
+      return state.isAuthorized;
+    },
   },
   mutations: {
-    login: (state: any, payload: any) => {
-      localStorage.setItem('user-token', payload.token.token);
-      state.status = 'success';
-      state.errorMessage = '';
-      state.user = payload.user;
-      state.token = payload.token.token;
-      state.hasLoadedOnce = true;
+    authorize: (state: IAuthState, userData: IUserAuthorized) => {
+      state.userId = userData.id;
+      state.userlogin = userData.login;
+      state.userRegion = userData.region;
+      state.isAuthorized = true;
+      Cookies.set('user_id', userData.id);
+      const cookie = Cookies.get('user_sid');
+
+      if (cookie) {
+        window.localStorage.setItem('user_sid', cookie);
+      }
     },
-    setLoginError: (state: any, errorMessage: string): void => {
-      state.status = 'error';
-      state.errorMessage = errorMessage;
-    }
+    deAuthorize: (state: IAuthState) => {
+      state.userId = '';
+      state.userlogin = '';
+      state.userRegion = '';
+      state.isAuthorized = false;
+      Cookies.remove('user_sid');
+      window.localStorage.removeItem('user_sid');
+    },
+    setRegistrationError: (state: IAuthState, errorMessage: string) => {
+      state.authorizationError = errorMessage;
+    },
   },
   actions: {
-    login: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + 'login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
+    login: async (context: any, userData: IUserLogin) => {
+      let response;
 
-      if (res.status === 200) {
-        context.commit('login', await res.json());
+      try {
+        response = await fetch(process.env.VUE_APP_BASE_URL + 'login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData),
+        });
+      } catch (error) {
+        console.log(error);
         return;
       }
 
-      context.commit('setLoginError', await res.text());
+      if (response?.status !== 200) {
+        context.commit(
+          'setRegistrationError',
+          'Не удалось войти. Пожалуйста, обратитесь к разработчикам.'
+        );
+        return;
+      }
+
+      context.commit('authorize', await response.json());
     },
-    logout: () => {
-      console.log(localStorage.getItem('user-token'));
-      localStorage.removeItem('user-token');
-      console.log(localStorage.getItem('user-token'));
+    register: async (context: any, userData: IUserRegister) => {
+      let response;
+
+      try {
+        response = await fetch(process.env.VUE_APP_BASE_URL + 'users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData),
+        });
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+
+      if (response?.status != 200) {
+        context.commit(
+          'authorizationError',
+          'Не удалось зарегистрироваться. Пожалуйста, обратитесь к разработчикам.'
+        );
+        return;
+      }
+
+      context.commit('authorize', await response.json());
+    },
+    logout: async (context: any) => {
+      let response;
+
+      try {
+        response = await fetch(process.env.VUE_APP_BASE_URL + 'logout', {
+          method: 'POST',
+        });
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+
+      if (response.status !== 200) {
+        console.log('Ошибка выхода.');
+      }
+
+      Cookies.remove('user_sid');
+      window.localStorage.removeItem('user_sid');
+      context.commit('deAuthorize');
+    },
+    deAuthorize: (context: any) => {
+      context.commit('deAuthorize');
+    },
+    setAuthorization: async (context: any) => {
+      let response;
+
+      try {
+        response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
+      } catch (error) {
+        context.commit('deAuthorize');
+        return;
+      }
+
+      if (response.status !== 200) {
+        context.commit('deAuthorize');
+        return;
+      }
+
+      context.commit('authorize', await response.json());
     },
   },
 };

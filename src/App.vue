@@ -17,7 +17,7 @@ import LoginLayout from './views/Login/LoginLayout.vue';
 })
 export default class App extends Vue {
   get layout(): string {
-    if (localStorage.getItem('user-token')) {
+    if (this.$store.getters['auth/isAuthorized']) {
       this.$store.commit('setLayout', 'main-layout');
     } else {
       this.$store.commit('setLayout', 'login-layout');
