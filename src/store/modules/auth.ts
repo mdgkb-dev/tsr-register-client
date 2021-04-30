@@ -26,6 +26,9 @@ export default {
     isAuthorized: (state: IAuthState) => {
       return state.isAuthorized;
     },
+    authError: (state: IAuthState) => {
+      return state.authorizationError;
+    },
   },
   mutations: {
     authorize: (state: IAuthState, userData: IUserAuthorized) => {
@@ -55,7 +58,6 @@ export default {
   actions: {
     login: async (context: any, userData: IUserLogin) => {
       let response;
-
       try {
         response = await fetch(process.env.VUE_APP_BASE_URL + 'login', {
           method: 'POST',
@@ -63,7 +65,11 @@ export default {
           body: JSON.stringify(userData),
         });
       } catch (error) {
-        console.log(error);
+        return;
+      }
+
+      if (response?.status === 401) {
+        context.commit('setRegistrationError', 'Проверьте корректность введённых данных');
         return;
       }
 
@@ -81,7 +87,7 @@ export default {
       let response;
 
       try {
-        response = await fetch(process.env.VUE_APP_BASE_URL + 'users', {
+        response = await fetch(process.env.VUE_APP_BASE_URL + 'user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userData),

@@ -161,6 +161,10 @@ const routes: Array<RouteRecordRaw> = [
     component: MkbList,
     beforeEnter: isAuthorized,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: `/login`,
+  },
 ];
 
 const router = createRouter({

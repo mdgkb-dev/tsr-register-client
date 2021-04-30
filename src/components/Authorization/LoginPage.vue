@@ -13,9 +13,18 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, mixins, Vue } from 'vue-class-component';
+import { mapGetters } from 'vuex';
+import MessageMixin from '@/mixins/MessageMixin.vue';
 
-export default class LoginPage extends Vue {
+@Options({
+  computed: {
+    ...mapGetters('auth', ['authError']),
+  },
+})
+export default class LoginPage extends mixins(MessageMixin) {
+  authError!: '';
+
   loginForm = {
     login: '',
     password: '',
@@ -25,8 +34,11 @@ export default class LoginPage extends Vue {
     try {
       await this.$store.dispatch('auth/login', this.loginForm);
     } catch (error) {
-      console.log(error);
       return;
+    }
+
+    if (this.authError) {
+      this.showMessageError(this.authError);
     }
 
     if (!this.$store.getters['auth/isAuthorized']) {
@@ -34,7 +46,7 @@ export default class LoginPage extends Vue {
       return;
     }
 
-    await this.$router.push(`/users/${this.$store.getters['auth/getUserId']}/forms`);
+    await this.$router.push('/patients');
   }
 }
 </script>

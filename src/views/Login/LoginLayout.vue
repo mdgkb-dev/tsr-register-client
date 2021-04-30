@@ -1,8 +1,15 @@
 <template>
   <div class="container">
     <el-header>
-      <el-menu-item index="/login">Войти</el-menu-item>
-      <el-menu-item index="/register">Зарегистрироваться</el-menu-item>
+      <el-menu
+        mode="horizontal"
+        background-color="#f2f2f2"
+        class="no-border display-flex justify-content-right"
+        :router="true"
+      >
+        <el-menu-item index="/login">Войти</el-menu-item>
+        <el-menu-item index="/register">Зарегистрироваться</el-menu-item>
+      </el-menu>
     </el-header>
     <el-main class="container">
       <slot />
