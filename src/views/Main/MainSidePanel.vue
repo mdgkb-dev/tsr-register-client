@@ -77,6 +77,10 @@ export default class MainSidePanel extends Vue {
 
   async logout(): Promise<void> {
     await this.$store.dispatch('auth/logout');
+    await this.$store.dispatch('auth/setAuthorization');
+    if (!this.$store.getters['auth/isAuthorized']) {
+      this.$store.commit('setLayout', 'login-layout');
+    }
     this.$store.commit('setLayout', 'login-layout');
     await this.$router.push('/login');
   }

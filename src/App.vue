@@ -16,15 +16,19 @@ import LoginLayout from './views/Login/LoginLayout.vue';
   },
 })
 export default class App extends Vue {
+  async mounted(): Promise<void> {
+    await this.$store.dispatch('auth/setAuthorization');
+    if (this.$store.getters['auth/isAuthorized']) {
+      this.$store.commit('setLayout', 'main-layout');
+    }
+  }
+
   get layout(): string {
     if (this.$store.getters['auth/isAuthorized']) {
-      console.log('yesx');
       this.$store.commit('setLayout', 'main-layout');
     } else {
-      console.log('not');
       this.$store.commit('setLayout', 'login-layout');
     }
-    console.log(this.$store.getters.layout);
     return this.$store.getters.layout;
   }
 }

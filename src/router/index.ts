@@ -27,22 +27,20 @@ const isAuthorized = async (to: any, from: any, next: any) => {
     next('/login');
     return;
   }
-
-  if (response.status !== 200) {
-    Cookies.remove('user_sid');
-    window.localStorage.removeItem('user_sid');
-    next('/login');
+  if (response.status === 200 || response.status === 304) {
+    const cookie = Cookies.get('user_sid');
+    window.localStorage.setItem('user_sid', String(cookie));
+    next();
     return;
   }
-
-  const cookie = Cookies.get('user_sid');
-  window.localStorage.setItem('user_sid', String(cookie));
+  Cookies.remove('user_sid');
+  window.localStorage.removeItem('user_sid');
+  next('/login');
   next();
 };
 
 const isNotAuthorized = async (to: any, from: any, next: any) => {
   let response;
-
   try {
     response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
   } catch (error) {
@@ -52,17 +50,15 @@ const isNotAuthorized = async (to: any, from: any, next: any) => {
     return;
   }
 
-  if (response.status !== 200) {
-    Cookies.remove('user_sid');
-    window.localStorage.removeItem('user_sid');
-    next();
+  if (response.status === 200 || response.status === 304) {
+    const cookie = Cookies.get('user_sid');
+    window.localStorage.setItem('user_sid', String(cookie));
+    next(`/patients`);
     return;
   }
-
-  const userId = Cookies.get('user_id');
-  const cookie = Cookies.get('user_sid');
-  window.localStorage.setItem('user_sid', String(cookie));
-  next(`/users/${userId}/forms`);
+  Cookies.remove('user_sid');
+  window.localStorage.removeItem('user_sid');
+  next();
 };
 
 const routes: Array<RouteRecordRaw> = [
@@ -81,7 +77,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: '/patients',
-    beforeEnter: isAuthorized,
   },
   {
     path: '/home',

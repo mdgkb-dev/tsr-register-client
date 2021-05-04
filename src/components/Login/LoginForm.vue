@@ -77,8 +77,8 @@ export default class LoginForm extends Vue {
   async submitForm(): Promise<void> {
     try {
       await this.$store.dispatch('auth/login', this.loginForm);
-      await this.$router.push('/');
       this.$store.commit('setLayout', 'main-layout');
+      await this.$router.push('/patients');
     } catch (e) {
       console.log(e);
     }

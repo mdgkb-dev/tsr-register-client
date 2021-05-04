@@ -36,7 +36,6 @@ export default class RegistrationPage extends mixins(MessageMixin) {
   };
 
   async submitForm(): Promise<void> {
-    console.log('submit');
     try {
       await this.$store.dispatch('auth/register', this.registrationForm);
     } catch (error) {

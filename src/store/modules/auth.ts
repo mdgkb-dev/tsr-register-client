@@ -118,7 +118,7 @@ export default {
         console.log(error);
         return;
       }
-
+      console.log(response);
       if (response.status !== 200) {
         console.log('Ошибка выхода.');
       }
@@ -132,20 +132,17 @@ export default {
     },
     setAuthorization: async (context: any) => {
       let response;
-
       try {
         response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
       } catch (error) {
         context.commit('deAuthorize');
         return;
       }
-
-      if (response.status !== 200) {
-        context.commit('deAuthorize');
+      if (response.status === 200 || response.status === 304) {
+        context.commit('authorize', await response.json());
         return;
       }
-
-      context.commit('authorize', await response.json());
+      context.commit('deAuthorize');
     },
   },
 };
