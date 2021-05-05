@@ -10,6 +10,7 @@ import anthropometry from './modules/anthropometry';
 import documentScans from './modules/documentScans';
 import mkb from './modules/mkb';
 import disabilities from './modules/disabilities';
+import sma from './modules/sma';
 
 export default createStore({
   state: {
@@ -37,5 +38,6 @@ export default createStore({
     documentScans,
     mkb,
     disabilities,
+    sma,
   },
 });
