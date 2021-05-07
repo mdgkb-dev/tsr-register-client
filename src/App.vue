@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue, ExtractInstance } from 'vue-class-component';
 import MainLayout from './views/Main/MainLayout.vue';
 import LoginLayout from './views/Login/LoginLayout.vue';
 

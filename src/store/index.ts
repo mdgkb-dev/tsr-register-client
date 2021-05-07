@@ -40,4 +40,5 @@ export default createStore({
     disabilities,
     sma,
   },
+  plugins: [],
 });

@@ -1,3 +1,7 @@
+import HttpClient from '@/services/HttpClient';
+
+const httpClient = new HttpClient('disability');
+
 export default {
   namespaced: true,
   state: {
@@ -18,9 +22,11 @@ export default {
     create: (state: any, payload: any) => {
       state.disabilities.push(payload);
     },
-    edit: (state: any, payload: any) => {
-      const item = state.disabilities.find((item: any) => item.id === payload.recordId);
-      Object.assign(item, payload);
+    update: (state: any, payload: any) => {
+      const item = state.disabilities.find((item: any) => item.id === payload.id);
+      if (item) {
+        Object.assign(item, payload);
+      }
     },
     delete: (state: any, payload: any) => {
       const i = state.disabilities.findIndex((disabilities: any) => disabilities.id == payload);
@@ -28,31 +34,17 @@ export default {
     },
   },
   actions: {
-    getAll: async (context: any): Promise<void> => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + 'disability');
-      context.commit('set', await res.json());
+    getAll: async (context: any) => {
+      context.commit('set', await httpClient.get());
     },
     create: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + 'disability', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('create', await res.json());
+      context.commit('create', await httpClient.post(payload));
     },
     edit: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + `disability/${payload.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('edit', await res.json());
+      context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: any) => {
-      await fetch(process.env.VUE_APP_BASE_URL + `disability/${id}`, {
-        method: 'DELETE',
-      });
-      context.commit('delete', id);
+    delete: async (context: any, id: string) => {
+      context.commit('delete', await httpClient.delete(id));
     },
   },
 };

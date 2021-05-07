@@ -1,7 +1,7 @@
 import IPatient from '../../interfaces/patients/IPatient';
 import HttpClient from '@/services/HttpClient';
 
-const httpClient = new HttpClient('patient/');
+const httpClient = new HttpClient('patient');
 
 export default {
   namespaced: true,
@@ -29,8 +29,10 @@ export default {
       state.patients.push(payload);
     },
     update: (state: any, payload: any) => {
-      const item = state.patients.find((item: any) => item.id === payload.recordId);
-      Object.assign(item, payload);
+      const item = state.patients.find((item: any) => item.id === payload.id);
+      if (item) {
+        Object.assign(item, payload);
+      }
     },
     delete: (state: any, payload: any) => {
       const i = state.patients.findIndex((item: any) => item.id == payload);
@@ -47,8 +49,8 @@ export default {
     edit: async (context: any, payload: any) => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, payload: any) => {
-      context.commit('delete', await httpClient.delete(payload.id));
+    delete: async (context: any, id: string) => {
+      context.commit('delete', await httpClient.delete(id));
     },
   },
 };

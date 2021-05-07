@@ -10,6 +10,7 @@ import 'dayjs/locale/ru';
 import { ElMessage } from 'element-plus';
 
 const app = createApp(App);
+
 app.use(store);
 app.use(router);
 app.use(ElementPlus, { locale, ElMessage });

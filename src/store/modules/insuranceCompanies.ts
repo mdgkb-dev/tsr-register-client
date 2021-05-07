@@ -1,3 +1,7 @@
+import HttpClient from '@/services/HttpClient';
+
+const httpClient = new HttpClient('insurance-company');
+
 export default {
   namespaced: true,
   state: {
@@ -18,11 +22,13 @@ export default {
     create: (state: any, payload: any) => {
       state.insuranceCompanies.push(payload);
     },
-    edit: (state: any, payload: any) => {
+    update: (state: any, payload: any) => {
       const insuranceCompany = state.insuranceCompanies.find(
-        (insuranceCompany: any) => insuranceCompany.id === payload.recordId
+        (insuranceCompany: any) => insuranceCompany.id === payload.id
       );
-      Object.assign(insuranceCompany, payload);
+      if (insuranceCompany) {
+        Object.assign(insuranceCompany, payload);
+      }
     },
     delete: (state: any, payload: any) => {
       const i = state.insuranceCompanies.findIndex(
@@ -32,31 +38,17 @@ export default {
     },
   },
   actions: {
-    getAll: async (context: any): Promise<void> => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + 'insurance-company');
-      context.commit('set', await res.json());
+    getAll: async (context: any) => {
+      context.commit('set', await httpClient.get());
     },
     create: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + 'insurance-company', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('create', await res.json());
+      context.commit('create', await httpClient.post(payload));
     },
     edit: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + `insurance-company/${payload.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('editHuman', await res.json());
+      context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: any) => {
-      await fetch(process.env.VUE_APP_BASE_URL + `insurance-company/${id}`, {
-        method: 'DELETE',
-      });
-      context.commit('delete', id);
+    delete: async (context: any, id: string) => {
+      context.commit('delete', await httpClient.delete(id));
     },
   },
 };

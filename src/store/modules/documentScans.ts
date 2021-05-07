@@ -24,7 +24,7 @@ export default {
       state.documentScans.push(payload);
     },
     update: (state: any, payload: any): void => {
-      const item = state.documentScans.find((item: any) => item.id === payload.recordId);
+      const item = state.documentScans.find((item: any) => item.id === payload.id);
       Object.assign(item, payload);
     },
     delete: (state: any, payload: any): void => {

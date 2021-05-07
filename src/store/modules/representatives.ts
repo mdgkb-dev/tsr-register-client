@@ -1,4 +1,6 @@
-const api = 'representative/';
+import HttpClient from '@/services/HttpClient';
+
+const httpClient = new HttpClient('representative');
 
 export default {
   namespaced: true,
@@ -21,9 +23,10 @@ export default {
       state.representatives.push(payload);
     },
     update: (state: any, payload: any) => {
-      console.log(payload);
       const item = state.representatives.find((item: any) => item.id === payload.id);
-      Object.assign(item, payload);
+      if (item) {
+        Object.assign(item, payload);
+      }
     },
     delete: (state: any, payload: any) => {
       const i = state.representatives.findIndex((item: any) => item.id == payload);
@@ -32,30 +35,16 @@ export default {
   },
   actions: {
     getAll: async (context: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + api);
-      context.commit('set', await res.json());
+      context.commit('set', await httpClient.get());
     },
     create: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + api, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('create', await res.json());
+      context.commit('create', await httpClient.post(payload));
     },
     edit: async (context: any, payload: any) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + `${api}${payload.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      context.commit('update', await res.json());
+      context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: any) => {
-      await fetch(process.env.VUE_APP_BASE_URL + `${api}${id}`, {
-        method: 'DELETE',
-      });
-      context.commit('delete', id);
+    delete: async (context: any, id: string) => {
+      context.commit('delete', await httpClient.delete(id));
     },
   },
 };
