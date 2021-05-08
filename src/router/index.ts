@@ -2,6 +2,10 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import Cookies from 'js-cookie';
 
+import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
+import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
+import MkbList from '@/components/Mkb/MkbList.vue';
+import DocumentPage from '@/components/Documents/DocumentPage.vue';
 import HomePage from '../components/HomePage.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
 import PatientPage from '../components/Patients/PatientPage.vue';
@@ -10,17 +14,12 @@ import RepresentativePage from '../components/Representatives/RepresentativePage
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
-import store from '../store';
-import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
-import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
-import MkbList from '@/components/Mkb/MkbList.vue';
-import DocumentPage from '@/components/Documents/DocumentPage.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
 
   try {
-    response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
+    response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
   } catch (error) {
     Cookies.remove('user_sid');
     window.localStorage.removeItem('user_sid');
@@ -42,7 +41,7 @@ const isAuthorized = async (to: any, from: any, next: any) => {
 const isNotAuthorized = async (to: any, from: any, next: any) => {
   let response;
   try {
-    response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
+    response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
   } catch (error) {
     Cookies.remove('user_sid');
     window.localStorage.removeItem('user_sid');
@@ -53,7 +52,7 @@ const isNotAuthorized = async (to: any, from: any, next: any) => {
   if (response.status === 200 || response.status === 304) {
     const cookie = Cookies.get('user_sid');
     window.localStorage.setItem('user_sid', String(cookie));
-    next(`/patients`);
+    next('/patients');
     return;
   }
   Cookies.remove('user_sid');
@@ -158,7 +157,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: `/login`,
+    redirect: '/login',
   },
 ];
 

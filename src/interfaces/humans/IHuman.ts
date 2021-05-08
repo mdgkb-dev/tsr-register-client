@@ -1,7 +1,7 @@
-import IContact from './IContact';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
+import IContact from './IContact';
 
 export default interface IHuman {
   id?: string;

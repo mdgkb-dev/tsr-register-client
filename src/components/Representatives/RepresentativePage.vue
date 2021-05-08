@@ -4,11 +4,7 @@
     <div v-if="mount">
       <HumanForm :human="representative.human" />
 
-      <DocumentForm
-        :inDocuments="documents"
-        :inDocumentsScans="documentsScans"
-        :inDocumentsValues="documentsValues"
-      />
+      <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
 
       <RepresentativeToPatientForm
         :inRepresentativeToPatient="representative.representativeToPatient"
@@ -30,12 +26,11 @@ import { mapGetters, mapActions } from 'vuex';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
-import IPatient from '../../interfaces/patients/IPatient';
-import IRepresentative from '../../interfaces/representatives/IRepresentative';
 import HumanForm from '@/components/HumanForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import Representative from '@/classes/representatives/Representative';
+import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({
   components: {
@@ -102,9 +97,7 @@ export default class RepresentativePage extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать представителя';
-      const response = await fetch(
-        process.env.VUE_APP_BASE_URL + `representative/${this.$route.params.representativeId}`
-      );
+      const response = await fetch(`${process.env.VUE_APP_BASE_URL}representative/${this.$route.params.representativeId}`);
       this.representative = await response.json();
     }
 
@@ -125,39 +118,45 @@ export default class RepresentativePage extends Vue {
     this.documentsValues = {};
 
     for (const document of this.documents) {
-      sum += document.documentFields!.length;
+      if (document.documentFields) {
+        sum += document.documentFields.length;
+      }
       this.offset.push(sum);
 
       this.documentsScans[document.id as string] = [];
       this.documentsValues[document.id as string] = {};
 
-      for (const field of document.documentFields!) {
-        let item = this.representative.human.documentFieldToHuman?.find(i => {
-          return i.documentFieldId === field.id;
-        });
-
-        if (item === undefined) {
-          item = {
-            id: field.id,
-            valueString: undefined,
-            valueNumber: 0,
-            valueDate: null,
-            documentFieldId: field.id,
-          };
+      if (document.documentFields) {
+        for (const field of document.documentFields) {
+          let item = this.representative.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
+          if (item === undefined) {
+            item = {
+              id: field.id,
+              valueString: undefined,
+              valueNumber: 0,
+              valueDate: null,
+              documentFieldId: field.id,
+            };
+          }
+          if (item) {
+            this.documentsValues[document.id as string][field.id as string] = item;
+          }
         }
-        this.documentsValues[document.id as string][field.id as string] = item!;
       }
     }
 
-    for (const scan of this.representative.human.documentScans!) {
-      this.documentsScans[scan.documentId!].push({
-        id: scan.id as string,
-        documentId: scan.documentId,
-        url: scan.id as string,
-        name: scan.name as string,
-      });
+    if (this.representative.human.documentScans) {
+      for (const scan of this.representative.human.documentScans) {
+        if (scan.documentId) {
+          this.documentsScans[scan.documentId].push({
+            id: scan.id as string,
+            documentId: scan.documentId,
+            url: scan.id as string,
+            name: scan.name as string,
+          });
+        }
+      }
     }
-
     this.mount = true;
   }
 
@@ -167,15 +166,21 @@ export default class RepresentativePage extends Vue {
     }
 
     for (const document in this.documentsScans) {
-      for (const scan of this.documentsScans[document]) {
-        this.representative.human.documentScans?.push(scan);
+      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
+        for (const scan of this.documentsScans[document]) {
+          this.representative.human.documentScans.push(scan);
+        }
       }
     }
 
     this.representative.human.documentFieldToHuman = [];
     for (const document in this.documentsValues) {
-      for (const field in this.documentsValues[document]) {
-        this.representative.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+      if (Object.prototype.hasOwnProperty.call(this.documentsValues, document)) {
+        for (const field in this.documentsValues[document]) {
+          if (Object.prototype.hasOwnProperty.call(this.documentsValues[document], field)) {
+            this.representative.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+          }
+        }
       }
     }
 

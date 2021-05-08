@@ -2,9 +2,10 @@ import moment from 'moment';
 
 export default class HttpClient {
   api: string;
-  headers: {};
 
-  constructor(api: string = '/') {
+  headers: Record<string, string>;
+
+  constructor(api = '/') {
     this.api = api;
     this.headers = { 'Content-Type': 'application/json' };
   }
@@ -15,7 +16,7 @@ export default class HttpClient {
       headers: this.headers,
     });
 
-    return await res.json();
+    return res.json();
   }
 
   async post(payload: any, params?: any): Promise<any> {
@@ -25,7 +26,7 @@ export default class HttpClient {
       headers: this.headers,
       body: JSON.stringify(payload),
     });
-    return await res.json();
+    return res.json();
   }
 
   async put(payload: any, params?: any): Promise<any> {
@@ -34,7 +35,7 @@ export default class HttpClient {
       headers: this.headers,
       body: JSON.stringify(payload),
     });
-    return await res.json();
+    return res.json();
   }
 
   async delete(params?: any): Promise<any> {
@@ -42,17 +43,17 @@ export default class HttpClient {
       method: 'DELETE',
       headers: this.headers,
     });
-    return await res.json();
+    return res.json();
   }
 
   private baseUrl(params?: any): string {
     if (!params) {
       return process.env.VUE_APP_BASE_URL + this.api;
     }
-    return process.env.VUE_APP_BASE_URL + this.api + '/' + `${params}`;
+    return `${process.env.VUE_APP_BASE_URL + this.api}/${params}`;
   }
 
-  private toUtc(payload: object) {
+  private toUtc(payload: Record<string, any>) {
     if (!payload) {
       return;
     }

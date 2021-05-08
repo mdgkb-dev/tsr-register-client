@@ -8,10 +8,15 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 
 export default class Patient implements IPatient {
   id?: string;
+
   human: IHuman;
+
   anthropometryData: IAnthropometryData[];
+
   mkbToPatient: IMkbToPatient[];
+
   representativeToPatient: IRepresentationType[];
+
   disabilities: IDisability[];
 
   constructor() {

@@ -1,9 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="this.create"
-        >Создать представителя</el-button
-      >
+      <el-button type="primary" icon="el-icon-document" @click="this.create">Создать представителя</el-button>
     </el-button-group>
 
     <el-table :data="representatives" style="width: 100%">
@@ -15,11 +13,7 @@
                 <span>Представляет</span>
               </div>
             </template>
-            <div
-              v-for="item in props.row.representativeToPatient"
-              :key="item.patient.human"
-              class="text item"
-            >
+            <div v-for="item in props.row.representativeToPatient" :key="item.patient.human" class="text item">
               {{ item.patient.human }}
             </div>
           </el-card>
@@ -42,13 +36,11 @@
       <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
       <el-table-column width="150" label="Привязанные дети">
         <template #default="scope">
-          <div v-for="rep in scope.row.representativeToPatient">
+          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
             <el-tooltip
               class="item"
               effect="dark"
-              :content="
-                `${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`
-              "
+              :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
               placement="top-end"
             >
               <el-tag size="small">{{ children(rep) }}</el-tag>
@@ -59,9 +51,7 @@
 
       <el-table-column fixed="right" label="" width="120">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small"
-            >Редактировать</el-button
-          >
+          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
           <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
@@ -73,11 +63,9 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import ModalForm from './RepresentativePage.vue';
 import IHuman from '@/interfaces/humans/IHuman';
-import IPatient from '@/interfaces/patients/IPatient';
 import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
+import ModalForm from './RepresentativePage.vue';
 
 @Options({
   components: {
@@ -113,17 +101,15 @@ export default class RepresentativesList extends Vue {
     this.$store.dispatch('representatives/delete', id);
   }
 
-  get fullName() {
-    return (human: IHuman) => `${human.surname} ${human.name} ${human.patronymic}`;
-  }
+  fullName = (human: IHuman) => `${human.surname} ${human.name} ${human.patronymic}`;
 
-  get gender() {
-    return (human: IHuman) => (human.gender === 'male' ? 'М' : 'Ж');
-  }
+  gender = (human: IHuman) => (human.gender === 'male' ? 'М' : 'Ж');
 
-  get children() {
-    return (representative: IRepresetnationType) =>
-      representative.patient!.human.gender === 'male' ? 'Сын' : 'Дочь';
-  }
+  children = (representative: IRepresetnationType) => {
+    if (representative.patient) {
+      return representative.patient.human.gender === 'male' ? 'Сын' : 'Дочь';
+    }
+    return '';
+  };
 }
 </script>

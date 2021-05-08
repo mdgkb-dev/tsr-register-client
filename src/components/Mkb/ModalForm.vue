@@ -29,12 +29,7 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import IPatient from '@/interfaces/patients/IPatient';
-import { mapActions, mapGetters } from 'vuex';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IMkb from '@/interfaces/mkb/IMkb';
-import IOption from '@/interfaces/shared/IOption';
 
 @Options({
   props: ['mkb-item', 'modalTitle'],

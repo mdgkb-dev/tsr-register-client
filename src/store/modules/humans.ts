@@ -8,12 +8,8 @@ export default {
     items: [],
   },
   getters: {
-    items: (state: any) => {
-      return state.items;
-    },
-    getById: (state: any) => (id: number) => {
-      return state.items.find((human: any) => human.id === id);
-    },
+    items: (state: any) => state.items,
+    getById: (state: any) => (id: number) => state.items.find((human: any) => human.id === id),
   },
   mutations: {
     set: (state: any, payload: any) => {
@@ -23,7 +19,7 @@ export default {
       state.items.push(payload);
     },
     update: (state: any, payload: any) => {
-      const item = state.items.find((item: any) => item.id === payload.id);
+      const item = state.items.find((i: any) => i.id === payload.id);
       if (item) {
         Object.assign(item, payload);
       }
@@ -34,16 +30,16 @@ export default {
     },
   },
   actions: {
-    getAll: async (context: any) => {
+    getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
     },
-    create: async (context: any, payload: any) => {
+    create: async (context: any, payload: any): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any) => {
+    edit: async (context: any, payload: any): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: string) => {
+    delete: async (context: any, id: string): Promise<void> => {
       context.commit('delete', await httpClient.delete(id));
     },
   },

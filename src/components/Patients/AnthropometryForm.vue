@@ -4,14 +4,9 @@
       <el-button @click="add(param.id)">Добавить изменение</el-button>
     </el-form-item>
     <template v-for="(item, i) in anthropometryData">
-      <div v-if="item.anthropometryId === param.id">
+      <div v-if="item.anthropometryId === param.id" :key="item">
         <el-form-item label="Дата" label-width="12vw">
-          <el-date-picker
-            type="date"
-            placeholder="Дата изменения"
-            v-model="anthropometryData[i].date"
-            style="width: 10vw"
-          ></el-date-picker>
+          <el-date-picker type="date" placeholder="Дата изменения" v-model="anthropometryData[i].date" style="width: 10vw"></el-date-picker>
         </el-form-item>
         <el-form-item label="Значение" label-width="12vw">
           <el-input-number v-model="anthropometryData[i].value"></el-input-number>

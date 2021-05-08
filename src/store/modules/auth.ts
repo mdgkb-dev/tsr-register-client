@@ -14,21 +14,11 @@ export default {
     authorizationError: '',
   },
   getters: {
-    getUserId: (state: IAuthState) => {
-      return state.userId;
-    },
-    getUserLogin: (state: IAuthState) => {
-      return state.userlogin;
-    },
-    getUserRegion: (state: IAuthState) => {
-      return state.userRegion;
-    },
-    isAuthorized: (state: IAuthState) => {
-      return state.isAuthorized;
-    },
-    authError: (state: IAuthState) => {
-      return state.authorizationError;
-    },
+    getUserId: (state: IAuthState) => state.userId,
+    getUserLogin: (state: IAuthState) => state.userlogin,
+    getUserRegion: (state: IAuthState) => state.userRegion,
+    isAuthorized: (state: IAuthState) => state.isAuthorized,
+    authError: (state: IAuthState) => state.authorizationError,
   },
   mutations: {
     authorize: (state: IAuthState, userData: IUserAuthorized) => {
@@ -59,7 +49,7 @@ export default {
     login: async (context: any, userData: IUserLogin) => {
       let response;
       try {
-        response = await fetch(process.env.VUE_APP_BASE_URL + 'login', {
+        response = await fetch(`${process.env.VUE_APP_BASE_URL}login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userData),
@@ -76,7 +66,7 @@ export default {
       if (response?.status !== 200) {
         context.commit(
           'setRegistrationError',
-          'Не удалось войти. Пожалуйста, обратитесь к разработчикам.'
+          'Не удалось войти. Пожалуйста, обратитесь к разработчикам.',
         );
         return;
       }
@@ -87,7 +77,7 @@ export default {
       let response;
 
       try {
-        response = await fetch(process.env.VUE_APP_BASE_URL + 'user', {
+        response = await fetch(`${process.env.VUE_APP_BASE_URL}user`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(userData),
@@ -97,10 +87,10 @@ export default {
         return;
       }
 
-      if (response?.status != 200) {
+      if (response?.status !== 200) {
         context.commit(
           'authorizationError',
-          'Не удалось зарегистрироваться. Пожалуйста, обратитесь к разработчикам.'
+          'Не удалось зарегистрироваться. Пожалуйста, обратитесь к разработчикам.',
         );
         return;
       }
@@ -111,7 +101,7 @@ export default {
       let response;
 
       try {
-        response = await fetch(process.env.VUE_APP_BASE_URL + 'logout', {
+        response = await fetch(`${process.env.VUE_APP_BASE_URL}logout`, {
           method: 'POST',
         });
       } catch (error) {
@@ -133,7 +123,7 @@ export default {
     setAuthorization: async (context: any) => {
       let response;
       try {
-        response = await fetch(process.env.VUE_APP_BASE_URL + 'login');
+        response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
       } catch (error) {
         context.commit('deAuthorize');
         return;

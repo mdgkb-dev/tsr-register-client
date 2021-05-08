@@ -18,7 +18,6 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
-import useVuelidate from '@vuelidate/core';
 import { required, helpers } from '@vuelidate/validators';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';

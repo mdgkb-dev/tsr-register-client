@@ -5,23 +5,13 @@
       <el-input v-model="document.name"></el-input>
     </el-form-item>
 
-    <el-form-item
-      v-for="(field, i) in document.documentFields"
-      :key="i"
-      v-model="document.documentFields"
-    >
+    <el-form-item v-for="(field, i) in document.documentFields" :key="i" v-model="document.documentFields">
       <el-form-item label="Название поля">
         <el-input v-model="document.documentFields[i].name"></el-input>
       </el-form-item>
 
       <el-select placeholder="Выберите тип поля" v-model="document.documentFields[i].type">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
 
       <el-form-item label="Порядковый номер поля" label-width="12vw">
@@ -43,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Vue } from 'vue-class-component';
 
 import Document from '@/classes/documents/Document';
 import DocumentField from '@/classes/documents/DocumentField';
@@ -71,14 +61,19 @@ export default class DocumentPage extends Vue {
   }
 
   remove(item: any): void {
-    const index = this.document.documentFields!.indexOf(item);
-    if (index !== -1) {
-      this.document.documentFields!.splice(index, 1);
+    let index = 0;
+    if (this.document.documentFields) {
+      index = this.document.documentFields.indexOf(item);
+    }
+    if (index !== -1 && this.document.documentFields) {
+      this.document.documentFields.splice(index, 1);
     }
   }
 
   add(): void {
-    this.document.documentFields!.push(new DocumentField());
+    if (this.document.documentFields) {
+      this.document.documentFields.push(new DocumentField());
+    }
   }
 
   // Lifecycle methods.
@@ -89,9 +84,7 @@ export default class DocumentPage extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать документ';
-      const response = await fetch(
-        process.env.VUE_APP_BASE_URL + `document/${this.$route.params.documentId}`
-      );
+      const response = await fetch(`${process.env.VUE_APP_BASE_URL}document/${this.$route.params.documentId}`);
       this.document = await response.json();
     }
   }

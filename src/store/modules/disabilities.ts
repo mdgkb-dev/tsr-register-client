@@ -8,12 +8,8 @@ export default {
     disabilities: [],
   },
   getters: {
-    disabilities: (state: any) => {
-      return state.disabilities;
-    },
-    getById: (state: any) => (id: number) => {
-      return state.disabilities.find((item: any) => item.id === id);
-    },
+    disabilities: (state: any) => state.disabilities,
+    getById: (state: any) => (id: number) => state.disabilities.find((item: any) => item.id === id),
   },
   mutations: {
     set: (state: any, payload: any) => {
@@ -23,27 +19,27 @@ export default {
       state.disabilities.push(payload);
     },
     update: (state: any, payload: any) => {
-      const item = state.disabilities.find((item: any) => item.id === payload.id);
+      const item = state.disabilities.find((i: any) => i.id === payload.id);
       if (item) {
         Object.assign(item, payload);
       }
     },
     delete: (state: any, payload: any) => {
-      const i = state.disabilities.findIndex((disabilities: any) => disabilities.id == payload);
+      const i = state.disabilities.findIndex((disabilities: any) => disabilities.id === payload);
       state.disabilities.splice(i, 1);
     },
   },
   actions: {
-    getAll: async (context: any) => {
+    getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
     },
-    create: async (context: any, payload: any) => {
+    create: async (context: any, payload: any): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any) => {
+    edit: async (context: any, payload: any): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: string) => {
+    delete: async (context: any, id: string): Promise<void> => {
       context.commit('delete', await httpClient.delete(id));
     },
   },

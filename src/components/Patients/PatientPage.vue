@@ -1,14 +1,7 @@
 <template>
   <el-collapse>
     <h2>{{ title }}</h2>
-    <el-form
-      ref="form"
-      :model="patient"
-      :rules="rules"
-      @submit.prevent="submitForm"
-      label-width="10vw"
-      label-position="right"
-    >
+    <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="10vw" label-position="right">
       <div v-if="mount">
         <el-collapse-item>
           <template #title>
@@ -24,10 +17,7 @@
               Антропометрия
             </h2>
           </template>
-          <AnthropometryForm
-            :inAnthropometry="anthropometry"
-            :inAnthropometryData="patient.anthropometryData"
-          />
+          <AnthropometryForm :inAnthropometry="anthropometry" :inAnthropometryData="patient.anthropometryData" />
         </el-collapse-item>
         <el-collapse-item>
           <template #title>
@@ -35,10 +25,7 @@
               Страховки
             </h2>
           </template>
-          <InsuranceForm
-            :inInsuranceCompaniesOptions="insuranceCompaniesOptions"
-            :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman"
-          />
+          <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
         </el-collapse-item>
         <el-collapse-item>
           <template #title>
@@ -46,11 +33,7 @@
               Документы
             </h2>
           </template>
-          <DocumentForm
-            :inDocuments="documents"
-            :inDocumentsScans="documentsScans"
-            :inDocumentsValues="documentsValues"
-          />
+          <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
         </el-collapse-item>
         <el-collapse-item>
           <template #title>
@@ -198,9 +181,7 @@ export default class ModalForm extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать пациента';
-      const response = await fetch(
-        `${process.env.VUE_APP_BASE_URL}/patient/${this.$route.params.patientId}`
-      );
+      const response = await fetch(`${process.env.VUE_APP_BASE_URL}/patient/${this.$route.params.patientId}`);
       this.patient = await response.json();
     }
 
@@ -237,36 +218,39 @@ export default class ModalForm extends Vue {
     this.documentsValues = {};
 
     for (const document of this.documents) {
-      sum += document.documentFields!.length;
+      if (document.documentFields) {
+        sum += document.documentFields.length;
+      }
       this.offset.push(sum);
 
       this.documentsScans[document.id as string] = [];
       this.documentsValues[document.id as string] = {};
 
-      for (const field of document.documentFields!) {
-        let item = this.patient.human.documentFieldToHuman?.find(i => {
-          return i.documentFieldId === field.id;
-        });
+      if (document.documentFields) {
+        for (const field of document.documentFields) {
+          let item = this.patient.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
 
-        if (item === undefined) {
-          item = {
-            id: field.id,
-            valueString: undefined,
-            valueNumber: 0,
-            documentFieldId: field.id,
-          };
+          if (item === undefined) {
+            item = {
+              id: field.id,
+              valueString: undefined,
+              valueNumber: 0,
+              documentFieldId: field.id,
+            };
+          }
+          this.documentsValues[document.id as string][field.id as string] = item;
         }
-        this.documentsValues[document.id as string][field.id as string] = item!;
       }
     }
-
-    for (const scan of this.patient.human.documentScans!) {
-      this.documentsScans[scan.documentId!].push({
-        id: scan.id as string,
-        documentId: scan.documentId,
-        url: scan.id as string,
-        name: scan.name as string,
-      });
+    for (const scan of this.patient.human.documentScans) {
+      if (scan.documentId) {
+        this.documentsScans[scan.documentId].push({
+          id: scan.id as string,
+          documentId: scan.documentId,
+          url: scan.id as string,
+          name: scan.name as string,
+        });
+      }
     }
     this.mount = true;
     this.diagnosisMount = true;
@@ -275,15 +259,21 @@ export default class ModalForm extends Vue {
   // Methods.
   async submitForm(): Promise<void> {
     for (const document in this.documentsScans) {
-      for (const scan of this.documentsScans[document]) {
-        this.patient.human.documentScans?.push(scan);
+      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
+        for (const scan of this.documentsScans[document]) {
+          this.patient.human.documentScans.push(scan);
+        }
       }
     }
 
     this.patient.human.documentFieldToHuman = [];
     for (const document in this.documentsValues) {
-      for (const field in this.documentsValues[document]) {
-        this.patient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+      if (Object.prototype.hasOwnProperty.call(this.documentsValues, document)) {
+        for (const field in this.documentsValues[document]) {
+          if (Object.prototype.hasOwnProperty.call(this.documentsValues[document], field)) {
+            this.patient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
+          }
+        }
       }
     }
 

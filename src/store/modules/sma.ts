@@ -10,14 +10,8 @@ export default {
     smaItem: {},
   },
   getters: {
-    getAll: (state: IState): ISma[] => {
-      return state.sma;
-    },
-    getById: (state: IState) => {
-      return (id: string): ISma | undefined => {
-        return state.sma.find((item: ISma) => item.id === id);
-      };
-    },
+    getAll: (state: IState): ISma[] => state.sma,
+    getById: (state: IState) => (id: string): ISma | undefined => state.sma.find((item: ISma) => item.id === id),
   },
   mutations: {
     set: (state: IState, payload: ISma[]) => {
@@ -27,16 +21,16 @@ export default {
       state.sma.push(payload);
     },
     update: (state: IState, payload: ISma) => {
-      const item = state.sma.find((item: any) => item.id === payload.id);
+      const item = state.sma.find((i: any) => i.id === payload.id);
       Object.assign(item, payload);
     },
     delete: (state: IState, payload: ISma) => {
-      const i = state.sma.findIndex((item: any) => item.id == payload);
+      const i = state.sma.findIndex((item: any) => item.id === payload);
       state.sma.splice(i, 1);
     },
   },
   actions: {
-    getAll: async (context: any) => {
+    getAll: async (context: any): Promise<void> => {
       const res = await fetch(process.env.VUE_APP_BASE_URL + api);
       context.commit('set', await res.json());
     },
@@ -50,7 +44,7 @@ export default {
       context.commit('create', await res.json());
     },
     edit: async (context: any, payload: ISma) => {
-      const res = await fetch(process.env.VUE_APP_BASE_URL + `${api}${payload.id}`, {
+      const res = await fetch(`${process.env.VUE_APP_BASE_URL}${api}${payload.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -58,8 +52,8 @@ export default {
 
       context.commit('update', await res.json());
     },
-    delete: async (context: any, id: string) => {
-      await fetch(process.env.VUE_APP_BASE_URL + `${api}${id}`, {
+    delete: async (context: any, id: string): Promise<void> => {
+      await fetch(`${process.env.VUE_APP_BASE_URL}${api}${id}`, {
         method: 'DELETE',
       });
 

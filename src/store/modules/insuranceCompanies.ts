@@ -8,12 +8,8 @@ export default {
     insuranceCompanies: [],
   },
   getters: {
-    insuranceCompanies: (state: any) => {
-      return state.insuranceCompanies;
-    },
-    getById: (state: any) => (id: number) => {
-      return state.insuranceCompanies.find((insuranceCompany: any) => insuranceCompany.id === id);
-    },
+    insuranceCompanies: (state: any) => state.insuranceCompanies,
+    getById: (state: any) => (id: number) => state.insuranceCompanies.find((insuranceCompany: any) => insuranceCompany.id === id),
   },
   mutations: {
     set: (state: any, payload: any) => {
@@ -24,7 +20,7 @@ export default {
     },
     update: (state: any, payload: any) => {
       const insuranceCompany = state.insuranceCompanies.find(
-        (insuranceCompany: any) => insuranceCompany.id === payload.id
+        (company: any) => company.id === payload.id,
       );
       if (insuranceCompany) {
         Object.assign(insuranceCompany, payload);
@@ -32,22 +28,22 @@ export default {
     },
     delete: (state: any, payload: any) => {
       const i = state.insuranceCompanies.findIndex(
-        (insuranceCompany: any) => insuranceCompany.id == payload
+        (insuranceCompany: any) => insuranceCompany.id === payload,
       );
       state.insuranceCompanies.splice(i, 1);
     },
   },
   actions: {
-    getAll: async (context: any) => {
+    getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
     },
-    create: async (context: any, payload: any) => {
+    create: async (context: any, payload: any): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any) => {
+    edit: async (context: any, payload: any): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
-    delete: async (context: any, id: string) => {
+    delete: async (context: any, id: string): Promise<void> => {
       context.commit('delete', await httpClient.delete(id));
     },
   },

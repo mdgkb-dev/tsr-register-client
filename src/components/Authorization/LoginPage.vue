@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { Options, mixins, Vue } from 'vue-class-component';
+import { Options, mixins } from 'vue-class-component';
 import { mapGetters } from 'vuex';
 import MessageMixin from '@/mixins/MessageMixin.vue';
 

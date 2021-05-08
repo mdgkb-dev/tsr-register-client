@@ -5,7 +5,9 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresetnationTyp
 
 export default class Representative implements IRepresentative {
   id?: string;
+
   human: IHuman;
+
   representativeToPatient: IRepresetnationType[];
 
   constructor() {

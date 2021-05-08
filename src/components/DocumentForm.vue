@@ -6,17 +6,10 @@
         <el-input v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"></el-input>
       </el-form-item>
       <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'number'">
-        <el-input-number
-          label="field.name"
-          v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"
-        ></el-input-number>
+        <el-input-number label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"></el-input-number>
       </el-form-item>
       <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'date'">
-        <el-date-picker
-          type="date"
-          placeholder="Выберете дату"
-          v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"
-        ></el-date-picker>
+        <el-date-picker type="date" placeholder="Выберете дату" v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"></el-date-picker>
       </el-form-item>
     </div>
 
@@ -75,17 +68,21 @@ export default class DocumentForm extends Vue {
     return re;
   }
 
-  onSuccess(res: any, file: any, fileList: any): void {
+  onSuccess = (res: any, file: any): void => {
+    // TODO: проверить после переделки доков
+    // eslint-disable-next-line no-param-reassign
     file.url = res.id;
-  }
+  };
 
   async onRemove(file: any): Promise<void> {
     await this.$store.dispatch('documentScans/delete', file.id);
     for (const document in this.documentsScans) {
-      for (const scan of this.documentsScans[document]) {
-        if (scan.id === file.id) {
-          const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
-          this.documentsScans[document].splice(i, 1);
+      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
+        for (const scan of this.documentsScans[document]) {
+          if (scan.id === file.id) {
+            const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
+            this.documentsScans[document].splice(i, 1);
+          }
         }
       }
     }

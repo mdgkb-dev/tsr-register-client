@@ -6,9 +6,13 @@ import Period from '@/classes/shared/Period';
 
 export default class Disability implements IDisability {
   id?: string;
+
   period?: IPeriod;
+
   patient?: IPatient;
+
   patientId?: string;
+
   edvs?: IEdv[];
 
   constructor() {

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+npm run lint
+if [ $? -gt 0 ]; then
+  printf "LINT FAILED\n"
+  exit 1
+else
+  printf "LINT SUCCEEDED\n"
+fi
+
+exit 0
