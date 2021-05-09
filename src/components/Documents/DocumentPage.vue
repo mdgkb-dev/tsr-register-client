@@ -1,6 +1,6 @@
 <template>
   <h2>{{ title }}</h2>
-  <el-form ref="form" :model="document" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
+  <el-form ref="form" :model="document" @submit.prevent="submitForm" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
     <el-form-item label="Название документа" prop="name">
       <el-input v-model="document.name"></el-input>
     </el-form-item>
@@ -26,7 +26,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
+      <el-button type="primary" native-type="submit" >Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
@@ -81,7 +81,7 @@ export default class DocumentPage extends Vue {
     ],
   };
 
-  onSubmit(): void {
+  submitForm(): void {
     let validationResult = true;
 
     this.$refs.form.validate((valid: boolean, errorFields: any) => {
