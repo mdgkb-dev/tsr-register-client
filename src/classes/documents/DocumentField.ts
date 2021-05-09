@@ -3,13 +3,9 @@ import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 
 export default class DocumentField implements IDocumentField {
   id?: string;
-
   name: string;
-
   type: string;
-
   order: number;
-
   documentFieldToHuman?: IDocumentFieldValue[];
 
   constructor() {

@@ -3,36 +3,20 @@
   <el-row>
     <el-form-item>
       <el-row>
-        <el-form-item
-          v-for="(item, index) in representativeToPatient"
-          :key="index"
-          v-model="representativeToPatient"
-        >
+        <el-form-item v-for="(item, index) in representativeToPatient" :key="index" v-model="representativeToPatient">
           <el-space direction="horizontal" alignment="start" :size="1">
             <span>Пациент</span>
             {{ representativeToPatient[index].patientId }}
             <el-col :span="12">
               <el-select v-model="representativeToPatient[index].patientId">
-                <el-option
-                  v-for="item in inPatients"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
+                <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </el-col>
 
             <span>Роль представителя</span>
             <el-col :span="11">
               <el-select v-model="representativeToPatient[index].type">
-                <el-option
-                  v-for="item in inTypes"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
-                </el-option>
+                <el-option v-for="item in inTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </el-col>
             <el-col :span="1">
@@ -54,7 +38,7 @@
 import { Vue, Options } from 'vue-class-component';
 
 import IOption from '@/interfaces/shared/IOption';
-import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 
 @Options({
   props: ['in-representative-to-patient', 'in-types', 'in-patients'],

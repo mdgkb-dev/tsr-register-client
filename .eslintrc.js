@@ -8,6 +8,7 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    'lines-between-class-members': 'off',
     'import/no-cycle': 'off',
     semi: 'off',
     '@typescript-eslint/semi': ['error'],

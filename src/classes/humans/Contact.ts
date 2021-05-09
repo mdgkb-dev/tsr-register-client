@@ -1,12 +1,14 @@
 import IContact from '@/interfaces/humans/IContact';
 
 export default class Contact implements IContact {
-  phone: string;
+  phone = '';
+  email = '';
 
-  email: string;
-
-  constructor() {
-    this.phone = '';
-    this.email = '';
+  constructor(contact?: IContact) {
+    if (!contact) {
+      return;
+    }
+    this.phone = contact.phone;
+    this.email = contact.email;
   }
 }

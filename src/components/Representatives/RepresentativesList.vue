@@ -4,7 +4,7 @@
       <el-button type="primary" icon="el-icon-document" @click="this.create">Создать представителя</el-button>
     </el-button-group>
 
-    <el-table :data="representatives" style="width: 100%">
+    <el-table :data="filterTable(representatives)" style="width: 100%">
       <el-table-column type="expand">
         <template #default="props">
           <el-card class="box-card">
@@ -20,14 +20,14 @@
         </template>
       </el-table-column>
       <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column width="150" label="ФИО">
+      <el-table-column width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
         <template #default="scope">
-          {{ fullName(scope.row.human) }}
+          {{ scope.row.human.getFullName() }}
         </template>
       </el-table-column>
       <el-table-column width="150" label="Пол">
         <template #default="scope">
-          {{ gender(scope.row.human) }}
+          {{ scope.row.human.getGender() }}
         </template>
       </el-table-column>
 
@@ -49,10 +49,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column fixed="right" label="" width="120">
+      <el-table-column fixed="right" label="" width="140">
+        <template #header>
+          <el-input v-model="search" size="mini" placeholder="Поиск" />
+        </template>
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-          <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
+          <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
+          <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,8 +66,11 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import IHuman from '@/interfaces/humans/IHuman';
-import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+
+import Filter from '@/classes/filters/Filter';
+import IFilter from '@/interfaces/filters/IFilter';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import ModalForm from './RepresentativePage.vue';
 
 @Options({
@@ -81,12 +87,19 @@ import ModalForm from './RepresentativePage.vue';
   },
 })
 export default class RepresentativesList extends Vue {
-  representatives!: [];
-
+  representatives!: IRepresentative[];
   getAll!: () => Promise<void>;
+  search = '';
+
+  filterName: IFilter[] = [];
+  filterDate: IFilter[] = [];
+  filter = new Filter();
 
   async mounted(): Promise<void> {
     await this.getAll();
+
+    this.filterName = this.representatives.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
+    this.filterDate = this.representatives.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));
   }
 
   edit(id: number): void {
@@ -97,13 +110,18 @@ export default class RepresentativesList extends Vue {
     this.$router.push('/representatives/new');
   }
 
-  delete(id: number): void {
+  remove(id: number): void {
     this.$store.dispatch('representatives/delete', id);
   }
 
-  fullName = (human: IHuman) => `${human.surname} ${human.name} ${human.patronymic}`;
-
-  gender = (human: IHuman) => (human.gender === 'male' ? 'М' : 'Ж');
+  filterTable = (representatives: IRepresentative[]) => {
+    const search = this.search.toLowerCase();
+    return representatives.filter((representative: IRepresentative) => {
+      const name = representative.human.getFullName().toLowerCase();
+      const date = representative.human.dateBirth;
+      return !this.search || name.includes(search) || date.includes(search);
+    });
+  };
 
   children = (representative: IRepresetnationType) => {
     if (representative.patient) {

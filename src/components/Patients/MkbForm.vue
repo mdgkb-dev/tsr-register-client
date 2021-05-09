@@ -2,13 +2,7 @@
   <el-form-item>
     <el-form-item v-for="(item, index) in mkbToPatient" :key="index" v-model="mkbToPatient">
       <el-select placeholder="Выберите диагноз" filterable v-model="mkbToPatient[index].mkbId">
-        <el-option
-          v-for="item in inMkbOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
+        <el-option v-for="item in inMkbOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
       </el-select>
       <el-checkbox v-model="mkbToPatient[index].primary">Первичный</el-checkbox>
       <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
@@ -25,6 +19,7 @@ import { Vue, Options } from 'vue-class-component';
 
 import IOption from '@/interfaces/patients/IOption';
 import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
+import MkbToPatient from '@/classes/mkb/MkbToPatient';
 
 @Options({
   props: ['in-mkb-options', 'in-mkb-to-patient'],
@@ -39,11 +34,7 @@ export default class MkbForm extends Vue {
   mkbToPatient = this.inMkbToPatient;
 
   addDiagnosis(): void {
-    this.mkbToPatient.push({
-      primary: false,
-      mkbId: '',
-      patientId: '',
-    });
+    this.mkbToPatient.push(new MkbToPatient());
   }
 
   removeDiagnosis(item: any): void {

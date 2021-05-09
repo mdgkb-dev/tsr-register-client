@@ -13,7 +13,10 @@ export default interface IHuman {
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
-  documentFieldToHuman?: IDocumentFieldValue[];
+  documentFieldToHuman: IDocumentFieldValue[];
   documentScans: IDocumentScan[];
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
+
+  getFullName: () => string;
+  getGender: () => string;
 }

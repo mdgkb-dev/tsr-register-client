@@ -1,5 +1,5 @@
 import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
-import IRepresentationType from '@/interfaces/representatives/IRepresetnationType';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
@@ -9,6 +9,8 @@ export default interface IPatient {
   human: IHuman;
   anthropometryData: IAnthropometryData[];
   mkbToPatient: IMkbToPatient[];
-  representativeToPatient: IRepresentationType[];
+  representativeToPatient: IRepresentativeToPatient[];
   disabilities: IDisability[];
+
+  getAnthropometryDataFull: () => string;
 }

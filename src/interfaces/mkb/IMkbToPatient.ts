@@ -5,5 +5,5 @@ export default interface IMkbToPatient {
   primary: boolean;
   mkbId: string;
   patientId: string;
-  mkb?: IMkb;
+  mkb: IMkb;
 }

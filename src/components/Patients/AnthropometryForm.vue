@@ -24,6 +24,7 @@ import { Vue, Options } from 'vue-class-component';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
+import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
 
 @Options({
   props: ['in-anthropometry', 'in-anthropometry-data'],
@@ -31,18 +32,14 @@ import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 export default class AnthropometryForm extends Vue {
   // Types.
   inAnthropometry!: IAnthropometry[];
-
   inAnthropometryData!: IAnthropometryData[];
-
   // Local state.
   anthropometryData = this.inAnthropometryData;
 
   add(paramId: string): void {
-    this.anthropometryData.push({
-      anthropometryId: paramId,
-      date: '',
-      value: 0,
-    });
+    const data = new AnthropometryData();
+    data.anthropometryId = paramId;
+    this.anthropometryData.push(data);
   }
 
   remove(item: any): void {

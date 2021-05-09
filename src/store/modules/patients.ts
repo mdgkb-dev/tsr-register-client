@@ -1,4 +1,5 @@
 import HttpClient from '@/services/HttpClient';
+import Patient from '@/classes/patients/Patient';
 import IPatient from '../../interfaces/patients/IPatient';
 
 const httpClient = new HttpClient('patient');
@@ -14,20 +15,20 @@ export default {
     getById: (state: any) => (id: number): IPatient => state.patients.find((human: any) => human.id === id),
   },
   mutations: {
-    set: (state: any, payload: any) => {
-      state.patients = payload;
+    set: (state: any, payload: IPatient[]) => {
+      state.patients = payload.map((p: IPatient) => new Patient(p));
     },
-    create: (state: any, payload: any) => {
-      state.patients.push(payload);
+    create: (state: any, payload: IPatient) => {
+      state.patients.push(new Patient(payload));
     },
-    update: (state: any, payload: any) => {
+    update: (state: any, payload: IPatient) => {
       const item = state.patients.find((i: any) => i.id === payload.id);
       if (item) {
         Object.assign(item, payload);
       }
     },
-    delete: (state: any, payload: any) => {
-      const i = state.patients.findIndex((item: any) => item.id === payload);
+    delete: (state: any, id: string) => {
+      const i = state.patients.findIndex((item: any) => item.id === id);
       state.patients.splice(i, 1);
     },
   },
@@ -35,10 +36,10 @@ export default {
     getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
     },
-    create: async (context: any, payload: any): Promise<void> => {
+    create: async (context: any, payload: IPatient): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any): Promise<void> => {
+    edit: async (context: any, payload: IPatient): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
     delete: async (context: any, id: string): Promise<void> => {

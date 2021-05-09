@@ -1,4 +1,6 @@
 import HttpClient from '@/services/HttpClient';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import Representative from '@/classes/representatives/Representative';
 
 const httpClient = new HttpClient('representative');
 
@@ -12,19 +14,19 @@ export default {
     getById: (state: any) => (id: number) => state.representatives.find((representative: any) => representative.id === id),
   },
   mutations: {
-    set: (state: any, payload: any) => {
-      state.representatives = payload;
+    set: (state: any, payload: IRepresentative[]): void => {
+      state.representatives = payload.map((r: IRepresentative) => new Representative(r));
     },
-    create: (state: any, payload: any) => {
-      state.representatives.push(payload);
+    create: (state: any, payload: IRepresentative): void => {
+      state.representatives.push(new Representative(payload));
     },
-    update: (state: any, payload: any) => {
+    update: (state: any, payload: IRepresentative): void => {
       const item = state.representatives.find((i: any) => i.id === payload.id);
       if (item) {
         Object.assign(item, payload);
       }
     },
-    delete: (state: any, payload: any) => {
+    delete: (state: any, payload: any): void => {
       const i = state.representatives.findIndex((item: any) => item.id === payload);
       state.representatives.splice(i, 1);
     },
@@ -33,10 +35,10 @@ export default {
     getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
     },
-    create: async (context: any, payload: any): Promise<void> => {
+    create: async (context: any, payload: IRepresentative): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any): Promise<void> => {
+    edit: async (context: any, payload: IRepresentative): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
     delete: async (context: any, id: string): Promise<void> => {

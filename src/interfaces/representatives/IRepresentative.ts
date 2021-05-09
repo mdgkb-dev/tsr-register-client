@@ -1,5 +1,5 @@
 import IHuman from '../humans/IHuman';
-import IRepresetnationType from './IRepresetnationType';
+import IRepresetnationType from './IRepresentativeToPatient';
 
 export default interface IRepresentative {
   id?: string;

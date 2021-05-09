@@ -1,17 +1,20 @@
 import IHuman from '@/interfaces/humans/IHuman';
 import Human from '@/classes/humans/Human';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import IRepresetnationType from '@/interfaces/representatives/IRepresetnationType';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 export default class Representative implements IRepresentative {
   id?: string;
+  human: IHuman = new Human();
+  representativeToPatient: IRepresetnationType[] = [];
 
-  human: IHuman;
-
-  representativeToPatient: IRepresetnationType[];
-
-  constructor() {
-    this.human = new Human();
-    this.representativeToPatient = [];
+  constructor(representative?: IRepresentative) {
+    if (!representative) {
+      return;
+    }
+    this.id = representative.id;
+    this.human = new Human(representative.human);
+    this.representativeToPatient = representative.representativeToPatient.map((r: RepresentativeToPatient) => new RepresentativeToPatient(r));
   }
 }
