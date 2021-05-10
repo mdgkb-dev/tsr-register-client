@@ -1,17 +1,24 @@
 <template>
-  <el-aside width="220px" style="background-color: rgb(238, 241, 246)">
-    <el-avatar :size="large" :src="circleUrl"></el-avatar>
-
+  <el-aside width="220px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
+    <el-row style="line-height: 100px; margin-top: 50px">
+      <el-col>
+        <el-avatar :size="large" :src="circleUrl"></el-avatar>
+      </el-col>
+    </el-row>
+    <el-row style="line-height: 10px">
+      <el-col>
+        <el-tag class="menu-badge">Пользователь</el-tag>
+      </el-col>
+    </el-row>
+    <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
     <el-menu>
       <el-menu-item-group :router="true">
         <el-menu :router="true" :default-openeds="[0]">
-          <div v-for="(menu, i) in menuItems" :key="menu.title">
+          <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
             <el-submenu :index="i">
               <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
               <div v-for="(item, j) in menu.links" v-bind:key="item.title">
-                <el-menu-item :index="i + '-' + j" :route="{ name: item.name }">{{
-                  item.title
-                }}</el-menu-item>
+                <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
               </div>
             </el-submenu>
           </div>
@@ -87,7 +94,13 @@ export default class MainSidePanel extends Vue {
 }
 </script>
 
-<style scoped>
+<style>
+.menu-badge {
+  width: 50%;
+  background-color: rgba(238, 55, 116, 255);
+  border-radius: 25px;
+  color: white;
+}
 .el-header,
 .el-footer {
   background-color: #b3c0d1;

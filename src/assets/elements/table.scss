@@ -1,0 +1,26 @@
+.table-background {
+  background-color: white;
+  padding: 50px;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.header-top-table {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.table-search {
+  margin-bottom: 20px;
+  border-radius: 40% !important;
+  border-bottom-color: deeppink;
+}
+.table-patients {
+  box-shadow: 2px 2px 5px grey; /* Параметры тени */
+  border: 1px solid lightgrey;
+}
+.tableHead {
+  font-size: 9px;
+  color: #a1a7bd;
+  background-color: #eff1f7;
+}

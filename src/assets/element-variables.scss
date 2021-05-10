@@ -1,0 +1,23 @@
+// переопределение переменных
+$--color-primary: #2753eb;
+$--color-success-lighter: #43d39d;
+$--color-success-light: #43d39d;
+$--color-success: #43d39d;
+
+$--input-border-radius: 40px;
+
+$--font-path: '~element-plus/lib/theme-chalk/fonts';
+@import "~element-plus/packages/theme-chalk/src/index";
+@import "./elements/table.scss";
+@import "./elements/sideMenu.scss";
+
+
+
+html,
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
