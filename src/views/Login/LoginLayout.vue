@@ -1,21 +1,15 @@
-<template>
-  <div class="container">
-    <el-header>
-      <el-menu
-        mode="horizontal"
-        background-color="#f2f2f2"
-        class="no-border display-flex justify-content-right"
-        :router="true"
-      >
+ь<template>
+  <el-container class="main-container">
+    <el-header style="width: 100%; padding: 0">
+      <el-menu mode="horizontal" background-color="#f2f2f2" class="no-border display-flex justify-content-right" :router="true">
         <el-menu-item index="/login">Войти</el-menu-item>
         <el-menu-item index="/register">Зарегистрироваться</el-menu-item>
       </el-menu>
     </el-header>
-    <el-main class="container">
+    <el-main class="container" style="padding: 10%">
       <slot />
     </el-main>
-    <el-footer></el-footer>
-  </div>
+  </el-container>
 </template>
 
 <script lang="ts">
@@ -23,3 +17,8 @@ import { Vue } from 'vue-class-component';
 
 export default class LoginLayout extends Vue {}
 </script>
+<style>
+#app {
+  height: 100%;
+}
+</style>

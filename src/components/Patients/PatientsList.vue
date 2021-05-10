@@ -13,7 +13,6 @@
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="filterTable(patients)"
-        @row-dblclick="edit"
         class="table-patients"
         :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
       >
@@ -124,6 +123,7 @@ export default class PatientsList extends Vue {
   }
 
   edit(id: string): void {
+    console.log(id);
     this.$router.push(`/patients/${id}`);
   }
 

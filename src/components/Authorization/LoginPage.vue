@@ -1,15 +1,17 @@
 <template>
-  <el-form :model="loginForm" @submit.prevent="submitForm" label-width="130px">
-    <el-form-item label="Логин">
-      <el-input v-model="loginForm.login"></el-input>
-    </el-form-item>
-    <el-form-item label="Пароль">
-      <el-input v-model="loginForm.password" type="password"></el-input>
-    </el-form-item>
-    <el-form-item align="right">
-      <el-button type="primary" native-type="submit">Войти</el-button>
-    </el-form-item>
-  </el-form>
+  <div style="width: 50%; padding-left: 25%">
+    <el-form :model="loginForm" @submit.prevent="submitForm" label-width="130px">
+      <el-form-item label="Логин">
+        <el-input v-model="loginForm.login"></el-input>
+      </el-form-item>
+      <el-form-item label="Пароль">
+        <el-input v-model="loginForm.password" type="password"></el-input>
+      </el-form-item>
+      <el-form-item align="right">
+        <el-button type="primary" native-type="submit">Войти</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script lang="ts">

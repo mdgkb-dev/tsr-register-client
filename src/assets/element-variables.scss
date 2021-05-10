@@ -11,8 +11,6 @@ $--font-path: '~element-plus/lib/theme-chalk/fonts';
 @import "./elements/table.scss";
 @import "./elements/sideMenu.scss";
 
-
-
 html,
 body {
   font-family: 'Roboto', sans-serif;
@@ -21,3 +19,17 @@ body {
   height: 100%;
 }
 
+.main-comntainer {
+  border: 1px solid #eee;
+  background-color: rgb(238, 241, 246);
+  height: 100%;
+}
+
+.semi-bold-header {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+#app {
+  height: 100%;
+}

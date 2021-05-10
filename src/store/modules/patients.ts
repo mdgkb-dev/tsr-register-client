@@ -12,7 +12,7 @@ export default {
   getters: {
     getPatientsNames: (state: any) => state.patients,
     patients: (state: any): IPatient[] => state.patients,
-    getById: (state: any) => (id: number): IPatient => state.patients.find((human: any) => human.id === id),
+    getById: (state: any) => (id: string): IPatient => state.patients.find((patient: IPatient) => patient.id === id),
   },
   mutations: {
     set: (state: any, payload: IPatient[]) => {

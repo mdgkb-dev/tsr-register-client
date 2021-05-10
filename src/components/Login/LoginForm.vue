@@ -1,22 +1,14 @@
 <template>
   <div class="login">
-    <el-card class="box-card">
+    <el-card class="box-card" style="width: 50%">
       <el-form class="login-form" @submit.prevent="submitForm">
         <div class="card-header">
           <h1>Войти в систему</h1>
           <el-button class="button" type="text">Забыли пароль?</el-button>
         </div>
         <el-form-item label="">
-          <el-input
-            v-model="v$.loginForm.login.$model"
-            :class="{ 'wrong-input': v$.loginForm.login.$errors.length > 0 }"
-            placeholder="Логин"
-          ></el-input>
-          <div
-            :class="['error-message']"
-            v-for="(error, loginIndex) of v$.loginForm.login.$errors"
-            :key="loginIndex"
-          >
+          <el-input v-model="v$.loginForm.login.$model" :class="{ 'wrong-input': v$.loginForm.login.$errors.length > 0 }" placeholder="Логин"></el-input>
+          <div :class="['error-message']" v-for="(error, loginIndex) of v$.loginForm.login.$errors" :key="loginIndex">
             {{ error.$message }}
           </div>
         </el-form-item>
@@ -27,21 +19,12 @@
             placeholder="Пароль"
             show-password
           ></el-input>
-          <div
-            :class="['error-message']"
-            v-for="(error, passwordIndex) of v$.loginForm.password.$errors"
-            :key="passwordIndex"
-          >
+          <div :class="['error-message']" v-for="(error, passwordIndex) of v$.loginForm.password.$errors" :key="passwordIndex">
             {{ error.$message }}
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button
-            type="primary"
-            native-type="submit"
-            :disabled="!v$.$dirty || (v$.$dirty && v$.$errors.length > 0)"
-            >Войти</el-button
-          >
+          <el-button type="primary" native-type="submit" :disabled="!v$.$dirty || (v$.$dirty && v$.$errors.length > 0)">Войти</el-button>
           <div :class="['error-message']">{{ $store.getters['auth/errorMessage'] }}</div>
         </el-form-item>
       </el-form>
@@ -98,6 +81,7 @@ export default class LoginForm extends Vue {
   justify-content: center;
   align-items: center;
   padding-top: 150px;
+  width: 50%;
 }
 
 .login-button {
@@ -105,7 +89,7 @@ export default class LoginForm extends Vue {
   margin-top: 40px;
 }
 .login-form {
-  width: 400px;
+  width: 50%;
 }
 
 .wrong-input {
