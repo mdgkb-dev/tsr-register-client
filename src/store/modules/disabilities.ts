@@ -1,8 +1,6 @@
 import HttpClient from '@/services/HttpClient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import Disability from '@/classes/disability/Disability';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import Anthropometry from '@/classes/anthropometry/Anthropometry';
 
 const httpClient = new HttpClient('disabilities');
 

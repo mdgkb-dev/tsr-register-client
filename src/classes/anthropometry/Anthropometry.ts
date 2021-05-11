@@ -2,8 +2,8 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 export default class Anthropometry implements IAnthropometry {
   id?: string;
-  name: string = '';
-  measure: string = '';
+  name = '';
+  measure = '';
 
   constructor(anthropometry?: IAnthropometry) {
     if (!anthropometry) {

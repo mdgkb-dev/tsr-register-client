@@ -6,6 +6,8 @@ import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCom
 import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
 import DocumentPage from '@/components/Documents/DocumentPage.vue';
+import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
+import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
 import HomePage from '../components/HomePage.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
 import PatientPage from '../components/Patients/PatientPage.vue';
@@ -14,8 +16,6 @@ import RepresentativePage from '../components/Representatives/RepresentativePage
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
-import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
-import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
