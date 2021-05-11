@@ -17,7 +17,7 @@ export default {
   },
   mutations: {
     setAll: (state: any, disabilities: IDisability[]) => {
-      state.disabilities = disabilities.map(d => new Disability(d));
+      state.disabilities = disabilities.map((d) => new Disability(d));
     },
     set: (state: any, disability: IDisability) => {
       state.disability = new Disability(disability);
