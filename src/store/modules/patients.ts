@@ -8,15 +8,20 @@ export default {
   namespaced: true,
   state: {
     patients: [],
+    patient: {},
   },
   getters: {
     getPatientsNames: (state: any) => state.patients,
     patients: (state: any): IPatient[] => state.patients,
     getById: (state: any) => (id: string): IPatient => state.patients.find((patient: IPatient) => patient.id === id),
+    getPatient: (state: any) => state.patient,
   },
   mutations: {
-    set: (state: any, payload: IPatient[]) => {
-      state.patients = payload.map((p: IPatient) => new Patient(p));
+    set: (state: any, patients: IPatient[]) => {
+      state.patients = patients.map((p: IPatient) => new Patient(p));
+    },
+    setOne: (state: any, patient: IPatient) => {
+      state.patient = new Patient(patient);
     },
     create: (state: any, payload: IPatient) => {
       state.patients.push(new Patient(payload));
@@ -35,6 +40,9 @@ export default {
   actions: {
     getAll: async (context: any): Promise<void> => {
       context.commit('set', await httpClient.get());
+    },
+    get: async (context: any, patientId: string) => {
+      context.commit('setOne', await httpClient.get(patientId));
     },
     create: async (context: any, payload: IPatient): Promise<void> => {
       context.commit('create', await httpClient.post(payload));

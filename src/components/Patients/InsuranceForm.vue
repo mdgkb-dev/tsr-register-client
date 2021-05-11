@@ -2,7 +2,7 @@
   <el-form-item label-width="20vw">
     <el-button @click="addInsurance">Добавить страховку</el-button>
   </el-form-item>
-
+  {{ insuranceCompanies }}
   <el-form-item v-for="(item, index) in insuranceCompanies" :key="index" v-model="insuranceCompanies">
     <el-form-item label="Компания" label-width="12vw">
       <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[index].insuranceCompanyId">

@@ -3,13 +3,11 @@
     <el-row>
       <el-col :span="8">
         <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>
-        <!--        <h2 small align="center" class="header-top-table">Пациенты</h2>-->
       </el-col>
       <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
         <el-button type="success" round native-type="submit">Сохранить изменения</el-button>
       </el-col>
     </el-row>
-    <!--    <h2>Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>-->
     <el-row v-if="mount">
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-row>
@@ -24,7 +22,7 @@
           </el-col>
           <el-col :span="15" :offset="1">
             <el-tag class="menu-badge">Пациент</el-tag>
-            <h2 v-html="patient.human.surname" style="margin-bottom: 60px"></h2>
+            <h2 v-html="patient.human.getFullName()" style="margin-bottom: 60px"></h2>
             <el-row>
               <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
               <el-col :span="12"> {{ patient.human.dateBirth }}</el-col>
@@ -32,7 +30,7 @@
             <el-divider></el-divider>
             <el-row>
               <el-col :span="12" style="color: #a1a8bd">Пол</el-col>
-              <el-col :span="12"> {{ patient.human.dateBirth }}</el-col>
+              <el-col :span="12"> {{ patient.human.getGender(true) }}</el-col>
             </el-row>
             <el-divider></el-divider>
             <el-row>
@@ -41,13 +39,13 @@
             </el-row>
             <el-divider></el-divider>
             <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Вест - Рост</el-col>
-              <el-col :span="12"> </el-col>
+              <el-col :span="12" style="color: #a1a8bd">Вес - Рост</el-col>
+              <el-col :span="12"> {{ patient.getAnthropometryDataFull() }}</el-col>
             </el-row>
             <el-divider></el-divider>
             <el-row>
               <el-col :span="12" style="color: #a1a8bd">Адрес</el-col>
-              <el-col :span="12"> </el-col>
+              <el-col :span="12"> {{ patient.human.addressRegistration }} </el-col>
             </el-row>
           </el-col>
         </el-row>
@@ -80,6 +78,7 @@
                     Страховки
                   </h2>
                 </template>
+                {{ patient.human.insuranceCompanyToHuman }}
                 <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
               </el-collapse-item>
               <el-collapse-item>
@@ -153,6 +152,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
     ...mapGetters('mkb', ['mkb']),
     ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
+    ...mapGetters('patients', ['patient']),
   },
   methods: {
     ...mapActions({
@@ -177,48 +177,31 @@ export default class ModalForm extends Vue {
   };
 
   // Types.
-
   anthropometry!: IAnthropometry[];
-
   disabilities!: IDisability[];
-
   mkb!: IMkb[];
-
   mkbOptions!: IOption[];
-
   isEditMode!: boolean;
-
   insuranceCompanies!: IInsuranceCompany[];
-
   insuranceCompaniesOptions!: IOption[];
-
   documents!: IDocument[];
-
   documentsScans!: { [id: string]: IDocumentScan[] };
 
   anthropometryGetAll!: () => Promise<void>;
-
   insuranceCompaniesGetAll!: () => Promise<void>;
-
   mkbGetAll!: () => Promise<void>;
-
   documentsGetAll!: () => Promise<void>;
-
   disabilitiesGetAll!: () => Promise<void>;
+  patientGet!: (patientId: string) => Promise<void>;
 
   offset: number[] = [0];
 
   // Local state.
   patient = new Patient();
-
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
-
   mount = false;
-
   diagnosisMount = false;
-
   title = '';
-
   error = '';
 
   rules = {
@@ -239,8 +222,8 @@ export default class ModalForm extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать пациента';
-      const response = await fetch(`${process.env.VUE_APP_BASE_URL}/patient/${this.$route.params.patientId}`);
-      this.patient = await response.json();
+      await this.patientGet(`${this.$route.params.patientId}`);
+      this.patient = this.$store.getters['patients/getPatient'];
     }
 
     await this.anthropometryGetAll();

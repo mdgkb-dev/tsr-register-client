@@ -3,12 +3,12 @@ import IPeriod from '@/interfaces/shared/IPeriod';
 import IPatient from '@/interfaces/patients/IPatient';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import Period from '@/classes/shared/Period';
-import Patient from '@/classes/patients/Patient';
+import Edv from '@/classes/disability/Edv';
 
 export default class Disability implements IDisability {
   id?: string;
   period?: IPeriod = new Period();
-  patient?: IPatient = new Patient();
+  patient?: IPatient;
   patientId?: string;
   edvs: IEdv[] = [];
 
@@ -20,6 +20,8 @@ export default class Disability implements IDisability {
     this.period = disability.period;
     this.patientId = disability.patientId;
     this.patient = disability.patient;
-    this.edvs = [];
+    if (disability.edvs) {
+      this.edvs = disability.edvs.map((e) => new Edv(e));
+    }
   }
 }

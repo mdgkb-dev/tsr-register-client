@@ -5,6 +5,7 @@ import IContact from './IContact';
 
 export default interface IHuman {
   id?: string;
+  patientId?: string;
   name: string;
   surname: string;
   patronymic: string;
@@ -18,5 +19,5 @@ export default interface IHuman {
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 
   getFullName: () => string;
-  getGender: () => string;
+  getGender: (full?: boolean) => string;
 }

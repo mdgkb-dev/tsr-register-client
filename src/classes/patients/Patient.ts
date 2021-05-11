@@ -26,9 +26,11 @@ export default class Patient implements IPatient {
     this.human = new Human(patient.human);
     this.anthropometryData = patient.anthropometryData.map((a: IAnthropometryData) => new AnthropometryData(a));
     this.mkbToPatient = patient.mkbToPatient.map((mkbToPatient: IMkbToPatient) => new MkbToPatient(mkbToPatient));
-    this.representativeToPatient = patient.representativeToPatient.map(
-      (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient),
-    );
+    if (patient.representativeToPatient) {
+      this.representativeToPatient = patient.representativeToPatient.map(
+        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient),
+      );
+    }
     if (patient.disabilities) {
       this.disabilities = patient.disabilities.map((disability: IDisability) => new Disability(disability));
     }

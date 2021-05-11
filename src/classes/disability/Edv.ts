@@ -5,9 +5,9 @@ import Period from '@/classes/shared/Period';
 export default class Edv implements IEdv {
   id?: string;
 
-  period?: IPeriod;
+  period?: IPeriod = new Period();
 
-  disabilityId: string;
+  disabilityId?: string;
 
   parameter1?: boolean;
 
@@ -15,11 +15,15 @@ export default class Edv implements IEdv {
 
   parameter3?: boolean;
 
-  constructor() {
-    this.period = new Period();
-    this.disabilityId = '';
-    this.parameter1 = false;
-    this.parameter2 = false;
-    this.parameter3 = false;
+  constructor(edv?: IEdv) {
+    if (!edv) {
+      return;
+    }
+    this.id = edv.id;
+    this.period = edv.period;
+    this.disabilityId = edv.disabilityId;
+    this.parameter1 = edv.parameter1;
+    this.parameter2 = edv.parameter2;
+    this.parameter3 = edv.parameter3;
   }
 }

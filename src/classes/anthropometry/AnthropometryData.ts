@@ -13,6 +13,7 @@ export default class AnthropometryDate implements IAnthropometryData {
     if (!anthropometryDate) {
       return;
     }
+    this.id = anthropometryDate.id;
     this.anthropometryId = anthropometryDate.anthropometryId;
     this.patientId = anthropometryDate.patientId;
     this.value = anthropometryDate.value;
