@@ -1,38 +1,19 @@
 <template>
-  <div style="width: 100%">
+  <div style="width: 100%" v-if="mount">
     <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="create"
-        >Создать параметр антропометрии</el-button
-      >
+      <el-button type="primary" icon="el-icon-document" @click="create">Создать параметр антропометрии</el-button>
     </el-button-group>
 
-    <el-table
-      :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="anthropometry"
-      style="width: 100%"
-    >
+    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="anthropometries" style="width: 100%">
       <el-table-column prop="№" label="№" width="150" />
       <el-table-column prop="name" label="Название параметра" width="150" />
       <el-table-column label="Действия" width="120">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small"
-            >Редактировать</el-button
-          >
+          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
           <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog
-      v-model="modalVisible"
-      :close-on-click-modal="false"
-      width="85vw"
-      top="3vh"
-      :title="modalTitle"
-      center
-    >
-      <ModalForm :anthropometry="anthropometryItem" :is-create-form="isCreateForm" @close="close" />
-    </el-dialog>
   </div>
 </template>
 
@@ -41,60 +22,37 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import ModalForm from './ModalForm.vue';
 
 @Options({
-  components: {
-    ModalForm,
-  },
   computed: {
-    ...mapState('anthropometry', ['anthropometry']),
+    ...mapState('anthropometry', ['anthropometries']),
   },
   methods: {
-    ...mapActions('anthropometry', ['getAll']),
+    ...mapActions({
+      getAll: 'anthropometry/getAll',
+    }),
   },
 })
 export default class Anthropometry extends Vue {
-  anthropometry!: [];
-
+  anthropometries!: IAnthropometry[];
   getAll!: () => Promise<void>;
-
-  anthropometryItem: IAnthropometry = {
-    name: '',
-    measure: '',
-  };
-
-  isCreateForm = false;
-
-  modalVisible = false;
-
-  modalTitle = '';
+  mount = false;
 
   async mounted(): Promise<void> {
     await this.getAll();
+    this.mount = true;
   }
 
-  edit(id: number): void {
-    this.anthropometryItem = this.$store.getters['anthropometry/getById'](id);
-    this.modalVisible = true;
+  edit(id: string): void {
+    this.$router.push(`/anthropometry/${id}`);
   }
 
   create(): void {
-    this.anthropometryItem = {
-      name: '',
-      measure: '',
-    };
-    this.isCreateForm = true;
-    this.modalVisible = true;
-    this.modalTitle = 'Добавить параметр антропометрии';
+    this.$router.push('/anthropometry/new');
   }
 
   delete(id: number): void {
     this.$store.dispatch('anthropometry/delete', id);
-  }
-
-  close(): void {
-    this.modalVisible = false;
   }
 }
 </script>

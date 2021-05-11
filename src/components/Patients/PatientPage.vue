@@ -223,9 +223,9 @@ export default class ModalForm extends Vue {
       this.isEditMode = true;
       this.title = 'Редактировать пациента';
       await this.patientGet(`${this.$route.params.patientId}`);
-      this.patient = this.$store.getters['patients/getPatient'];
+      this.patient = this.$store.getters['patients/patient'];
     }
-
+    console.log();
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();

@@ -2,20 +2,25 @@ import HttpClient from '@/services/HttpClient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import Representative from '@/classes/representatives/Representative';
 
-const httpClient = new HttpClient('representative');
+const httpClient = new HttpClient('representatives');
 
 export default {
   namespaced: true,
   state: {
     representatives: [],
+    representative: {},
   },
   getters: {
-    representatives: (state: any) => state.representatives,
+    getAll: (state: any) => state.representatives,
+    get: (state: any) => state.representative,
     getById: (state: any) => (id: number) => state.representatives.find((representative: any) => representative.id === id),
   },
   mutations: {
-    set: (state: any, payload: IRepresentative[]): void => {
+    setAll: (state: any, payload: IRepresentative[]): void => {
       state.representatives = payload.map((r: IRepresentative) => new Representative(r));
+    },
+    set: (state: any, representative: IRepresentative) => {
+      state.representative = new Representative(representative);
     },
     create: (state: any, payload: IRepresentative): void => {
       state.representatives.push(new Representative(payload));
@@ -33,7 +38,10 @@ export default {
   },
   actions: {
     getAll: async (context: any): Promise<void> => {
-      context.commit('set', await httpClient.get());
+      context.commit('setAll', await httpClient.get());
+    },
+    get: async (context: any, representativeId: string) => {
+      context.commit('set', await httpClient.get(representativeId));
     },
     create: async (context: any, payload: IRepresentative): Promise<void> => {
       context.commit('create', await httpClient.post(payload));

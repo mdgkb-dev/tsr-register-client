@@ -14,6 +14,8 @@ import RepresentativePage from '../components/Representatives/RepresentativePage
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
+import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
+import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
@@ -144,9 +146,33 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: isAuthorized,
   },
   {
+    path: '/insurance-companies/new',
+    name: 'CreateInsuranceCompany',
+    component: InsuranceCompanyPage,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/insurance-companies/:insuranceCompanyId',
+    name: 'EditInsuranceCompany',
+    component: InsuranceCompanyPage,
+    beforeEnter: isAuthorized,
+  },
+  {
     path: '/anthropometry',
     name: 'Anthropometry',
     component: AnthropometryList,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/anthropometry/new',
+    name: 'CreateAnthropometry',
+    component: AnthropometryPage,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/anthropometry/:anthropometryId',
+    name: 'EditAnthropometry',
+    component: AnthropometryPage,
     beforeEnter: isAuthorized,
   },
   {

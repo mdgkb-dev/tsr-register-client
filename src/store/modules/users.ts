@@ -1,6 +1,6 @@
 import HttpClient from '@/services/HttpClient';
 
-const httpClient = new HttpClient('user');
+const httpClient = new HttpClient('users');
 
 export default {
   namespaced: true,

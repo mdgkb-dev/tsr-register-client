@@ -123,7 +123,6 @@ export default class PatientsList extends Vue {
   }
 
   edit(id: string): void {
-    console.log(id);
     this.$router.push(`/patients/${id}`);
   }
 

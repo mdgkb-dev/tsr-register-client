@@ -1,6 +1,6 @@
 import HttpClient from '@/services/HttpClient';
 
-const httpClient = new HttpClient('document');
+const httpClient = new HttpClient('documents');
 
 export default {
   namespaced: true,
@@ -52,12 +52,9 @@ export default {
     },
 
     download: async (context: any, filePath: string): Promise<void> => {
-      const res = await fetch(
-        `${process.env.VUE_APP_BASE_URL}${httpClient.api}/download/${filePath}`,
-        {
-          method: 'GET',
-        },
-      );
+      const res = await fetch(`${process.env.VUE_APP_BASE_URL}${httpClient.api}/download/${filePath}`, {
+        method: 'GET',
+      });
       const fileURL = window.URL.createObjectURL(new Blob([await res.blob()]));
       const fileLink = document.createElement('a');
       fileLink.href = fileURL;

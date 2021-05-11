@@ -2,7 +2,7 @@ import HttpClient from '@/services/HttpClient';
 import Patient from '@/classes/patients/Patient';
 import IPatient from '../../interfaces/patients/IPatient';
 
-const httpClient = new HttpClient('patient');
+const httpClient = new HttpClient('patients');
 
 export default {
   namespaced: true,
@@ -11,16 +11,16 @@ export default {
     patient: {},
   },
   getters: {
-    getPatientsNames: (state: any) => state.patients,
     patients: (state: any): IPatient[] => state.patients,
+    patient: (state: any) => state.patient,
     getById: (state: any) => (id: string): IPatient => state.patients.find((patient: IPatient) => patient.id === id),
-    getPatient: (state: any) => state.patient,
+    getPatientsNames: (state: any) => state.patients,
   },
   mutations: {
-    set: (state: any, patients: IPatient[]) => {
+    setAll: (state: any, patients: IPatient[]) => {
       state.patients = patients.map((p: IPatient) => new Patient(p));
     },
-    setOne: (state: any, patient: IPatient) => {
+    set: (state: any, patient: IPatient) => {
       state.patient = new Patient(patient);
     },
     create: (state: any, payload: IPatient) => {
@@ -39,10 +39,10 @@ export default {
   },
   actions: {
     getAll: async (context: any): Promise<void> => {
-      context.commit('set', await httpClient.get());
+      context.commit('setAll', await httpClient.get());
     },
     get: async (context: any, patientId: string) => {
-      context.commit('setOne', await httpClient.get(patientId));
+      context.commit('set', await httpClient.get(patientId));
     },
     create: async (context: any, payload: IPatient): Promise<void> => {
       context.commit('create', await httpClient.post(payload));

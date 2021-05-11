@@ -28,7 +28,7 @@ export default class Patient implements IPatient {
     this.mkbToPatient = patient.mkbToPatient.map((mkbToPatient: IMkbToPatient) => new MkbToPatient(mkbToPatient));
     if (patient.representativeToPatient) {
       this.representativeToPatient = patient.representativeToPatient.map(
-        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient),
+        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient)
       );
     }
     if (patient.disabilities) {

@@ -15,11 +15,7 @@
     </el-select>
   </el-form-item>
   <el-form-item label="Дата рождения" label-width="20vw">
-    <el-date-picker
-      type="date"
-      placeholder="Выберете дату"
-      v-model="editHuman.dateBirth"
-    ></el-date-picker>
+    <el-date-picker type="date" placeholder="Выберете дату" v-model="editHuman.dateBirth"></el-date-picker>
   </el-form-item>
   <el-form-item label="Адрес регистрации" label-width="20vw">
     <el-input v-model="editHuman.addressRegistration"></el-input>

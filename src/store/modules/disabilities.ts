@@ -1,42 +1,54 @@
 import HttpClient from '@/services/HttpClient';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import Disability from '@/classes/disability/Disability';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import Anthropometry from '@/classes/anthropometry/Anthropometry';
 
-const httpClient = new HttpClient('disability');
+const httpClient = new HttpClient('disabilities');
 
 export default {
   namespaced: true,
   state: {
     disabilities: [],
+    disability: {},
   },
   getters: {
     disabilities: (state: any) => state.disabilities,
+    disability: (state: any) => state.disability,
     getById: (state: any) => (id: number) => state.disabilities.find((item: any) => item.id === id),
   },
   mutations: {
-    set: (state: any, payload: any) => {
-      state.disabilities = payload;
+    setAll: (state: any, disabilities: IDisability[]) => {
+      state.disabilities = disabilities.map(d => new Disability(d));
     },
-    create: (state: any, payload: any) => {
-      state.disabilities.push(payload);
+    set: (state: any, disability: IDisability) => {
+      state.disability = new Disability(disability);
     },
-    update: (state: any, payload: any) => {
-      const item = state.disabilities.find((i: any) => i.id === payload.id);
+    create: (state: any, disability: IDisability) => {
+      state.disability = new Disability(disability);
+    },
+    update: (state: any, payload: IDisability) => {
+      const item = state.disabilities.find((i: IDisability) => i.id === payload.id);
       if (item) {
         Object.assign(item, payload);
       }
     },
-    delete: (state: any, payload: any) => {
+    delete: (state: any, payload: string) => {
       const i = state.disabilities.findIndex((disabilities: any) => disabilities.id === payload);
       state.disabilities.splice(i, 1);
     },
   },
   actions: {
     getAll: async (context: any): Promise<void> => {
-      context.commit('set', await httpClient.get());
+      context.commit('setAll', await httpClient.get());
     },
-    create: async (context: any, payload: any): Promise<void> => {
+    get: async (context: any, disabilityId: string) => {
+      context.commit('set', await httpClient.get(disabilityId));
+    },
+    create: async (context: any, payload: IDisability): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any): Promise<void> => {
+    edit: async (context: any, payload: IDisability): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
     delete: async (context: any, id: string): Promise<void> => {

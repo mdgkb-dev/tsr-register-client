@@ -1,7 +1,7 @@
 import ISma from '@/interfaces/sma/ISma';
 import IState from '@/interfaces/sma/IState';
 
-const api = 'sma/';
+const api = 'sma';
 
 export default {
   namespaced: true,
