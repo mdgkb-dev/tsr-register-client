@@ -1,8 +1,6 @@
 <template>
   <div style="width: 100%">
-    <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="create">Создать страховую компанию</el-button>
-    </el-button-group>
+    <ListHead :title="title" @create="create" />
 
     <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="insuranceCompanies" style="width: 100%">
       <el-table-column type="index" width="50"> </el-table-column>
@@ -22,8 +20,12 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
+import ListHead from '@/components/ListHead.vue';
 
 @Options({
+  components: {
+    ListHead,
+  },
   computed: {
     ...mapState('insuranceCompanies', ['insuranceCompanies']),
   },
@@ -34,6 +36,7 @@ import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany
 export default class InsuranceCompanies extends Vue {
   insuranceCompanies!: IInsuranceCompany[];
   getAll!: () => Promise<void>;
+  title = 'Страховые компании';
 
   async mounted(): Promise<void> {
     await this.getAll();

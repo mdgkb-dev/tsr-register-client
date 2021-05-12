@@ -1,13 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%" v-if="mount">
-    <el-row>
-      <el-col :span="2">
-        <h2 small align="center" class="header-top-table">Пациенты</h2>
-      </el-col>
-      <el-col :span="5" :offset="16" style="margin-top: 8px" align="right">
-        <el-button type="success" round @click="create">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
-      </el-col>
-    </el-row>
+    <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
@@ -83,8 +76,12 @@ import IFilter from '@/interfaces/filters/IFilter';
 import IPatient from '@/interfaces/patients/IPatient';
 
 import Filter from '@/classes/filters/Filter';
+import ListHead from '@/components/ListHead.vue';
 
 @Options({
+  components: {
+    ListHead,
+  },
   computed: {
     ...mapState('patients', ['patients']),
   },
@@ -108,6 +105,7 @@ export default class PatientsList extends Vue {
   filterName: IFilter[] = [];
   filterDate: IFilter[] = [];
   filter = new Filter();
+  title = 'Пациенты';
 
   async mounted(): Promise<void> {
     try {

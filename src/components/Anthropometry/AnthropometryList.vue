@@ -1,8 +1,6 @@
 <template>
   <div style="width: 100%" v-if="mount">
-    <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="create">Создать параметр антропометрии</el-button>
-    </el-button-group>
+    <ListHead :title="title" @create="create" />
 
     <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="anthropometries" style="width: 100%">
       <el-table-column prop="№" label="№" width="150" />
@@ -22,8 +20,12 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import ListHead from '@/components/ListHead.vue';
 
 @Options({
+  components: {
+    ListHead,
+  },
   computed: {
     ...mapState('anthropometry', ['anthropometries']),
   },
@@ -37,6 +39,7 @@ export default class Anthropometry extends Vue {
   anthropometries!: IAnthropometry[];
   getAll!: () => Promise<void>;
   mount = false;
+  title = 'Антропометрия';
 
   async mounted(): Promise<void> {
     await this.getAll();

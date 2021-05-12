@@ -1,8 +1,6 @@
 <template>
   <div style="width: 100%">
-    <el-button-group>
-      <el-button type="primary" icon="el-icon-document" @click="create">Создать документ</el-button>
-    </el-button-group>
+    <ListHead :title="title" @create="create" />
 
     <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="documents" style="width: 100%">
       <el-table-column type="expand">
@@ -35,11 +33,11 @@
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import ModalForm from './DocumentPage.vue';
+import ListHead from '@/components/ListHead.vue';
 
 @Options({
   components: {
-    ModalForm,
+    ListHead,
   },
   computed: {
     ...mapState('documents', ['documents']),
@@ -50,8 +48,8 @@ import ModalForm from './DocumentPage.vue';
 })
 export default class DocumentsList extends Vue {
   documents!: [];
-
   getAll!: () => Promise<void>;
+  title = 'Документы';
 
   async mounted(): Promise<void> {
     await this.getAll();

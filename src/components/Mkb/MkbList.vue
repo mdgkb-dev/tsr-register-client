@@ -1,5 +1,6 @@
 <template>
   <div style="width: 100%">
+    <ListHead :title="title" @create="create" />
     <el-table :data="mkb1" style="width: 100%" v-if="mount">
       <el-table-column prop="id" label="Класс" width="150" />
       <el-table-column prop="class" label="Класс" width="150" />
@@ -18,21 +19,11 @@
       <el-table-column prop="diagnosisName" label="Название диагноза" width="150" />
       <el-table-column prop="diagnosisComment" label="Комментарий к диагнозу" width="150" />
       <el-table-column prop="subDiagnosisName" label="Название уточнённого диагноза" width="150" />
-      <el-table-column
-        prop="subDiagnosisComment"
-        label="Комментарий к уточнённому диагнозу"
-        width="150"
-      />
-      <el-table-column
-        prop="subDiagnosisComment"
-        label="Комментарий к уточнённому диагнозу"
-        width="150"
-      />
+      <el-table-column prop="subDiagnosisComment" label="Комментарий к уточнённому диагнозу" width="150" />
+      <el-table-column prop="subDiagnosisComment" label="Комментарий к уточнённому диагнозу" width="150" />
       <el-table-column fixed="right" label="Добавить комментарии" width="120">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small"
-            >Добавить комментарий</el-button
-          >
+          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Добавить комментарий</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -48,11 +39,13 @@ import { mapState, mapActions } from 'vuex';
 
 import IMkb from '@/interfaces/mkb/IMkb';
 
+import ListHead from '@/components/ListHead.vue';
 import ModalForm from './ModalForm.vue';
 
 @Options({
   components: {
     ModalForm,
+    ListHead,
   },
   computed: {
     ...mapState('mkb', ['mkb']),
@@ -65,11 +58,8 @@ import ModalForm from './ModalForm.vue';
 })
 export default class MkbList extends Vue {
   getAll!: () => Promise<void>;
-
   mkb!: IMkb[];
-
   mkb1!: IMkb[];
-
   mkbItem: IMkb = {
     id: '',
     class: '',
@@ -92,12 +82,10 @@ export default class MkbList extends Vue {
   };
 
   mount = false;
-
   modalTitle = '';
-
   isCreateForm = false;
-
   modalVisible = false;
+  title = 'МКБ';
 
   async mounted(): Promise<void> {
     await this.getAll();

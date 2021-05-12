@@ -1,13 +1,6 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <el-row>
-      <el-col :span="2">
-        <h2 small align="center" class="header-top-table">Представители</h2>
-      </el-col>
-      <el-col :span="5" :offset="16" style="margin-top: 8px" align="right">
-        <el-button type="success" round @click="create">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
-      </el-col>
-    </el-row>
+    <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
@@ -80,11 +73,11 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import Filter from '@/classes/filters/Filter';
 import IFilter from '@/interfaces/filters/IFilter';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import ModalForm from './RepresentativePage.vue';
+import ListHead from '../ListHead.vue';
 
 @Options({
   components: {
-    ModalForm,
+    ListHead,
   },
   computed: {
     ...mapState('representatives', ['representatives']),
@@ -103,6 +96,7 @@ export default class RepresentativesList extends Vue {
   filterName: IFilter[] = [];
   filterDate: IFilter[] = [];
   filter = new Filter();
+  title = 'Представители';
 
   async mounted(): Promise<void> {
     await this.getAll();
