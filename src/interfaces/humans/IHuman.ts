@@ -9,7 +9,7 @@ export default interface IHuman {
   name: string;
   surname: string;
   patronymic: string;
-  gender: string;
+  isMale: boolean;
   dateBirth: string;
   addressRegistration: string;
   addressResidential: string;
@@ -19,5 +19,5 @@ export default interface IHuman {
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 
   getFullName: () => string;
-  getGender: (full?: boolean) => string;
+  getisMale: (full?: boolean) => string;
 }

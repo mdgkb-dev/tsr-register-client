@@ -6,19 +6,14 @@
       <el-input v-model="edit.patronymic"></el-input>
     </el-form-item>
     <el-form-item label="Activity zone">
-      <el-select v-model="edit.gender" placeholder="please select your zone">
-        <el-option label="Мужчина" value="male"></el-option>
-        <el-option label="Женщина" value="female"></el-option>
+      <el-select v-model="edit.isMale" placeholder="please select your zone">
+        <el-option label="Мужчина" :value="true"></el-option>
+        <el-option label="Женщина" :value="false"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="Activity time">
       <el-col :span="11">
-        <el-date-picker
-          type="date"
-          placeholder="Pick a date"
-          v-model="edit.dateBirth"
-          style="width: 100%"
-        ></el-date-picker>
+        <el-date-picker type="date" placeholder="Pick a date" v-model="edit.dateBirth" style="width: 100%"></el-date-picker>
       </el-col>
     </el-form-item>
     <el-form-item label="Адреса">

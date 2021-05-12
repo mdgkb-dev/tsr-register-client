@@ -9,9 +9,9 @@
     <el-input v-model="editHuman.patronymic"></el-input>
   </el-form-item>
   <el-form-item label="Пол" label-width="20vw">
-    <el-select v-model="editHuman.gender" placeholder="Выберите пол">
-      <el-option label="Мужчина" value="male"></el-option>
-      <el-option label="Женщина" value="female"></el-option>
+    <el-select v-model="editHuman.isMale" placeholder="Выберите пол">
+      <el-option label="Мужчина" :value="true"></el-option>
+      <el-option label="Женщина" :value="false"></el-option>
     </el-select>
   </el-form-item>
   <el-form-item label="Дата рождения" label-width="20vw">

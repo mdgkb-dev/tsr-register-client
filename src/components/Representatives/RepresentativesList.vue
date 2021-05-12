@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column width="150" label="Пол">
         <template #default="scope">
-          {{ scope.row.human.getGender() }}
+          {{ scope.row.human.getisMale() }}
         </template>
       </el-table-column>
 
@@ -121,7 +121,7 @@ export default class RepresentativesList extends Vue {
 
   children = (representative: IRepresetnationType) => {
     if (representative.patient) {
-      return representative.patient.human.gender === 'male' ? 'Сын' : 'Дочь';
+      return representative.patient.human.isMale ? 'Сын' : 'Дочь';
     }
     return '';
   };

@@ -29,7 +29,7 @@
           <el-divider></el-divider>
           <el-row>
             <el-col :span="12" style="color: #a1a8bd">Пол</el-col>
-            <el-col :span="12"> {{ patient.human.getGender(true) }}</el-col>
+            <el-col :span="12"> {{ patient.human.getisMale(true) }}</el-col>
           </el-row>
           <el-divider></el-divider>
           <el-row>
@@ -207,7 +207,7 @@ export default class ModalForm extends Vue {
       surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       name: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       patronymic: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      gender: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      isMale: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       dateBirth: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
     },
   };

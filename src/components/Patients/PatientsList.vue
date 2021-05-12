@@ -10,9 +10,9 @@
             {{ scope.row.human.getFullName() }}
           </template>
         </el-table-column>
-        <el-table-column width="150" label="Пол" sortable prop="human.gender">
+        <el-table-column width="150" label="Пол" sortable prop="human.isMale">
           <template #default="scope">
-            {{ scope.row.human.getGender() }}
+            {{ scope.row.human.getisMale() }}
           </template>
         </el-table-column>
         <el-table-column width="150" label="Вес, Рост">
