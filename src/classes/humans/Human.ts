@@ -47,7 +47,7 @@ export default class Human implements IHuman {
   getFullName(): string {
     return `${this.surname} ${this.name} ${this.patronymic}`;
   }
-  getisMale(full?: boolean): string {
+  getGender(full?: boolean): string {
     if (full) {
       return this.isMale ? 'Мужской' : 'Женский';
     }

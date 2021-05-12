@@ -19,5 +19,5 @@ export default interface IHuman {
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
 
   getFullName: () => string;
-  getisMale: (full?: boolean) => string;
+  getGender: (full?: boolean) => string;
 }

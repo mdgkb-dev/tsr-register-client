@@ -12,7 +12,7 @@
         </el-table-column>
         <el-table-column width="150" label="Пол" sortable prop="human.isMale">
           <template #default="scope">
-            {{ scope.row.human.getisMale() }}
+            {{ scope.row.human.getGender() }}
           </template>
         </el-table-column>
         <el-table-column width="150" label="Вес, Рост">
