@@ -165,7 +165,7 @@ export default class ModalForm extends Vue {
       surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       name: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       patronymic: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      gender: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      isMale: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
       dateBirth: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
     },
   };

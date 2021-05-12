@@ -12,7 +12,7 @@ export default class Human implements IHuman {
   name = '';
   surname = '';
   patronymic = '';
-  gender = '';
+  isMale = true;
   patientId?: string;
   dateBirth = '';
   addressRegistration = '';
@@ -30,13 +30,13 @@ export default class Human implements IHuman {
     this.name = human.name ?? '';
     this.surname = human.surname ?? '';
     this.patronymic = human.patronymic ?? '';
-    this.gender = human.gender ?? '';
+    this.isMale = human.isMale ?? true;
     this.patientId = human.patientId;
     this.dateBirth = human.dateBirth ?? '';
     this.addressRegistration = human.addressRegistration ?? '';
     this.addressResidential = human.addressResidential ?? '';
     this.contact = new Contact(human.contact);
-    this.documentFieldToHuman = human.documentFieldToHuman.map((d) => new DocumentFieldToHuman(d));
+    this.documentFieldToHuman = human.documentFieldToHuman.map(d => new DocumentFieldToHuman(d));
     if (human.insuranceCompanyToHuman) {
       this.insuranceCompanyToHuman = human.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
     }
@@ -47,10 +47,10 @@ export default class Human implements IHuman {
   getFullName(): string {
     return `${this.surname} ${this.name} ${this.patronymic}`;
   }
-  getGender(full?: boolean): string {
+  getisMale(full?: boolean): string {
     if (full) {
-      return this.gender === 'male' ? 'Мужской' : 'Женский';
+      return this.isMale ? 'Мужской' : 'Женский';
     }
-    return this.gender === 'male' ? 'М' : 'Ж';
+    return this.isMale ? 'М' : 'Ж';
   }
 }
