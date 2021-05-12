@@ -127,4 +127,3 @@ export default class RepresentativesList extends Vue {
   };
 }
 </script>
-<style></style>
