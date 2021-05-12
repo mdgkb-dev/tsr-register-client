@@ -1,8 +1,12 @@
 <template>
-  <div style="width: 100%">
-    <ListHead :title="title" @create="create" />
-
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="documents" style="width: 100%">
+  <ListHead :title="title" @create="create" />
+  <div class="table-background">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="documents"
+      class="table-shadow"
+      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
+    >
       <el-table-column type="expand">
         <template #default="props">
           <el-card class="box-card">

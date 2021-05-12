@@ -1,119 +1,117 @@
 <template>
-  <div style="width: 100%; height: 100%">
-    <el-row>
-      <el-col :span="8">
-        <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>
-      </el-col>
-      <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-        <el-button type="success" round native-type="submit">Сохранить изменения</el-button>
-      </el-col>
-    </el-row>
-    <el-row v-if="mount">
-      <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-row>
-          <el-col :span="8">
-            <div class="block">
-              <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
-            </div>
-            <h1 class="semi-bold-header">Диагноз</h1>
-            <el-divider></el-divider>
+  <el-row>
+    <el-col :span="8">
+      <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>
+    </el-col>
+    <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
+      <el-button type="success" round native-type="submit">Сохранить изменения</el-button>
+    </el-col>
+  </el-row>
+  <el-row v-if="mount">
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <el-row>
+        <el-col :span="8">
+          <div class="block">
+            <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+          </div>
+          <h1 class="semi-bold-header">Диагноз</h1>
+          <el-divider></el-divider>
 
-            <h1 class="semi-bold-header">Инвалидность</h1>
-          </el-col>
-          <el-col :span="15" :offset="1">
-            <el-tag class="menu-badge">Пациент</el-tag>
-            <h2 v-html="patient.human.getFullName()" style="margin-bottom: 60px"></h2>
-            <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
-              <el-col :span="12"> {{ patient.human.dateBirth }}</el-col>
-            </el-row>
-            <el-divider></el-divider>
-            <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Пол</el-col>
-              <el-col :span="12"> {{ patient.human.getGender(true) }}</el-col>
-            </el-row>
-            <el-divider></el-divider>
-            <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Языки</el-col>
-              <el-col :span="12"> Русский </el-col>
-            </el-row>
-            <el-divider></el-divider>
-            <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Вес - Рост</el-col>
-              <el-col :span="12"> {{ patient.getAnthropometryDataFull() }}</el-col>
-            </el-row>
-            <el-divider></el-divider>
-            <el-row>
-              <el-col :span="12" style="color: #a1a8bd">Адрес</el-col>
-              <el-col :span="12"> {{ patient.human.addressRegistration }} </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-      </div>
-    </el-row>
-    <el-row>
-      <div class="table-background" style="width: 100%; height: 100%">
-        <el-collapse>
-          <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="10vw" label-position="right">
-            <div v-if="mount">
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Паспортные данные
-                  </h2>
-                </template>
-                <HumanForm :human="patient.human" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Антропометрия
-                  </h2>
-                </template>
-                <AnthropometryForm :inAnthropometry="anthropometry" :inAnthropometryData="patient.anthropometryData" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Страховки
-                  </h2>
-                </template>
-                {{ patient.human.insuranceCompanyToHuman }}
-                <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Документы
-                  </h2>
-                </template>
-                <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Диагнозы
-                  </h2>
-                </template>
-                <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">
-                    Инвалидность
-                  </h2>
-                </template>
-                <DisabilityForm :inDisabilities="patient.disabilities" />
-              </el-collapse-item>
-            </div>
-            <div class="center-align">
-              <el-button type="primary" native-type="submit">Сохранить</el-button>
-            </div>
-          </el-form>
-        </el-collapse>
-      </div>
-    </el-row>
-  </div>
+          <h1 class="semi-bold-header">Инвалидность</h1>
+        </el-col>
+        <el-col :span="15" :offset="1">
+          <el-tag class="menu-badge">Пациент</el-tag>
+          <h2 v-html="patient.human.getFullName()" style="margin-bottom: 60px"></h2>
+          <el-row>
+            <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
+            <el-col :span="12"> {{ patient.human.dateBirth }}</el-col>
+          </el-row>
+          <el-divider></el-divider>
+          <el-row>
+            <el-col :span="12" style="color: #a1a8bd">Пол</el-col>
+            <el-col :span="12"> {{ patient.human.getGender(true) }}</el-col>
+          </el-row>
+          <el-divider></el-divider>
+          <el-row>
+            <el-col :span="12" style="color: #a1a8bd">Языки</el-col>
+            <el-col :span="12"> Русский </el-col>
+          </el-row>
+          <el-divider></el-divider>
+          <el-row>
+            <el-col :span="12" style="color: #a1a8bd">Вес - Рост</el-col>
+            <el-col :span="12"> {{ patient.getAnthropometryDataFull() }}</el-col>
+          </el-row>
+          <el-divider></el-divider>
+          <el-row>
+            <el-col :span="12" style="color: #a1a8bd">Адрес</el-col>
+            <el-col :span="12"> {{ patient.human.addressRegistration }} </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </div>
+  </el-row>
+  <el-row>
+    <div class="table-background" style="width: 100%; height: 100%">
+      <el-collapse>
+        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="10vw" label-position="right">
+          <div v-if="mount">
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Паспортные данные
+                </h2>
+              </template>
+              <HumanForm :human="patient.human" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Антропометрия
+                </h2>
+              </template>
+              <AnthropometryForm :inAnthropometry="anthropometry" :inAnthropometryData="patient.anthropometryData" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Страховки
+                </h2>
+              </template>
+              {{ patient.human.insuranceCompanyToHuman }}
+              <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Документы
+                </h2>
+              </template>
+              <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Диагнозы
+                </h2>
+              </template>
+              <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Инвалидность
+                </h2>
+              </template>
+              <DisabilityForm :inDisabilities="patient.disabilities" />
+            </el-collapse-item>
+          </div>
+          <div class="center-align">
+            <el-button type="primary" native-type="submit">Сохранить</el-button>
+          </div>
+        </el-form>
+      </el-collapse>
+    </div>
+  </el-row>
 </template>
 
 <script lang="ts">

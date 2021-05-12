@@ -3,7 +3,9 @@
     <MainSidePanel />
     <el-container direction="vertical" style="margin-right: 50px">
       <el-row style="margin-top: 50px; margin-right: 50px; height: 100%">
-        <slot />
+        <div class="page-container">
+          <slot />
+        </div>
       </el-row>
     </el-container>
   </el-container>

@@ -1,8 +1,12 @@
 <template>
-  <div style="width: 100%" v-if="mount">
-    <ListHead :title="title" @create="create" />
-
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="anthropometries" style="width: 100%">
+  <ListHead :title="title" @create="create" />
+  <div v-if="mount" class="table-background">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="anthropometries"
+      class="table-shadow"
+      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
+    >
       <el-table-column prop="№" label="№" width="150" />
       <el-table-column prop="name" label="Название параметра" width="150" />
       <el-table-column label="Действия" width="120">

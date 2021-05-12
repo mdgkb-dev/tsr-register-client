@@ -1,66 +1,64 @@
 <template>
-  <div style="width: 100%; height: 100%">
-    <ListHead :title="title" @create="create" />
-    <div class="table-background">
-      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-      <el-table
-        :data="filterTable(representatives)"
-        class="table-patients"
-        @row-dblclick="edit"
-        :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
-      >
-        <el-table-column type="expand">
-          <template #default="props">
-            <el-card class="box-card">
-              <template #header>
-                <div class="card-header">
-                  <span>Представляет</span>
-                </div>
-              </template>
-              <div v-for="item in props.row.representativeToPatient" :key="item.patient.human" class="text item">
-                {{ item.patient.human }}
+  <ListHead :title="title" @create="create" />
+  <div class="table-background">
+    <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
+    <el-table
+      :data="filterTable(representatives)"
+      class="table-shadow"
+      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
+      @row-dblclick="edit"
+    >
+      <el-table-column type="expand">
+        <template #default="props">
+          <el-card class="box-card">
+            <template #header>
+              <div class="card-header">
+                <span>Представляет</span>
               </div>
-            </el-card>
-          </template>
-        </el-table-column>
-        <el-table-column type="index" width="50"> </el-table-column>
-        <el-table-column width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
-          <template #default="scope">
-            {{ scope.row.human.getFullName() }}
-          </template>
-        </el-table-column>
-        <el-table-column width="150" label="Пол">
-          <template #default="scope">
-            {{ scope.row.human.getGender() }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
-        <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
-        <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
-        <el-table-column width="150" label="Привязанные дети">
-          <template #default="scope">
-            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
-                placement="top-end"
-              >
-                <el-tag size="small">{{ children(rep) }}</el-tag>
-              </el-tooltip>
+            </template>
+            <div v-for="item in props.row.representativeToPatient" :key="item.patient.human" class="text item">
+              {{ item.patient.human }}
             </div>
-          </template>
-        </el-table-column>
+          </el-card>
+        </template>
+      </el-table-column>
+      <el-table-column type="index" width="50"> </el-table-column>
+      <el-table-column width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
+        <template #default="scope">
+          {{ scope.row.human.getFullName() }}
+        </template>
+      </el-table-column>
+      <el-table-column width="150" label="Пол">
+        <template #default="scope">
+          {{ scope.row.human.getGender() }}
+        </template>
+      </el-table-column>
 
-        <el-table-column fixed="right" label="" width="140">
-          <template #default="scope">
-            <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-            <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+      <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
+      <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
+      <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
+      <el-table-column width="150" label="Привязанные дети">
+        <template #default="scope">
+          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
+              placement="top-end"
+            >
+              <el-tag size="small">{{ children(rep) }}</el-tag>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column fixed="right" label="" width="140">
+        <template #default="scope">
+          <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
+          <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 

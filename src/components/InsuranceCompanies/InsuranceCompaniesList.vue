@@ -1,8 +1,12 @@
 <template>
-  <div style="width: 100%">
-    <ListHead :title="title" @create="create" />
-
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="insuranceCompanies" style="width: 100%">
+  <ListHead :title="title" @create="create" />
+  <div class="table-background">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="insuranceCompanies"
+      class="table-shadow"
+      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
+    >
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column prop="name" label="Название страховой компании" width="150" />
       <el-table-column label="Действия" width="120">
@@ -38,7 +42,7 @@ export default class InsuranceCompanies extends Vue {
   getAll!: () => Promise<void>;
   title = 'Страховые компании';
 
-  async mounted(): Promise<void> {
+  async amounted(): Promise<void> {
     await this.getAll();
   }
 

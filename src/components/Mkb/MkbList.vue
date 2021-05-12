@@ -1,7 +1,12 @@
 <template>
-  <div style="width: 100%">
-    <ListHead :title="title" @create="create" />
-    <el-table :data="mkb1" style="width: 100%" v-if="mount">
+  <ListHead :title="title" @create="create" />
+  <div class="table-background">
+    <el-table
+      :data="mkb1"
+      class="table-shadow"
+      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
+      v-if="mount"
+    >
       <el-table-column prop="id" label="Класс" width="150" />
       <el-table-column prop="class" label="Класс" width="150" />
       <el-table-column prop="className" label="Название класса" width="150" />

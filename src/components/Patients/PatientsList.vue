@@ -1,12 +1,12 @@
 <template>
-  <div style="width: 100%; height: 100%" v-if="mount">
+  <div v-if="mount">
     <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="filterTable(patients)"
-        class="table-patients"
+        class="table-shadow"
         :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
       >
         <el-table-column type="index" width="50" />
