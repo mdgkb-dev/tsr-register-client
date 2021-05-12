@@ -37,7 +37,7 @@ export default class InsuranceCompanies extends Vue {
   getAll!: () => Promise<void>;
   title = 'Страховые компании';
 
-  async amounted(): Promise<void> {
+  async mounted(): Promise<void> {
     await this.getAll();
   }
 

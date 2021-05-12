@@ -31,7 +31,7 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
   },
 })
 export default class AnthropometryPage extends Vue {
-  anthropometryGet!: (patientId: string) => Promise<void>;
+  anthropometryGet!: (anthropometryId: string) => Promise<void>;
 
   isEditMode!: boolean;
   anthropometry: IAnthropometry = new Anthropometry();

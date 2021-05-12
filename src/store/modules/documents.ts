@@ -1,4 +1,6 @@
 import HttpClient from '@/services/HttpClient';
+import IDocument from '@/interfaces/documents/IDocument';
+import Document from '@/classes/documents/Document';
 
 const httpClient = new HttpClient('documents');
 
@@ -6,15 +8,21 @@ export default {
   namespaced: true,
   state: {
     documents: [],
+    document: {},
   },
   getters: {
     getPatientsNames: (state: any): void => state.documents,
     documents: (state: any): void => state.documents,
+    document: (state: any): void => state.document,
     getById: (state: any) => (id: number): void => state.documents.find((human: any) => human.id === id),
   },
   mutations: {
-    set: (state: any, payload: any): void => {
-      state.documents = payload;
+    setAll: (state: any, documents: IDocument[]) => {
+      state.documents = documents.map((d: IDocument) => new Document(d));
+    },
+    set: (state: any, document: IDocument): void => {
+      state.document = new Document(document);
+      console.log('state.document', state.document);
     },
     create: (state: any, payload: any): void => {
       state.documents.push(payload);
@@ -30,12 +38,15 @@ export default {
   },
   actions: {
     getAll: async (context: any): Promise<void> => {
-      context.commit('set', await httpClient.get());
+      context.commit('setAll', await httpClient.get());
     },
-    create: async (context: any, payload: any): Promise<void> => {
+    get: async (context: any, documentId: string) => {
+      context.commit('set', await httpClient.get(documentId));
+    },
+    create: async (context: any, payload: IDocument): Promise<void> => {
       context.commit('create', await httpClient.post(payload));
     },
-    edit: async (context: any, payload: any): Promise<void> => {
+    edit: async (context: any, payload: IDocument): Promise<void> => {
       context.commit('update', await httpClient.put(payload, payload.id));
     },
     delete: async (context: any, id: string): Promise<void> => {

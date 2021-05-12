@@ -1,6 +1,6 @@
 <template>
   <h2>{{ title }}</h2>
-  <el-form ref="form" :model="document" label-width="10vw" label-position="right">
+  <el-form ref="form" :model="document" label-width="10vw" label-position="right" v-if="mount">
     <el-form-item label="Название документа">
       <el-input v-model="document.name"></el-input>
     </el-form-item>
@@ -33,17 +33,30 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import Document from '@/classes/documents/Document';
 import DocumentField from '@/classes/documents/DocumentField';
+import IDocument from '@/interfaces/documents/IDocument';
+import { mapActions, mapGetters } from 'vuex';
 
+@Options({
+  computed: {
+    ...mapGetters('documents', ['document']),
+  },
+  methods: {
+    ...mapActions({
+      documentGet: 'documents/get',
+    }),
+  },
+})
 export default class DocumentPage extends Vue {
+  documentGet!: (documentId: string) => Promise<void>;
+
   isEditMode!: boolean;
-
-  document = new Document();
-
+  document: IDocument = new Document();
   title = '';
+  mount = false;
 
   options = [
     { label: 'Строка', value: 'string' },
@@ -57,7 +70,7 @@ export default class DocumentPage extends Vue {
     } else {
       this.$store.dispatch('documents/create', this.document);
     }
-    this.$emit('close');
+    this.$router.push('/documents');
   }
 
   remove(item: any): void {
@@ -84,9 +97,10 @@ export default class DocumentPage extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать документ';
-      const response = await fetch(`${process.env.VUE_APP_BASE_URL}document/${this.$route.params.documentId}`);
-      this.document = await response.json();
+      await this.documentGet(`${this.$route.params.documentId}`);
+      this.document = this.$store.getters['documents/document'];
     }
+    this.mount = true;
   }
 }
 </script>
