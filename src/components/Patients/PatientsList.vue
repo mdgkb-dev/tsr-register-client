@@ -3,12 +3,7 @@
     <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-      <el-table
-        :default-sort="{ prop: 'id', order: 'ascending' }"
-        :data="filterTable(patients)"
-        class="table-shadow"
-        :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
-      >
+      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="filterTable(patients)" class="table-shadow" header-row-class-name="header-style">
         <el-table-column type="index" width="50" />
         <el-table-column width="150" label="ФИО" sortable prop="human.surname" :filters="filterName" :filter-method="filter.filterNameMethod">
           <template #default="scope">

@@ -1,12 +1,7 @@
 <template>
   <ListHead :title="title" @create="create" />
   <div v-if="mount" class="table-background">
-    <el-table
-      :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="anthropometries"
-      class="table-shadow"
-      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
-    >
+    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="anthropometries" class="table-shadow" header-row-class-name="header-style">
       <el-table-column prop="№" label="№" width="150" />
       <el-table-column prop="name" label="Название параметра" width="150" />
       <el-table-column label="Действия" width="120">

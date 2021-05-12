@@ -2,12 +2,7 @@
   <ListHead :title="title" @create="create" />
   <div class="table-background">
     <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-    <el-table
-      :data="filterTable(representatives)"
-      class="table-shadow"
-      :header-cell-style="{ color: '#a1a7bd', 'font-size': '12px', background: '#eff1f7', 'font-family': 'Open Sans' }"
-      @row-dblclick="edit"
-    >
+    <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" @row-dblclick="edit">
       <el-table-column type="expand">
         <template #default="props">
           <el-card class="box-card">
@@ -132,3 +127,4 @@ export default class RepresentativesList extends Vue {
   };
 }
 </script>
+<style></style>
