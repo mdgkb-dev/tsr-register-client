@@ -9,11 +9,11 @@ export default class Edv implements IEdv {
 
   disabilityId?: string;
 
-  parameter1: boolean = false;
+  parameter1 = false;
 
-  parameter2: boolean = false;
+  parameter2 = false;
 
-  parameter3: boolean = false;
+  parameter3 = false;
 
   constructor(edv?: IEdv) {
     if (!edv) {
