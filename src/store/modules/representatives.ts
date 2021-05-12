@@ -11,8 +11,8 @@ export default {
     representative: {},
   },
   getters: {
-    getAll: (state: any) => state.representatives,
-    get: (state: any) => state.representative,
+    representatives: (state: any) => state.representatives,
+    representative: (state: any) => state.representative,
     getById: (state: any) => (id: number) => state.representatives.find((representative: any) => representative.id === id),
   },
   mutations: {
