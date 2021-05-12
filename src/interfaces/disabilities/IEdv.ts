@@ -5,8 +5,8 @@ export default interface IEdv {
   id?: string;
   disabilityId?: string;
   period?: IPeriod;
-  parameter1?: boolean;
-  parameter2?: boolean;
-  parameter3?: boolean;
+  parameter1: boolean;
+  parameter2: boolean;
+  parameter3: boolean;
   disability?: IDisability;
 }

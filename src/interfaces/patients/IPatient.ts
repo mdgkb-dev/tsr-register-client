@@ -13,4 +13,5 @@ export default interface IPatient {
   disabilities: IDisability[];
 
   getAnthropometryDataFull: () => string;
+  getActuallyDisability: () => IDisability;
 }

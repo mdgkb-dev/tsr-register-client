@@ -8,4 +8,6 @@ export default interface IDisability {
   patientId?: string;
   patient?: IPatient;
   edvs?: IEdv[];
+
+  getActuallyEdv: () => IEdv;
 }

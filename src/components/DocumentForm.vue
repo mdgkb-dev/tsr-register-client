@@ -1,32 +1,41 @@
 <template>
-  <el-form-item v-for="document in documents" :key="document">
-    <h3>{{ document.name }}</h3>
-    <div v-for="(field, j) in document.documentFields" :key="j">
-      <el-form-item label-width="12vw" :label="field.name" v-if="field.type === 'string'">
-        <el-input v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"></el-input>
-      </el-form-item>
-      <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'number'">
-        <el-input-number label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"></el-input-number>
-      </el-form-item>
-      <el-form-item label-width="12vw" :label="field.name" v-else-if="field.type === 'date'">
-        <el-date-picker type="date" placeholder="Выберете дату" v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"></el-date-picker>
-      </el-form-item>
-    </div>
+  <div class="form-under-collapse">
+    <div v-for="document in documents" :key="document">
+      <el-row style="margin-bottom: 50px">
+        <el-col :span="2">
+          <div style="font-weight: bold">{{ document.name }}</div>
+        </el-col>
+        <el-col :span="22">
+          <el-form-item v-for="(field, j) in document.documentFields" :key="j" style="margin-bottom: 10px">
+            <el-form-item v-if="field.type === 'string'" :label="field.name">
+              <el-input :label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"></el-input>
+            </el-form-item>
+            <el-form-item v-else-if="field.type === 'number'">
+              <el-input-number label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"></el-input-number>
+            </el-form-item>
+            <el-form-item v-else-if="field.type === 'date'">
+              <el-date-picker type="date" placeholder="Выберете дату" v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"></el-date-picker>
+            </el-form-item>
+          </el-form-item>
+        </el-col>
 
-    <el-upload
-      action=""
-      :limit="3"
-      :on-preview="download"
-      :on-success="onSuccess"
-      :on-remove="onRemove"
-      :http-request="upload"
-      :data="document"
-      ref="uploadFile"
-      :file-list="documentsScans[document.id]"
-    >
-      <el-button size="small" type="primary">Загрузить изображение документа</el-button>
-    </el-upload>
-  </el-form-item>
+        <el-upload
+          action=""
+          :limit="3"
+          :on-preview="download"
+          :on-success="onSuccess"
+          :on-remove="onRemove"
+          :http-request="upload"
+          :data="document"
+          ref="uploadFile"
+          :file-list="documentsScans[document.id]"
+        >
+          <el-button size="small" type="primary">Загрузить изображение документа</el-button>
+        </el-upload>
+      </el-row>
+      <el-divider></el-divider>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -42,16 +51,12 @@ import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 export default class DocumentForm extends Vue {
   // Types.
   inDocumentsScans!: { [id: string]: IDocumentScan[] };
-
   inDocuments!: IDocument[];
-
   inDocumentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
 
   // Local state.
   documentsScans = this.inDocumentsScans;
-
   documents = this.inDocuments;
-
   documentsValues = this.inDocumentsValues;
 
   //  документы

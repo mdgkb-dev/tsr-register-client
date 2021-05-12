@@ -1,34 +1,55 @@
 <template>
-  <el-button @click="addDisability()">Добавить изменение</el-button>
-  <el-form-item v-for="disability in disabilities" :key="disability">
-    <el-form-item label-width="12vw" label="Дата начала инвалидности ">
-      <el-date-picker type="date" placeholder="Выберете дату" v-model="disability.period.dateStart"></el-date-picker>
-    </el-form-item>
+  <div>
+    <el-button @click="addDisability()">Добавить изменение</el-button>
+    <el-form-item v-for="disability in disabilities" :key="disability">
+      <el-row style="margin-bottom: 40px">
+        <el-col :span="8">
+          <el-form-item label="Дата начала инвалидности">
+            <el-date-picker type="date" placeholder="Выберете дату" v-model="disability.period.dateStart"></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="Дата окончания инвалидности ">
+            <el-date-picker type="date" placeholder="Выберете дату" v-model="disability.period.dateEnd"></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item>
+            <el-button @click.prevent="removeDisability(disability)">Удалить инвалидность</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-    <el-form-item label-width="12vw" label="Дата окончания инвалидности ">
-      <el-date-picker type="date" placeholder="Выберете дату" v-model="disability.period.dateEnd"></el-date-picker>
-    </el-form-item>
+      <el-button @click="addEdv(disability.edvs)">Добавить справку</el-button>
 
-    <el-button @click="addEdv(disability.edvs)">Добавить справку</el-button>
-    <div v-for="(edv, j) in disability.edvs" :key="j">
-      <el-form-item label-width="12vw" label="Дата начала действия справки">
-        <el-date-picker type="date" placeholder="Выберете дату" v-model="edv.period.dateStart"></el-date-picker>
-      </el-form-item>
-      <el-form-item label-width="12vw" label="Дата окончания действия справки">
-        <el-date-picker type="date" placeholder="Выберете дату" v-model="edv.period.dateEnd"></el-date-picker>
-      </el-form-item>
-      <el-checkbox v-model="edv.parameter1">Параметр 1</el-checkbox>
-      <el-checkbox v-model="edv.parameter2">Параметр 2</el-checkbox>
-      <el-checkbox v-model="edv.parameter3">Параметр 3</el-checkbox>
-      <el-form-item label-width="12vw">
-        <el-button @click.prevent="removeEdv(edvs, edv)">Удалить справку</el-button>
-      </el-form-item>
-    </div>
+      <div v-for="(edv, j) in disability.edvs" :key="j" style="margin-top: 20px">
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="Дата начала действия справки">
+              <el-date-picker type="date" placeholder="Выберете дату" v-model="edv.period.dateStart"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="Дата окончания действия справки">
+              <el-date-picker type="date" placeholder="Выберете дату" v-model="edv.period.dateEnd"></el-date-picker>
+            </el-form-item>
+          </el-col>
 
-    <el-form-item label-width="12vw">
-      <el-button @click.prevent="removeDisability(disability.id)">Удалить инвалидность</el-button>
+          <el-col :span="6">
+            <el-checkbox-button v-model="edv.parameter1">A</el-checkbox-button>
+            <el-checkbox-button v-model="edv.parameter2">B</el-checkbox-button>
+            <el-checkbox-button v-model="edv.parameter3">C</el-checkbox-button>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item>
+              <el-button @click.prevent="removeEdv(disability.edvs, edv)">Удалить справку</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+      <el-divider></el-divider>
     </el-form-item>
-  </el-form-item>
+  </div>
 </template>
 
 <script lang="ts">
@@ -74,3 +95,8 @@ export default class DisabilityForm extends Vue {
   };
 }
 </script>
+<style>
+.but {
+  border-radius: 50%;
+}
+</style>

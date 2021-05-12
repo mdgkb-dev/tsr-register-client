@@ -4,6 +4,10 @@ $--color-success-lighter: #43d39d;
 $--color-success-light: #43d39d;
 $--color-success: #43d39d;
 
+
+$--border-radius-small: 50%;
+$--checkbox-border-radius: 50%;
+
 $--input-border-radius: 40px;
 
 $--font-path: '~element-plus/lib/theme-chalk/fonts';
@@ -37,4 +41,14 @@ body {
 
 #app {
   height: 100%;
+}
+
+.collapseHeader {
+  padding-left: 10px;
+}
+
+.form-under-collapse {
+  width: 50%;
+  margin-top: 10px;
+  margin-left: 10px;
 }

@@ -21,7 +21,11 @@ export default class Disability implements IDisability {
     this.patientId = disability.patientId;
     this.patient = disability.patient;
     if (disability.edvs) {
-      this.edvs = disability.edvs.map((e) => new Edv(e));
+      this.edvs = disability.edvs.map(e => new Edv(e));
     }
+  }
+
+  getActuallyEdv(): IEdv {
+    return this.edvs[this.edvs.length - 1];
   }
 }
