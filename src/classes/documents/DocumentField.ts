@@ -4,9 +4,9 @@ import DocumentFieldToHuman from '@/classes/documents/DocumentFieldToHuman';
 
 export default class DocumentField implements IDocumentField {
   id?: string;
-  name: string = '';
-  type: string = '';
-  order: number = 0;
+  name = '';
+  type = '';
+  order = 0;
   documentFieldToHuman?: IDocumentFieldValue[];
 
   constructor(documentField?: IDocumentField) {
@@ -18,7 +18,7 @@ export default class DocumentField implements IDocumentField {
     this.type = documentField.type;
     this.order = documentField.order;
     if (documentField.documentFieldToHuman) {
-      this.documentFieldToHuman = documentField.documentFieldToHuman.map(d => new DocumentFieldToHuman(d));
+      this.documentFieldToHuman = documentField.documentFieldToHuman.map((d) => new DocumentFieldToHuman(d));
     }
   }
 }

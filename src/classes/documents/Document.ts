@@ -1,11 +1,10 @@
 import IDocumentField from '@/interfaces/documents/IDocumentField';
 import IDocument from '@/interfaces/documents/IDocument';
-import DocumentFieldToHuman from '@/classes/documents/DocumentFieldToHuman';
 import DocumentField from '@/classes/documents/DocumentField';
 
 export default class Document implements IDocument {
   id?: string;
-  name: string = '';
+  name = '';
   documentFields?: IDocumentField[];
 
   constructor(document?: IDocument) {
