@@ -29,7 +29,7 @@
                   Антропометрия
                 </h2>
               </template>
-              <AnthropometryForm :inAnthropometry="anthropometry" :inAnthropometryData="patient.anthropometryData" />
+              <AnthropometryForm :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
@@ -103,7 +103,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
     DisabilityForm,
   },
   computed: {
-    ...mapGetters('anthropometry', ['anthropometry']),
+    ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('mkb', ['mkb']),
     ...mapGetters('documents', ['documents']),
@@ -133,7 +133,7 @@ export default class ModalForm extends Vue {
   };
 
   // Types.
-  anthropometry!: IAnthropometry[];
+  anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
   mkb!: IMkb[];
   mkbOptions!: IOption[];
@@ -181,12 +181,13 @@ export default class ModalForm extends Vue {
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
     }
-    console.log();
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.mkbGetAll();
     await this.documentsGetAll();
     this.insuranceCompaniesOptions = [];
+
+    console.log(this.anthropometries);
 
     for (const disability of this.patient.disabilities) {
       if (!disability.edvs) {

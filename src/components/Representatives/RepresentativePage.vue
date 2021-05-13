@@ -6,11 +6,7 @@
 
       <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
 
-      <RepresentativeToPatientForm
-        :inRepresentativeToPatient="representative.representativeToPatient"
-        :inTypes="types"
-        :inPatients="patientsOptions"
-      />
+      <RepresentativeToPatientForm :inRepresentativeToPatient="representative.representativeToPatient" :inTypes="types" :inPatients="patientsOptions" />
     </div>
     <el-form-item>
       <el-button type="primary" @click="onSubmit">Сохранить</el-button>
@@ -56,31 +52,21 @@ export default class RepresentativePage extends Vue {
   $refs!: {
     uploadFile: any;
   };
-
   isEditMode!: boolean;
-
   patients!: IPatient[];
-
   documents!: IDocument[];
-
   offset: number[] = [0];
 
   patientsGetAll!: () => Promise<void>;
-
   documentsGetAll!: () => Promise<void>;
-
   documentsUpload!: () => Promise<void>;
 
   // Local state.
 
   documentsScans: { [id: string]: IDocumentScan[] } = {};
-
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
-
   mount = false;
-
   representative = new Representative();
-
   patientsOptions = [{}];
 
   title = '';
