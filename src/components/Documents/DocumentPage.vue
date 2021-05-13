@@ -26,7 +26,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" native-type="submit" >Сохранить</el-button>
+      <el-button type="primary" native-type="submit">Сохранить</el-button>
       <el-button @click="close">Отмена</el-button>
     </el-form-item>
   </el-form>
