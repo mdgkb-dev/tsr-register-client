@@ -1,18 +1,49 @@
 <template>
-  <h2>{{ title }}</h2>
-  <el-form ref="form" :model="representative" label-width="150px">
-    <div v-if="mount">
-      <HumanForm :human="representative.human" />
-
-      <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
-
-      <RepresentativeToPatientForm :inRepresentativeToPatient="representative.representativeToPatient" :inTypes="types" :inPatients="patientsOptions" />
+  <el-row>
+    <el-col :span="8">
+      <h2 class="header-top-table">Представители <i class="el-icon-arrow-right" /> Профиль</h2>
+    </el-col>
+    <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
+      <el-button type="success" round native-type="submit" @click="onSubmit">Сохранить изменения</el-button>
+    </el-col>
+  </el-row>
+  <el-row v-if="mount">
+    <RepresentativePageInfo :representative="representative" />
+  </el-row>
+  <el-row>
+    <div class="table-background" style="width: 100%; height: 100%">
+      <el-collapse>
+        <el-form ref="form" :model="representative" label-width="150px">
+          <div v-if="mount">
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Паспортные данные
+                </h2>
+              </template>
+              <HumanForm :human="representative.human" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Документы
+                </h2>
+              </template>
+              <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
+            </el-collapse-item>
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">
+                  Привязанные дети
+                </h2>
+              </template>
+              <RepresentativeToPatientForm :inRepresentativeToPatient="representative.representativeToPatient" :inTypes="types" :inPatients="patientsOptions" />
+            </el-collapse-item>
+          </div>
+        </el-form>
+      </el-collapse>
     </div>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">Сохранить</el-button>
-      <el-button @click="close">Отмена</el-button>
-    </el-form-item>
-  </el-form>
+  </el-row>
 </template>
 
 <script lang="ts">
@@ -27,14 +58,15 @@ import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import Representative from '@/classes/representatives/Representative';
 import IPatient from '../../interfaces/patients/IPatient';
+import RepresentativePageInfo from './RepresentativePageInfo.vue';
 
 @Options({
   components: {
     HumanForm,
     DocumentForm,
     RepresentativeToPatientForm,
+    RepresentativePageInfo,
   },
-  props: ['representative', 'is-create-form', 'modal-title'],
   computed: {
     ...mapGetters('patients', ['patients']),
     ...mapGetters('documents', ['documents']),
