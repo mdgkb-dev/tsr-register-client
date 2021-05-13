@@ -16,6 +16,7 @@ import RepresentativePage from '../components/Representatives/RepresentativePage
 import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
+import store from '../store/index';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
@@ -25,6 +26,7 @@ const isAuthorized = async (to: any, from: any, next: any) => {
   } catch (error) {
     Cookies.remove('user_sid');
     window.localStorage.removeItem('user_sid');
+    store.commit('setLayout', 'login-layout');
     next('/login');
     return;
   }
@@ -36,6 +38,7 @@ const isAuthorized = async (to: any, from: any, next: any) => {
   }
   Cookies.remove('user_sid');
   window.localStorage.removeItem('user_sid');
+  store.commit('setLayout', 'login-layout');
   next('/login');
   next();
 };

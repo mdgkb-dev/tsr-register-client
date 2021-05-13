@@ -187,8 +187,6 @@ export default class ModalForm extends Vue {
     await this.documentsGetAll();
     this.insuranceCompaniesOptions = [];
 
-    console.log(this.anthropometries);
-
     for (const disability of this.patient.disabilities) {
       if (!disability.edvs) {
         disability.edvs = [];

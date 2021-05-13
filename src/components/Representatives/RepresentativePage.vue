@@ -74,6 +74,7 @@ import RepresentativePageInfo from './RepresentativePageInfo.vue';
   methods: {
     ...mapActions({
       patientsGetAll: 'patients/getAll',
+      representativeGet: 'representatives/get',
       patientsCreate: 'patients/create',
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
@@ -92,6 +93,7 @@ export default class RepresentativePage extends Vue {
   patientsGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
   documentsUpload!: () => Promise<void>;
+  representativeGet!: (representativeId: string) => Promise<void>;
 
   // Local state.
 
@@ -115,8 +117,8 @@ export default class RepresentativePage extends Vue {
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать представителя';
-      const response = await fetch(`${process.env.VUE_APP_BASE_URL}representative/${this.$route.params.representativeId}`);
-      this.representative = await response.json();
+      await this.representativeGet(`${this.$route.params.representativeId}`);
+      this.representative = this.$store.getters['representatives/representative'];
     }
 
     await this.patientsGetAll();
@@ -207,6 +209,8 @@ export default class RepresentativePage extends Vue {
     } else {
       this.$store.dispatch('representatives/create', this.representative);
     }
+
+    this.$router.push('/representatives');
   }
 }
 </script>
