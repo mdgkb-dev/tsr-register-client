@@ -9,7 +9,8 @@
         <el-divider></el-divider>
 
         <h1 class="semi-bold-header">Инвалидность</h1>
-        <div>До {{ patient.getActuallyDisability().period.dateEnd }}</div>
+        <div v-if="patient.getActuallyDisability()">До {{ patient.getActuallyDisability().period.dateEnd }}</div>
+        <div v-else>Не установлена</div>
       </el-col>
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Пациент</el-tag>
