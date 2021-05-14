@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <el-col :span="8">
-      <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>
+      <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"></i> Профиль</h2>
     </el-col>
     <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
       <el-affix :offset="20">
@@ -16,26 +16,39 @@
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Паспортные данные</h2>
+              </template>
               <HumanForm :human="patient.human" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Антропометрия</h2></template>
-              <AnthropometryForm :inHeightWeight="patient.heightWeight" :inBirthDate="patient.human.dateBirth" :isMale="patient.human.isMale" />
+              <template #title>
+                <h2 class="collapseHeader">Антропометрия</h2>
+              </template>
+              <AnthropometryForm :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Страховки</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Страховки</h2>
+              </template>
               <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Документы</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Документы</h2>
+              </template>
               <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Диагнозы</h2></template><MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
+              <template #title>
+                <h2 class="collapseHeader">Диагнозы</h2>
+              </template>
+              <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Инвалидность</h2>
+              </template>
               <DisabilityForm :inDisabilities="patient.disabilities" />
             </el-collapse-item>
             <el-collapse-item>

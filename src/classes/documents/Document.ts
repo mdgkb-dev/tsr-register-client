@@ -5,7 +5,7 @@ import DocumentField from '@/classes/documents/DocumentField';
 export default class Document implements IDocument {
   id?: string;
   name = '';
-  documentFields?: IDocumentField[];
+  documentFields: IDocumentField[] = [];
 
   constructor(document?: IDocument) {
     if (!document) {
