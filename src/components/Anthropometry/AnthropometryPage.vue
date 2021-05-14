@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="anthropometry" @submit.prevent="submitForm" label-width="120px">
+  <el-form ref="form" :model="anthropometry" @submit.prevent="submitForm" label-width="120px" :rules="rules">
     <el-form-item label="Название параметра" label-width="20vw" prop="name">
       <el-input v-model="anthropometry.name"></el-input>
     </el-form-item>
@@ -31,11 +31,32 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
   },
 })
 export default class AnthropometryPage extends Vue {
+  $refs!: {
+    form: any;
+  };
+
   anthropometryGet!: (anthropometryId: string) => Promise<void>;
 
   isEditMode!: boolean;
   anthropometry: IAnthropometry = new Anthropometry();
   title = '';
+
+  rules = {
+    name: [
+      {
+        required: true,
+        message: 'Пожалуйста, введите название параметра',
+        trigger: 'blur',
+      },
+    ],
+    measure: [
+      {
+        required: true,
+        message: 'Пожалуйста, введите единицы измерения',
+        trigger: 'blur',
+      },
+    ],
+  };
 
   async created(): Promise<void> {
     if (!this.$route.params.anthropometryId) {
@@ -50,6 +71,20 @@ export default class AnthropometryPage extends Vue {
   }
 
   submitForm(): void {
+    let validationResult = true;
+
+    this.$refs.form.validate((valid: boolean) => {
+      if (!valid) {
+        validationResult = false;
+        return false;
+      }
+      return true;
+    });
+
+    if (!validationResult) {
+      return;
+    }
+
     if (this.isEditMode) {
       this.$store.dispatch('anthropometry/edit', this.anthropometry);
     } else {
