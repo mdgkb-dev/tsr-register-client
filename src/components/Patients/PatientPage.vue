@@ -84,13 +84,14 @@ import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IMkb from '@/interfaces/mkb/IMkb';
+import IMkb from '@/interfaces/mkb/IMkbClass';
 import IOption from '@/interfaces/shared/IOption';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import Patient from '@/classes/patients/Patient';
 import IDisability from '@/interfaces/disabilities/IDisability';
+import Contact from '@/classes/humans/Contact';
 
 @Options({
   components: {
@@ -161,8 +162,7 @@ export default class ModalForm extends Vue {
   error = '';
 
   validatePhone = (rule: any, value: any, callback: any): void => {
-    const phoneRegExp = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-    if (phoneRegExp.test(value) || !value) {
+    if (Contact.getPhoneRegExp().test(value) || !value) {
       callback();
     } else {
       callback(new Error('Пожалуйста, введите корректный номер телефона'));
@@ -170,8 +170,7 @@ export default class ModalForm extends Vue {
   };
 
   validateEmail = (rule: any, value: any, callback: any): void => {
-    const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRegExp.test(value) || !value) {
+    if (Contact.getEmailRegExp().test(value) || !value) {
       callback();
     } else {
       callback(new Error('Пожалуйста, введите корректный email'));
@@ -207,7 +206,7 @@ export default class ModalForm extends Vue {
     }
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
-    await this.mkbGetAll();
+    // await this.mkbGetAll();
     await this.documentsGetAll();
     this.insuranceCompaniesOptions = [];
 
@@ -223,14 +222,14 @@ export default class ModalForm extends Vue {
       });
     }
 
-    this.mkb = this.mkb.slice(1, 100);
+    // this.mkb = this.mkb.slice(1, 100);
     this.mkbOptions = [];
-    for (const item of this.mkb) {
-      this.mkbOptions.push({
-        label: `${item.class} ${item.groupName} ${item.subGroupName} ${item.diagnosisName} ${item.subDiagnosisName}`,
-        value: `${item.id}`,
-      });
-    }
+    // for (const item of this.mkb) {
+    //   // this.mkbOptions.push({
+    //   //   label: `${item.class} ${item.groupName} ${item.subGroupName} ${item.diagnosisName} ${item.subDiagnosisName}`,
+    //   //   value: `${item.id}`,
+    //   // });
+    // }
 
     let sum = 0;
 

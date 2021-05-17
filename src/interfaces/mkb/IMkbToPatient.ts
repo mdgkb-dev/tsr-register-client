@@ -1,4 +1,4 @@
-import IMkb from '@/interfaces/mkb/IMkb';
+import IMkb from '@/interfaces/mkb/IMkbClass';
 
 export default interface IMkbToPatient {
   id?: string;
