@@ -36,6 +36,11 @@
         </el-row>
         <el-divider></el-divider>
         <el-row>
+          <el-col :span="12" style="color: #a1a8bd">BMI</el-col>
+          <el-col :span="12"> {{ patient.getBmiGroup() }}</el-col>
+        </el-row>
+        <el-divider></el-divider>
+        <el-row>
           <el-col :span="12" style="color: #a1a8bd">Адрес</el-col>
           <el-col :span="12"> {{ patient.human.addressRegistration }} </el-col>
         </el-row>

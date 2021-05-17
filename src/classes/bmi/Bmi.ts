@@ -1,4 +1,5 @@
 import BmiBoys from '@/classes/bmi/BmiBoys';
+import BmiGirls from '@/classes/bmi/BmiGirls';
 
 interface IBmiMonth {
   '1st': number;
@@ -17,27 +18,27 @@ interface IBmiMonth {
 export default class Bmi {
   // вес в кг поделить на рост в метрах в квадрате
   // рост будет передаваться в сантиметрах
-  calculate = (weight: number, height: number): number => {
+  static calculate = (weight: number, height: number): number => {
     const m2 = height / 100;
     const h2 = m2 * m2;
     return weight / h2;
   };
 
-  birthDateToMonth = (birthDate: Date): number => (new Date().getFullYear() - birthDate.getFullYear()) * 12;
+  static birthDateToMonth = (birthDate: string): number => (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
 
-  findBmiMonth = (month: number, isBoy: boolean): IBmiMonth => {
-    if (isBoy) {
-      return BmiBoys[month];
+  static findBmiMonth = (month: number, isMale: boolean): IBmiMonth => {
+    if (isMale) {
+      return BmiBoys[month + 1];
     }
-    return BmiBoys[month];
+    return BmiGirls[month + 1];
   };
 
-  calculateGroup = (bmi: number, bmiMonth: IBmiMonth): string => {
+  static calculateGroup = (bmi: number, bmiMonth: IBmiMonth): string => {
     let groupBmi = 0;
     for (const group in bmiMonth) {
       if (Object.prototype.hasOwnProperty.call(bmiMonth, group)) {
         groupBmi = (bmiMonth as any)[group];
-        if (bmi > groupBmi) {
+        if (bmi < groupBmi) {
           return group;
         }
       }
