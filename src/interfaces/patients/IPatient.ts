@@ -14,4 +14,6 @@ export default interface IPatient {
 
   getAnthropometryDataFull: () => string;
   getActuallyDisability: () => IDisability;
+  getLastAnthropometryValue: (name: string) => number;
+  getBmiGroup: () => string;
 }
