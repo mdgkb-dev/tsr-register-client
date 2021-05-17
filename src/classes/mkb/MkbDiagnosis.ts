@@ -4,8 +4,8 @@ import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;
-  name?: string;
-  code?: string;
+  name = '';
+  code = '';
   comment?: string;
   mkbClassId?: string;
   mkbGroupId?: string;
@@ -32,4 +32,6 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
       this.mkbSubDiagnosis = mkbDiagnosis.mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
     }
   }
+
+  getFullName = () => `${this.code} ${this.name}`;
 }

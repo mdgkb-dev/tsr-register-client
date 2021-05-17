@@ -45,9 +45,11 @@ export default {
       context.commit('set', await httpClient.get(patientId));
     },
     create: async (context: any, payload: IPatient): Promise<void> => {
+      console.log('create');
       context.commit('create', await httpClient.post(payload));
     },
     edit: async (context: any, payload: IPatient): Promise<void> => {
+      console.log('edit');
       context.commit('update', await httpClient.put(payload, payload.id));
     },
     delete: async (context: any, id: string): Promise<void> => {

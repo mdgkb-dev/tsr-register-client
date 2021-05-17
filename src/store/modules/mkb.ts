@@ -19,13 +19,23 @@ export default {
   namespaced: true,
   state: {
     mkbClasses: [],
+    mkbDiagnosis: [],
+    mkbSubDiagnosis: [],
   },
   getters: {
     mkbClasses: (state: any): IMkbClass[] => state.mkbClasses,
+    mkbDiagnosis: (state: any): IMkbDiagnosis[] => state.mkbDiagnosis,
+    mkbSubDiagnosis: (state: any): IMkbSubDiagnosis[] => state.mkbSubDiagnosis,
   },
   mutations: {
     setAll: (state: any, mkbClasses: IMkbClass[]) => {
       state.mkbClasses = mkbClasses.map((m: IMkbClass) => new MkbCLass(m));
+    },
+    setDiagnosis: (state: any, mkbDiagnosis: IMkbDiagnosis[]) => {
+      state.mkbDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
+    },
+    setSubDiagnosisByDiagnosisId: (state: any, mkbSubDiagnosis: IMkbSubDiagnosis[]) => {
+      state.mkbSubDiagnosis = mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
     },
     setGroupByClassId: (state: any, mkbComposition: MkbComposition) => {
       const groups = mkbComposition.mkbGroupAnswer.mkbGroups ? mkbComposition.mkbGroupAnswer.mkbGroups.map((m: IMkbGroup) => new MkbGroup(m)) : undefined;
@@ -112,6 +122,13 @@ export default {
       res.mkbSubDiagnosisAnswer = await httpClient.get(`diagnosis/${idSet.diagnosisId}`);
       res.mkbIdSet = idSet;
       context.commit('setSubDiagnosis', res);
+    },
+    searchDiagnosis: async (context: any, query: MkbIdSet): Promise<void> => {
+      context.commit('setDiagnosis', await httpClient.get(`diagnosis?query=${query}`));
+    },
+    searchSubDiagnosis: async (context: any, diagnosisId: string): Promise<void> => {
+      console.log('diagnosisId', diagnosisId);
+      context.commit('setSubDiagnosisByDiagnosisId', await httpClient.get(`diagnosis/${diagnosisId}`));
     },
   },
 };

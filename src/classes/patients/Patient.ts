@@ -1,23 +1,23 @@
 import IPatient from '@/interfaces/patients/IPatient';
 import IHuman from '@/interfaces/humans/IHuman';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
-import IMkbToPatient from '@/interfaces/mkb/IMkbToPatient';
 import Human from '@/classes/humans/Human';
-import MkbToPatient from '@/classes/mkb/MkbToPatient';
 import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import Disability from '@/classes/disability/Disability';
 import Bmi from '../bmi/Bmi';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 
 export default class Patient implements IPatient {
   id?: string;
   human: IHuman = new Human();
   anthropometryData: IAnthropometryData[] = [];
-  mkbToPatient: IMkbToPatient[] = [];
   representativeToPatient: IRepresentativeToPatient[] = [];
   disabilities: IDisability[] = [];
+  patientDiagnosis: IPatientDiagnosis[] = [];
 
   constructor(patient?: IPatient) {
     if (!patient) {
@@ -26,8 +26,8 @@ export default class Patient implements IPatient {
     this.id = patient.id;
     this.human = new Human(patient.human);
     this.anthropometryData = patient.anthropometryData.map((a: IAnthropometryData) => new AnthropometryData(a));
-    if (patient.mkbToPatient) {
-      this.mkbToPatient = patient.mkbToPatient.map((mkbToPatient: IMkbToPatient) => new MkbToPatient(mkbToPatient));
+    if (patient.patientDiagnosis) {
+      this.patientDiagnosis = patient.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
     }
     if (patient.representativeToPatient) {
       this.representativeToPatient = patient.representativeToPatient.map(
@@ -70,7 +70,6 @@ export default class Patient implements IPatient {
     const bmi = Bmi.calculate(lastWeight, lastHeight);
     const month = Bmi.birthDateToMonth(this.human.dateBirth);
     const bmiMonth = Bmi.findBmiMonth(month, this.human.isMale);
-    const bmiGroup = Bmi.calculateGroup(bmi, bmiMonth);
-    return bmiGroup;
+    return Bmi.calculateGroup(bmi, bmiMonth);
   }
 }

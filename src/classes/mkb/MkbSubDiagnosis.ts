@@ -19,4 +19,6 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.comment = mkbSubDiagnosis.comment;
     this.mkbDiagnosisId = mkbSubDiagnosis.mkbDiagnosisId;
   }
+
+  getFullName = () => `${this.subCode} ${this.name}`;
 }
