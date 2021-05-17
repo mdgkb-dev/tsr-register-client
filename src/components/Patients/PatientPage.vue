@@ -53,7 +53,7 @@
                   Диагнозы
                 </h2>
               </template>
-              <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
+              <MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
@@ -84,7 +84,6 @@ import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IMkb from '@/interfaces/mkb/IMkbClass';
 import IOption from '@/interfaces/shared/IOption';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
@@ -106,7 +105,6 @@ import Contact from '@/classes/humans/Contact';
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
-    ...mapGetters('mkb', ['mkb']),
     ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
     ...mapGetters('patients', ['patient']),
@@ -116,7 +114,6 @@ import Contact from '@/classes/humans/Contact';
       patientGet: 'patients/get',
       anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
-      mkbGetAll: 'mkb/getAll',
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
       disabilitiesGetAll: 'disabilities/getAll',
@@ -136,8 +133,6 @@ export default class ModalForm extends Vue {
   // Types.
   anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
-  mkb!: IMkb[];
-  mkbOptions!: IOption[];
   isEditMode!: boolean;
   insuranceCompanies!: IInsuranceCompany[];
   insuranceCompaniesOptions!: IOption[];
@@ -146,9 +141,7 @@ export default class ModalForm extends Vue {
 
   anthropometryGetAll!: () => Promise<void>;
   insuranceCompaniesGetAll!: () => Promise<void>;
-  mkbGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
-  disabilitiesGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
 
   offset: number[] = [0];
@@ -206,7 +199,6 @@ export default class ModalForm extends Vue {
     }
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
-    // await this.mkbGetAll();
     await this.documentsGetAll();
     this.insuranceCompaniesOptions = [];
 
@@ -222,20 +214,9 @@ export default class ModalForm extends Vue {
       });
     }
 
-    // this.mkb = this.mkb.slice(1, 100);
-    this.mkbOptions = [];
-    // for (const item of this.mkb) {
-    //   // this.mkbOptions.push({
-    //   //   label: `${item.class} ${item.groupName} ${item.subGroupName} ${item.diagnosisName} ${item.subDiagnosisName}`,
-    //   //   value: `${item.id}`,
-    //   // });
-    // }
-
     let sum = 0;
-
     this.documentsScans = {};
     this.documentsValues = {};
-
     for (const document of this.documents) {
       if (document.documentFields) {
         sum += document.documentFields.length;
@@ -244,7 +225,7 @@ export default class ModalForm extends Vue {
 
       this.documentsScans[document.id as string] = [];
       this.documentsValues[document.id as string] = {};
-
+      console.log(3);
       if (document.documentFields) {
         for (const field of document.documentFields) {
           let item = this.patient.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
@@ -277,7 +258,9 @@ export default class ModalForm extends Vue {
 
   // Methods.
   async submitForm(): Promise<void> {
+    console.log('1');
     let validationResult = true;
+    console.log('2');
 
     this.$refs.form.validate((valid: boolean) => {
       if (!valid) {
@@ -286,10 +269,9 @@ export default class ModalForm extends Vue {
       }
       return true;
     });
-
-    if (!validationResult) {
-      return;
-    }
+    // if (!validationResult) {
+    //   return;
+    // }
 
     for (const document in this.documentsScans) {
       if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
@@ -309,7 +291,7 @@ export default class ModalForm extends Vue {
         }
       }
     }
-
+    console.log('3');
     try {
       if (this.isEditMode) {
         await this.$store.dispatch('patients/edit', this.patient);
@@ -320,11 +302,13 @@ export default class ModalForm extends Vue {
       this.$message.error(e.toString());
       return;
     }
+    console.log('4');
 
     this.$refs.form.validate((val: any) => {
       console.log(val);
     });
 
+    console.log('5');
     this.$router.push('/patients');
   }
 }
