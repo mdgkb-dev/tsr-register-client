@@ -4,8 +4,8 @@ import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;
-  name: string = '';
-  code: string = '';
+  name = '';
+  code = '';
   comment?: string;
   mkbClassId?: string;
   mkbGroupId?: string;

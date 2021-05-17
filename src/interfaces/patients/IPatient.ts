@@ -1,8 +1,8 @@
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 
 export default interface IPatient {
   id?: string;
