@@ -57,6 +57,7 @@ import HumanForm from '@/components/HumanForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import Representative from '@/classes/representatives/Representative';
+import Contact from '@/classes/humans/Contact';
 import IPatient from '../../interfaces/patients/IPatient';
 import RepresentativePageInfo from './RepresentativePageInfo.vue';
 
@@ -112,8 +113,7 @@ export default class RepresentativePage extends Vue {
   ];
 
   validatePhone = (rule: any, value: any, callback: any): void => {
-    const phoneRegExp = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
-    if (phoneRegExp.test(value) || !value) {
+    if (Contact.getPhoneRegExp().test(value) || !value) {
       callback();
     } else {
       callback(new Error('Пожалуйста, введите корректный номер телефона'));
@@ -121,8 +121,7 @@ export default class RepresentativePage extends Vue {
   };
 
   validateEmail = (rule: any, value: any, callback: any): void => {
-    const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRegExp.test(value) || !value) {
+    if (Contact.getEmailRegExp().test(value) || !value) {
       callback();
     } else {
       callback(new Error('Пожалуйста, введите корректный email'));

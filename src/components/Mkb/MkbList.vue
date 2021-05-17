@@ -1,106 +1,188 @@
 <template>
-  <ListHead :title="title" @create="create" />
-  <div class="table-background">
-    <el-table :data="mkb1" class="table-shadow" header-row-class-name="header-style" v-if="mount">
-      <el-table-column prop="id" label="Класс" width="150" />
-      <el-table-column prop="class" label="Класс" width="150" />
-      <el-table-column prop="className" label="Название класса" width="150" />
-      <el-table-column prop="classRange" label="Диапазон класса" width="150" />
-      <el-table-column prop="classComment" label="Комментарий к классу" width="150" />
-      <el-table-column prop="groupName" label="Название группы" width="150" />
-      <el-table-column prop="groupRange" label="Диапазон группы" width="150" />
-      <el-table-column prop="groupComment" label="Комментарий к группе" width="150" />
-      <el-table-column prop="subGroupName" label="Название подгруппы" width="150" />
-      <el-table-column prop="subGroupRange" label="Диапазон подгруппы" width="150" />
-      <el-table-column prop="subGroupComment" label="Комментарий к подгруппе" width="150" />
-      <el-table-column prop="subSubGroupName" label="Название подподгруппы" width="150" />
-      <el-table-column prop="subSubGroupRange" label="Диапазон подподгруппы" width="150" />
-      <el-table-column prop="subSubGroupComment" label="Комментарий к подподгруппе" width="150" />
-      <el-table-column prop="diagnosisName" label="Название диагноза" width="150" />
-      <el-table-column prop="diagnosisComment" label="Комментарий к диагнозу" width="150" />
-      <el-table-column prop="subDiagnosisName" label="Название уточнённого диагноза" width="150" />
-      <el-table-column prop="subDiagnosisComment" label="Комментарий к уточнённому диагнозу" width="150" />
-      <el-table-column prop="subDiagnosisComment" label="Комментарий к уточнённому диагнозу" width="150" />
-      <el-table-column fixed="right" label="Добавить комментарии" width="120">
-        <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Добавить комментарий</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog v-model="modalVisible" width="50%" :close-on-click-modal="false">
-      <ModalForm :mkbItem="mkbItem" :modalTitle="modalTitle" @close="close" />
-    </el-dialog>
-  </div>
+  <ListHead :title="title" />
+  <el-tree :data="mkbClasses" v-if="mount" node-key="id" :load="load" lazy accordion allow-drop="true`" :props="{ isLeaf: 'leaf' }">
+    <template #default="{ node, data }">
+      <span accordion class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
+        <span style="margin-bottom: 10px" v-if="node.level === 1 && !data.code">
+          <span style="font-weight: bold">{{ data.number }} </span> <span>{{ data.name }}</span>
+        </span>
+        <span v-else-if="node.level === 1 && data.code">
+          <span style="font-weight: bold">{{ data.code }}</span>
+          <span>data.name</span>
+        </span>
+        <span v-else-if="node.level === 2 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+        <span v-else-if="node.level === 2 && data.code">{{ `${data.code} ${data.name}` }}</span>
+        <span v-else-if="node.level === 3 && data.subCode">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
+        <span v-else-if="node.level === 3 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+        <span v-else-if="node.level === 3 && data.code">{{ `${data.code} ${data.name}` }}</span>
+        <span v-else-if="node.level === 4 && data.subCode >= 0">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
+        <span v-else-if="node.level === 4 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+        <span v-else-if="node.level === 4 && data.code">{{ `${data.code} ${data.name}` }}</span>
+        <span v-else-if="node.level === 5">
+          {{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}
+        </span>
+      </span>
+    </template>
+  </el-tree>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
-import IMkb from '@/interfaces/mkb/IMkb';
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
 
 import ListHead from '@/components/ListHead.vue';
-import ModalForm from './ModalForm.vue';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import MkbIdSet from '@/classes/mkb/MkbIdSet';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 
 @Options({
   components: {
-    ModalForm,
     ListHead,
   },
   computed: {
-    ...mapState('mkb', ['mkb']),
+    ...mapState('mkb', ['mkbClasses']),
   },
   methods: {
     ...mapActions({
-      getAll: 'mkb/getAll',
+      getAllMkbClasses: 'mkb/getAllMkbClasses',
+      getGroupById: 'mkb/getGroupById',
+      getSubGroupById: 'mkb/getSubGroupById',
+      getSubSubGroupById: 'mkb/getSubSubGroupById',
+      getSubDiagnosisByDiagnosisId: 'mkb/getSubDiagnosisByDiagnosisId',
     }),
   },
 })
 export default class MkbList extends Vue {
-  getAll!: () => Promise<void>;
-  mkb!: IMkb[];
-  mkb1!: IMkb[];
-  mkbItem: IMkb = {
-    id: '',
-    class: '',
-    className: '',
-    classRange: '',
-    classComment: '',
-    groupName: '',
-    groupRange: '',
-    groupComment: '',
-    subGroupName: '',
-    subGroupRange: '',
-    subGroupComment: '',
-    subSubGroupName: '',
-    subSubGroupRange: '',
-    subSubGroupComment: '',
-    diagnosisName: '',
-    diagnosisComment: '',
-    subDiagnosisName: '',
-    subDiagnosisComment: '',
-  };
+  getAllMkbClasses!: () => Promise<void>;
+  getGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
+  getSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
+  getSubSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
+  getSubDiagnosisByDiagnosisId!: (mkbIdSet: MkbIdSet) => Promise<void>;
 
   mount = false;
-  modalTitle = '';
-  isCreateForm = false;
-  modalVisible = false;
-  title = 'МКБ';
+  title = 'МКБ10';
+  mkbClasses: IMkbClass[] = [];
 
   async mounted(): Promise<void> {
-    await this.getAll();
-    this.mkb1 = this.mkb.slice(1, 100);
+    await this.getAllMkbClasses();
+    this.mkbClasses = [];
+    await this.getAllMkbClasses();
+    this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     this.mount = true;
   }
 
-  edit(id: number): void {
-    this.mkbItem = this.$store.getters['mkb/getById'](id);
-    this.modalTitle = 'Добавить комментарий';
-    this.modalVisible = true;
+  async load(node: any, resolve: any): Promise<void> {
+    const mkbIdSet = new MkbIdSet();
+    if (node.level === 0) {
+      return resolve(this.mkbClasses);
+    }
+
+    if (node.level === 1) {
+      mkbIdSet.classId = node.data.id;
+      return resolve(await this.getNodeOne(node, mkbIdSet));
+    }
+
+    if (node.level === 2) {
+      mkbIdSet.classId = node.parent.data.id;
+      mkbIdSet.groupId = node.data.id;
+      mkbIdSet.diagnosisId = node.data.id;
+      return resolve(await this.getNodeTwo(node, mkbIdSet));
+    }
+
+    if (node.level === 3) {
+      mkbIdSet.classId = node.parent.parent.data.id;
+      mkbIdSet.groupId = node.parent.data.id;
+      mkbIdSet.subGroupId = node.data.id;
+      mkbIdSet.diagnosisId = node.data.id;
+      return resolve(await this.getNodeThree(node, mkbIdSet));
+    }
+
+    if (node.level === 4) {
+      mkbIdSet.classId = node.parent.parent.parent.data.id;
+      mkbIdSet.groupId = node.parent.parent.data.id;
+      mkbIdSet.subGroupId = node.parent.data.id;
+      mkbIdSet.diagnosisId = node.data.id;
+      return resolve(await this.getNodeFour(node, mkbIdSet));
+    }
+    return resolve([]);
   }
 
-  close(): void {
-    this.modalVisible = false;
+  async getNodeOne(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
+    await this.getGroupById(mkbIdSet);
+    this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
+    const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+    return classN ? [...classN.mkbGroups, ...classN.mkbDiagnosis] : undefined;
+  }
+
+  async getNodeTwo(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
+    await this.getSubGroupById(mkbIdSet);
+    this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
+    const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+    if (classN && classN.mkbGroups) {
+      const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
+      if (group && group.mkbSubGroups && group.mkbDiagnosis) {
+        return group ? [...group.mkbDiagnosis, ...group.mkbSubGroups] : [];
+      }
+    }
+
+    return undefined;
+  }
+
+  async getNodeThree(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
+    if (!node.data.code) {
+      await this.getSubSubGroupById(mkbIdSet);
+      this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
+      const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+      if (classN && classN.mkbGroups) {
+        const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
+        if (group && group.mkbSubGroups) {
+          const subGroup = group.mkbSubGroups.find((m: IMkbSubGroup) => m.id === mkbIdSet.subGroupId);
+          if (subGroup && subGroup.mkbSubSubGroups && subGroup.mkbDiagnosis) {
+            return subGroup ? [...subGroup.mkbDiagnosis, ...subGroup.mkbSubSubGroups] : undefined;
+          }
+        }
+      }
+    }
+    await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
+    return this.findSubDiagnosisFromTree(mkbIdSet);
+  }
+
+  async getNodeFour(node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> {
+    await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
+    this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
+    return this.findSubDiagnosisFromTree(mkbIdSet);
+  }
+
+  findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] | undefined {
+    let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
+    const mkbClass = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+    if (!mkbClass) {
+      return undefined;
+    }
+    diagnosis = mkbClass ? mkbClass.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
+    if (diagnosis && diagnosis.mkbSubDiagnosis) {
+      return diagnosis.mkbSubDiagnosis;
+    }
+
+    const mkbGroup = mkbClass.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
+    diagnosis = mkbGroup ? mkbGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
+    if (diagnosis && diagnosis.mkbSubDiagnosis) {
+      return diagnosis.mkbSubDiagnosis;
+    }
+    if (!mkbGroup) {
+      return undefined;
+    }
+    const subGroup = mkbGroup.mkbSubGroups.find((m: IMkbSubGroup) => m.id === mkbIdSet.subGroupId);
+    diagnosis = subGroup ? subGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
+    if (diagnosis && diagnosis.mkbSubDiagnosis) {
+      return diagnosis.mkbSubDiagnosis;
+    }
+    return undefined;
   }
 }
 </script>

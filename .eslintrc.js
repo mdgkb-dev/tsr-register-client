@@ -12,7 +12,7 @@ module.exports = {
     'import/no-cycle': 'off',
     semi: 'off',
     '@typescript-eslint/semi': ['error'],
-    'max-len': ['error', { code: 160 }],
+    'max-len': ['error', { code: 170 }],
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
