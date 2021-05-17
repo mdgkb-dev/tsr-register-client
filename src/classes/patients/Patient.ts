@@ -31,7 +31,7 @@ export default class Patient implements IPatient {
     }
     if (patient.representativeToPatient) {
       this.representativeToPatient = patient.representativeToPatient.map(
-        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient)
+        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient),
       );
     }
     if (patient.disabilities) {
@@ -44,9 +44,8 @@ export default class Patient implements IPatient {
 
     const anthropometryNames: (string | undefined)[] = [...new Set(this.anthropometryData.map((data: IAnthropometryData) => data.anthropometry?.name))];
     anthropometryNames.forEach((name: string | undefined) => {
-      const lastAnthropometry = this.anthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => {
-        return item.anthropometry?.name === name ?? item.date > mostRecent.date ? item : mostRecent;
-      });
+      const lastAnthropometry = this.anthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (
+        item.anthropometry?.name === name ?? item.date > mostRecent.date ? item : mostRecent));
       total = `${total} ${lastAnthropometry.getFullInfo()} \n`;
     });
     return total;
@@ -57,13 +56,10 @@ export default class Patient implements IPatient {
   }
 
   getLastAnthropometryValue(name: string): number {
-    const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => {
-      return data.anthropometry?.name.toLowerCase() === name.toLowerCase();
-    });
+    const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
     if (!currentAnthropometryData.length) return 0;
-    const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => {
-      return item.date > mostRecent.date ? item : mostRecent;
-    });
+    const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (
+      item.date > mostRecent.date ? item : mostRecent));
     return lastAnthropometry.value;
   }
 
