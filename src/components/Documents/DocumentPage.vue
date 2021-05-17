@@ -1,7 +1,7 @@
 <template>
   <h2>{{ title }}</h2>
-  <el-form ref="form" :model="document" label-width="10vw" label-position="right" v-if="mount">
-    <el-form-item label="Название документа">
+  <el-form ref="form" :model="document" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
+    <el-form-item label="Название документа" prop="name">
       <el-input v-model="document.name"></el-input>
     </el-form-item>
 
@@ -51,6 +51,10 @@ import { mapActions, mapGetters } from 'vuex';
   },
 })
 export default class DocumentPage extends Vue {
+  $refs!: {
+    form: any;
+  };
+
   documentGet!: (documentId: string) => Promise<void>;
 
   isEditMode!: boolean;
@@ -64,7 +68,31 @@ export default class DocumentPage extends Vue {
     { label: 'Дата', value: 'date' },
   ];
 
+  rules = {
+    name: [
+      {
+        required: true,
+        message: 'Пожалуйста, введите название документа',
+        trigger: 'blur',
+      },
+    ],
+  };
+
   onSubmit(): void {
+    let validationResult = true;
+
+    this.$refs.form.validate((valid: boolean) => {
+      if (!valid) {
+        validationResult = false;
+        return false;
+      }
+      return true;
+    });
+
+    if (!validationResult) {
+      return;
+    }
+
     if (this.isEditMode) {
       this.$store.dispatch('documents/edit', this.document);
     } else {

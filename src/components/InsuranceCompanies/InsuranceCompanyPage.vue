@@ -1,6 +1,6 @@
 <template>
-  <el-form ref="form" :model="insuranceCompany" @submit.prevent="submitForm">
-    <el-form-item label="Название компании" label-width="20vw">
+  <el-form ref="form" :model="insuranceCompany" @submit.prevent="submitForm" :rules="rules">
+    <el-form-item label="Название компании" label-width="20vw" prop="name">
       <el-input v-model="insuranceCompany.name"></el-input>
     </el-form-item>
 
@@ -28,11 +28,25 @@ import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
   },
 })
 export default class InsuranceCompanyPage extends Vue {
+  $refs!: {
+    form: any;
+  };
+
   insuranceCompanyGet!: (insuranceCompanyId: string) => Promise<void>;
 
   isEditMode!: boolean;
   insuranceCompany: IInsuranceCompany = new InsuranceCompany();
   title = '';
+
+  rules = {
+    name: [
+      {
+        required: true,
+        message: 'Пожалуйста, введите название компании',
+        trigger: 'blur',
+      },
+    ],
+  };
 
   async created(): Promise<void> {
     if (!this.$route.params.insuranceCompanyId) {
@@ -47,6 +61,20 @@ export default class InsuranceCompanyPage extends Vue {
   }
 
   submitForm(): void {
+    let validationResult = true;
+
+    this.$refs.form.validate((valid: boolean) => {
+      if (!valid) {
+        validationResult = false;
+        return false;
+      }
+      return true;
+    });
+
+    if (!validationResult) {
+      return;
+    }
+
     if (this.isEditMode) {
       this.$store.dispatch('insuranceCompanies/edit', this.insuranceCompany);
     } else {

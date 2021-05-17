@@ -160,13 +160,37 @@ export default class ModalForm extends Vue {
   title = '';
   error = '';
 
+  validatePhone = (rule: any, value: any, callback: any): void => {
+    const phoneRegExp = /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
+    if (phoneRegExp.test(value) || !value) {
+      callback();
+    } else {
+      callback(new Error('Пожалуйста, введите корректный номер телефона'));
+    }
+  };
+
+  validateEmail = (rule: any, value: any, callback: any): void => {
+    const emailRegExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (emailRegExp.test(value) || !value) {
+      callback();
+    } else {
+      callback(new Error('Пожалуйста, введите корректный email'));
+    }
+  };
+
   rules = {
     human: {
-      surname: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      name: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      patronymic: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      isMale: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
-      dateBirth: [{ required: true, message: 'Необходимое поле', trigger: 'blur' }],
+      surname: [{ required: true, message: 'Пожалуйста, укажите фамилию', trigger: 'blur' }],
+      name: [{ required: true, message: 'Пожалуйста, укажите имя', trigger: 'blur' }],
+      patronymic: [{ required: true, message: 'Пожалуйста, укажите отчество', trigger: 'blur' }],
+      isMale: [{ required: true, message: 'Пожалуйста, выберите пол', trigger: 'change' }],
+      dateBirth: [{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }],
+      addressRegistration: [{ required: true, message: 'Пожалуйста, укажите адрес регистрации', trigger: 'blur' }],
+      addressResidential: [{ required: true, message: 'Пожалуйста, укажите адрес проживания', trigger: 'blur' }],
+      contact: {
+        phone: [{ validator: this.validatePhone, trigger: 'blur' }],
+        email: [{ validator: this.validateEmail, trigger: 'blur' }],
+      },
     },
   };
 
@@ -254,6 +278,20 @@ export default class ModalForm extends Vue {
 
   // Methods.
   async submitForm(): Promise<void> {
+    let validationResult = true;
+
+    this.$refs.form.validate((valid: boolean) => {
+      if (!valid) {
+        validationResult = false;
+        return false;
+      }
+      return true;
+    });
+
+    if (!validationResult) {
+      return;
+    }
+
     for (const document in this.documentsScans) {
       if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
         for (const scan of this.documentsScans[document]) {
