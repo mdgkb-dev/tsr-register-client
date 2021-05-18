@@ -41,9 +41,9 @@
         </el-table-column>
         <el-table-column width="150" label="Диагнозы">
           <template #default="scope">
-            <div v-for="mkbToPatient in scope.row.mkbToPatient" :key="mkbToPatient">
-              <el-tooltip class="item" effect="dark" :content="mkbToPatient.mkb ? mkbToPatient.mkb.diagnosisName : ''" placement="top-end">
-                <el-tag size="small">{{ mkbToPatient.mkb ? mkbToPatient.mkb.diagnosisName.slice(0, 3) : '' }}</el-tag>
+            <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
+              <el-tooltip class="item" effect="dark" :content="diagnosis.mkbDiagnosis.name" placement="top-end">
+                <el-tag size="small">{{ diagnosis.mkbDiagnosis.code }}</el-tag>
               </el-tooltip>
             </div>
           </template>

@@ -6,6 +6,10 @@
           <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
         </div>
         <h1 class="semi-bold-header">Диагноз</h1>
+        <div v-for="item in patient.patientDiagnosis" :key="item.id">
+          <span class="underline-label" v-html="item.mkbDiagnosis.code"></span>
+          <PopoverInfo :content="item.mkbDiagnosis.name" />
+        </div>
         <el-divider></el-divider>
 
         <h1 class="semi-bold-header">Инвалидность</h1>
@@ -52,10 +56,14 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 
+import PopoverInfo from '@/components/PopoverInfo.vue';
 import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({
   props: ['patient'],
+  components: {
+    PopoverInfo,
+  },
 })
 export default class PatientPageInfo extends Vue {
   // Types.
