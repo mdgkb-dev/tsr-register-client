@@ -1,25 +1,32 @@
 <template>
   <div class="form-under-collapse">
-    <el-form-item>
-      <el-button @click="addInsurance">Добавить страховку</el-button>
-    </el-form-item>
-    <el-form-item v-for="(item, index) in insuranceCompanies" :key="index" v-model="insuranceCompanies" label="Компания / Номер">
-      <el-form-item>
-        <el-row>
-          <el-col :span="8" style="margin-right: 10px">
+    <el-button @click="addInsurance" style="margin-bottom: 20px">Добавить страховку</el-button>
+    <el-row style="font-weight: bold">
+      <el-col :span="8"><el-form-item>Компания</el-form-item></el-col>
+      <el-col :span="12"><el-form-item>Номер</el-form-item></el-col>
+      <el-col :span="3"><el-form-item></el-form-item></el-col>
+    </el-row>
+    <div v-for="(item, index) in insuranceCompanies" :key="index">
+      <el-row>
+        <el-col :span="8">
+          <el-form-item>
             <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[index].insuranceCompanyId">
               <el-option v-for="item in inInsuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
-          </el-col>
-          <el-col :span="12">
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item>
             <el-input label="Введите номер страховки" v-model="insuranceCompanies[index].number"></el-input>
-          </el-col>
-          <el-col :span="3" style="margin-left: 10px">
+          </el-form-item>
+        </el-col>
+        <el-col :span="3" style="margin-left: 10px">
+          <el-form-item>
             <el-button @click.prevent="removeInsurance(item)" round>Удалить страховку</el-button>
-          </el-col>
-        </el-row>
-      </el-form-item>
-    </el-form-item>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 

@@ -13,7 +13,7 @@
         <el-divider></el-divider>
 
         <h1 class="semi-bold-header">Инвалидность</h1>
-        <div v-if="patient.getActuallyDisability()">До {{ patient.getActuallyDisability().period.dateEnd }}</div>
+        <div v-if="patient.getActuallyDisability()">До {{ $dateFormatRu(patient.getActuallyDisability().period.dateEnd) }}</div>
         <div v-else>Не установлена</div>
       </el-col>
       <el-col :span="15" :offset="1">
@@ -21,7 +21,7 @@
         <h2 v-html="patient.human.getFullName()" style="margin-bottom: 60px"></h2>
         <el-row>
           <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
-          <el-col :span="12"> {{ patient.human.dateBirth }}</el-col>
+          <el-col :span="12"> {{ $dateFormatRu(patient.human.dateBirth) }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
@@ -70,7 +70,5 @@ export default class PatientPageInfo extends Vue {
   patient!: IPatient;
   checked = true;
   notChecked = false;
-
-  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 }
 </script>

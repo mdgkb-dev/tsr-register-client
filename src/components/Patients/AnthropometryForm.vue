@@ -1,22 +1,34 @@
 <template>
-  <el-form-item v-for="param in inAnthropometry" :key="param">
-    <el-form-item :label="param.name">
-      <el-button @click="add(param.id)">Добавить изменение</el-button>
-    </el-form-item>
+  <div v-for="param in inAnthropometry" :key="param" class="form-under-collapse">
+    <h3 v-html="param.name"></h3>
+    <el-button @click="add(param.id)" style="margin-bottom: 20px">Добавить изменение</el-button>
+    <el-row style="font-weight: bold">
+      <el-col :span="8"><el-form-item>Дата</el-form-item></el-col>
+      <el-col :span="8"><el-form-item>Значение</el-form-item></el-col>
+      <el-col :span="8"><el-form-item></el-form-item></el-col>
+    </el-row>
     <template v-for="(item, i) in anthropometryData">
       <div v-if="item.anthropometryId === param.id" :key="item">
-        <el-form-item label="Дата" label-width="12vw">
-          <el-date-picker type="date" placeholder="Дата изменения" v-model="anthropometryData[i].date" style="width: 10vw"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="Значение" label-width="12vw">
-          <el-input-number v-model="anthropometryData[i].value"></el-input-number>
-        </el-form-item>
-        <el-form-item label-width="12vw">
-          <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item>
+              <el-date-picker format="DD.MM.YYYY" type="date" placeholder="Дата изменения" v-model="anthropometryData[i].date" style="width: 10vw"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item>
+              <el-input-number controls-position="right" v-model="anthropometryData[i].value"> </el-input-number>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label-width="12vw">
+              <el-button @click.prevent="remove(item)">Удалить изменение</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </div>
     </template>
-  </el-form-item>
+  </div>
 </template>
 
 <script lang="ts">

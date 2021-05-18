@@ -1,18 +1,39 @@
 <template>
-  <el-form-item>
-    <el-form-item v-for="(item, index) in patientDiagnosis" :key="index" v-model="patientDiagnosis">
-      <el-autocomplete :fetch-suggestions="findDiagnosis" v-model="queryStrings[index]" placeholder="Выберите диагноз" @select="handleSelect($event, index)" />
-      <el-select v-if="patientDiagnosis[index].mkbDiagnosisId" v-model="patientDiagnosis[index].mkbSubDiagnosisId" placeholder="Select">
-        <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />
-      </el-select>
-      <el-checkbox v-model="patientDiagnosis[index].primary">Первичный</el-checkbox>
-      <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
-    </el-form-item>
-  </el-form-item>
-
-  <el-form-item>
-    <el-button @click="addDiagnosis">Добавить диагноз</el-button>
-  </el-form-item>
+  <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+  <div class="form-under-collapse">
+    <el-row style="font-weight: bold">
+      <el-col :span="6"><el-form-item>Основной диагноз</el-form-item></el-col>
+      <el-col :span="6"><el-form-item>Уточнённый диагноз</el-form-item></el-col>
+      <el-col :span="6"><el-form-item>Первичность</el-form-item></el-col>
+      <el-col :span="6"><el-form-item></el-form-item></el-col>
+    </el-row>
+    <div v-for="(item, index) in patientDiagnosis" :key="index">
+      <el-row>
+        <el-col :span="6">
+          <el-form-item>
+            <el-autocomplete :fetch-suggestions="findDiagnosis" v-model="queryStrings[index]" placeholder="Выберите диагноз" @select="handleSelect($event, index)" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item>
+            <el-select v-if="patientDiagnosis[index].mkbDiagnosisId" v-model="patientDiagnosis[index].mkbSubDiagnosisId" placeholder="Select">
+              <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item>
+            <el-checkbox v-model="patientDiagnosis[index].primary">Первичный</el-checkbox>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item>
+            <el-button @click.prevent="removeDiagnosis(item)">Удалить диагноз</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
