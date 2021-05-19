@@ -119,7 +119,7 @@ export default {
     },
     getSubDiagnosisByDiagnosisId: async (context: any, idSet: MkbIdSet): Promise<void> => {
       const res: MkbComposition = new MkbComposition();
-      res.mkbSubDiagnosisAnswer = await httpClient.get(`diagnosis/${idSet.diagnosisId}`);
+      res.mkbSubDiagnosisAnswer.mkbSubDiagnosis = await httpClient.get(`diagnosis/${idSet.diagnosisId}`);
       res.mkbIdSet = idSet;
       context.commit('setSubDiagnosis', res);
     },
