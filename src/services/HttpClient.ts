@@ -29,6 +29,7 @@ export default class HttpClient {
   }
 
   async put(payload: any, params?: any): Promise<any> {
+    this.toUtc(payload);
     const res = await fetch(this.baseUrl(params), {
       method: 'PUT',
       headers: this.headers,
