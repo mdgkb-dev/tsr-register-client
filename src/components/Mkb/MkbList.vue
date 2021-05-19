@@ -78,9 +78,7 @@ export default class MkbList extends Vue {
 
   async load(node: any, resolve: any): Promise<void> {
     const mkbIdSet = new MkbIdSet();
-    if (node.level === 0) {
-      return resolve(this.mkbClasses);
-    }
+    if (node.level === 0) return resolve(this.mkbClasses);
 
     if (node.level === 1) {
       mkbIdSet.classId = node.data.id;
@@ -161,27 +159,21 @@ export default class MkbList extends Vue {
   findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] | undefined {
     let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
     const mkbClass = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
-    if (!mkbClass) {
-      return undefined;
-    }
+
+    if (!mkbClass) return undefined;
     diagnosis = mkbClass ? mkbClass.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-    if (diagnosis && diagnosis.mkbSubDiagnosis) {
-      return diagnosis.mkbSubDiagnosis;
-    }
+    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
 
     const mkbGroup = mkbClass.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
     diagnosis = mkbGroup ? mkbGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-    if (diagnosis && diagnosis.mkbSubDiagnosis) {
-      return diagnosis.mkbSubDiagnosis;
-    }
-    if (!mkbGroup) {
-      return undefined;
-    }
+
+    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
+    if (!mkbGroup) return undefined;
+
     const subGroup = mkbGroup.mkbSubGroups.find((m: IMkbSubGroup) => m.id === mkbIdSet.subGroupId);
     diagnosis = subGroup ? subGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-    if (diagnosis && diagnosis.mkbSubDiagnosis) {
-      return diagnosis.mkbSubDiagnosis;
-    }
+
+    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
     return undefined;
   }
 }

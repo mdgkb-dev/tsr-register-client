@@ -54,9 +54,7 @@ export default class HttpClient {
 
   private toUtc(payload: Record<string, any>): Record<string, any> {
     const obj = payload;
-    if (!obj) {
-      return obj;
-    }
+    if (!obj) return obj;
     for (const item of Object.keys(obj)) {
       if (obj[item] && typeof obj[item].getMonth !== 'function' && typeof obj[item] === 'object') {
         this.toUtc(obj[item]);
