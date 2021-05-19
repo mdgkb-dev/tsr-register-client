@@ -1,7 +1,7 @@
 <template>
   <div v-for="param in inAnthropometry" :key="param" class="form-under-collapse">
     <h3 v-html="param.name"></h3>
-    <el-button @click="add(param.id)" style="margin-bottom: 20px">Добавить изменение</el-button>
+    <el-button @click="add(param)" style="margin-bottom: 20px">Добавить изменение</el-button>
     <el-row style="font-weight: bold">
       <el-col :span="8"><el-form-item>Дата</el-form-item></el-col>
       <el-col :span="8"><el-form-item>Значение</el-form-item></el-col>
@@ -48,10 +48,12 @@ export default class AnthropometryForm extends Vue {
   // Local state.
   anthropometryData = this.inAnthropometryData;
 
-  add(paramId: string): void {
+  add(param: IAnthropometry): void {
     const data = new AnthropometryData();
-    data.anthropometryId = paramId;
+    data.anthropometryId = param.id;
+    data.anthropometry = param;
     this.anthropometryData.push(data);
+    this.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
   remove(item: any): void {

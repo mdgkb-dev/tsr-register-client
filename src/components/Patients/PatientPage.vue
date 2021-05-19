@@ -91,6 +91,7 @@ import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import Patient from '@/classes/patients/Patient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import Contact from '@/classes/humans/Contact';
+import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 
 @Options({
   components: {
@@ -121,6 +122,7 @@ import Contact from '@/classes/humans/Contact';
   },
 })
 export default class ModalForm extends Vue {
+  // Types.
   $refs!: {
     form: any;
     message: any;
@@ -130,7 +132,6 @@ export default class ModalForm extends Vue {
     error: any;
   };
 
-  // Types.
   anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
   isEditMode!: boolean;
@@ -200,6 +201,7 @@ export default class ModalForm extends Vue {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.documentsGetAll();
+    this.patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
     this.insuranceCompaniesOptions = [];
 
     for (const disability of this.patient.disabilities) {

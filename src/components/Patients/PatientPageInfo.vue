@@ -36,7 +36,7 @@
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" style="color: #a1a8bd">Вес - Рост</el-col>
-          <el-col :span="12"> {{ patient.getAnthropometryDataFull() }}</el-col>
+          <el-col :span="12"> {{ getAnthropometryDataFull }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
@@ -57,6 +57,7 @@
 import { Vue, Options } from 'vue-class-component';
 
 import PopoverInfo from '@/components/PopoverInfo.vue';
+import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({
@@ -70,5 +71,19 @@ export default class PatientPageInfo extends Vue {
   patient!: IPatient;
   checked = true;
   notChecked = false;
+
+  get getAnthropometryDataFull(): string {
+    let total = '';
+    // const anthropometryNames: (string | undefined)[] = [...new Set(this.anthropometryData.map((data: IAnthropometryData) => data.anthropometry?.name))];
+    const anthropometryNames: string[] = ['Вес', 'Рост'];
+    anthropometryNames.forEach((name: string) => {
+      const currentAnthropometryData = this.patient.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
+      if (currentAnthropometryData.length) {
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+        total = `${total} ${lastAnthropometry.getFullInfo()} \n`;
+      }
+    });
+    return total;
+  }
 }
 </script>

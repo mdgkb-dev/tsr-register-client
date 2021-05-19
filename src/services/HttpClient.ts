@@ -30,6 +30,7 @@ export default class HttpClient {
   }
 
   async put(payload: any, params?: any): Promise<any> {
+    this.toUtc(payload);
     const res = await fetch(this.baseUrl(params), {
       method: 'PUT',
       headers: this.headers,
@@ -53,23 +54,23 @@ export default class HttpClient {
     return `${process.env.VUE_APP_BASE_URL + this.api}/${params}`;
   }
 
-  private toUtc(payload: Record<string, any>) {
-    if (!payload) {
-      return;
+  private toUtc(payload: Record<string, any>): Record<string, any> {
+    const obj = payload;
+    if (!obj) {
+      return obj;
     }
-    for (let item of Object.values(payload)) {
-      if (item && typeof item.getMonth !== 'function' && typeof item === 'object') {
-        console.log(item);
-        this.toUtc(item);
+    for (const item of Object.keys(obj)) {
+      if (obj[item] && typeof obj[item].getMonth !== 'function' && typeof obj[item] === 'object') {
+        this.toUtc(obj[item]);
       }
-      if (item && typeof item.getMonth === 'function') {
-        console.log('error1');
-        item = moment(item).add(+moment().utcOffset(), 'm');
-        item = moment
-          .parseZone(item)
+      if (obj[item] && typeof obj[item].getMonth === 'function') {
+        obj[item] = moment(obj[item]).add(+moment().utcOffset(), 'm');
+        obj[item] = obj[item]
+          .parseZone()
           .utc()
           .format();
       }
     }
+    return obj;
   }
 }
