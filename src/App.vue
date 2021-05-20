@@ -18,7 +18,11 @@ import LoginLayout from './views/Login/LoginLayout.vue';
 })
 export default class App extends Vue {
   async mounted(): Promise<void> {
-    await this.$store.dispatch('auth/setAuthorization');
+    try {
+      await this.$store.dispatch('auth/setAuthorization');
+    } catch (e) {
+      console.log(e);
+    }
     if (this.$store.getters['auth/isAuthorized']) {
       this.$store.commit('setLayout', 'main-layout');
     }

@@ -13,7 +13,6 @@ app.config.globalProperties.$dateFormatRu = fillDateFormat;
 app.use(store);
 app.use(router);
 app.use(ElementPlus, { locale, ElMessage });
-app.use(ElMessage);
 
 router.isReady().then(() => {
   app.mount('#app');
