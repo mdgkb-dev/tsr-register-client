@@ -1,8 +1,8 @@
 <template>
   <ListHead :title="title" />
-  <el-tree :data="mkbClasses" v-if="mount" node-key="id" :load="load" lazy accordion allow-drop="true`" :props="{ isLeaf: 'leaf' }">
+  <el-tree :data="mkbClasses" node-key="id" :load="load" lazy accordion :props="{ isLeaf: 'leaf' }">
     <template #default="{ node, data }">
-      <span accordion class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
+      <span class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
         <span style="margin-bottom: 10px" v-if="node.level === 1 && !data.code">
           <span style="font-weight: bold">{{ data.number }} </span> <span>{{ data.name }}</span>
         </span>

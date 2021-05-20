@@ -2,7 +2,7 @@
   <el-aside width="220px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
     <el-row style="line-height: 100px; margin-top: 50px">
       <el-col>
-        <el-avatar :size="large" :src="circleUrl"></el-avatar>
+        <el-avatar size="large" :src="circleUrl"></el-avatar>
       </el-col>
     </el-row>
     <el-row style="line-height: 10px">
@@ -15,7 +15,7 @@
       <el-menu-item-group :router="true">
         <el-menu :router="true" :default-openeds="[0]">
           <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-            <el-submenu :index="i">
+            <el-submenu :index="i.toString()">
               <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
               <div v-for="(item, j) in menu.links" v-bind:key="item.title">
                 <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>

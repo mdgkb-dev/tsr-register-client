@@ -109,8 +109,10 @@ export default class PatientsList extends Vue {
       this.$message.error(e.toString());
       return;
     }
-    this.filterName = this.patients.map((patient: IPatient) => ({ text: patient.human.getFullName(), value: patient.human.getFullName() }));
-    this.filterDate = this.patients.map((patient: IPatient) => ({ text: patient.human.dateBirth, value: patient.human.dateBirth }));
+    if (this.patients) {
+      this.filterName = this.patients.map((patient: IPatient) => ({ text: patient.human.getFullName(), value: patient.human.getFullName() }));
+      this.filterDate = this.patients.map((patient: IPatient) => ({ text: patient.human.dateBirth, value: patient.human.dateBirth }));
+    }
 
     this.mount = true;
   }

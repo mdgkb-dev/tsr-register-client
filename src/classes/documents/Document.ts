@@ -16,6 +16,5 @@ export default class Document implements IDocument {
     if (document.documentFields) {
       this.documentFields = document.documentFields.map((d) => new DocumentField(d));
     }
-    console.log(this);
   }
 }

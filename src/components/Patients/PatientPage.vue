@@ -199,45 +199,52 @@ export default class ModalForm extends Vue {
     await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.documentsGetAll();
-    this.patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    if (this.patient.anthropometryData) {
+      this.patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    }
     this.insuranceCompaniesOptions = [];
-
-    for (const disability of this.patient.disabilities) {
-      if (!disability.edvs) {
-        disability.edvs = [];
+    if (this.patient.disabilities) {
+      for (const disability of this.patient.disabilities) {
+        if (!disability.edvs) {
+          disability.edvs = [];
+        }
       }
     }
-    for (const item of this.insuranceCompanies) {
-      this.insuranceCompaniesOptions.push({
-        label: `${item.name}`,
-        value: `${item.id}`,
-      });
+    if (this.insuranceCompanies) {
+      for (const item of this.insuranceCompanies) {
+        this.insuranceCompaniesOptions.push({
+          label: `${item.name}`,
+          value: `${item.id}`,
+        });
+      }
     }
 
     let sum = 0;
     this.documentsScans = {};
     this.documentsValues = {};
-    for (const document of this.documents) {
-      if (document.documentFields) {
-        sum += document.documentFields.length;
-      }
-      this.offset.push(sum);
+    if (this.documents) {
+      for (const document of this.documents) {
+        if (document.documentFields) {
+          sum += document.documentFields.length;
+        }
+        this.offset.push(sum);
 
-      this.documentsScans[document.id as string] = [];
-      this.documentsValues[document.id as string] = {};
-      if (document.documentFields) {
-        for (const field of document.documentFields) {
-          let item = this.patient.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
+        this.documentsScans[document.id as string] = [];
+        this.documentsValues[document.id as string] = {};
+        if (document.documentFields) {
+          for (const field of document.documentFields) {
+            let item = this.patient.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
 
-          if (item === undefined) {
-            item = {
-              id: field.id,
-              valueString: undefined,
-              valueNumber: 0,
-              documentFieldId: field.id,
-            };
+            if (item === undefined) {
+              item = {
+                id: field.id,
+                valueString: undefined,
+                valueNumber: 0,
+                documentFieldId: field.id,
+              };
+            }
+            this.documentsValues[document.id as string][field.id as string] = item;
           }
-          this.documentsValues[document.id as string][field.id as string] = item;
         }
       }
     }
