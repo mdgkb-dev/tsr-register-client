@@ -46,6 +46,23 @@ export default class Bmi {
     return '';
   };
 
+  static getWeightClass = (bmi: number): string => {
+    switch (true) {
+      case bmi < 18.5:
+        return 'недостаточность веса';
+      case bmi < 25:
+        return 'нормальный вес';
+      case bmi < 30:
+        return 'излишний вес';
+      case bmi < 35:
+        return 'ожирение класс I';
+      case bmi < 40:
+        return 'ожирение класс II';
+      default:
+        return 'ожирение класс III';
+    }
+  };
+
   // findDegree(bmi: number, bmiMonth: IBmiMonth) {
   //   const group = this.calculateGroup(bmi, bmiMonth);
   // }
