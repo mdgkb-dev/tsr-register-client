@@ -112,6 +112,15 @@ export default class DisabilityForm extends Vue {
       edvs.splice(index, 1);
     }
   };
+
+  validateDisabilityDates = (rule: any, value: any, callback: any): void => {
+    this.disabilities.forEach((disability: IDisability) => {
+      if (disability.period && disability.period.dateStart && disability.period.dateEnd && disability.period.dateStart > disability.period?.dateEnd) {
+        callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
+      }
+    });
+    callback();
+  };
 }
 </script>
 <style>

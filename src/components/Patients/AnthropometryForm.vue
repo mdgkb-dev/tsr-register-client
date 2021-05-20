@@ -16,8 +16,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item>
-              <el-input-number controls-position="right" v-model="anthropometryData[i].value"> </el-input-number>
+            <el-form-item :prop="'anthropometryData.' + i + '.value'" :rules="[{ type: 'number', min: 3, message: 'age must be a number' }]">
+              <el-input-number controls-position="right" v-model.number="anthropometryData[i].value"> </el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="8">

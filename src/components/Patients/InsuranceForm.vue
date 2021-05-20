@@ -6,18 +6,24 @@
       <el-col :span="12"><el-form-item>Номер</el-form-item></el-col>
       <el-col :span="3"><el-form-item></el-form-item></el-col>
     </el-row>
-    <div v-for="(item, index) in insuranceCompanies" :key="index">
+    <div v-for="(item, i) in insuranceCompanies" :key="i">
       <el-row>
         <el-col :span="8">
-          <el-form-item>
-            <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[index].insuranceCompanyId">
+          <el-form-item
+            :prop="'human.insuranceCompanyToHuman.' + i + '.insuranceCompanyId'"
+            :rules="[{ required: true, message: 'Пожалуйста, выберете страховую компанию' }]"
+          >
+            <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[i].insuranceCompanyId">
               <el-option v-for="item in inInsuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item>
-            <el-input label="Введите номер страховки" v-model="insuranceCompanies[index].number"></el-input>
+          <el-form-item
+            :prop="'human.insuranceCompanyToHuman.' + i + '.number'"
+            :rules="[{ required: true, message: 'Пожалуйста, заполните номер страховки', trigger: 'blur' }]"
+          >
+            <el-input label="Введите номер страховки" v-model.lazy="insuranceCompanies[i].number"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="3" style="margin-left: 10px">
@@ -50,7 +56,7 @@ export default class InsuranceForm extends Vue {
   addInsurance(): void {
     this.insuranceCompanies.push({
       number: '',
-      insuranceCompanyId: undefined,
+      insuranceCompanyId: '',
       humanId: undefined,
     });
   }
