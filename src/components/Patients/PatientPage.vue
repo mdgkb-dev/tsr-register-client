@@ -128,9 +128,7 @@ export default class ModalForm extends Vue {
     message: any;
   };
 
-  $message!: {
-    error: any;
-  };
+  $message!: any;
 
   anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
@@ -261,11 +259,25 @@ export default class ModalForm extends Vue {
   async submitForm(): Promise<void> {
     let validationResult = true;
 
-    this.$refs.form.validate((valid: boolean) => {
+    this.$refs.form.validate((valid: boolean, errorFields: any) => {
+      let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
+      for (const item of Object.keys(errorFields)) {
+        errorMessage += `<li>${errorFields[item][0].message}</li>`;
+      }
+      errorMessage += '</ul>';
       if (!valid) {
+        this.$message({
+          dangerouslyUseHTMLString: true,
+          message: errorMessage,
+          type: 'error',
+        });
         validationResult = false;
         return false;
       }
+      this.$message({
+        message: 'Изменения успешно сохранены',
+        type: 'success',
+      });
       return true;
     });
 
