@@ -74,8 +74,7 @@ export default class Patient implements IPatient {
     if (!bmiMonth) return 'Данные по данной дате рождения неизвестны';
     const group = Bmi.calculateGroup(bmi, bmiMonth);
     if (!group) return 'Некорректные данные антропометрии';
-    const weightClass = Bmi.getWeightClass(bmi);
-    console.log(bmi);
+    const weightClass = Bmi.getWeightClass(group);
     const result = `${group}, ${weightClass}`;
     return result;
   }

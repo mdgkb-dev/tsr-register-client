@@ -46,20 +46,26 @@ export default class Bmi {
     return '';
   };
 
-  static getWeightClass = (bmi: number): string => {
-    switch (true) {
-      case bmi < 18.5:
-        return 'недостаточность веса';
-      case bmi < 25:
+  static getWeightClass = (group: string): string => {
+    switch (group) {
+      case '1st':
+      case '99th':
+        return 'есть вероятность патологии развития';
+      case '3rd':
+      case '5th':
+      case '95th':
+      case '97th':
+        return 'возможно потребуются дополнительные обследования и консультации специалистов';
+      case '15th':
+      case '85th':
+        return 'требуются дополнительные обследования и консультации специалистов';
+      case '25th':
+      case '75th':
         return 'нормальный вес';
-      case bmi < 30:
-        return 'излишний вес';
-      case bmi < 35:
-        return 'ожирение класс I';
-      case bmi < 40:
-        return 'ожирение класс II';
+      case '50th':
+        return 'эталон';
       default:
-        return 'ожирение класс III';
+        return '';
     }
   };
 
