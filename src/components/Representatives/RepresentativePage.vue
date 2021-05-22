@@ -58,6 +58,7 @@ import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import Representative from '@/classes/representatives/Representative';
 import Contact from '@/classes/humans/Contact';
+import HumanRules from '@/classes/humans/HumanRules';
 import IPatient from '../../interfaces/patients/IPatient';
 import RepresentativePageInfo from './RepresentativePageInfo.vue';
 
@@ -130,19 +131,7 @@ export default class RepresentativePage extends Vue {
   };
 
   rules = {
-    human: {
-      surname: [{ required: true, message: 'Пожалуйста, укажите фамилию', trigger: 'blur' }],
-      name: [{ required: true, message: 'Пожалуйста, укажите имя', trigger: 'blur' }],
-      patronymic: [{ required: true, message: 'Пожалуйста, укажите отчество', trigger: 'blur' }],
-      isMale: [{ required: true, message: 'Пожалуйста, выберите пол', trigger: 'change' }],
-      dateBirth: [{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }],
-      addressRegistration: [{ required: true, message: 'Пожалуйста, укажите адрес регистрации', trigger: 'blur' }],
-      addressResidential: [{ required: true, message: 'Пожалуйста, укажите адрес проживания', trigger: 'blur' }],
-      contact: {
-        phone: [{ validator: this.validatePhone, trigger: 'blur' }],
-        email: [{ validator: this.validateEmail, trigger: 'blur' }],
-      },
-    },
+    human: HumanRules,
   };
 
   async mounted(): Promise<void> {

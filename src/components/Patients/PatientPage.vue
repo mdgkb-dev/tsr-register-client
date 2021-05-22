@@ -7,60 +7,33 @@
       <el-button type="success" round native-type="submit" @click="submitForm()">Сохранить изменения</el-button>
     </el-col>
   </el-row>
-  <el-row v-if="mount">
-    <PatientPageInfo :patient="patient" />
-  </el-row>
+  <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
   <el-row>
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">
-                  Паспортные данные
-                </h2>
-              </template>
+              <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
               <HumanForm :human="patient.human" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">
-                  Антропометрия
-                </h2>
-              </template>
-              <AnthropometryForm :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
+              <template #title><h2 class="collapseHeader">Антропометрия</h2></template>
+              <AnthropometryForm :inHeightWeight="patient.heightWeight" :inBirthDate="patient.human.dateBirth" :isMale="patient.human.isMale" />
             </el-collapse-item>
-            <el-collapse-item v-if="mount">
-              <template #title>
-                <h2 class="collapseHeader">
-                  Страховки
-                </h2>
-              </template>
+            <el-collapse-item>
+              <template #title><h2 class="collapseHeader">Страховки</h2></template>
               <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">
-                  Документы
-                </h2>
-              </template>
+              <template #title><h2 class="collapseHeader">Документы</h2></template>
               <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">
-                  Диагнозы
-                </h2>
-              </template>
-              <MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
+              <template #title><h2 class="collapseHeader">Диагнозы</h2></template><MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">
-                  Инвалидность
-                </h2>
-              </template>
+              <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm :inDisabilities="patient.disabilities" />
             </el-collapse-item>
           </div>
@@ -81,8 +54,6 @@ import DocumentForm from '@/components/DocumentForm.vue';
 import MkbForm from '@/components/Patients/MkbForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
-
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IOption from '@/interfaces/shared/IOption';
 import IDocument from '@/interfaces/documents/IDocument';
@@ -90,8 +61,8 @@ import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import Patient from '@/classes/patients/Patient';
 import IDisability from '@/interfaces/disabilities/IDisability';
-import Contact from '@/classes/humans/Contact';
-import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
+import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import HumanRules from '@/classes/humans/HumanRules';
 
 @Options({
   components: {
@@ -104,7 +75,6 @@ import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
     DisabilityForm,
   },
   computed: {
-    ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
@@ -113,7 +83,6 @@ import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
   methods: {
     ...mapActions({
       patientGet: 'patients/get',
-      anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
@@ -130,7 +99,6 @@ export default class ModalForm extends Vue {
 
   $message!: any;
 
-  anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
   isEditMode!: boolean;
   insuranceCompanies!: IInsuranceCompany[];
@@ -138,7 +106,6 @@ export default class ModalForm extends Vue {
   documents!: IDocument[];
   documentsScans!: { [id: string]: IDocumentScan[] };
 
-  anthropometryGetAll!: () => Promise<void>;
   insuranceCompaniesGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
@@ -153,36 +120,8 @@ export default class ModalForm extends Vue {
   title = '';
   error = '';
 
-  validatePhone = (rule: any, value: any, callback: any): void => {
-    if (Contact.getPhoneRegExp().test(value) || !value) {
-      callback();
-    } else {
-      callback(new Error('Пожалуйста, введите корректный номер телефона'));
-    }
-  };
-
-  validateEmail = (rule: any, value: any, callback: any): void => {
-    if (Contact.getEmailRegExp().test(value) || !value) {
-      callback();
-    } else {
-      callback(new Error('Пожалуйста, введите корректный email'));
-    }
-  };
-
   rules = {
-    human: {
-      surname: [{ required: true, message: 'Пожалуйста, укажите фамилию', trigger: 'blur' }],
-      name: [{ required: true, message: 'Пожалуйста, укажите имя', trigger: 'blur' }],
-      patronymic: [{ required: true, message: 'Пожалуйста, укажите отчество', trigger: 'blur' }],
-      isMale: [{ required: true, message: 'Пожалуйста, выберите пол', trigger: 'change' }],
-      dateBirth: [{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }],
-      addressRegistration: [{ required: true, message: 'Пожалуйста, укажите адрес регистрации', trigger: 'blur' }],
-      addressResidential: [{ required: true, message: 'Пожалуйста, укажите адрес проживания', trigger: 'blur' }],
-      contact: {
-        phone: [{ validator: this.validatePhone, trigger: 'blur' }],
-        email: [{ validator: this.validateEmail, trigger: 'blur' }],
-      },
-    },
+    human: HumanRules,
   };
 
   // Lifecycle methods.
@@ -196,12 +135,9 @@ export default class ModalForm extends Vue {
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
     }
-    await this.anthropometryGetAll();
     await this.insuranceCompaniesGetAll();
     await this.documentsGetAll();
-    if (this.patient.anthropometryData) {
-      this.patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
-    }
+
     this.insuranceCompaniesOptions = [];
     if (this.patient.disabilities) {
       for (const disability of this.patient.disabilities) {
@@ -310,6 +246,9 @@ export default class ModalForm extends Vue {
         }
       }
     }
+
+    this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, this.patient.id);
+
     try {
       if (this.isEditMode) {
         await this.$store.dispatch('patients/edit', this.patient);
@@ -321,11 +260,7 @@ export default class ModalForm extends Vue {
       return;
     }
 
-    this.$refs.form.validate((val: any) => {
-      console.log(val);
-    });
-
-    this.$router.push('/patients');
+    await this.$router.push('/patients');
   }
 }
 </script>

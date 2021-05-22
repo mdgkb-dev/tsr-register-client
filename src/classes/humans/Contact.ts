@@ -19,4 +19,20 @@ export default class Contact implements IContact {
   static getPhoneRegExp(): RegExp {
     return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
   }
+
+  static validatePhone = (rule: any, value: any, callback: any): void => {
+    if (Contact.getPhoneRegExp().test(value) || !value) {
+      callback();
+    } else {
+      callback(new Error('Пожалуйста, введите корректный номер телефона'));
+    }
+  };
+
+  static validateEmail = (rule: any, value: any, callback: any): void => {
+    if (Contact.getEmailRegExp().test(value) || !value) {
+      callback();
+    } else {
+      callback(new Error('Пожалуйста, введите корректный email'));
+    }
+  };
 }

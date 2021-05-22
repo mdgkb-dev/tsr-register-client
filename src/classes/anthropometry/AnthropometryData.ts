@@ -24,4 +24,14 @@ export default class AnthropometryDate implements IAnthropometryData {
   getFullInfo(): string {
     return `${this.anthropometry?.name}: ${this.value} ${this.anthropometry?.measure}.`;
   }
+
+  isWeight(): boolean {
+    if (!this.anthropometry) return false;
+    return this.anthropometry.name.toLowerCase() === 'вес';
+  }
+
+  isHeight(): boolean {
+    if (!this.anthropometry) return false;
+    return this.anthropometry.name.toLowerCase() === 'рост';
+  }
 }
