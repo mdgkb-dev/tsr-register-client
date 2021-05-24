@@ -8,6 +8,8 @@ import MkbList from '@/components/Mkb/MkbList.vue';
 import DocumentPage from '@/components/Documents/DocumentPage.vue';
 import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
 import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
+import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
+import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
 import HomePage from '../components/HomePage.vue';
 import PatientsList from '../components/Patients/PatientsList.vue';
 import PatientPage from '../components/Patients/PatientPage.vue';
@@ -17,8 +19,6 @@ import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
 import store from '../store/index';
-import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
-import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;

@@ -2,7 +2,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 
 export default class RepresentativeType implements IRepresentativeType {
   id?: string;
-  name: string = '';
+  name = '';
 
   constructor(representativeType?: IRepresentativeType) {
     if (!representativeType) {

@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import { State } from './state';
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, representativeTypes: IRepresentativeType[]) {
