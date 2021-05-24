@@ -7,8 +7,8 @@
         </div>
         <h1 class="semi-bold-header">Диагноз</h1>
         <div v-for="item in patient.patientDiagnosis" :key="item.id">
-          <span class="underline-label" v-html="item.mkbDiagnosis.code"></span>
-          <PopoverInfo :content="item.mkbDiagnosis.name" />
+          <span class="underline-label" v-if="item.mkbDiagnosis" v-html="item.mkbDiagnosis.code"></span>
+          <PopoverInfo v-if="item.mkbDiagnosis" :content="item.mkbDiagnosis.name" />
         </div>
         <el-divider></el-divider>
 
