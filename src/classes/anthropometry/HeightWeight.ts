@@ -18,12 +18,11 @@ export default class HeightWeight implements IHeightWeight {
     this.date = date;
   }
 
-  getBmiGroup(date: string, isMale: boolean): string {
+  getBmiGroup(birthDate: string, isMale: boolean): string {
     if (!this.weight || !this.height) return 'Недостаточно данных';
     const bmi = Bmi.calculate(this.weight, this.height);
-    const monthFromBirth = Bmi.birthDateToMonth(date);
-    const monthFromMeasure = Bmi.birthDateToMonth(this.date);
-    const bmiMonth = Bmi.findBmiMonth(monthFromBirth - monthFromMeasure, isMale);
+    const monthFromBirth = Bmi.birthDateToMeasureToMonth(birthDate, this.date);
+    const bmiMonth = Bmi.findBmiMonth(monthFromBirth, isMale);
     if (!bmiMonth) return 'Данные по данной дате рождения неизвестны';
     const group = Bmi.calculateGroup(bmi, bmiMonth);
     if (!group) return 'Некорректные данные антропометрии';

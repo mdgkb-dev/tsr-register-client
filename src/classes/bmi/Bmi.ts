@@ -26,6 +26,8 @@ export default class Bmi {
 
   static birthDateToMonth = (birthDate: string): number => (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
 
+  static birthDateToMeasureToMonth = (birthDate: string, measureDate: string): number => (new Date(measureDate).getFullYear() - new Date(birthDate).getFullYear()) * 12;
+
   static findBmiMonth = (month: number, isMale: boolean): IBmiMonth => {
     if (isMale) {
       return BmiBoys[month + 1];
