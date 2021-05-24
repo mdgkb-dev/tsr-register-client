@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
-import { State } from './state';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import Cookies from 'js-cookie';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   authorize(state, userData: IUserAuthorized) {

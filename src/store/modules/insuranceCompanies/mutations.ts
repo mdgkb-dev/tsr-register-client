@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
-import { State } from './state';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, insuranceCompanies: IInsuranceCompany[]) {

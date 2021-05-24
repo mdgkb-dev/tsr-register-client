@@ -1,11 +1,11 @@
 import { MutationTree } from 'vuex';
-import { State } from './state';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import Disability from '@/classes/disability/Disability';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, disabilities: IDisability[]) {
-    state.disabilities = disabilities.map(d => new Disability(d));
+    state.disabilities = disabilities.map((d) => new Disability(d));
   },
   set(state, disability: IDisability) {
     state.disability = new Disability(disability);

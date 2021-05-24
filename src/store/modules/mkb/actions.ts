@@ -1,10 +1,10 @@
 import { ActionTree } from 'vuex';
 import { RootState } from '@/store/types';
 import HttpClient from '@/services/HttpClient';
-import { State } from './state';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import MkbComposition from '@/classes/mkb/MkbComposition';
 import MkbIdSet from '@/classes/mkb/MkbIdSet';
+import { State } from './state';
 
 const httpClient = new HttpClient('mkb');
 

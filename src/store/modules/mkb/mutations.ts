@@ -1,5 +1,4 @@
 import { MutationTree } from 'vuex';
-import { State } from './state';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import MkbCLass from '@/classes/mkb/MkbСlass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
@@ -11,6 +10,7 @@ import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, mkbClasses: IMkbClass[]) {
