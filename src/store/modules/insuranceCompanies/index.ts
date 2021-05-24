@@ -6,13 +6,13 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  anthropometries: undefined,
-  anthropometry: undefined,
+  insuranceCompanies: undefined,
+  insuranceCompany: undefined,
 };
 
 const namespaced = true;
 
-export const anthropometry: Module<State, RootState> = {
+export const insuranceCompanies: Module<State, RootState> = {
   namespaced,
   state,
   getters,

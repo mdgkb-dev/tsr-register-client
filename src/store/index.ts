@@ -2,16 +2,15 @@ import Vuex, { StoreOptions } from 'vuex';
 
 import { RootState } from './types';
 
-import humans from './modules/humans/humans';
-import auth from './modules/auth/auth';
-import patients from './modules/patients/patients';
-import representatives from './modules/representatives/representatives';
+import { auth } from './modules/auth';
+import { patients } from './modules/patients';
+import { representatives } from './modules/representatives';
 import documents from './modules/documents/documents';
-import insuranceCompanies from './modules/insuranceCompanies/insuranceCompanies';
-import anthropometry from './modules/anthropometry/anthropometry';
+import { insuranceCompanies } from './modules/insuranceCompanies';
+import { anthropometry } from './modules/anthropometry';
 import documentScans from './modules/documentScans/documentScans';
-import mkb from './modules/mkb/mkb';
-import disabilities from './modules/disabilities/disabilities';
+import { mkb } from './modules/mkb';
+import { disabilities } from './modules/disabilities';
 import sma from './modules/sma/sma';
 
 const store: StoreOptions<RootState> = {
@@ -29,7 +28,6 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
-    humans,
     auth,
     patients,
     representatives,

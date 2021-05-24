@@ -6,13 +6,14 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  anthropometries: undefined,
-  anthropometry: undefined,
+  mkbClasses: [],
+  mkbDiagnosis: [],
+  mkbSubDiagnosis: [],
 };
 
 const namespaced = true;
 
-export const anthropometry: Module<State, RootState> = {
+export const mkb: Module<State, RootState> = {
   namespaced,
   state,
   getters,
