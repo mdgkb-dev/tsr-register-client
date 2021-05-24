@@ -1,9 +1,11 @@
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 export default interface IRepresentativeToPatient {
   id?: string;
-  type: string;
+  representativeTypeId?: string;
+  representativeType?: IRepresentativeType;
   patientId?: string;
   patient?: IPatient;
   representative?: IRepresentative;

@@ -37,7 +37,11 @@
                   Привязанные дети
                 </h2>
               </template>
-              <RepresentativeToPatientForm :inRepresentativeToPatient="representative.representativeToPatient" :inTypes="types" :inPatients="patientsOptions" />
+              <RepresentativeToPatientForm
+                :inRepresentativeToPatient="representative.representativeToPatient"
+                :inRepresentativeTypes="representativeTypesOptions"
+                :inPatients="patientsOptions"
+              />
             </el-collapse-item>
           </div>
         </el-form>
@@ -57,8 +61,8 @@ import HumanForm from '@/components/HumanForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import Representative from '@/classes/representatives/Representative';
-import Contact from '@/classes/humans/Contact';
 import HumanRules from '@/classes/humans/HumanRules';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 import IPatient from '../../interfaces/patients/IPatient';
 import RepresentativePageInfo from './RepresentativePageInfo.vue';
 
@@ -72,10 +76,12 @@ import RepresentativePageInfo from './RepresentativePageInfo.vue';
   computed: {
     ...mapGetters('patients', ['patients']),
     ...mapGetters('documents', ['documents']),
+    ...mapGetters('representativeTypes', ['representativeTypes']),
   },
   methods: {
     ...mapActions({
       patientsGetAll: 'patients/getAll',
+      representativeTypesGetAll: 'representativeTypes/getAll',
       representativeGet: 'representatives/get',
       patientsCreate: 'patients/create',
       documentsGetAll: 'documents/getAll',
@@ -93,42 +99,23 @@ export default class RepresentativePage extends Vue {
   patients!: IPatient[];
   documents!: IDocument[];
   offset: number[] = [0];
+  representativeTypes!: IRepresentativeType[];
 
   patientsGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
   documentsUpload!: () => Promise<void>;
   representativeGet!: (representativeId: string) => Promise<void>;
+  representativeTypesGetAll!: () => Promise<void>;
 
   // Local state.
-
   documentsScans: { [id: string]: IDocumentScan[] } = {};
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
   mount = false;
   representative = new Representative();
   patientsOptions = [{}];
+  representativeTypesOptions = [{}];
 
   title = '';
-
-  types = [
-    { label: 'Отец', value: 'отец' },
-    { label: 'Мать', value: 'мать' },
-  ];
-
-  validatePhone = (rule: any, value: any, callback: any): void => {
-    if (Contact.getPhoneRegExp().test(value) || !value) {
-      callback();
-    } else {
-      callback(new Error('Пожалуйста, введите корректный номер телефона'));
-    }
-  };
-
-  validateEmail = (rule: any, value: any, callback: any): void => {
-    if (Contact.getEmailRegExp().test(value) || !value) {
-      callback();
-    } else {
-      callback(new Error('Пожалуйста, введите корректный email'));
-    }
-  };
 
   rules = {
     human: HumanRules,
@@ -146,6 +133,16 @@ export default class RepresentativePage extends Vue {
     }
 
     await this.patientsGetAll();
+    await this.representativeTypesGetAll();
+
+    this.representativeTypesOptions.splice(0, 1);
+    for (const item of this.representativeTypes) {
+      this.representativeTypesOptions.push({
+        label: item.name,
+        value: item.id,
+      });
+    }
+
     this.patientsOptions.splice(0, 1);
     for (const item of this.patients) {
       this.patientsOptions.push({

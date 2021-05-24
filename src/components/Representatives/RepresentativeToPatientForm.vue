@@ -15,8 +15,8 @@
 
             <span>Роль представителя</span>
             <el-col :span="11">
-              <el-select v-model="representativeToPatient[index].type">
-                <el-option v-for="item in inTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+              <el-select v-model="representativeToPatient[index].representativeTypeId">
+                <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </el-col>
             <el-col :span="1">
@@ -39,28 +39,22 @@ import { Vue, Options } from 'vue-class-component';
 
 import IOption from '@/interfaces/shared/IOption';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 @Options({
-  props: ['in-representative-to-patient', 'in-types', 'in-patients'],
+  props: ['in-representative-to-patient', 'in-representative-types', 'in-patients'],
 })
 export default class RepresentativeToPatientForm extends Vue {
   // Types.
   inRepresentativeToPatient!: IRepresetnationType[];
-
-  inTypes!: IOption[];
-
+  inRepresentativeTypes!: IOption[];
   inPatients!: IOption[];
 
   // Local state.
-
   representativeToPatient = this.inRepresentativeToPatient;
 
   add(): void {
-    this.representativeToPatient.push({
-      id: undefined,
-      type: '',
-      patientId: undefined,
-    });
+    this.representativeToPatient.push(new RepresentativeToPatient());
   }
 
   remove(item: any): void {

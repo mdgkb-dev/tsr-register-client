@@ -12,6 +12,7 @@ import documentScans from './modules/documentScans/documentScans';
 import { mkb } from './modules/mkb';
 import { disabilities } from './modules/disabilities';
 import sma from './modules/sma/sma';
+import { representativeTypes } from './modules/representativeTypes';
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -38,6 +39,7 @@ const store: StoreOptions<RootState> = {
     mkb,
     disabilities,
     sma,
+    representativeTypes,
   },
 };
 

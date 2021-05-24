@@ -17,6 +17,8 @@ import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
 import store from '../store/index';
+import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
+import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
@@ -158,6 +160,24 @@ const routes: Array<RouteRecordRaw> = [
     path: '/insurance-companies/:insuranceCompanyId',
     name: 'EditInsuranceCompany',
     component: InsuranceCompanyPage,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/representative-types',
+    name: 'RepresentativeTypes',
+    component: RepresentativeTypesList,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/representative-types/new',
+    name: 'CreateRepresentativeType',
+    component: RepresentativeTypePage,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/representative-types/:representativeTypeId',
+    name: 'EditRepresentativeType',
+    component: RepresentativeTypePage,
     beforeEnter: isAuthorized,
   },
   {

@@ -47,7 +47,7 @@
                   :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
                   placement="top-end"
                 >
-                  <el-tag size="small">{{ rep.type }}</el-tag>
+                  <el-tag size="small">{{ rep.representativeType.name }}</el-tag>
                 </el-tooltip>
               </div>
             </template>

@@ -1,6 +1,4 @@
 import { MutationTree } from 'vuex';
-import IPatient from '@/interfaces/patients/IPatient';
-import Patient from '@/classes/patients/Patient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import Representative from '@/classes/representatives/Representative';
 import { State } from './state';
@@ -12,10 +10,10 @@ const mutations: MutationTree<State> = {
   set(state, representative: IRepresentative) {
     state.representative = new Representative(representative);
   },
-  create(state, payload: IPatient) {
-    state.representatives.push(new Patient(payload));
+  create(state, payload: IRepresentative) {
+    state.representatives.push(new Representative(payload));
   },
-  update(state, payload: IPatient) {
+  update(state, payload: IRepresentative) {
     const item = state.representatives.find((i: any) => i.id === payload.id);
     if (item) {
       Object.assign(item, payload);

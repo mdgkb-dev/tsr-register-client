@@ -78,6 +78,11 @@ export default class MainSidePanel extends Vue {
           title: 'Антропометрия',
           link: '/anthropometry',
         },
+        {
+          name: 'RepresentativeTypes',
+          title: 'Типы представителей',
+          link: '/representative-types',
+        },
       ],
     },
   ];
