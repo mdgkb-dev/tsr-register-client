@@ -1,6 +1,6 @@
 import HttpClient from '@/services/HttpClient';
 import Patient from '@/classes/patients/Patient';
-import IPatient from '../../interfaces/patients/IPatient';
+import IPatient from '../../../interfaces/patients/IPatient';
 
 const httpClient = new HttpClient('patients');
 

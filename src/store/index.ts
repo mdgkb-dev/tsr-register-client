@@ -1,18 +1,20 @@
-import { createStore } from 'vuex';
+import Vuex, { StoreOptions } from 'vuex';
 
-import humans from './modules/humans';
-import auth from './modules/auth';
-import patients from './modules/patients';
-import representatives from './modules/representatives';
-import documents from './modules/documents';
-import insuranceCompanies from './modules/insuranceCompanies';
-import anthropometry from './modules/anthropometry';
-import documentScans from './modules/documentScans';
-import mkb from './modules/mkb';
-import disabilities from './modules/disabilities';
-import sma from './modules/sma';
+import { RootState } from './types';
 
-export default createStore({
+import humans from './modules/humans/humans';
+import auth from './modules/auth/auth';
+import patients from './modules/patients/patients';
+import representatives from './modules/representatives/representatives';
+import documents from './modules/documents/documents';
+import insuranceCompanies from './modules/insuranceCompanies/insuranceCompanies';
+import anthropometry from './modules/anthropometry/anthropometry';
+import documentScans from './modules/documentScans/documentScans';
+import mkb from './modules/mkb/mkb';
+import disabilities from './modules/disabilities/disabilities';
+import sma from './modules/sma/sma';
+
+const store: StoreOptions<RootState> = {
   state: {
     layout: 'main-layout',
   },
@@ -26,7 +28,6 @@ export default createStore({
       state.layout = payload;
     },
   },
-  actions: {},
   modules: {
     humans,
     auth,
@@ -40,5 +41,6 @@ export default createStore({
     disabilities,
     sma,
   },
-  plugins: [],
-});
+};
+
+export default new Vuex.Store<RootState>(store);
