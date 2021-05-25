@@ -3,10 +3,10 @@ import IHuman from '@/interfaces/humans/IHuman';
 import Human from '@/classes/humans/Human';
 
 export default class User implements IUser {
-  id: string = '';
+  id = '';
   human: IHuman = new Human();
-  login: string = '';
-  email: string = '';
+  login = '';
+  email = '';
 
   constructor(user?: IUser) {
     if (!user) return;

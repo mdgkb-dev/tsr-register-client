@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 import { RootState } from '@/store/types';
-import { State } from './state';
 import IUser from '@/interfaces/users/IUser';
+import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {
   users(state): IUser[] | undefined {

@@ -1,5 +1,6 @@
 import Vuex, { StoreOptions } from 'vuex';
 
+import { users } from '@/store/modules/users';
 import { RootState } from './types';
 
 import { auth } from './modules/auth';
@@ -13,7 +14,6 @@ import { mkb } from './modules/mkb';
 import { disabilities } from './modules/disabilities';
 import sma from './modules/sma/sma';
 import { representativeTypes } from './modules/representativeTypes';
-import { users } from '@/store/modules/users';
 
 const store: StoreOptions<RootState> = {
   state: {

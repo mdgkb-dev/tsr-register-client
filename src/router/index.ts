@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 
 import MkbList from '@/components/Mkb/MkbList.vue';
 import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
-import store from '../store/index';
 import PatientsRoutes from '@/router/PatientsRoutes';
 import AuthRoutes from '@/router/AuthRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
@@ -13,6 +12,7 @@ import AnthropometriesRoutes from '@/router/AnthropometriesRoutes';
 import UsersRoutes from '@/router/UsersRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
+import store from '../store/index';
 
 export const isAuthorized = async (to: any, from: any, next: any) => {
   let response;

@@ -1,8 +1,8 @@
 import { ActionTree } from 'vuex';
 import { RootState } from '@/store/types';
 import HttpClient from '@/services/HttpClient';
-import { State } from './state';
 import IUser from '@/interfaces/users/IUser';
+import { State } from './state';
 
 const httpClient = new HttpClient('users');
 

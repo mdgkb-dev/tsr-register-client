@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 import IUser from '@/interfaces/users/IUser';
-import { State } from './state';
 import User from '@/classes/user/User';
+import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, users: IUser[]) {
