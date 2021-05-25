@@ -11,6 +11,13 @@
     <el-form-item label="Подопечный женского пола" label-width="20vw" prop="name">
       <el-input v-model="representativeType.childWomanType"></el-input>
     </el-form-item>
+
+    <el-form-item label="Пол" prop="isMale">
+      <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
+        <el-option label="Мужчина" :value="true"></el-option>
+        <el-option label="Женщина" :value="false"></el-option>
+      </el-select>
+    </el-form-item>
     <div class="center-align">
       <el-button type="primary" native-type="submit">Сохранить</el-button>
     </div>

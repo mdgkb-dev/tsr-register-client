@@ -5,6 +5,7 @@ export default class RepresentativeType implements IRepresentativeType {
   name = '';
   childMaleType = '';
   childWomanType = '';
+  isMale: boolean = false;
 
   constructor(representativeType?: IRepresentativeType) {
     if (!representativeType) {
@@ -14,5 +15,6 @@ export default class RepresentativeType implements IRepresentativeType {
     this.name = representativeType.name;
     this.childMaleType = representativeType.childMaleType;
     this.childWomanType = representativeType.childWomanType;
+    this.isMale = representativeType.isMale;
   }
 }
