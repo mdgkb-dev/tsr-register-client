@@ -1,0 +1,123 @@
+<template>
+  <div v-if="mount">
+    <ListHead :title="title" @create="create" />
+    <div class="table-background">
+      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
+      <el-table border :default-sort="{ prop: 'id', order: 'ascending' }" :data="filterTable(patients)" class="table-shadow" header-row-class-name="header-style">
+        <el-table-column type="index" width="50" />
+        <el-table-column width="150" align="center">
+          <template #header>
+            <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
+          </template>
+          <el-table-column label="ФИО" sortable prop="human.surname" align="left" resizable width="160">
+            <template #default="scope">
+              {{ scope.row.human.getFullName() }}
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column>
+          <el-table-column prop="human.dateBirth" label="Дата постановки" width="160" sortable>
+            <template #default="scope">
+              {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateStart) }}
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column>
+          <el-table-column prop="human.dateBirth" label="Дата завершения" width="160" sortable>
+            <template #default="scope">
+              {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateEnd) }}
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column>
+          <el-table-column label="Справка ЕДВ" width="160" sortable>
+            <template #default="scope">
+              {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
+              {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column>
+          <el-table-column label="Инвалидность" width="180" sortable>
+            <template #default="scope">
+              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
+              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
+              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+            </template>
+          </el-table-column>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Options } from 'vue-class-component';
+import { mapState, mapActions } from 'vuex';
+
+import IPatient from '@/interfaces/patients/IPatient';
+import ListHead from '@/components/ListHead.vue';
+
+@Options({
+  components: {
+    ListHead,
+  },
+  computed: {
+    ...mapState('patients', ['patients']),
+  },
+  methods: {
+    ...mapActions({
+      getAllWithDisabilities: 'patients/getAllWithDisabilities',
+    }),
+  },
+})
+export default class PatientsList extends Vue {
+  $message!: {
+    error: any;
+  };
+
+  getAllWithDisabilities!: () => Promise<void>;
+  patients!: IPatient[];
+
+  mount = false;
+  search = '';
+  searchFullName = '';
+
+  title = 'Инвалидность';
+
+  async mounted(): Promise<void> {
+    try {
+      await this.getAllWithDisabilities();
+    } catch (e) {
+      this.$message.error(e.toString());
+      return;
+    }
+
+    this.mount = true;
+  }
+
+  // get buttonType() =>
+
+  filterTable = (patients: IPatient[]) => {
+    let filteredPatients = patients;
+
+    const search = this.search.toLowerCase();
+    const searchFullName = this.searchFullName.toLowerCase();
+
+    filteredPatients = filteredPatients.filter((patient: IPatient) => {
+      const name = patient.human.getFullName().toLowerCase();
+      return !this.searchFullName || name.includes(searchFullName);
+    });
+
+    filteredPatients = filteredPatients.filter((patient: IPatient) => {
+      const name = patient.human.getFullName().toLowerCase();
+      const date = patient.human.dateBirth;
+      return !this.search || name.includes(search) || date.includes(search);
+    });
+
+    return filteredPatients;
+  };
+
+  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
+}
+</script>

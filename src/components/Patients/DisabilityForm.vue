@@ -53,12 +53,12 @@
               </el-form-item>
             </el-col>
 
-            <el-col :span="6">
-              <el-checkbox-button v-model="edv.parameter1">A</el-checkbox-button>
-              <el-checkbox-button v-model="edv.parameter2">B</el-checkbox-button>
-              <el-checkbox-button v-model="edv.parameter3">C</el-checkbox-button>
+            <el-col :span="8">
+              <el-button :type="edv.parameter1 ? 'primary' : undefined" circle v-model="edv.parameter1" @click="edv.parameter1 = !edv.parameter1">A</el-button>
+              <el-button :type="edv.parameter2 ? 'primary' : undefined" circle v-model="edv.parameter2" @click="edv.parameter2 = !edv.parameter2">B</el-button>
+              <el-button :type="edv.parameter3 ? 'primary' : undefined" circle v-model="edv.parameter3" @click="edv.parameter3 = !edv.parameter3">C</el-button>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="3">
               <el-form-item>
                 <el-button @click.prevent="removeEdv(disability.edvs, edv)">Удалить справку</el-button>
               </el-form-item>

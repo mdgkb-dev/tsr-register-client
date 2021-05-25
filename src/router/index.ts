@@ -2,25 +2,19 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import Cookies from 'js-cookie';
 
-import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
-import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
-import DocumentPage from '@/components/Documents/DocumentPage.vue';
-import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
-import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
-import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
-import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
-import HomePage from '../components/HomePage.vue';
-import PatientsList from '../components/Patients/PatientsList.vue';
-import PatientPage from '../components/Patients/PatientPage.vue';
-import RepresentativesList from '../components/Representatives/RepresentativesList.vue';
-import RepresentativePage from '../components/Representatives/RepresentativePage.vue';
-import DocumentsList from '../components/Documents/DocumentsList.vue';
-import LoginPage from '../components/Authorization/LoginPage.vue';
-import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
+import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
+import PatientsRoutes from '@/router/PatientsRoutes';
+import AuthRoutes from '@/router/AuthRoutes';
+import RepresentativeRoutes from '@/router/RepresentativeRoutes';
+import DocumentsRoutes from '@/router/DocumentsRoutes';
+import AnthropometriesRoutes from '@/router/AnthropometriesRoutes';
+import UsersRoutes from '@/router/UsersRoutes';
+import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
+import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import store from '../store/index';
 
-const isAuthorized = async (to: any, from: any, next: any) => {
+export const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
 
   try {
@@ -45,7 +39,7 @@ const isAuthorized = async (to: any, from: any, next: any) => {
   next();
 };
 
-const isNotAuthorized = async (to: any, from: any, next: any) => {
+export const isNotAuthorized = async (to: any, from: any, next: any) => {
   let response;
   try {
     response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
@@ -68,140 +62,24 @@ const isNotAuthorized = async (to: any, from: any, next: any) => {
 };
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/login',
-    name: 'LoginPage',
-    component: LoginPage,
-    beforeEnter: isNotAuthorized,
-  },
-  {
-    path: '/register',
-    name: 'RegistrationPage',
-    component: RegistrationPage,
-    beforeEnter: isNotAuthorized,
-  },
-  {
-    path: '/',
-    redirect: '/patients',
-  },
-  {
-    path: '/home',
-    name: 'Home',
-    component: HomePage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/patients',
-    name: 'Patients',
-    component: PatientsList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/patients/new',
-    name: 'CreatePatient',
-    component: PatientPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/patients/:patientId',
-    name: 'EditPatient',
-    component: PatientPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representatives',
-    name: 'Representatives',
-    component: RepresentativesList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representatives/new',
-    name: 'CreateRepresentative',
-    component: RepresentativePage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representatives/:representativeId',
-    name: 'EditRepresentative',
-    component: RepresentativePage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/documents',
-    name: 'Documents',
-    component: DocumentsList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/documents/new',
-    name: 'CreateDocument',
-    component: DocumentPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/documents/:documentId',
-    name: 'EditDocument',
-    component: DocumentPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/insurance-companies',
-    name: 'InsuranceCompanies',
-    component: InsuranceCompaniesList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/insurance-companies/new',
-    name: 'CreateInsuranceCompany',
-    component: InsuranceCompanyPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/insurance-companies/:insuranceCompanyId',
-    name: 'EditInsuranceCompany',
-    component: InsuranceCompanyPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representative-types',
-    name: 'RepresentativeTypes',
-    component: RepresentativeTypesList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representative-types/new',
-    name: 'CreateRepresentativeType',
-    component: RepresentativeTypePage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/representative-types/:representativeTypeId',
-    name: 'EditRepresentativeType',
-    component: RepresentativeTypePage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/anthropometry',
-    name: 'Anthropometry',
-    component: AnthropometryList,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/anthropometry/new',
-    name: 'CreateAnthropometry',
-    component: AnthropometryPage,
-    beforeEnter: isAuthorized,
-  },
-  {
-    path: '/anthropometry/:anthropometryId',
-    name: 'EditAnthropometry',
-    component: AnthropometryPage,
-    beforeEnter: isAuthorized,
-  },
+  ...PatientsRoutes,
+  ...AuthRoutes,
+  ...RepresentativeRoutes,
+  ...InsuranceCompaniesRoutes,
+  ...RepresentativeTypesRoutes,
+  ...DocumentsRoutes,
+  ...AnthropometriesRoutes,
+  ...UsersRoutes,
   {
     path: '/mkb',
     name: 'Mkb',
     component: MkbList,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/disabilities',
+    name: 'Disabilities',
+    component: DisabilitiesList,
     beforeEnter: isAuthorized,
   },
   {
