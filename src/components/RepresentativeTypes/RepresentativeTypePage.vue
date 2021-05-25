@@ -4,6 +4,13 @@
       <el-input v-model="representativeType.name"></el-input>
     </el-form-item>
 
+    <el-form-item label="Подопечный мужского пола" label-width="20vw" prop="name">
+      <el-input v-model="representativeType.childMaleType"></el-input>
+    </el-form-item>
+
+    <el-form-item label="Подопечный женского пола" label-width="20vw" prop="name">
+      <el-input v-model="representativeType.childWomanType"></el-input>
+    </el-form-item>
     <div class="center-align">
       <el-button type="primary" native-type="submit">Сохранить</el-button>
     </div>

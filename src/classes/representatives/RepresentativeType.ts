@@ -3,6 +3,8 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 export default class RepresentativeType implements IRepresentativeType {
   id?: string;
   name = '';
+  childMaleType = '';
+  childWomanType = '';
 
   constructor(representativeType?: IRepresentativeType) {
     if (!representativeType) {
@@ -10,5 +12,7 @@ export default class RepresentativeType implements IRepresentativeType {
     }
     this.id = representativeType.id;
     this.name = representativeType.name;
+    this.childMaleType = representativeType.childMaleType;
+    this.childWomanType = representativeType.childWomanType;
   }
 }

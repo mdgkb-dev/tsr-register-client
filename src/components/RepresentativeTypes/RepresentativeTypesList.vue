@@ -4,6 +4,8 @@
     <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="representativeTypes" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column prop="name" label="Название типа" width="150" />
+      <el-table-column prop="childMaleType" label="Подопечный мужского пола" width="150" />
+      <el-table-column prop="childWomanType" label="Подопечный женского пола" width="150" />
       <el-table-column label="Действия" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
