@@ -36,7 +36,9 @@ export default class Human implements IHuman {
     this.addressRegistration = human.addressRegistration ?? '';
     this.addressResidential = human.addressResidential ?? '';
     this.contact = new Contact(human.contact);
-    this.documentFieldToHuman = human.documentFieldToHuman.map((d) => new DocumentFieldToHuman(d));
+    if (human.documentFieldToHuman) {
+      this.documentFieldToHuman = human.documentFieldToHuman.map(d => new DocumentFieldToHuman(d));
+    }
     if (human.insuranceCompanyToHuman) {
       this.insuranceCompanyToHuman = human.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
     }

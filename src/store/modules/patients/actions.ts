@@ -10,6 +10,10 @@ const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get());
   },
+  getAllWithDisabilities: async ({ commit }): Promise<void> => {
+    console.log('httpClient');
+    commit('setAll', await httpClient.get('?withDisabilities=true'));
+  },
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get(id));
   },

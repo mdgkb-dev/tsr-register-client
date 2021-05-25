@@ -19,6 +19,7 @@ import DocumentsList from '../components/Documents/DocumentsList.vue';
 import LoginPage from '../components/Authorization/LoginPage.vue';
 import RegistrationPage from '../components/Authorization/RegistrationPage.vue';
 import store from '../store/index';
+import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
 
 const isAuthorized = async (to: any, from: any, next: any) => {
   let response;
@@ -202,6 +203,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/mkb',
     name: 'Mkb',
     component: MkbList,
+    beforeEnter: isAuthorized,
+  },
+  {
+    path: '/disabilities',
+    name: 'Disabilities',
+    component: DisabilitiesList,
     beforeEnter: isAuthorized,
   },
   {

@@ -52,6 +52,11 @@ export default class MainSidePanel extends Vue {
           title: 'Представители',
           link: '/representatives',
         },
+        {
+          name: 'Disabilities',
+          title: 'Инвалидность',
+          link: '/disabilities',
+        },
       ],
     },
     {
