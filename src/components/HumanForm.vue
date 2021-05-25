@@ -47,6 +47,5 @@ export default class HumanForm extends Vue {
 
   // Local state.
   editHuman = this.human;
-
 }
 </script>
