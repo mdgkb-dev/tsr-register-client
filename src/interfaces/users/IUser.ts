@@ -1,5 +1,8 @@
+import IHuman from '@/interfaces/humans/IHuman';
+
 export default interface IUser {
   id: string;
-  login?: string;
-  email?: string;
+  human: IHuman;
+  login: string;
+  email: string;
 }

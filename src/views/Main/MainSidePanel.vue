@@ -69,14 +69,20 @@ export default class MainSidePanel extends Vue {
           link: '/mkb',
         },
         {
-          name: 'Documents',
-          title: 'Документы',
-          link: '/documents',
-        },
-        {
           name: 'InsuranceCompanies',
           title: 'Страховые Компании',
           link: '/insurance-companies',
+        },
+      ],
+    },
+    {
+      title: 'Администрирование',
+      class: 'el-icon-notebook-2',
+      links: [
+        {
+          name: 'Documents',
+          title: 'Документы',
+          link: '/documents',
         },
         {
           name: 'Anthropometry',
@@ -87,6 +93,11 @@ export default class MainSidePanel extends Vue {
           name: 'RepresentativeTypes',
           title: 'Типы представителей',
           link: '/representative-types',
+        },
+        {
+          name: 'Users',
+          title: 'Пользователи',
+          link: 'users',
         },
       ],
     },
