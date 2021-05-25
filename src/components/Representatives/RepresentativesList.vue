@@ -121,7 +121,7 @@ export default class RepresentativesList extends Vue {
 
   children = (representative: IRepresetnationType) => {
     if (representative.patient) {
-      return representative.patient.human.isMale ? 'Сын' : 'Дочь';
+      return representative.patient.human.isMale ? representative.representativeType?.childMaleType : representative.representativeType?.childWomanType;
     }
     return '';
   };

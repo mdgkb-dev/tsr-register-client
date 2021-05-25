@@ -6,7 +6,6 @@
         <el-form-item v-for="(item, index) in representativeToPatient" :key="index" v-model="representativeToPatient">
           <el-space direction="horizontal" alignment="start" :size="1">
             <span>Пациент</span>
-            {{ representativeToPatient[index].patientId }}
             <el-col :span="12">
               <el-select v-model="representativeToPatient[index].patientId">
                 <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>

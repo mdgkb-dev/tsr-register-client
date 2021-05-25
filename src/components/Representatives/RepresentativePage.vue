@@ -137,10 +137,14 @@ export default class RepresentativePage extends Vue {
 
     this.representativeTypesOptions.splice(0, 1);
     for (const item of this.representativeTypes) {
-      this.representativeTypesOptions.push({
-        label: item.name,
-        value: item.id,
-      });
+      console.log(this.representative.human.isMale);
+      console.log(item.isMale);
+      if ((this.representative.human.isMale && item.isMale) || (!this.representative.human.isMale && !item.isMale)) {
+        this.representativeTypesOptions.push({
+          label: item.name,
+          value: item.id,
+        });
+      }
     }
 
     this.patientsOptions.splice(0, 1);
