@@ -25,7 +25,7 @@
       <el-input v-model="editHuman.addressResidential"></el-input>
     </el-form-item>
     <el-form-item label="Телефон" prop="human.contact.phone">
-      <el-input v-model="editHuman.contact.phone" @input="formatPhoneNumber()"></el-input>
+      <el-input v-model="editHuman.contact.phone" @input="editHuman.contact.formatPhoneNumber()"></el-input>
     </el-form-item>
     <el-form-item label="Email" prop="human.contact.email">
       <el-input v-model="editHuman.contact.email"></el-input>
@@ -48,36 +48,5 @@ export default class HumanForm extends Vue {
   // Local state.
   editHuman = this.human;
 
-  formatPhoneNumber = (): void => {
-    let value = this.editHuman.contact.phone;
-    if (!value) {
-      this.editHuman.contact.phone = value;
-    } else {
-      if ((value[0] === '7' || value[0] === '8') && value.length !== 1) value = value.slice(1);
-      const phoneNumber = value.replace(/\+7|[^\d]/g, '');
-      const phoneNumberLength = phoneNumber.length;
-      switch (true) {
-        case phoneNumberLength === 0:
-          this.editHuman.contact.phone = '';
-          break;
-        case phoneNumberLength === 1 && value.length === 1 && phoneNumber === '7':
-        case phoneNumberLength === 1 && value.length === 1 && phoneNumber === '8':
-          this.editHuman.contact.phone = '+7 (';
-          break;
-        case phoneNumberLength < 4:
-          this.editHuman.contact.phone = `+7 (${phoneNumber}`;
-          break;
-        case phoneNumberLength < 7:
-          this.editHuman.contact.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-          break;
-        case phoneNumberLength < 9:
-          this.editHuman.contact.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 8)}`;
-          break;
-        default:
-          this.editHuman.contact.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 8)}-${phoneNumber.slice(8, 10)}`;
-          break;
-      }
-    }
-  };
 }
 </script>
