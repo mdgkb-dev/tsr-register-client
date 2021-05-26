@@ -11,6 +11,8 @@ export default class MkbCLass implements IMkbClass {
   rangeEnd?: string;
   comment?: string;
   leaf = false;
+  disabled = true;
+  showCheckbox = false;
   mkbGroups: IMkbGroup[] = [];
   mkbDiagnosis: IMkbDiagnosis[] = [];
 
@@ -28,6 +30,8 @@ export default class MkbCLass implements IMkbClass {
     if (mkbClass.mkbGroups) {
       this.mkbGroups = mkbClass.mkbGroups.map((mkbGroup: IMkbGroup) => new MkbGroup(mkbGroup));
     }
+    this.disabled = true;
+    this.showCheckbox = false;
   }
 
   getDiagnosis(diagnosisId: string): IMkbDiagnosis | undefined {

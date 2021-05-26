@@ -1,17 +1,33 @@
 <template>
   <div class="table-under-collapse">
     <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+    <el-button @click="addDiagnosisModal">Добавить диагноз из списка</el-button>
+
+    <el-dialog v-model="diagnosisModalVisible" width="80%">
+      <MkbTree :selectable="true" @setDiagnosis="setDiagnosis" @setSubDiagnosis="setSubDiagnosis"></MkbTree>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="cancelDiagnosisFromModal">Отменить</el-button>
+          <el-button type="primary" @click="addDiagnosisFromModal">Добавить диагноз</el-button>
+        </span>
+      </template>
+    </el-dialog>
 
     <el-table :data="patientDiagnosis">
       <el-table-column type="index" width="50" />
       <el-table-column prop="human.dateBirth" label="Основной диагноз" width="350" sortable>
         <template #default="scope">
           <el-autocomplete
+            popper-class="wide-dropdown"
             :fetch-suggestions="findDiagnosis"
             v-model="queryStrings[scope.$index]"
             placeholder="Выберите диагноз"
             @select="handleSelect($event, scope.$index)"
-          />
+          >
+            <template #default="{ item }">
+              <div class="value">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
         </template>
       </el-table-column>
       <el-table-column prop="height" label="Уточнённый диагноз" width="250">
@@ -45,8 +61,14 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IOption from '@/interfaces/shared/IOption';
+import { defineAsyncComponent } from 'vue';
+
+const MkbTree = defineAsyncComponent(() => import('@/components/MkbTree.vue'));
 
 @Options({
+  components: {
+    MkbTree,
+  },
   props: ['in-patient-diagnosis'],
   computed: {
     ...mapGetters('mkb', ['mkbDiagnosis', 'mkbSubDiagnosis']),
@@ -72,10 +94,38 @@ export default class MkbForm extends Vue {
   mkbSubDiagnosisOption: IOption[] = [];
   // Local state.
   patientDiagnosis = this.inPatientDiagnosis;
+  diagnosisModalVisible = false;
+  checkedDiagnosis?: IMkbDiagnosis = undefined;
+  checkedSubDiagnosis?: IMkbSubDiagnosis = undefined;
+
+  cancelDiagnosisFromModal(): void {
+    this.checkedDiagnosis = undefined;
+  }
 
   addDiagnosis(): void {
     this.patientDiagnosis.push(new PatientDiagnosis());
     this.queryStrings.push();
+  }
+
+  addDiagnosisModal(): void {
+    this.diagnosisModalVisible = true;
+  }
+
+  addDiagnosisFromModal(): void {
+    this.diagnosisModalVisible = false;
+    const diagnosis = new PatientDiagnosis();
+    if (this.checkedDiagnosis) {
+      diagnosis.mkbDiagnosisId = this.checkedDiagnosis.id;
+      this.patientDiagnosis.push(diagnosis);
+    }
+  }
+
+  setDiagnosis(diagnosis: IMkbDiagnosis): void {
+    this.checkedDiagnosis = diagnosis;
+  }
+
+  setSubDiagnosis(subDiagnosis: IMkbSubDiagnosis): void {
+    this.checkedSubDiagnosis = subDiagnosis;
   }
 
   async findDiagnosis(query: string, resolve: any) {

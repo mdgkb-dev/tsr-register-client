@@ -5,7 +5,7 @@ $--color-primary: #2753eb;
 $--color-success: #43d39d;
 
 
-$--border-radius-small: 50%;
+//$--border-radius-small: 50%;
 $--checkbox-border-radius: 50%;
 
 $--input-border-radius: 40px;
@@ -59,4 +59,8 @@ body {
 
 .underline-label {
   text-decoration: underline
+}
+
+.wide-dropdown {
+  width: 600px !important;
 }

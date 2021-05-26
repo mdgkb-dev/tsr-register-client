@@ -5,6 +5,7 @@ export default interface IMkbSubDiagnosis {
   comment?: string;
   mkbDiagnosisId?: string;
   leaf: boolean;
+  disabled: boolean;
 
   getFullName: () => string;
 }

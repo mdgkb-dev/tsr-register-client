@@ -10,6 +10,7 @@ export default interface IMkbGroup {
   mkbClassId?: string;
   mkbSubGroups: IMkbSubGroup[];
   mkbDiagnosis: IMkbDiagnosis[];
+  disabled: boolean;
 
   getDiagnosis: (diagnosisId: string) => IMkbDiagnosis | undefined;
 }

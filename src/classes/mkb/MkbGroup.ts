@@ -11,6 +11,7 @@ export default class MkbGroup implements IMkbGroup {
   rangeEnd?: string;
   comment?: string;
   mkbClassId?: string;
+  disabled = true;
   mkbSubGroups: IMkbSubGroup[] = [];
   mkbDiagnosis: IMkbDiagnosis[] = [];
 
@@ -32,6 +33,7 @@ export default class MkbGroup implements IMkbGroup {
     if (mkbGroup.mkbDiagnosis) {
       this.mkbDiagnosis = mkbGroup.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
     }
+    this.disabled = true;
   }
 
   getDiagnosis(diagnosisId: string): IMkbDiagnosis | undefined {

@@ -7,6 +7,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
   comment?: string;
   mkbDiagnosisId?: string;
   leaf = true;
+  disabled = false;
 
   constructor(mkbSubDiagnosis?: IMkbSubDiagnosis) {
     if (!mkbSubDiagnosis) {
@@ -18,6 +19,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.leaf = mkbSubDiagnosis.leaf;
     this.comment = mkbSubDiagnosis.comment;
     this.mkbDiagnosisId = mkbSubDiagnosis.mkbDiagnosisId;
+    this.disabled = false;
   }
 
   getFullName = () => `${this.subCode} ${this.name}`;

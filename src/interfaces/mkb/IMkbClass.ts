@@ -9,6 +9,7 @@ export default interface IMkbClass {
   rangeEnd?: string;
   comment?: string;
   leaf: boolean;
+  disabled: boolean;
 
   mkbGroups: IMkbGroup[];
   mkbDiagnosis: IMkbDiagnosis[];
