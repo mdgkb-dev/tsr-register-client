@@ -10,6 +10,7 @@ export default class RepresentativeToPatient implements IRepresentativeToPatient
   representativeType?: IRepresentativeType;
   patientId?: string;
   patient?: IPatient;
+  representativeId?: string;
   representative?: IRepresentative;
 
   constructor(representativeToPatient?: IRepresentativeToPatient) {
@@ -21,6 +22,7 @@ export default class RepresentativeToPatient implements IRepresentativeToPatient
     this.representativeType = new RepresentativeType(representativeToPatient.representativeType);
     this.patientId = representativeToPatient.patientId;
     this.patient = representativeToPatient.patient;
+    this.representativeId = representativeToPatient.representativeId;
     this.representative = representativeToPatient.representative;
   }
 }

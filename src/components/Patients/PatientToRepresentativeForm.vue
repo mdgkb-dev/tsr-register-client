@@ -4,10 +4,10 @@
       <el-row>
         <el-form-item v-for="(item, index) in representativeToPatient" :key="index" v-model="representativeToPatient">
           <el-space direction="horizontal" alignment="start" :size="1">
-            <span>Пациент</span>
+            <span>Представитель</span>
             <el-col :span="12">
-              <el-select v-model="representativeToPatient[index].patientId">
-                <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+              <el-select v-model="representativeToPatient[index].representativeId">
+                <el-option v-for="item in inRepresentatives" :key="item.value" :label="item.label" :value="item.value"> </el-option>
               </el-select>
             </el-col>
 
@@ -18,14 +18,14 @@
               </el-select>
             </el-col>
             <el-col :span="1">
-              <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+              <el-button @click.prevent="remove(item)">Удалить представителя</el-button>
             </el-col>
           </el-space>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item>
-          <el-button @click="add">Добавить пациента</el-button>
+          <el-button @click="add">Добавить представителя</el-button>
         </el-form-item>
       </el-row>
     </el-form-item>
@@ -40,13 +40,13 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 @Options({
-  props: ['in-representative-to-patient', 'in-representative-types', 'in-patients'],
+  props: ['in-representative-to-patient', 'in-representative-types', 'in-representatives'],
 })
-export default class RepresentativeToPatientForm extends Vue {
+export default class PatientToRepresentativeForm extends Vue {
   // Types.
   inRepresentativeToPatient!: IRepresetnationType[];
   inRepresentativeTypes!: IOption[];
-  inPatients!: IOption[];
+  inRepresentatives!: IOption[];
 
   // Local state.
   representativeToPatient = this.inRepresentativeToPatient;

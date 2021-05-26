@@ -47,7 +47,7 @@
                   :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
                   placement="top-end"
                 >
-                  <el-tag size="small">{{ rep.representativeType.name }}</el-tag>
+                  <el-check-tag @click="this.$router.push(`/representatives/${rep.representative.id}`)">{{ rep.representativeType.name }}</el-check-tag>
                 </el-tooltip>
               </div>
             </template>

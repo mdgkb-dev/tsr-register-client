@@ -36,6 +36,14 @@
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm :inDisabilities="patient.disabilities" />
             </el-collapse-item>
+            <el-collapse-item>
+              <template #title><h2 class="collapseHeader">Законные представители</h2></template>
+              <PatientToRepresentativeForm
+                :inRepresentativeToPatient="patient.representativeToPatient"
+                :inRepresentativeTypes="representativeTypesOptions"
+                :inRepresentatives="representativeOptions"
+              />
+            </el-collapse-item>
           </div>
         </el-form>
       </el-collapse>
@@ -54,6 +62,7 @@ import DocumentForm from '@/components/DocumentForm.vue';
 import MkbForm from '@/components/Patients/MkbForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
+import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IOption from '@/interfaces/shared/IOption';
 import IDocument from '@/interfaces/documents/IDocument';
@@ -63,6 +72,8 @@ import Patient from '@/classes/patients/Patient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 @Options({
   components: {
@@ -73,12 +84,15 @@ import HumanRules from '@/classes/humans/HumanRules';
     DocumentForm,
     MkbForm,
     DisabilityForm,
+    PatientToRepresentativeForm,
   },
   computed: {
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
     ...mapGetters('patients', ['patient']),
+    ...mapGetters('representativeTypes', ['representativeTypes']),
+    ...mapGetters('representatives', ['representatives']),
   },
   methods: {
     ...mapActions({
@@ -87,6 +101,8 @@ import HumanRules from '@/classes/humans/HumanRules';
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
       disabilitiesGetAll: 'disabilities/getAll',
+      representativeTypesGetAll: 'representativeTypes/getAll',
+      representativesGetAll: 'representatives/getAll',
     }),
   },
 })
@@ -105,9 +121,13 @@ export default class ModalForm extends Vue {
   insuranceCompaniesOptions!: IOption[];
   documents!: IDocument[];
   documentsScans!: { [id: string]: IDocumentScan[] };
+  representatives!: IRepresentative[];
+  representativeTypes!: IRepresentativeType[];
 
   insuranceCompaniesGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
+  representativesGetAll!: () => Promise<void>;
+  representativeTypesGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
 
   offset: number[] = [0];
@@ -117,6 +137,8 @@ export default class ModalForm extends Vue {
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
   mount = false;
   diagnosisMount = false;
+  representativeOptions = [{}];
+  representativeTypesOptions = [{}];
   title = '';
   error = '';
 
@@ -194,6 +216,27 @@ export default class ModalForm extends Vue {
         });
       }
     }
+
+    await this.representativesGetAll();
+    await this.representativeTypesGetAll();
+
+    this.representativeTypesOptions.splice(0, 1);
+    for (const item of this.representativeTypes) {
+      this.representativeTypesOptions.push({
+        label: item.name,
+        value: item.id,
+      });
+    }
+
+    this.representativeOptions.splice(0, 1);
+    for (const item of this.representatives) {
+      this.representativeOptions.push({
+        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+        value: item.id,
+        human: item.human,
+      });
+    }
+
     this.mount = true;
     this.diagnosisMount = true;
   }
@@ -226,6 +269,10 @@ export default class ModalForm extends Vue {
 
     if (!validationResult) {
       return;
+    }
+
+    for (const item of this.patient.representativeToPatient) {
+      item.patient = undefined;
     }
 
     for (const document in this.documentsScans) {

@@ -8,5 +8,6 @@ export default interface IRepresentativeToPatient {
   representativeType?: IRepresentativeType;
   patientId?: string;
   patient?: IPatient;
+  representativeId?: string;
   representative?: IRepresentative;
 }
