@@ -4,7 +4,9 @@
       <h2 class="header-top-table">Представители <i class="el-icon-arrow-right" /> Профиль</h2>
     </el-col>
     <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-      <el-button type="success" round native-type="submit" @click="onSubmit">Сохранить изменения</el-button>
+      <el-affix :offset="20">
+        <el-button type="success" round native-type="submit" @click="onSubmit">Сохранить изменения</el-button>
+      </el-affix>
     </el-col>
   </el-row>
   <el-row v-if="mount">
@@ -95,6 +97,7 @@ export default class RepresentativePage extends Vue {
     form: any;
   };
   $message: any;
+  $confirm!: any;
   isEditMode!: boolean;
   patients!: IPatient[];
   documents!: IDocument[];
@@ -114,6 +117,8 @@ export default class RepresentativePage extends Vue {
   representative = new Representative();
   patientsOptions = [{}];
   representativeTypesOptions = [{}];
+  confirmStay = false;
+  initialState = '';
 
   title = '';
 
@@ -121,7 +126,34 @@ export default class RepresentativePage extends Vue {
     human: HumanRules,
   };
 
+  compareStates() {
+    const initial = this.initialState;
+    this.initialState = '';
+    if (initial !== JSON.stringify(this)) {
+      this.confirmStay = true;
+    }
+  }
+
+  confirmLeave() {
+    if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
+      this.confirmStay = false;
+      return true;
+    }
+    return false;
+  }
+
+  async beforeWindowUnload(e: any) {
+    this.compareStates();
+    if (this.confirmStay && !this.confirmLeave()) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  }
+
+  // Lifecycle methods.
   async mounted(): Promise<void> {
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+
     if (!this.$route.params.representativeId) {
       this.isEditMode = false;
       this.title = 'Создать представителя';
@@ -201,6 +233,21 @@ export default class RepresentativePage extends Vue {
       }
     }
     this.mount = true;
+    this.initialState = JSON.stringify(this);
+  }
+
+  async beforeUnmount(): Promise<void> {
+    window.removeEventListener('beforeunload', this.beforeWindowUnload);
+  }
+
+  // Methods.
+  async beforeRouteLeave(to: any, from: any, next: any) {
+    await this.compareStates();
+    if (this.confirmStay && !this.confirmLeave()) {
+      next(false);
+    } else {
+      next();
+    }
   }
 
   onSubmit(): void {

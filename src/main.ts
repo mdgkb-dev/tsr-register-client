@@ -1,3 +1,4 @@
+import './router/componentHooks';
 import { createApp } from 'vue';
 import ElementPlus, { ElMessage } from 'element-plus';
 import locale from 'element-plus/lib/locale/lang/ru';
