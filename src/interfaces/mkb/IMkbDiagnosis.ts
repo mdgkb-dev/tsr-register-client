@@ -11,6 +11,7 @@ export default interface IMkbDiagnosis {
   mkbSubSubGroupId?: string;
   leaf: boolean;
   disabled: boolean;
+  checked: boolean;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[];
 
