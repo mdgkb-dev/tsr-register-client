@@ -145,6 +145,7 @@ export default class ModalForm extends Vue {
   title = '';
   error = '';
   confirmStay = false;
+  fromSubmitForm = false;
   initialState = '';
 
   rules = {
@@ -160,9 +161,12 @@ export default class ModalForm extends Vue {
   }
 
   confirmLeave() {
-    if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
-      this.confirmStay = false;
-      return true;
+    if (!this.fromSubmitForm) {
+      if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
+        this.confirmStay = false;
+        return true;
+      }
+      return false;
     }
     return false;
   }
@@ -280,7 +284,7 @@ export default class ModalForm extends Vue {
   // Methods.
   async beforeRouteLeave(to: any, from: any, next: any) {
     await this.compareStates();
-    if (this.confirmStay && !this.confirmLeave()) {
+    if (this.confirmStay && !this.confirmLeave() && !this.fromSubmitForm) {
       next(false);
     } else {
       next();
@@ -288,6 +292,7 @@ export default class ModalForm extends Vue {
   }
 
   async submitForm(): Promise<void> {
+    this.fromSubmitForm = true;
     let validationResult = true;
 
     this.$refs.form.validate((valid: boolean, errorFields: any) => {
@@ -351,7 +356,6 @@ export default class ModalForm extends Vue {
       this.$message.error(e.toString());
       return;
     }
-
     await this.$router.push('/patients');
   }
 }
