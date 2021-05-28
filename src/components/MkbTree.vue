@@ -84,7 +84,7 @@ export default class MkbTree extends Vue {
   mkbClasses: IMkbClass[] = [];
   selectable!: boolean;
 
-  setDiagnosis(checkedNode: any, checked: any): void {
+  setDiagnosis(checkedNode: any): void {
     const curNode = this.$refs.tree.getNode(checkedNode.id);
 
     if (!curNode.checked) {
@@ -93,9 +93,7 @@ export default class MkbTree extends Vue {
       curNode.parent.childNodes.forEach((child: any) => {
         if (child.checked) notChildrenChecked = false;
       });
-      const curDiagnosis = this.checkedDiagnosis.find((d: IPatientDiagnosis) => {
-        return checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId;
-      });
+      const curDiagnosis = this.checkedDiagnosis.find((d: IPatientDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId);
       if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
       curNode.childNodes.forEach((child: any) => this.$refs.tree.setChecked(child.data.id, false, false));
       if (checkedNode.code || checkedNode.subCode > -1) this.$emit('removeDiagnosis', checkedNode);
@@ -116,7 +114,7 @@ export default class MkbTree extends Vue {
     }
   }
 
-  handleNodeExpand(first: any, two: any, three: any) {
+  handleNodeExpand(first: any) {
     setTimeout(() => {
       if (first.mkbDiagnosis && first.mkbDiagnosis.length > 0) this.checkDiagnosis(first.mkbDiagnosis);
       if (first.mkbSubDiagnosis > -1 && first.mkbSubDiagnosis.length > 0) this.checkSubDiagnosis(first.mkbSubDiagnosis);
