@@ -1,35 +1,26 @@
 <template>
-  <el-row>
-    <el-form-item>
-      <el-row>
-        <el-form-item v-for="(item, index) in representativeToPatient" :key="index" v-model="representativeToPatient">
-          <el-space direction="horizontal" alignment="start" :size="1">
-            <span>Представитель</span>
-            <el-col :span="12">
-              <el-select v-model="representativeToPatient[index].representativeId">
-                <el-option v-for="item in inRepresentatives" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-              </el-select>
-            </el-col>
-
-            <span>Роль представителя</span>
-            <el-col :span="11">
-              <el-select v-model="representativeToPatient[index].representativeTypeId">
-                <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="1">
-              <el-button @click.prevent="remove(item)">Удалить представителя</el-button>
-            </el-col>
-          </el-space>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item>
-          <el-button @click="add">Добавить представителя</el-button>
-        </el-form-item>
-      </el-row>
-    </el-form-item>
-  </el-row>
+  <el-table :data="representativeToPatient" style="width: 100%">
+    <el-table-column type="index" width="50" />
+    <el-table-column label="Представитель" width="250" sortable>
+      <template #default="scope">
+        <el-select v-model="representativeToPatient[scope.$index].representativeId">
+          <el-option v-for="item in inRepresentatives" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </template>
+    </el-table-column>
+    <el-table-column label="Роль представителя">
+      <template #default="scope">
+        <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
+          <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </template>
+    </el-table-column>
+    <el-table-column>
+      <template #default="scope">
+        <el-button @click.prevent="remove(scope.row)" round>Удалить представителя</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script lang="ts">

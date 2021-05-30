@@ -1,6 +1,10 @@
 <template>
   <div v-if="mount">
-    <ListHead :title="title" @create="create" />
+    <el-row>
+      <el-col :span="2">
+        <h2 small align="center" class="header-top-table" v-html="title"></h2>
+      </el-col>
+    </el-row>
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table border :default-sort="{ prop: 'id', order: 'ascending' }" :data="filterTable(patients)" class="table-shadow" header-row-class-name="header-style">
@@ -56,12 +60,8 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IPatient from '@/interfaces/patients/IPatient';
-import ListHead from '@/components/ListHead.vue';
 
 @Options({
-  components: {
-    ListHead,
-  },
   computed: {
     ...mapState('patients', ['patients']),
   },

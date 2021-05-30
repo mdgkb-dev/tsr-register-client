@@ -1,38 +1,41 @@
 <template>
   <div class="form-under-collapse">
     <el-button @click="addInsurance" style="margin-bottom: 20px">Добавить страховку</el-button>
-    <el-row style="font-weight: bold">
-      <el-col :span="8"><el-form-item>Компания</el-form-item></el-col>
-      <el-col :span="12"><el-form-item>Номер</el-form-item></el-col>
-      <el-col :span="3"><el-form-item></el-form-item></el-col>
-    </el-row>
-    <div v-for="(item, i) in insuranceCompanies" :key="i">
-      <el-row>
-        <el-col :span="8">
+
+    <el-table :data="insuranceCompanies" style="width: 100%">
+      <el-table-column type="index" width="50" />
+      <el-table-column label="Компания" width="250" sortable>
+        <template #default="scope">
           <el-form-item
-            :prop="'human.insuranceCompanyToHuman.' + i + '.insuranceCompanyId'"
+            :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.insuranceCompanyId'"
             :rules="[{ required: true, message: 'Пожалуйста, выберете страховую компанию' }]"
+            label-width="0"
+            style="margin-bottom: 0"
           >
-            <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[i].insuranceCompanyId">
+            <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[scope.$index].insuranceCompanyId">
               <el-option v-for="item in inInsuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
+        </template>
+      </el-table-column>
+      <el-table-column label="Номер страховки">
+        <template #default="scope">
           <el-form-item
-            :prop="'human.insuranceCompanyToHuman.' + i + '.number'"
+            :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.number'"
             :rules="[{ required: true, message: 'Пожалуйста, заполните номер страховки', trigger: 'blur' }]"
+            style="margin-bottom: 0"
+            label-width="0"
           >
-            <el-input label="Введите номер страховки" v-model.lazy="insuranceCompanies[i].number"></el-input>
+            <el-input label="Введите номер страховки" v-model.lazy="insuranceCompanies[scope.$index].number"></el-input>
           </el-form-item>
-        </el-col>
-        <el-col :span="3" style="margin-left: 10px">
-          <el-form-item>
-            <el-button @click.prevent="removeInsurance(item)" round>Удалить страховку</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </div>
+        </template>
+      </el-table-column>
+      <el-table-column>
+        <template #default="scope">
+          <el-button @click.prevent="removeInsurance(scope.row)" round>Удалить страховку</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -69,3 +72,8 @@ export default class InsuranceForm extends Vue {
   }
 }
 </script>
+<style>
+.el-form-item__content {
+  margin-left: 0;
+}
+</style>
