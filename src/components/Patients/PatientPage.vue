@@ -4,7 +4,9 @@
       <h2 class="header-top-table">Пациенты <i class="el-icon-arrow-right"> </i> Профиль</h2>
     </el-col>
     <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-      <el-button type="success" round native-type="submit" @click="submitForm()">Сохранить изменения</el-button>
+      <el-affix :offset="20">
+        <el-button type="success" round native-type="submit" @click="submitForm()">Сохранить изменения</el-button>
+      </el-affix>
     </el-col>
   </el-row>
   <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
@@ -117,6 +119,7 @@ export default class ModalForm extends Vue {
   };
 
   $message!: any;
+  $confirm!: any;
 
   disabilities!: IDisability[];
   anthropometries!: IAnthropometry[];
@@ -146,13 +149,41 @@ export default class ModalForm extends Vue {
   representativeTypesOptions = [{}];
   title = '';
   error = '';
+  confirmStay = false;
+  initialState = '';
 
   rules = {
     human: HumanRules,
   };
 
+  compareStates() {
+    const initial = this.initialState;
+    this.initialState = '';
+    if (initial !== JSON.stringify(this)) {
+      this.confirmStay = true;
+    }
+  }
+
+  confirmLeave() {
+    if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
+      this.confirmStay = false;
+      return true;
+    }
+    return false;
+  }
+
+  async beforeWindowUnload(e: any) {
+    this.compareStates();
+    if (this.confirmStay && !this.confirmLeave()) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  }
+
   // Lifecycle methods.
   async created(): Promise<void> {
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+
     if (!this.$route.params.patientId) {
       this.isEditMode = false;
       this.title = 'Создать пациента';
@@ -245,9 +276,23 @@ export default class ModalForm extends Vue {
 
     this.mount = true;
     this.diagnosisMount = true;
+    this.initialState = JSON.stringify(this);
+  }
+
+  async beforeUnmount(): Promise<void> {
+    window.removeEventListener('beforeunload', this.beforeWindowUnload);
   }
 
   // Methods.
+  async beforeRouteLeave(to: any, from: any, next: any) {
+    await this.compareStates();
+    if (this.confirmStay && !this.confirmLeave()) {
+      next(false);
+    } else {
+      next();
+    }
+  }
+
   async submitForm(): Promise<void> {
     let validationResult = true;
 
