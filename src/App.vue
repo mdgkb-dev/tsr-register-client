@@ -25,6 +25,8 @@ export default class App extends Vue {
     }
     if (this.$store.getters['auth/isAuthorized']) {
       this.$store.commit('setLayout', 'main-layout');
+    } else {
+      await this.$router.push('/login/');
     }
   }
 

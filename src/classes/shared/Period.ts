@@ -9,4 +9,9 @@ export default class Period implements IPeriod {
     this.dateStart = '';
     this.dateEnd = '';
   }
+
+  dateStartLess() {
+    if (!this.dateStart || !this.dateEnd) return false;
+    return this.dateStart < this.dateEnd;
+  }
 }

@@ -1,21 +1,12 @@
 <template>
-  <el-row>
-    <el-col :span="8">
-      <h2 class="header-top-table">Представители <i class="el-icon-arrow-right" /> Профиль</h2>
-    </el-col>
-    <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-      <el-affix :offset="20">
-        <el-button type="success" round native-type="submit" @click="onSubmit">Сохранить изменения</el-button>
-      </el-affix>
-    </el-col>
-  </el-row>
+  <PageHead :titleParent="'Представители'" :title="'Профиль'" @submitForm="submitForm" />
   <el-row v-if="mount">
     <RepresentativePageInfo :representative="representative" />
   </el-row>
   <el-row>
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
-        <el-form ref="form" :model="representative" label-width="150px" :rules="rules">
+        <el-form ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
           <div v-if="mount">
             <el-collapse-item>
               <template #title>
@@ -53,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, mixins } from 'vue-class-component';
 import { mapGetters, mapActions } from 'vuex';
 
 import IDocument from '@/interfaces/documents/IDocument';
@@ -65,8 +56,12 @@ import RepresentativeToPatientForm from '@/components/Representatives/Representa
 import Representative from '@/classes/representatives/Representative';
 import HumanRules from '@/classes/humans/HumanRules';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import IPatient from '../../interfaces/patients/IPatient';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import PageHead from '@/components/PageHead.vue';
 import RepresentativePageInfo from './RepresentativePageInfo.vue';
+import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({
   components: {
@@ -74,6 +69,7 @@ import RepresentativePageInfo from './RepresentativePageInfo.vue';
     DocumentForm,
     RepresentativeToPatientForm,
     RepresentativePageInfo,
+    PageHead,
   },
   computed: {
     ...mapGetters('patients', ['patients']),
@@ -91,13 +87,11 @@ import RepresentativePageInfo from './RepresentativePageInfo.vue';
     }),
   },
 })
-export default class RepresentativePage extends Vue {
+export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   $refs!: {
     uploadFile: any;
     form: any;
   };
-  $message: any;
-  $confirm!: any;
   isEditMode!: boolean;
   patients!: IPatient[];
   documents!: IDocument[];
@@ -117,38 +111,12 @@ export default class RepresentativePage extends Vue {
   representative = new Representative();
   patientsOptions = [{}];
   representativeTypesOptions = [{}];
-  confirmStay = false;
-  initialState = '';
 
   title = '';
 
   rules = {
     human: HumanRules,
   };
-
-  compareStates() {
-    const initial = this.initialState;
-    this.initialState = '';
-    if (initial !== JSON.stringify(this)) {
-      this.confirmStay = true;
-    }
-  }
-
-  confirmLeave() {
-    if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
-      this.confirmStay = false;
-      return true;
-    }
-    return false;
-  }
-
-  async beforeWindowUnload(e: any) {
-    this.compareStates();
-    if (this.confirmStay && !this.confirmLeave()) {
-      e.preventDefault();
-      e.returnValue = '';
-    }
-  }
 
   // Lifecycle methods.
   async mounted(): Promise<void> {
@@ -236,48 +204,8 @@ export default class RepresentativePage extends Vue {
     this.initialState = JSON.stringify(this);
   }
 
-  async beforeUnmount(): Promise<void> {
-    window.removeEventListener('beforeunload', this.beforeWindowUnload);
-  }
-
-  // Methods.
-  async beforeRouteLeave(to: any, from: any, next: any) {
-    await this.compareStates();
-    if (this.confirmStay && !this.confirmLeave()) {
-      next(false);
-    } else {
-      next();
-    }
-  }
-
-  onSubmit(): void {
-    let validationResult = true;
-
-    this.$refs.form.validate((valid: boolean, errorFields: any) => {
-      let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
-      for (const item of Object.keys(errorFields)) {
-        errorMessage += `<li>${errorFields[item][0].message}</li>`;
-      }
-      errorMessage += '</ul>';
-      if (!valid) {
-        this.$message({
-          dangerouslyUseHTMLString: true,
-          message: errorMessage,
-          type: 'error',
-        });
-        validationResult = false;
-        return false;
-      }
-      this.$message({
-        message: 'Изменения успешно сохранены',
-        type: 'success',
-      });
-      return true;
-    });
-
-    if (!validationResult) {
-      return;
-    }
+  submitForm(): void {
+    if (!this.validate(this.$refs.form)) return;
 
     for (const item of this.representative.representativeToPatient) {
       item.patient = undefined;
@@ -301,14 +229,7 @@ export default class RepresentativePage extends Vue {
         }
       }
     }
-
-    if (this.isEditMode) {
-      this.$store.dispatch('representatives/edit', this.representative);
-    } else {
-      this.$store.dispatch('representatives/create', this.representative);
-    }
-
-    this.$router.push('/representatives');
+    this.syncSubmitHandling('representatives', this.representative);
   }
 }
 </script>

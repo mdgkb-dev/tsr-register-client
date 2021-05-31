@@ -9,7 +9,14 @@
     </el-table-column>
     <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250">
       <template #default="scope">
-        <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateStart"></el-date-picker>
+        <el-date-picker
+          ref="picker"
+          type="date"
+          format="DD.MM.YYYY"
+          :disabled-date="disabledDate"
+          placeholder="Выберите дату"
+          v-model="scope.row.period.dateStart"
+        ></el-date-picker>
       </template>
     </el-table-column>
     <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250">
@@ -50,11 +57,17 @@ import IEdv from '@/interfaces/disabilities/IEdv';
 import { v4 as uuidv4 } from 'uuid';
 
 @Options({
-  props: ['in-disabilities'],
+  props: ['in-disabilities', 'in-birth-date'],
 })
 export default class DisabilityForm extends Vue {
+  $refs!: {
+    picker: any;
+  };
+
   // Types.
   inDisabilities!: IDisability[];
+  inBirthDate!: string;
+  fromDate: Date = new Date();
 
   // Local state.
   disabilities = this.inDisabilities;
@@ -62,7 +75,6 @@ export default class DisabilityForm extends Vue {
   addDisability(): void {
     const d = new Disability();
     d.id = uuidv4();
-    console.log(d.id);
     this.disabilities.push(d);
   }
 
@@ -80,6 +92,11 @@ export default class DisabilityForm extends Vue {
     if (index !== -1) {
       this.disabilities.splice(index, 1);
     }
+  }
+
+  disabledDate(time: any) {
+    // console.log(time);
+    return time.getTime() < Date.parse(this.inBirthDate);
   }
 
   removeEdv = (edv: IEdv): void => {
