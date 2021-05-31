@@ -1,10 +1,10 @@
 <template>
   <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
   <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
-  <el-row>
+  <el-row v-if="mount">
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
-        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
+        <el-form v-if="mount" ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -25,7 +25,7 @@
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template><MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
-            <el-collapse-item>
+            <el-collapse-item v-if="mount">
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm :inDisabilities="patient.disabilities" :inBirthDate="patient.human.dateBirth" />
             </el-collapse-item>
@@ -136,8 +136,8 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
   documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
   mount = false;
   diagnosisMount = false;
-  representativeOptions = [{}];
-  representativeTypesOptions = [{}];
+  representativeOptions: IOption[] = [];
+  representativeTypesOptions: IOption[] = [];
 
   rules = {
     human: HumanRules,
@@ -154,10 +154,13 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
     }
-
-    await this.insuranceCompaniesGetAll();
-    await this.documentsGetAll();
-    await this.anthropometryGetAll();
+    try {
+      await this.insuranceCompaniesGetAll();
+      await this.documentsGetAll();
+      await this.anthropometryGetAll();
+    } catch (e) {
+      console.log(e);
+    }
 
     this.insuranceCompaniesOptions = [];
     if (this.patient.disabilities) {
@@ -167,6 +170,7 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
         }
       }
     }
+
     if (this.insuranceCompanies) {
       for (const item of this.insuranceCompanies) {
         this.insuranceCompaniesOptions.push({
@@ -179,6 +183,7 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
     let sum = 0;
     this.documentsScans = {};
     this.documentsValues = {};
+
     if (this.documents) {
       for (const document of this.documents) {
         if (document.documentFields) {
@@ -205,6 +210,7 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
         }
       }
     }
+
     for (const scan of this.patient.human.documentScans) {
       if (scan.documentId) {
         this.documentsScans[scan.documentId].push({
@@ -215,25 +221,30 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
         });
       }
     }
-
     await this.representativesGetAll();
     await this.representativeTypesGetAll();
-
     this.representativeTypesOptions.splice(0, 1);
-    for (const item of this.representativeTypes) {
-      this.representativeTypesOptions.push({
-        label: item.name,
-        value: item.id,
-      });
+    if (this.representativeTypes) {
+      for (const item of this.representativeTypes) {
+        if (item.id) {
+          this.representativeTypesOptions.push({
+            label: item.name,
+            value: item.id,
+          });
+        }
+      }
     }
 
     this.representativeOptions.splice(0, 1);
-    for (const item of this.representatives) {
-      this.representativeOptions.push({
-        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-        value: item.id,
-        human: item.human,
-      });
+    if (this.representatives) {
+      for (const item of this.representatives) {
+        if (item.id) {
+          this.representativeOptions.push({
+            label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+            value: item.id,
+          });
+        }
+      }
     }
 
     this.mount = true;

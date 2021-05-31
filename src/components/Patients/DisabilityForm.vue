@@ -9,19 +9,23 @@
     </el-table-column>
     <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250">
       <template #default="scope">
-        <el-date-picker
-          ref="picker"
-          type="date"
-          format="DD.MM.YYYY"
-          :disabled-date="disabledDate"
-          placeholder="Выберите дату"
-          v-model="scope.row.period.dateStart"
-        ></el-date-picker>
+        <el-form-item :prop="getProp(scope)" :rules="getRuleStart(scope)" label-width="0" style="margin-bottom: 0">
+          <el-date-picker
+            :disabled-date="disabledDate"
+            format="DD.MM.YYYY"
+            placeholder="Выберите дату"
+            ref="picker"
+            type="date"
+            v-model="scope.row.period.dateStart"
+          ></el-date-picker>
+        </el-form-item>
       </template>
     </el-table-column>
     <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250">
       <template #default="scope">
-        <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateEnd"></el-date-picker>
+        <el-form-item :prop="getProp(scope)" :rules="getRuleEnd(scope)" label-width="0" style="margin-bottom: 0">
+          <el-date-picker type="date" :disabled-date="disabledDate" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateEnd"></el-date-picker>
+        </el-form-item>
       </template>
     </el-table-column>
     <el-table-column label="Инвалидность" width="180" sortable>
@@ -54,21 +58,16 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
 import IEdv from '@/interfaces/disabilities/IEdv';
+import PeriodRules from '@/classes/shared/PeriodRules';
 import { v4 as uuidv4 } from 'uuid';
 
 @Options({
   props: ['in-disabilities', 'in-birth-date'],
 })
 export default class DisabilityForm extends Vue {
-  $refs!: {
-    picker: any;
-  };
-
   // Types.
   inDisabilities!: IDisability[];
   inBirthDate!: string;
-  fromDate: Date = new Date();
-
   // Local state.
   disabilities = this.inDisabilities;
 
@@ -87,6 +86,27 @@ export default class DisabilityForm extends Vue {
     }
   };
 
+  getRuleStart = (scope: any) => {
+    const rule = new PeriodRules();
+    rule.dateStart[0].options = scope.row.period;
+    return rule.dateStart;
+  };
+
+  getRuleEnd = (scope: any) => {
+    const rule = new PeriodRules();
+    rule.dateEnd[0].options = scope.row.period;
+    return rule.dateEnd;
+  };
+
+  getProp = (scope: any): string => {
+    if (scope.row.parameter1 === undefined) {
+      return `disabilities.${this.disabilities.indexOf(scope.row)}.period.startDate`;
+    }
+    const disabilityIndex = this.disabilities.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
+    const edvIndex = this.disabilities[disabilityIndex].edvs!.indexOf(scope.row);
+    return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.startDate`;
+  };
+
   removeDisability(item: IDisability): void {
     const index = this.disabilities.indexOf(item);
     if (index !== -1) {
@@ -95,7 +115,6 @@ export default class DisabilityForm extends Vue {
   }
 
   disabledDate(time: any) {
-    // console.log(time);
     return time.getTime() < Date.parse(this.inBirthDate);
   }
 

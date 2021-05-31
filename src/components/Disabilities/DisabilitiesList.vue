@@ -36,17 +36,27 @@
         <el-table-column>
           <el-table-column label="Справка ЕДВ" width="160" sortable>
             <template #default="scope">
-              {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
-              {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
+              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
+                {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
+                {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
+              </div>
+              <div v-else>
+                Нет справок ЕДВ
+              </div>
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column>
           <el-table-column label="Инвалидность" width="180" sortable>
             <template #default="scope">
-              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
-              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
-              <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
+                <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
+                <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
+                <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+              </div>
+              <div v-else>
+                Нет справок ЕДВ
+              </div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -95,8 +105,6 @@ export default class PatientsList extends Vue {
 
     this.mount = true;
   }
-
-  // get buttonType() =>
 
   filterTable = (patients: IPatient[]) => {
     let filteredPatients = patients;

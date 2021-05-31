@@ -4,10 +4,10 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {
-  anthropometries(state): IDisability[] | undefined {
+  disabilities(state): IDisability[] | undefined {
     return state.disabilities;
   },
-  anthropometry(state): IDisability | undefined {
+  disability(state): IDisability | undefined {
     return state.disability;
   },
   getById(state, id: number): IDisability | undefined {
