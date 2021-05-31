@@ -1,8 +1,8 @@
 import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default class Period implements IPeriod {
-  dateStart: string = '';
-  dateEnd: string = '';
+  dateStart = '';
+  dateEnd = '';
 
   constructor(period?: IPeriod) {
     if (!period) return;

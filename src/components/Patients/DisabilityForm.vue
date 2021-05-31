@@ -103,7 +103,11 @@ export default class DisabilityForm extends Vue {
       return `disabilities.${this.disabilities.indexOf(scope.row)}.period.startDate`;
     }
     const disabilityIndex = this.disabilities.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
-    const edvIndex = this.disabilities[disabilityIndex].edvs!.indexOf(scope.row);
+    let edvIndex = -1;
+    if (this.disabilities[disabilityIndex].edvs) {
+      edvIndex = this.disabilities[disabilityIndex].edvs.indexOf(scope.row);
+    }
+
     return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.startDate`;
   };
 
