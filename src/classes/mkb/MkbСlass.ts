@@ -10,6 +10,7 @@ export default class MkbCLass implements IMkbClass {
   rangeStart?: string;
   rangeEnd?: string;
   comment?: string;
+  relevant?: boolean;
   leaf = false;
   disabled = true;
   showCheckbox = false;
@@ -27,6 +28,7 @@ export default class MkbCLass implements IMkbClass {
     this.rangeEnd = mkbClass.rangeEnd;
     this.comment = mkbClass.comment;
     this.leaf = mkbClass.leaf;
+    this.relevant = mkbClass.relevant;
     if (mkbClass.mkbGroups) {
       this.mkbGroups = mkbClass.mkbGroups.map((mkbGroup: IMkbGroup) => new MkbGroup(mkbGroup));
     }

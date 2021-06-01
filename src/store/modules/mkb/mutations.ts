@@ -82,6 +82,16 @@ const mutations: MutationTree<State> = {
       diagnosis.mkbSubDiagnosis = mkbSubDiagnosis;
     }
   },
+
+  // updateRelevant: (state, payload) => {
+  //   let item;
+  //   Object.values(state).forEach((group: any) => {
+  //     item = group.find((i: any) => i.id === payload.id);
+  //   });
+  //   if (item) {
+  //     Object.assign(item, payload);
+  //   }
+  // },
 };
 
 export default mutations;
