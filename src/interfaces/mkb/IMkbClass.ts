@@ -8,6 +8,7 @@ export default interface IMkbClass {
   rangeStart?: string;
   rangeEnd?: string;
   comment?: string;
+  relevant?: boolean;
   leaf: boolean;
   disabled: boolean;
 

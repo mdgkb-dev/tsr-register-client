@@ -7,6 +7,7 @@ export default interface IMkbSubSubGroup {
   rangeEnd?: string;
   comment?: string;
   mkbSubGroupId?: string;
+  relevant?: boolean;
   disabled: boolean;
 
   mkbDiagnosis: IMkbDiagnosis[];
