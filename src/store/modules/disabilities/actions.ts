@@ -14,7 +14,7 @@ const actions: ActionTree<State, RootState> = {
     commit('set', await httpClient.get(id));
   },
   create: async ({ commit }, payload: IDisability): Promise<void> => {
-    commit('create', await httpClient.post(payload));
+    commit('create', await httpClient.post({ payload }));
   },
   edit: async ({ commit }, payload: IDisability): Promise<void> => {
     commit('update', await httpClient.put(payload, payload.id));
