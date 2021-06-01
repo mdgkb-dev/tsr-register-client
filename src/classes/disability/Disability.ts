@@ -17,7 +17,10 @@ export default class Disability implements IDisability {
       return;
     }
     this.id = disability.id;
-    this.period = disability.period;
+    if (disability.period) {
+      this.period = new Period(disability.period);
+    }
+
     this.patientId = disability.patientId;
     this.patient = disability.patient;
     if (disability.edvs) {

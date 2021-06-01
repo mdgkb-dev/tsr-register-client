@@ -12,6 +12,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   mkbSubGroupId?: string;
   mkbSubSubGroupId?: string;
   checked = false;
+  relevant?: boolean;
   leaf = false;
   disabled = false;
 
@@ -30,6 +31,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
     this.mkbSubGroupId = mkbDiagnosis.mkbSubGroupId;
     this.mkbSubSubGroupId = mkbDiagnosis.mkbSubSubGroupId;
     this.leaf = mkbDiagnosis.leaf;
+    this.relevant = mkbDiagnosis.relevant;
     if (mkbDiagnosis.mkbSubDiagnosis) {
       this.mkbSubDiagnosis = mkbDiagnosis.mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
     }

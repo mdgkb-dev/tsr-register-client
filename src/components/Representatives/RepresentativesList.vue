@@ -82,6 +82,10 @@ import ListHead from '../ListHead.vue';
   },
 })
 export default class RepresentativesList extends Vue {
+  $message!: {
+    error: any;
+  };
+
   representatives!: IRepresentative[];
   getAll!: () => Promise<void>;
   search = '';
@@ -92,7 +96,12 @@ export default class RepresentativesList extends Vue {
   title = 'Представители';
 
   async mounted(): Promise<void> {
-    await this.getAll();
+    try {
+      await this.getAll();
+    } catch (e) {
+      this.$message.error(e.toString());
+      return;
+    }
 
     this.filterName = this.representatives.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
     this.filterDate = this.representatives.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));

@@ -6,6 +6,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
   subCode?: number;
   comment?: string;
   mkbDiagnosisId?: string;
+  relevant?: boolean;
   leaf = true;
   disabled = false;
 
@@ -20,6 +21,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.comment = mkbSubDiagnosis.comment;
     this.mkbDiagnosisId = mkbSubDiagnosis.mkbDiagnosisId;
     this.disabled = false;
+    this.relevant = mkbSubDiagnosis.relevant;
   }
 
   getFullName = () => `${this.subCode} ${this.name}`;
