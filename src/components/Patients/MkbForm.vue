@@ -67,6 +67,20 @@
     </el-dialog>
 
     <el-table :data="patientDiagnosis">
+      <el-table-column type="expand">
+        <template #default="props">
+          <el-button @click="addAnamnesis(props.row)">Добавить диагноз</el-button>
+          <el-timeline>
+            <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="index" :timestamp="anamnesis.date">
+              <el-form-item prop="human.dateBirth">
+                <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="anamnesis.date"></el-date-picker>
+              </el-form-item>
+              <div style="margin: 20px 0;"></div>
+              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" placeholder="Please input" v-model="anamnesis.value"> </el-input>
+            </el-timeline-item>
+          </el-timeline>
+        </template>
+      </el-table-column>
       <el-table-column type="index" width="50" />
       <el-table-column label="Основной диагноз" width="450" sortable>
         <template #default="scope">
@@ -103,6 +117,7 @@ import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IOption from '@/interfaces/shared/IOption';
 import { defineAsyncComponent } from 'vue';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/MkbTree.vue'));
 
@@ -148,6 +163,11 @@ export default class MkbForm extends Vue {
     // this.patientDiagnosis.push(new PatientDiagnosis());
     // this.queryStrings.push();
   }
+
+  addAnamnesis = (diagnosis: IPatientDiagnosis) => {
+    console.log(diagnosis);
+    diagnosis.patientDiagnosisAnamnesis.push(new PatientDiagnosisAnamnesis());
+  };
 
   addDiagnosisModal(): void {
     this.diagnosisModalVisible = true;
@@ -205,7 +225,7 @@ export default class MkbForm extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);

@@ -5,6 +5,8 @@ import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 export default class PatientDiagnosis implements IPatientDiagnosis {
   id?: string;
@@ -15,6 +17,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
   mkbDiagnosis?: IMkbDiagnosis;
   patientId = '';
   patient?: IPatient;
+  patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[] = [];
 
   constructor(patientDiagnosis?: IPatientDiagnosis) {
     if (!patientDiagnosis) {
@@ -33,6 +36,9 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
     this.patientId = patientDiagnosis.patientId;
     if (patientDiagnosis.patient) {
       this.patient = new Patient(patientDiagnosis.patient);
+    }
+    if (patientDiagnosis.patientDiagnosisAnamnesis) {
+      this.patientDiagnosisAnamnesis = patientDiagnosis.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
     }
   }
 }
