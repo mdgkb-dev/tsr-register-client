@@ -9,6 +9,7 @@ export default interface IMkbDiagnosis {
   mkbGroupId?: string;
   mkbSubGroupId?: string;
   mkbSubSubGroupId?: string;
+  relevant?: boolean;
   leaf: boolean;
   disabled: boolean;
   checked: boolean;
