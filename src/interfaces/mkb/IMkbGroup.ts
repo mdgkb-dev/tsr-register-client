@@ -8,6 +8,7 @@ export default interface IMkbGroup {
   rangeEnd?: string;
   comment?: string;
   mkbClassId?: string;
+  relevant?: boolean;
   mkbSubGroups: IMkbSubGroup[];
   mkbDiagnosis: IMkbDiagnosis[];
   disabled: boolean;

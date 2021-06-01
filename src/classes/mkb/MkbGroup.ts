@@ -14,6 +14,7 @@ export default class MkbGroup implements IMkbGroup {
   disabled = true;
   mkbSubGroups: IMkbSubGroup[] = [];
   mkbDiagnosis: IMkbDiagnosis[] = [];
+  relevant?: boolean;
 
   constructor(mkbGroup?: IMkbGroup) {
     if (!mkbGroup) {
@@ -34,6 +35,7 @@ export default class MkbGroup implements IMkbGroup {
       this.mkbDiagnosis = mkbGroup.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
     }
     this.disabled = true;
+    this.relevant = mkbGroup.relevant;
   }
 
   getDiagnosis(diagnosisId: string): IMkbDiagnosis | undefined {

@@ -4,6 +4,7 @@ export default interface IMkbSubDiagnosis {
   subCode?: number;
   comment?: string;
   mkbDiagnosisId?: string;
+  relevant?: boolean;
   leaf: boolean;
   disabled: boolean;
 

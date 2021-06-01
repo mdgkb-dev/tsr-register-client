@@ -1,10 +1,10 @@
 <template>
   <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
   <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
-  <el-row v-if="mount">
+  <el-row>
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
-        <el-form v-if="mount" ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
+        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -25,7 +25,7 @@
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template><MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
-            <el-collapse-item v-if="mount">
+            <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm :inDisabilities="patient.disabilities" :inBirthDate="patient.human.dateBirth" />
             </el-collapse-item>
@@ -154,13 +154,9 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
     }
-    try {
-      await this.insuranceCompaniesGetAll();
-      await this.documentsGetAll();
-      await this.anthropometryGetAll();
-    } catch (e) {
-      console.log(e);
-    }
+    await this.insuranceCompaniesGetAll();
+    await this.documentsGetAll();
+    await this.anthropometryGetAll();
 
     this.insuranceCompaniesOptions = [];
     if (this.patient.disabilities) {

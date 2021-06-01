@@ -9,6 +9,7 @@ export default class MkbSubSubGroup implements IMkbSubSubGroup {
   rangeEnd?: string;
   comment?: string;
   mkbSubGroupId?: string;
+  relevant?: boolean;
   disabled = true;
 
   mkbDiagnosis: IMkbDiagnosis[] = [];
@@ -23,6 +24,7 @@ export default class MkbSubSubGroup implements IMkbSubSubGroup {
     this.rangeEnd = mkbSubSubGroup.rangeEnd;
     this.comment = mkbSubSubGroup.comment;
     this.mkbSubGroupId = mkbSubSubGroup.mkbSubGroupId;
+    this.relevant = mkbSubSubGroup.relevant;
 
     if (mkbSubSubGroup.mkbDiagnosis) {
       this.mkbDiagnosis = mkbSubSubGroup.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));

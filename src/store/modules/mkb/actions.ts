@@ -40,8 +40,10 @@ const actions: ActionTree<State, RootState> = {
     commit('setDiagnosis', await httpClient.get(`diagnosis?query=${query}`));
   },
   searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
-    console.log('diagnosisId', diagnosisId);
     commit('setSubDiagnosisByDiagnosisId', await httpClient.get(`diagnosis/${diagnosisId}`));
+  },
+  updateRelevant: async ({ commit }, data: any): Promise<void> => {
+    await httpClient.get(`${data.id}?relevant=${data.relevant}&group=${data.mkbGroupName}`);
   },
 };
 
