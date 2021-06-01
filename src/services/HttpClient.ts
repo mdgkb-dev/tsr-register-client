@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import IPostParams from '@/interfaces/fetchApi/IPostParams';
+
 export default class HttpClient {
   api: string;
 
@@ -10,8 +12,8 @@ export default class HttpClient {
     this.headers = { 'Content-Type': 'application/json' };
   }
 
-  async get(params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
+  async get(query?: string): Promise<any> {
+    const res = await fetch(this.baseUrl(query), {
       method: 'GET',
       headers: this.headers,
     });
@@ -19,18 +21,36 @@ export default class HttpClient {
     return res.json();
   }
 
-  async post(payload: any, params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
+  async post(params: IPostParams): Promise<any> {
+    const { payload, fileSets, query, headers, isFormData } = params;
+    this.toUtc(payload);
+    let body: string | FormData = JSON.stringify(payload);
+
+    if (isFormData) {
+      body = new FormData();
+      body.append('payload', JSON.stringify(payload));
+
+      if (fileSets) {
+        for (const fileSet of fileSets) {
+          for (const file of fileSet.files) {
+            body.append(fileSet.category, file);
+          }
+        }
+      }
+    }
+
+    const res = await fetch(this.baseUrl(query), {
       method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify(this.toUtc(payload)),
+      headers: headers ?? this.headers,
+      body,
     });
+
     return res.json();
   }
 
-  async put(payload: any, params?: any): Promise<any> {
+  async put(payload: any, query?: string): Promise<any> {
     this.toUtc(payload);
-    const res = await fetch(this.baseUrl(params), {
+    const res = await fetch(this.baseUrl(query), {
       method: 'PUT',
       headers: this.headers,
       body: JSON.stringify(payload),
@@ -38,19 +58,19 @@ export default class HttpClient {
     return res.json();
   }
 
-  async delete(params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
+  async delete(query?: string): Promise<any> {
+    const res = await fetch(this.baseUrl(query), {
       method: 'DELETE',
       headers: this.headers,
     });
     return res.json();
   }
 
-  private baseUrl(params?: any): string {
-    if (!params) {
+  private baseUrl(query?: string): string {
+    if (!query) {
       return process.env.VUE_APP_BASE_URL + this.api;
     }
-    return `${process.env.VUE_APP_BASE_URL + this.api}/${params}`;
+    return `${process.env.VUE_APP_BASE_URL + this.api}/${query}`;
   }
 
   private toUtc(payload: Record<string, any>): Record<string, any> {
