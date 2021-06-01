@@ -13,4 +13,12 @@ export default class Anthropometry implements IAnthropometry {
     this.name = anthropometry.name;
     this.measure = anthropometry.measure;
   }
+
+  isWeight(): boolean {
+    return this.name.toLowerCase() === 'вес';
+  }
+
+  isHeight(): boolean {
+    return this.name.toLowerCase() === 'рост';
+  }
 }

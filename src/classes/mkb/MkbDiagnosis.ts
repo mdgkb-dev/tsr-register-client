@@ -11,6 +11,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   mkbGroupId?: string;
   mkbSubGroupId?: string;
   mkbSubSubGroupId?: string;
+  checked = false;
   leaf = false;
   disabled = false;
 

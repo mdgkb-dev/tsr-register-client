@@ -1,11 +1,7 @@
-// переопределение переменных
 $--color-primary: #2753eb;
-// $--color-success-lighter: #43d39d;
-// $--color-success-light: #43d39d;
 $--color-success: #43d39d;
 
 
-//$--border-radius-small: 50%;
 $--checkbox-border-radius: 50%;
 
 $--input-border-radius: 40px;
@@ -63,4 +59,8 @@ body {
 
 .wide-dropdown {
   width: 600px !important;
+}
+
+.el-form-item__content {
+  margin-left: 0;
 }

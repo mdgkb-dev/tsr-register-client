@@ -3,8 +3,61 @@
     <el-button @click="addDiagnosis">Добавить диагноз</el-button>
     <el-button @click="addDiagnosisModal">Добавить диагноз из списка</el-button>
 
-    <el-dialog v-model="diagnosisModalVisible" width="80%">
-      <MkbTree :selectable="true" @setDiagnosis="setDiagnosis" @setSubDiagnosis="setSubDiagnosis"></MkbTree>
+    <el-dialog v-if="diagnosisModalVisible" v-model="diagnosisModalVisible" width="90%">
+      <el-row>
+        <el-col :span="12">
+          <h3>Список диагнозов</h3>
+          <MkbTree
+            :checkedDiagnosis="checkedDiagnosis"
+            :selectable="true"
+            @setDiagnosis="setDiagnosis"
+            @removeDiagnosis="removeCheckedDiagnosis"
+            @setSubDiagnosis="setSubDiagnosis"
+          ></MkbTree>
+        </el-col>
+        <el-col :span="10" offset="2">
+          <h3>Добавленные диагнозы</h3>
+          <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
+            <el-table-column type="index" width="50" />
+            <el-table-column prop="mkbDiagnosis.name" label="Основной диагноз" width="300"> </el-table-column>
+            <el-table-column prop="mkbSubDiagnosis.name" label="Уточнённый диагноз" width="400"> </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="cancelDiagnosisFromModal">Отменить</el-button>
+          <el-button type="primary" @click="addDiagnosisFromModal">Добавить диагноз</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-if="diagnosisSearchModalVisible" v-model="diagnosisSearchModalVisible" width="90%">
+      <el-row>
+        <el-col :span="12">
+          <h3>Поиск</h3>
+          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findDiagnosis" v-model="queryStrings[0]" placeholder="Выберите диагноз">
+            <!--            @select="handleSelect($event, scope.$index)"-->
+            <template #default="{ item }">
+              <div class="value">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
+
+          <!--          <el-select v-model="scope.row.mkbSubDiagnosisId" v-if="scope.row.mkbDiagnosisId" placeholder="Выберите диагноз">-->
+          <!--            <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />-->
+          <!--          </el-select>-->
+        </el-col>
+        <el-col :span="10" offset="2">
+          <h3>Добавленные диагнозы</h3>
+          <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
+            <el-table-column type="index" width="50" />
+            <el-table-column prop="mkbDiagnosis.name" label="Основной диагноз" width="300"> </el-table-column>
+            <el-table-column prop="mkbSubDiagnosis.name" label="Уточнённый диагноз" width="400"> </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="cancelDiagnosisFromModal">Отменить</el-button>
@@ -15,36 +68,24 @@
 
     <el-table :data="patientDiagnosis">
       <el-table-column type="index" width="50" />
-      <el-table-column prop="human.dateBirth" label="Основной диагноз" width="350" sortable>
+      <el-table-column label="Основной диагноз" width="450" sortable>
         <template #default="scope">
-          <el-autocomplete
-            popper-class="wide-dropdown"
-            :fetch-suggestions="findDiagnosis"
-            v-model="queryStrings[scope.$index]"
-            placeholder="Выберите диагноз"
-            @select="handleSelect($event, scope.$index)"
-          >
-            <template #default="{ item }">
-              <div class="value">{{ item.value }}</div>
-            </template>
-          </el-autocomplete>
+          <div>{{ scope.row.mkbDiagnosis.code }} {{ scope.row.mkbDiagnosis.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="height" label="Уточнённый диагноз" width="250">
+      <el-table-column prop="height" label="Уточнённый диагноз" width="450">
         <template #default="scope">
-          <el-select v-model="scope.row.mkbSubDiagnosisId" v-if="scope.row.mkbDiagnosisId" placeholder="Выберите диагноз">
-            <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />
-          </el-select>
+          <div v-if="scope.row.mkbSubDiagnosis">{{ scope.row.mkbDiagnosis.code }}.{{ scope.row.mkbSubDiagnosis.subCode }} {{ scope.row.mkbSubDiagnosis.name }}</div>
         </template>
       </el-table-column>
-      <el-table-column prop="weight" label="Первичный" width="100">
+      <el-table-column prop="weight" label="Первичный" width="120">
         <template #default="scope">
           <el-checkbox v-model="scope.row.primary" />
         </template>
       </el-table-column>
       <el-table-column width="120">
         <template #default="scope">
-          <el-button @click="removeDiagnosis(scope.$index)" type="text" size="small">Удалить</el-button>
+          <el-button @click="removeDiagnosis(scope.row)" type="text" size="small">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -95,16 +136,17 @@ export default class MkbForm extends Vue {
   // Local state.
   patientDiagnosis = this.inPatientDiagnosis;
   diagnosisModalVisible = false;
-  checkedDiagnosis?: IMkbDiagnosis = undefined;
-  checkedSubDiagnosis?: IMkbSubDiagnosis = undefined;
+  diagnosisSearchModalVisible = false;
+  checkedDiagnosis: IPatientDiagnosis[] = this.inPatientDiagnosis;
 
   cancelDiagnosisFromModal(): void {
-    this.checkedDiagnosis = undefined;
+    this.diagnosisModalVisible = false;
   }
 
   addDiagnosis(): void {
-    this.patientDiagnosis.push(new PatientDiagnosis());
-    this.queryStrings.push();
+    this.diagnosisSearchModalVisible = true;
+    // this.patientDiagnosis.push(new PatientDiagnosis());
+    // this.queryStrings.push();
   }
 
   addDiagnosisModal(): void {
@@ -113,19 +155,24 @@ export default class MkbForm extends Vue {
 
   addDiagnosisFromModal(): void {
     this.diagnosisModalVisible = false;
-    const diagnosis = new PatientDiagnosis();
-    if (this.checkedDiagnosis) {
-      diagnosis.mkbDiagnosisId = this.checkedDiagnosis.id;
-      this.patientDiagnosis.push(diagnosis);
-    }
+    this.patientDiagnosis = this.checkedDiagnosis;
   }
 
   setDiagnosis(diagnosis: IMkbDiagnosis): void {
-    this.checkedDiagnosis = diagnosis;
+    const patientDiagnosis = new PatientDiagnosis();
+    patientDiagnosis.mkbDiagnosis = diagnosis;
+    patientDiagnosis.mkbDiagnosisId = diagnosis.id;
+    this.checkedDiagnosis.push(patientDiagnosis);
   }
 
-  setSubDiagnosis(subDiagnosis: IMkbSubDiagnosis): void {
-    this.checkedSubDiagnosis = subDiagnosis;
+  setSubDiagnosis(subDiagnosis: IMkbSubDiagnosis, diagnosis: IMkbDiagnosis): void {
+    const patientDiagnosis = new PatientDiagnosis();
+    patientDiagnosis.mkbSubDiagnosis = subDiagnosis;
+    patientDiagnosis.mkbSubDiagnosisId = subDiagnosis.id;
+
+    patientDiagnosis.mkbDiagnosis = diagnosis;
+    patientDiagnosis.mkbDiagnosisId = diagnosis.id;
+    this.checkedDiagnosis.push(patientDiagnosis);
   }
 
   async findDiagnosis(query: string, resolve: any) {
@@ -154,6 +201,19 @@ export default class MkbForm extends Vue {
   async handleSelect(item: ISearch, index: number) {
     this.patientDiagnosis[index].mkbDiagnosisId = item.id;
     await this.findSubDiagnosis(item.id);
+  }
+
+  removeCheckedDiagnosis(item: any): void {
+    const checkedDiagnosis = this.checkedDiagnosis.filter(
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+    );
+    checkedDiagnosis.forEach((d: any) => {
+      const index = this.checkedDiagnosis.indexOf(d);
+      if (index !== -1) {
+        this.patientDiagnosis.splice(index, 1);
+        this.queryStrings.splice(index, 1);
+      }
+    });
   }
 
   removeDiagnosis(item: any): void {

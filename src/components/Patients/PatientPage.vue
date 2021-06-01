@@ -76,6 +76,7 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 @Options({
   components: {
@@ -89,6 +90,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
     PatientToRepresentativeForm,
   },
   computed: {
+    ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
@@ -99,6 +101,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
   methods: {
     ...mapActions({
       patientGet: 'patients/get',
+      anthropometryGetAll: 'anthropometry/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
@@ -119,6 +122,7 @@ export default class ModalForm extends Vue {
   $confirm!: any;
 
   disabilities!: IDisability[];
+  anthropometries!: IAnthropometry[];
   isEditMode!: boolean;
   insuranceCompanies!: IInsuranceCompany[];
   insuranceCompaniesOptions!: IOption[];
@@ -132,6 +136,7 @@ export default class ModalForm extends Vue {
   representativesGetAll!: () => Promise<void>;
   representativeTypesGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
+  anthropometryGetAll!: () => Promise<void>;
 
   offset: number[] = [0];
 
@@ -194,6 +199,7 @@ export default class ModalForm extends Vue {
     }
     await this.insuranceCompaniesGetAll();
     await this.documentsGetAll();
+    await this.anthropometryGetAll();
 
     this.insuranceCompaniesOptions = [];
     if (this.patient.disabilities) {
@@ -344,7 +350,14 @@ export default class ModalForm extends Vue {
       }
     }
 
-    this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, this.patient.id);
+    let heightId: string | undefined = '';
+    let weightId: string | undefined = '';
+    this.anthropometries.forEach((a: IAnthropometry) => {
+      if (a.isHeight()) heightId = a.id;
+      if (a.isWeight()) weightId = a.id;
+    });
+
+    this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);
 
     try {
       if (this.isEditMode) {

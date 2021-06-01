@@ -5,15 +5,17 @@ import AnthropometryDate from '@/classes/anthropometry/AnthropometryData';
 
 export default class HeightWeight implements IHeightWeight {
   id: string;
-  anthropometryId: string;
+  heightId: string;
+  weightId: string;
   height: number;
   weight: number;
   date: string;
 
-  constructor(id = '', anthropometryId = '', height = 0, weight = 0, date = '') {
+  constructor(id = '', heightId = '', height = 0, weightId = '', weight = 0, date = '') {
     this.id = id;
-    this.anthropometryId = anthropometryId;
+    this.heightId = heightId;
     this.height = height;
+    this.weightId = weightId;
     this.weight = weight;
     this.date = date;
   }
@@ -37,13 +39,15 @@ export default class HeightWeight implements IHeightWeight {
     anthropometryData.forEach((a: IAnthropometryData) => {
       if (!a.anthropometry) return;
       if (a.isHeight()) {
+        heightWeight.heightId = a.id ?? '';
         heightWeight.height = a.value;
       }
       if (a.isWeight()) {
+        heightWeight.weightId = a.id ?? '';
         heightWeight.weight = a.value;
       }
       if (heightWeight.height && heightWeight.weight) {
-        resultHeightWeight.push(new HeightWeight(a.id, a.anthropometryId, heightWeight.height, heightWeight.weight, a.date));
+        resultHeightWeight.push(new HeightWeight(a.id, heightWeight.heightId, heightWeight.height, heightWeight.weightId, heightWeight.weight, a.date));
         heightWeight = new HeightWeight();
       }
     });
@@ -51,16 +55,26 @@ export default class HeightWeight implements IHeightWeight {
     return resultHeightWeight;
   }
 
-  static toAnthropometryData(heightWeight: IHeightWeight[], patientId?: string): IAnthropometryData[] {
+  static toAnthropometryData(heightWeight: IHeightWeight[], heightId: string, weightId: string, patientId?: string): IAnthropometryData[] {
+    console.log(heightId);
+    console.log(weightId);
     const result: IAnthropometryData[] = [];
     heightWeight.forEach((heightWightItem: IHeightWeight) => {
       const anthro = new AnthropometryDate();
+      if (heightWightItem.id !== '') anthro.id = heightWightItem.heightId;
       anthro.patientId = patientId;
-      anthro.id = heightWightItem.id;
-      anthro.value = heightWightItem.height ?? heightWightItem.weight;
       anthro.date = heightWightItem.date;
-      anthro.anthropometryId = heightWightItem.anthropometryId;
+      anthro.anthropometryId = heightId;
+      anthro.value = heightWightItem.height;
       result.push(anthro);
+
+      const anthro2 = new AnthropometryDate();
+      if (heightWightItem.id !== '') anthro2.id = heightWightItem.weightId;
+      anthro2.patientId = patientId;
+      anthro2.date = heightWightItem.date;
+      anthro2.anthropometryId = weightId;
+      anthro2.value = heightWightItem.weight;
+      result.push(anthro2);
     });
     return result;
   }
