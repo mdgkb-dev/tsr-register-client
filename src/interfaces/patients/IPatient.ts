@@ -6,7 +6,7 @@ import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
 
 export default interface IPatient {
-  id?: string;
+  id: string;
   human: IHuman;
   anthropometryData: IAnthropometryData[];
   patientDiagnosis: IPatientDiagnosis[];

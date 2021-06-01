@@ -1,20 +1,22 @@
-import IPatient from '@/interfaces/patients/IPatient';
-import IHuman from '@/interfaces/humans/IHuman';
-import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
-import Human from '@/classes/humans/Human';
-import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
-import IDisability from '@/interfaces/disabilities/IDisability';
-import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import Disability from '@/classes/disability/Disability';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Bmi from '../bmi/Bmi';
 
+import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IHuman from '@/interfaces/humans/IHuman';
+import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+
+import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
+import Disability from '@/classes/disability/Disability';
+import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import Human from '@/classes/humans/Human';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+
 export default class Patient implements IPatient {
-  id?: string;
+  id: string = '';
   human: IHuman = new Human();
   anthropometryData: IAnthropometryData[] = [];
   representativeToPatient: IRepresentativeToPatient[] = [];

@@ -1,22 +1,21 @@
-import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
-import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IContact from './IContact';
+import IDocument from '@/interfaces/documents/IDocument';
+import FileInfo from '@/interfaces/files/IFileInfo';
 
 export default interface IHuman {
-  id?: string;
-  patientId?: string;
+  id: string;
   name: string;
   surname: string;
   patronymic: string;
   isMale: boolean;
-  dateBirth: string;
+  dateBirth: Date;
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
-  documentFieldToHuman: IDocumentFieldValue[];
-  documentScans: IDocumentScan[];
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
+  documents: IDocument[];
+  fileInfos: FileInfo[];
 
   getFullName: () => string;
   getGender: (full?: boolean) => string;
