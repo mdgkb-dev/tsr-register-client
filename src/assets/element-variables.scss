@@ -1,27 +1,28 @@
 $--color-primary: #2753eb;
 $--color-success: #43d39d;
 
-
 $--checkbox-border-radius: 50%;
 
 $--input-border-radius: 40px;
 
 $--font-path: '~element-plus/lib/theme-chalk/fonts';
-@import "~element-plus/packages/theme-chalk/src/index";
-@import "./elements/table.scss";
-@import "./elements/sideMenu.scss";
+@import '~element-plus/packages/theme-chalk/src/index';
+@import './elements/table.scss';
+@import './elements/sideMenu.scss';
 
 html,
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  height: 100vh;
 }
 
-.main-comntainer {
+.main-container {
   border: 1px solid #eee;
   background-color: rgb(238, 241, 246);
   height: 100%;
+  overflow: auto;
 }
 
 .semi-bold-header {
@@ -54,7 +55,7 @@ body {
 }
 
 .underline-label {
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 .wide-dropdown {

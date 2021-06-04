@@ -66,22 +66,25 @@
       </template>
     </el-dialog>
 
-    <el-table :data="patientDiagnosis">
+    <el-table :data="patientDiagnosis" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange">
       <el-table-column type="expand">
         <template #default="props">
-          <el-button @click="addAnamnesis(props.row)">Добавить диагноз</el-button>
-          <el-timeline>
-            <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="index" :timestamp="anamnesis.date">
-              <el-form-item prop="human.dateBirth">
-                <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="anamnesis.date"></el-date-picker>
-              </el-form-item>
-              <div style="margin: 20px 0;"></div>
-              <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" placeholder="Please input" v-model="anamnesis.value"> </el-input>
-            </el-timeline-item>
-          </el-timeline>
+          <el-button @click="addAnamnesis(props.row)" stryle="margin: 100px">Добавить анамнез</el-button>
+          <div class="block" style="">
+            <el-timeline style="margin-top: 20px">
+              <el-timeline-item
+                v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis"
+                :key="index"
+                :timestamp="fillDateFormat(anamnesis.date)"
+                placement="top"
+              >
+                <AnamnesisForm :anamnesis="anamnesis" :index="index" :diagnosis="props.row" />
+              </el-timeline-item>
+            </el-timeline>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column type="index" width="50" />
+      <!-- <el-table-column type="index" width="50" /> -->
       <el-table-column label="Основной диагноз" width="450" sortable>
         <template #default="scope">
           <div>{{ scope.row.mkbDiagnosis.code }} {{ scope.row.mkbDiagnosis.name }}</div>
@@ -120,10 +123,12 @@ import { defineAsyncComponent } from 'vue';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/MkbTree.vue'));
+const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
 @Options({
   components: {
     MkbTree,
+    AnamnesisForm,
   },
   props: ['in-patient-diagnosis'],
   computed: {
@@ -153,6 +158,7 @@ export default class MkbForm extends Vue {
   diagnosisModalVisible = false;
   diagnosisSearchModalVisible = false;
   checkedDiagnosis: IPatientDiagnosis[] = this.inPatientDiagnosis;
+  expandRowKeys: (string | undefined)[] = [];
 
   cancelDiagnosisFromModal(): void {
     this.diagnosisModalVisible = false;
@@ -165,8 +171,13 @@ export default class MkbForm extends Vue {
   }
 
   addAnamnesis = (diagnosis: IPatientDiagnosis) => {
-    console.log(diagnosis);
-    diagnosis.patientDiagnosisAnamnesis.push(new PatientDiagnosisAnamnesis());
+    const anamnesis = new PatientDiagnosisAnamnesis();
+    anamnesis.isEditMode = true;
+    diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
+  };
+
+  handleExpandChange = (row: IPatientDiagnosis) => {
+    this.expandRowKeys = row.id === this.expandRowKeys[0] ? [] : [row.id];
   };
 
   addDiagnosisModal(): void {
@@ -225,7 +236,7 @@ export default class MkbForm extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);
@@ -243,5 +254,6 @@ export default class MkbForm extends Vue {
       this.queryStrings.splice(index, 1);
     }
   }
+  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 }
 </script>

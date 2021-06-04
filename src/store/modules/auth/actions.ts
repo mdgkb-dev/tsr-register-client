@@ -19,12 +19,12 @@ const actions: ActionTree<State, RootState> = {
     }
 
     if (response?.status === 401) {
-      commit('setRegistrationError', 'Проверьте корректность введённых данных');
+      commit('setError', 'Проверьте корректность введённых данных');
       return;
     }
 
     if (response?.status !== 200) {
-      commit('setRegistrationError', 'Не удалось войти. Пожалуйста, обратитесь к разработчикам.');
+      commit('setError', 'Не удалось войти. Пожалуйста, обратитесь к разработчикам.');
       return;
     }
 
@@ -34,7 +34,7 @@ const actions: ActionTree<State, RootState> = {
     let response;
 
     try {
-      response = await fetch(`${process.env.VUE_APP_BASE_URL}user`, {
+      response = await fetch(`${process.env.VUE_APP_BASE_URL}users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
@@ -45,7 +45,7 @@ const actions: ActionTree<State, RootState> = {
     }
 
     if (response?.status !== 200) {
-      commit('authorizationError', 'Не удалось зарегистрироваться. Пожалуйста, обратитесь к разработчикам.');
+      commit('setError', 'Не удалось зарегистрироваться. Пожалуйста, обратитесь к разработчикам.');
       return;
     }
 

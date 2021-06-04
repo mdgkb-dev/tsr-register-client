@@ -5,6 +5,7 @@ export default class PatientDiagnosisAnamnesis implements IPatientDiagnosisAnamn
   value = '';
   date = '';
   patientDiagnosisId?: string;
+  isEditMode?: boolean;
 
   constructor(patientDiagnosisAnamnesis?: IPatientDiagnosisAnamnesis) {
     if (!patientDiagnosisAnamnesis) {
@@ -14,5 +15,6 @@ export default class PatientDiagnosisAnamnesis implements IPatientDiagnosisAnamn
     this.value = patientDiagnosisAnamnesis.value;
     this.date = patientDiagnosisAnamnesis.date;
     this.patientDiagnosisId = patientDiagnosisAnamnesis.patientDiagnosisId;
+    this.isEditMode = patientDiagnosisAnamnesis?.isEditMode;
   }
 }

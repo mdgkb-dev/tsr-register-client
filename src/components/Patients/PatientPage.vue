@@ -1,8 +1,9 @@
 <template>
-  <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
-  <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
-  <el-row>
-    <div class="table-background" style="width: 100%; height: 100%">
+  <div class="patient-page-container">
+    <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
+    <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
+    <el-row>
+      <!-- <div class="table-background" style="width: 100%; height: 100%"> -->
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
@@ -40,8 +41,9 @@
           </div>
         </el-form>
       </el-collapse>
-    </div>
-  </el-row>
+      <!-- </div> -->
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -286,3 +288,9 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.patient-page-container:deep {
+  @import '@/assets/elements/patientAndRepresPage.scss';
+}
+</style>

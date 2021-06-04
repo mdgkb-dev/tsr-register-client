@@ -1,32 +1,34 @@
 <template>
-  <el-aside width="220px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
-    <el-row style="line-height: 100px; margin-top: 50px">
-      <el-col>
-        <el-avatar size="large" :src="circleUrl"></el-avatar>
-      </el-col>
-    </el-row>
-    <el-row style="line-height: 10px">
-      <el-col>
-        <el-tag class="menu-badge">Пользователь</el-tag>
-      </el-col>
-    </el-row>
-    <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
-    <el-menu>
-      <el-menu-item-group :router="true">
-        <el-menu :router="true" :default-openeds="[0]">
-          <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-            <el-submenu :index="i.toString()">
-              <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
-              <div v-for="(item, j) in menu.links" v-bind:key="item.title">
-                <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
-              </div>
-            </el-submenu>
-          </div>
-        </el-menu>
-      </el-menu-item-group>
-    </el-menu>
-    <div style="margin-top: 50vh">
-      <el-button @click="logout()">Выйти</el-button>
+  <el-aside width="250px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
+    <div style="background-color: white; position: fixed; width: 250px; height: 100%">
+      <el-row style="line-height: 100px; margin-top: 50px">
+        <el-col>
+          <el-avatar size="large" :src="circleUrl"></el-avatar>
+        </el-col>
+      </el-row>
+      <el-row style="line-height: 10px">
+        <el-col>
+          <el-tag class="menu-badge">Пользователь</el-tag>
+        </el-col>
+      </el-row>
+      <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
+      <el-menu>
+        <el-menu-item-group :router="true">
+          <el-menu :router="true" :default-openeds="[0]">
+            <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
+              <el-submenu :index="i.toString()">
+                <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
+                <div v-for="(item, j) in menu.links" v-bind:key="item.title">
+                  <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
+                </div>
+              </el-submenu>
+            </div>
+          </el-menu>
+        </el-menu-item-group>
+      </el-menu>
+      <div style="position: absolute; bottom: 0; width: 100%; height: 160px">
+        <el-button @click="logout()">Выйти</el-button>
+      </div>
     </div>
   </el-aside>
 </template>

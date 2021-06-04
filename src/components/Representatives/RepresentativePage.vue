@@ -1,10 +1,10 @@
 <template>
-  <PageHead :titleParent="'Представители'" :title="'Профиль'" @submitForm="submitForm" />
-  <el-row v-if="mount">
-    <RepresentativePageInfo :representative="representative" />
-  </el-row>
-  <el-row>
-    <div class="table-background" style="width: 100%; height: 100%">
+  <div class="representative-page-container">
+    <PageHead :titleParent="'Представители'" :title="'Профиль'" @submitForm="submitForm" />
+    <el-row v-if="mount">
+      <RepresentativePageInfo :representative="representative" />
+    </el-row>
+    <el-row>
       <el-collapse>
         <el-form ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
           <div v-if="mount">
@@ -39,8 +39,8 @@
           </div>
         </el-form>
       </el-collapse>
-    </div>
-  </el-row>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -234,7 +234,7 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-row {
   margin-bottom: 40px;
   &:last-child {
@@ -250,5 +250,8 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 .modal-wrapper {
   width: 100%;
   height: 100%;
+}
+.representative-page-container:deep {
+  @import '@/assets/elements/patientAndRepresPage.scss';
 }
 </style>

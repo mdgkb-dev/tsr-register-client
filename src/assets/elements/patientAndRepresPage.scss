@@ -1,0 +1,15 @@
+.el-collapse {
+  width: 100%;
+}
+.el-collapse-item {
+  background-color: white;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.el-collapse-item__header,
+.el-collapse-item__wrap {
+  border: none;
+}

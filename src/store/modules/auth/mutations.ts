@@ -24,7 +24,7 @@ const mutations: MutationTree<State> = {
     Cookies.remove('user_sid');
     window.localStorage.removeItem('user_sid');
   },
-  setRegistrationError(state, errorMessage: string) {
+  setError(state, errorMessage: string) {
     state.authorizationError = errorMessage;
   },
 };

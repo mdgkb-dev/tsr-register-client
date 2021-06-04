@@ -8,7 +8,7 @@
         <template #default="scope">
           <el-form-item
             :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.insuranceCompanyId'"
-            :rules="[{ required: true, message: 'Пожалуйста, выберете страховую компанию' }]"
+            :rules="[{ required: true, message: 'Пожалуйста, выберите страховую компанию' }]"
             label-width="0"
             style="margin-bottom: 0"
           >
