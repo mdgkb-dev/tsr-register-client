@@ -39,17 +39,12 @@ import { mapActions, mapGetters } from 'vuex';
 import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 
-// import Document from '@/classes/documents/Document';
-// import IDocument from '@/interfaces/documents/IDocument';
-
 @Options({
   computed: {
-    // ...mapGetters('documents', ['document']),
     ...mapGetters('documentTypes', ['documentType']),
   },
   methods: {
     ...mapActions({
-      // documentGet: 'documents/get',
       documentTypesGet: 'documentTypes/get',
       documentTypesGetAll: 'documentTypes/getAll',
     }),
@@ -57,7 +52,6 @@ import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 })
 export default class DocumentTypePage extends Vue {
   // Types.
-  // documentGet!: (documentId: string) => Promise<void>;
   $refs!: {
     form: any;
     message: any;
@@ -67,7 +61,6 @@ export default class DocumentTypePage extends Vue {
   documentTypesGet!: (id: string) => Promise<void>;
 
   // Local state.
-  // document: IDocument = new Document();
   documentType = new DocumentType();
   title = '';
   mount = false;
@@ -98,8 +91,6 @@ export default class DocumentTypePage extends Vue {
       this.title = 'Редактировать документ';
       await this.documentTypesGet(String(this.$route.params.documentTypeId));
       this.documentType = this.$store.getters['documentTypes/documentType'];
-      // await this.documentGet(`${this.$route.params.documentId}`);
-      // this.document = this.$store.getters['documents/document'];
     }
     this.mount = true;
   }
