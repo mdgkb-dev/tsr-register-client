@@ -3,12 +3,11 @@ import moment from 'moment';
 import IPostParams from '@/interfaces/fetchApi/IPostParams';
 
 export default class HttpClient {
-  api: string;
-
+  endpoint: string;
   headers: Record<string, string>;
 
-  constructor(api = '/') {
-    this.api = api;
+  constructor(endpoint = '/') {
+    this.endpoint = endpoint;
     this.headers = { 'Content-Type': 'application/json' };
   }
 
@@ -68,18 +67,23 @@ export default class HttpClient {
 
   private baseUrl(query?: string): string {
     if (!query) {
-      return process.env.VUE_APP_BASE_URL + this.api;
+      return process.env.VUE_APP_BASE_URL + this.endpoint;
     }
-    return `${process.env.VUE_APP_BASE_URL + this.api}/${query}`;
+
+    return `${process.env.VUE_APP_BASE_URL + this.endpoint}/${query}`;
   }
 
   private toUtc(payload: Record<string, any>): Record<string, any> {
     const obj = payload;
-    if (!obj) return obj;
+    if (!obj) {
+      return obj;
+    }
+
     for (const item of Object.keys(obj)) {
       if (obj[item] && typeof obj[item].getMonth !== 'function' && typeof obj[item] === 'object') {
         this.toUtc(obj[item]);
       }
+
       if (obj[item] && typeof obj[item].getMonth === 'function') {
         obj[item] = moment(obj[item]).add(+moment().utcOffset(), 'm');
         obj[item] = obj[item]
@@ -88,6 +92,7 @@ export default class HttpClient {
           .format();
       }
     }
+
     return obj;
   }
 }
