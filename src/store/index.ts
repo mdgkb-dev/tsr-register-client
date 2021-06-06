@@ -1,8 +1,7 @@
 import Vuex, { StoreOptions } from 'vuex';
 
-import { users } from '@/store/modules/users';
 import { RootState } from './types';
-
+import documentTypes from './modules/documentTypes';
 import sma from './modules/sma/sma';
 import { anthropometry } from './modules/anthropometry';
 import { auth } from './modules/auth';
@@ -12,6 +11,7 @@ import { mkb } from './modules/mkb';
 import { patients } from './modules/patients';
 import { representativeTypes } from './modules/representativeTypes';
 import { representatives } from './modules/representatives';
+import { users } from '@/store/modules/users';
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -28,15 +28,16 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
-    auth,
-    patients,
-    representatives,
-    insuranceCompanies,
     anthropometry,
-    mkb,
+    auth,
     disabilities,
-    sma,
+    documentTypes,
+    insuranceCompanies,
+    mkb,
+    patients,
     representativeTypes,
+    representatives,
+    sma,
     users,
   },
 };
