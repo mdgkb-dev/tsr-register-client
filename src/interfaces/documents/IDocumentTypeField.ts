@@ -1,5 +1,5 @@
 export default interface IDocumentTypeField {
-  id: string;
+  id?: string;
   name: string;
   type: string;
   order: number;

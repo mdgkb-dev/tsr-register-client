@@ -1,24 +1,24 @@
+import DocumentTypeList from '@/components/Documents/DocumentTypeList.vue';
+import DocumentTypePage from '@/components/Documents/DocumentTypePage.vue';
 import { isAuthorized } from '@/router/index';
-import DocumentsList from '@/components/Documents/DocumentsList.vue';
-import DocumentPage from '@/components/Documents/DocumentPage.vue';
 
 export default [
   {
-    path: '/documents',
-    name: 'Documents',
-    component: DocumentsList,
+    path: '/document-types',
+    name: 'DocumentTypes',
+    component: DocumentTypeList,
     beforeEnter: isAuthorized,
   },
   {
-    path: '/documents/new',
-    name: 'CreateDocument',
-    component: DocumentPage,
+    path: '/document-types/new',
+    name: 'CreateDocumentType',
+    component: DocumentTypePage,
     beforeEnter: isAuthorized,
   },
   {
-    path: '/documents/:documentId',
-    name: 'EditDocument',
-    component: DocumentPage,
+    path: '/document-types/:documentTypeId',
+    name: 'EditDocumentType',
+    component: DocumentTypePage,
     beforeEnter: isAuthorized,
   },
 ];

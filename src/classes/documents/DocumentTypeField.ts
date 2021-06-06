@@ -1,7 +1,7 @@
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
 
 export default class DocumentTypeField implements IDocumentTypeField {
-  id = '';
+  id?;
   name = '';
   type = '';
   order = 0;

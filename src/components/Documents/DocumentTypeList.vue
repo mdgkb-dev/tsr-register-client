@@ -1,7 +1,7 @@
 <template>
   <ListHead :title="title" @create="create" />
   <div class="table-background">
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="documents" class="table-shadow" header-row-class-name="header-style">
+    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="documentTypes" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="expand">
         <template #default="props">
           <el-card class="box-card">
@@ -10,7 +10,7 @@
                 <span>Поля документа</span>
               </div>
             </template>
-            <div v-for="item in props.row.documentFields" :key="item.id" class="text item">
+            <div v-for="item in props.row.documentTypeFields" :key="item.id" class="text item">
               {{ item.name }}
             </div>
           </el-card>
@@ -34,36 +34,41 @@ import { mapState, mapActions } from 'vuex';
 
 import ListHead from '@/components/ListHead.vue';
 
+import IDocumentType from '@/interfaces/documents/IDocumentType';
+
 @Options({
   components: {
     ListHead,
   },
   computed: {
-    ...mapState('documents', ['documents']),
+    ...mapState('documentTypes', ['documentTypes']),
   },
   methods: {
-    ...mapActions('documents', ['getAll']),
+    ...mapActions('documentTypes', ['getAll']),
   },
 })
-export default class DocumentsList extends Vue {
-  documents!: [];
+export default class DocumentTypeList extends Vue {
+  // Types.
+  documentTypes!: IDocumentType[];
   getAll!: () => Promise<void>;
-  title = 'Документы';
+
+  // Local state.
+  title = 'Типы документов';
 
   async mounted(): Promise<void> {
     await this.getAll();
   }
 
   edit(id: string): void {
-    this.$router.push(`/documents/${id}`);
+    this.$router.push(`/document-types/${id}`);
   }
 
   create(): void {
-    this.$router.push('/documents/new');
+    this.$router.push('/document-types/new');
   }
 
-  delete(id: number): void {
-    this.$store.dispatch('documents/delete', id);
+  async delete(id: number): Promise<void> {
+    await this.$store.dispatch('documentTypes/delete', id);
   }
 }
 </script>
