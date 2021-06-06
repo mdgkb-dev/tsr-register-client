@@ -80,24 +80,24 @@ export default class MainSidePanel extends Vue {
       class: 'el-icon-notebook-2',
       links: [
         {
-          name: 'Documents',
-          title: 'Документы',
-          link: '/documents',
-        },
-        {
           name: 'Anthropometry',
           title: 'Антропометрия',
           link: '/anthropometry',
         },
         {
-          name: 'RepresentativeTypes',
-          title: 'Типы представителей',
-          link: '/representative-types',
-        },
-        {
           name: 'Users',
           title: 'Пользователи',
           link: 'users',
+        },
+        {
+          name: 'DocumentTypes',
+          title: 'Типы документов',
+          link: '/document-types',
+        },
+        {
+          name: 'RepresentativeTypes',
+          title: 'Типы представителей',
+          link: '/representative-types',
         },
       ],
     },
