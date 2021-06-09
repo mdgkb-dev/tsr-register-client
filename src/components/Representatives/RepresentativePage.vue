@@ -230,8 +230,11 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 </script>
 
 <style lang="scss" scoped>
+.representative-page-container:deep {
+  @import '@/assets/elements/patientAndRepresPage.scss';
+}
+
 .el-row {
-  margin-bottom: 40px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -245,8 +248,5 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 .modal-wrapper {
   width: 100%;
   height: 100%;
-}
-.representative-page-container:deep {
-  @import '@/assets/elements/patientAndRepresPage.scss';
 }
 </style>
