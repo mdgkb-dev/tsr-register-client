@@ -9,7 +9,7 @@ export default interface IHuman {
   surname: string;
   patronymic: string;
   isMale: boolean;
-  dateBirth: Date;
+  dateBirth: string;
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
