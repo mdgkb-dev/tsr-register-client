@@ -111,10 +111,6 @@ import PageHead from '@/components/PageHead.vue';
 })
 export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   // Types.
-  $refs!: {
-    form: any;
-  };
-
   disabilities!: IDisability[];
   anthropometries!: IAnthropometry[];
   insuranceCompanies!: IInsuranceCompany[];

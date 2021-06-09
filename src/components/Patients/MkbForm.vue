@@ -78,7 +78,7 @@
                 :timestamp="fillDateFormat(anamnesis.date)"
                 placement="top"
               >
-                <AnamnesisForm :anamnesis="anamnesis" :index="index" :diagnosis="props.row" />
+                <AnamnesisForm :anamnesis="anamnesis" :index="index" :diagnosis="props.row" :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index" />
               </el-timeline-item>
             </el-timeline>
           </div>

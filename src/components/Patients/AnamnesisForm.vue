@@ -1,12 +1,22 @@
 <template>
   <div class="card-wrapper">
     <el-card class="box-card" style="position: relative">
-        <el-form-item v-if="anamnesis.isEditMode" prop="date" label-width="0" :rules="[{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }]">
-          <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="anamnesis.date"></el-date-picker>
-        </el-form-item>
-        <el-form-item v-if="anamnesis.isEditMode" prop="value" label-width="0" :rules="[{ required: true, message: 'Это поле не может быть пустым', trigger: 'blur' }]">
-          <el-input type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }" v-model="anamnesis.value"> </el-input>
-        </el-form-item>
+      <el-form-item
+        v-if="anamnesis.isEditMode"
+        label-width="0"
+        :prop="propName + '.date'"
+        :rules="[{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }]"
+      >
+        <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="anamnesis.date"></el-date-picker>
+      </el-form-item>
+      <el-form-item
+        v-if="anamnesis.isEditMode"
+        :prop="propName + '.value'"
+        label-width="0"
+        :rules="[{ required: true, message: 'Это поле не может быть пустым', trigger: 'blur' }]"
+      >
+        <el-input type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }" v-model="anamnesis.value"> </el-input>
+      </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
       <div class="icons">
         <i class="el-icon-folder-checked icon" v-if="anamnesis.isEditMode" @click="edit"></i>
@@ -24,7 +34,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 @Options({
-  props: ['anamnesis', 'index', 'diagnosis'],
+  props: ['anamnesis', 'index', 'diagnosis', 'prop-name'],
 })
 export default class AnamnesisForm extends Vue {
   // Types.
@@ -32,6 +42,7 @@ export default class AnamnesisForm extends Vue {
   anamnesis!: IPatientDiagnosisAnamnesis;
   index!: number;
   diagnosis!: IPatientDiagnosis;
+  propName!: string;
 
   remove = () => {
     this.diagnosis.patientDiagnosisAnamnesis.splice(this.index, 1);

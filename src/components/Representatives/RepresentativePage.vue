@@ -88,11 +88,6 @@ import IPatient from '../../interfaces/patients/IPatient';
   },
 })
 export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
-  $refs!: {
-    uploadFile: any;
-    form: any;
-  };
-  isEditMode!: boolean;
   patients!: IPatient[];
   documents!: IDocument[];
   offset: number[] = [0];
