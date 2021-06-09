@@ -15,7 +15,7 @@
             @setSubDiagnosis="setSubDiagnosis"
           ></MkbTree>
         </el-col>
-        <el-col :span="10" offset="2">
+        <el-col :span="10" :offset="2">
           <h3>Добавленные диагнозы</h3>
           <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
             <el-table-column type="index" width="50" />
@@ -48,7 +48,7 @@
           <!--            <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />-->
           <!--          </el-select>-->
         </el-col>
-        <el-col :span="10" offset="2">
+        <el-col :span="10" :offset="2">
           <h3>Добавленные диагнозы</h3>
           <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
             <el-table-column type="index" width="50" />
