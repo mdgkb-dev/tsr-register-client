@@ -47,16 +47,17 @@ import {
   ElMessage,
   ElMessageBox,
   ElNotification,
-  locale,
 } from 'element-plus';
-import lang from 'element-plus/es/locale/lang/ru';
 import fillDateFormat from '@/services/DateFormat';
+import lang from 'element-plus/lib/locale/lang/ru';
+import 'dayjs/locale/ru';
+import locale from 'element-plus/lib/locale';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 import './assets/element-variables.scss';
-import 'dayjs/locale/ru';
 
+locale.use(lang);
 const components = [
   ElAside,
   ElAutocomplete,
@@ -106,7 +107,6 @@ app.config.globalProperties.$dateFormatRu = fillDateFormat;
 app.use(store);
 app.use(router);
 
-locale(lang);
 components.forEach((component) => {
   app.component(component.name, component);
 });
