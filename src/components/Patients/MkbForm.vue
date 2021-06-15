@@ -60,8 +60,7 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="cancelDiagnosisFromModal">Отменить</el-button>
-          <el-button type="primary" @click="addDiagnosisFromModal">Добавить диагноз</el-button>
+          <el-button @click="addDiagnosisFromModal">Закрыть</el-button>
         </span>
       </template>
     </el-dialog>
@@ -78,7 +77,12 @@
                 :timestamp="fillDateFormat(anamnesis.date)"
                 placement="top"
               >
-                <AnamnesisForm :anamnesis="anamnesis" :index="index" :diagnosis="props.row" :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index" />
+                <AnamnesisForm
+                  :anamnesis="anamnesis"
+                  :index="index"
+                  :diagnosis="props.row"
+                  :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
+                />
               </el-timeline-item>
             </el-timeline>
           </div>
@@ -236,7 +240,7 @@ export default class MkbForm extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);
