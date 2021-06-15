@@ -27,8 +27,7 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="cancelDiagnosisFromModal">Отменить</el-button>
-          <el-button type="primary" @click="addDiagnosisFromModal">Добавить диагноз</el-button>
+          <el-button @click="addDiagnosisFromModal">Закрыть</el-button>
         </span>
       </template>
     </el-dialog>
@@ -164,14 +163,8 @@ export default class MkbForm extends Vue {
   checkedDiagnosis: IPatientDiagnosis[] = this.inPatientDiagnosis;
   expandRowKeys: (string | undefined)[] = [];
 
-  cancelDiagnosisFromModal(): void {
-    this.diagnosisModalVisible = false;
-  }
-
   addDiagnosis(): void {
     this.diagnosisSearchModalVisible = true;
-    // this.patientDiagnosis.push(new PatientDiagnosis());
-    // this.queryStrings.push();
   }
 
   addAnamnesis = (diagnosis: IPatientDiagnosis) => {

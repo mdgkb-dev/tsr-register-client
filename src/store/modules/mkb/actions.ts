@@ -4,13 +4,13 @@ import HttpClient from '@/services/HttpClient';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import MkbComposition from '@/classes/mkb/MkbComposition';
 import MkbIdSet from '@/classes/mkb/MkbIdSet';
-import { State } from './state';
 import MkbCLass from '@/classes/mkb/MkbСlass';
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
+import { State } from './state';
 
 const httpClient = new HttpClient('mkb');
 
