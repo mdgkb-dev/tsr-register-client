@@ -5,7 +5,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, disabilities: IDisability[]) {
-    state.disabilities = disabilities.map(d => new Disability(d));
+    state.disabilities = disabilities.map((d: IDisability) => new Disability(d));
   },
   set(state, disability: IDisability) {
     state.disability = new Disability(disability);
