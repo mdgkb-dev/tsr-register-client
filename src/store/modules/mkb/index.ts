@@ -7,6 +7,8 @@ import { State } from './state';
 
 export const state: State = {
   mkbClasses: [],
+  mkbGroups: [],
+  mkbFilteredDiagnosis: [],
   mkbDiagnosis: [],
   mkbSubDiagnosis: [],
 };

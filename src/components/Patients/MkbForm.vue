@@ -15,7 +15,7 @@
             @setSubDiagnosis="setSubDiagnosis"
           ></MkbTree>
         </el-col>
-        <el-col :span="10" offset="2">
+        <el-col :span="10" :offset="2">
           <h3>Добавленные диагнозы</h3>
           <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
             <el-table-column type="index" width="50" />
@@ -37,9 +37,21 @@
       <el-row>
         <el-col :span="12">
           <h3>Поиск</h3>
-          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findGroups" v-model="queryStringsGroups[0]" placeholder="Выберите группу"> </el-autocomplete>
-          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findDiagnosis" v-model="queryStringsDiagnosis[0]" placeholder="Выберите диагноз">
-            <!--            @select="handleSelect($event, scope.$index)"-->
+          <el-autocomplete
+            popper-class="wide-dropdown"
+            @select="handleGroupSelect($event)"
+            :fetch-suggestions="findGroups"
+            v-model="queryStringsGroups[0]"
+            placeholder="Выберите группу"
+          >
+          </el-autocomplete>
+          <el-autocomplete
+            @select="handleDiagnosisSelect($event)"
+            popper-class="wide-dropdown"
+            :fetch-suggestions="findDiagnosis"
+            v-model="queryStringsDiagnosis[0]"
+            placeholder="Выберите диагноз"
+          >
             <template #default="{ item }">
               <div class="value">{{ item.value }}</div>
             </template>
@@ -49,7 +61,7 @@
           <!--            <el-option v-for="i in mkbSubDiagnosisOption" :key="i.value" :label="i.label" :value="i.value" />-->
           <!--          </el-select>-->
         </el-col>
-        <el-col :span="10" offset="2">
+        <el-col :span="10" :offset="2">
           <h3>Добавленные диагнозы</h3>
           <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
             <el-table-column type="index" width="50" />
@@ -139,13 +151,14 @@ const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/A
   },
   props: ['in-patient-diagnosis'],
   computed: {
-    ...mapGetters('mkb', ['mkbDiagnosis', 'mkbSubDiagnosis']),
+    ...mapGetters('mkb', ['mkbDiagnosis', 'mkbGroups', 'mkbSubDiagnosis', 'filteredDiagnosis']),
   },
   methods: {
     ...mapActions({
-      searchGroups: 'mkb/searchDiagnosis',
+      searchGroups: 'mkb/searchGroups',
       searchDiagnosis: 'mkb/searchDiagnosis',
       searchSubDiagnosis: 'mkb/searchSubDiagnosis',
+      getDiagnosisByGroupId: 'mkb/getDiagnosisByGroupId',
     }),
   },
 })
@@ -157,12 +170,14 @@ export default class MkbForm extends Vue {
   mkbDiagnosis!: IMkbDiagnosis[];
   mkbGroups!: IMkbGroup[];
   mkbSubDiagnosis!: IMkbSubDiagnosis[];
+  filteredDiagnosis!: IMkbDiagnosis[];
 
   inPatientDiagnosis!: IPatientDiagnosis[];
 
   searchDiagnosis!: (query: string) => Promise<void>;
   searchGroups!: (query: string) => Promise<void>;
   searchSubDiagnosis!: (diagnosisId: string) => Promise<void>;
+  getDiagnosisByGroupId!: (groupId: string) => Promise<void>;
 
   diagnosis: ISearch[] = [];
   groups: ISearch[] = [];
@@ -181,8 +196,6 @@ export default class MkbForm extends Vue {
 
   addDiagnosis(): void {
     this.diagnosisSearchModalVisible = true;
-    // this.patientDiagnosis.push(new PatientDiagnosis());
-    // this.queryStrings.push();
   }
 
   addAnamnesis = (diagnosis: IPatientDiagnosis) => {
@@ -222,6 +235,16 @@ export default class MkbForm extends Vue {
   }
 
   async findDiagnosis(query: string, resolve: any) {
+    console.log(this.filteredDiagnosis);
+    if (this.filteredDiagnosis.length > 0) {
+      this.diagnosis = [];
+      this.filteredDiagnosis.forEach((d: IMkbDiagnosis) => {
+        if (d.id) {
+          this.diagnosis.push({ value: d.getFullName(), id: d.id });
+        }
+      });
+      resolve(this.diagnosis);
+    }
     if (query.length > 2) {
       await this.searchDiagnosis(query);
       this.diagnosis = [];
@@ -235,7 +258,7 @@ export default class MkbForm extends Vue {
   }
 
   async findGroups(query: string, resolve: any) {
-    if (query.length > 2) {
+    if (query.length > 0) {
       await this.searchGroups(query);
       this.groups = [];
       this.mkbGroups.forEach((d: IMkbGroup) => {
@@ -257,14 +280,19 @@ export default class MkbForm extends Vue {
     });
   }
 
-  async handleSelect(item: ISearch, index: number) {
-    this.patientDiagnosis[index].mkbDiagnosisId = item.id;
+  async handleGroupSelect(item: ISearch) {
+    await this.getDiagnosisByGroupId(item.id);
+  }
+
+  async handleDiagnosisSelect(item: ISearch) {
+    // console.log(index);
+    // this.patientDiagnosis[index].mkbDiagnosisId = item.id;
     await this.findSubDiagnosis(item.id);
   }
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);
