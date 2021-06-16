@@ -264,7 +264,7 @@ export default class MkbForm extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);
