@@ -106,6 +106,11 @@ export default class MainSidePanel extends Vue {
           title: 'Регистры пациентов',
           link: '/registers',
         },
+        {
+          name: 'RegisterGroups',
+          title: 'Группы для регистров',
+          link: '/register-groups',
+        },
       ],
     },
   ];

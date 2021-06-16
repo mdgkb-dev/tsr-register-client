@@ -1,38 +1,48 @@
 <template>
-  <el-form ref="form" :model="representativeType" @submit.prevent="submitForm" :rules="rules">
-    <el-form-item label="Название типа" label-width="20vw" prop="name">
-      <el-input v-model="representativeType.name"></el-input>
-    </el-form-item>
+  <PageHead :titleParent="'Типы представителей'" :title="title" @submitForm="submitForm" />
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <el-form ref="form" :model="representativeType" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">
+        <el-form-item label="Название типа" prop="name">
+          <el-input v-model="representativeType.name"></el-input>
+        </el-form-item>
 
-    <el-form-item label="Подопечный мужского пола" label-width="20vw" prop="name">
-      <el-input v-model="representativeType.childMaleType"></el-input>
-    </el-form-item>
+        <el-form-item label="Подопечный мужского пола" prop="name">
+          <el-input v-model="representativeType.childMaleType"></el-input>
+        </el-form-item>
 
-    <el-form-item label="Подопечный женского пола" label-width="20vw" prop="name">
-      <el-input v-model="representativeType.childWomanType"></el-input>
-    </el-form-item>
+        <el-form-item label="Подопечный женского пола" prop="name">
+          <el-input v-model="representativeType.childWomanType"></el-input>
+        </el-form-item>
 
-    <el-form-item label="Пол" prop="isMale">
-      <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
-        <el-option label="Мужчина" :value="true"></el-option>
-        <el-option label="Женщина" :value="false"></el-option>
-      </el-select>
-    </el-form-item>
-    <div class="center-align">
-      <el-button type="primary" native-type="submit">Сохранить</el-button>
+        <el-form-item label="Пол" prop="isMale">
+          <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
+            <el-option label="Мужчина" :value="true"></el-option>
+            <el-option label="Женщина" :value="false"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
     </div>
-  </el-form>
+  </el-row>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-
+import { Options, mixins } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
+
+import PageHead from '@/components/PageHead.vue';
+
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
+  components: {
+    PageHead,
+  },
   computed: {
     ...mapGetters('representativeTypes', ['representativeTypes']),
   },
@@ -42,17 +52,9 @@ import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTyp
     }),
   },
 })
-export default class RepresentativeTypePage extends Vue {
-  $refs!: {
-    form: any;
-    message: any;
-  };
-
-  $message!: any;
-
+export default class RepresentativeTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   representativeTypeGet!: (representativeTypeId: string) => Promise<void>;
 
-  isEditMode!: boolean;
   representativeType: IRepresentativeType = new RepresentativeType();
   title = '';
 
@@ -61,43 +63,17 @@ export default class RepresentativeTypePage extends Vue {
   async created(): Promise<void> {
     if (!this.$route.params.representativeTypeId) {
       this.isEditMode = false;
-      this.title = 'Создать компанию';
+      this.title = 'Создать тип';
     } else {
       this.isEditMode = true;
-      this.title = 'Редактировать компанию';
+      this.title = 'Редактировать тип';
       await this.representativeTypeGet(`${this.$route.params.representativeTypeId}`);
       this.representativeType = this.$store.getters['representativeTypes/representativeType'];
     }
   }
 
   submitForm(): void {
-    let validationResult = true;
-
-    this.$refs.form.validate((valid: boolean, errorFields: any) => {
-      let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
-      for (const item of Object.keys(errorFields)) {
-        errorMessage += `<li>${errorFields[item][0].message}</li>`;
-      }
-      errorMessage += '</ul>';
-      if (!valid) {
-        this.$message({
-          dangerouslyUseHTMLString: true,
-          message: errorMessage,
-          type: 'error',
-        });
-        validationResult = false;
-        return false;
-      }
-      this.$message({
-        message: 'Изменения успешно сохранены',
-        type: 'success',
-      });
-      return true;
-    });
-
-    if (!validationResult) {
-      return;
-    }
+    if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {
       this.$store.dispatch('representativeTypes/edit', this.representativeType);

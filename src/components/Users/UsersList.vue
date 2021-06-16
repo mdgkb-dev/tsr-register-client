@@ -1,17 +1,19 @@
 <template>
   <div v-if="mount">
     <ListHead :title="title" @create="create" />
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="users" style="width: 100%">
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="login" label="Логин" width="150" />
-      <el-table-column prop="email" label="Email" width="150" />
-      <el-table-column fixed="right" label="" width="140">
-        <template #default="scope">
-          <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-          <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="table-background">
+      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="users" class="table-shadow" header-row-class-name="header-style" border>
+        <el-table-column type="index" label="№" min-width="50" />
+        <el-table-column prop="login" label="Логин" min-width="150" />
+        <el-table-column prop="email" label="Email" min-width="150" />
+        <el-table-column label="Действия" width="140">
+          <template #default="scope">
+            <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
+            <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 

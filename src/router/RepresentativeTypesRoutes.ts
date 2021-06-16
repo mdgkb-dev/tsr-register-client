@@ -16,7 +16,7 @@ export default [
     beforeEnter: isAuthorized,
   },
   {
-    path: '/representative-types/:representativeId',
+    path: '/representative-types/:representativeTypeId',
     name: 'EditRepresentativeType',
     component: RepresentativeTypePage,
     beforeEnter: isAuthorized,

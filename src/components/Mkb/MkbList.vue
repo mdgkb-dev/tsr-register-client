@@ -1,6 +1,10 @@
 <template>
   <ListHead :title="title" />
-  <MkbTree></MkbTree>
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <MkbTree></MkbTree>
+    </div>
+  </el-row>
 </template>
 
 <script lang="ts">

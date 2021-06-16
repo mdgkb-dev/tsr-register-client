@@ -1,9 +1,9 @@
 <template>
   <el-row>
-    <el-col :span="2">
+    <el-col :span="4">
       <h2 small align="center" class="header-top-table" v-html="title"></h2>
     </el-col>
-    <el-col :span="5" :offset="16" style="margin-top: 8px" align="right">
+    <el-col :span="4" :offset="15" style="margin-top: 8px" align="right">
       <el-button type="success" round @click="this.$emit('create')">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
     </el-col>
   </el-row>

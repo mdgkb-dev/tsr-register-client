@@ -6,6 +6,7 @@ import { RootState } from './types';
 import { auth } from './modules/auth';
 import { patients } from './modules/patients';
 import { registers } from './modules/registers';
+import { registerGroups } from './modules/registerGroups';
 import { representatives } from './modules/representatives';
 import documents from './modules/documents';
 import { insuranceCompanies } from './modules/insuranceCompanies';
@@ -35,6 +36,7 @@ const store: StoreOptions<RootState> = {
     patients,
     representatives,
     registers,
+    registerGroups,
     documents,
     insuranceCompanies,
     anthropometry,

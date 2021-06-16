@@ -13,6 +13,7 @@ import UsersRoutes from '@/router/UsersRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import RegistersRoutes from './RegistersRoutes';
+import RegisterGroupsRoutes from './RegisterGroupsRoutes';
 import store from '../store/index';
 
 export const isAuthorized = async (to: any, from: any, next: any) => {
@@ -72,6 +73,7 @@ const routes: Array<RouteRecordRaw> = [
   ...AnthropometriesRoutes,
   ...UsersRoutes,
   ...RegistersRoutes,
+  ...RegisterGroupsRoutes,
   {
     path: '/mkb',
     name: 'Mkb',

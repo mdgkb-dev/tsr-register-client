@@ -1,23 +1,32 @@
 <template>
-  <el-form ref="form" :model="insuranceCompany" @submit.prevent="submitForm" :rules="rules">
-    <el-form-item label="Название компании" label-width="20vw" prop="name">
-      <el-input v-model="insuranceCompany.name"></el-input>
-    </el-form-item>
-
-    <div class="center-align">
-      <el-button type="primary" native-type="submit">Сохранить</el-button>
+  <PageHead :titleParent="'Страховые компании'" :title="title" @submitForm="submitForm" />
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <el-form ref="form" :model="insuranceCompany" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">
+        <el-form-item label="Название компании" prop="name">
+          <el-input v-model="insuranceCompany.name"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
-  </el-form>
+  </el-row>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, mixins } from 'vue-class-component';
+import { mapActions, mapGetters } from 'vuex';
+
+import PageHead from '@/components/PageHead.vue';
 
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import { mapActions, mapGetters } from 'vuex';
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
+  components: {
+    PageHead,
+  },
   computed: {
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
   },
@@ -27,17 +36,9 @@ import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
     }),
   },
 })
-export default class InsuranceCompanyPage extends Vue {
-  $refs!: {
-    form: any;
-    message: any;
-  };
-
-  $message!: any;
-
+export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   insuranceCompanyGet!: (insuranceCompanyId: string) => Promise<void>;
 
-  isEditMode!: boolean;
   insuranceCompany: IInsuranceCompany = new InsuranceCompany();
   title = '';
 
@@ -64,33 +65,7 @@ export default class InsuranceCompanyPage extends Vue {
   }
 
   submitForm(): void {
-    let validationResult = true;
-
-    this.$refs.form.validate((valid: boolean, errorFields: any) => {
-      let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
-      for (const item of Object.keys(errorFields)) {
-        errorMessage += `<li>${errorFields[item][0].message}</li>`;
-      }
-      errorMessage += '</ul>';
-      if (!valid) {
-        this.$message({
-          dangerouslyUseHTMLString: true,
-          message: errorMessage,
-          type: 'error',
-        });
-        validationResult = false;
-        return false;
-      }
-      this.$message({
-        message: 'Изменения успешно сохранены',
-        type: 'success',
-      });
-      return true;
-    });
-
-    if (!validationResult) {
-      return;
-    }
+    if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {
       this.$store.dispatch('insuranceCompanies/edit', this.insuranceCompany);

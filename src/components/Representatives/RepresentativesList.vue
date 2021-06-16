@@ -2,8 +2,8 @@
   <ListHead :title="title" @create="create" />
   <div class="table-background">
     <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-    <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" @row-dblclick="edit">
-      <el-table-column type="expand">
+    <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" @row-dblclick="edit" border>
+      <!-- <el-table-column type="expand">
         <template #default="props">
           <el-card class="box-card">
             <template #header>
@@ -16,7 +16,7 @@
             </div>
           </el-card>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
         <template #default="scope">

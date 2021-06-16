@@ -14,14 +14,14 @@ const mutations: MutationTree<State> = {
     state.registers.push(new Register(payload));
   },
   update(state: any, payload: IRegister) {
-    const item = state.registers.find((i: any) => i.id === payload.id);
+    const item = state.registers.find((i: IRegister) => i.id === payload.id);
     if (item) {
       Object.assign(item, payload);
     }
   },
   delete(state, id: string) {
     if (state.registers) {
-      const i = state.registers.findIndex((item: any) => item.id === id);
+      const i = state.registers.findIndex((item: IRegister) => item.id === id);
       state.registers.splice(i, 1);
     }
   },

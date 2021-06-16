@@ -1,27 +1,18 @@
 <template>
-  <div class="register-page-container">
-    <PageHead :titleParent="'Регистры пациентов'" :title="title" @submitForm="submitForm" />
-    <el-row>
-      <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form ref="form" label-width="20%" label-position="left">
-          <el-form-item label="Название регистра">
-            <el-input v-model="register.name"></el-input>
-          </el-form-item>
-          <!-- <el-button>Добавить группу</el-button> -->
-          <!-- <el-collapse>
-            <el-collapse-item>
-              <template #title>
-                <el-form-item label="Название группы" label-width="200px" label-position="left"> <el-input></el-input> </el-form-item>
-              </template>
-              <div class="form-under-collapse">
-                <el-button>Добавить поле</el-button>
-              </div>
-            </el-collapse-item>
-          </el-collapse> -->
-        </el-form>
-      </div>
-    </el-row>
-  </div>
+  <PageHead :titleParent="'Регистры пациентов'" :title="title" @submitForm="submitForm" />
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <el-select v-model="value" placeholder="Select">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+      </el-select>
+      <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="max-width: 800px">
+        <el-form-item label="Название регистра">
+          <el-input v-model="register.name"></el-input>
+        </el-form-item>
+        <RegisterGroupToRegisterForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroupOptions" />
+      </el-form>
+    </div>
+  </el-row>
 </template>
 
 <script lang="ts">
@@ -30,43 +21,95 @@ import { mapActions, mapGetters } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import Register from '@/classes/registers/Register';
+import RegisterGroupToRegisterForm from '@/components/Registers/RegisterGroupToRegisterForm.vue';
+
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IOption from '@/interfaces/patients/IOption';
 
 @Options({
   components: {
     PageHead,
+    RegisterGroupToRegisterForm,
   },
   computed: {
     ...mapGetters('registers', ['register']),
+    ...mapGetters('registerGroups', ['registerGroup']),
   },
   methods: {
     ...mapActions({
       registerGet: 'registers/get',
+      registerGroupsGetAll: 'registerGroups/getAll',
     }),
   },
 })
 export default class RegisterPage extends Vue {
   // Types.
   isEditMode!: boolean;
-  register: IRegister = new Register();
   $message!: any;
+  registerGroups!: IRegisterGroup[];
+
+  options = [
+    {
+      value: 'Option1',
+      label: 'Option1',
+    },
+    {
+      value: 'Option2',
+      label: 'Option2',
+    },
+    {
+      value: 'Option3',
+      label: 'Option3',
+    },
+    {
+      value: 'Option4',
+      label: 'Option4',
+    },
+    {
+      value: 'Option5',
+      label: 'Option5',
+    },
+  ];
+  value = '';
+
+  registerGet!: (registerId: string) => Promise<void>;
+  registerGroupsGetAll!: () => Promise<void>;
 
   // Local state.
-  registerGet!: (registerId: string) => Promise<void>;
+  register: IRegister = new Register();
+  registerGroupOptions: IOption[] = [];
   title = '';
   mount = false;
 
   async created(): Promise<void> {
-    if (!this.$route.params.registerId) {
-      this.isEditMode = false;
-      this.title = 'Создать регистр';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать регистр';
-      await this.registerGet(`${this.$route.params.registerId}`);
-      this.register = this.$store.getters['registers/register'];
+    try {
+      if (!this.$route.params.registerId) {
+        this.isEditMode = false;
+        this.title = 'Создать регистр';
+      } else {
+        this.isEditMode = true;
+        this.title = 'Редактировать регистр';
+        await this.registerGet(`${this.$route.params.registerId}`);
+        this.register = this.$store.getters['registers/register'];
+      }
+
+      await this.registerGroupsGetAll();
+      this.registerGroups = this.$store.getters['registerGroups/registerGroups'];
+
+      for (const item of this.registerGroups) {
+        if (item.name && item.id) {
+          this.registerGroupOptions.push({
+            label: item.name,
+            value: item.id,
+          });
+        }
+      }
+
+      this.mount = true;
+    } catch (e) {
+      console.log(e);
     }
-    this.mount = true;
   }
 
   async submitForm(): Promise<void> {
@@ -85,9 +128,3 @@ export default class RegisterPage extends Vue {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.register-page-container:deep {
-  @import '@/assets/elements/patientAndRepresPage.scss';
-}
-</style>
