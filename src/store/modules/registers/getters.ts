@@ -12,9 +12,9 @@ const getters: GetterTree<State, RootState> = {
     const { register } = state;
     return register;
   },
-  getById(state, id: number): IRegister | undefined {
+  getById(state, id: string): IRegister | undefined {
     const { registers } = state;
-    return registers ? registers.find((item: any) => item.id === id) : undefined;
+    return registers ? registers.find((item: IRegister) => item.id === id) : undefined;
   },
 };
 

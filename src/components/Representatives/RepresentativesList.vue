@@ -18,7 +18,7 @@
         </template>
       </el-table-column> -->
       <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
+      <el-table-column min-width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
         <template #default="scope">
           {{ scope.row.human.getFullName() }}
         </template>
@@ -29,10 +29,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="human.addressRegistration" label="Адрес регистрации" width="150" />
-      <el-table-column prop="human.contact.phone" label="Телефон" width="150" />
-      <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
-      <el-table-column width="150" label="Привязанные дети">
+      <el-table-column prop="human.addressRegistration" label="Адрес регистрации" min-width="150" />
+      <el-table-column prop="human.contact.phone" label="Телефон" min-width="150" />
+      <el-table-column prop="human.contact.email" label="Эл.почта" min-width="150" />
+      <el-table-column min-width="150" label="Привязанные дети">
         <template #default="scope">
           <div v-for="rep in scope.row.representativeToPatient" :key="rep">
             <el-tooltip

@@ -1,6 +1,6 @@
 import IRegister from '@/interfaces/registers/IRegister';
 
 export interface State {
-  registers?: IRegister[];
+  registers: IRegister[];
   register?: IRegister;
 }

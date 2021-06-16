@@ -12,9 +12,9 @@ const getters: GetterTree<State, RootState> = {
     const { anthropometry } = state;
     return anthropometry;
   },
-  getById(state, id: number): IAnthropometry | undefined {
+  getById(state, id: string): IAnthropometry | undefined {
     const { anthropometries } = state;
-    return anthropometries ? anthropometries.find((item: any) => item.id === id) : undefined;
+    return anthropometries ? anthropometries.find((item: IAnthropometry) => item.id === id) : undefined;
   },
 };
 

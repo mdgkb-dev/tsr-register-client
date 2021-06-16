@@ -1,6 +1,6 @@
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 export interface State {
-  insuranceCompanies?: IInsuranceCompany[];
+  insuranceCompanies: IInsuranceCompany[];
   insuranceCompany?: IInsuranceCompany;
 }

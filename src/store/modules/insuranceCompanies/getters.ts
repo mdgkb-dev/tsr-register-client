@@ -10,8 +10,8 @@ const getters: GetterTree<State, RootState> = {
   insuranceCompany(state): IInsuranceCompany | undefined {
     return state.insuranceCompany;
   },
-  getById(state, id: number): IInsuranceCompany | undefined {
-    return state.insuranceCompanies ? state.insuranceCompanies.find((item: any) => item.id === id) : undefined;
+  getById(state, id: string): IInsuranceCompany | undefined {
+    return state.insuranceCompanies ? state.insuranceCompanies.find((item: IInsuranceCompany) => item.id === id) : undefined;
   },
 };
 
