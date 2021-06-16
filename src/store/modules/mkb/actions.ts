@@ -36,6 +36,9 @@ const actions: ActionTree<State, RootState> = {
     res.mkbIdSet = idSet;
     commit('setSubDiagnosis', res);
   },
+  searchGroups: async ({ commit }, query: MkbIdSet): Promise<void> => {
+    commit('setGroups', await httpClient.get(`groups?query=${query}`));
+  },
   searchDiagnosis: async ({ commit }, query: MkbIdSet): Promise<void> => {
     commit('setDiagnosis', await httpClient.get(`diagnosis?query=${query}`));
   },

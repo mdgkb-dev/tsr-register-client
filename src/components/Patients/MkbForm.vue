@@ -37,7 +37,8 @@
       <el-row>
         <el-col :span="12">
           <h3>Поиск</h3>
-          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findDiagnosis" v-model="queryStrings[0]" placeholder="Выберите диагноз">
+          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findGroups" v-model="queryStringsGroups[0]" placeholder="Выберите группу"> </el-autocomplete>
+          <el-autocomplete popper-class="wide-dropdown" :fetch-suggestions="findDiagnosis" v-model="queryStringsDiagnosis[0]" placeholder="Выберите диагноз">
             <!--            @select="handleSelect($event, scope.$index)"-->
             <template #default="{ item }">
               <div class="value">{{ item.value }}</div>
@@ -78,13 +79,18 @@
                 :timestamp="fillDateFormat(anamnesis.date)"
                 placement="top"
               >
-                <AnamnesisForm :anamnesis="anamnesis" :index="index" :diagnosis="props.row" :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index" />
+                <AnamnesisForm
+                  :anamnesis="anamnesis"
+                  :index="index"
+                  :diagnosis="props.row"
+                  :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
+                />
               </el-timeline-item>
             </el-timeline>
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column type="index" width="50" /> -->
+
       <el-table-column label="Основной диагноз" width="450" sortable>
         <template #default="scope">
           <div>{{ scope.row.mkbDiagnosis.code }} {{ scope.row.mkbDiagnosis.name }}</div>
@@ -121,6 +127,7 @@ import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IOption from '@/interfaces/shared/IOption';
 import { defineAsyncComponent } from 'vue';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/MkbTree.vue'));
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
@@ -136,6 +143,7 @@ const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/A
   },
   methods: {
     ...mapActions({
+      searchGroups: 'mkb/searchDiagnosis',
       searchDiagnosis: 'mkb/searchDiagnosis',
       searchSubDiagnosis: 'mkb/searchSubDiagnosis',
     }),
@@ -143,16 +151,23 @@ const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/A
 })
 export default class MkbForm extends Vue {
   // Types.
-  queryStrings = [];
+  queryStringsGroups = [];
+  queryStringsDiagnosis = [];
+
   mkbDiagnosis!: IMkbDiagnosis[];
+  mkbGroups!: IMkbGroup[];
   mkbSubDiagnosis!: IMkbSubDiagnosis[];
+
   inPatientDiagnosis!: IPatientDiagnosis[];
 
   searchDiagnosis!: (query: string) => Promise<void>;
+  searchGroups!: (query: string) => Promise<void>;
   searchSubDiagnosis!: (diagnosisId: string) => Promise<void>;
 
   diagnosis: ISearch[] = [];
+  groups: ISearch[] = [];
   mkbSubDiagnosisOption: IOption[] = [];
+
   // Local state.
   patientDiagnosis = this.inPatientDiagnosis;
   diagnosisModalVisible = false;
@@ -219,6 +234,19 @@ export default class MkbForm extends Vue {
     }
   }
 
+  async findGroups(query: string, resolve: any) {
+    if (query.length > 2) {
+      await this.searchGroups(query);
+      this.groups = [];
+      this.mkbGroups.forEach((d: IMkbGroup) => {
+        if (d.id && d.name) {
+          this.groups.push({ value: d.name, id: d.id });
+        }
+      });
+      resolve(this.groups);
+    }
+  }
+
   async findSubDiagnosis(diagnosisId: string) {
     await this.searchSubDiagnosis(diagnosisId);
     this.mkbSubDiagnosisOption = [];
@@ -236,13 +264,12 @@ export default class MkbForm extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.checkedDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.checkedDiagnosis.indexOf(d);
       if (index !== -1) {
         this.patientDiagnosis.splice(index, 1);
-        this.queryStrings.splice(index, 1);
       }
     });
   }
@@ -251,7 +278,6 @@ export default class MkbForm extends Vue {
     const index = this.patientDiagnosis.indexOf(item);
     if (index !== -1) {
       this.patientDiagnosis.splice(index, 1);
-      this.queryStrings.splice(index, 1);
     }
   }
   fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
