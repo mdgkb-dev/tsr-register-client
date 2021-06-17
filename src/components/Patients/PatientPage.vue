@@ -24,7 +24,8 @@
               <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
             </el-collapse-item>
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Диагнозы</h2></template><MkbForm :inPatientDiagnosis="patient.patientDiagnosis" />
+              <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+              <MkbForm v-model:patientDiagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
@@ -54,7 +55,7 @@ import HumanForm from '@/components/HumanForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
-import MkbForm from '@/components/Patients/MkbForm.vue';
+import MkbForm from '@/components/Patients/MkbForm/MkbForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';

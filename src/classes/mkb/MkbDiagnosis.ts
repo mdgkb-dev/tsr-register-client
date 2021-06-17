@@ -1,6 +1,8 @@
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import MkbGroup from '@/classes/mkb/MkbGroup';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;
@@ -17,6 +19,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   disabled = false;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[] = [];
+  mkbGroup?: IMkbGroup;
 
   constructor(mkbDiagnosis?: IMkbDiagnosis) {
     if (!mkbDiagnosis) {
@@ -36,6 +39,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
       this.mkbSubDiagnosis = mkbDiagnosis.mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
     }
     this.disabled = false;
+    this.mkbGroup = new MkbGroup(mkbDiagnosis.mkbGroup);
   }
 
   getFullName = () => `${this.code} ${this.name}`;

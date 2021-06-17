@@ -3,8 +3,8 @@ import { RootState } from '@/store/types';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import { State } from './state';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {
   mkbClasses(state): IMkbClass[] | undefined {
