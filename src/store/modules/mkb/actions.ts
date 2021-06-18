@@ -40,6 +40,10 @@ const actions: ActionTree<State, RootState> = {
     commit('setFilteredDiagnosis', await httpClient.get(`diagnosis/byGroupId/${groupId}`));
   },
   searchGroups: async ({ commit }, query: string): Promise<void> => {
+    if (query.length === 0) {
+      commit('setFilteredDiagnosis', []);
+      return;
+    }
     commit('setGroups', await httpClient.get(`groups?query=${query}`));
   },
   searchDiagnosis: async ({ commit }, query: string): Promise<void> => {
