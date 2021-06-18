@@ -9,9 +9,11 @@ const mutations: MutationTree<State> = {
   setAll(state, registerProperties: RegisterProperty[]) {
     state.registerProperties = registerProperties.map((a: IRegisterProperty) => new RegisterProperty(a));
   },
-  set(state, { registerProperty, valueTypes }: { registerProperty: IRegisterProperty; valueTypes: IValueType[] }) {
-    state.registerProperty = new RegisterProperty(registerProperty);
+  setValueTypes(state, valueTypes: IValueType[]) {
     state.valueTypes = valueTypes.map((a: IValueType) => new ValueType(a));
+  },
+  set(state, registerProperty: IRegisterProperty) {
+    state.registerProperty = new RegisterProperty(registerProperty);
   },
   create(state, payload: IRegisterProperty) {
     state.registerProperties.push(new RegisterProperty(payload));

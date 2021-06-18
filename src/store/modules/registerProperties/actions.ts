@@ -10,6 +10,9 @@ const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get());
   },
+  getValueTypes: async ({ commit }): Promise<void> => {
+    commit('setValueTypes', await httpClient.get('value-types'));
+  },
   get: async ({ commit }, registerPropertyId: string) => {
     commit('set', await httpClient.get(registerPropertyId));
   },
