@@ -2,14 +2,14 @@
   <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
   <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow">
     <el-table-column type="index" width="50" />
-    <el-table-column label="Группа" min-width="250">
+    <el-table-column label="Наименование" min-width="250">
       <template #default="scope">
         <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
           <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
         </el-select>
       </template>
     </el-table-column>
-    <el-table-column label="Добавить группу" fixed="right" width="200">
+    <el-table-column fixed="right" width="200">
       <template #default="scope">
         <el-button @click.prevent="remove(scope.row)" round>Удалить группу</el-button>
       </template>
@@ -27,7 +27,7 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 @Options({
   props: ['in-register-group-to-register', 'in-register-group-options'],
 })
-export default class RegisterGroupToRegisterForm extends Vue {
+export default class RegisterGroupForm extends Vue {
   // Types.
   inRegisterGroupToRegister!: IRegisterGroupToRegister[];
   inRegisterGroupOptions!: IRegisterGroup[];

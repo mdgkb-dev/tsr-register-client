@@ -6,6 +6,7 @@
         <el-form-item label="Название группы">
           <el-input v-model="registerGroup.name"></el-input>
         </el-form-item>
+        <RegisterPropertyForm :inRegisterPropertyToRegisterGroup="registerGroup.registerPropertyToRegisterGroup" :inRegisterPropertyOptions="registerProperties" />
       </el-form>
     </div>
   </el-row>
@@ -16,31 +17,39 @@ import { Vue, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
+import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
 import RegisterGroup from '@/classes/registers/RegisterGroup';
 
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 @Options({
   components: {
     PageHead,
+    RegisterPropertyForm,
   },
   computed: {
     ...mapGetters('registerGroups', ['registerGroup']),
+    ...mapGetters('registerProperties', ['registerProperties']),
   },
   methods: {
     ...mapActions({
       registerGroupGet: 'registerGroups/get',
+      registerPropertiesGetAll: 'registerProperties/getAll',
     }),
   },
 })
 export default class RegisterGroupPage extends Vue {
   // Types.
   isEditMode!: boolean;
-  registerGroup: IRegisterGroup = new RegisterGroup();
   $message!: any;
+  registerProperties!: IRegisterProperty[];
+
+  registerGroupGet!: (registerGroupId: string) => Promise<void>;
+  registerPropertiesGetAll!: () => Promise<void>;
 
   // Local state.
-  registerGroupGet!: (registerId: string) => Promise<void>;
+  registerGroup: IRegisterGroup = new RegisterGroup();
   title = '';
   mount = false;
 
@@ -54,13 +63,12 @@ export default class RegisterGroupPage extends Vue {
       await this.registerGroupGet(`${this.$route.params.registerGroupId}`);
       this.registerGroup = this.$store.getters['registerGroups/registerGroup'];
     }
+
+    await this.registerPropertiesGetAll();
+    this.registerProperties = this.$store.getters['registerProperties/registerProperties'];
+
     this.mount = true;
   }
-
-  // addRegisterGroup(): void {
-  //   const registerGroup = new RegisterGroup();
-  //   this.registerGroup.registerGroups.push(registerGroup);
-  // }
 
   async submitForm(): Promise<void> {
     try {
