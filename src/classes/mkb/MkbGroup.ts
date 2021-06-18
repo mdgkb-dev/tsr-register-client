@@ -45,4 +45,13 @@ export default class MkbGroup implements IMkbGroup {
   getFullName(): string {
     return `${this.rangeStart}-${this.rangeEnd} ${this.name}`;
   }
+
+  getChildren(relevant: boolean): (IMkbSubGroup | IMkbDiagnosis)[] {
+    if (relevant) return [...this.mkbSubGroups.filter(i => i.relevant), ...this.mkbDiagnosis.filter(i => i.relevant)];
+    return [...this.mkbSubGroups, ...this.mkbDiagnosis];
+  }
+
+  getSubGroup(mkbSubGroupId: string): IMkbSubGroup | undefined {
+    return this.mkbSubGroups.find((g: IMkbSubGroup) => g.id === mkbSubGroupId);
+  }
 }

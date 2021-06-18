@@ -5,7 +5,7 @@
       <el-col :span="12">
         <h3>Список диагнозов</h3>
         <MkbTree
-          v-model:checkedDiagnosis="checkedDiagnosis"
+          v-model:patientDiagnosis="patientDiagnosis"
           :selectable="true"
           @setDiagnosis="setDiagnosis"
           @removeDiagnosis="removeCheckedDiagnosis"
@@ -14,7 +14,7 @@
       </el-col>
       <el-col :span="10" :offset="2">
         <h3>Добавленные диагнозы</h3>
-        <el-table :data="checkedDiagnosis" style="width: 100%; margin-bottom: 20px">
+        <el-table :data="patientDiagnosis" style="width: 100%; margin-bottom: 20px">
           <el-table-column type="index" width="50" />
           <el-table-column prop="mkbDiagnosis.name" label="Основной диагноз" width="300"> </el-table-column>
           <el-table-column prop="mkbSubDiagnosis.name" label="Уточнённый диагноз" width="400"> </el-table-column>
@@ -76,7 +76,6 @@ export default class MkbTreeDialog extends Vue {
 
   // Local state.
   diagnosisModalVisible = false;
-  checkedDiagnosis: IPatientDiagnosis[] = this.patientDiagnosis;
 
   addDiagnosisModal(): void {
     this.diagnosisModalVisible = true;
@@ -91,7 +90,7 @@ export default class MkbTreeDialog extends Vue {
     patientDiagnosis.id = uuidv4();
     patientDiagnosis.mkbDiagnosis = diagnosis;
     patientDiagnosis.mkbDiagnosisId = diagnosis.id;
-    this.checkedDiagnosis.push(patientDiagnosis);
+    this.patientDiagnosis.push(patientDiagnosis);
     this.$emit('setDiagnosis', patientDiagnosis);
   }
 
@@ -103,16 +102,16 @@ export default class MkbTreeDialog extends Vue {
 
     patientDiagnosis.mkbDiagnosis = diagnosis;
     patientDiagnosis.mkbDiagnosisId = diagnosis.id;
-    this.checkedDiagnosis.push(patientDiagnosis);
+    this.patientDiagnosis.push(patientDiagnosis);
     this.$emit('setDiagnosis', patientDiagnosis);
   }
 
   removeCheckedDiagnosis(item: any): void {
-    const checkedDiagnosis = this.checkedDiagnosis.filter(
+    const checkedDiagnosis = this.patientDiagnosis.filter(
       (diagnosis: IPatientDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
     );
     checkedDiagnosis.forEach((d: any) => {
-      const index = this.checkedDiagnosis.indexOf(d);
+      const index = this.patientDiagnosis.indexOf(d);
       if (index !== -1) {
         this.patientDiagnosis.splice(index, 1);
       }

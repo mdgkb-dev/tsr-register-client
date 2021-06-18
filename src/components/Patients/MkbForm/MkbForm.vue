@@ -155,12 +155,12 @@ export default class MkbForm extends Vue {
   syncSearchDiagnosis(query: string, id: string): void {
     if (query.length === 0) {
       this.queryStringsGroups[id] = '';
-      const dianosis = this.patientDiagnosis.find(d => d.id === id);
-      if (dianosis) {
-        dianosis.mkbDiagnosis = undefined;
-        dianosis.mkbDiagnosisId = undefined;
-        dianosis.mkbSubDiagnosis = undefined;
-        dianosis.mkbSubDiagnosisId = undefined;
+      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
+      if (diagnosis) {
+        diagnosis.mkbDiagnosis = undefined;
+        diagnosis.mkbDiagnosisId = undefined;
+        diagnosis.mkbSubDiagnosis = undefined;
+        diagnosis.mkbSubDiagnosisId = undefined;
       }
     }
   }
@@ -168,7 +168,7 @@ export default class MkbForm extends Vue {
   syncSearchGroups(query: string, id: string): void {
     if (query.length === 0) {
       this.queryStringsDiagnosis[id] = '';
-      const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
       if (diagnosis) {
         diagnosis.mkbDiagnosis = undefined;
         diagnosis.mkbDiagnosisId = undefined;
@@ -239,18 +239,18 @@ export default class MkbForm extends Vue {
 
   async handleGroupSelect(item: ISearch, id: string) {
     await this.getDiagnosisByGroupId(item.id);
-    const dianosis = this.patientDiagnosis.find(d => d.id === id);
+    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
     this.queryStringsDiagnosis[id] = '';
-    if (dianosis) {
-      dianosis.mkbDiagnosis = undefined;
-      dianosis.mkbDiagnosisId = undefined;
-      dianosis.mkbSubDiagnosis = undefined;
-      dianosis.mkbSubDiagnosisId = undefined;
+    if (diagnosis) {
+      diagnosis.mkbDiagnosis = undefined;
+      diagnosis.mkbDiagnosisId = undefined;
+      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosisId = undefined;
     }
   }
 
   async handleDiagnosisSelect(item: ISearchDiagnosis, id: string) {
-    const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
     if (diagnosis) {
       diagnosis.mkbDiagnosisId = item.id;
       diagnosis.mkbDiagnosis = item.diagnosis;
