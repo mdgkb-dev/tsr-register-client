@@ -198,11 +198,8 @@ export default class MkbForm extends Vue {
   };
 
   async findDiagnosis(query: string, resolve: any) {
-    console.log(1, this.filteredDiagnosis);
-
     let diagnosis: ISearchDiagnosis[] = [];
     if (this.filteredDiagnosis.length > 0 && query.length === 0) {
-      console.log(2, diagnosis);
       this.filteredDiagnosis.forEach((d: IMkbDiagnosis) => {
         if (d.id) {
           diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
@@ -211,7 +208,6 @@ export default class MkbForm extends Vue {
     }
 
     if (query.length > 2) {
-      console.log(3, diagnosis);
       diagnosis = [];
       await this.searchDiagnosis(query);
       this.mkbDiagnosis.forEach((d: IMkbDiagnosis) => {
@@ -220,7 +216,6 @@ export default class MkbForm extends Vue {
         }
       });
     }
-    console.log(4, diagnosis);
     resolve(diagnosis);
   }
 
