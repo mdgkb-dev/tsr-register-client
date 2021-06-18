@@ -1,14 +1,22 @@
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
+import RegisterPropertyToRegisterGroup from '@/classes/registers/RegisterPropertyToRegisterGroup';
 
 export default class RegisterGroup implements IRegisterGroup {
   id?: string;
   name?: string;
+  registerPropertyToRegisterGroup: IRegisterPropertyToRegisterGroup[] = [];
 
-  constructor(register?: IRegisterGroup) {
-    if (!register) {
+  constructor(registerGroup?: IRegisterGroup) {
+    if (!registerGroup) {
       return;
     }
-    this.id = register.id;
-    this.name = register.name;
+    this.id = registerGroup.id;
+    this.name = registerGroup.name;
+    if (registerGroup.registerPropertyToRegisterGroup) {
+      this.registerPropertyToRegisterGroup = registerGroup.registerPropertyToRegisterGroup.map(
+        (registerProperty: IRegisterPropertyToRegisterGroup) => new RegisterPropertyToRegisterGroup(registerProperty),
+      );
+    }
   }
 }

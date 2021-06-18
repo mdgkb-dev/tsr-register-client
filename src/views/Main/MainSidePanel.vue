@@ -111,6 +111,11 @@ export default class MainSidePanel extends Vue {
           title: 'Группы для регистров',
           link: '/register-groups',
         },
+        {
+          name: 'RegisterProperties',
+          title: 'Свойства для регистров',
+          link: '/register-properties',
+        },
       ],
     },
   ];

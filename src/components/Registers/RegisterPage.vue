@@ -6,7 +6,7 @@
         <el-form-item label="Название регистра">
           <el-input v-model="register.name"></el-input>
         </el-form-item>
-        <RegisterGroupToRegisterForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
+        <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
       </el-form>
     </div>
   </el-row>
@@ -18,7 +18,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import Register from '@/classes/registers/Register';
-import RegisterGroupToRegisterForm from '@/components/Registers/RegisterGroupToRegisterForm.vue';
+import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
@@ -26,7 +26,7 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 @Options({
   components: {
     PageHead,
-    RegisterGroupToRegisterForm,
+    RegisterGroupForm,
   },
   computed: {
     ...mapGetters('registers', ['register']),
@@ -54,24 +54,20 @@ export default class RegisterPage extends Vue {
   mount = false;
 
   async created(): Promise<void> {
-    try {
-      if (!this.$route.params.registerId) {
-        this.isEditMode = false;
-        this.title = 'Создать регистр';
-      } else {
-        this.isEditMode = true;
-        this.title = 'Редактировать регистр';
-        await this.registerGet(`${this.$route.params.registerId}`);
-        this.register = this.$store.getters['registers/register'];
-      }
-
-      await this.registerGroupsGetAll();
-      this.registerGroups = this.$store.getters['registerGroups/registerGroups'];
-
-      this.mount = true;
-    } catch (e) {
-      console.log(e);
+    if (!this.$route.params.registerId) {
+      this.isEditMode = false;
+      this.title = 'Создать регистр';
+    } else {
+      this.isEditMode = true;
+      this.title = 'Редактировать регистр';
+      await this.registerGet(`${this.$route.params.registerId}`);
+      this.register = this.$store.getters['registers/register'];
     }
+
+    await this.registerGroupsGetAll();
+    this.registerGroups = this.$store.getters['registerGroups/registerGroups'];
+
+    this.mount = true;
   }
 
   async submitForm(): Promise<void> {
@@ -79,7 +75,6 @@ export default class RegisterPage extends Vue {
       if (this.isEditMode) {
         this.$store.dispatch('registers/edit', this.register);
       } else {
-        console.log('this.register', this.register);
         this.$store.dispatch('registers/create', this.register);
       }
     } catch (e) {
