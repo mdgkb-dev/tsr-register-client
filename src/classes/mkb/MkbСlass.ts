@@ -43,7 +43,7 @@ export default class MkbCLass implements IMkbClass {
   }
 
   getChildren(relevant: boolean): (IMkbGroup | IMkbDiagnosis)[] {
-    if (relevant) return [...this.mkbGroups.filter(i => i.relevant), ...this.mkbDiagnosis.filter(i => i.relevant)];
+    if (relevant) return [...this.mkbGroups.filter((i) => i.relevant), ...this.mkbDiagnosis.filter((i) => i.relevant)];
     return [...this.mkbGroups, ...this.mkbDiagnosis];
   }
 

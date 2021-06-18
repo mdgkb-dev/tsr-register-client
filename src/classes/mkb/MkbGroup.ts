@@ -47,7 +47,7 @@ export default class MkbGroup implements IMkbGroup {
   }
 
   getChildren(relevant: boolean): (IMkbSubGroup | IMkbDiagnosis)[] {
-    if (relevant) return [...this.mkbSubGroups.filter(i => i.relevant), ...this.mkbDiagnosis.filter(i => i.relevant)];
+    if (relevant) return [...this.mkbSubGroups.filter((i) => i.relevant), ...this.mkbDiagnosis.filter((i) => i.relevant)];
     return [...this.mkbSubGroups, ...this.mkbDiagnosis];
   }
 
