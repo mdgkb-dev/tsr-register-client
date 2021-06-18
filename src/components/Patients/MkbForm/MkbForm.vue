@@ -197,7 +197,7 @@ export default class MkbForm extends Vue {
     this.expandRowKeys = row.id === this.expandRowKeys[0] ? [] : [row.id];
   };
 
-  async findDiagnosis(query: string, resolve: any, param: any) {
+  async findDiagnosis(query: string, resolve: any) {
     console.log(1, this.filteredDiagnosis);
 
     let diagnosis: ISearchDiagnosis[] = [];

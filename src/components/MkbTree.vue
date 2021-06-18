@@ -224,7 +224,7 @@ export default class MkbTree extends Vue {
 
   async getNodeFour(node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> {
     await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
-    return this.onlyRelevant ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter(item => item.relevant) : this.findSubDiagnosisFromTree(mkbIdSet);
+    return this.onlyRelevant ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant) : this.findSubDiagnosisFromTree(mkbIdSet);
   }
 
   findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] {
@@ -242,7 +242,7 @@ export default class MkbTree extends Vue {
       await this.getAllMkbClasses();
       this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     } else {
-      this.mkbClasses = this.mkbClasses.filter(item => item.relevant);
+      this.mkbClasses = this.mkbClasses.filter((item) => item.relevant);
     }
     this.onlyRelevant = !this.onlyRelevant;
   }
