@@ -21,10 +21,10 @@ import { Vue, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
-// import RegisterProperty from '@/classes/registers/RegisterProperty';
 
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
+import RegisterProperty from '@/classes/registers/RegisterProperty';
 
 @Options({
   components: {
@@ -37,6 +37,7 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
   methods: {
     ...mapActions({
       registerPropertyGet: 'registerProperties/get',
+      getValueTypes: 'registerProperties/getValueTypes',
     }),
   },
 })
@@ -46,9 +47,10 @@ export default class RegisterPropertyPage extends Vue {
   $message!: any;
 
   registerPropertyGet!: (registerId: string) => Promise<void>;
+  getValueTypes!: () => Promise<void>;
 
   // Local state.
-  registerProperty!: IRegisterProperty;
+  registerProperty: IRegisterProperty = new RegisterProperty();
   valueTypes!: IValueType[];
   title = '';
   mount = false;
@@ -56,14 +58,15 @@ export default class RegisterPropertyPage extends Vue {
   async created(): Promise<void> {
     if (!this.$route.params.registerPropertyId) {
       this.isEditMode = false;
-      this.title = 'Создать свойства';
+      this.title = 'Создать свойство';
     } else {
       this.isEditMode = true;
       this.title = 'Редактировать свойство';
       await this.registerPropertyGet(`${this.$route.params.registerPropertyId}`);
       this.registerProperty = this.$store.getters['registerProperties/registerProperty'];
-      this.valueTypes = this.$store.getters['registerProperties/valueTypes'];
     }
+    await this.getValueTypes();
+    this.valueTypes = this.$store.getters['registerProperties/valueTypes'];
     this.mount = true;
   }
 
