@@ -46,7 +46,6 @@
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
-
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -56,9 +55,10 @@ import MkbIdSet from '@/classes/mkb/MkbIdSet';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 @Options({
-  props: ['selectable', 'checked-diagnosis'],
+  props: ['selectable', 'patientDiagnosis'],
   computed: {
     ...mapState('mkb', ['mkbClasses']),
   },
@@ -77,9 +77,8 @@ export default class MkbTree extends Vue {
   $refs!: {
     tree: any;
   };
-  $message!: any;
 
-  checkedDiagnosis!: IPatientDiagnosis[];
+  patientDiagnosis!: IPatientDiagnosis[];
   getAllMkbClasses!: () => Promise<void>;
   getGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
   getSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
@@ -103,7 +102,7 @@ export default class MkbTree extends Vue {
       curNode.parent.childNodes.forEach((child: any) => {
         if (child.checked) notChildrenChecked = false;
       });
-      const curDiagnosis = this.checkedDiagnosis.find((d: IPatientDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId);
+      const curDiagnosis = this.patientDiagnosis.find((d: IPatientDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId);
       if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
       curNode.childNodes.forEach((child: any) => this.$refs.tree.setChecked(child.data.id, false, false));
       if (checkedNode.code || checkedNode.subCode > -1) this.$emit('removeDiagnosis', checkedNode);
@@ -175,7 +174,7 @@ export default class MkbTree extends Vue {
 
   checkDiagnosis(diagnosisArr: IMkbDiagnosis[]) {
     diagnosisArr.forEach((diagnosis: any) => {
-      this.checkedDiagnosis.forEach((d: IPatientDiagnosis) => {
+      this.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
         if (diagnosis.id === d.mkbDiagnosisId) {
           this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);
         }
@@ -185,7 +184,7 @@ export default class MkbTree extends Vue {
 
   checkSubDiagnosis(diagnosisArr: IMkbSubDiagnosis[]) {
     diagnosisArr.forEach((diagnosis: any) => {
-      this.checkedDiagnosis.forEach((d: IPatientDiagnosis) => {
+      this.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
         if (diagnosis.id === d.mkbSubDiagnosisId) {
           this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);
         }
@@ -193,48 +192,30 @@ export default class MkbTree extends Vue {
     });
   }
 
-  async getNodeOne(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
+  async getNodeOne(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbGroup | IMkbDiagnosis)[]> {
     await this.getGroupById(mkbIdSet);
-    // this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
-    if (this.onlyRelevant) return classN ? [...classN.mkbGroups.filter((item) => item.relevant), ...classN.mkbDiagnosis.filter((item) => item.relevant)] : undefined;
-    return classN ? [...classN.mkbGroups, ...classN.mkbDiagnosis] : undefined;
+    return classN ? classN.getChildren(this.onlyRelevant) : [];
   }
 
-  async getNodeTwo(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
-    // console.log(node);
+  async getNodeTwo(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubGroup | IMkbDiagnosis)[]> {
     await this.getSubGroupById(mkbIdSet);
-    // this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
 
     if (classN && classN.mkbGroups) {
       const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
-      if (group && group.mkbSubGroups && group.mkbDiagnosis) {
-        if (this.onlyRelevant) return group ? [...group.mkbDiagnosis.filter((item) => item.relevant), ...group.mkbSubGroups.filter((item) => item.relevant)] : [];
-        return group ? [...group.mkbDiagnosis, ...group.mkbSubGroups] : [];
-      }
+      return group ? group.getChildren(this.onlyRelevant) : [];
     }
-
-    return undefined;
+    return [];
   }
 
-  async getNodeThree(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
+  async getNodeThree(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubSubGroup | IMkbDiagnosis | IMkbSubDiagnosis)[]> {
     if (!node.data.code) {
       await this.getSubSubGroupById(mkbIdSet);
-      // this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
       const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
       if (classN && classN.mkbGroups) {
-        const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
-        if (group && group.mkbSubGroups) {
-          const subGroup = group.mkbSubGroups.find((m: IMkbSubGroup) => m.id === mkbIdSet.subGroupId);
-
-          if (subGroup && subGroup.mkbSubSubGroups && subGroup.mkbDiagnosis) {
-            if (this.onlyRelevant) {
-              return subGroup ? [...subGroup.mkbDiagnosis.filter((item) => item.relevant), ...subGroup.mkbSubSubGroups.filter((item) => item.relevant)] : undefined;
-            }
-            return subGroup ? [...subGroup.mkbDiagnosis, ...subGroup.mkbSubSubGroups] : undefined;
-          }
-        }
+        const subGroup = classN.getSubGroup(mkbIdSet);
+        return subGroup ? subGroup.getChildren(this.onlyRelevant) : [];
       }
     }
     await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
@@ -243,29 +224,17 @@ export default class MkbTree extends Vue {
 
   async getNodeFour(node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> {
     await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
-    // this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     return this.onlyRelevant ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant) : this.findSubDiagnosisFromTree(mkbIdSet);
   }
 
-  findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] | undefined {
+  findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] {
     let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
     const mkbClass = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
 
-    if (!mkbClass) return undefined;
-    diagnosis = mkbClass ? mkbClass.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
-
-    const mkbGroup = mkbClass.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
-    diagnosis = mkbGroup ? mkbGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-
-    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
-    if (!mkbGroup) return undefined;
-
-    const subGroup = mkbGroup.mkbSubGroups.find((m: IMkbSubGroup) => m.id === mkbIdSet.subGroupId);
-    diagnosis = subGroup ? subGroup.getDiagnosis(mkbIdSet.diagnosisId) : undefined;
-
-    if (diagnosis && diagnosis.mkbSubDiagnosis) return diagnosis.mkbSubDiagnosis;
-    return undefined;
+    if (!mkbClass) return [];
+    diagnosis = mkbClass.getDiagnosisFromTree(mkbIdSet);
+    if (diagnosis) return diagnosis.mkbSubDiagnosis;
+    return [];
   }
 
   async showRelevant() {
