@@ -156,7 +156,7 @@ export default class MkbForm extends Vue {
     if (query.length === 0) {
       this.queryStringsGroups[id] = '';
       this.filteredDiagnosis = [];
-      const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
       if (diagnosis) {
         diagnosis.mkbDiagnosis = undefined;
         diagnosis.mkbDiagnosisId = undefined;
@@ -170,7 +170,7 @@ export default class MkbForm extends Vue {
     if (query.length === 0) {
       this.queryStringsDiagnosis[id] = '';
       this.filteredDiagnosis = [];
-      const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
       if (diagnosis) {
         diagnosis.mkbDiagnosis = undefined;
         diagnosis.mkbDiagnosisId = undefined;
@@ -248,7 +248,7 @@ export default class MkbForm extends Vue {
 
   async handleGroupSelect(item: ISearch, id: string) {
     await this.getDiagnosisByGroupId(item.id);
-    const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
     this.queryStringsDiagnosis[id] = '';
     if (diagnosis) {
       diagnosis.mkbDiagnosis = undefined;
@@ -259,7 +259,7 @@ export default class MkbForm extends Vue {
   }
 
   async handleDiagnosisSelect(item: ISearchDiagnosis, id: string) {
-    const diagnosis = this.patientDiagnosis.find(d => d.id === id);
+    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
     if (diagnosis) {
       diagnosis.mkbDiagnosisId = item.id;
       diagnosis.mkbDiagnosis = item.diagnosis;
