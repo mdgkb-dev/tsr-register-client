@@ -21,13 +21,15 @@ export default class HttpClient {
   }
 
   async post(params: IPostParams): Promise<any> {
-    const { payload, fileSets, query, headers, isFormData } = params;
+    const {
+      payload, fileSets, query, headers, isFormData,
+    } = params;
     this.toUtc(payload);
     let body: string | FormData = JSON.stringify(payload);
 
     if (isFormData) {
       body = new FormData();
-      body.append('payload', JSON.stringify(payload));
+      body.append('form', JSON.stringify(payload));
 
       if (fileSets) {
         for (const fileSet of fileSets) {
@@ -40,7 +42,9 @@ export default class HttpClient {
 
     const res = await fetch(this.baseUrl(query), {
       method: 'POST',
-      headers: headers ?? this.headers,
+      headers: headers ?? isFormData
+        ? {}
+        : this.headers,
       body,
     });
 

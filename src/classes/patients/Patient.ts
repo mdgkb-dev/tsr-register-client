@@ -1,5 +1,3 @@
-import Bmi from '../bmi/Bmi';
-
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
@@ -14,9 +12,10 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import Bmi from '../bmi/Bmi';
 
 export default class Patient implements IPatient {
-  id: string = '';
+  id?: string;
   human: IHuman = new Human();
   anthropometryData: IAnthropometryData[] = [];
   representativeToPatient: IRepresentativeToPatient[] = [];
@@ -28,6 +27,7 @@ export default class Patient implements IPatient {
     if (!patient) {
       return;
     }
+
     this.id = patient.id;
     this.human = new Human(patient.human);
     if (patient.anthropometryData) {

@@ -7,7 +7,7 @@ import Contact from '@/classes/humans/Contact';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 
 export default class Human implements IHuman {
-  id = '';
+  id?: string;
   name = '';
   surname = '';
   patronymic = '';
@@ -46,10 +46,29 @@ export default class Human implements IHuman {
   getFullName(): string {
     return `${this.surname} ${this.name} ${this.patronymic}`;
   }
+
   getGender(full?: boolean): string {
     if (full) {
       return this.isMale ? 'Мужской' : 'Женский';
     }
     return this.isMale ? 'М' : 'Ж';
+  }
+
+  removeDocumentsIds(): void {
+    for (const document of this.documents) {
+      if (document.isDraft) {
+        document.id = undefined;
+      }
+    }
+  }
+
+  removeDocumentFieldValuesIds(): void {
+    for (const document of this.documents) {
+      if (document.isDraft) {
+        for (const value of document.documentFieldValues) {
+          value.id = undefined;
+        }
+      }
+    }
   }
 }

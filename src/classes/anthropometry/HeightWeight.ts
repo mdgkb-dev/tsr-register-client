@@ -56,8 +56,6 @@ export default class HeightWeight implements IHeightWeight {
   }
 
   static toAnthropometryData(heightWeight: IHeightWeight[], heightId: string, weightId: string, patientId?: string): IAnthropometryData[] {
-    console.log(heightId);
-    console.log(weightId);
     const result: IAnthropometryData[] = [];
     heightWeight.forEach((heightWightItem: IHeightWeight) => {
       const anthro = new AnthropometryDate();
@@ -76,6 +74,7 @@ export default class HeightWeight implements IHeightWeight {
       anthro2.value = heightWightItem.weight;
       result.push(anthro2);
     });
+
     return result;
   }
 }

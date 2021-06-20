@@ -1,105 +1,85 @@
 <template>
   <div class="form-under-collapse">
-    <div v-for="document in documents" :key="document">
-      <el-row style="margin-bottom: 50px">
-        <el-col :span="2">
-          <div style="font-weight: bold">{{ document.name }}</div>
-        </el-col>
-        <el-col :span="22">
-          <el-form-item v-for="(field, j) in document.documentFields" :key="j" style="margin-bottom: 10px">
-            <el-form-item v-if="field.type === 'string'" :label="field.name">
-              <el-input :label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueString"></el-input>
-            </el-form-item>
-            <el-form-item v-else-if="field.type === 'number'">
-              <el-input-number label="field.name" v-model="documentsValues[`${document.id}`][`${field.id}`].valueNumber"></el-input-number>
-            </el-form-item>
-            <el-form-item v-else-if="field.type === 'date'">
-              <el-date-picker type="date" placeholder="Выберете дату" v-model="documentsValues[`${document.id}`][`${field.id}`].valueDate"></el-date-picker>
-            </el-form-item>
-          </el-form-item>
-        </el-col>
+    <el-row type="flex" justify="start">
+      <el-col :span="12">
+        <el-button @click="add">Добавить документ</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-select v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
+          <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
+        </el-select>
+      </el-col>
+    </el-row>
 
-        <el-upload
-          action=""
-          :limit="3"
-          :on-preview="download"
-          :on-success="onSuccess"
-          :on-remove="onRemove"
-          :http-request="upload"
-          :data="document"
-          ref="uploadFile"
-          :file-list="documentsScans[document.id]"
-        >
-          <el-button size="small" type="primary">Загрузить изображение документа</el-button>
-        </el-upload>
-      </el-row>
-      <el-divider></el-divider>
-    </div>
+    <section v-for="document in documents" :key="document.id">
+      <h3>
+        {{ document.documentType.name }}
+        <el-divider direction="vertical" />
+        <el-button @click="() => remove(document.id)" type="text" size="small">Удалить</el-button>
+      </h3>
+
+      <section v-for="(value, valueIndex) in document.documentFieldValues" :key="value.id">
+        <el-form-item v-if="value.documentTypeField.type === 'string'" :label="value.documentTypeField.name" :prop="document.documentFieldValues[valueIndex].valueString">
+          <el-input v-model="document.documentFieldValues[valueIndex].valueString" />
+        </el-form-item>
+
+        <el-form-item v-if="value.documentTypeField.type === 'number'" :label="value.documentTypeField.name" :prop="document.documentFieldValues[valueIndex].valueString">
+          <el-input-number v-model="document.documentFieldValues[valueIndex].valueNumber" />
+        </el-form-item>
+
+        <el-form-item v-if="value.documentTypeField.type === 'date'" :label="value.documentTypeField.name" :prop="document.documentFieldValues[valueIndex].valueString">
+          <el-date-picker v-model="document.documentFieldValues[valueIndex].valueDate" />
+        </el-form-item>
+      </section>
+    </section>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component';
+import { v4 as uuidv4 } from 'uuid';
 
-import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
 import IDocument from '@/interfaces/documents/IDocument';
-import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
+import IDocumentType from '@/interfaces/documents/IDocumentType';
+
+import Document from '@/classes/documents/Document';
+import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
 
 @Options({
-  props: ['in-documents', 'in-documents-scans', 'in-documents-values'],
+  name: 'DocumentForm',
+  props: ['documents', 'documentTypes'],
+  emits: ['update:documents'],
 })
 export default class DocumentForm extends Vue {
   // Types.
-  inDocumentsScans!: { [id: string]: IDocumentScan[] };
-  inDocuments!: IDocument[];
-  inDocumentsValues!: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } };
+  documents!: IDocument[];
+  documentTypes!: IDocumentType[];
+  tempVariable!: string;
 
   // Local state.
-  documentsScans = this.inDocumentsScans;
-  documents = this.inDocuments;
-  documentsValues = this.inDocumentsValues;
+  selectedDocumentTypeId = '';
 
-  //  документы
-  async upload(file: any): Promise<any> {
-    const formData = new FormData();
-    formData.append('file', file.file);
-    formData.append('documentId', file.data.id);
-    const res = await this.$store.dispatch('documentScans/upload', formData);
-    const re = await res.json();
-    this.documentsScans[file.data.id].push({
-      id: re.id as string,
-      documentId: re.documentId,
-    });
-    return re;
-  }
+  // Methods.
+  add(): void {
+    const selectedType = this.documentTypes.find((type) => type.id === this.selectedDocumentTypeId);
 
-  onSuccess = (res: any, file: any): void => {
-    // TODO: проверить после переделки доков
-    // eslint-disable-next-line no-param-reassign
-    file.url = res.id;
-  };
-
-  async onRemove(file: any): Promise<void> {
-    await this.$store.dispatch('documentScans/delete', file.id);
-    for (const document in this.documentsScans) {
-      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
-        for (const scan of this.documentsScans[document]) {
-          if (scan.id === file.id) {
-            const i = this.documentsScans[document].findIndex((item: any) => item.id === file.id);
-            this.documentsScans[document].splice(i, 1);
-          }
-        }
-      }
+    if (!selectedType || !selectedType.id || !selectedType?.documentTypeFields) {
+      return;
     }
-    //
-    // for (const scan of this.documentsScans!) {
-    //   const i = this.documentsScans!.findIndex((item: any) => item.id === file.id);
-    //   this.documentsScans!.splice(i, 1);
-    // }
+
+    const documentFieldValues: DocumentFieldValue[] = selectedType.documentTypeFields.map(
+      (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField }),
+    );
+
+    const document = new Document({
+      id: uuidv4(), documentType: { ...selectedType }, documentFieldValues, isDraft: true,
+    });
+
+    this.$emit('update:documents', [...this.documents, document]);
   }
 
-  async download(file: any): Promise<void> {
-    await this.$store.dispatch('documentScans/download', file);
+  remove(documentId: string): void {
+    this.$emit('update:documents', [...(this.documents.filter((document) => document.id !== documentId))]);
   }
 }
 </script>

@@ -1,8 +1,8 @@
 import { ActionContext, ActionTree } from 'vuex';
 import HttpClient from '@/services/HttpClient';
-import State from './state';
 import { RootState } from '@/store/types';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+import State from './state';
 
 const httpClient = new HttpClient('document-types');
 
@@ -34,7 +34,7 @@ const actions: ActionTree<State, RootState> = {
   delete: async ({ commit }: ActionContext<State, RootState>, id: string): Promise<void> => {
     await httpClient.delete(id);
     commit('delete', id);
-  }
-}
+  },
+};
 
 export default actions;

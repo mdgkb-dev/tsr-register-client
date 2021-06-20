@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
-import State from './state';
 import { RootState } from '@/store/types';
+import State from './state';
 
 const getters: GetterTree<State, RootState> = {
   documentType(state: State): IDocumentType | undefined {
@@ -9,7 +9,7 @@ const getters: GetterTree<State, RootState> = {
   },
   documentTypes(state: State): IDocumentType[] | undefined {
     return state.documentTypes;
-  }
-}
+  },
+};
 
 export default getters;

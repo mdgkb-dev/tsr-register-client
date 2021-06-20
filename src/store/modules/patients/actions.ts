@@ -16,8 +16,10 @@ const actions: ActionTree<State, RootState> = {
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get(id));
   },
-  create: async ({ commit }, payload: IPatient): Promise<void> => {
-    commit('create', await httpClient.post({ payload }));
+  create: async ({ commit }, patient: IPatient): Promise<void> => {
+    patient.human.removeDocumentsIds();
+    patient.human.removeDocumentFieldValuesIds();
+    commit('create', await httpClient.post({ payload: patient, isFormData: true }));
   },
   edit: async ({ commit }, payload: IPatient): Promise<void> => {
     commit('update', await httpClient.put(payload, payload.id));
