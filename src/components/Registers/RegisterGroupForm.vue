@@ -1,20 +1,21 @@
 <template>
-  <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
-  <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow">
-    <el-table-column type="index" width="50" />
-    <el-table-column label="Наименование" min-width="250">
-      <template #default="scope">
-        <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
-          <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
-        </el-select>
-      </template>
-    </el-table-column>
-    <el-table-column fixed="right" width="200">
-      <template #default="scope">
-        <el-button @click.prevent="remove(scope.row)" round>Удалить группу</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <div class="table-under-collapse">
+    <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
+    <el-table :data="registerGroupToRegister" style="width: 100%">
+      <el-table-column label="Наименование" min-width="250">
+        <template #default="scope">
+          <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
+            <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+      <el-table-column width="120">
+        <template #default="scope">
+          <el-button @click.prevent="remove(scope.row)" type="text" size="small" round>Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script lang="ts">

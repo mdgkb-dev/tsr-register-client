@@ -1,15 +1,26 @@
 <template>
-  <PageHead :titleParent="'Регистры пациентов'" :title="title" @submitForm="submitForm" />
-  <el-row>
-    <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="max-width: 800px">
-        <el-form-item label="Название регистра">
-          <el-input v-model="register.name"></el-input>
-        </el-form-item>
-        <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
+  <div class="register-page-container">
+    <PageHead :titleParent="'Регистры пациентов'" :title="title" @submitForm="submitForm" />
+    <el-row>
+      <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="width: 100%">
+        <div class="table-background" style="margin-bottom: 20px; height: unset">
+          <el-form-item label="Название регистра">
+            <el-input v-model="register.name"></el-input>
+          </el-form-item>
+        </div>
+        <el-collapse>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Группы</h2></template>
+            <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
+          </el-collapse-item>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+            <MkbForm v-model:diagnosisData="register.registerDiagnosis" />
+          </el-collapse-item>
+        </el-collapse>
       </el-form>
-    </div>
-  </el-row>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,6 +30,7 @@ import { mapActions, mapGetters } from 'vuex';
 import PageHead from '@/components/PageHead.vue';
 import Register from '@/classes/registers/Register';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
+import MkbForm from '@/components/Mkb/MkbForm.vue';
 
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
@@ -27,6 +39,7 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
   components: {
     PageHead,
     RegisterGroupForm,
+    MkbForm,
   },
   computed: {
     ...mapGetters('registers', ['register']),
@@ -53,7 +66,7 @@ export default class RegisterPage extends Vue {
   title = '';
   mount = false;
 
-  async created(): Promise<void> {
+  async mounted(): Promise<void> {
     if (!this.$route.params.registerId) {
       this.isEditMode = false;
       this.title = 'Создать регистр';
@@ -62,6 +75,7 @@ export default class RegisterPage extends Vue {
       this.title = 'Редактировать регистр';
       await this.registerGet(`${this.$route.params.registerId}`);
       this.register = this.$store.getters['registers/register'];
+      console.log(this.register);
     }
 
     await this.registerGroupsGetAll();
@@ -85,3 +99,9 @@ export default class RegisterPage extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.register-page-container:deep {
+  @import '@/assets/elements/collapse.scss';
+}
+</style>
