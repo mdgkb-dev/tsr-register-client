@@ -106,7 +106,7 @@ export default class RegisterPropertyPage extends Vue {
   }
 
   changeRelation(valueTypeId: string): void {
-    const valueType = this.valueTypes.find(i => i.id === valueTypeId);
+    const valueType = this.valueTypes.find((i) => i.id === valueTypeId);
     if (valueType) {
       if (valueType.valueRelation === ValueRelation.manyToMany) {
         this.showSet = true;

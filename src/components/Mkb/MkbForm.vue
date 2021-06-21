@@ -1,11 +1,12 @@
 <template>
   <div class="table-under-collapse">
-    <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+    <el-space style="margin-bottom: 10px">
+      <el-button @click="addDiagnosis">Добавить диагноз</el-button>
+      <MkbTreeDialog @setDiagnosis="setDiagnosisFromModal($event)" v-model:diagnosisData="diagnosisData" :patientDiagnosis="patientDiagnosis" />
+    </el-space>
 
-    <MkbTreeDialog @setDiagnosis="setDiagnosisFromModal($event)" v-model:patientDiagnosis="patientDiagnosis" />
-
-    <el-table :data="patientDiagnosis" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange">
-      <el-table-column type="expand">
+    <el-table :data="diagnosisData" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange">
+      <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
           <el-button @click="addAnamnesis(props.row)" stryle="margin: 100px">Добавить анамнез</el-button>
           <div class="block" style="">
@@ -62,14 +63,14 @@
           <el-select style="width: 100%" v-else disabled v-model="undefined" placeholder="Уточнённых диагнозов нет" />
         </template>
       </el-table-column>
-      <el-table-column prop="weight" label="Первичный" width="90">
+      <el-table-column v-if="patientDiagnosis" prop="weight" label="Первичный" width="90">
         <template #default="scope">
           <el-checkbox v-model="scope.row.primary" />
         </template>
       </el-table-column>
       <el-table-column width="120">
         <template #default="scope">
-          <el-button @click="removeDiagnosis(scope.row)" type="text" size="small">Удалить</el-button>
+          <el-button @click="removeDiagnosis(scope.row)" type="text" size="small" round>Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -88,9 +89,11 @@ import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import { defineAsyncComponent } from 'vue';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
-import MkbTreeDialog from '@/components/Patients/MkbForm/MkbTreeDialog.vue';
+import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import { v4 as uuidv4 } from 'uuid';
 import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
@@ -99,7 +102,7 @@ const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/A
     AnamnesisForm,
     MkbTreeDialog,
   },
-  props: ['patientDiagnosis'],
+  props: ['diagnosisData', 'patientDiagnosis'],
   computed: {
     ...mapGetters('mkb', ['mkbDiagnosis', 'mkbGroups', 'mkbSubDiagnosis', 'filteredDiagnosis']),
   },
@@ -122,7 +125,8 @@ export default class MkbForm extends Vue {
   mkbSubDiagnosis!: IMkbSubDiagnosis[];
   filteredDiagnosis!: IMkbDiagnosis[];
 
-  patientDiagnosis!: IPatientDiagnosis[];
+  diagnosisData!: Array<IPatientDiagnosis | IRegisterDiagnosis>;
+  patientDiagnosis?: boolean;
 
   searchGroups!: (query: string) => Promise<void>;
 
@@ -134,29 +138,34 @@ export default class MkbForm extends Vue {
   expandRowKeys: (string | undefined)[] = [];
 
   mounted(): void {
-    this.patientDiagnosis.forEach((patientDiagnosis: PatientDiagnosis) => {
-      if (patientDiagnosis.mkbDiagnosis && patientDiagnosis.id) {
-        this.queryStringsDiagnosis[patientDiagnosis.id] = patientDiagnosis.mkbDiagnosis.getFullName();
-        if (patientDiagnosis.mkbDiagnosis.mkbGroup && patientDiagnosis.mkbDiagnosis.mkbGroup.name) {
-          this.queryStringsGroups[patientDiagnosis.id] = patientDiagnosis.mkbDiagnosis.mkbGroup.getFullName();
+    this.diagnosisData.forEach((diagnosisData: PatientDiagnosis | RegisterDiagnosis) => {
+      if (diagnosisData.mkbDiagnosis && diagnosisData.id) {
+        this.queryStringsDiagnosis[diagnosisData.id] = diagnosisData.mkbDiagnosis.getFullName();
+        if (diagnosisData.mkbDiagnosis.mkbGroup && diagnosisData.mkbDiagnosis.mkbGroup.name) {
+          this.queryStringsGroups[diagnosisData.id] = diagnosisData.mkbDiagnosis.mkbGroup.getFullName();
         }
       }
     });
   }
 
   addDiagnosis(): void {
-    const patientDiagnosis = new PatientDiagnosis();
-    patientDiagnosis.id = uuidv4();
-    this.patientDiagnosis.push(patientDiagnosis);
-    this.queryStringsDiagnosis[patientDiagnosis.id] = '';
-    this.queryStringsGroups[patientDiagnosis.id] = '';
+    let diagnosisData;
+    if (this.patientDiagnosis) {
+      diagnosisData = new PatientDiagnosis();
+    } else {
+      diagnosisData = new RegisterDiagnosis();
+    }
+    diagnosisData.id = uuidv4();
+    this.diagnosisData.push(diagnosisData);
+    this.queryStringsDiagnosis[diagnosisData.id] = '';
+    this.queryStringsGroups[diagnosisData.id] = '';
   }
 
   syncSearchDiagnosis(query: string, id: string): void {
     if (query.length === 0) {
       this.queryStringsGroups[id] = '';
       this.filteredDiagnosis = [];
-      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
+      const diagnosis = this.diagnosisData.find((d) => d.id === id);
       if (diagnosis) {
         diagnosis.mkbDiagnosis = undefined;
         diagnosis.mkbDiagnosisId = undefined;
@@ -170,7 +179,7 @@ export default class MkbForm extends Vue {
     if (query.length === 0) {
       this.queryStringsDiagnosis[id] = '';
       this.filteredDiagnosis = [];
-      const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
+      const diagnosis = this.diagnosisData.find((d) => d.id === id);
       if (diagnosis) {
         diagnosis.mkbDiagnosis = undefined;
         diagnosis.mkbDiagnosisId = undefined;
@@ -180,7 +189,7 @@ export default class MkbForm extends Vue {
     }
   }
 
-  setDiagnosisFromModal(diagnosis: IPatientDiagnosis): void {
+  setDiagnosisFromModal(diagnosis: IPatientDiagnosis | IRegisterDiagnosis): void {
     if (diagnosis.id && diagnosis.mkbDiagnosis && diagnosis.mkbDiagnosis.mkbGroup) {
       this.queryStringsDiagnosis[diagnosis.id] = diagnosis.mkbDiagnosis.getFullName();
       this.queryStringsGroups[diagnosis.id] = diagnosis.mkbDiagnosis.mkbGroup.getFullName();
@@ -193,7 +202,7 @@ export default class MkbForm extends Vue {
     diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
   };
 
-  handleExpandChange = (row: IPatientDiagnosis) => {
+  handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis) => {
     this.expandRowKeys = row.id === this.expandRowKeys[0] ? [] : [row.id];
   };
 
@@ -239,7 +248,7 @@ export default class MkbForm extends Vue {
 
   async findSubDiagnosis(diagnosisId: string) {
     await this.searchSubDiagnosis(diagnosisId);
-    this.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
+    this.diagnosisData.forEach((d: IPatientDiagnosis | RegisterDiagnosis) => {
       if (d.mkbDiagnosis && d.mkbDiagnosisId === diagnosisId) {
         d.mkbDiagnosis.mkbSubDiagnosis.push(...this.mkbSubDiagnosis);
       }
@@ -248,7 +257,7 @@ export default class MkbForm extends Vue {
 
   async handleGroupSelect(item: ISearch, id: string) {
     await this.getDiagnosisByGroupId(item.id);
-    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
+    const diagnosis = this.diagnosisData.find((d) => d.id === id);
     this.queryStringsDiagnosis[id] = '';
     if (diagnosis) {
       diagnosis.mkbDiagnosis = undefined;
@@ -259,7 +268,7 @@ export default class MkbForm extends Vue {
   }
 
   async handleDiagnosisSelect(item: ISearchDiagnosis, id: string) {
-    const diagnosis = this.patientDiagnosis.find((d) => d.id === id);
+    const diagnosis = this.diagnosisData.find((d) => d.id === id);
     if (diagnosis) {
       diagnosis.mkbDiagnosisId = item.id;
       diagnosis.mkbDiagnosis = item.diagnosis;
@@ -271,9 +280,9 @@ export default class MkbForm extends Vue {
   }
 
   removeDiagnosis(item: any): void {
-    const index = this.patientDiagnosis.indexOf(item);
+    const index = this.diagnosisData.indexOf(item);
     if (index !== -1) {
-      this.patientDiagnosis.splice(index, 1);
+      this.diagnosisData.splice(index, 1);
     }
   }
 }

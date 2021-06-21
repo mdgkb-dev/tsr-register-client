@@ -231,7 +231,7 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 
 <style lang="scss" scoped>
 .representative-page-container:deep {
-  @import '@/assets/elements/patientAndRepresPage.scss';
+  @import '@/assets/elements/collapse.scss';
 }
 
 .el-row {
