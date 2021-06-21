@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts">
+import { mapGetters, mapActions } from 'vuex';
 import { Vue, Options } from 'vue-class-component';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -47,17 +48,33 @@ import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
 
 @Options({
   name: 'DocumentForm',
-  props: ['documents', 'documentTypes'],
+  computed: {
+    ...mapGetters('documentTypes', ['documentTypes']),
+  },
+  methods: {
+    ...mapActions({
+      documentTypesGetAll: 'documentTypes/getAll',
+    }),
+  },
+  props: ['documents'],
   emits: ['update:documents'],
 })
 export default class DocumentForm extends Vue {
   // Types.
   documents!: IDocument[];
-  documentTypes!: IDocumentType[];
   tempVariable!: string;
 
+  documentTypesGetAll!: () => Promise<void>;
+
   // Local state.
+  documentTypes: IDocumentType[] = [];
   selectedDocumentTypeId = '';
+
+  // Lifecycle methods.
+  async created(): Promise<void> {
+    await this.documentTypesGetAll();
+    this.documentTypes = [...(await this.$store.getters['documentTypes/documentTypes'])];
+  }
 
   // Methods.
   add(): void {

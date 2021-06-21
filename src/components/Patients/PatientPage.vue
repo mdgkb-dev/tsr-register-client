@@ -31,7 +31,7 @@
               <template #title>
                 <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm v-model:documents="patient.human.documents" :documentTypes="documentTypes" />
+              <DocumentForm v-model:documents="patient.human.documents" />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -81,7 +81,6 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IDisability from '@/interfaces/disabilities/IDisability';
-import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IOption from '@/interfaces/shared/IOption';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
@@ -107,7 +106,6 @@ import Patient from '@/classes/patients/Patient';
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('disabilities', ['disabilities']),
-    ...mapGetters('documentTypes', ['documentTypes']),
     ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('patients', ['patient']),
     ...mapGetters('representativeTypes', ['representativeTypes']),
@@ -117,7 +115,6 @@ import Patient from '@/classes/patients/Patient';
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
       disabilitiesGetAll: 'disabilities/getAll',
-      documentTypesGetAll: 'documentTypes/getAll',
       insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       patientGet: 'patients/get',
       representativeTypesGetAll: 'representativeTypes/getAll',
@@ -138,7 +135,6 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
   representatives!: IRepresentative[];
 
   anthropometryGetAll!: () => Promise<void>;
-  documentTypesGetAll!: () => Promise<void>;
   insuranceCompaniesGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
   representativeTypesGetAll!: () => Promise<void>;
@@ -146,7 +142,6 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
 
   // Local state.
   diagnosisMount = false;
-  documentTypes: IDocumentType[] = [];
   mount = false;
   offset: number[] = [0];
   patient = new Patient();
@@ -169,8 +164,6 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
       this.patient = this.$store.getters['patients/patient'];
     }
 
-    await this.documentTypesGetAll();
-    this.documentTypes = [...(await this.$store.getters['documentTypes/documentTypes'])];
     await this.insuranceCompaniesGetAll();
     await this.anthropometryGetAll();
     this.insuranceCompaniesOptions = [];
