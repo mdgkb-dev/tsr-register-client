@@ -76,6 +76,15 @@
         <el-table-column>
           <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
         </el-table-column>
+        <el-table-column label="Регистры">
+          <template #default="scope">
+            <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
+              <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
+                <el-tag size="small">{{ registerToPatient.register.name }}</el-tag>
+              </el-tooltip>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="" width="140">
           <template #default="scope">
             <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>

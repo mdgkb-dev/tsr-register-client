@@ -2,9 +2,9 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default interface IPatient {
   id?: string;

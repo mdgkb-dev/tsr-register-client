@@ -3,7 +3,6 @@
     <PageHead :titleParent="'Пациенты'" :title="'Профиль'" :link="'/patients'" @submitForm="submitForm" />
     <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
-      <!-- <div class="table-background" style="width: 100%; height: 100%"> -->
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
@@ -39,10 +38,13 @@
                 :inRepresentatives="representativeOptions"
               />
             </el-collapse-item>
+            <el-collapse-item>
+              <template #title><h2 class="collapseHeader">Регистры</h2></template>
+              <PatientRegistersForm v-model:registerToPatient="patient.registerToPatient" :patientDiagnosis="patient.patientDiagnosis" />
+            </el-collapse-item>
           </div>
         </el-form>
       </el-collapse>
-      <!-- </div> -->
     </el-row>
   </div>
 </template>
@@ -75,6 +77,9 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import PageHead from '@/components/PageHead.vue';
+import { defineAsyncComponent } from 'vue';
+
+const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
 
 @Options({
   components: {
@@ -87,6 +92,7 @@ import PageHead from '@/components/PageHead.vue';
     DisabilityForm,
     PatientToRepresentativeForm,
     PageHead,
+    PatientRegistersForm,
   },
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
