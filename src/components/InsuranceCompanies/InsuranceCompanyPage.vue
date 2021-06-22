@@ -1,5 +1,5 @@
 <template>
-  <PageHead :titleParent="'Страховые компании'" :title="title" @submitForm="submitForm" />
+  <PageHead :titleParent="'Страховые компании'" :title="title" :link="'/insurance-companies'" @submitForm="submitForm" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <el-form ref="form" :model="insuranceCompany" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">

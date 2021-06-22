@@ -1,5 +1,5 @@
 <template>
-  <PageHead :titleParent="'Типы представителей'" :title="title" @submitForm="submitForm" />
+  <PageHead :titleParent="'Типы представителей'" :title="title" :link="'/representative-types'" @submitForm="submitForm" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <el-form ref="form" :model="representativeType" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">

@@ -65,3 +65,20 @@ body {
 .el-form-item__content {
   margin-left: 0;
 }
+
+.el-breadcrumb__inner,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
+  font-size: 24px;
+  align-items: center;
+  font-weight: bold;
+}
+
+.el-breadcrumb__item:last-child .el-breadcrumb__inner,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a,
+.el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
+  color: #303133;
+}

@@ -1,5 +1,5 @@
 <template>
-  <PageHead :titleParent="'Антропометрия'" :title="title" @submitForm="submitForm" />
+  <PageHead :titleParent="'Антропометрия'" :title="title" :link="'/anthropometry'" @submitForm="submitForm" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <el-form ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
