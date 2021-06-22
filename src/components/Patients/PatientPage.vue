@@ -1,6 +1,6 @@
 <template>
   <div class="patient-page-container">
-    <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
+    <PageHead :titleParent="'Пациенты'" :title="'Профиль'" :link="'/patients'" @submitForm="submitForm" />
     <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <!-- <div class="table-background" style="width: 100%; height: 100%"> -->

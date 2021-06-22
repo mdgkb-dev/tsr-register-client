@@ -1,6 +1,6 @@
 <template>
   <div class="representative-page-container">
-    <PageHead :titleParent="'Представители'" :title="'Профиль'" @submitForm="submitForm" />
+    <PageHead :titleParent="'Представители'" :title="'Профиль'" :link="'/representatives'" @submitForm="submitForm" />
     <el-row v-if="mount">
       <RepresentativePageInfo :representative="representative" />
     </el-row>

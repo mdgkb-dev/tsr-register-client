@@ -1,5 +1,5 @@
 <template>
-  <PageHead :titleParent="'Группы для регистров'" :title="title" @submitForm="submitForm" />
+  <PageHead :titleParent="'Группы для регистров'" :title="title" :link="'/register-groups'" @submitForm="submitForm" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <el-form v-if="mount" ref="form" label-width="150px" label-position="left" style="max-width: 800px">

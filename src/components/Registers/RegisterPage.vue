@@ -1,6 +1,6 @@
 <template>
   <div class="register-page-container">
-    <PageHead :titleParent="'Регистры пациентов'" :title="title" @submitForm="submitForm" />
+    <PageHead :titleParent="'Регистры пациентов'" :title="title" :link="'/registers'" @submitForm="submitForm" />
     <el-row>
       <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="width: 100%">
         <div class="table-background" style="margin-bottom: 20px; height: unset">
