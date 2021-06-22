@@ -50,7 +50,7 @@ export default class PatientRegistersForm extends Vue {
     }
     const diagnosis = this.patientDiagnosis.find((d: IPatientDiagnosis) => {
       if (row.registerDiagnosis.length > 0) {
-        const comparedDiagnosis = row.registerDiagnosis.find(i => i.mkbDiagnosisId === d.mkbDiagnosisId);
+        const comparedDiagnosis = row.registerDiagnosis.find((i) => i.mkbDiagnosisId === d.mkbDiagnosisId);
         if (comparedDiagnosis) {
           return true;
         }
