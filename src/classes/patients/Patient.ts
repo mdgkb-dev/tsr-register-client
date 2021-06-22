@@ -11,8 +11,9 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
-import Bmi from '../bmi/Bmi';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import Bmi from '../bmi/Bmi';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -45,6 +46,9 @@ export default class Patient implements IPatient {
     }
     if (patient.disabilities) {
       this.disabilities = patient.disabilities.map((disability: IDisability) => new Disability(disability));
+    }
+    if (patient.registerToPatient) {
+      this.registerToPatient = patient.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
     }
   }
 
