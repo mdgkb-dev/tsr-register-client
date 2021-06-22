@@ -75,7 +75,6 @@ export default class RegisterPage extends Vue {
       this.title = 'Редактировать регистр';
       await this.registerGet(`${this.$route.params.registerId}`);
       this.register = this.$store.getters['registers/register'];
-      console.log(this.register);
     }
 
     await this.registerGroupsGetAll();

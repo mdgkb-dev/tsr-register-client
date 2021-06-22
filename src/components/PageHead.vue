@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: link }">{{ titleParent }}</el-breadcrumb-item>
         <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-button type="success" round native-type="submit" @click="this.$emit('submitForm')">Сохранить изменения</el-button>
+      <el-button type="success" round native-type="submit" v-if="showButton" @click="this.$emit('submitForm')">Сохранить изменения</el-button>
     </el-space>
   </el-row>
 </template>
@@ -14,12 +14,18 @@
 import { Vue, Options } from 'vue-class-component';
 
 @Options({
-  props: ['title-parent', 'title', 'link'],
+  props: ['titleParent', 'title', 'link', 'hideButton'],
 })
 export default class PageHead extends Vue {
   // Types.
   titleParent!: string;
   title!: string;
   link!: string;
+  hideButton!: boolean;
+  showButton = true;
+
+  mounted() {
+    if (this.hideButton) this.showButton = false;
+  }
 }
 </script>

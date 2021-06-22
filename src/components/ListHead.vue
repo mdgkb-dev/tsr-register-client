@@ -4,7 +4,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right" style="">
         <el-breadcrumb-item :replace="true">{{ title }}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-button type="success" round @click="this.$emit('create')">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
+      <el-button type="success" round v-if="showButton" @click="this.$emit('create')">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
     </el-space>
   </el-row>
 </template>
@@ -13,14 +13,16 @@
 import { Vue, Options } from 'vue-class-component';
 
 @Options({
-  props: ['title'],
+  props: ['title', 'hideButton'],
 })
-export default class DocumentForm extends Vue {
+export default class ListHead extends Vue {
   // Types.
   title!: string;
+  hideButton!: boolean;
+  showButton = true;
 
-  async download(file: any): Promise<void> {
-    await this.$store.dispatch('documentScans/download', file);
+  mounted() {
+    if (this.hideButton) this.showButton = false;
   }
 }
-</script>
+</script>x

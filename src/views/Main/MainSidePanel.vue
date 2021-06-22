@@ -19,12 +19,18 @@
           <el-menu-item-group :router="true">
             <el-menu :router="true" :default-openeds="[0]">
               <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-                <el-submenu :index="i.toString()">
-                  <template #title><i :class="menu.class"></i><span>{{ menu.title }}</span></template>
+                <el-submenu v-if="menu.links" :index="i.toString()">
+                  <template #title
+                    ><i :class="menu.class"></i><span>{{ menu.title }}</span></template
+                  >
                   <div v-for="(item, j) in menu.links" v-bind:key="item.title">
                     <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
                   </div>
                 </el-submenu>
+                <el-menu-item v-else :index="i.toString()" :route="{ name: menu.name }" class="side-menu-elements-font">
+                  <i :class="menu.class"></i>
+                  <span>{{ menu.title }}</span>
+                </el-menu-item>
               </div>
             </el-menu>
           </el-menu-item-group>
@@ -86,6 +92,12 @@ export default class MainSidePanel extends Vue {
           link: '/insurance-companies',
         },
       ],
+    },
+    {
+      title: 'Регистры',
+      class: 'el-icon-s-order',
+      name: 'RegisterLinkList',
+      link: '/register-link-list',
     },
     {
       title: 'Администрирование',
