@@ -1,7 +1,7 @@
-import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
-import IDocument from '@/interfaces/documents/IDocument';
 import FileInfo from '@/interfaces/files/IFileInfo';
-import IContact from './IContact';
+import IContact from '@/interfaces//humans/IContact';
+import IDocument from '@/interfaces/documents/IDocument';
+import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 
 export default interface IHuman {
   id?: string;
@@ -19,6 +19,5 @@ export default interface IHuman {
 
   getFullName: () => string;
   getGender: (full?: boolean) => string;
-  removeDocumentsIds: () => void;
   removeDocumentFieldValuesIds: () => void;
 }

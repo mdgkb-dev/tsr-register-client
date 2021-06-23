@@ -31,7 +31,7 @@
               <template #title>
                 <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm v-model:documents="patient.human.documents" />
+              <DocumentForm v-model:documents="patient.human.documents" v-model:fileInfos="patient.human.fileInfos"/>
             </el-collapse-item>
 
             <el-collapse-item>

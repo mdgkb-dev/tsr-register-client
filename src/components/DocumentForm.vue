@@ -31,6 +31,28 @@
           <el-date-picker v-model="document.documentFieldValues[valueIndex].valueDate" />
         </el-form-item>
       </section>
+
+      <el-button @click="$refs[document.id].click()" size="mini"> Приложить файлы </el-button>
+      <input
+        type="file"
+        :ref="document.id"
+        hidden
+        multiple
+        @change="
+          (event) => {
+            addFiles(event, document.id);
+          }
+        "
+      />
+
+      <el-table :data="fileInfos.filter((info) => info.category === document.id)" size="mini" style="width: 100%">
+        <el-table-column label="Приложенные файлы" prop=".originalName" />
+        <el-table-column align="right">
+          <template #default="scope">
+            <el-button @click="() => removeFile(scope.row.id)" type="text" size="small">Удалить</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </section>
   </div>
 </template>
@@ -42,9 +64,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 import Document from '@/classes/documents/Document';
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
+import FileInfo from '@/classes/files/FileInfo';
 
 @Options({
   name: 'DocumentForm',
@@ -56,13 +80,13 @@ import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
       documentTypesGetAll: 'documentTypes/getAll',
     }),
   },
-  props: ['documents'],
-  emits: ['update:documents'],
+  props: ['documents', 'fileInfos'],
+  emits: ['update:documents', 'update:fileInfos'],
 })
 export default class DocumentForm extends Vue {
   // Types.
   documents!: IDocument[];
-  tempVariable!: string;
+  fileInfos!: IFileInfo[];
 
   documentTypesGetAll!: () => Promise<void>;
 
@@ -97,6 +121,24 @@ export default class DocumentForm extends Vue {
 
   remove(documentId: string): void {
     this.$emit('update:documents', [...(this.documents.filter((document) => document.id !== documentId))]);
+  }
+
+  addFiles(event: InputEvent, category: string): void {
+    const target = event.target as HTMLInputElement;
+
+    if (!target || !target.files) {
+      return;
+    }
+
+    const newInfos: IFileInfo[] = Array.from(target.files).map((file: File) => new FileInfo({
+      id: uuidv4(), category, originalName: file.name, file, isDraft: true,
+    }));
+
+    this.$emit('update:fileInfos', [...this.fileInfos, ...newInfos]);
+  }
+
+  removeFile(fileId: string): void {
+    this.$emit('update:fileInfos', this.fileInfos.filter((info) => info.id !== fileId));
   }
 }
 </script>

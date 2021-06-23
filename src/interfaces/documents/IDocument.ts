@@ -6,5 +6,5 @@ export default interface IDocument {
   documentType: IDocumentType;
   humanId?: string;
   documentFieldValues: IDocumentFieldValue[];
-  isDraft: boolean;
+  isDraft?: boolean;
 }

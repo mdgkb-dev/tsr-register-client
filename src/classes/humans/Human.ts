@@ -54,14 +54,6 @@ export default class Human implements IHuman {
     return this.isMale ? 'М' : 'Ж';
   }
 
-  removeDocumentsIds(): void {
-    for (const document of this.documents) {
-      if (document.isDraft) {
-        document.id = undefined;
-      }
-    }
-  }
-
   removeDocumentFieldValuesIds(): void {
     for (const document of this.documents) {
       if (document.isDraft) {

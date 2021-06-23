@@ -10,7 +10,7 @@ export default class Document implements IDocument {
   documentType!: IDocumentType;
   humanId?: string = '';
   documentFieldValues: IDocumentFieldValue[] = [];
-  isDraft = false;
+  isDraft? = false;
 
   constructor(document?: IDocument) {
     if (!document) {
@@ -28,8 +28,6 @@ export default class Document implements IDocument {
       this.documentFieldValues = document.documentFieldValues.map((value) => new DocumentFieldValue(value));
     }
 
-    if (document.isDraft) {
-      this.isDraft = document.isDraft;
-    }
+    this.isDraft = document.isDraft ?? false;
   }
 }

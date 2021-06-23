@@ -1,9 +1,9 @@
-import IFileSet from '@/interfaces/files/IFileSet';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default interface IPostParams {
   payload: any;
-  fileSets?: IFileSet[];
   query?: string;
   headers?: Headers;
   isFormData?: boolean;
+  fileInfos?: IFileInfo[];
 }
