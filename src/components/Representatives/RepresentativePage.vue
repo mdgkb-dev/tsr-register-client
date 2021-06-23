@@ -41,10 +41,6 @@
 import { Options, mixins } from 'vue-class-component';
 import { mapGetters, mapActions } from 'vuex';
 
-// import IDocument from '@/interfaces/documents/IDocument';
-// import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
-// import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
-
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
