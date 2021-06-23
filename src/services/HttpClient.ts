@@ -22,8 +22,9 @@ export default class HttpClient {
 
   async post(params: IPostParams): Promise<any> {
     const {
-      payload, fileSets, query, headers, isFormData,
+      payload, fileInfos, query, headers, isFormData,
     } = params;
+
     this.toUtc(payload);
     let body: string | FormData = JSON.stringify(payload);
 
@@ -31,10 +32,10 @@ export default class HttpClient {
       body = new FormData();
       body.append('form', JSON.stringify(payload));
 
-      if (fileSets) {
-        for (const fileSet of fileSets) {
-          for (const file of fileSet.files) {
-            body.append(fileSet.category, file);
+      if (fileInfos) {
+        for (const fileInfo of fileInfos) {
+          if (fileInfo.file) {
+            body.append('files', fileInfo.file, fileInfo.originalName);
           }
         }
       }
@@ -51,13 +52,35 @@ export default class HttpClient {
     return res.json();
   }
 
-  async put(payload: any, query?: string): Promise<any> {
+  async put(params: IPostParams): Promise<any> {
+    const {
+      payload, fileInfos, query, headers, isFormData,
+    } = params;
+
     this.toUtc(payload);
+    let body: string | FormData = JSON.stringify(payload);
+
+    if (isFormData) {
+      body = new FormData();
+      body.append('form', JSON.stringify(payload));
+
+      if (fileInfos) {
+        for (const fileInfo of fileInfos) {
+          if (fileInfo.file) {
+            body.append('files', fileInfo.file, fileInfo.originalName);
+          }
+        }
+      }
+    }
+
     const res = await fetch(this.baseUrl(query), {
       method: 'PUT',
-      headers: this.headers,
-      body: JSON.stringify(payload),
+      headers: headers ?? isFormData
+        ? {}
+        : this.headers,
+      body,
     });
+
     return res.json();
   }
 

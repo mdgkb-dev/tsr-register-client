@@ -29,7 +29,7 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', documentTypes);
   },
   edit: async (_context: ActionContext<State, RootState>, documentType: IDocumentType): Promise<void> => {
-    await httpClient.put(documentType, documentType.id);
+    await httpClient.put({ payload: documentType, query: documentType.id });
   },
   delete: async ({ commit }: ActionContext<State, RootState>, id: string): Promise<void> => {
     await httpClient.delete(id);
