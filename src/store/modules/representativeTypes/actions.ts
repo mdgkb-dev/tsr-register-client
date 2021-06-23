@@ -17,7 +17,7 @@ const actions: ActionTree<State, RootState> = {
     commit('create', await httpClient.post({ payload }));
   },
   edit: async ({ commit }, payload: IRepresentativeType): Promise<void> => {
-    commit('update', await httpClient.put(payload, payload.id));
+    commit('update', await httpClient.put({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     commit('delete', await httpClient.delete(id));

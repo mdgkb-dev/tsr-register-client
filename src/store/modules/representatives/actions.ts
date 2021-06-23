@@ -14,12 +14,11 @@ const actions: ActionTree<State, RootState> = {
     commit('set', await httpClient.get(id));
   },
   create: async ({ commit }, representative: IRepresentative): Promise<void> => {
-    representative.human.removeDocumentsIds();
     representative.human.removeDocumentFieldValuesIds();
     commit('create', await httpClient.post({ payload: representative, isFormData: true }));
   },
   edit: async ({ commit }, payload: IRepresentative): Promise<void> => {
-    commit('update', await httpClient.put(payload, payload.id));
+    commit('update', await httpClient.put({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     commit('delete', await httpClient.delete(id));
