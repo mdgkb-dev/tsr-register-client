@@ -11,10 +11,10 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', await httpClient.get());
   },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get('?withDisabilities=true'));
+    commit('setAll', await httpClient.get({ query: '?withDisabilities=true' }));
   },
   get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get(id));
+    commit('set', await httpClient.get({ query: id }));
   },
   create: async ({ commit }, patient: IPatient): Promise<void> => {
     patient.human.removeDocumentFieldValuesIds();

@@ -46,7 +46,12 @@
       />
 
       <el-table :data="fileInfos.filter((info) => info.category === document.id)" size="mini" style="width: 100%">
-        <el-table-column label="Приложенные файлы" prop=".originalName" />
+        <el-table-column label="Приложенные файлы">
+          <template #default="scope">
+            <a v-if="scope.row.isDraft" >{{ scope.row.originalName }}</a>
+            <a v-else href="DownloadFile" :data-file-id="scope.row.id" @click.prevent="downloadFile">{{ scope.row.originalName }}</a>
+          </template>
+        </el-table-column>
         <el-table-column align="right">
           <template #default="scope">
             <el-button @click="() => removeFile(scope.row.id)" type="text" size="small">Удалить</el-button>
@@ -54,6 +59,8 @@
         </el-table-column>
       </el-table>
     </section>
+
+    <a ref="fileAnchor" style="display: none" />
   </div>
 </template>
 
@@ -65,6 +72,7 @@ import { v4 as uuidv4 } from 'uuid';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IFileAnchor from '@/interfaces/files/IFileAnchor';
 
 import Document from '@/classes/documents/Document';
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
@@ -74,10 +82,12 @@ import FileInfo from '@/classes/files/FileInfo';
   name: 'DocumentForm',
   computed: {
     ...mapGetters('documentTypes', ['documentTypes']),
+    ...mapGetters('files', ['fileAnchor']),
   },
   methods: {
     ...mapActions({
       documentTypesGetAll: 'documentTypes/getAll',
+      generateDownloadLink: 'files/generateLink',
     }),
   },
   props: ['documents', 'fileInfos'],
@@ -85,10 +95,16 @@ import FileInfo from '@/classes/files/FileInfo';
 })
 export default class DocumentForm extends Vue {
   // Types.
+  declare $refs: {
+    fileAnchor: HTMLAnchorElement
+  };
+
   documents!: IDocument[];
+  downloadLink!: string;
   fileInfos!: IFileInfo[];
 
   documentTypesGetAll!: () => Promise<void>;
+  generateDownloadLink!: (fileId: string) => Promise<void>;
 
   // Local state.
   documentTypes: IDocumentType[] = [];
@@ -139,6 +155,30 @@ export default class DocumentForm extends Vue {
 
   removeFile(fileId: string): void {
     this.$emit('update:fileInfos', this.fileInfos.filter((info) => info.id !== fileId));
+  }
+
+  async downloadFile(event: MouseEvent): Promise<void> {
+    if (!event || !event.target) {
+      return;
+    }
+
+    const anchorElement = event.target as HTMLAnchorElement;
+    const { fileId } = anchorElement.dataset;
+
+    if (!fileId) {
+      return;
+    }
+
+    try {
+      await this.generateDownloadLink(fileId);
+    } catch (error) {
+      return;
+    }
+
+    const anchor: IFileAnchor = this.$store.getters['files/fileAnchor'];
+    this.$refs.fileAnchor.href = anchor.href;
+    this.$refs.fileAnchor.download = String(anchor.download);
+    this.$refs.fileAnchor.click();
   }
 }
 </script>

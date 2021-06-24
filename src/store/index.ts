@@ -1,17 +1,18 @@
 import Vuex, { StoreOptions } from 'vuex';
-
-import { users } from '@/store/modules/users';
 import { RootState } from './types';
-import documentTypes from './modules/documentTypes';
-import sma from './modules/sma/sma';
-import { anthropometry } from './modules/anthropometry';
-import { auth } from './modules/auth';
-import { disabilities } from './modules/disabilities';
-import { insuranceCompanies } from './modules/insuranceCompanies';
-import { mkb } from './modules/mkb';
-import { patients } from './modules/patients';
-import { representativeTypes } from './modules/representativeTypes';
-import { representatives } from './modules/representatives';
+
+import documentTypes from '@/store/modules/documentTypes';
+import files from '@/store/modules/files';
+import sma from '@/store/modules/sma/sma';
+import { anthropometry } from '@/store/modules/anthropometry';
+import { auth } from '@/store/modules/auth';
+import { disabilities } from '@/store/modules/disabilities';
+import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
+import { mkb } from '@/store/modules/mkb';
+import { patients } from '@/store/modules/patients';
+import { representativeTypes } from '@/store/modules/representativeTypes';
+import { representatives } from '@/store/modules/representatives';
+import { users } from '@/store/modules/users';
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -32,6 +33,7 @@ const store: StoreOptions<RootState> = {
     auth,
     disabilities,
     documentTypes,
+    files,
     insuranceCompanies,
     mkb,
     patients,

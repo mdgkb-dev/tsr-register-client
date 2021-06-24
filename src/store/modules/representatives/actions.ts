@@ -11,7 +11,7 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', await httpClient.get());
   },
   get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get(id));
+    commit('set', await httpClient.get({ query: id }));
   },
   create: async ({ commit }, representative: IRepresentative): Promise<void> => {
     representative.human.removeDocumentFieldValuesIds();

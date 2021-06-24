@@ -11,7 +11,7 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', await httpClient.get());
   },
   get: async ({ commit }, anthropometryId: string) => {
-    commit('set', await httpClient.get(anthropometryId));
+    commit('set', await httpClient.get({ query: anthropometryId }));
   },
   create: async ({ commit }, payload: IAnthropometry): Promise<void> => {
     commit('create', await httpClient.post({ payload }));

@@ -11,7 +11,7 @@ const actions: ActionTree<State, RootState> = {
     await httpClient.post({ payload: documentType });
   },
   get: async ({ commit }: ActionContext<State, RootState>, id: string): Promise<void> => {
-    const documentType: IDocumentType = await httpClient.get(id);
+    const documentType: IDocumentType = await httpClient.get({ query: id });
 
     if (!documentType) {
       return;

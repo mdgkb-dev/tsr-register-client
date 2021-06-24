@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import IPostParams from '@/interfaces/fetchApi/IPostParams';
+import { IBodilessParams, IBodyfulParams } from '@/interfaces/fetchApi/IHTTPTypes';
 
 export default class HttpClient {
   endpoint: string;
@@ -11,16 +11,22 @@ export default class HttpClient {
     this.headers = { 'Content-Type': 'application/json' };
   }
 
-  async get(query?: string): Promise<any> {
+  async get(params?: IBodilessParams): Promise<any> {
+    const query = params?.query;
+    const headers = params?.headers;
+    const isBlob = params?.isBlob;
+
     const res = await fetch(this.baseUrl(query), {
       method: 'GET',
-      headers: this.headers,
+      headers: headers ?? this.headers,
     });
 
-    return res.json();
+    return !isBlob
+      ? res.json()
+      : { href: URL.createObjectURL(await res.blob()), download: String(res.headers.get('Download-File-Name')) };
   }
 
-  async post(params: IPostParams): Promise<any> {
+  async post(params: IBodyfulParams): Promise<any> {
     const {
       payload, fileInfos, query, headers, isFormData,
     } = params;
@@ -52,7 +58,7 @@ export default class HttpClient {
     return res.json();
   }
 
-  async put(params: IPostParams): Promise<any> {
+  async put(params: IBodyfulParams): Promise<any> {
     const {
       payload, fileInfos, query, headers, isFormData,
     } = params;
