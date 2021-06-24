@@ -1,65 +1,122 @@
 import moment from 'moment';
 
-export default class HttpClient {
-  api: string;
+import { IBodilessParams, IBodyfulParams } from '@/interfaces/fetchApi/IHTTPTypes';
 
+export default class HttpClient {
+  endpoint: string;
   headers: Record<string, string>;
 
-  constructor(api = '/') {
-    this.api = api;
+  constructor(endpoint = '/') {
+    this.endpoint = endpoint;
     this.headers = { 'Content-Type': 'application/json' };
   }
 
-  async get(params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
+  async get(params?: IBodilessParams): Promise<any> {
+    const query = params?.query;
+    const headers = params?.headers;
+    const isBlob = params?.isBlob;
+
+    const res = await fetch(this.baseUrl(query), {
       method: 'GET',
-      headers: this.headers,
+      headers: headers ?? this.headers,
     });
 
-    return res.json();
+    return !isBlob
+      ? res.json()
+      : { href: URL.createObjectURL(await res.blob()), download: String(res.headers.get('Download-File-Name')) };
   }
 
-  async post(payload: any, params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify(this.toUtc(payload)),
-    });
-    return res.json();
-  }
+  async post(params: IBodyfulParams): Promise<any> {
+    const {
+      payload, fileInfos, query, headers, isFormData,
+    } = params;
 
-  async put(payload: any, params?: any): Promise<any> {
     this.toUtc(payload);
-    const res = await fetch(this.baseUrl(params), {
-      method: 'PUT',
-      headers: this.headers,
-      body: JSON.stringify(payload),
+    let body: string | FormData = JSON.stringify(payload);
+
+    if (isFormData) {
+      body = new FormData();
+      body.append('form', JSON.stringify(payload));
+
+      if (fileInfos) {
+        for (const fileInfo of fileInfos) {
+          if (fileInfo.file) {
+            body.append('files', fileInfo.file, fileInfo.originalName);
+          }
+        }
+      }
+    }
+
+    const res = await fetch(this.baseUrl(query), {
+      method: 'POST',
+      headers: headers ?? isFormData
+        ? {}
+        : this.headers,
+      body,
     });
+
     return res.json();
   }
 
-  async delete(params?: any): Promise<any> {
-    const res = await fetch(this.baseUrl(params), {
+  async put(params: IBodyfulParams): Promise<any> {
+    const {
+      payload, fileInfos, query, headers, isFormData,
+    } = params;
+
+    this.toUtc(payload);
+    let body: string | FormData = JSON.stringify(payload);
+
+    if (isFormData) {
+      body = new FormData();
+      body.append('form', JSON.stringify(payload));
+
+      if (fileInfos) {
+        for (const fileInfo of fileInfos) {
+          if (fileInfo.file) {
+            body.append('files', fileInfo.file, fileInfo.originalName);
+          }
+        }
+      }
+    }
+
+    const res = await fetch(this.baseUrl(query), {
+      method: 'PUT',
+      headers: headers ?? isFormData
+        ? {}
+        : this.headers,
+      body,
+    });
+
+    return res.json();
+  }
+
+  async delete(query?: string): Promise<any> {
+    const res = await fetch(this.baseUrl(query), {
       method: 'DELETE',
       headers: this.headers,
     });
     return res.json();
   }
 
-  private baseUrl(params?: any): string {
-    if (!params) {
-      return process.env.VUE_APP_BASE_URL + this.api;
+  private baseUrl(query?: string): string {
+    if (!query) {
+      return process.env.VUE_APP_BASE_URL + this.endpoint;
     }
-    return `${process.env.VUE_APP_BASE_URL + this.api}/${params}`;
+
+    return `${process.env.VUE_APP_BASE_URL + this.endpoint}/${query}`;
   }
 
   private toUtc(payload: Record<string, any>): Record<string, any> {
     const obj = payload;
-    if (!obj) return obj;
+    if (!obj) {
+      return obj;
+    }
+
     for (const item of Object.keys(obj)) {
       if (obj[item] && typeof obj[item].getMonth !== 'function' && typeof obj[item] === 'object') {
         this.toUtc(obj[item]);
       }
+
       if (obj[item] && typeof obj[item].getMonth === 'function') {
         obj[item] = moment(obj[item]).add(+moment().utcOffset(), 'm');
         obj[item] = obj[item]
@@ -68,6 +125,7 @@ export default class HttpClient {
           .format();
       }
     }
+
     return obj;
   }
 }

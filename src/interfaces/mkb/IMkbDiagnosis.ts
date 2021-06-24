@@ -14,6 +14,7 @@ export default interface IMkbDiagnosis {
   leaf: boolean;
   disabled: boolean;
   checked: boolean;
+  isEditMode: boolean;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[];
   mkbGroup?: IMkbGroup;

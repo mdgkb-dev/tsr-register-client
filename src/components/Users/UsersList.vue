@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount">
+  <div v-if="mount" style="height: 100%">
     <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="users" class="table-shadow" header-row-class-name="header-style" border>

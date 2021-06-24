@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount">
+  <div v-if="mount" style="height: 100%">
     <ListHead :title="title" :hideButton="true" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />

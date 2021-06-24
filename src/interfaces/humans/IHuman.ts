@@ -1,11 +1,10 @@
-import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
-import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
+import FileInfo from '@/interfaces/files/IFileInfo';
+import IContact from '@/interfaces//humans/IContact';
+import IDocument from '@/interfaces/documents/IDocument';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
-import IContact from './IContact';
 
 export default interface IHuman {
   id?: string;
-  patientId?: string;
   name: string;
   surname: string;
   patronymic: string;
@@ -14,10 +13,11 @@ export default interface IHuman {
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
-  documentFieldToHuman: IDocumentFieldValue[];
-  documentScans: IDocumentScan[];
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
+  documents: IDocument[];
+  fileInfos: FileInfo[];
 
   getFullName: () => string;
   getGender: (full?: boolean) => string;
+  removeDocumentFieldValuesIds: () => void;
 }

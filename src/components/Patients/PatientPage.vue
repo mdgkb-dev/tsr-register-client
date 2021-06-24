@@ -7,29 +7,43 @@
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Паспортные данные</h2>
+              </template>
               <HumanForm :human="patient.human" />
             </el-collapse-item>
+
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Антропометрия</h2></template>
-              <AnthropometryForm :inHeightWeight="patient.heightWeight" :inBirthDate="patient.human.dateBirth" :isMale="patient.human.isMale" />
+              <template #title>
+                <h2 class="collapseHeader">Антропометрия</h2>
+              </template>
+              <AnthropometryForm :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
             </el-collapse-item>
+
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Страховки</h2></template>
+              <template #title>
+                <h2 class="collapseHeader">Страховки</h2>
+              </template>
               <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
             </el-collapse-item>
+
             <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Документы</h2></template>
-              <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
+              <template #title>
+                <h2 class="collapseHeader">Документы</h2>
+              </template>
+              <DocumentForm v-model:documents="patient.human.documents" v-model:fileInfos="patient.human.fileInfos"/>
             </el-collapse-item>
+
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
               <MkbForm v-model:diagnosisData="patient.patientDiagnosis" :patientDiagnosis="true" />
             </el-collapse-item>
+
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm :inDisabilities="patient.disabilities" :inBirthDate="patient.human.dateBirth" />
             </el-collapse-item>
+
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Законные представители</h2></template>
               <PatientToRepresentativeForm
@@ -50,38 +64,39 @@
 </template>
 
 <script lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { Options, mixins } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
+import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
+import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
+import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
-import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
+import PageHead from '@/components/PageHead.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IOption from '@/interfaces/shared/IOption';
-import IDocument from '@/interfaces/documents/IDocument';
-import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
-import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
-import Patient from '@/classes/patients/Patient';
-import IDisability from '@/interfaces/disabilities/IDisability';
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
-import HumanRules from '@/classes/humans/HumanRules';
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
-import PageHead from '@/components/PageHead.vue';
-import { defineAsyncComponent } from 'vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
+import IOption from '@/interfaces/shared/IOption';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+
+import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import HumanRules from '@/classes/humans/HumanRules';
+import Patient from '@/classes/patients/Patient';
 
 const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
 
 @Options({
+  name: 'PatientPage',
   components: {
     PatientPageInfo,
     HumanForm,
@@ -96,51 +111,47 @@ const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Pat
   },
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
-    ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
-    ...mapGetters('documents', ['documents']),
     ...mapGetters('disabilities', ['disabilities']),
+    ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('patients', ['patient']),
     ...mapGetters('representativeTypes', ['representativeTypes']),
     ...mapGetters('representatives', ['representatives']),
   },
   methods: {
     ...mapActions({
-      patientGet: 'patients/get',
       anthropometryGetAll: 'anthropometry/getAll',
-      insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
-      documentsGetAll: 'documents/getAll',
-      documentScansUpload: 'documentScans/upload',
       disabilitiesGetAll: 'disabilities/getAll',
+      insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
+      patientGet: 'patients/get',
       representativeTypesGetAll: 'representativeTypes/getAll',
       representativesGetAll: 'representatives/getAll',
     }),
   },
 })
-export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
+export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   // Types.
-  disabilities!: IDisability[];
+  declare $refs: {
+    form: any;
+  };
+
   anthropometries!: IAnthropometry[];
+  disabilities!: IDisability[];
   insuranceCompanies!: IInsuranceCompany[];
   insuranceCompaniesOptions!: IOption[];
-  documents!: IDocument[];
-  documentsScans!: { [id: string]: IDocumentScan[] };
-  representatives!: IRepresentative[];
   representativeTypes!: IRepresentativeType[];
+  representatives!: IRepresentative[];
 
-  insuranceCompaniesGetAll!: () => Promise<void>;
-  documentsGetAll!: () => Promise<void>;
-  representativesGetAll!: () => Promise<void>;
-  representativeTypesGetAll!: () => Promise<void>;
-  patientGet!: (patientId: string) => Promise<void>;
   anthropometryGetAll!: () => Promise<void>;
-
-  offset: number[] = [0];
+  insuranceCompaniesGetAll!: () => Promise<void>;
+  patientGet!: (patientId: string) => Promise<void>;
+  representativeTypesGetAll!: () => Promise<void>;
+  representativesGetAll!: () => Promise<void>;
 
   // Local state.
-  patient = new Patient();
-  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
-  mount = false;
   diagnosisMount = false;
+  mount = false;
+  offset: number[] = [0];
+  patient = new Patient();
   representativeOptions: IOption[] = [];
   representativeTypesOptions: IOption[] = [];
 
@@ -159,11 +170,11 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
     }
-    await this.insuranceCompaniesGetAll();
-    await this.documentsGetAll();
-    await this.anthropometryGetAll();
 
+    await this.insuranceCompaniesGetAll();
+    await this.anthropometryGetAll();
     this.insuranceCompaniesOptions = [];
+
     if (this.patient.disabilities) {
       for (const disability of this.patient.disabilities) {
         if (!disability.edvs) {
@@ -181,50 +192,10 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
       }
     }
 
-    let sum = 0;
-    this.documentsScans = {};
-    this.documentsValues = {};
-
-    if (this.documents) {
-      for (const document of this.documents) {
-        if (document.documentFields) {
-          sum += document.documentFields.length;
-        }
-        this.offset.push(sum);
-
-        this.documentsScans[document.id as string] = [];
-        this.documentsValues[document.id as string] = {};
-        if (document.documentFields) {
-          for (const field of document.documentFields) {
-            let item = this.patient.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
-
-            if (item === undefined) {
-              item = {
-                id: field.id,
-                valueString: undefined,
-                valueNumber: 0,
-                documentFieldId: field.id,
-              };
-            }
-            this.documentsValues[document.id as string][field.id as string] = item;
-          }
-        }
-      }
-    }
-
-    for (const scan of this.patient.human.documentScans) {
-      if (scan.documentId) {
-        this.documentsScans[scan.documentId].push({
-          id: scan.id as string,
-          documentId: scan.documentId,
-          url: scan.id as string,
-          name: scan.name as string,
-        });
-      }
-    }
     await this.representativesGetAll();
     await this.representativeTypesGetAll();
     this.representativeTypesOptions.splice(0, 1);
+
     if (this.representativeTypes) {
       for (const item of this.representativeTypes) {
         if (item.id) {
@@ -237,6 +208,7 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
     }
 
     this.representativeOptions.splice(0, 1);
+
     if (this.representatives) {
       for (const item of this.representatives) {
         if (item.id) {
@@ -253,37 +225,22 @@ export default class ModalForm extends mixins(ValidateMixin, ConfirmLeavePage, F
     this.initialState = JSON.stringify(this);
   }
 
+  // Methods.
   async submitForm(): Promise<void> {
-    if (!this.validate(this.$refs.form)) return;
+    if (!this.validate(this.$refs.form)) {
+      return;
+    }
 
     for (const item of this.patient.representativeToPatient) {
       item.patient = undefined;
     }
 
-    for (const document in this.documentsScans) {
-      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
-        for (const scan of this.documentsScans[document]) {
-          this.patient.human.documentScans.push(scan);
-        }
-      }
-    }
-
-    this.patient.human.documentFieldToHuman = [];
-    for (const document in this.documentsValues) {
-      if (Object.prototype.hasOwnProperty.call(this.documentsValues, document)) {
-        for (const field in this.documentsValues[document]) {
-          if (Object.prototype.hasOwnProperty.call(this.documentsValues[document], field)) {
-            this.patient.human.documentFieldToHuman.push(this.documentsValues[document][field]);
-          }
-        }
-      }
-    }
-
     let heightId: string | undefined = '';
     let weightId: string | undefined = '';
+
     this.anthropometries.forEach((a: IAnthropometry) => {
-      if (a.isHeight()) heightId = a.id;
-      if (a.isWeight()) weightId = a.id;
+      if (a.isHeight()) { heightId = a.id; }
+      if (a.isWeight()) { weightId = a.id; }
     });
 
     this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);

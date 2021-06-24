@@ -1,20 +1,33 @@
-import IDocumentField from '@/interfaces/documents/IDocumentField';
+import { v4 as uuidv4 } from 'uuid';
+
 import IDocument from '@/interfaces/documents/IDocument';
-import DocumentField from '@/classes/documents/DocumentField';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
+import IDocumentType from '@/interfaces/documents/IDocumentType';
+import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
 
 export default class Document implements IDocument {
-  id?: string;
-  name = '';
-  documentFields?: IDocumentField[];
+  id?: string = uuidv4();
+  documentType!: IDocumentType;
+  humanId?: string = '';
+  documentFieldValues: IDocumentFieldValue[] = [];
+  isDraft? = false;
 
   constructor(document?: IDocument) {
     if (!document) {
       return;
     }
-    this.id = document.id;
-    this.name = document.name;
-    if (document.documentFields) {
-      this.documentFields = document.documentFields.map((d) => new DocumentField(d));
+
+    if (document.id) {
+      this.id = document.id;
     }
+
+    this.documentType = document.documentType;
+    this.humanId = document.humanId;
+
+    if (document.documentFieldValues) {
+      this.documentFieldValues = document.documentFieldValues.map((value) => new DocumentFieldValue(value));
+    }
+
+    this.isDraft = document.isDraft ?? false;
   }
 }

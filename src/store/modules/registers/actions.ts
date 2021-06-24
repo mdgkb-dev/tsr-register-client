@@ -11,13 +11,13 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', await httpClient.get());
   },
   get: async ({ commit }, registerId: string) => {
-    commit('set', await httpClient.get(registerId));
+    commit('set', await httpClient.get({ query: registerId }));
   },
   create: async ({ commit }, payload: IRegister): Promise<void> => {
-    commit('create', await httpClient.post(payload));
+    commit('create', await httpClient.post({ payload }));
   },
   edit: async ({ commit }, payload: IRegister): Promise<void> => {
-    commit('update', await httpClient.put(payload, payload.id));
+    commit('update', await httpClient.put({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete(id);

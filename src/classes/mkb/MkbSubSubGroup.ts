@@ -11,6 +11,7 @@ export default class MkbSubSubGroup implements IMkbSubSubGroup {
   mkbSubGroupId?: string;
   relevant?: boolean;
   disabled = true;
+  isEditMode = false;
 
   mkbDiagnosis: IMkbDiagnosis[] = [];
 
@@ -25,6 +26,7 @@ export default class MkbSubSubGroup implements IMkbSubSubGroup {
     this.comment = mkbSubSubGroup.comment;
     this.mkbSubGroupId = mkbSubSubGroup.mkbSubGroupId;
     this.relevant = mkbSubSubGroup.relevant;
+    this.isEditMode = mkbSubSubGroup.isEditMode;
 
     if (mkbSubSubGroup.mkbDiagnosis) {
       this.mkbDiagnosis = mkbSubSubGroup.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));

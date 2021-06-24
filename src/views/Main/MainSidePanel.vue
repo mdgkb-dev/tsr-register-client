@@ -36,13 +36,7 @@
           </el-menu-item-group>
         </el-menu>
       </el-scrollbar>
-      <div
-        style="height: 150px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;"
-      >
+      <div style="height: 150px; text-align: center; display: flex; justify-content: center; align-items: center">
         <el-button @click="logout()" style="">Выйти</el-button>
       </div>
     </div>
@@ -104,24 +98,24 @@ export default class MainSidePanel extends Vue {
       class: 'el-icon-setting',
       links: [
         {
-          name: 'Documents',
-          title: 'Документы',
-          link: '/documents',
-        },
-        {
           name: 'Anthropometry',
           title: 'Антропометрия',
           link: '/anthropometry',
         },
         {
-          name: 'RepresentativeTypes',
-          title: 'Типы представителей',
-          link: '/representative-types',
-        },
-        {
           name: 'Users',
           title: 'Пользователи',
           link: 'users',
+        },
+        {
+          name: 'DocumentTypes',
+          title: 'Типы документов',
+          link: '/document-types',
+        },
+        {
+          name: 'RepresentativeTypes',
+          title: 'Типы представителей',
+          link: '/representative-types',
         },
         {
           name: 'Registers',

@@ -10,25 +10,19 @@
           <div v-if="mount">
             <el-collapse-item>
               <template #title>
-                <h2 class="collapseHeader">
-                  Паспортные данные
-                </h2>
+                <h2 class="collapseHeader">Паспортные данные</h2>
               </template>
               <HumanForm :human="representative.human" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
-                <h2 class="collapseHeader">
-                  Документы
-                </h2>
+                <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm :inDocuments="documents" :inDocumentsScans="documentsScans" :inDocumentsValues="documentsValues" />
+              <DocumentForm v-model:documents="representative.human.documents" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
-                <h2 class="collapseHeader">
-                  Привязанные дети
-                </h2>
+                <h2 class="collapseHeader">Привязанные дети</h2>
               </template>
               <RepresentativeToPatientForm
                 :inRepresentativeToPatient="representative.representativeToPatient"
@@ -47,21 +41,21 @@
 import { Options, mixins } from 'vue-class-component';
 import { mapGetters, mapActions } from 'vuex';
 
-import IDocument from '@/interfaces/documents/IDocument';
-import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
-import IDocumentScan from '@/interfaces/documentScans/IDocumentScan';
-import HumanForm from '@/components/HumanForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
+import HumanForm from '@/components/HumanForm.vue';
+import PageHead from '@/components/PageHead.vue';
+import RepresentativePageInfo from '@/components/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
-import Representative from '@/classes/representatives/Representative';
-import HumanRules from '@/classes/humans/HumanRules';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
-import PageHead from '@/components/PageHead.vue';
-import RepresentativePageInfo from './RepresentativePageInfo.vue';
-import IPatient from '../../interfaces/patients/IPatient';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+
+import IPatient from '@/interfaces/patients/IPatient';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+
+import HumanRules from '@/classes/humans/HumanRules';
+import Representative from '@/classes/representatives/Representative';
 
 @Options({
   components: {
@@ -73,35 +67,30 @@ import IPatient from '../../interfaces/patients/IPatient';
   },
   computed: {
     ...mapGetters('patients', ['patients']),
-    ...mapGetters('documents', ['documents']),
     ...mapGetters('representativeTypes', ['representativeTypes']),
   },
   methods: {
     ...mapActions({
-      patientsGetAll: 'patients/getAll',
-      representativeTypesGetAll: 'representativeTypes/getAll',
-      representativeGet: 'representatives/get',
-      patientsCreate: 'patients/create',
-      documentsGetAll: 'documents/getAll',
       documentScansUpload: 'documentScans/upload',
+      patientsCreate: 'patients/create',
+      patientsGetAll: 'patients/getAll',
+      representativeGet: 'representatives/get',
+      representativeTypesGetAll: 'representativeTypes/getAll',
     }),
   },
 })
 export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   patients!: IPatient[];
-  documents!: IDocument[];
   offset: number[] = [0];
   representativeTypes!: IRepresentativeType[];
 
-  patientsGetAll!: () => Promise<void>;
   documentsGetAll!: () => Promise<void>;
   documentsUpload!: () => Promise<void>;
+  patientsGetAll!: () => Promise<void>;
   representativeGet!: (representativeId: string) => Promise<void>;
   representativeTypesGetAll!: () => Promise<void>;
 
   // Local state.
-  documentsScans: { [id: string]: IDocumentScan[] } = {};
-  documentsValues: { [documentId: string]: { [fieldId: string]: IDocumentFieldValue } } = {};
   mount = false;
   representative = new Representative();
   patientsOptions = [{}];
@@ -129,8 +118,8 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 
     await this.patientsGetAll();
     await this.representativeTypesGetAll();
-
     this.representativeTypesOptions.splice(0, 1);
+
     for (const item of this.representativeTypes) {
       if ((this.representative.human.isMale && item.isMale) || (!this.representative.human.isMale && !item.isMale)) {
         this.representativeTypesOptions.push({
@@ -149,52 +138,6 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
       });
     }
 
-    let sum = 0;
-    await this.documentsGetAll();
-
-    this.documentsScans = {};
-    this.documentsValues = {};
-
-    for (const document of this.documents) {
-      if (document.documentFields) {
-        sum += document.documentFields.length;
-      }
-      this.offset.push(sum);
-
-      this.documentsScans[document.id as string] = [];
-      this.documentsValues[document.id as string] = {};
-
-      if (document.documentFields) {
-        for (const field of document.documentFields) {
-          let item = this.representative.human.documentFieldToHuman?.find((i: IDocumentFieldValue) => i.documentFieldId === field.id);
-          if (item === undefined) {
-            item = {
-              id: field.id,
-              valueString: undefined,
-              valueNumber: 0,
-              valueDate: null,
-              documentFieldId: field.id,
-            };
-          }
-          if (item) {
-            this.documentsValues[document.id as string][field.id as string] = item;
-          }
-        }
-      }
-    }
-
-    if (this.representative.human.documentScans) {
-      for (const scan of this.representative.human.documentScans) {
-        if (scan.documentId) {
-          this.documentsScans[scan.documentId].push({
-            id: scan.id as string,
-            documentId: scan.documentId,
-            url: scan.id as string,
-            name: scan.name as string,
-          });
-        }
-      }
-    }
     this.mount = true;
     this.initialState = JSON.stringify(this);
   }
@@ -206,24 +149,6 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
       item.patient = undefined;
     }
 
-    for (const document in this.documentsScans) {
-      if (Object.prototype.hasOwnProperty.call(this.documentsScans, document)) {
-        for (const scan of this.documentsScans[document]) {
-          this.representative.human.documentScans.push(scan);
-        }
-      }
-    }
-
-    this.representative.human.documentFieldToHuman = [];
-    for (const document in this.documentsValues) {
-      if (Object.prototype.hasOwnProperty.call(this.documentsValues, document)) {
-        for (const field in this.documentsValues[document]) {
-          if (Object.prototype.hasOwnProperty.call(this.documentsValues[document], field)) {
-            this.representative.human.documentFieldToHuman.push(this.documentsValues[document][field]);
-          }
-        }
-      }
-    }
     this.syncSubmitHandling('representatives', this.representative);
   }
 }

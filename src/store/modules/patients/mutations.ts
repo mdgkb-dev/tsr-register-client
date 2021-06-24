@@ -10,13 +10,13 @@ const mutations: MutationTree<State> = {
   set(state, patient: IPatient) {
     state.patient = new Patient(patient);
   },
-  create(state, payload: IPatient) {
-    state.patients.push(new Patient(payload));
+  create(state, patient: IPatient) {
+    state.patients.push(new Patient(patient));
   },
-  update(state, payload: IPatient) {
-    const item = state.patients.find((i: IPatient) => i.id === payload.id);
+  update(state, patient: IPatient) {
+    const item = state.patients.find((i: IPatient) => i.id === patient.id);
     if (item) {
-      Object.assign(item, payload);
+      Object.assign(item, patient);
     }
   },
   delete(state, id: string) {

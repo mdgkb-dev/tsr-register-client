@@ -1,22 +1,21 @@
 import Vuex, { StoreOptions } from 'vuex';
-
-import { users } from '@/store/modules/users';
 import { RootState } from './types';
 
-import { auth } from './modules/auth';
-import { patients } from './modules/patients';
-import { registers } from './modules/registers';
-import { registerGroups } from './modules/registerGroups';
-import { registerProperties } from './modules/registerProperties';
-import { representatives } from './modules/representatives';
-import documents from './modules/documents';
-import { insuranceCompanies } from './modules/insuranceCompanies';
-import { anthropometry } from './modules/anthropometry';
-import documentScans from './modules/documentScans';
-import { mkb } from './modules/mkb';
-import { disabilities } from './modules/disabilities';
-import sma from './modules/sma/sma';
-import { representativeTypes } from './modules/representativeTypes';
+import documentTypes from '@/store/modules/documentTypes';
+import files from '@/store/modules/files';
+import sma from '@/store/modules/sma/sma';
+import { anthropometry } from '@/store/modules/anthropometry';
+import { auth } from '@/store/modules/auth';
+import { disabilities } from '@/store/modules/disabilities';
+import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
+import { mkb } from '@/store/modules/mkb';
+import { patients } from '@/store/modules/patients';
+import { registerGroups } from '@/store/modules/registerGroups';
+import { registerProperties } from '@/store/modules/registerProperties';
+import { registers } from '@/store/modules/registers';
+import { representativeTypes } from '@/store/modules/representativeTypes';
+import { representatives } from '@/store/modules/representatives';
+import { users } from '@/store/modules/users';
 
 const store: StoreOptions<RootState> = {
   state: {
@@ -33,20 +32,20 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
+    anthropometry,
     auth,
+    disabilities,
+    documentTypes,
+    files,
+    insuranceCompanies,
+    mkb,
     patients,
-    representatives,
-    registers,
     registerGroups,
     registerProperties,
-    documents,
-    insuranceCompanies,
-    anthropometry,
-    documentScans,
-    mkb,
-    disabilities,
-    sma,
+    registers,
     representativeTypes,
+    representatives,
+    sma,
     users,
   },
 };

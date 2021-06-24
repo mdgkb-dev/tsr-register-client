@@ -1,7 +1,10 @@
-import IDocumentField from './IDocumentField';
+import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
+import IDocumentType from '@/interfaces/documents/IDocumentType';
 
 export default interface IDocument {
   id?: string;
-  name: string;
-  documentFields?: IDocumentField[];
+  documentType: IDocumentType;
+  humanId?: string;
+  documentFieldValues: IDocumentFieldValue[];
+  isDraft?: boolean;
 }

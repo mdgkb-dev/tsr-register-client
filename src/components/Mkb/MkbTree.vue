@@ -1,46 +1,53 @@
 <template>
-  <el-button @click="edit">{{ editing ? 'Сохранить' : 'Редактировать' }}</el-button
-  ><el-button @click="showRelevant">{{ onlyRelevant ? 'Показать все' : 'Показать активные' }}</el-button>
-  <el-tree
-    ref="tree"
-    :check-strictly="true"
-    :data="mkbClasses"
-    node-key="id"
-    :load="load"
-    lazy
-    :render-after-expand="false"
-    accordion
-    :props="{ isLeaf: 'leaf' }"
-    @check="setDiagnosis"
-    @node-expand="handleNodeExpand"
-    :show-checkbox="selectable"
-    :expand-on-click-node="editing ? false : true"
-    :check-on-click-node="editing ? false : true"
-  >
-    <template #default="{ node, data }">
-      <el-checkbox v-if="editing" v-model="data.relevant" @change="update(data)"></el-checkbox>
-      <span class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
-        <span style="margin-bottom: 10px" v-if="node.level === 1 && !data.code">
-          <span style="font-weight: bold">{{ data.number }} </span> <span>{{ data.name }}</span>
-        </span>
-        <span v-else-if="node.level === 1 && data.code">
-          <span style="font-weight: bold">{{ data.code }}</span>
-          <span>data.name</span>
-        </span>
-        <span v-else-if="node.level === 2 && !data.code"> {{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
-        <span v-else-if="node.level === 2 && data.code">{{ `${data.code} ${data.name}` }}</span>
-        <span v-else-if="node.level === 3 && data.subCode">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
-        <span v-else-if="node.level === 3 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
-        <span v-else-if="node.level === 3 && data.code">{{ `${data.code} ${data.name}` }}</span>
-        <span v-else-if="node.level === 4 && data.subCode >= 0">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
-        <span v-else-if="node.level === 4 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
-        <span v-else-if="node.level === 4 && data.code">{{ `${data.code} ${data.name}` }}</span>
-        <span v-else-if="node.level === 5">
-          {{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}
-        </span>
-      </span>
-    </template>
-  </el-tree>
+  <div class="wrapper">
+    <el-button @click="editMkbTree">{{ editing ? 'Выйти из редактирования' : 'Редактировать' }}</el-button
+    ><el-button @click="showRelevant">{{ onlyRelevant ? 'Показать все' : 'Показать активные' }}</el-button>
+    <el-tree
+      ref="tree"
+      :check-strictly="true"
+      :data="mkbClasses"
+      node-key="id"
+      :load="load"
+      lazy
+      :render-after-expand="false"
+      accordion
+      :props="{ isLeaf: 'leaf' }"
+      @check="setDiagnosis"
+      @node-expand="handleNodeExpand"
+      :show-checkbox="selectable"
+      :expand-on-click-node="editing ? false : true"
+      :check-on-click-node="editing ? false : true"
+    >
+      <template #default="{ node, data }">
+        <el-checkbox v-if="editing" v-model="data.relevant" @change="updateRelevantHandler(data)"></el-checkbox>
+        <i v-if="editing && !data.isEditMode" @click="data.isEditMode = true" class="el-icon-edit" style="margin: 0 5px; color: blue"></i>
+        <i v-else-if="editing && data.isEditMode" @click="updateNameHandler(data)" class="el-icon-folder-checked" style="margin: 0 5px; color: blue"></i>
+        <el-input v-if="editing && data.isEditMode" v-model="data.name"></el-input>
+        <div v-else>
+          <span class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
+            <span style="margin-bottom: 10px" v-if="node.level === 1 && !data.code">
+              <span style="font-weight: bold">{{ data.number }} </span> <span>{{ data.name }}</span>
+            </span>
+            <span v-else-if="node.level === 1 && data.code">
+              <span style="font-weight: bold">{{ data.code }}</span>
+              <span>data.name</span>
+            </span>
+            <span v-else-if="node.level === 2 && !data.code"> {{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+            <span v-else-if="node.level === 2 && data.code">{{ `${data.code} ${data.name}` }}</span>
+            <span v-else-if="node.level === 3 && data.subCode">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
+            <span v-else-if="node.level === 3 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+            <span v-else-if="node.level === 3 && data.code">{{ `${data.code} ${data.name}` }}</span>
+            <span v-else-if="node.level === 4 && data.subCode >= 0">{{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}</span>
+            <span v-else-if="node.level === 4 && !data.code">{{ `${data.rangeStart}-${data.rangeEnd} ${data.name}` }}</span>
+            <span v-else-if="node.level === 4 && data.code">{{ `${data.code} ${data.name}` }}</span>
+            <span v-else-if="node.level === 5">
+              {{ `${node.parent.data.code}.${data.subCode} ${data.name}` }}
+            </span>
+          </span>
+        </div>
+      </template>
+    </el-tree>
+  </div>
 </template>
 
 <script lang="ts">
@@ -76,11 +83,12 @@ import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
       getSubSubGroupById: 'mkb/getSubSubGroupById',
       getSubDiagnosisByDiagnosisId: 'mkb/getSubDiagnosisByDiagnosisId',
       updateRelevant: 'mkb/updateRelevant',
+      updateName: 'mkb/updateName',
     }),
   },
 })
 export default class MkbTree extends Vue {
-  $refs!: {
+  declare $refs: {
     tree: any;
   };
   $message!: any;
@@ -94,6 +102,7 @@ export default class MkbTree extends Vue {
   getSubSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
   getSubDiagnosisByDiagnosisId!: (mkbIdSet: MkbIdSet) => Promise<void>;
   updateRelevant!: (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => Promise<void>;
+  updateName!: (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => Promise<void>;
 
   mount = false;
   title = 'МКБ10';
@@ -111,7 +120,9 @@ export default class MkbTree extends Vue {
       curNode.parent.childNodes.forEach((child: any) => {
         if (child.checked) notChildrenChecked = false;
       });
-      const curDiagnosis = this.checkedDiagnosis.find((d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId);
+      const curDiagnosis = this.checkedDiagnosis.find(
+        (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId,
+      );
       if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
       curNode.childNodes.forEach((child: any) => this.$refs.tree.setChecked(child.data.id, false, false));
       if (checkedNode.code || checkedNode.subCode > -1) this.$emit('removeDiagnosis', checkedNode);
@@ -286,12 +297,32 @@ export default class MkbTree extends Vue {
     this.onlyRelevant = !this.onlyRelevant;
   }
 
-  edit() {
+  editMkbTree() {
     this.editing = !this.editing;
   }
 
-  update(mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) {
+  updateNameHandler(data: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) {
+    const mkb = data;
+    mkb.isEditMode = false;
+    this.updateName(data);
+  }
+
+  updateRelevantHandler(mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) {
     this.updateRelevant(mkb);
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.wrapper:deep {
+  .el-input__inner {
+    border-radius: 10px;
+    height: 30px;
+    padding: 0 10px;
+  }
+
+  .el-tree-node {
+    margin: 7px 0;
+  }
+}
+</style>

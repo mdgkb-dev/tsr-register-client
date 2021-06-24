@@ -57,6 +57,8 @@ export default class RegisterLinkList extends Vue {
 
 <style lang="scss" scoped>
 .wrapper:deep {
+  height: 100%;
+
   .el-table__row {
     cursor: pointer;
   }

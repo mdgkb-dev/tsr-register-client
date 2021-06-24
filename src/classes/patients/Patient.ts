@@ -1,23 +1,24 @@
-import IPatient from '@/interfaces/patients/IPatient';
-import IHuman from '@/interfaces/humans/IHuman';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
-import Human from '@/classes/humans/Human';
-import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
 import IDisability from '@/interfaces/disabilities/IDisability';
-import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import Disability from '@/classes/disability/Disability';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IHuman from '@/interfaces/humans/IHuman';
+import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+
+import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
+import Bmi from '@/classes/bmi/Bmi';
+import Disability from '@/classes/disability/Disability';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import Human from '@/classes/humans/Human';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
-import Bmi from '../bmi/Bmi';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -35,6 +36,7 @@ export default class Patient implements IPatient {
     if (!patient) {
       return;
     }
+
     this.id = patient.id;
     this.human = new Human(patient.human);
     if (patient.anthropometryData) {

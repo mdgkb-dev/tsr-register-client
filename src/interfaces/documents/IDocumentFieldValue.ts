@@ -1,8 +1,10 @@
+import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
+
 export default interface IDocumentFieldValue {
   id?: string;
-  humanId?: string;
-  documentFieldId?: string;
+  documentId?: string;
+  documentTypeField: IDocumentTypeField;
   valueString?: string;
   valueNumber?: number;
-  valueDate?: Date | null;
+  valueDate?: Date;
 }

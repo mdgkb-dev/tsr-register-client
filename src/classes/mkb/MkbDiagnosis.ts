@@ -17,6 +17,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   relevant?: boolean;
   leaf = false;
   disabled = false;
+  isEditMode = false;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[] = [];
   mkbGroup?: IMkbGroup;
@@ -40,6 +41,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
     }
     this.disabled = false;
     this.mkbGroup = new MkbGroup(mkbDiagnosis.mkbGroup);
+    this.isEditMode = mkbDiagnosis.isEditMode;
   }
 
   getFullName = () => `${this.code} ${this.name}`;
