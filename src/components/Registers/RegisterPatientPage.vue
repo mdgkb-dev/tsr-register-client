@@ -122,6 +122,7 @@ export default class RegisterPatientPage extends mixins(FormMixin) {
   }
 
   async submitForm() {
+    this.patient.registerToPatient = undefined;
     await this.$store.dispatch('patients/edit', this.patient);
     await this.$router.push(`/registers/patients/${this.$route.params.registerId}`);
   }
