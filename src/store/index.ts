@@ -1,5 +1,4 @@
 import Vuex, { StoreOptions } from 'vuex';
-import { RootState } from './types';
 
 import documentTypes from '@/store/modules/documentTypes';
 import files from '@/store/modules/files';
@@ -16,6 +15,7 @@ import { registers } from '@/store/modules/registers';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { representatives } from '@/store/modules/representatives';
 import { users } from '@/store/modules/users';
+import { RootState } from './types';
 
 const store: StoreOptions<RootState> = {
   state: {

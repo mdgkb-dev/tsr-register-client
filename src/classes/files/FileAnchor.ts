@@ -4,7 +4,7 @@ export default class FileAnchor implements IFileAnchor {
   href: string;
   download: string;
 
-  constructor (anchor: IFileAnchor) {
+  constructor(anchor: IFileAnchor) {
     this.href = anchor.href;
     this.download = anchor.download;
   }

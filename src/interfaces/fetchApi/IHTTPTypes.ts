@@ -6,7 +6,7 @@ export interface IBodilessParams {
   isBlob?: boolean;
 }
 
-export interface IBodyfulParams  {
+export interface IBodyfulParams {
   payload?: any;
   query?: string;
   headers?: Headers;
