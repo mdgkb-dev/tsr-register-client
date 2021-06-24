@@ -7,6 +7,7 @@ export default interface IMkbSubDiagnosis {
   relevant?: boolean;
   leaf: boolean;
   disabled: boolean;
+  isEditMode: boolean;
 
   getFullName: () => string;
 }

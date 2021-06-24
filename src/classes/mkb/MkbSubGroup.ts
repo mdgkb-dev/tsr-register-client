@@ -13,6 +13,7 @@ export default class MkbSubGroup implements IMkbSubGroup {
   disabled = true;
   mkbDiagnosis: IMkbDiagnosis[] = [];
   mkbSubSubGroups: IMkbSubSubGroup[] = [];
+  isEditMode = false;
 
   constructor(mkbSubGroup?: IMkbSubGroup) {
     if (!mkbSubGroup) {
@@ -26,6 +27,7 @@ export default class MkbSubGroup implements IMkbSubGroup {
     this.mkbGroupId = mkbSubGroup.mkbGroupId;
     this.disabled = true;
     this.relevant = mkbSubGroup.relevant;
+    this.isEditMode = mkbSubGroup.isEditMode;
   }
 
   getDiagnosis(diagnosisId: string): IMkbDiagnosis | undefined {

@@ -12,6 +12,7 @@ export default interface IMkbGroup {
   mkbSubGroups: IMkbSubGroup[];
   mkbDiagnosis: IMkbDiagnosis[];
   disabled: boolean;
+  isEditMode: boolean;
 
   getDiagnosis: (diagnosisId: string) => IMkbDiagnosis | undefined;
   getFullName: () => string;

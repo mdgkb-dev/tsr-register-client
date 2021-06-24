@@ -13,6 +13,7 @@ export default interface IMkbClass {
   relevant?: boolean;
   leaf: boolean;
   disabled: boolean;
+  isEditMode: boolean;
 
   mkbGroups: IMkbGroup[];
   mkbDiagnosis: IMkbDiagnosis[];

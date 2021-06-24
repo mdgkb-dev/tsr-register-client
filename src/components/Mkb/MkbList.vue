@@ -1,5 +1,5 @@
 <template>
-  <ListHead :title="title" />
+  <ListHead :title="title" :hideButton="true" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <MkbTree></MkbTree>

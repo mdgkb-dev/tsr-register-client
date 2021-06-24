@@ -61,6 +61,9 @@ const actions: ActionTree<State, RootState> = {
   updateRelevant: async ({ commit }, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
     await httpClient.put(undefined, `${mkb.id}?mkbType=${mkb.constructor.name}`);
   },
+  updateName: async ({ commit }, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
+    await httpClient.put(mkb, `${mkb.id}?mkbType=${mkb.constructor.name}&update=name`);
+  },
 };
 
 export default actions;

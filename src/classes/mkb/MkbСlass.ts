@@ -18,6 +18,7 @@ export default class MkbCLass implements IMkbClass {
   showCheckbox = false;
   mkbGroups: IMkbGroup[] = [];
   mkbDiagnosis: IMkbDiagnosis[] = [];
+  isEditMode = false;
 
   constructor(mkbClass?: IMkbClass) {
     if (!mkbClass) {
@@ -36,6 +37,7 @@ export default class MkbCLass implements IMkbClass {
     }
     this.disabled = true;
     this.showCheckbox = false;
+    this.isEditMode = mkbClass.isEditMode;
   }
 
   getDiagnosis(diagnosisId: string): IMkbDiagnosis | undefined {

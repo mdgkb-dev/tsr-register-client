@@ -9,6 +9,7 @@ export default interface IMkbSubSubGroup {
   mkbSubGroupId?: string;
   relevant?: boolean;
   disabled: boolean;
+  isEditMode: boolean;
 
   mkbDiagnosis: IMkbDiagnosis[];
 
