@@ -50,6 +50,7 @@ import {
   ElMessage,
   ElMessageBox,
   ElNotification,
+  ElRadio,
 } from 'element-plus';
 import fillDateFormat from '@/services/DateFormat';
 import lang from 'element-plus/lib/locale/lang/ru';
@@ -106,6 +107,7 @@ const components = [
   ElTooltip,
   ElTree,
   ElUpload,
+  ElRadio,
 ];
 const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification];
 const app = createApp(App);

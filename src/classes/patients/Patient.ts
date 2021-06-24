@@ -13,6 +13,10 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
+import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
+import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
+import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
+import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import Bmi from '../bmi/Bmi';
 
 export default class Patient implements IPatient {
@@ -24,6 +28,8 @@ export default class Patient implements IPatient {
   patientDiagnosis: IPatientDiagnosis[] = [];
   heightWeight: IHeightWeight[] = [];
   registerToPatient: IRegisterToPatient[] = [];
+  registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
+  registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
 
   constructor(patient?: IPatient) {
     if (!patient) {
@@ -49,6 +55,12 @@ export default class Patient implements IPatient {
     }
     if (patient.registerToPatient) {
       this.registerToPatient = patient.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
+    }
+    if (patient.registerPropertyToPatient) {
+      this.registerPropertyToPatient = patient.registerPropertyToPatient.map((i: IRegisterPropertyToPatient) => new RegisterPropertyToPatient(i));
+    }
+    if (patient.registerPropertySetToPatient) {
+      this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map((i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i));
     }
   }
 
@@ -89,5 +101,77 @@ export default class Patient implements IPatient {
     if (!group) return 'Некорректные данные антропометрии';
     const weightClass = Bmi.getWeightClass(group);
     return `${group}, ${weightClass}`;
+  }
+
+  findProperty(propertyId: string): RegisterPropertyToPatient | undefined {
+    return this.registerPropertyToPatient?.find((i: IRegisterPropertyToPatient) => i.registerPropertyId === propertyId);
+  }
+
+  pushRegisterProperty(propertyId: string): void {
+    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    registerPropertyToPatient.registerPropertyId = propertyId;
+    this.registerPropertyToPatient.push(registerPropertyToPatient);
+  }
+
+  getRegisterPropertyValue(propertyId: string, valueType: string): boolean | string | number | Date | null {
+    if (valueType === 'set') {
+      const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === propertyId);
+      return !!item;
+    }
+    const item = this.findProperty(propertyId);
+    switch (valueType) {
+      case 'string':
+        if (item && item.valueString) return item.valueString;
+        return '';
+      case 'number':
+        if (item && item.valueNumber) return item.valueNumber;
+        return 0;
+      case 'date':
+        if (item && item.valueDate) return item.valueDate;
+        return null;
+      case 'radio':
+        if (item && item.registerPropertyRadioId) return item.registerPropertyRadioId;
+        return null;
+      default:
+        return null;
+    }
+  }
+
+  setRegisterPropertyValue(value: number | string | Date, propertyId: string, valueType: string): void {
+    let item = this.findProperty(propertyId);
+    if (!item) {
+      this.pushRegisterProperty(propertyId);
+      item = this.findProperty(propertyId);
+    }
+    if (!item) return;
+    switch (valueType) {
+      case 'string':
+        item.valueString = value as string;
+        return;
+      case 'number':
+        item.valueNumber = value as number;
+        return;
+      case 'date':
+        item.valueDate = value as Date;
+        return;
+      case 'radio':
+        item.registerPropertyRadioId = value as string;
+        break;
+      default:
+    }
+  }
+
+  setRegisterPropertyValueSet(check: boolean, setId: string): void {
+    if (check) {
+      const registerPropertySetToPatient = new RegisterPropertySetToPatient();
+      registerPropertySetToPatient.registerPropertySetId = setId;
+      registerPropertySetToPatient.patientId = this.id;
+      this.registerPropertySetToPatient.push(registerPropertySetToPatient);
+      return;
+    }
+    const index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+    if (index > -1) {
+      this.registerPropertySetToPatient.splice(index, 1);
+    }
   }
 }

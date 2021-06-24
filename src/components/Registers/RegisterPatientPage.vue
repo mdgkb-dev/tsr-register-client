@@ -1,0 +1,134 @@
+<template>
+  <div class="patient-page-container">
+    <PageHead v-if="mount" :title="title" :links="links" @submitForm="submitForm" />
+    <el-row>
+      <el-collapse>
+        <el-form ref="form" :model="patient" label-width="20%" label-position="left">
+          <div v-if="mount">
+            <el-collapse-item>
+              <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
+              <HumanForm :human="patient.human" />
+            </el-collapse-item>
+            <div v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister">
+              <el-collapse-item>
+                <template #title>
+                  <h2 class="collapseHeader">{{ registerGroupToRegister.registerGroup.name }}</h2>
+                </template>
+                <el-form-item v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
+                  <el-form-item v-if="prop.registerProperty.valueType.name === 'string'" :label="prop.registerProperty.name">
+                    <el-input
+                      :label="prop.registerProperty.name"
+                      :model-value="
+                        patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty.id, 'string')
+                      "
+                      @input="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'string')"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.name === 'number'" :label="prop.registerProperty.name">
+                    <el-input-number
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'number')"
+                      @change="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'number')"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.name === 'date'" :label="prop.registerProperty.name">
+                    <el-date-picker
+                      type="date"
+                      format="DD.MM.YYYY"
+                      placeholder="Выберите дату"
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'date')"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.name === 'set'" :label="prop.registerProperty.name">
+                    <el-checkbox
+                      v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
+                      :label="registerPropertySet.name"
+                      :key="registerPropertySet.id"
+                      :model-value="patient.getRegisterPropertyValue(registerPropertySet.id, 'set')"
+                      @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
+                    >
+                      {{ registerPropertySet.name }}</el-checkbox
+                    >
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.name === 'radio'" :label="prop.registerProperty.name">
+                    <el-radio
+                      v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'radio')"
+                      @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty.id, 'radio')"
+                      :label="registerPropertyRadio.id"
+                      :key="registerPropertyRadio.id"
+                      >{{ registerPropertyRadio.name }}</el-radio
+                    >
+                  </el-form-item>
+                </el-form-item>
+              </el-collapse-item>
+            </div>
+          </div>
+        </el-form>
+      </el-collapse>
+    </el-row>
+  </div>
+</template>
+
+<script lang="ts">
+import { Options, mixins } from 'vue-class-component';
+import PageHead from '@/components/PageHead.vue';
+import { mapActions, mapGetters } from 'vuex';
+import IRegister from '@/interfaces/registers/IRegister';
+import Register from '@/classes/registers/Register';
+import Patient from '@/classes/patients/Patient';
+import HumanForm from '@/components/HumanForm.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import Link from '@/classes/shared/Link';
+
+@Options({
+  components: {
+    PageHead,
+    HumanForm,
+  },
+  computed: {
+    ...mapGetters('registers', ['register']),
+    ...mapGetters('patients', ['patient']),
+  },
+  methods: {
+    ...mapActions({
+      patientGet: 'patients/get',
+      registerGet: 'registers/get',
+    }),
+  },
+})
+export default class RegisterPatientPage extends mixins(FormMixin) {
+  links: Link[] = [];
+  title = '';
+  mount = false;
+  register: IRegister = new Register();
+  patient = new Patient();
+  isEditMode = true;
+
+  registerGet!: (registerId: string) => Promise<void>;
+  patientGet!: (patientId: string) => Promise<void>;
+
+  async mounted(): Promise<void> {
+    await this.registerGet(`${this.$route.params.registerId}`);
+    this.register = this.$store.getters['registers/register'];
+    await this.patientGet(`${this.$route.params.patientId}`);
+    this.patient = this.$store.getters['patients/patient'];
+    if (this.register.name) {
+      this.links.push(new Link('/register-link-list/', 'Регистры пациентов'));
+      this.links.push(new Link(`/registers/patients/${this.$route.params.registerId}`, this.register.name));
+    }
+    if (this.patient) this.title = this.patient.human.getFullName();
+    this.mount = true;
+  }
+
+  async submitForm() {
+    await this.$store.dispatch('patients/edit', this.patient);
+    await this.$router.push(`/registers/patients/${this.$route.params.registerId}`);
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.patient-page-container:deep {
+  @import '@/assets/elements/collapse.scss';
+}
+</style>

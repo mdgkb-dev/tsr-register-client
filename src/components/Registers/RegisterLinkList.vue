@@ -50,7 +50,7 @@ export default class RegisterLinkList extends Vue {
   }
 
   link(row: any): void {
-    this.$router.push(`/registers/patients/:${row.id}/:${row.name}`);
+    this.$router.push(`/registers/patients/${row.id}`);
   }
 }
 </script>
