@@ -1,6 +1,6 @@
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 export interface State {
-  anthropometries?: IAnthropometry[];
+  anthropometries: IAnthropometry[];
   anthropometry?: IAnthropometry;
 }

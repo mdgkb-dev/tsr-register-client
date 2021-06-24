@@ -1,10 +1,10 @@
 <template>
-  <PageHead :titleParent="'Представители'" :title="'Профиль'" @submitForm="submitForm" />
-  <el-row v-if="mount">
-    <RepresentativePageInfo :representative="representative" />
-  </el-row>
-  <el-row>
-    <div class="table-background" style="width: 100%; height: 100%">
+  <div class="representative-page-container">
+    <PageHead :titleParent="'Представители'" :title="'Профиль'" :link="'/representatives'" @submitForm="submitForm" />
+    <el-row v-if="mount">
+      <RepresentativePageInfo :representative="representative" />
+    </el-row>
+    <el-row>
       <el-collapse>
         <el-form ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
           <div v-if="mount">
@@ -33,8 +33,8 @@
           </div>
         </el-form>
       </el-collapse>
-    </div>
-  </el-row>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -80,11 +80,6 @@ import Representative from '@/classes/representatives/Representative';
   },
 })
 export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
-  $refs!: {
-    uploadFile: any;
-    form: any;
-  };
-  isEditMode!: boolean;
   patients!: IPatient[];
   offset: number[] = [0];
   representativeTypes!: IRepresentativeType[];
@@ -159,9 +154,12 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.representative-page-container:deep {
+  @import '@/assets/elements/collapse.scss';
+}
+
 .el-row {
-  margin-bottom: 40px;
   &:last-child {
     margin-bottom: 0;
   }

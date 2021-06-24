@@ -8,6 +8,8 @@ module.exports = {
     ecmaVersion: 2020,
   },
   rules: {
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
     'lines-between-class-members': 'off',
     'import/no-cycle': 'off',
     semi: 'off',

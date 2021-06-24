@@ -19,6 +19,12 @@ const mutations: MutationTree<State> = {
   setDiagnosis(state, mkbDiagnosis: IMkbDiagnosis[]) {
     state.mkbDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
   },
+  setFilteredDiagnosis(state, mkbDiagnosis: IMkbDiagnosis[]) {
+    state.mkbFilteredDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
+  },
+  setGroups(state, mkbDiagnosis: IMkbGroup[]) {
+    state.mkbGroups = mkbDiagnosis.map((i: IMkbGroup) => new MkbGroup(i));
+  },
   setSubDiagnosisByDiagnosisId(state, mkbSubDiagnosis: IMkbSubDiagnosis[]) {
     state.mkbSubDiagnosis = mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
   },

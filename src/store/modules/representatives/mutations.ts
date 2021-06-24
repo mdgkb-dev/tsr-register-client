@@ -14,13 +14,13 @@ const mutations: MutationTree<State> = {
     state.representatives.push(new Representative(payload));
   },
   update(state, payload: IRepresentative) {
-    const item = state.representatives.find((i: any) => i.id === payload.id);
+    const item = state.representatives.find((i: IRepresentative) => i.id === payload.id);
     if (item) {
       Object.assign(item, payload);
     }
   },
   delete(state, id: string) {
-    const i = state.representatives.findIndex((item: any) => item.id === id);
+    const i = state.representatives.findIndex((item: IRepresentative) => item.id === id);
     state.representatives.splice(i, 1);
   },
 };

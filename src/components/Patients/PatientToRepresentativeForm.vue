@@ -27,7 +27,7 @@
 import { Vue, Options } from 'vue-class-component';
 
 import IOption from '@/interfaces/shared/IOption';
-import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 @Options({
@@ -35,7 +35,7 @@ import RepresentativeToPatient from '@/classes/representatives/RepresentativeToP
 })
 export default class PatientToRepresentativeForm extends Vue {
   // Types.
-  inRepresentativeToPatient!: IRepresetnationType[];
+  inRepresentativeToPatient!: IRepresentativeToPatient[];
   inRepresentativeTypes!: IOption[];
   inRepresentatives!: IOption[];
 
@@ -46,7 +46,7 @@ export default class PatientToRepresentativeForm extends Vue {
     this.representativeToPatient.push(new RepresentativeToPatient());
   }
 
-  remove(item: any): void {
+  remove(item: IRepresentativeToPatient): void {
     const index = this.representativeToPatient.indexOf(item);
     if (index !== -1) {
       this.representativeToPatient.splice(index, 1);

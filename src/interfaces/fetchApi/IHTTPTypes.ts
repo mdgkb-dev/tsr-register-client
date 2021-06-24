@@ -7,7 +7,7 @@ export interface IBodilessParams {
 }
 
 export interface IBodyfulParams  {
-  payload: any;
+  payload?: any;
   query?: string;
   headers?: Headers;
   isFormData?: boolean;

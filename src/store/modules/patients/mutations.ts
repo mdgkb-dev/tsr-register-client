@@ -14,13 +14,13 @@ const mutations: MutationTree<State> = {
     state.patients.push(new Patient(patient));
   },
   update(state, patient: IPatient) {
-    const item = state.patients.find((i: any) => i.id === patient.id);
+    const item = state.patients.find((i: IPatient) => i.id === patient.id);
     if (item) {
       Object.assign(item, patient);
     }
   },
   delete(state, id: string) {
-    const i = state.patients.findIndex((item: any) => item.id === id);
+    const i = state.patients.findIndex((item: IPatient) => item.id === id);
     state.patients.splice(i, 1);
   },
 };

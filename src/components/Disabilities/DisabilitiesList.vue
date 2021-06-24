@@ -1,40 +1,36 @@
 <template>
-  <div v-if="mount">
-    <el-row>
-      <el-col :span="2">
-        <h2 small align="center" class="header-top-table" v-html="title"></h2>
-      </el-col>
-    </el-row>
+  <div v-if="mount" style="height: 100%">
+    <ListHead :title="title" :hideButton="true" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table border :default-sort="{ prop: 'id', order: 'ascending' }" :data="filterTable(patients)" class="table-shadow" header-row-class-name="header-style">
         <el-table-column type="index" width="50" />
-        <el-table-column width="150" align="center">
+        <el-table-column min-width="150" align="center">
           <template #header>
             <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
           </template>
-          <el-table-column label="ФИО" sortable prop="human.surname" align="left" resizable width="160">
+          <el-table-column label="ФИО" sortable prop="human.surname" align="left" resizable min-width="160">
             <template #default="scope">
               {{ scope.row.human.getFullName() }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column>
-          <el-table-column prop="human.dateBirth" label="Дата постановки" width="160" sortable>
+          <el-table-column prop="human.dateBirth" label="Дата постановки" min-width="160" sortable>
             <template #default="scope">
               {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateStart) }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column>
-          <el-table-column prop="human.dateBirth" label="Дата завершения" width="160" sortable>
+          <el-table-column prop="human.dateBirth" label="Дата завершения" min-width="160" sortable>
             <template #default="scope">
               {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateEnd) }}
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column>
-          <el-table-column label="Справка ЕДВ" width="160" sortable>
+          <el-table-column label="Справка ЕДВ" min-width="160" sortable>
             <template #default="scope">
               <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
                 {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
@@ -47,7 +43,7 @@
           </el-table-column>
         </el-table-column>
         <el-table-column>
-          <el-table-column label="Инвалидность" width="180" sortable>
+          <el-table-column label="Инвалидность" min-width="180" sortable>
             <template #default="scope">
               <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
                 <el-button :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
@@ -70,8 +66,12 @@ import { Vue, Options } from 'vue-class-component';
 import { mapState, mapActions } from 'vuex';
 
 import IPatient from '@/interfaces/patients/IPatient';
+import ListHead from '@/components/ListHead.vue';
 
 @Options({
+  components: {
+    ListHead,
+  },
   computed: {
     ...mapState('patients', ['patients']),
   },

@@ -10,8 +10,8 @@ const getters: GetterTree<State, RootState> = {
   representativeType(state): IRepresentativeType | undefined {
     return state.representativeType;
   },
-  getById(state, id: number): IRepresentativeType | undefined {
-    return state.representativeTypes.find((item: any) => item.id === id);
+  getById(state, id: string): IRepresentativeType | undefined {
+    return state.representativeTypes.find((item: IRepresentativeType) => item.id === id);
   },
 };
 

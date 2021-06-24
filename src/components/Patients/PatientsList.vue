@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount">
+  <div v-if="mount" style="height: 100%">
     <ListHead :title="title" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
@@ -75,6 +75,15 @@
         </el-table-column>
         <el-table-column>
           <el-table-column prop="human.contact.email" label="Эл.почта" width="150" />
+        </el-table-column>
+        <el-table-column label="Регистры">
+          <template #default="scope">
+            <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
+              <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
+                <el-tag size="small">{{ registerToPatient.register.name }}</el-tag>
+              </el-tooltip>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column fixed="right" label="" width="140">
           <template #default="scope">

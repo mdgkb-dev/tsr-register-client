@@ -10,6 +10,9 @@ import { disabilities } from '@/store/modules/disabilities';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { mkb } from '@/store/modules/mkb';
 import { patients } from '@/store/modules/patients';
+import { registerGroups } from '@/store/modules/registerGroups';
+import { registerProperties } from '@/store/modules/registerProperties';
+import { registers } from '@/store/modules/registers';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { representatives } from '@/store/modules/representatives';
 import { users } from '@/store/modules/users';
@@ -37,6 +40,9 @@ const store: StoreOptions<RootState> = {
     insuranceCompanies,
     mkb,
     patients,
+    registerGroups,
+    registerProperties,
+    registers,
     representativeTypes,
     representatives,
     sma,

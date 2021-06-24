@@ -19,6 +19,10 @@ const mutations: MutationTree<State> = {
       Object.assign(item, payload);
     }
   },
+  delete(state, id: string) {
+    const i = state.anthropometries.findIndex((item: IAnthropometry) => item.id === id);
+    state.anthropometries.splice(i, 1);
+  },
 };
 
 export default mutations;

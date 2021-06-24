@@ -6,7 +6,7 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  insuranceCompanies: undefined,
+  insuranceCompanies: [],
   insuranceCompany: undefined,
 };
 

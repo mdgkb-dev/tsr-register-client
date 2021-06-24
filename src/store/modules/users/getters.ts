@@ -10,8 +10,8 @@ const getters: GetterTree<State, RootState> = {
   user(state): IUser | undefined {
     return state.user;
   },
-  getById(state, id: number): IUser | undefined {
-    return state.users.find((item: any) => item.id === id);
+  getById(state, id: string): IUser | undefined {
+    return state.users.find((item: IUser) => item.id === id);
   },
 };
 

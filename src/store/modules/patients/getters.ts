@@ -10,8 +10,8 @@ const getters: GetterTree<State, RootState> = {
   patient(state): IPatient | undefined {
     return state.patient;
   },
-  getById(state, id: number): IPatient | undefined {
-    return state.patients.find((item: any) => item.id === id);
+  getById(state, id: string): IPatient | undefined {
+    return state.patients.find((item: IPatient) => item.id === id);
   },
 };
 

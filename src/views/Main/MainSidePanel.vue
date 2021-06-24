@@ -1,32 +1,44 @@
 <template>
-  <el-aside width="220px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
-    <el-row style="line-height: 100px; margin-top: 50px">
-      <el-col>
-        <el-avatar size="large" :src="circleUrl"></el-avatar>
-      </el-col>
-    </el-row>
-    <el-row style="line-height: 10px">
-      <el-col>
-        <el-tag class="menu-badge">Пользователь</el-tag>
-      </el-col>
-    </el-row>
-    <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
-    <el-menu>
-      <el-menu-item-group :router="true">
-        <el-menu :router="true" :default-openeds="[0]">
-          <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-            <el-submenu :index="i.toString()">
-              <template #title><i :class="menu.class"></i>{{ menu.title }}</template>
-              <div v-for="(item, j) in menu.links" v-bind:key="item.title">
-                <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
+  <el-aside width="250px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
+    <div style="background-color: white; position: fixed; width: 250px; height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+      <div>
+        <el-row style="line-height: 100px; margin-top: 50px">
+          <el-col>
+            <el-avatar size="large" :src="circleUrl"></el-avatar>
+          </el-col>
+        </el-row>
+        <el-row style="line-height: 10px">
+          <el-col>
+            <el-tag class="menu-badge">Пользователь</el-tag>
+          </el-col>
+        </el-row>
+        <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
+      </div>
+      <el-scrollbar>
+        <el-menu style="text-align: start">
+          <el-menu-item-group :router="true">
+            <el-menu :router="true" :default-openeds="[0]">
+              <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
+                <el-submenu v-if="menu.links" :index="i.toString()">
+                  <template #title
+                    ><i :class="menu.class"></i><span>{{ menu.title }}</span></template
+                  >
+                  <div v-for="(item, j) in menu.links" v-bind:key="item.title">
+                    <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">{{ item.title }}</el-menu-item>
+                  </div>
+                </el-submenu>
+                <el-menu-item v-else :index="i.toString()" :route="{ name: menu.name }" class="side-menu-elements-font">
+                  <i :class="menu.class"></i>
+                  <span>{{ menu.title }}</span>
+                </el-menu-item>
               </div>
-            </el-submenu>
-          </div>
+            </el-menu>
+          </el-menu-item-group>
         </el-menu>
-      </el-menu-item-group>
-    </el-menu>
-    <div style="margin-top: 50vh">
-      <el-button @click="logout()">Выйти</el-button>
+      </el-scrollbar>
+      <div style="height: 150px; text-align: center; display: flex; justify-content: center; align-items: center">
+        <el-button @click="logout()" style="">Выйти</el-button>
+      </div>
     </div>
   </el-aside>
 </template>
@@ -76,8 +88,14 @@ export default class MainSidePanel extends Vue {
       ],
     },
     {
+      title: 'Регистры',
+      class: 'el-icon-s-order',
+      name: 'RegisterLinkList',
+      link: '/register-link-list',
+    },
+    {
       title: 'Администрирование',
-      class: 'el-icon-notebook-2',
+      class: 'el-icon-setting',
       links: [
         {
           name: 'Anthropometry',
@@ -98,6 +116,21 @@ export default class MainSidePanel extends Vue {
           name: 'RepresentativeTypes',
           title: 'Типы представителей',
           link: '/representative-types',
+        },
+        {
+          name: 'Registers',
+          title: 'Регистры пациентов',
+          link: '/registers',
+        },
+        {
+          name: 'RegisterGroups',
+          title: 'Группы для регистров',
+          link: '/register-groups',
+        },
+        {
+          name: 'RegisterProperties',
+          title: 'Свойства для регистров',
+          link: '/register-properties',
         },
       ],
     },

@@ -1,6 +1,10 @@
 <template>
-  <ListHead :title="title" />
-  <MkbTree></MkbTree>
+  <ListHead :title="title" :hideButton="true" />
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <MkbTree></MkbTree>
+    </div>
+  </el-row>
 </template>
 
 <script lang="ts">
@@ -9,7 +13,7 @@ import { defineAsyncComponent } from 'vue';
 import { Vue, Options } from 'vue-class-component';
 import ListHead from '@/components/ListHead.vue';
 
-const MkbTree = defineAsyncComponent(() => import('@/components/MkbTree.vue'));
+const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 
 @Options({
   components: {

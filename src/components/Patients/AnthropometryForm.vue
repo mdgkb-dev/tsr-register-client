@@ -5,17 +5,38 @@
       <el-table-column type="index" width="50" />
       <el-table-column prop="human.dateBirth" label="Дата измерения" width="250" sortable>
         <template #default="scope">
-          <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.date"></el-date-picker>
+          <el-form-item
+            label-width="0"
+            style="margin-bottom: 0"
+            :prop="'heightWeight.' + scope.$index + '.date'"
+            :rules="[{ required: true, message: 'Необходимо заполнить дату антропометрии', trigger: 'blur' }]"
+          >
+            <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.date"></el-date-picker>
+          </el-form-item>
         </template>
       </el-table-column>
       <el-table-column prop="height" label="Рост" width="250">
         <template #default="scope">
-          <el-input-number size="medium" controls-position="right" v-model="scope.row.height"></el-input-number>
+          <el-form-item
+            label-width="0"
+            style="margin-bottom: 0"
+            :prop="'heightWeight.' + scope.$index + '.height'"
+            :rules="[{ required: true, message: 'Необходимо заполнить значение роста', trigger: 'blur' }]"
+          >
+            <el-input-number size="medium" controls-position="right" v-model="scope.row.height"></el-input-number>
+          </el-form-item>
         </template>
       </el-table-column>
       <el-table-column prop="weight" label="Вес" width="250">
         <template #default="scope">
-          <el-input-number size="medium" controls-position="right" v-model="scope.row.weight"></el-input-number>
+          <el-form-item
+            label-width="0"
+            style="margin-bottom: 0"
+            :prop="'heightWeight.' + scope.$index + '.weight'"
+            :rules="[{ required: true, message: 'Необходимо заполнить значение веса', trigger: 'blur' }]"
+          >
+            <el-input-number size="medium" controls-position="right" v-model="scope.row.weight"></el-input-number>
+          </el-form-item>
         </template>
       </el-table-column>
       <el-table-column width="500" label="ИМТ">

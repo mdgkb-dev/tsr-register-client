@@ -1,9 +1,17 @@
 import { ActionTree } from 'vuex';
 import { RootState } from '@/store/types';
 import HttpClient from '@/services/HttpClient';
+
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
+
+import MkbCLass from '@/classes/mkb/MkbСlass';
 import MkbComposition from '@/classes/mkb/MkbComposition';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbIdSet from '@/classes/mkb/MkbIdSet';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
+import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
 import { State } from './state';
 
 const httpClient = new HttpClient('mkb');
@@ -36,14 +44,27 @@ const actions: ActionTree<State, RootState> = {
     res.mkbIdSet = idSet;
     commit('setSubDiagnosis', res);
   },
-  searchDiagnosis: async ({ commit }, query: MkbIdSet): Promise<void> => {
+  getDiagnosisByGroupId: async ({ commit }, groupId: string): Promise<void> => {
+    commit('setFilteredDiagnosis', await httpClient.get({ query: `diagnosis/byGroupId/${groupId}` }));
+  },
+  searchGroups: async ({ commit }, query: string): Promise<void> => {
+    if (query.length === 0) {
+      commit('setFilteredDiagnosis', []);
+      return;
+    }
+    commit('setGroups', await httpClient.get({ query: `groups?query=${query}` }));
+  },
+  searchDiagnosis: async ({ commit }, query: string): Promise<void> => {
     commit('setDiagnosis', await httpClient.get({ query: `diagnosis?query=${query}` }));
   },
   searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
     commit('setSubDiagnosisByDiagnosisId', await httpClient.get({ query: `diagnosis/${diagnosisId}` }));
   },
-  updateRelevant: async ({ commit }, data: any): Promise<void> => {
-    await httpClient.get({ query: `${data.id}?relevant=${data.relevant}&group=${data.mkbGroupName}` });
+  updateRelevant: async ({ commit }, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
+    await httpClient.put({ query: `${mkb.id}?mkbType=${mkb.constructor.name}` });
+  },
+  updateName: async ({ commit }, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
+    await httpClient.put({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
   },
 };
 

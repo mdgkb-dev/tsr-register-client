@@ -1,9 +1,9 @@
 <template>
   <ListHead :title="title" @create="create" />
   <div class="table-background">
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="insuranceCompanies" class="table-shadow" header-row-class-name="header-style">
+    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="insuranceCompanies" class="table-shadow" header-row-class-name="header-style" border>
       <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column prop="name" label="Название страховой компании" width="150" />
+      <el-table-column prop="name" label="Название страховой компании" min-width="150" />
       <el-table-column label="Действия" width="120">
         <template #default="scope">
           <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>

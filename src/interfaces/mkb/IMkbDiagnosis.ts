@@ -1,4 +1,5 @@
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 
 export default interface IMkbDiagnosis {
   id?: string;
@@ -13,8 +14,10 @@ export default interface IMkbDiagnosis {
   leaf: boolean;
   disabled: boolean;
   checked: boolean;
+  isEditMode: boolean;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[];
+  mkbGroup?: IMkbGroup;
 
   getFullName: () => string;
 }

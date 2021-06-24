@@ -1,26 +1,35 @@
 <template>
-  <el-form ref="form" :model="anthropometry" @submit.prevent="submitForm" label-width="120px" :rules="rules">
-    <el-form-item label="Название параметра" label-width="20vw" prop="name">
-      <el-input v-model="anthropometry.name"></el-input>
-    </el-form-item>
-
-    <el-form-item label="Единицы измерения" label-width="20vw" prop="measure">
-      <el-input v-model="anthropometry.measure"></el-input>
-    </el-form-item>
-
-    <div class="center-align">
-      <el-button type="primary" native-type="submit">Сохранить</el-button>
+  <PageHead :titleParent="'Антропометрия'" :title="title" :link="'/anthropometry'" @submitForm="submitForm" />
+  <el-row>
+    <div class="table-background" style="width: 100%; margin-bottom: 20px">
+      <el-form ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
+        <el-form-item label="Название параметра" prop="name">
+          <el-input v-model="anthropometry.name"></el-input>
+        </el-form-item>
+        <el-form-item label="Единицы измерения" prop="measure">
+          <el-input v-model="anthropometry.measure"></el-input>
+        </el-form-item>
+      </el-form>
     </div>
-  </el-form>
+  </el-row>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import Anthropometry from '@/classes/anthropometry/Anthropometry';
+import { Options, mixins } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
+
+import PageHead from '@/components/PageHead.vue';
+
+import Anthropometry from '@/classes/anthropometry/Anthropometry';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
+  components: {
+    PageHead,
+  },
   computed: {
     ...mapGetters('anthropometry', ['anthropometry']),
   },
@@ -30,17 +39,9 @@ import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
     }),
   },
 })
-export default class AnthropometryPage extends Vue {
-  $refs!: {
-    form: any;
-    message: any;
-  };
-
-  $message!: any;
-
+export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   anthropometryGet!: (anthropometryId: string) => Promise<void>;
 
-  isEditMode!: boolean;
   anthropometry: IAnthropometry = new Anthropometry();
   title = '';
 
@@ -74,33 +75,7 @@ export default class AnthropometryPage extends Vue {
   }
 
   submitForm(): void {
-    let validationResult = true;
-
-    this.$refs.form.validate((valid: boolean, errorFields: any) => {
-      let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
-      for (const item of Object.keys(errorFields)) {
-        errorMessage += `<li>${errorFields[item][0].message}</li>`;
-      }
-      errorMessage += '</ul>';
-      if (!valid) {
-        this.$message({
-          dangerouslyUseHTMLString: true,
-          message: errorMessage,
-          type: 'error',
-        });
-        validationResult = false;
-        return false;
-      }
-      this.$message({
-        message: 'Изменения успешно сохранены',
-        type: 'success',
-      });
-      return true;
-    });
-
-    if (!validationResult) {
-      return;
-    }
+    if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {
       this.$store.dispatch('anthropometry/edit', this.anthropometry);

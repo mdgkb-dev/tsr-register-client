@@ -5,7 +5,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, disabilities: IDisability[]) {
-    state.disabilities = disabilities.map((d) => new Disability(d));
+    state.disabilities = disabilities.map((d: IDisability) => new Disability(d));
   },
   set(state, disability: IDisability) {
     state.disability = new Disability(disability);
@@ -14,15 +14,13 @@ const mutations: MutationTree<State> = {
     state.disability = new Disability(disability);
   },
   update(state, payload: IDisability) {
-    if (state.disabilities) {
-      const item = state.disabilities.find((i: IDisability) => i.id === payload.id);
-      if (item) {
-        Object.assign(item, payload);
-      }
+    const item = state.disabilities.find((i: IDisability) => i.id === payload.id);
+    if (item) {
+      Object.assign(item, payload);
     }
   },
-  delete: (state: any, payload: string) => {
-    const i = state.disabilities.findIndex((disabilities: any) => disabilities.id === payload);
+  delete: (state, payload: string) => {
+    const i = state.disabilities.findIndex((disabilities: IDisability) => disabilities.id === payload);
     state.disabilities.splice(i, 1);
   },
 };

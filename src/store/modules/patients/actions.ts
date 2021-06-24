@@ -27,7 +27,8 @@ const actions: ActionTree<State, RootState> = {
     }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
-    commit('delete', await httpClient.delete(id));
+    await httpClient.delete(id);
+    commit('delete', id);
   },
 };
 

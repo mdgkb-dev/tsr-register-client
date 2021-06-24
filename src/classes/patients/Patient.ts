@@ -7,12 +7,14 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
+import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Human from '@/classes/humans/Human';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import Bmi from '../bmi/Bmi';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -22,6 +24,7 @@ export default class Patient implements IPatient {
   disabilities: IDisability[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
   heightWeight: IHeightWeight[] = [];
+  registerToPatient: IRegisterToPatient[] = [];
 
   constructor(patient?: IPatient) {
     if (!patient) {
@@ -45,6 +48,9 @@ export default class Patient implements IPatient {
     }
     if (patient.disabilities) {
       this.disabilities = patient.disabilities.map((disability: IDisability) => new Disability(disability));
+    }
+    if (patient.registerToPatient) {
+      this.registerToPatient = patient.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
     }
   }
 

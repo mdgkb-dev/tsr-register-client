@@ -10,8 +10,8 @@ const getters: GetterTree<State, RootState> = {
   disability(state): IDisability | undefined {
     return state.disability;
   },
-  getById(state, id: number): IDisability | undefined {
-    return state.disabilities ? state.disabilities.find((item: any) => item.id === id) : undefined;
+  getById(state, id: string): IDisability | undefined {
+    return state.disabilities ? state.disabilities.find((item: IDisability) => item.id === id) : undefined;
   },
 };
 

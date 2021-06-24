@@ -6,7 +6,7 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  anthropometries: undefined,
+  anthropometries: [],
   anthropometry: undefined,
 };
 

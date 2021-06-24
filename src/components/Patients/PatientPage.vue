@@ -1,8 +1,8 @@
 <template>
-  <PageHead :titleParent="'Пациенты'" :title="'Профиль'" @submitForm="submitForm" />
-  <el-row v-if="mount"><PatientPageInfo :patient="patient" /></el-row>
-  <el-row>
-    <div class="table-background" style="width: 100%; height: 100%">
+  <div class="patient-page-container">
+    <PageHead :titleParent="'Пациенты'" :title="'Профиль'" :link="'/patients'" @submitForm="submitForm" />
+    <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
+    <el-row>
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
@@ -35,10 +35,8 @@
             </el-collapse-item>
 
             <el-collapse-item>
-              <template #title>
-                <h2 class="collapseHeader">Диагнозы</h2>
-              </template>
-              <MkbForm :inMkbObtions="mkbOptions" :inMkbToPatient="patient.mkbToPatient" />
+              <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+              <MkbForm v-model:diagnosisData="patient.patientDiagnosis" :patientDiagnosis="true" />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -54,14 +52,19 @@
                 :inRepresentatives="representativeOptions"
               />
             </el-collapse-item>
+            <el-collapse-item>
+              <template #title><h2 class="collapseHeader">Регистры</h2></template>
+              <PatientRegistersForm v-model:registerToPatient="patient.registerToPatient" :patientDiagnosis="patient.patientDiagnosis" />
+            </el-collapse-item>
           </div>
         </el-form>
       </el-collapse>
-    </div>
-  </el-row>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
+import { defineAsyncComponent } from 'vue';
 import { Options, mixins } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -90,6 +93,8 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/patients/Patient';
 
+const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
+
 @Options({
   name: 'PatientPage',
   components: {
@@ -102,6 +107,7 @@ import Patient from '@/classes/patients/Patient';
     DisabilityForm,
     PatientToRepresentativeForm,
     PageHead,
+    PatientRegistersForm,
   },
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
@@ -124,9 +130,10 @@ import Patient from '@/classes/patients/Patient';
 })
 export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
   // Types.
-  $refs!: {
+  declare $refs: {
     form: any;
   };
+
   anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
   insuranceCompanies!: IInsuranceCompany[];
@@ -241,3 +248,9 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.patient-page-container:deep {
+  @import '@/assets/elements/collapse.scss';
+}
+</style>

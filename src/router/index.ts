@@ -12,6 +12,9 @@ import AnthropometriesRoutes from '@/router/AnthropometriesRoutes';
 import UsersRoutes from '@/router/UsersRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
+import RegistersRoutes from './RegistersRoutes';
+import RegisterGroupsRoutes from './RegisterGroupsRoutes';
+import RegisterPropertiesRoutes from './RegisterPropertiesRoutes';
 import store from '../store/index';
 
 export const isAuthorized = async (to: any, from: any, next: any) => {
@@ -70,6 +73,9 @@ const routes: Array<RouteRecordRaw> = [
   ...DocumentsRoutes,
   ...AnthropometriesRoutes,
   ...UsersRoutes,
+  ...RegistersRoutes,
+  ...RegisterGroupsRoutes,
+  ...RegisterPropertiesRoutes,
   {
     path: '/mkb',
     name: 'Mkb',
