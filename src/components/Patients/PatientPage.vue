@@ -73,7 +73,7 @@ import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
-import MkbForm from '@/components/Patients/MkbForm.vue';
+import MkbForm from '@/components/Mkb/MkbForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';

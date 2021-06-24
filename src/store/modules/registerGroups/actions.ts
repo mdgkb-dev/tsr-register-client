@@ -11,10 +11,10 @@ const actions: ActionTree<State, RootState> = {
     commit('setAll', await httpClient.get());
   },
   get: async ({ commit }, registerGroupId: string) => {
-    commit('set', await httpClient.get(registerGroupId));
+    commit('set', await httpClient.get({ query: registerGroupId }));
   },
   create: async ({ commit }, payload: IRegisterGroup): Promise<void> => {
-    commit('create', await httpClient.post(payload));
+    commit('create', await httpClient.post({ payload }));
   },
   edit: async ({ commit }, payload: IRegisterGroup): Promise<void> => {
     commit('update', await httpClient.put({ payload, query: payload.id }));
