@@ -35,7 +35,8 @@
                       type="date"
                       format="DD.MM.YYYY"
                       placeholder="Выберите дату"
-                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'date')"
+                      v-bind:value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'date')"
+                      @change="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'date')"
                     />
                   </el-form-item>
                   <el-form-item v-if="prop.registerProperty.valueType.name === 'set'" :label="prop.registerProperty.name">

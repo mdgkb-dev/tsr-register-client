@@ -1,4 +1,4 @@
-const enum ValueRelation {
+enum ValueRelation {
   simple = 'simple',
   oneToMany = 'oneToMany',
   manyToMany = 'manyToMany',
