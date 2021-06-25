@@ -8,7 +8,7 @@ import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 
 export default class Register implements IRegister {
   id?: string;
-  name: string = '';
+  name = '';
   registerDiagnosis: IRegisterDiagnosis[] = [];
   registerGroupToRegister: IRegisterGroupToRegister[] = [];
   registerToPatient: IRegisterToPatient[] = [];

@@ -57,6 +57,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 import HumanRules from '@/classes/humans/HumanRules';
 import Representative from '@/classes/representatives/Representative';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+
 @Options({
   components: {
     HumanForm,
