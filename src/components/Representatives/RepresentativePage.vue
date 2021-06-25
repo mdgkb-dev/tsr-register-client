@@ -18,7 +18,7 @@
               <template #title>
                 <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm v-model:documents="representative.human.documents" />
+              <DocumentForm v-model:documents="representative.human.documents" v-model:fileInfos="representative.human.fileInfos" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
