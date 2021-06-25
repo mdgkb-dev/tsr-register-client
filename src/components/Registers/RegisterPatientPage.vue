@@ -31,13 +31,7 @@
                     />
                   </el-form-item>
                   <el-form-item v-if="prop.registerProperty.valueType.name === 'date'" :label="prop.registerProperty.name">
-                    <el-date-picker
-                      type="date"
-                      format="DD.MM.YYYY"
-                      placeholder="Выберите дату"
-                      v-bind:value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'date')"
-                      @change="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'date')"
-                    />
+                    <DataComponentComputed :propertyId="prop.registerProperty.id" :patient="patient" />
                   </el-form-item>
                   <el-form-item v-if="prop.registerProperty.valueType.name === 'set'" :label="prop.registerProperty.name">
                     <el-checkbox
@@ -80,11 +74,13 @@ import Patient from '@/classes/patients/Patient';
 import HumanForm from '@/components/HumanForm.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import Link from '@/classes/shared/Link';
+import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
 
 @Options({
   components: {
     PageHead,
     HumanForm,
+    DataComponentComputed,
   },
   computed: {
     ...mapGetters('registers', ['register']),
