@@ -7,6 +7,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
   },
+  plugins: ['simple-import-sort', 'unused-imports'], // Sort imports and delete unused
   rules: {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
@@ -22,5 +23,18 @@ module.exports = {
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
     quotes: [2, 'single', { avoidEscape: true }],
     'no-useless-escape': 0,
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+    'no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_',
+      },
+    ],
   },
 };

@@ -52,14 +52,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { v4 as uuidv4 } from 'uuid';
+import { Options, Vue } from 'vue-class-component';
 
-import IDisability from '@/interfaces/disabilities/IDisability';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
-import IEdv from '@/interfaces/disabilities/IEdv';
 import PeriodRules from '@/classes/shared/PeriodRules';
-import { v4 as uuidv4 } from 'uuid';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import IEdv from '@/interfaces/disabilities/IEdv';
 
 @Options({
   props: ['in-disabilities', 'in-birth-date'],

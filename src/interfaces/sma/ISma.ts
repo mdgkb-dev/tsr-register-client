@@ -1,11 +1,11 @@
 import IPatient from '@/interfaces/patients/IPatient';
 import ISmaDiagnosis from '@/interfaces/sma/ISmaDiagnosis';
-import ISmaMolecularGeneticConfirmation from '@/interfaces/sma/ISmaMolecularGeneticConfirmation';
-import ISmaPatientStatus from '@/interfaces/sma/ISmaPatientStatus';
-import ISmaPathogenTherapy from '@/interfaces/sma/ISmaPathogenTherapy';
-import ISmaRehabilitationActivity from '@/interfaces/sma/ISmaRehabilitationActivity';
-import ISmaNutritionSupport from '@/interfaces/sma/ISmaNutritionSupport';
 import ISmaIntrathecal from '@/interfaces/sma/ISmaIntrathecal';
+import ISmaMolecularGeneticConfirmation from '@/interfaces/sma/ISmaMolecularGeneticConfirmation';
+import ISmaNutritionSupport from '@/interfaces/sma/ISmaNutritionSupport';
+import ISmaPathogenTherapy from '@/interfaces/sma/ISmaPathogenTherapy';
+import ISmaPatientStatus from '@/interfaces/sma/ISmaPatientStatus';
+import ISmaRehabilitationActivity from '@/interfaces/sma/ISmaRehabilitationActivity';
 import IUser from '@/interfaces/users/IUser';
 
 export default interface ISma {

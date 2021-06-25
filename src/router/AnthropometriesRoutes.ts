@@ -1,6 +1,6 @@
-import { isAuthorized } from '@/router/index';
 import AnthropometryList from '@/components/Anthropometry/AnthropometryList.vue';
 import AnthropometryPage from '@/components/Anthropometry/AnthropometryPage.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

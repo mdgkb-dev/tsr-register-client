@@ -12,16 +12,15 @@
 </template>
 
 <script lang="ts">
-import { Options, mixins } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
-
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import PageHead from '@/components/PageHead.vue';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
   components: {

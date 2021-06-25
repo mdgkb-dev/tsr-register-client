@@ -38,25 +38,22 @@
 </template>
 
 <script lang="ts">
-import { Options, mixins } from 'vue-class-component';
-import { mapGetters, mapActions } from 'vuex';
+import { mixins, Options } from 'vue-class-component';
+import { mapActions, mapGetters } from 'vuex';
 
+import HumanRules from '@/classes/humans/HumanRules';
+import Representative from '@/classes/representatives/Representative';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import RepresentativePageInfo from '@/components/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
-
+import IPatient from '@/interfaces/patients/IPatient';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
-
-import IPatient from '@/interfaces/patients/IPatient';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-
-import HumanRules from '@/classes/humans/HumanRules';
-import Representative from '@/classes/representatives/Representative';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
   components: {

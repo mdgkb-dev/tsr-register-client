@@ -1,6 +1,6 @@
-import IPeriod from '@/interfaces/shared/IPeriod';
-import IPatient from '@/interfaces/patients/IPatient';
 import IEdv from '@/interfaces/disabilities/IEdv';
+import IPatient from '@/interfaces/patients/IPatient';
+import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default interface IDisability {
   id?: string;

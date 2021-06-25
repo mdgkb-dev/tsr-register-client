@@ -1,8 +1,8 @@
-import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import RegisterProperty from '@/classes/registers/RegisterProperty';
 import RegisterGroup from '@/classes/registers/RegisterGroup';
+import RegisterProperty from '@/classes/registers/RegisterProperty';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
 
 export default class RegisterPropertyToRegisterGroup implements IRegisterPropertyToRegisterGroup {
   id?: string;

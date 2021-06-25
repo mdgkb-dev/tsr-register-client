@@ -1,10 +1,10 @@
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default class Register implements IRegister {
   id?: string;

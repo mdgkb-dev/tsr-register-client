@@ -1,6 +1,6 @@
-import IRisdiplamAdministration from '@/interfaces/sma/IRisdiplamAdministration';
-import INusinersenAdministrationDates from '@/interfaces/sma/INusinersenAdministrationDates';
 import IDrugReplacementReason from '@/interfaces/sma/IDrugReplacementReason';
+import INusinersenAdministrationDates from '@/interfaces/sma/INusinersenAdministrationDates';
+import IRisdiplamAdministration from '@/interfaces/sma/IRisdiplamAdministration';
 
 export default interface ISmaPathogenTherapy {
   id: string;

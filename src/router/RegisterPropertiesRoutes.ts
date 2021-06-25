@@ -1,6 +1,6 @@
-import { isAuthorized } from '@/router/index';
 import RegisterPropertyList from '@/components/RegisterProperties/RegisterPropertyList.vue';
 import RegisterPropertyPage from '@/components/RegisterProperties/RegisterPropertyPage.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

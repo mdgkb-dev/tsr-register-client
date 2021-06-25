@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
-import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 @Options({
   props: ['in-register-group-to-register', 'in-register-group-options'],

@@ -15,11 +15,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import { mapState, mapActions } from 'vuex';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapState } from 'vuex';
 
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import ListHead from '@/components/ListHead.vue';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 @Options({
   components: {

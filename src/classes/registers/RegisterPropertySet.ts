@@ -1,5 +1,5 @@
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 
 export default class RegisterPropertySet implements IRegisterPropertySet {
   id?: string;

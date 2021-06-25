@@ -97,11 +97,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import { mapState, mapActions } from 'vuex';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapState } from 'vuex';
 
-import IPatient from '@/interfaces/patients/IPatient';
 import ListHead from '@/components/ListHead.vue';
+import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
   components: {

@@ -1,5 +1,5 @@
-import IRiskReason from '@/interfaces/sma/IRiskReason';
 import IAnesthesiaRiskReasons from '@/interfaces/sma/IAnesthesiaRiskReasons';
+import IRiskReason from '@/interfaces/sma/IRiskReason';
 
 export default interface ISmaIntrathecal {
   id: string;

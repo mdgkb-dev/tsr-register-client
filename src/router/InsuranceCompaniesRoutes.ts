@@ -1,6 +1,6 @@
-import { isAuthorized } from '@/router/index';
 import InsuranceCompaniesList from '@/components/InsuranceCompanies/InsuranceCompaniesList.vue';
 import InsuranceCompanyPage from '@/components/InsuranceCompanies/InsuranceCompanyPage.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

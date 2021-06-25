@@ -1,10 +1,11 @@
-import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
+import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
+
 import MessageError from '@/classes/messages/MessageError';
 import MessageSuccess from '@/classes/messages/MessageSuccess';
 

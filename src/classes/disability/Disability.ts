@@ -1,9 +1,9 @@
-import IDisability from '@/interfaces/disabilities/IDisability';
-import IPeriod from '@/interfaces/shared/IPeriod';
-import IPatient from '@/interfaces/patients/IPatient';
-import IEdv from '@/interfaces/disabilities/IEdv';
-import Period from '@/classes/shared/Period';
 import Edv from '@/classes/disability/Edv';
+import Period from '@/classes/shared/Period';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import IEdv from '@/interfaces/disabilities/IEdv';
+import IPatient from '@/interfaces/patients/IPatient';
+import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default class Disability implements IDisability {
   id?: string;

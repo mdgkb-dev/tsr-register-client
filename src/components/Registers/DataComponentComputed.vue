@@ -3,7 +3,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
+
 import Patient from '@/classes/patients/Patient';
 
 @Options({

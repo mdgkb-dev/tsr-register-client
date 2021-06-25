@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
-import IOption from '@/interfaces/shared/IOption';
-import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import IOption from '@/interfaces/shared/IOption';
 
 @Options({
   props: ['in-representative-to-patient', 'in-representative-types', 'in-patients'],

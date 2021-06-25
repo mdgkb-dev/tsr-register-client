@@ -1,6 +1,6 @@
-import IPeriod from '@/interfaces/shared/IPeriod';
-import IEdv from '@/interfaces/disabilities/IEdv';
 import Period from '@/classes/shared/Period';
+import IEdv from '@/interfaces/disabilities/IEdv';
+import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default class Edv implements IEdv {
   id?: string;

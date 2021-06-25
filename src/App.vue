@@ -7,8 +7,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
-import MainLayout from './views/Main/MainLayout.vue';
 import LoginLayout from './views/Login/LoginLayout.vue';
+import MainLayout from './views/Main/MainLayout.vue';
 
 @Options({
   components: {

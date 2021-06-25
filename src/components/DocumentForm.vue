@@ -65,18 +65,17 @@
 </template>
 
 <script lang="ts">
-import { mapGetters, mapActions } from 'vuex';
-import { Vue, Options } from 'vue-class-component';
 import { v4 as uuidv4 } from 'uuid';
-
-import IDocument from '@/interfaces/documents/IDocument';
-import IDocumentType from '@/interfaces/documents/IDocumentType';
-import IFileInfo from '@/interfaces/files/IFileInfo';
-import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapGetters } from 'vuex';
 
 import Document from '@/classes/documents/Document';
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
 import FileInfo from '@/classes/files/FileInfo';
+import IDocument from '@/interfaces/documents/IDocument';
+import IDocumentType from '@/interfaces/documents/IDocumentType';
+import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 @Options({
   name: 'DocumentForm',

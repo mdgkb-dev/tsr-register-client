@@ -1,21 +1,21 @@
+import Cookies from 'js-cookie';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-import Cookies from 'js-cookie';
-
-import MkbList from '@/components/Mkb/MkbList.vue';
 import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
-import PatientsRoutes from '@/router/PatientsRoutes';
-import AuthRoutes from '@/router/AuthRoutes';
-import RepresentativeRoutes from '@/router/RepresentativeRoutes';
-import DocumentsRoutes from '@/router/DocumentsRoutes';
+import MkbList from '@/components/Mkb/MkbList.vue';
 import AnthropometriesRoutes from '@/router/AnthropometriesRoutes';
-import UsersRoutes from '@/router/UsersRoutes';
-import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
+import AuthRoutes from '@/router/AuthRoutes';
+import DocumentsRoutes from '@/router/DocumentsRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
-import RegistersRoutes from './RegistersRoutes';
+import PatientsRoutes from '@/router/PatientsRoutes';
+import RepresentativeRoutes from '@/router/RepresentativeRoutes';
+import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
+import UsersRoutes from '@/router/UsersRoutes';
+
+import store from '../store/index';
 import RegisterGroupsRoutes from './RegisterGroupsRoutes';
 import RegisterPropertiesRoutes from './RegisterPropertiesRoutes';
-import store from '../store/index';
+import RegistersRoutes from './RegistersRoutes';
 
 export const isAuthorized = async (to: any, from: any, next: any) => {
   let response;

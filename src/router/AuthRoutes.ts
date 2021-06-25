@@ -1,7 +1,7 @@
-import { isAuthorized, isNotAuthorized } from '@/router/index';
 import LoginPage from '@/components/Authorization/LoginPage.vue';
 import RegistrationPage from '@/components/Authorization/RegistrationPage.vue';
 import HomePage from '@/components/HomePage.vue';
+import { isAuthorized, isNotAuthorized } from '@/router/index';
 
 export default [
   {

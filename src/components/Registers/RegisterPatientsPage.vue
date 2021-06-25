@@ -25,12 +25,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import PageHead from '@/components/PageHead.vue';
+import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
-import IRegister from '@/interfaces/registers/IRegister';
+
 import Register from '@/classes/registers/Register';
 import Link from '@/classes/shared/Link';
+import PageHead from '@/components/PageHead.vue';
+import IRegister from '@/interfaces/registers/IRegister';
 
 @Options({
   components: {

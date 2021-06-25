@@ -1,9 +1,11 @@
 import { GetterTree } from 'vuex';
-import { RootState } from '@/store/types';
+
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {

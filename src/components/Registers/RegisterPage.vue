@@ -22,14 +22,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
 import Register from '@/classes/registers/Register';
-import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-
+import PageHead from '@/components/PageHead.vue';
+import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 

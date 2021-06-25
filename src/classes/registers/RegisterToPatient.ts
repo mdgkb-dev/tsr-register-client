@@ -1,8 +1,8 @@
-import IPatient from '@/interfaces/patients/IPatient';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import IRegister from '@/interfaces/registers/IRegister';
-import Register from '@/classes/registers/Register';
 import Patient from '@/classes/patients/Patient';
+import Register from '@/classes/registers/Register';
+import IPatient from '@/interfaces/patients/IPatient';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default class RegisterToPatient implements IRegisterToPatient {
   id?: string;

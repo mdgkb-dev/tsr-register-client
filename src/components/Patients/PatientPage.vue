@@ -65,34 +65,31 @@
 
 <script lang="ts">
 import { defineAsyncComponent } from 'vue';
-import { Options, mixins } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
-
-import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
-import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
-import HumanForm from '@/components/HumanForm.vue';
-import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
-import MkbForm from '@/components/Mkb/MkbForm.vue';
-import PageHead from '@/components/PageHead.vue';
-import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
-import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
-
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
-
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import IDisability from '@/interfaces/disabilities/IDisability';
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IOption from '@/interfaces/shared/IOption';
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/patients/Patient';
+import DocumentForm from '@/components/DocumentForm.vue';
+import HumanForm from '@/components/HumanForm.vue';
+import MkbForm from '@/components/Mkb/MkbForm.vue';
+import PageHead from '@/components/PageHead.vue';
+import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
+import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
+import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
+import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
+import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IDisability from '@/interfaces/disabilities/IDisability';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import IOption from '@/interfaces/shared/IOption';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
 

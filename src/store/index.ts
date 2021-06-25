@@ -1,20 +1,21 @@
 import Vuex, { StoreOptions } from 'vuex';
 
-import documentTypes from '@/store/modules/documentTypes';
-import files from '@/store/modules/files';
-import sma from '@/store/modules/sma/sma';
 import { anthropometry } from '@/store/modules/anthropometry';
 import { auth } from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
+import documentTypes from '@/store/modules/documentTypes';
+import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { mkb } from '@/store/modules/mkb';
 import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
 import { registerProperties } from '@/store/modules/registerProperties';
 import { registers } from '@/store/modules/registers';
-import { representativeTypes } from '@/store/modules/representativeTypes';
 import { representatives } from '@/store/modules/representatives';
+import { representativeTypes } from '@/store/modules/representativeTypes';
+import sma from '@/store/modules/sma/sma';
 import { users } from '@/store/modules/users';
+
 import { RootState } from './types';
 
 const store: StoreOptions<RootState> = {

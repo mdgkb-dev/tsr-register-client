@@ -1,8 +1,10 @@
+import Cookies from 'js-cookie';
 import { ActionTree } from 'vuex';
-import { RootState } from '@/store/types';
+
 import IUserLogin from '@/interfaces/users/IUserLogin';
 import IUserRegister from '@/interfaces/users/IUserRegister';
-import Cookies from 'js-cookie';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const actions: ActionTree<State, RootState> = {

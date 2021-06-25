@@ -1,10 +1,5 @@
 import { ActionTree } from 'vuex';
-import { RootState } from '@/store/types';
-import HttpClient from '@/services/HttpClient';
 
-import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
-
-import MkbCLass from '@/classes/mkb/MkbСlass';
 import MkbComposition from '@/classes/mkb/MkbComposition';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbGroup from '@/classes/mkb/MkbGroup';
@@ -12,6 +7,11 @@ import MkbIdSet from '@/classes/mkb/MkbIdSet';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
+import MkbCLass from '@/classes/mkb/MkbСlass';
+import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
+import HttpClient from '@/services/HttpClient';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const httpClient = new HttpClient('mkb');

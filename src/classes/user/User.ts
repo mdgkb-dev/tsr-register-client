@@ -1,6 +1,6 @@
-import IUser from '@/interfaces/users/IUser';
-import IHuman from '@/interfaces/humans/IHuman';
 import Human from '@/classes/humans/Human';
+import IHuman from '@/interfaces/humans/IHuman';
+import IUser from '@/interfaces/users/IUser';
 
 export default class User implements IUser {
   id = '';

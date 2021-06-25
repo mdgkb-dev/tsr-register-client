@@ -1,5 +1,7 @@
 import { MutationTree } from 'vuex';
+
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+
 import State from './state';
 
 const mutations: MutationTree<State> = {

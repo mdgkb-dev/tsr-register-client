@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
+
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 

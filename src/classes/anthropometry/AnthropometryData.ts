@@ -1,5 +1,5 @@
-import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 
 export default class AnthropometryDate implements IAnthropometryData {
   id?: string;

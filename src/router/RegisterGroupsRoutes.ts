@@ -1,6 +1,6 @@
-import { isAuthorized } from '@/router/index';
 import RegisterGroupList from '@/components/RegisterGroups/RegisterGroupList.vue';
 import RegisterGroupPage from '@/components/RegisterGroups/RegisterGroupPage.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

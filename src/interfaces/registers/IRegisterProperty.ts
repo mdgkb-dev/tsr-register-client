@@ -1,5 +1,5 @@
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
+import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 export default interface IRegisterProperty {

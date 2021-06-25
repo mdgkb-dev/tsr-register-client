@@ -1,8 +1,8 @@
-import IPatient from '@/interfaces/patients/IPatient';
 import Patient from '@/classes/patients/Patient';
-import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
+import IPatient from '@/interfaces/patients/IPatient';
+import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
+import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 
 export default class RegisterPropertySetToPatient implements IRegisterPropertySetToPatient {
   id?: string;

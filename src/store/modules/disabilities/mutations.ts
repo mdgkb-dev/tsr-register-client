@@ -1,6 +1,8 @@
 import { MutationTree } from 'vuex';
-import IDisability from '@/interfaces/disabilities/IDisability';
+
 import Disability from '@/classes/disability/Disability';
+import IDisability from '@/interfaces/disabilities/IDisability';
+
 import { State } from './state';
 
 const mutations: MutationTree<State> = {

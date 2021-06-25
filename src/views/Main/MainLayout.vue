@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
+
 import MainHeader from './MainHeader.vue';
 import MainSidePanel from './MainSidePanel.vue';
 

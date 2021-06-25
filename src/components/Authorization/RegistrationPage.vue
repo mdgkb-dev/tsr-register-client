@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { mixins } from 'vue-class-component';
+
 import MessageMixin from '@/mixins/MessageMixin.vue';
 
 export default class RegistrationPage extends mixins(MessageMixin) {

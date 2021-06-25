@@ -78,22 +78,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-
-import { mapActions, mapGetters } from 'vuex';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import ISearch from '@/interfaces/shared/ISearch';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import { defineAsyncComponent } from 'vue';
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
-import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import { v4 as uuidv4 } from 'uuid';
-import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import { defineAsyncComponent } from 'vue';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapGetters } from 'vuex';
+
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import ISearch from '@/interfaces/shared/ISearch';
+import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 

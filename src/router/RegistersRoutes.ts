@@ -1,9 +1,9 @@
-import { isAuthorized } from '@/router/index';
-import RegisterList from '@/components/Registers/RegisterList.vue';
 import RegisterLinkList from '@/components/Registers/RegisterLinkList.vue';
+import RegisterList from '@/components/Registers/RegisterList.vue';
 import RegisterPage from '@/components/Registers/RegisterPage.vue';
-import RegisterPatientsPage from '@/components/Registers/RegisterPatientsPage.vue';
 import RegisterPatientPage from '@/components/Registers/RegisterPatientPage.vue';
+import RegisterPatientsPage from '@/components/Registers/RegisterPatientsPage.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

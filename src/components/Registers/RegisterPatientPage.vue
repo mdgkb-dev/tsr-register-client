@@ -65,16 +65,17 @@
 </template>
 
 <script lang="ts">
-import { Options, mixins } from 'vue-class-component';
-import PageHead from '@/components/PageHead.vue';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
-import IRegister from '@/interfaces/registers/IRegister';
-import Register from '@/classes/registers/Register';
+
 import Patient from '@/classes/patients/Patient';
+import Register from '@/classes/registers/Register';
 import HumanForm from '@/components/HumanForm.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
+import PageHead from '@/components/PageHead.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
+import IRegister from '@/interfaces/registers/IRegister';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
   components: {

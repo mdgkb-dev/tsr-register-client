@@ -15,8 +15,9 @@
 </template>
 
 <script lang="ts">
-import { Options, mixins } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapGetters } from 'vuex';
+
 import MessageMixin from '@/mixins/MessageMixin.vue';
 
 @Options({

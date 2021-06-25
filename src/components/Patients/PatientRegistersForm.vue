@@ -16,12 +16,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
-import IRegister from '@/interfaces/registers/IRegister';
+
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 @Options({
   props: ['registerToPatient', 'patientDiagnosis'],

@@ -58,14 +58,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import { mapState, mapActions } from 'vuex';
-
-import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapState } from 'vuex';
 
 import Filter from '@/classes/filters/Filter';
 import IFilter from '@/interfaces/filters/IFilter';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+
 import ListHead from '../ListHead.vue';
 
 @Options({

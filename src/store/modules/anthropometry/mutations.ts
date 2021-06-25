@@ -1,6 +1,8 @@
 import { MutationTree } from 'vuex';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+
 import { State } from './state';
 
 const mutations: MutationTree<State> = {

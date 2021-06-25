@@ -54,10 +54,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
 @Options({
   props: ['in-birth-date', 'in-height-weight', 'is-male'],

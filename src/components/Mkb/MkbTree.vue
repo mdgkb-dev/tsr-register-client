@@ -51,23 +51,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-import { mapState, mapActions } from 'vuex';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapState } from 'vuex';
 
-import IMkbClass from '@/interfaces/mkb/IMkbClass';
-
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
-import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import MkbIdSet from '@/classes/mkb/MkbIdSet';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import MkbCLass from '@/classes/mkb/MkbСlass';
 import MkbGroup from '@/classes/mkb/MkbGroup';
+import MkbIdSet from '@/classes/mkb/MkbIdSet';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import MkbCLass from '@/classes/mkb/MkbСlass';
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
 @Options({

@@ -1,13 +1,15 @@
 import './router/componentHooks';
-import { createApp } from 'vue';
+import 'dayjs/locale/ru';
+import './assets/element-variables.scss';
+
 import {
+  ElAffix,
   ElAside,
   ElAutocomplete,
   ElAvatar,
-  ElAffix,
-  ElButton,
   ElBreadcrumb,
   ElBreadcrumbItem,
+  ElButton,
   ElCard,
   ElCheckbox,
   ElCheckTag,
@@ -24,19 +26,25 @@ import {
   ElHeader,
   ElIcon,
   ElImage,
+  ElInfiniteScroll,
   ElInput,
   ElInputNumber,
+  ElLoading,
   ElMain,
   ElMenu,
   ElMenuItem,
   ElMenuItemGroup,
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
   ElOption,
   ElPopover,
+  ElRadio,
   ElRow,
   ElScrollbar,
   ElSelect,
-  ElSubmenu,
   ElSpace,
+  ElSubmenu,
   ElTable,
   ElTableColumn,
   ElTag,
@@ -45,21 +53,16 @@ import {
   ElTooltip,
   ElTree,
   ElUpload,
-  ElInfiniteScroll,
-  ElLoading,
-  ElMessage,
-  ElMessageBox,
-  ElNotification,
-  ElRadio,
 } from 'element-plus';
-import fillDateFormat from '@/services/DateFormat';
-import lang from 'element-plus/lib/locale/lang/ru';
-import 'dayjs/locale/ru';
 import locale from 'element-plus/lib/locale';
+import lang from 'element-plus/lib/locale/lang/ru';
+import { createApp } from 'vue';
+
+import fillDateFormat from '@/services/DateFormat';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import './assets/element-variables.scss';
 
 locale.use(lang);
 const components = [

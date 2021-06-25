@@ -1,6 +1,6 @@
+import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
-import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 
 export default class DocumentType implements IDocumentType {
   id?: string;

@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 

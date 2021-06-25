@@ -1,6 +1,6 @@
-import HttpClient from '@/services/HttpClient';
-import IDocument from '@/interfaces/documents/IDocument';
 import Document from '@/classes/documents/Document';
+import IDocument from '@/interfaces/documents/IDocument';
+import HttpClient from '@/services/HttpClient';
 
 const httpClient = new HttpClient('documents');
 

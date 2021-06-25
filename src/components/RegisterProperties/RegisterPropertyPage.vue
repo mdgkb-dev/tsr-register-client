@@ -47,13 +47,12 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
+import RegisterProperty from '@/classes/registers/RegisterProperty';
+import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
+import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
 import PageHead from '@/components/PageHead.vue';
-
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
-import RegisterProperty from '@/classes/registers/RegisterProperty';
-import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
-import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
 
 @Options({

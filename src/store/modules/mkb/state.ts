@@ -1,7 +1,7 @@
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export interface State {
   mkbClasses: IMkbClass[];

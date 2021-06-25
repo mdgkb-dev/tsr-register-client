@@ -32,19 +32,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-
-import { mapActions, mapGetters } from 'vuex';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import ISearch from '@/interfaces/shared/ISearch';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import { defineAsyncComponent } from 'vue';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import { v4 as uuidv4 } from 'uuid';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import { defineAsyncComponent } from 'vue';
+import { Options, Vue } from 'vue-class-component';
+import { mapActions, mapGetters } from 'vuex';
+
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import ISearch from '@/interfaces/shared/ISearch';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));

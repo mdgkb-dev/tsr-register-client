@@ -1,6 +1,8 @@
 import { MutationTree } from 'vuex';
-import IUser from '@/interfaces/users/IUser';
+
 import User from '@/classes/user/User';
+import IUser from '@/interfaces/users/IUser';
+
 import { State } from './state';
 
 const mutations: MutationTree<State> = {

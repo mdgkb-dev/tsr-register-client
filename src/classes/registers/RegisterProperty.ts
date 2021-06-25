@@ -1,10 +1,10 @@
+import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
+import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
+import ValueType from '@/classes/valueTypes/ValueType';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
-import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
-import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 import IValueType from '@/interfaces/valueTypes/IValueType';
-import ValueType from '@/classes/valueTypes/ValueType';
 
 export default class RegisterProperty implements IRegisterProperty {
   id?: string;

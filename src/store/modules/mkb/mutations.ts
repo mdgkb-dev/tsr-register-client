@@ -1,15 +1,17 @@
 import { MutationTree } from 'vuex';
-import IMkbClass from '@/interfaces/mkb/IMkbClass';
-import MkbCLass from '@/classes/mkb/MkbСlass';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+
 import MkbComposition from '@/classes/mkb/MkbComposition';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbGroup from '@/classes/mkb/MkbGroup';
-import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
+import MkbCLass from '@/classes/mkb/MkbСlass';
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
+
 import { State } from './state';
 
 const mutations: MutationTree<State> = {

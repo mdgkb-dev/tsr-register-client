@@ -1,6 +1,6 @@
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
-import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
+import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
+import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 
 export default class RegisterPropertyToPatient implements IRegisterPropertyToPatient {
   id?: string;

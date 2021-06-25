@@ -1,5 +1,5 @@
-import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 
 export default interface IMkbGroup {
   id?: string;

@@ -1,11 +1,10 @@
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IRegister from '@/interfaces/registers/IRegister';
-
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import Register from '@/classes/registers/Register';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
 export default class RegisterDiagnosis implements IRegisterDiagnosis {
   id?: string;

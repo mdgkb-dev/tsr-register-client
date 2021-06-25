@@ -1,24 +1,23 @@
+import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
+import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import Bmi from '@/classes/bmi/Bmi';
+import Disability from '@/classes/disability/Disability';
+import Human from '@/classes/humans/Human';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
+import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
-import IDisability from '@/interfaces/disabilities/IDisability';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IDisability from '@/interfaces/disabilities/IDisability';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-
-import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
-import Bmi from '@/classes/bmi/Bmi';
-import Disability from '@/classes/disability/Disability';
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
-import Human from '@/classes/humans/Human';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import RegisterToPatient from '@/classes/registers/RegisterToPatient';
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
-import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
-import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
-import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 export default class Patient implements IPatient {
   id?: string;

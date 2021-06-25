@@ -13,13 +13,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
+import RegisterGroup from '@/classes/registers/RegisterGroup';
 import PageHead from '@/components/PageHead.vue';
 import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
-import RegisterGroup from '@/classes/registers/RegisterGroup';
-
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 

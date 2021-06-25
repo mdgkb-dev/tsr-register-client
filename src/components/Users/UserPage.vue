@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
-
+import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
-import User from '@/classes/user/User';
-import PageInfo from '@/components/Users/PageInfo.vue';
+
 import HumanRules from '@/classes/humans/HumanRules';
+import User from '@/classes/user/User';
 import HumanForm from '@/components/HumanForm.vue';
+import PageInfo from '@/components/Users/PageInfo.vue';
 
 @Options({
   components: {

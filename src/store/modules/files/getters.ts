@@ -1,6 +1,8 @@
 import { GetterTree } from 'vuex';
-import { RootState } from '@/store/types';
+
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {

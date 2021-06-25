@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Vue } from 'vue-class-component';
+
 import Link from '../classes/shared/Link';
 
 export default class ConfirmLeavePage extends Vue {

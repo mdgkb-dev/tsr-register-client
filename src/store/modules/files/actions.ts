@@ -1,7 +1,9 @@
 import { ActionTree } from 'vuex';
-import { RootState } from '@/store/types';
-import HttpClient from '@/services/HttpClient';
+
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import HttpClient from '@/services/HttpClient';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const httpClient = new HttpClient('files');

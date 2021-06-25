@@ -1,8 +1,8 @@
-import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegister from '@/interfaces/registers/IRegister';
 import Register from '@/classes/registers/Register';
 import RegisterGroup from '@/classes/registers/RegisterGroup';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 export default class RegisterGroupToRegister implements IRegisterGroupToRegister {
   id?: string;

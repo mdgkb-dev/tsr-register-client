@@ -1,5 +1,5 @@
-import PatientsList from '@/components/Patients/PatientsList.vue';
 import PatientPage from '@/components/Patients/PatientPage.vue';
+import PatientsList from '@/components/Patients/PatientsList.vue';
 import { isAuthorized } from '@/router/index';
 
 export default [

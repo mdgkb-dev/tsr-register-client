@@ -54,10 +54,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
+
 import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({

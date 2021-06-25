@@ -1,8 +1,8 @@
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import MkbGroup from '@/classes/mkb/MkbGroup';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;

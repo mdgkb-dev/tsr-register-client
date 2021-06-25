@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import IHuman from '@/interfaces/humans/IHuman';
 

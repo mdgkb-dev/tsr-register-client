@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+
 import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default class FileInfo implements IFileInfo {

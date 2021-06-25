@@ -1,8 +1,8 @@
-import IHuman from '@/interfaces/humans/IHuman';
 import Human from '@/classes/humans/Human';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IHuman from '@/interfaces/humans/IHuman';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
-import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 
 export default class Representative implements IRepresentative {
   id?: string;

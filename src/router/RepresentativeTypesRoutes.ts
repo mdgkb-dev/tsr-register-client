@@ -1,6 +1,6 @@
-import { isAuthorized } from '@/router/index';
-import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
 import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
+import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
+import { isAuthorized } from '@/router/index';
 
 export default [
   {

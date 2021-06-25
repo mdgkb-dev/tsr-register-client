@@ -1,7 +1,7 @@
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import AnthropometryDate from '@/classes/anthropometry/AnthropometryData';
 import Bmi from '@/classes/bmi/Bmi';
 import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
-import AnthropometryDate from '@/classes/anthropometry/AnthropometryData';
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
 export default class HeightWeight implements IHeightWeight {
   id: string;

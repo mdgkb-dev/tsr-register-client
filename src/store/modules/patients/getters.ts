@@ -1,6 +1,8 @@
 import { GetterTree } from 'vuex';
-import { RootState } from '@/store/types';
+
 import IPatient from '@/interfaces/patients/IPatient';
+import { RootState } from '@/store/types';
+
 import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {

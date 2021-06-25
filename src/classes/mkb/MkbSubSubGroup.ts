@@ -1,6 +1,6 @@
-import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 export default class MkbSubSubGroup implements IMkbSubSubGroup {
   id?: string;

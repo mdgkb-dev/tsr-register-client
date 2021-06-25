@@ -1,5 +1,5 @@
-import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 export default class MkbSubGroup implements IMkbSubGroup {

@@ -1,5 +1,5 @@
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 

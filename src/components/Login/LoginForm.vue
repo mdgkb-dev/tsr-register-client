@@ -33,9 +33,9 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from 'vue-class-component';
 import useVuelidate from '@vuelidate/core';
-import { required, helpers } from '@vuelidate/validators';
+import { helpers, required } from '@vuelidate/validators';
+import { Options, Vue } from 'vue-class-component';
 
 @Options({
   validations: {

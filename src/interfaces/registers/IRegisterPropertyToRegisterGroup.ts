@@ -1,5 +1,5 @@
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 export default interface IRegisterPropertyToRegisterGroup {
   id?: string;

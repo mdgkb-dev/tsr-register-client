@@ -1,5 +1,5 @@
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IPatient from '@/interfaces/patients/IPatient';
+import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 
 export default interface IRegisterPropertySetToPatient {
   id?: string;
