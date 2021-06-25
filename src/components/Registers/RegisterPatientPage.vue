@@ -1,6 +1,6 @@
 <template>
   <div class="patient-page-container">
-    <PageHead v-if="mount" :title="title" :links="links" @submitForm="submitForm" />
+    <PageHead v-if="mount" :title="patient.human.getFullName()" :links="links" titles="" @submitForm="submitForm" />
     <el-row>
       <el-collapse>
         <el-form ref="form" :model="patient" label-width="20%" label-position="left">
@@ -73,8 +73,8 @@ import Register from '@/classes/registers/Register';
 import Patient from '@/classes/patients/Patient';
 import HumanForm from '@/components/HumanForm.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
-import Link from '@/classes/shared/Link';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
   components: {
@@ -93,9 +93,7 @@ import DataComponentComputed from '@/components/Registers/DataComponentComputed.
     }),
   },
 })
-export default class RegisterPatientPage extends mixins(FormMixin) {
-  links: Link[] = [];
-  title = '';
+export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLinks) {
   mount = false;
   register: IRegister = new Register();
   patient = new Patient();
@@ -109,11 +107,7 @@ export default class RegisterPatientPage extends mixins(FormMixin) {
     this.register = this.$store.getters['registers/register'];
     await this.patientGet(`${this.$route.params.patientId}`);
     this.patient = this.$store.getters['patients/patient'];
-    if (this.register.name) {
-      this.links.push(new Link('/register-link-list/', 'Регистры пациентов'));
-      this.links.push(new Link(`/registers/patients/${this.$route.params.registerId}`, this.register.name));
-    }
-    if (this.patient) this.title = this.patient.human.getFullName();
+    this.pushToLinks(['/register-link-list/', `/registers/patients/${this.$route.params.registerId}`], ['Регистры пациентов', this.register.name]);
     this.mount = true;
   }
 

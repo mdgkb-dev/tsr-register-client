@@ -1,6 +1,6 @@
 <template>
   <div class="representative-page-container">
-    <PageHead :titleParent="'Представители'" :title="'Профиль'" :link="'/representatives'" @submitForm="submitForm" />
+    <PageHead :title="representative.human.getFullName()" :links="links" @submitForm="submitForm" />
     <el-row v-if="mount">
       <RepresentativePageInfo :representative="representative" />
     </el-row>
@@ -56,7 +56,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 
 import HumanRules from '@/classes/humans/HumanRules';
 import Representative from '@/classes/representatives/Representative';
-
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 @Options({
   components: {
     HumanForm,
@@ -79,7 +79,7 @@ import Representative from '@/classes/representatives/Representative';
     }),
   },
 })
-export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
+export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   patients!: IPatient[];
   offset: number[] = [0];
   representativeTypes!: IRepresentativeType[];
@@ -96,8 +96,6 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
   patientsOptions = [{}];
   representativeTypesOptions = [{}];
 
-  title = '';
-
   rules = {
     human: HumanRules,
   };
@@ -108,10 +106,8 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 
     if (!this.$route.params.representativeId) {
       this.isEditMode = false;
-      this.title = 'Создать представителя';
     } else {
       this.isEditMode = true;
-      this.title = 'Редактировать представителя';
       await this.representativeGet(`${this.$route.params.representativeId}`);
       this.representative = this.$store.getters['representatives/representative'];
     }
@@ -137,6 +133,8 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
         human: item.human,
       });
     }
+
+    this.pushToLinks(['/representatives'], ['Список представителей']);
 
     this.mount = true;
     this.initialState = JSON.stringify(this);

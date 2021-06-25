@@ -1,6 +1,6 @@
 <template>
   <div class="patient-page-container">
-    <PageHead :titleParent="'Пациенты'" :title="'Профиль'" :link="'/patients'" @submitForm="submitForm" />
+    <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" />
     <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <el-collapse>
@@ -31,7 +31,7 @@
               <template #title>
                 <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm v-model:documents="patient.human.documents" v-model:fileInfos="patient.human.fileInfos"/>
+              <DocumentForm v-model:documents="patient.human.documents" v-model:fileInfos="patient.human.fileInfos" />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -92,6 +92,7 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/patients/Patient';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
 
@@ -128,7 +129,7 @@ const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Pat
     }),
   },
 })
-export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
+export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   // Types.
   declare $refs: {
     form: any;
@@ -220,6 +221,7 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
       }
     }
 
+    this.pushToLinks(['/patients'], ['Список пациентов']);
     this.mount = true;
     this.diagnosisMount = true;
     this.initialState = JSON.stringify(this);
@@ -239,8 +241,12 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
     let weightId: string | undefined = '';
 
     this.anthropometries.forEach((a: IAnthropometry) => {
-      if (a.isHeight()) { heightId = a.id; }
-      if (a.isWeight()) { weightId = a.id; }
+      if (a.isHeight()) {
+        heightId = a.id;
+      }
+      if (a.isWeight()) {
+        weightId = a.id;
+      }
     });
 
     this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);

@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount" style="height: 100%">
-    <ListHead :title="title" @create="create" />
+    <ListHead :title="'Список пациентов'" @create="create" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table border :default-sort="{ prop: 'id', order: 'ascending' }" :data="filterTable(patients)" class="table-shadow" header-row-class-name="header-style">
