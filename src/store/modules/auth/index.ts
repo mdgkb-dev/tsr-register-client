@@ -8,9 +8,7 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  userId: '',
-  userLogin: '',
-  userRegion: '',
+  user: undefined,
   isAuthorized: false,
   authorizationError: '',
 };

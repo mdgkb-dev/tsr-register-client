@@ -14,6 +14,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -114,53 +115,37 @@ export default class Patient implements IPatient {
     this.registerPropertyToPatient.push(registerPropertyToPatient);
   }
 
-  getRegisterPropertyValue(propertyId: string, valueType: string): boolean | string | number | Date | null {
-    if (valueType === 'set') {
-      const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === propertyId);
+  getRegisterPropertyValue(property: IRegisterProperty): boolean | string | number | Date | null {
+    if (property.valueType?.isSet()) {
+      const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === property.id);
       return !!item;
     }
-    const item = this.findProperty(propertyId);
-    switch (valueType) {
-      case 'string':
-        if (item && item.valueString) return item.valueString;
-        return '';
-      case 'number':
-        if (item && item.valueNumber) return item.valueNumber;
-        return 0;
-      case 'date':
-        if (item && item.valueDate) return item.valueDate;
-        return null;
-      case 'radio':
-        if (item && item.registerPropertyRadioId) return item.registerPropertyRadioId;
-        return null;
-      default:
-        return null;
+    if (property.id) {
+      const item = this.findProperty(property.id);
+      if (property.valueType?.isString() && item && item.valueString) return item.valueString;
+      if (property.valueType?.isNumber() && item && item.valueNumber) return item.valueNumber;
+      if (property.valueType?.isDate() && item && item.valueDate) return item.valueDate;
+      if (property.valueType?.isRadio() && item && item.registerPropertyRadioId) return item.registerPropertyRadioId;
     }
+    return null;
   }
 
-  setRegisterPropertyValue(value: number | string | Date, propertyId: string, valueType: string): void {
-    console.log(value);
-    let item = this.findProperty(propertyId);
+  getRegisterPropertyValueSet(setId: string): boolean {
+    return !!this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+  }
+
+  setRegisterPropertyValue(value: number | string | Date, property: IRegisterProperty): void {
+    if (!property.id) return;
+    let item = this.findProperty(property.id);
     if (!item) {
-      this.pushRegisterProperty(propertyId);
-      item = this.findProperty(propertyId);
+      this.pushRegisterProperty(property.id);
+      item = this.findProperty(property.id);
     }
     if (!item) return;
-    switch (valueType) {
-      case 'string':
-        item.valueString = value as string;
-        return;
-      case 'number':
-        item.valueNumber = value as number;
-        return;
-      case 'date':
-        item.valueDate = value as Date;
-        return;
-      case 'radio':
-        item.registerPropertyRadioId = value as string;
-        break;
-      default:
-    }
+    if (property.valueType?.isString()) item.valueString = value as string;
+    if (property.valueType?.isNumber()) item.valueNumber = value as number;
+    if (property.valueType?.isDate()) item.valueDate = value as Date;
+    if (property.valueType?.isRadio()) item.registerPropertyRadioId = value as string;
   }
 
   setRegisterPropertyValueSet(check: boolean, setId: string): void {

@@ -1,7 +1,7 @@
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
+
 export interface State {
-  userId: string;
-  userLogin: string;
-  userRegion: string;
+  user?: IUserAuthorized;
   isAuthorized: boolean;
   authorizationError: string;
 }
