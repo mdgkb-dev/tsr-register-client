@@ -17,7 +17,7 @@
               <template #title>
                 <h2 class="collapseHeader">Антропометрия</h2>
               </template>
-              <AnthropometryForm :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
+              <AnthropometryForm :inHeightWeight="patient.heightWeight" :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
             </el-collapse-item>
 
             <el-collapse-item>

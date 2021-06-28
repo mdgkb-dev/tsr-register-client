@@ -105,7 +105,7 @@ export default class RegisterPropertyPage extends Vue {
   }
 
   changeRelation(valueTypeId: string): void {
-    const valueType = this.valueTypes.find((i) => i.id === valueTypeId);
+    const valueType = this.valueTypes.find(i => i.id === valueTypeId);
     if (valueType) {
       if (valueType.valueRelation === ValueRelation.manyToMany) {
         this.showSet = true;
@@ -113,6 +113,10 @@ export default class RegisterPropertyPage extends Vue {
       }
       if (valueType.valueRelation === ValueRelation.oneToMany) {
         this.showRadio = true;
+        this.showSet = false;
+      }
+      if (valueType.valueRelation === ValueRelation.simple) {
+        this.showRadio = false;
         this.showSet = false;
       }
     }
