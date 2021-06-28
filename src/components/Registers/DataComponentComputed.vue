@@ -6,20 +6,23 @@
 import { Options, Vue } from 'vue-class-component';
 
 import Patient from '@/classes/patients/Patient';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 @Options({
-  props: ['patient', 'propertyId'],
+  props: ['patient', 'property'],
 })
 export default class DataComponentComputed extends Vue {
   patient!: Patient;
-  propertyId!: string;
+  property!: IRegisterProperty;
 
   get dataModel() {
-    return this.patient.getRegisterPropertyValue(this.propertyId, 'date');
+    return this.patient.getRegisterPropertyValue(this.property);
   }
 
   set dataModel(value: any) {
-    this.patient.setRegisterPropertyValue(value, this.propertyId, 'date');
+    if (this.property.id) {
+      this.patient.setRegisterPropertyValue(value, this.property);
+    }
   }
 }
 </script>

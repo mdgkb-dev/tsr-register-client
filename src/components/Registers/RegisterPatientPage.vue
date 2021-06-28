@@ -3,7 +3,7 @@
     <PageHead v-if="mount" :title="patient.human.getFullName()" :links="links" titles="" @submitForm="submitForm" />
     <el-row>
       <el-collapse>
-        <el-form ref="form" :model="patient" label-width="20%" label-position="left">
+        <el-form ref="form" :model="patient">
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -14,47 +14,47 @@
                 <template #title>
                   <h2 class="collapseHeader">{{ registerGroupToRegister.registerGroup.name }}</h2>
                 </template>
-                <el-form-item v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
-                  <el-form-item v-if="prop.registerProperty.valueType.name === 'string'" :label="prop.registerProperty.name">
-                    <el-input
-                      :label="prop.registerProperty.name"
-                      :model-value="
-                        patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty.id, 'string')
-                      "
-                      @input="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'string')"
-                    />
+                <div class="form-under-collapse">
+                  <el-form-item v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
+                    <el-form-item v-if="prop.registerProperty.valueType.isString()" :label="prop.registerProperty.name">
+                      <el-input
+                        :label="prop.registerProperty.name"
+                        :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                        @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                      />
+                    </el-form-item>
+                    <el-form-item v-if="prop.registerProperty.valueType.isNumber()" :label="prop.registerProperty.name">
+                      <el-input-number
+                        :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
+                        @change="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                      />
+                    </el-form-item>
+                    <el-form-item v-if="prop.registerProperty.valueType.isDate()" :label="prop.registerProperty.name">
+                      <DataComponentComputed :property="prop.registerProperty" :patient="patient" />
+                    </el-form-item>
+                    <el-form-item v-if="prop.registerProperty.valueType.isSet()" :label="prop.registerProperty.name">
+                      <el-checkbox
+                        v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
+                        :label="registerPropertySet.name"
+                        :key="registerPropertySet.id"
+                        :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
+                        @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
+                      >
+                        {{ registerPropertySet.name }}</el-checkbox
+                      >
+                    </el-form-item>
+                    <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
+                      <el-radio
+                        v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
+                        :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
+                        @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty)"
+                        :label="registerPropertyRadio.id"
+                        :key="registerPropertyRadio.id"
+                        >{{ registerPropertyRadio.name }}</el-radio
+                      >
+                    </el-form-item>
                   </el-form-item>
-                  <el-form-item v-if="prop.registerProperty.valueType.name === 'number'" :label="prop.registerProperty.name">
-                    <el-input-number
-                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'number')"
-                      @change="patient.setRegisterPropertyValue($event, prop.registerProperty.id, 'number')"
-                    />
-                  </el-form-item>
-                  <el-form-item v-if="prop.registerProperty.valueType.name === 'date'" :label="prop.registerProperty.name">
-                    <DataComponentComputed :propertyId="prop.registerProperty.id" :patient="patient" />
-                  </el-form-item>
-                  <el-form-item v-if="prop.registerProperty.valueType.name === 'set'" :label="prop.registerProperty.name">
-                    <el-checkbox
-                      v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
-                      :label="registerPropertySet.name"
-                      :key="registerPropertySet.id"
-                      :model-value="patient.getRegisterPropertyValue(registerPropertySet.id, 'set')"
-                      @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
-                    >
-                      {{ registerPropertySet.name }}</el-checkbox
-                    >
-                  </el-form-item>
-                  <el-form-item v-if="prop.registerProperty.valueType.name === 'radio'" :label="prop.registerProperty.name">
-                    <el-radio
-                      v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
-                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty.id, 'radio')"
-                      @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty.id, 'radio')"
-                      :label="registerPropertyRadio.id"
-                      :key="registerPropertyRadio.id"
-                      >{{ registerPropertyRadio.name }}</el-radio
-                    >
-                  </el-form-item>
-                </el-form-item>
+                </div>
               </el-collapse-item>
             </div>
           </div>

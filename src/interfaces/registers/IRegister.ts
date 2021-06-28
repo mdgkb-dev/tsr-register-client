@@ -1,5 +1,6 @@
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default interface IRegister {
@@ -8,4 +9,6 @@ export default interface IRegister {
   registerDiagnosis: IRegisterDiagnosis[];
   registerGroupToRegister: IRegisterGroupToRegister[];
   registerToPatient: IRegisterToPatient[];
+
+  getProps: () => IRegisterProperty[];
 }

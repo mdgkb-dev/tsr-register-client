@@ -1,11 +1,15 @@
 import Cookies from 'js-cookie';
 import { ActionTree } from 'vuex';
 
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import IUserLogin from '@/interfaces/users/IUserLogin';
 import IUserRegister from '@/interfaces/users/IUserRegister';
+import HttpClient from '@/services/HttpClient';
 import { RootState } from '@/store/types';
 
 import { State } from './state';
+
+const httpClient = new HttpClient('users');
 
 const actions: ActionTree<State, RootState> = {
   login: async ({ commit }, userData: IUserLogin) => {
@@ -84,11 +88,15 @@ const actions: ActionTree<State, RootState> = {
       commit('deAuthorize');
       return;
     }
+    console.log();
     if (response.status === 200 || response.status === 304) {
       commit('authorize', await response.json());
       return;
     }
     commit('deAuthorize');
+  },
+  editAuthUser: async ({ commit }, payload: IUserAuthorized): Promise<void> => {
+    commit('updateAuthUser', await httpClient.put({ payload, query: payload.id }));
   },
 };
 
