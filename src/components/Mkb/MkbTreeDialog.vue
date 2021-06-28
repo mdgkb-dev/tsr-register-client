@@ -5,7 +5,7 @@
       <el-col :span="12">
         <h3>Список диагнозов</h3>
         <MkbTree
-          v-model:diagnosisData="diagnosisData"
+          v-model:checkedDiagnosis="diagnosisData"
           :selectable="true"
           @setDiagnosis="setDiagnosis"
           @removeDiagnosis="removeCheckedDiagnosis"
