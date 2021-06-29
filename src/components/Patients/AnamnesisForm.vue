@@ -70,14 +70,9 @@ export default class AnamnesisForm extends Vue {
     right: 10px;
   }
 
-  .icon {
+  .icons i {
     font-size: 20px;
     margin: 10px;
-    cursor: pointer;
-  }
-
-  .icon:hover {
-    color: #5cb6ff;
   }
 
   .el-input__inner,

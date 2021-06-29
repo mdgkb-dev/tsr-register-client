@@ -7,8 +7,14 @@
         </div>
         <h1 class="semi-bold-header">Диагноз</h1>
         <div v-for="item in patient.patientDiagnosis" :key="item.id">
-          <span class="underline-label" v-if="item.mkbDiagnosis" v-html="item.mkbDiagnosis.code"></span>
-          <PopoverInfo v-if="item.mkbDiagnosis" :content="item.mkbDiagnosis.name" />
+          <div v-if="item.mkbSubDiagnosis">
+            <span class="underline-label" v-if="item.mkbSubDiagnosis" v-html="item.mkbDiagnosis.code + '.' + item.mkbSubDiagnosis.subCode"></span>
+            <PopoverInfo v-if="item.mkbSubDiagnosis" :content="item.mkbSubDiagnosis.name" />
+          </div>
+          <div v-else>
+            <span class="underline-label" v-if="item.mkbDiagnosis" v-html="item.mkbDiagnosis.code"></span>
+            <PopoverInfo v-if="item.mkbDiagnosis" :content="item.mkbDiagnosis.name" />
+          </div>
         </div>
         <el-divider></el-divider>
 
@@ -80,7 +86,9 @@ export default class PatientPageInfo extends Vue {
     anthropometryNames.forEach((name: string) => {
       const currentAnthropometryData = this.patient.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
       if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
+          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
+        );
         total = `${total} ${lastAnthropometry.getFullInfo()} \n`;
       }
     });

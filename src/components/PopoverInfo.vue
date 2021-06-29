@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="top-start" :title="title" :width="400" trigger="hover" :content="content">
+  <el-popover placement="top-start" :title="title" width="auto" trigger="hover" :content="content">
     <template #reference>
       <i style="margin-left: 10px;" class="custom-icon el-icon-info"></i>
     </template>

@@ -4,7 +4,7 @@
     <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <el-collapse>
-        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
+        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="25%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
               <template #title>
