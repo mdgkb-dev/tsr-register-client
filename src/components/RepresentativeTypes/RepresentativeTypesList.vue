@@ -60,7 +60,7 @@ export default class RepresentativeTypesList extends Vue {
     this.$router.push('/representative-types/new');
   }
 
-  delete(id: number): void {
+  remove(id: number): void {
     this.$store.dispatch('representativeTypes/delete', id);
   }
 }

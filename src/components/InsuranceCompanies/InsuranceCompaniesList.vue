@@ -58,7 +58,7 @@ export default class InsuranceCompanies extends Vue {
     this.$router.push('/insurance-companies/new');
   }
 
-  delete(id: number): void {
+  remove(id: number): void {
     this.$store.dispatch('insuranceCompanies/delete', id);
   }
 }
