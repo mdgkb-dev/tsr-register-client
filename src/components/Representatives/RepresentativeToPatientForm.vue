@@ -18,14 +18,14 @@
               </el-select>
             </el-col>
             <el-col :span="1">
-              <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+              <el-button @click.prevent="remove(item)">Удалить подопечного</el-button>
             </el-col>
           </el-space>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item>
-          <el-button @click="add">Добавить пациента</el-button>
+          <el-button @click="add">Добавить подопечного</el-button>
         </el-form-item>
       </el-row>
     </el-form-item>

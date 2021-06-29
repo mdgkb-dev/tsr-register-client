@@ -62,7 +62,7 @@ export default class Anthropometry extends Vue {
     this.$router.push('/anthropometry/new');
   }
 
-  delete(id: number): void {
+  remove(id: number): void {
     this.$store.dispatch('anthropometry/delete', id);
   }
 }

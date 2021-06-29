@@ -61,7 +61,7 @@ export default class DocumentTypeList extends Vue {
     this.$router.push('/document-types/new');
   }
 
-  async delete(id: number): Promise<void> {
+  async remove(id: number): Promise<void> {
     await this.$store.dispatch('documentTypes/delete', id);
   }
 }
