@@ -86,9 +86,7 @@ export default class PatientPageInfo extends Vue {
     anthropometryNames.forEach((name: string) => {
       const currentAnthropometryData = this.patient.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
       if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
-          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
-        );
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
         total = `${total} ${lastAnthropometry.getFullInfo()} \n`;
       }
     });
