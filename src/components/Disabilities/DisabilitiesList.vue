@@ -94,6 +94,7 @@ import ListHead from '@/components/ListHead.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
+  name: 'PatientsList',
   components: {
     ListHead,
   },

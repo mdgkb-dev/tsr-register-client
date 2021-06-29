@@ -50,6 +50,7 @@ const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
 @Options({
+  name: 'MkbTreeDialog',
   components: {
     MkbTree,
     AnamnesisForm,

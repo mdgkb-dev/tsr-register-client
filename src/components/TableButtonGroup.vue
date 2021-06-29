@@ -9,6 +9,7 @@
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
+  name: 'TableButtonGroup',
   props: ['showEditButton', 'showRemoveButton'],
 })
 export default class TableButtonGroup extends Vue {

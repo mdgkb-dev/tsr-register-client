@@ -42,6 +42,7 @@ import { Options, Vue } from 'vue-class-component';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
 @Options({
+  name: 'RepresentativePageInfo',
   props: ['representative'],
 })
 export default class RepresentativePageInfo extends Vue {

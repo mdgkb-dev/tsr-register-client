@@ -31,6 +31,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 @Options({
+  name: 'RegisterPropertyList',
   components: {
     ListHead,
     TableButtonGroup,

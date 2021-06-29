@@ -55,6 +55,7 @@ import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
+  name: 'DocumentTypePage',
   components: {
     PageHead,
   },

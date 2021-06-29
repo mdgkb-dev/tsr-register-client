@@ -1,9 +1,12 @@
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
+@Options({
+  name: 'FormMixin',
+})
 export default class FormMixin extends Vue {
   isEditMode!: boolean;
   $message!: any;

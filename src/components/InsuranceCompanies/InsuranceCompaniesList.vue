@@ -30,6 +30,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 @Options({
+  name: 'InsuranceCompanies',
   components: {
     ListHead,
     TableButtonGroup,

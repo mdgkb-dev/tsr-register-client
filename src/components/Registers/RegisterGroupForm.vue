@@ -26,7 +26,8 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 @Options({
-  props: ['in-register-group-to-register', 'in-register-group-options'],
+  name: 'RegisterGroupForm',
+  props: ['inRegisterGroupToRegister', 'inRegisterGroupOptions'],
 })
 export default class RegisterGroupForm extends Vue {
   // Types.

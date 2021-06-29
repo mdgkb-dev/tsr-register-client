@@ -44,6 +44,7 @@ import PopoverInfo from '@/components/PopoverInfo.vue';
 import IHuman from '@/interfaces/humans/IHuman';
 
 @Options({
+  name: 'PageInfo',
   props: ['human'],
   components: {
     PopoverInfo,

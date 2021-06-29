@@ -26,6 +26,7 @@ import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
+  name: 'AnthropometryPage',
   components: {
     PageHead,
   },

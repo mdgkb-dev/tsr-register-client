@@ -1,6 +1,9 @@
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
+@Options({
+  name: 'MessageMixin',
+})
 export default class MessageMixin extends Vue {
   $message!: {
     error: any;

@@ -34,6 +34,7 @@ import HumanForm from '@/components/HumanForm.vue';
 import PageInfo from '@/components/Users/PageInfo.vue';
 
 @Options({
+  name: 'UserPage',
   components: {
     PageInfo,
     HumanForm,

@@ -25,6 +25,7 @@ import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 @Options({
+  name: 'PatientRegistersForm',
   props: ['registerToPatient', 'patientDiagnosis'],
   computed: {
     ...mapState('registers', ['registers']),

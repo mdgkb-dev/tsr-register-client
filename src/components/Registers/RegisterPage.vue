@@ -35,6 +35,7 @@ import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 
 @Options({
+  name: 'RegisterPage',
   components: {
     PageHead,
     RegisterGroupForm,

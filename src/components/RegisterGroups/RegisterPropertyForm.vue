@@ -25,7 +25,8 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
 
 @Options({
-  props: ['in-register-property-to-register-group', 'in-register-property-options'],
+  name: 'RegisterPropertyForm',
+  props: ['inRegisterPropertyToRegisterGroup', 'inRegisterPropertyOptions'],
 })
 export default class RegisterPropertyForm extends Vue {
   // Types.

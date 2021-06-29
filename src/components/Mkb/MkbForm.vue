@@ -103,6 +103,7 @@ import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
 @Options({
+  name: 'MkbForm',
   components: {
     AnamnesisForm,
     MkbTreeDialog,

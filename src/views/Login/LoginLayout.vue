@@ -13,8 +13,11 @@
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
+@Options({
+  name: 'LoginLayout',
+})
 export default class LoginLayout extends Vue {}
 </script>
 <style>

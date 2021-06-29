@@ -8,6 +8,7 @@ import { Options, Vue } from 'vue-class-component';
 import { mapState } from 'vuex';
 
 @Options({
+  name: 'MainHeader',
   computed: {
     ...mapState(['auth']),
   },

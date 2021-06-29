@@ -28,6 +28,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IUser from '../../interfaces/users/IUser';
 
 @Options({
+  name: 'UsersList',
   components: {
     ListHead,
     TableButtonGroup,

@@ -23,6 +23,7 @@ import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
+  name: 'InsuranceCompanyPage',
   components: {
     PageHead,
   },

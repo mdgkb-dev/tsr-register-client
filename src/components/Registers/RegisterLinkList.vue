@@ -25,6 +25,7 @@ import ListHead from '@/components/ListHead.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 
 @Options({
+  name: 'RegisterLinkList',
   components: {
     ListHead,
   },

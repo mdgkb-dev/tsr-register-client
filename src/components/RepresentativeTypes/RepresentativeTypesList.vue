@@ -32,6 +32,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 @Options({
+  name: 'RepresentativeTypesList',
   components: {
     ListHead,
     TableButtonGroup,

@@ -30,6 +30,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 @Options({
+  name: 'Anthropometry',
   components: {
     ListHead,
     TableButtonGroup,

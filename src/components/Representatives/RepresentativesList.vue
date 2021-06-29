@@ -99,6 +99,7 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import ListHead from '../ListHead.vue';
 
 @Options({
+  name: 'RepresentativesList',
   components: {
     ListHead,
     TableButtonGroup,

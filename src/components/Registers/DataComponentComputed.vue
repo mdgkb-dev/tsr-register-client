@@ -9,6 +9,7 @@ import Patient from '@/classes/patients/Patient';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 @Options({
+  name: 'DataComponentComputed',
   props: ['patient', 'property'],
 })
 export default class DataComponentComputed extends Vue {

@@ -161,6 +161,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
+  name: 'PatientsList',
   components: {
     ListHead,
     TableButtonGroup,

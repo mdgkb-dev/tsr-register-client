@@ -10,6 +10,7 @@
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
+  name: 'PopoverInfo',
   props: ['content', 'title'],
 })
 export default class PopoverInfo extends Vue {

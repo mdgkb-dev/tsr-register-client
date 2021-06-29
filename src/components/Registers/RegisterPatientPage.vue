@@ -78,6 +78,7 @@ import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
+  name: 'RegisterPatientPage',
   components: {
     PageHead,
     HumanForm,

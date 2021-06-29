@@ -34,7 +34,8 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 @Options({
-  props: ['anamnesis', 'index', 'diagnosis', 'prop-name'],
+  name: 'AnamnesisForm',
+  props: ['anamnesis', 'index', 'diagnosis', 'propName'],
 })
 export default class AnamnesisForm extends Vue {
   // Types.

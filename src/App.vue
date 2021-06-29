@@ -11,6 +11,7 @@ import LoginLayout from './views/Login/LoginLayout.vue';
 import MainLayout from './views/Main/MainLayout.vue';
 
 @Options({
+  name: 'App',
   components: {
     MainLayout,
     LoginLayout,

@@ -60,7 +60,8 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
 @Options({
-  props: ['in-birth-date', 'in-height-weight', 'is-male'],
+  name: 'AnthropometryForm',
+  props: ['inBirthDate', 'inHeightWeight', 'isMale'],
 })
 export default class AnthropometryForm extends Vue {
   // Types.

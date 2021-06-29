@@ -56,6 +56,7 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
 
 @Options({
+  name: 'RegisterPropertyPage',
   components: {
     PageHead,
   },

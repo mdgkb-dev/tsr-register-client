@@ -30,6 +30,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 
 @Options({
+  name: 'DocumentTypeList',
   components: {
     ListHead,
     TableButtonGroup,

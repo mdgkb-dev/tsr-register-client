@@ -68,6 +68,7 @@ import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IPatient from '../../interfaces/patients/IPatient';
 
 @Options({
+  name: 'PatientPageInfo',
   props: ['patient'],
   components: {
     PopoverInfo,

@@ -1,8 +1,11 @@
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
 import Link from '../classes/shared/Link';
 
+@Options({
+  name: 'ConfirmLeavePage',
+})
 export default class ConfirmLeavePage extends Vue {
   links: Link[] = [];
 
