@@ -9,10 +9,9 @@
         @row-click="link"
         class="table-shadow"
         header-row-class-name="header-style"
-        border
       >
-        <el-table-column type="index" label="№" width="50" />
-        <el-table-column prop="name" label="Название регистра" min-width="150" />
+        <el-table-column type="index" width="60" align="center" />
+        <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
       </el-table>
     </div>
   </div>

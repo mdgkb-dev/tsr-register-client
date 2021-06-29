@@ -4,6 +4,7 @@ import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default class Register implements IRegister {
@@ -28,5 +29,13 @@ export default class Register implements IRegister {
     if (register.registerToPatient) {
       this.registerToPatient = register.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
     }
+  }
+
+  getProps(): IRegisterProperty[] {
+    const props: IRegisterProperty[] = [];
+    this.registerGroupToRegister.forEach((groupToRegister) => groupToRegister.registerGroup?.registerPropertyToRegisterGroup.forEach((propToRegister) => {
+      if (propToRegister.registerProperty) props.push(propToRegister.registerProperty);
+    }));
+    return props as IRegisterProperty[];
   }
 }

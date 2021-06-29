@@ -2,13 +2,18 @@
   <div class="table-under-collapse">
     <el-space style="margin-bottom: 10px">
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
-      <MkbTreeDialog @setDiagnosis="setDiagnosisFromModal($event)" v-model:diagnosisData="diagnosisData" :patientDiagnosis="patientDiagnosis" />
+      <MkbTreeDialog
+        @setDiagnosis="setDiagnosisFromModal($event)"
+        v-model:checkedDiagnosis="diagnosisData"
+        v-model:diagnosisData="diagnosisData"
+        v-model:patientDiagnosis="patientDiagnosis"
+      />
     </el-space>
 
-    <el-table :data="diagnosisData" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange">
+    <el-table :data="diagnosisData" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange" class="table-shadow">
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
-          <el-button @click="addAnamnesis(props.row)" stryle="margin: 100px">Добавить анамнез</el-button>
+          <el-button @click="addAnamnesis(props.row)" style="margin: 10px">Добавить анамнез</el-button>
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
               <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="index" :timestamp="$dateFormatRu(anamnesis.date)" placement="top">
@@ -23,7 +28,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="Группа диагноза" width="450">
+      <el-table-column label="Группа диагноза" align="center" sortable>
         <template #default="scope">
           <el-autocomplete
             style="width: 100%"
@@ -37,7 +42,7 @@
           </el-autocomplete>
         </template>
       </el-table-column>
-      <el-table-column label="Основной диагноз" width="450" sortable>
+      <el-table-column label="Основной диагноз" align="center" sortable>
         <template #default="scope">
           <el-autocomplete
             style="width: 100%"
@@ -50,7 +55,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column prop="height" label="Уточнённый диагноз" width="450">
+      <el-table-column prop="height" label="Уточнённый диагноз" align="center">
         <template #default="scope">
           <el-select
             style="width: 100%"
@@ -63,7 +68,7 @@
           <el-select style="width: 100%" v-else disabled v-model="undefined" placeholder="Уточнённых диагнозов нет" />
         </template>
       </el-table-column>
-      <el-table-column v-if="patientDiagnosis" prop="weight" label="Первичный" width="90">
+      <el-table-column v-if="patientDiagnosis" prop="weight" label="Первичный" width="110" align="center">
         <template #default="scope">
           <el-checkbox v-model="scope.row.primary" />
         </template>

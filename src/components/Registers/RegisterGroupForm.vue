@@ -1,7 +1,7 @@
 <template>
   <div class="table-under-collapse">
     <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
-    <el-table :data="registerGroupToRegister" style="width: 100%">
+    <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow">
       <el-table-column label="Наименование" min-width="250">
         <template #default="scope">
           <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">

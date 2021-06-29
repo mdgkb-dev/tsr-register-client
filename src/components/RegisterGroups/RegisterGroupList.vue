@@ -1,13 +1,21 @@
 <template>
   <ListHead :title="title" @create="create" />
   <div class="table-background">
-    <el-table v-if="mount" :default-sort="{ prop: 'id', order: 'ascending' }" :data="registerGroups" class="table-shadow" header-row-class-name="header-style" border>
-      <el-table-column type="index" label="№" width="50" />
-      <el-table-column prop="name" label="Название группы" min-width="150" />
-      <el-table-column label="Действия" width="120">
+    <el-table
+      v-if="mount"
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="registerGroups"
+      class="table-shadow"
+      header-row-class-name="header-style"
+      row-class-name="no-hover"
+    >
+      <el-table-column type="index" width="60" align="center" />
+      <el-table-column prop="name" label="Название группы" min-width="150" sortable />
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-          <el-button @click="this.remove(scope.row.id)" type="text" size="small">Удалить</el-button>
+          <el-space direction="vertical" class="icons">
+            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -19,11 +27,13 @@ import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
 import ListHead from '@/components/ListHead.vue';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 
 @Options({
   components: {
     ListHead,
+    TableButtonGroup,
   },
   computed: {
     ...mapState('registerGroups', ['registerGroups']),

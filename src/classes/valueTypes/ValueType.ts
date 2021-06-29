@@ -14,4 +14,24 @@ export default class ValueType implements IValueType {
     this.name = valueType.name;
     this.valueRelation = valueType.valueRelation;
   }
+
+  isString(): boolean {
+    return this.name === 'string';
+  }
+
+  isNumber(): boolean {
+    return this.name === 'number';
+  }
+
+  isDate(): boolean {
+    return this.name === 'date';
+  }
+
+  isRadio(): boolean {
+    return this.name === 'radio';
+  }
+
+  isSet(): boolean {
+    return this.name === 'set';
+  }
 }

@@ -2,7 +2,7 @@
   <PageHead :titleParent="'Типы представителей'" :title="title" :link="'/representative-types'" @submitForm="submitForm" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <el-form ref="form" :model="representativeType" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">
+      <el-form ref="form" :model="representativeType" :rules="rules" label-width="30%" label-position="left" style="max-width: 800px">
         <el-form-item label="Название типа" prop="name">
           <el-input v-model="representativeType.name"></el-input>
         </el-form-item>
