@@ -1,24 +1,26 @@
 <template>
-  <PageHead :titleParent="'Регистры пациентов'" :title="title" :link="'/registers'" @submitForm="submitForm" />
-  <el-row>
-    <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="width: 100%">
-      <div class="table-background" style="margin-bottom: 20px; height: unset">
-        <el-form-item label="Название регистра">
-          <el-input v-model="register.name"></el-input>
-        </el-form-item>
-      </div>
-      <el-collapse>
-        <el-collapse-item>
-          <template #title><h2 class="collapseHeader">Группы</h2></template>
-          <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
-        </el-collapse-item>
-        <el-collapse-item>
-          <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-          <MkbForm v-model:diagnosisData="register.registerDiagnosis" />
-        </el-collapse-item>
-      </el-collapse>
-    </el-form>
-  </el-row>
+  <div class="wrapper">
+    <PageHead :titleParent="'Регистры пациентов'" :title="title" :link="'/registers'" @submitForm="submitForm" />
+    <el-row>
+      <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="width: 100%">
+        <div class="table-background" style="margin-bottom: 20px; height: unset">
+          <el-form-item label="Название регистра">
+            <el-input v-model="register.name"></el-input>
+          </el-form-item>
+        </div>
+        <el-collapse>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Группы</h2></template>
+            <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
+          </el-collapse-item>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+            <MkbForm v-model:diagnosisData="register.registerDiagnosis" />
+          </el-collapse-item>
+        </el-collapse>
+      </el-form>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -97,7 +99,7 @@ export default class RegisterPage extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.register-page-container:deep {
+.wrapper:deep {
   @import '@/assets/elements/collapse.scss';
 }
 </style>

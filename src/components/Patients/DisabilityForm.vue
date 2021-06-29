@@ -28,16 +28,16 @@
         </el-form-item>
       </template>
     </el-table-column>
-    <el-table-column label="Инвалидность" width="180" sortable>
+    <el-table-column label="Инвалидность" width="160" sortable>
       <template #default="scope">
         <div v-if="scope.row.parameter1 === true || scope.row.parameter1 === false">
-          <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1">A</el-button>
-          <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2">B</el-button>
-          <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3">C</el-button>
+          <el-button :type="scope.row.parameter1 ? 'primary' : undefined" size="small" circle @click="scope.row.parameter1 = !scope.row.parameter1">A</el-button>
+          <el-button :type="scope.row.parameter2 ? 'primary' : undefined" size="small" circle @click="scope.row.parameter2 = !scope.row.parameter2">B</el-button>
+          <el-button :type="scope.row.parameter3 ? 'primary' : undefined" size="small" circle @click="scope.row.parameter3 = !scope.row.parameter3">C</el-button>
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="Действия" width="500" sortable>
+    <el-table-column label="Действия" min-width="500" sortable>
       <template #default="scope">
         <div v-if="scope.row.parameter1 === undefined">
           <el-button @click="addEdv(scope.row)">Добавить справку ЕДВ</el-button>
