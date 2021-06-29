@@ -139,7 +139,6 @@ export default class Patient implements IPatient {
   }
 
   setRegisterPropertyValue(value: number | string | Date, propertyId: string, valueType: string): void {
-    console.log(value);
     let item = this.findProperty(propertyId);
     if (!item) {
       this.pushRegisterProperty(propertyId);

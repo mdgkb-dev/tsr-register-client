@@ -1,7 +1,7 @@
 <template>
   <div class="patient-page-container">
     <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" />
-    <el-row v-if="mount"><PatientPageInfo :patient="patient"/></el-row>
+    <el-row v-if="mount"><PatientPageInfo :patient="patient" /></el-row>
     <el-row>
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
@@ -41,7 +41,13 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
-              <DisabilityForm :inDisabilities="patient.disabilities" :inBirthDate="patient.human.dateBirth" />
+              <DisabilityForm
+                v-model:disabilities="patient.disabilities"
+                :birthDate="patient.human.dateBirth"
+                v-model:fileInfos="patient.human.fileInfos"
+                @addEdv="addEdv"
+                @removeEdv="removeEdv"
+              />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -82,6 +88,7 @@ import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IDisability from '@/interfaces/disabilities/IDisability';
+import IEdv from '@/interfaces/disabilities/IEdv';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
@@ -248,6 +255,32 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
 
     this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);
     await this.submitHandling('patients', this.patient);
+  }
+
+  addEdv(edv: IEdv): void {
+    const disabilitiy = this.patient.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
+
+    if (!disabilitiy) {
+      return;
+    }
+
+    disabilitiy.edvs.push(edv);
+  }
+
+  removeEdv(edv: IEdv): void {
+    const disabilitiy = this.patient.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
+
+    if (!disabilitiy) {
+      return;
+    }
+
+    const edvIndex = disabilitiy.edvs.findIndex((e: IEdv): boolean => e.id === edv.id);
+
+    if (edvIndex < 0) {
+      return;
+    }
+
+    disabilitiy.edvs.splice(edvIndex, 1);
   }
 }
 </script>

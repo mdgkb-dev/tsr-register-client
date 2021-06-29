@@ -220,7 +220,6 @@ export default class MkbTree extends Vue {
   }
 
   async getNodeTwo(node: any, mkbIdSet: MkbIdSet): Promise<any | undefined> {
-    // console.log(node);
     await this.getSubGroupById(mkbIdSet);
     // this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
     const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);

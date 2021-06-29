@@ -22,7 +22,6 @@ export default {
     },
     set: (state: any, document: IDocument): void => {
       state.document = new Document(document);
-      console.log('state.document', state.document);
     },
     create: (state: any, payload: any): void => {
       state.documents.push(payload);
