@@ -2,7 +2,12 @@
   <div class="table-under-collapse">
     <el-space style="margin-bottom: 10px">
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
-      <MkbTreeDialog @setDiagnosis="setDiagnosisFromModal($event)" v-model:diagnosisData="diagnosisData" :patientDiagnosis="patientDiagnosis" />
+      <MkbTreeDialog
+        @setDiagnosis="setDiagnosisFromModal($event)"
+        v-model:checkedDiagnosis="diagnosisData"
+        v-model:diagnosisData="diagnosisData"
+        v-model:patientDiagnosis="patientDiagnosis"
+      />
     </el-space>
 
     <el-table :data="diagnosisData" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange">
