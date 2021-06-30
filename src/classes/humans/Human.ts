@@ -1,3 +1,4 @@
+import Document from '@/classes/documents/Document';
 import Contact from '@/classes/humans/Contact';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import IDocument from '@/interfaces/documents/IDocument';
@@ -38,7 +39,10 @@ export default class Human implements IHuman {
       this.insuranceCompanyToHuman = human.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
     }
 
-    this.documents = human.documents ?? [];
+    if (human.documents) {
+      this.documents = human.documents.map((i: IDocument) => new Document(i));
+    }
+
     this.fileInfos = human.fileInfos ?? [];
   }
 

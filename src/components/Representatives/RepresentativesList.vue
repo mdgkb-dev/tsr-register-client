@@ -64,18 +64,20 @@
         <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
       </el-table-column>
 
-      <el-table-column>
-        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-          <template #default="scope">
-            <div v-for="document in scope.row.human.documents" :key="document">
-              <el-tag size="small">
-                <i class="el-icon-document" style="margin-right: 3px"></i>
-                <span>{{ document.documentType.name }}</span>
-              </el-tag>
-            </div>
-          </template>
+        <el-table-column>
+          <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+            <template #default="scope">
+              <div v-for="document in scope.row.human.documents" :key="document">
+                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                  <el-tag size="small">
+                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <span>{{ document.documentType.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-table-column>
         </el-table-column>
-      </el-table-column>
 
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">

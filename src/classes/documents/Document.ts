@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
+import DocumentType from '@/classes/documents/DocumentType';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
@@ -20,8 +21,7 @@ export default class Document implements IDocument {
     if (document.id) {
       this.id = document.id;
     }
-
-    this.documentType = document.documentType;
+    this.documentType = new DocumentType(document.documentType);
     this.humanId = document.humanId;
 
     if (document.documentFieldValues) {

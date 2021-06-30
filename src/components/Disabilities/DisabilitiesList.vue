@@ -73,10 +73,12 @@
           <el-table-column label="ДОКУМЕНТЫ" width="130" align="center">
             <template #default="scope">
               <div v-for="document in scope.row.human.documents" :key="document">
-                <el-tag size="small">
-                  <i class="el-icon-document" style="margin-right: 3px"></i>
-                  <span>{{ document.documentType.name }}</span>
-                </el-tag>
+                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                  <el-tag size="small">
+                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <span>{{ document.documentType.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
               </div>
             </template>
           </el-table-column>

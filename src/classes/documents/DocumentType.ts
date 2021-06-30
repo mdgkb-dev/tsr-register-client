@@ -20,4 +20,11 @@ export default class DocumentType implements IDocumentType {
       this.documentTypeFields = documentType.documentTypeFields.map((d) => new DocumentTypeField(d));
     }
   }
+
+  getTagName(): string {
+    if (this.name.length > 10) {
+      return this.name.replace(/(?<=.{9}).+/g, '...');
+    }
+    return this.name;
+  }
 }
