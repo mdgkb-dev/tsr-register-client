@@ -38,6 +38,7 @@ import { helpers, required } from '@vuelidate/validators';
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
+  name: 'LoginForm',
   validations: {
     loginForm: {
       login: {

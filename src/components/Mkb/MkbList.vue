@@ -16,6 +16,7 @@ import ListHead from '@/components/ListHead.vue';
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 
 @Options({
+  name: 'MkbList',
   components: {
     ListHead,
     MkbTree,

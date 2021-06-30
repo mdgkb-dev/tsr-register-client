@@ -70,7 +70,8 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
 @Options({
-  props: ['selectable', 'checked-diagnosis', 'patientDiagnosis'],
+  name: 'MkbTree',
+  props: ['selectable', 'checkedDiagnosis', 'patientDiagnosis'],
   computed: {
     ...mapState('mkb', ['mkbClasses']),
   },

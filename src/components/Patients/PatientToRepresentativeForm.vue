@@ -31,7 +31,8 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import IOption from '@/interfaces/shared/IOption';
 
 @Options({
-  props: ['in-representative-to-patient', 'in-representative-types', 'in-representatives'],
+  name: 'PatientToRepresentativeForm',
+  props: ['inRepresentativeToPatient', 'inRepresentativeTypes', 'inRepresentatives'],
 })
 export default class PatientToRepresentativeForm extends Vue {
   // Types.

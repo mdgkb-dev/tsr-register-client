@@ -92,6 +92,7 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 @Options({
+  name: 'RegisterPatientsPage',
   components: {
     PageHead,
   },

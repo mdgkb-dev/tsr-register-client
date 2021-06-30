@@ -25,10 +25,13 @@
 </template>
 
 <script lang="ts">
-import { mixins } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 
 import MessageMixin from '@/mixins/MessageMixin.vue';
 
+@Options({
+  name: 'RegistrationPage',
+})
 export default class RegistrationPage extends mixins(MessageMixin) {
   registrationForm = {
     login: '',

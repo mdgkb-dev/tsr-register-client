@@ -23,6 +23,7 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 @Options({
+  name: 'RegisterGroupPage',
   components: {
     PageHead,
     RegisterPropertyForm,

@@ -1,6 +1,9 @@
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 
+@Options({
+  name: 'ConfirmLeavePage',
+})
 export default class ConfirmLeavePage extends Vue {
   initialState = '';
   confirmStay = false;

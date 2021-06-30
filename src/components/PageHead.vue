@@ -16,6 +16,7 @@ import { Options, Vue } from 'vue-class-component';
 import Link from '@/classes/shared/Link';
 
 @Options({
+  name: 'PageHead',
   props: ['title', 'links', 'hideButton'],
 })
 export default class PageHead extends Vue {

@@ -22,7 +22,7 @@
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
-                <h2 class="collapseHeader">Привязанные дети</h2>
+                <h2 class="collapseHeader">Подопечные</h2>
               </template>
               <RepresentativeToPatientForm
                 :inRepresentativeToPatient="representative.representativeToPatient"
@@ -56,6 +56,7 @@ import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
+  name: 'RepresentativePage',
   components: {
     HumanForm,
     DocumentForm,

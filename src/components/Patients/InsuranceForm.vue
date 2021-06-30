@@ -46,7 +46,8 @@ import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsurance
 import IOption from '@/interfaces/patients/IOption';
 
 @Options({
-  props: ['in-insurance-company-to-human', 'in-insurance-companies-options'],
+  name: 'InsuranceForm',
+  props: ['inInsuranceCompanyToHuman', 'inInsuranceCompaniesOptions'],
 })
 export default class InsuranceForm extends Vue {
   // Types.

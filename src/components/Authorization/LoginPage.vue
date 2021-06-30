@@ -21,6 +21,7 @@ import { mapGetters } from 'vuex';
 import MessageMixin from '@/mixins/MessageMixin.vue';
 
 @Options({
+  name: 'LoginPage',
   computed: {
     ...mapGetters('auth', ['authError']),
   },

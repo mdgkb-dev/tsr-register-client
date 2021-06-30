@@ -32,7 +32,7 @@
         </el-form-item>
       </section>
 
-      <el-button @click="$refs[document.id].click()" size="mini"> Приложить файлы </el-button>
+      <el-button @click="$refs[document.id].click()" size="mini">Приложить файлы</el-button>
       <input
         type="file"
         :ref="document.id"
@@ -48,7 +48,7 @@
       <el-table :data="fileInfos.filter((info) => info.category === document.id)" size="mini" style="width: 100%">
         <el-table-column label="Приложенные файлы">
           <template #default="scope">
-            <a v-if="scope.row.isDraft" >{{ scope.row.originalName }}</a>
+            <a v-if="scope.row.isDraft">{{ scope.row.originalName }}</a>
             <a v-else href="DownloadFile" :data-file-id="scope.row.id" @click.prevent="downloadFile">{{ scope.row.originalName }}</a>
           </template>
         </el-table-column>

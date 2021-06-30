@@ -18,6 +18,7 @@ import MainHeader from './MainHeader.vue';
 import MainSidePanel from './MainSidePanel.vue';
 
 @Options({
+  name: 'MainLayout',
   components: {
     MainHeader,
     MainSidePanel,

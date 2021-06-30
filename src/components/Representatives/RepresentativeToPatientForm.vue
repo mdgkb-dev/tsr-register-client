@@ -18,14 +18,14 @@
               </el-select>
             </el-col>
             <el-col :span="1">
-              <el-button @click.prevent="remove(item)">Удалить пациента</el-button>
+              <el-button @click.prevent="remove(item)">Удалить подопечного</el-button>
             </el-col>
           </el-space>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item>
-          <el-button @click="add">Добавить пациента</el-button>
+          <el-button @click="add">Добавить подопечного</el-button>
         </el-form-item>
       </el-row>
     </el-form-item>
@@ -40,7 +40,8 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import IOption from '@/interfaces/shared/IOption';
 
 @Options({
-  props: ['in-representative-to-patient', 'in-representative-types', 'in-patients'],
+  name: 'RepresentativeToPatientForm',
+  props: ['inRepresentativeToPatient', 'inRepresentativeTypes', 'inPatients'],
 })
 export default class RepresentativeToPatientForm extends Vue {
   // Types.

@@ -13,6 +13,7 @@
 import { Options, Vue } from 'vue-class-component';
 
 @Options({
+  name: 'ListHead',
   props: ['title', 'hideButton'],
 })
 export default class ListHead extends Vue {

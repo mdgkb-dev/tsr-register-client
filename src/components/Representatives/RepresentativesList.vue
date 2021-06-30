@@ -2,55 +2,84 @@
   <ListHead :title="title" @create="create" />
   <div class="table-background">
     <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-    <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" @row-dblclick="edit" border>
-      <!-- <el-table-column type="expand">
-        <template #default="props">
-          <el-card class="box-card">
-            <template #header>
-              <div class="card-header">
-                <span>Представляет</span>
-              </div>
-            </template>
-            <div v-for="item in props.row.representativeToPatient" :key="item.patient.human" class="text item">
-              {{ item.patient.human }}
+    <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
+      <el-table-column type="index" width="60" align="center" />
+      <el-table-column width="150" align="left">
+        <template #header>
+          <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
+        </template>
+        <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable align="left" min-width="150" resizable>
+          <template #default="scope">
+            {{ scope.row.human.getFullName() }}
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column>
+        <template #header> </template>
+        <el-table-column width="75" label="ПОЛ" sortable prop="human.isMale" align="center">
+          <template #default="scope">
+            {{ scope.row.human.getGender() }}
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column>
+        <el-table-column prop="human.dateBirth" label="ДАТА РОЖДЕНИЯ" width="120" align="center" sortable>
+          <template #default="scope">
+            {{ fillDateFormat(scope.row.human.dateBirth) }}
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column>
+        <template #header>
+          <el-input v-model="searchAddress" size="mini" placeholder="Поиск по адресу..." />
+        </template>
+        <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
+      </el-table-column>
+
+      <el-table-column>
+        <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
+          <template #default="scope">
+            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
+                placement="top-end"
+              >
+                <el-tag class="tag-link" @click="this.$router.push(`/patients/${rep.patient.id}`)">{{ children(rep) }}</el-tag>
+              </el-tooltip>
             </div>
-          </el-card>
-        </template>
-      </el-table-column> -->
-      <el-table-column type="index" width="50"> </el-table-column>
-      <el-table-column min-width="150" label="ФИО" :filters="filterName" :filter-method="filter.filterNameMethod">
-        <template #default="scope">
-          {{ scope.row.human.getFullName() }}
-        </template>
-      </el-table-column>
-      <el-table-column width="150" label="Пол">
-        <template #default="scope">
-          {{ scope.row.human.getGender() }}
-        </template>
+          </template>
+        </el-table-column>
       </el-table-column>
 
-      <el-table-column prop="human.addressRegistration" label="Адрес регистрации" min-width="150" />
-      <el-table-column prop="human.contact.phone" label="Телефон" min-width="150" />
-      <el-table-column prop="human.contact.email" label="Эл.почта" min-width="150" />
-      <el-table-column min-width="150" label="Привязанные дети">
-        <template #default="scope">
-          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-            <el-tooltip
-              class="item"
-              effect="dark"
-              :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
-              placement="top-end"
-            >
-              <el-check-tag @click="this.$router.push(`/patients/${rep.patient.id}`)">{{ children(rep) }}</el-check-tag>
-            </el-tooltip>
-          </div>
-        </template>
+      <el-table-column>
+        <el-table-column prop="human.contact.phone" label="ТЕЛЕФОН" width="150" align="center" />
       </el-table-column>
 
-      <el-table-column fixed="right" label="" width="140">
+      <el-table-column>
+        <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
+      </el-table-column>
+
+      <el-table-column>
+        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-for="document in scope.row.human.documents" :key="document">
+              <el-tag size="small">
+                <i class="el-icon-document" style="margin-right: 3px"></i>
+                <span>{{ document.documentType.name }}</span>
+              </el-tag>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click="edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-          <el-button @click="remove(scope.row.id)" type="text" size="small">Удалить</el-button>
+          <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
         </template>
       </el-table-column>
     </el-table>
@@ -62,6 +91,7 @@ import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
 import Filter from '@/classes/filters/Filter';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IFilter from '@/interfaces/filters/IFilter';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -69,8 +99,10 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import ListHead from '../ListHead.vue';
 
 @Options({
+  name: 'RepresentativesList',
   components: {
     ListHead,
+    TableButtonGroup,
   },
   computed: {
     ...mapState('representatives', ['representatives']),
@@ -92,6 +124,8 @@ export default class RepresentativesList extends Vue {
 
   filterName: IFilter[] = [];
   filterDate: IFilter[] = [];
+  searchFullName = '';
+  searchAddress = '';
   filter = new Filter();
   title = 'Представители';
 
@@ -119,20 +153,39 @@ export default class RepresentativesList extends Vue {
     this.$store.dispatch('representatives/delete', id);
   }
 
-  filterTable = (representatives: IRepresentative[]) => {
-    const search = this.search.toLowerCase();
-    return representatives.filter((representative: IRepresentative) => {
-      const name = representative.human.getFullName().toLowerCase();
-      const date = representative.human.dateBirth;
-      return !this.search || name.includes(search) || date.includes(search);
-    });
-  };
-
   children = (representative: IRepresetnationType) => {
     if (representative.patient) {
       return representative.patient.human.isMale ? representative.representativeType?.childMaleType : representative.representativeType?.childWomanType;
     }
     return '';
   };
+
+  filterTable = (representatives: IRepresentative[]) => {
+    let filteredRepresentatives = representatives;
+
+    const search = this.search.toLowerCase();
+    const searchFullName = this.searchFullName.toLowerCase();
+    const searchAddress = this.searchAddress.toLowerCase();
+
+    filteredRepresentatives = filteredRepresentatives.filter((patient: IRepresentative) => {
+      const address = patient.human.addressRegistration.toLowerCase();
+      return !this.searchAddress || address.includes(searchAddress);
+    });
+
+    filteredRepresentatives = filteredRepresentatives.filter((patient: IRepresentative) => {
+      const name = patient.human.getFullName().toLowerCase();
+      return !this.searchFullName || name.includes(searchFullName);
+    });
+
+    filteredRepresentatives = filteredRepresentatives.filter((patient: IRepresentative) => {
+      const name = patient.human.getFullName().toLowerCase();
+      const date = patient.human.dateBirth;
+      return !this.search || name.includes(search) || date.includes(search);
+    });
+
+    return filteredRepresentatives;
+  };
+
+  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 }
 </script>

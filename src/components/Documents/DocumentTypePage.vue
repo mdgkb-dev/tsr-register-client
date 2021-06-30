@@ -1,45 +1,64 @@
 <template>
-  <h2>{{ title }}</h2>
-  <el-form ref="form" :model="documentType" @submit.prevent="submitForm" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
-    <el-form-item label="Название документа" prop="name">
-      <el-input v-model="documentType.name"></el-input>
-    </el-form-item>
+  <div v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" />
+    <el-row>
+      <div class="table-background" style="width: 100%; margin-bottom: 20px">
+        <el-form ref="form" :model="documentType" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
+          <el-form-item label="Название документа" prop="name">
+            <el-input v-model="documentType.name"></el-input>
+          </el-form-item>
+          <el-button @click="add" style="margin-bottom: 10px">Добавить поле</el-button>
 
-    <el-form-item v-for="(field, i) in documentType.documentTypeFields" :key="i" v-model="documentType.documentTypeFields">
-      <el-form-item label="Название поля">
-        <el-input v-model="documentType.documentTypeFields[i].name"></el-input>
-      </el-form-item>
+          <el-table :data="documentType.documentTypeFields" style="width: 100%" class="table-shadow">
+            <el-table-column type="index" width="60" align="center" />
 
-      <el-select placeholder="Выберите тип поля" v-model="documentType.documentTypeFields[i].type">
-        <el-option v-for="option in options" :key="option.value" :label="option.label" :value="option.value"> </el-option>
-      </el-select>
+            <el-table-column label="Название поля" min-width="250">
+              <template #default="scope">
+                <el-input v-model="scope.row.name"></el-input>
+              </template>
+            </el-table-column>
 
-      <el-form-item label="Порядковый номер поля" label-width="12vw">
-        <el-input-number v-model="documentType.documentTypeFields[i].order"></el-input-number>
-      </el-form-item>
+            <el-table-column label="Тип поля" min-width="250">
+              <template #default="scope">
+                <el-select placeholder="Выберите тип поля" v-model="scope.row.type">
+                  <el-option v-for="option in options" :key="option.value" :label="option.label" :value="option.value"> </el-option>
+                </el-select>
+              </template>
+            </el-table-column>
 
-      ><el-button @click.prevent="remove(i)">Удалить поле</el-button>
-    </el-form-item>
+            <el-table-column label="Порядковый номер поля" min-width="250">
+              <template #default="scope">
+                <el-input-number v-model="scope.row.order"></el-input-number>
+              </template>
+            </el-table-column>
 
-    <el-form-item>
-      <el-button @click="add">Добавить поле</el-button>
-    </el-form-item>
-
-    <el-form-item>
-      <el-button type="primary" native-type="submit">Сохранить</el-button>
-      <el-button @click="cancel">Отмена</el-button>
-    </el-form-item>
-  </el-form>
+            <el-table-column fixed="right" width="200">
+              <template #default="scope">
+                <el-button @click.prevent="remove(scope.row)" round>Удалить поле</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form>
+      </div>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
+import PageHead from '@/components/PageHead.vue';
+import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
+  name: 'DocumentTypePage',
+  components: {
+    PageHead,
+  },
   computed: {
     ...mapGetters('documentTypes', ['documentType']),
   },
@@ -50,7 +69,7 @@ import DocumentTypeField from '@/classes/documents/DocumentTypeField';
     }),
   },
 })
-export default class DocumentTypePage extends Vue {
+export default class DocumentTypePage extends mixins(BreadCrumbsLinks) {
   // Types.
   $refs!: {
     form: any;
@@ -92,6 +111,8 @@ export default class DocumentTypePage extends Vue {
       await this.documentTypesGet(String(this.$route.params.documentTypeId));
       this.documentType = this.$store.getters['documentTypes/documentType'];
     }
+    this.pushToLinks(['/document-types'], ['Регистры пациентов']);
+
     this.mount = true;
   }
 
@@ -139,12 +160,11 @@ export default class DocumentTypePage extends Vue {
     this.$router.push('/document-types');
   }
 
-  remove(fieldIndex: number): void {
-    if (fieldIndex < 0) {
-      return;
+  remove(item: IDocumentTypeField): void {
+    const index = this.documentType.documentTypeFields.indexOf(item);
+    if (index !== -1) {
+      this.documentType.documentTypeFields.splice(index, 1);
     }
-
-    this.documentType.documentTypeFields.splice(fieldIndex, 1);
   }
 
   add(): void {

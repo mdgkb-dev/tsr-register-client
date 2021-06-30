@@ -1,27 +1,20 @@
 <template>
   <ListHead :title="title" @create="create" />
   <div class="table-background">
-    <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="documentTypes" class="table-shadow" header-row-class-name="header-style">
-      <el-table-column type="expand">
-        <template #default="props">
-          <el-card class="box-card">
-            <template #header>
-              <div class="card-header">
-                <span>Поля документа</span>
-              </div>
-            </template>
-            <div v-for="item in props.row.documentTypeFields" :key="item.id" class="text item">
-              {{ item.name }}
-            </div>
-          </el-card>
-        </template>
-      </el-table-column>
-      <el-table-column prop="№" label="№" width="150" />
-      <el-table-column prop="name" label="Название документа" width="150" />
-      <el-table-column label="Действия" width="120">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="documentTypes"
+      class="table-shadow"
+      header-row-class-name="header-style"
+      row-class-name="no-hover"
+    >
+      <el-table-column type="index" width="60" align="center" />
+      <el-table-column prop="name" label="Название документа" sortable="" />
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click="this.edit(scope.row.id)" type="text" size="small">Редактировать</el-button>
-          <el-button @click="this.delete(scope.row.id)" type="text" size="small">Удалить</el-button>
+          <el-space direction="vertical" class="icons">
+            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+          </el-space>
         </template>
       </el-table-column>
     </el-table>
@@ -33,11 +26,14 @@ import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
 import ListHead from '@/components/ListHead.vue';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 
 @Options({
+  name: 'DocumentTypeList',
   components: {
     ListHead,
+    TableButtonGroup,
   },
   computed: {
     ...mapState('documentTypes', ['documentTypes']),
@@ -66,7 +62,7 @@ export default class DocumentTypeList extends Vue {
     this.$router.push('/document-types/new');
   }
 
-  async delete(id: number): Promise<void> {
+  async remove(id: number): Promise<void> {
     await this.$store.dispatch('documentTypes/delete', id);
   }
 }
