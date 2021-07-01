@@ -42,9 +42,6 @@ export default class PageHead extends Vue {
     width: 100%;
     justify-content: space-between;
     margin: 20px 8px;
-    // position: fixed;
-    // top: 0;
-    // z-index: 1;
   }
 }
 </style>
