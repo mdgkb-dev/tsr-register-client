@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount" style="height: 100%">
-    <ListHead :title="title" :hideButton="true" />
+    <PageHead :title="title" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
@@ -13,11 +13,11 @@
       >
         <el-table-column type="index" width="60" align="center" />
 
-        <el-table-column min-width="150" align="center">
+        <el-table-column>
           <template #header>
             <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
           </template>
-          <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="human.surname" align="left" resizable min-width="160">
+          <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="human.surname" align="left" resizable min-width="170">
             <template #default="scope">
               {{ scope.row.human.getFullName() }}
             </template>
@@ -92,13 +92,13 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
   name: 'PatientsList',
   components: {
-    ListHead,
+    PageHead,
   },
   computed: {
     ...mapState('patients', ['patients']),

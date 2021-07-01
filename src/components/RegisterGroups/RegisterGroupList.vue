@@ -1,5 +1,5 @@
 <template>
-  <ListHead :title="title" @create="create" />
+  <PageHead :title="title" @create="create" :showAddButton="true" />
   <div class="table-background">
     <el-table
       v-if="mount"
@@ -26,14 +26,14 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 
 @Options({
   name: 'RegisterGroupList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

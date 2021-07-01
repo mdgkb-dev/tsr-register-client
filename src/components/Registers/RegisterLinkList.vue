@@ -1,9 +1,8 @@
 <template>
-  <div class="wrapper">
-    <ListHead :title="title" :hideButton="true" />
+  <div class="wrapper" v-if="mount" style="height: 100%">
+    <PageHead :title="title" />
     <div class="table-background">
       <el-table
-        v-if="mount"
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="registers"
         @row-click="link"
@@ -21,13 +20,13 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 
 @Options({
   name: 'RegisterLinkList',
   components: {
-    ListHead,
+    PageHead,
   },
   computed: {
     ...mapState('registers', ['registers']),
@@ -46,6 +45,7 @@ export default class RegisterLinkList extends Vue {
 
   async mounted(): Promise<void> {
     await this.getAll();
+    console.log(this.registers);
     this.mount = true;
   }
 
@@ -57,8 +57,6 @@ export default class RegisterLinkList extends Vue {
 
 <style lang="scss" scoped>
 .wrapper:deep {
-  height: 100%;
-
   .el-table__row {
     cursor: pointer;
   }

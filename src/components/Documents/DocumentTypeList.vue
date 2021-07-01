@@ -1,5 +1,5 @@
 <template>
-  <ListHead :title="title" @create="create" />
+  <PageHead :title="title" @create="create" :showAddButton="true" />
   <div class="table-background">
     <el-table
       :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -25,14 +25,14 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 
 @Options({
   name: 'DocumentTypeList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

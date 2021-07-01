@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount" style="height: 100%">
-    <ListHead :title="'Список пациентов'" @create="create" />
+    <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
@@ -158,14 +158,14 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 
 @Options({
   name: 'PatientsList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

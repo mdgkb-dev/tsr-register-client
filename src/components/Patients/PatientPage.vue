@@ -1,11 +1,11 @@
 <template>
-  <div class="patient-page-container">
-    <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" />
-    <el-row v-if="mount"><PatientPageInfo :patient="patient" /></el-row>
+  <div class="patient-page-container" v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <el-row><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <el-collapse>
         <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="25%" label-position="left">
-          <div v-if="mount">
+          <div>
             <el-collapse-item>
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
@@ -159,6 +159,7 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
   patient = new Patient();
   representativeOptions: IOption[] = [];
   representativeTypesOptions: IOption[] = [];
+  title = '';
 
   rules = {
     human: HumanRules,
@@ -170,10 +171,12 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
 
     if (!this.$route.params.patientId) {
       this.isEditMode = false;
+      this.title = 'Создать пациента';
     } else {
       this.isEditMode = true;
       await this.patientGet(`${this.$route.params.patientId}`);
       this.patient = this.$store.getters['patients/patient'];
+      this.title = this.patient.human.getFullName();
     }
 
     await this.insuranceCompaniesGetAll();

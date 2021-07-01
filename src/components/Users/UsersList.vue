@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount" style="height: 100%">
-    <ListHead :title="title" @create="create" />
+    <PageHead :title="title" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="users" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
         <el-table-column type="index" width="60" align="center" />
@@ -22,7 +22,7 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 
 import IUser from '../../interfaces/users/IUser';
@@ -30,7 +30,7 @@ import IUser from '../../interfaces/users/IUser';
 @Options({
   name: 'UsersList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

@@ -1,24 +1,19 @@
 <template>
-  <ListHead :title="title" @create="create" />
-  <div class="table-background">
-    <el-table
-      v-if="mount"
-      :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="registers"
-      class="table-shadow"
-      header-row-class-name="header-style"
-      row-class-name="no-hover"
-    >
-      <el-table-column type="index" width="60" align="center" />
-      <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
-      <el-table-column width="40" fixed="right" align="center">
-        <template #default="scope">
-          <el-space direction="vertical" class="icons">
-            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
-          </el-space>
-        </template>
-      </el-table-column>
-    </el-table>
+  <div v-if="mount" style="height: 100%">
+    <PageHead :title="title" @create="create" :showAddButton="true" />
+    <div class="table-background">
+      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="registers" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
+        <el-table-column type="index" width="60" align="center" />
+        <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
+        <el-table-column width="40" fixed="right" align="center">
+          <template #default="scope">
+            <el-space direction="vertical" class="icons">
+              <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+            </el-space>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -26,14 +21,14 @@
 import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 
 @Options({
   name: 'RegisterList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

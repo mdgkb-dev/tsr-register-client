@@ -4,9 +4,9 @@ import { Options, Vue } from 'vue-class-component';
 import Link from '../classes/shared/Link';
 
 @Options({
-  name: 'ConfirmLeavePage',
+  name: 'BreadCrumbsLinks',
 })
-export default class ConfirmLeavePage extends Vue {
+export default class BreadCrumbsLinks extends Vue {
   links: Link[] = [];
 
   pushToLinks(links: string[], text: string[]) {

@@ -1,19 +1,21 @@
 <template>
-  <PageHead :titleParent="'Группы для регистров'" :title="title" :link="'/register-groups'" @submitForm="submitForm" />
-  <el-row>
-    <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <el-form v-if="mount" ref="form" label-width="150px" label-position="left" style="max-width: 800px">
-        <el-form-item label="Название группы">
-          <el-input v-model="registerGroup.name"></el-input>
-        </el-form-item>
-        <RegisterPropertyForm :inRegisterPropertyToRegisterGroup="registerGroup.registerPropertyToRegisterGroup" :inRegisterPropertyOptions="registerProperties" />
-      </el-form>
-    </div>
-  </el-row>
+  <div v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <el-row>
+      <div class="table-background" style="width: 100%; margin-bottom: 20px">
+        <el-form ref="form" label-width="150px" label-position="left" style="max-width: 800px">
+          <el-form-item label="Название группы">
+            <el-input v-model="registerGroup.name"></el-input>
+          </el-form-item>
+          <RegisterPropertyForm :inRegisterPropertyToRegisterGroup="registerGroup.registerPropertyToRegisterGroup" :inRegisterPropertyOptions="registerProperties" />
+        </el-form>
+      </div>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
@@ -21,6 +23,7 @@ import PageHead from '@/components/PageHead.vue';
 import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
   name: 'RegisterGroupPage',
@@ -39,7 +42,7 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
     }),
   },
 })
-export default class RegisterGroupPage extends Vue {
+export default class RegisterGroupPage extends mixins(BreadCrumbsLinks) {
   // Types.
   isEditMode!: boolean;
   $message!: any;
@@ -67,6 +70,7 @@ export default class RegisterGroupPage extends Vue {
     await this.registerPropertiesGetAll();
     this.registerProperties = this.$store.getters['registerProperties/registerProperties'];
 
+    this.pushToLinks(['/register-groups'], ['Группы для регистров']);
     this.mount = true;
   }
 

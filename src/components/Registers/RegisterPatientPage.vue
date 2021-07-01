@@ -1,10 +1,10 @@
 <template>
-  <div class="patient-page-container">
-    <PageHead v-if="mount" :title="patient.human.getFullName()" :links="links" titles="" @submitForm="submitForm" />
+  <div class="patient-page-container" v-if="mount">
+    <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <el-collapse>
         <el-form ref="form" :model="patient">
-          <div v-if="mount">
+          <div>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
               <HumanForm :human="patient.human" />

@@ -1,5 +1,5 @@
 <template>
-  <ListHead :title="title" :hideButton="true" />
+  <PageHead :title="title" />
   <el-row>
     <div class="table-background" style="width: 100%; margin-bottom: 20px">
       <MkbTree></MkbTree>
@@ -11,14 +11,14 @@
 import { defineAsyncComponent } from 'vue';
 import { Options, Vue } from 'vue-class-component';
 
-import ListHead from '@/components/ListHead.vue';
+import PageHead from '@/components/PageHead.vue';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 
 @Options({
   name: 'MkbList',
   components: {
-    ListHead,
+    PageHead,
     MkbTree,
   },
 })

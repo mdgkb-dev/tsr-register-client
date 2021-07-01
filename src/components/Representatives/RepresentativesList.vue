@@ -1,5 +1,5 @@
 <template>
-  <ListHead :title="title" @create="create" />
+  <PageHead :title="title" @create="create" :showAddButton="true" />
   <div class="table-background">
     <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
     <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
@@ -93,17 +93,16 @@ import { Options, Vue } from 'vue-class-component';
 import { mapActions, mapState } from 'vuex';
 
 import Filter from '@/classes/filters/Filter';
+import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IFilter from '@/interfaces/filters/IFilter';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 
-import ListHead from '../ListHead.vue';
-
 @Options({
   name: 'RepresentativesList',
   components: {
-    ListHead,
+    PageHead,
     TableButtonGroup,
   },
   computed: {

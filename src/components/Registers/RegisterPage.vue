@@ -1,8 +1,8 @@
 <template>
-  <div class="wrapper">
-    <PageHead :titleParent="'Регистры пациентов'" :title="title" :link="'/registers'" @submitForm="submitForm" />
+  <div class="wrapper" v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
-      <el-form v-if="mount" ref="form" label-width="20%" label-position="left" style="width: 100%">
+      <el-form ref="form" label-width="20%" label-position="left" style="width: 100%">
         <div class="table-background" style="margin-bottom: 20px; height: unset">
           <el-form-item label="Название регистра">
             <el-input v-model="register.name"></el-input>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import Register from '@/classes/registers/Register';
@@ -33,6 +33,7 @@ import PageHead from '@/components/PageHead.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 
 @Options({
   name: 'RegisterPage',
@@ -52,7 +53,7 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
     }),
   },
 })
-export default class RegisterPage extends Vue {
+export default class RegisterPage extends mixins(BreadCrumbsLinks) {
   // Types.
   isEditMode!: boolean;
   $message!: any;
@@ -80,6 +81,7 @@ export default class RegisterPage extends Vue {
     await this.registerGroupsGetAll();
     this.registerGroups = this.$store.getters['registerGroups/registerGroups'];
 
+    this.pushToLinks(['/registers'], ['Регистры пациентов']);
     this.mount = true;
   }
 

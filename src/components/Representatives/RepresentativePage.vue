@@ -1,13 +1,13 @@
 <template>
-  <div class="representative-page-container">
-    <PageHead :title="representative.human.getFullName()" :links="links" @submitForm="submitForm" />
-    <el-row v-if="mount">
+  <div class="representative-page-container" v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <el-row>
       <RepresentativePageInfo :representative="representative" />
     </el-row>
     <el-row>
       <el-collapse>
         <el-form ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
-          <div v-if="mount">
+          <div>
             <el-collapse-item>
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
@@ -94,6 +94,7 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
   representative = new Representative();
   patientsOptions = [{}];
   representativeTypesOptions = [{}];
+  title = '';
 
   rules = {
     human: HumanRules,
@@ -105,10 +106,12 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 
     if (!this.$route.params.representativeId) {
       this.isEditMode = false;
+      this.title = 'Создать представителя';
     } else {
       this.isEditMode = true;
       await this.representativeGet(`${this.$route.params.representativeId}`);
       this.representative = this.$store.getters['representatives/representative'];
+      this.title = this.representative.human.getFullName();
     }
 
     await this.patientsGetAll();

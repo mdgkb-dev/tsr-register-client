@@ -1,29 +1,31 @@
 <template>
-  <PageHead :titleParent="'Типы представителей'" :title="title" :link="'/representative-types'" @submitForm="submitForm" />
-  <el-row>
-    <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <el-form ref="form" :model="representativeType" :rules="rules" label-width="30%" label-position="left" style="max-width: 800px">
-        <el-form-item label="Название типа" prop="name">
-          <el-input v-model="representativeType.name"></el-input>
-        </el-form-item>
+  <div v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <el-row>
+      <div class="table-background" style="width: 100%; margin-bottom: 20px">
+        <el-form ref="form" :model="representativeType" :rules="rules" label-width="30%" label-position="left" style="max-width: 800px">
+          <el-form-item label="Название типа" prop="name">
+            <el-input v-model="representativeType.name"></el-input>
+          </el-form-item>
 
-        <el-form-item label="Подопечный мужского пола" prop="name">
-          <el-input v-model="representativeType.childMaleType"></el-input>
-        </el-form-item>
+          <el-form-item label="Подопечный мужского пола" prop="name">
+            <el-input v-model="representativeType.childMaleType"></el-input>
+          </el-form-item>
 
-        <el-form-item label="Подопечный женского пола" prop="name">
-          <el-input v-model="representativeType.childWomanType"></el-input>
-        </el-form-item>
+          <el-form-item label="Подопечный женского пола" prop="name">
+            <el-input v-model="representativeType.childWomanType"></el-input>
+          </el-form-item>
 
-        <el-form-item label="Пол" prop="isMale">
-          <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
-            <el-option label="Мужчина" :value="true"></el-option>
-            <el-option label="Женщина" :value="false"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-    </div>
-  </el-row>
+          <el-form-item label="Пол" prop="isMale">
+            <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
+              <el-option label="Мужчина" :value="true"></el-option>
+              <el-option label="Женщина" :value="false"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -34,6 +36,7 @@ import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
 import PageHead from '@/components/PageHead.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
@@ -52,11 +55,12 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
     }),
   },
 })
-export default class RepresentativeTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
+export default class RepresentativeTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   representativeTypeGet!: (representativeTypeId: string) => Promise<void>;
 
   representativeType: IRepresentativeType = new RepresentativeType();
   title = '';
+  mount = false;
 
   rules = RepresentativeTypeRules;
 
@@ -70,6 +74,8 @@ export default class RepresentativeTypePage extends mixins(ValidateMixin, Confir
       await this.representativeTypeGet(`${this.$route.params.representativeTypeId}`);
       this.representativeType = this.$store.getters['representativeTypes/representativeType'];
     }
+    this.pushToLinks(['/representative-types'], ['Типы представителей']);
+    this.mount = true;
   }
 
   submitForm(): void {

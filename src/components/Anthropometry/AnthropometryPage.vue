@@ -1,17 +1,19 @@
 <template>
-  <PageHead :titleParent="'Антропометрия'" :title="title" :link="'/anthropometry'" @submitForm="submitForm" />
-  <el-row>
-    <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <el-form ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
-        <el-form-item label="Название параметра" prop="name">
-          <el-input v-model="anthropometry.name"></el-input>
-        </el-form-item>
-        <el-form-item label="Единицы измерения" prop="measure">
-          <el-input v-model="anthropometry.measure"></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-  </el-row>
+  <div v-if="mount">
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <el-row>
+      <div class="table-background" style="width: 100%; margin-bottom: 20px">
+        <el-form ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
+          <el-form-item label="Название параметра" prop="name">
+            <el-input v-model="anthropometry.name"></el-input>
+          </el-form-item>
+          <el-form-item label="Единицы измерения" prop="measure">
+            <el-input v-model="anthropometry.measure"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -21,6 +23,7 @@ import { mapActions, mapGetters } from 'vuex';
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
 import PageHead from '@/components/PageHead.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
@@ -39,11 +42,12 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
     }),
   },
 })
-export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin) {
+export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   anthropometryGet!: (anthropometryId: string) => Promise<void>;
 
   anthropometry: IAnthropometry = new Anthropometry();
   title = '';
+  mount = false;
 
   rules = {
     name: [
@@ -72,6 +76,8 @@ export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeav
       await this.anthropometryGet(`${this.$route.params.anthropometryId}`);
       this.anthropometry = this.$store.getters['anthropometry/anthropometry'];
     }
+    this.pushToLinks(['/anthropometry'], ['Антропометрия']);
+    this.mount = true;
   }
 
   submitForm(): void {

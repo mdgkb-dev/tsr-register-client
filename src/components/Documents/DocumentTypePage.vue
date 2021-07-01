@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" />
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form ref="form" :model="documentType" label-width="10vw" label-position="right" v-if="mount" :rules="rules">
