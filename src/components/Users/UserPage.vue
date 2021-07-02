@@ -25,13 +25,14 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { mixins, Options } from 'vue-class-component';
 import { mapActions, mapGetters } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import User from '@/classes/user/User';
 import HumanForm from '@/components/HumanForm.vue';
 import PageInfo from '@/components/Users/PageInfo.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 
 @Options({
   name: 'UserPage',
@@ -48,18 +49,12 @@ import PageInfo from '@/components/Users/PageInfo.vue';
     }),
   },
 })
-export default class UserPage extends Vue {
+export default class UserPage extends mixins(ConfirmLeavePage) {
   // Types.
-  $refs!: {
-    form: any;
-    message: any;
-  };
-
+  // Local state.
   rules = {
     human: HumanRules,
   };
-
-  $message!: any;
 
   isEditMode!: boolean;
   userGet!: (userId: string) => Promise<void>;
@@ -67,7 +62,8 @@ export default class UserPage extends Vue {
   title = '';
   mount = false;
 
-  async created(): Promise<void> {
+  // Lifecycle methods.
+  async mounted(): Promise<void> {
     if (!this.$route.params.userId) {
       this.isEditMode = false;
       this.title = 'Создать юзера';
@@ -78,9 +74,18 @@ export default class UserPage extends Vue {
       this.user = this.$store.getters['users/user'];
     }
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('user', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   async submitForm(): Promise<void> {
+    this.saveButtonClick = true;
     try {
       if (this.isEditMode) {
         await this.$store.dispatch('users/edit', this.user);

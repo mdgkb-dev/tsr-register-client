@@ -40,8 +40,10 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
   },
 })
 export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
+  // Types.
   insuranceCompanyGet!: (insuranceCompanyId: string) => Promise<void>;
 
+  // Local state.
   insuranceCompany: IInsuranceCompany = new InsuranceCompany();
   title = '';
   mount = false;
@@ -56,7 +58,8 @@ export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmL
     ],
   };
 
-  async created(): Promise<void> {
+  // Lifecycle methods.
+  async mounted(): Promise<void> {
     if (!this.$route.params.insuranceCompanyId) {
       this.isEditMode = false;
       this.title = 'Создать компанию';
@@ -69,9 +72,18 @@ export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmL
 
     this.pushToLinks(['/insurance-companies'], ['Страховые компании']);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('insuranceCompany', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   submitForm(): void {
+    this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {

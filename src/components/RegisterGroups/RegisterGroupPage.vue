@@ -24,6 +24,7 @@ import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyFo
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 
 @Options({
   name: 'RegisterGroupPage',
@@ -42,10 +43,9 @@ import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
     }),
   },
 })
-export default class RegisterGroupPage extends mixins(BreadCrumbsLinks) {
+export default class RegisterGroupPage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
   // Types.
   isEditMode!: boolean;
-  $message!: any;
   registerProperties!: IRegisterProperty[];
 
   registerGroupGet!: (registerGroupId: string) => Promise<void>;
@@ -56,6 +56,7 @@ export default class RegisterGroupPage extends mixins(BreadCrumbsLinks) {
   title = '';
   mount = false;
 
+  // Lifecycle methods.
   async created(): Promise<void> {
     if (!this.$route.params.registerGroupId) {
       this.isEditMode = false;
@@ -72,9 +73,18 @@ export default class RegisterGroupPage extends mixins(BreadCrumbsLinks) {
 
     this.pushToLinks(['/register-groups'], ['Группы для регистров']);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('registerGroup', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   async submitForm(): Promise<void> {
+    this.saveButtonClick = true;
     try {
       if (this.isEditMode) {
         this.$store.dispatch('registerGroups/edit', this.registerGroup);

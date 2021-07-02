@@ -57,6 +57,7 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 
 @Options({
   name: 'RegisterPropertyPage',
@@ -74,24 +75,22 @@ import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
     }),
   },
 })
-export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks) {
-  $message!: {
-    error: any;
-  };
+export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
   // Types.
   isEditMode!: boolean;
+  valueTypes!: IValueType[];
 
   registerPropertyGet!: (registerId: string) => Promise<void>;
   getValueTypes!: () => Promise<void>;
 
   // Local state.
   registerProperty: IRegisterProperty = new RegisterProperty();
-  valueTypes!: IValueType[];
   title = '';
   mount = false;
   showSet = false;
   showRadio = false;
 
+  // Lifecycle methods.
   async created(): Promise<void> {
     if (!this.$route.params.registerPropertyId) {
       this.isEditMode = false;
@@ -108,8 +107,16 @@ export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks) {
 
     this.pushToLinks(['/register-properties'], ['Свойства для регистров']);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('registerProperty', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   changeRelation(valueTypeId: string): void {
     const valueType = this.valueTypes.find((i) => i.id === valueTypeId);
     if (valueType) {
@@ -141,6 +148,7 @@ export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks) {
     this.registerProperty.registerPropertyRadio.splice(i, 1);
   }
   async submitForm(): Promise<void> {
+    this.saveButtonClick = true;
     try {
       if (this.isEditMode) {
         this.$store.dispatch('registerProperties/edit', this.registerProperty);

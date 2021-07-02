@@ -79,6 +79,7 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
   },
 })
 export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
+  // Types.
   patients!: IPatient[];
   offset: number[] = [0];
   representativeTypes!: IRepresentativeType[];
@@ -102,8 +103,6 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 
   // Lifecycle methods.
   async mounted(): Promise<void> {
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-
     if (!this.$route.params.representativeId) {
       this.isEditMode = false;
       this.title = 'Создать представителя';
@@ -139,10 +138,18 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
     this.pushToLinks(['/representatives'], ['Список представителей']);
 
     this.mount = true;
-    this.initialState = JSON.stringify(this);
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('representative', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   submitForm(): void {
+    this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
     for (const item of this.representative.representativeToPatient) {

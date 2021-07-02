@@ -43,8 +43,10 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
   },
 })
 export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
+  // Types.
   anthropometryGet!: (anthropometryId: string) => Promise<void>;
 
+  // Local state.
   anthropometry: IAnthropometry = new Anthropometry();
   title = '';
   mount = false;
@@ -66,7 +68,8 @@ export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeav
     ],
   };
 
-  async created(): Promise<void> {
+  // Lifecycle methods.
+  async mounted(): Promise<void> {
     if (!this.$route.params.anthropometryId) {
       this.isEditMode = false;
       this.title = 'Создать параметр';
@@ -78,9 +81,18 @@ export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeav
     }
     this.pushToLinks(['/anthropometry'], ['Антропометрия']);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('anthropometry', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   submitForm(): void {
+    this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {

@@ -53,6 +53,7 @@ import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import PageHead from '@/components/PageHead.vue';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 
 @Options({
   name: 'DocumentTypePage',
@@ -69,13 +70,12 @@ import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
     }),
   },
 })
-export default class DocumentTypePage extends mixins(BreadCrumbsLinks) {
+export default class DocumentTypePage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
   // Types.
-  $refs!: {
+  declare $refs: {
     form: any;
     message: any;
   };
-  $message!: any;
   isEditMode!: boolean;
   documentTypesGet!: (id: string) => Promise<void>;
 
@@ -114,10 +114,18 @@ export default class DocumentTypePage extends mixins(BreadCrumbsLinks) {
     this.pushToLinks(['/document-types'], ['Регистры пациентов']);
 
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('documentType', this.formUpdated, { deep: true });
+  }
+
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
   async submitForm(): Promise<void> {
+    this.saveButtonClick = true;
     let validationResult = true;
 
     this.$refs.form.validate((valid: boolean, errorFields: any) => {

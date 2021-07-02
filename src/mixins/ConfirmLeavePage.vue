@@ -5,42 +5,48 @@ import { Options, Vue } from 'vue-class-component';
   name: 'ConfirmLeavePage',
 })
 export default class ConfirmLeavePage extends Vue {
+  $confirm: any;
+  $message: any;
+
   initialState = '';
   confirmStay = false;
+  saveButtonClick = false;
 
-  compareStates() {
-    const initial = this.initialState;
-    this.initialState = '';
-    if (initial !== JSON.stringify(this)) {
-      this.confirmStay = true;
-    }
+  formUpdated() {
+    this.confirmStay = true;
   }
 
-  confirmLeave() {
-    if (window.confirm('Вы уверены, что хотите покинуть страницу? У вас есть несохранённые изменения!')) {
-      this.confirmStay = false;
-      return true;
-    }
-    return false;
-  }
-
-  async beforeWindowUnload(e: any) {
-    this.compareStates();
-    if (this.confirmStay && !this.confirmLeave()) {
+  beforeWindowUnload(e: any) {
+    if (this.confirmStay) {
       e.preventDefault();
       e.returnValue = '';
     }
   }
 
-  async beforeUnmount(): Promise<void> {
+  beforeUnmount() {
     window.removeEventListener('beforeunload', this.beforeWindowUnload);
   }
 
-  // Methods.
-  async beforeRouteLeave(to: any, from: any, next: any) {
-    await this.compareStates();
-    if (this.confirmStay && !this.confirmLeave()) {
-      next(false);
+  showConfirmModal(submit: any, next: any) {
+    if (this.confirmStay && !this.saveButtonClick) {
+      this.$confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: 'Сохранить',
+        cancelButtonText: 'Не сохранять',
+      })
+        .then(() => {
+          // Вызывается при сохранении
+          submit();
+        })
+        .catch((action: any) => {
+          if (action === 'cancel') {
+            this.$message({
+              type: 'warning',
+              message: 'Изменения не были сохранены',
+            });
+            next();
+          }
+        });
     } else {
       next();
     }

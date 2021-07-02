@@ -75,6 +75,7 @@ import PageHead from '@/components/PageHead.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 
 @Options({
@@ -95,15 +96,18 @@ import FormMixin from '@/mixins/FormMixin.vue';
     }),
   },
 })
-export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLinks) {
+export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLinks, ConfirmLeavePage) {
+  // Types.
+  registerGet!: (registerId: string) => Promise<void>;
+  patientGet!: (patientId: string) => Promise<void>;
+
+  // Local state.
   mount = false;
   register: IRegister = new Register();
   patient = new Patient();
   isEditMode = true;
 
-  registerGet!: (registerId: string) => Promise<void>;
-  patientGet!: (patientId: string) => Promise<void>;
-
+  // Lifecycle methods.
   async mounted(): Promise<void> {
     await this.registerGet(`${this.$route.params.registerId}`);
     this.register = this.$store.getters['registers/register'];
@@ -111,9 +115,19 @@ export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLi
     this.patient = this.$store.getters['patients/patient'];
     this.pushToLinks(['/register-link-list/', `/registers/patients/${this.$route.params.registerId}`], ['Регистры пациентов', this.register.name]);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('patient', this.formUpdated, { deep: true });
+    this.$watch('register', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   async submitForm() {
+    this.saveButtonClick = true;
     this.patient.registerToPatient = undefined;
     await this.$store.dispatch('patients/edit', this.patient);
     await this.$router.push(`/registers/patients/${this.$route.params.registerId}`);

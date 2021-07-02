@@ -135,9 +135,6 @@ const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Pat
 })
 export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   // Types.
-  declare $refs: {
-    form: any;
-  };
 
   anthropometries!: IAnthropometry[];
   disabilities!: IDisability[];
@@ -166,9 +163,7 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
   };
 
   // Lifecycle methods.
-  async created(): Promise<void> {
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-
+  async mounted(): Promise<void> {
     if (!this.$route.params.patientId) {
       this.isEditMode = false;
       this.title = 'Создать пациента';
@@ -231,14 +226,19 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
     this.pushToLinks(['/patients'], ['Список пациентов']);
     this.mount = true;
     this.diagnosisMount = true;
-    this.initialState = JSON.stringify(this);
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('patient', this.formUpdated, { deep: true });
+  }
+
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
   async submitForm(): Promise<void> {
-    if (!this.validate(this.$refs.form)) {
-      return;
-    }
+    this.saveButtonClick = true;
+    if (!this.validate(this.$refs.form)) return;
 
     for (const item of this.patient.representativeToPatient) {
       item.patient = undefined;

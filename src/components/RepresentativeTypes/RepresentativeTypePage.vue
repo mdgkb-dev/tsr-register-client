@@ -56,15 +56,18 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
   },
 })
 export default class RepresentativeTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
+  // Types.
   representativeTypeGet!: (representativeTypeId: string) => Promise<void>;
 
+  // Local state.
   representativeType: IRepresentativeType = new RepresentativeType();
   title = '';
   mount = false;
 
   rules = RepresentativeTypeRules;
 
-  async created(): Promise<void> {
+  // Lifecycle methods.
+  async mounted(): Promise<void> {
     if (!this.$route.params.representativeTypeId) {
       this.isEditMode = false;
       this.title = 'Создать тип';
@@ -76,9 +79,18 @@ export default class RepresentativeTypePage extends mixins(ValidateMixin, Confir
     }
     this.pushToLinks(['/representative-types'], ['Типы представителей']);
     this.mount = true;
+
+    window.addEventListener('beforeunload', this.beforeWindowUnload);
+    this.$watch('representativeType', this.formUpdated, { deep: true });
   }
 
+  beforeRouteLeave(to: any, from: any, next: any) {
+    this.showConfirmModal(this.submitForm, next);
+  }
+
+  // Methods.
   submitForm(): void {
+    this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
     if (this.isEditMode) {
