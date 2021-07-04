@@ -123,6 +123,7 @@ export default class Patient implements IPatient {
     if (property.id) {
       const item = this.findProperty(property.id);
       if (property.valueType?.isString() && item && item.valueString) return item.valueString;
+      if (property.valueType?.isText() && item && item.valueString) return item.valueString;
       if (property.valueType?.isNumber() && item && item.valueNumber) return item.valueNumber;
       if (property.valueType?.isDate() && item && item.valueDate) return item.valueDate;
       if (property.valueType?.isRadio() && item && item.registerPropertyRadioId) return item.registerPropertyRadioId;
@@ -142,7 +143,7 @@ export default class Patient implements IPatient {
       item = this.findProperty(property.id);
     }
     if (!item) return;
-    if (property.valueType?.isString()) item.valueString = value as string;
+    if (property.valueType?.isString() || property.valueType?.isText()) item.valueString = value as string;
     if (property.valueType?.isNumber()) item.valueNumber = value as number;
     if (property.valueType?.isDate()) item.valueDate = value as Date;
     if (property.valueType?.isRadio()) item.registerPropertyRadioId = value as string;
