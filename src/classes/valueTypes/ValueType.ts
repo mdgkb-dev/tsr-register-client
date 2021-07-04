@@ -34,4 +34,12 @@ export default class ValueType implements IValueType {
   isSet(): boolean {
     return this.name === 'set';
   }
+
+  isText(): boolean {
+    return this.name === 'text';
+  }
+
+  isBoolean(): boolean {
+    return this.name === 'boolean';
+  }
 }

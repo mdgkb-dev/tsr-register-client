@@ -23,6 +23,15 @@
                         @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
                       />
                     </el-form-item>
+                    <el-form-item v-if="prop.registerProperty.valueType.isText()" :label="prop.registerProperty.name">
+                      <el-input
+                        type="textarea"
+                        :rows="3"
+                        :label="prop.registerProperty.name"
+                        :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                        @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                      />
+                    </el-form-item>
                     <el-form-item v-if="prop.registerProperty.valueType.isNumber()" :label="prop.registerProperty.name">
                       <el-input-number
                         :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
