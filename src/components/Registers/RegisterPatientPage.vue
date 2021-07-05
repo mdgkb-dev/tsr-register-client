@@ -3,45 +3,45 @@
     <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <el-collapse>
-        <el-form :status-icon="true" ref="form" :model="patient">
+        <el-form label-position="top" :status-icon="true" ref="form" :model="patient">
           <div>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
-              <HumanForm :human="patient.human" />
+              <HumanForm :readonly="true" :human="patient.human" />
             </el-collapse-item>
             <div v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister">
               <el-collapse-item>
                 <template #title>
                   <h2 class="collapseHeader">{{ registerGroupToRegister.registerGroup.name }}</h2>
                 </template>
-                <div class="form-under-collapse">
-                  <el-form-item v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
-                    <el-form-item v-if="prop.registerProperty.valueType.isString()" :label="prop.registerProperty.name">
-                      <el-input
-                        :label="prop.registerProperty.name"
-                        :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
-                        @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
-                      />
-                    </el-form-item>
-                    <el-form-item v-if="prop.registerProperty.valueType.isText()" :label="prop.registerProperty.name">
-                      <el-input
-                        type="textarea"
-                        :rows="3"
-                        :label="prop.registerProperty.name"
-                        :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
-                        @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
-                      />
-                    </el-form-item>
-                    <el-form-item v-if="prop.registerProperty.valueType.isNumber()" :label="prop.registerProperty.name">
-                      <el-input-number
-                        :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
-                        @change="patient.setRegisterPropertyValue($event, prop.registerProperty)"
-                      />
-                    </el-form-item>
-                    <el-form-item v-if="prop.registerProperty.valueType.isDate()" :label="prop.registerProperty.name">
-                      <DataComponentComputed :property="prop.registerProperty" :patient="patient" />
-                    </el-form-item>
-                    <el-form-item v-if="prop.registerProperty.valueType.isSet()" :label="prop.registerProperty.name">
+                <span v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
+                  <el-form-item v-if="prop.registerProperty.valueType.isString()" :label="prop.registerProperty.name">
+                    <el-input
+                      :label="prop.registerProperty.name"
+                      :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.isText()" :label="prop.registerProperty.name">
+                    <el-input
+                      type="textarea"
+                      :rows="3"
+                      :label="prop.registerProperty.name"
+                      :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.isNumber()" :label="prop.registerProperty.name">
+                    <el-input-number
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
+                      @change="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                    />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.isDate()" :label="prop.registerProperty.name">
+                    <DataComponentComputed :property="prop.registerProperty" :patient="patient" />
+                  </el-form-item>
+                  <el-form-item v-if="prop.registerProperty.valueType.isSet()" :label="prop.registerProperty.name">
+                    <el-checkbox-group>
                       <el-checkbox
                         v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
                         :label="registerPropertySet.name"
@@ -51,19 +51,28 @@
                       >
                         {{ registerPropertySet.name }}</el-checkbox
                       >
-                    </el-form-item>
-                    <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
-                      <el-radio
-                        v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
-                        :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
-                        @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty)"
-                        :label="registerPropertyRadio.id"
-                        :key="registerPropertyRadio.id"
-                        >{{ registerPropertyRadio.name }}</el-radio
-                      >
-                    </el-form-item>
+                    </el-checkbox-group>
                   </el-form-item>
-                </div>
+                  <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
+                    <el-radio
+                      v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
+                      @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty)"
+                      :label="registerPropertyRadio.id"
+                      :key="registerPropertyRadio.id"
+                      >{{ registerPropertyRadio.name }}
+                    </el-radio>
+                    <el-input
+                      style="margin-top: 10px"
+                      v-if="prop.registerProperty.withOther"
+                      placeholder="Другое, указать"
+                      type="textarea"
+                      :rows="3"
+                      :model-value="patient.getOtherPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      @input="patient.setRegisterPropertyValueOther($event, prop.registerProperty)"
+                    />
+                  </el-form-item>
+                </span>
               </el-collapse-item>
             </div>
           </div>
@@ -145,7 +154,33 @@ export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLi
 </script>
 
 <style lang="scss" scoped>
+.el-collapse-item__header {
+  background-color: rgb(242, 242, 242) !important;
+  border-bottom: 1px solid rgb(200, 200, 200) !important;
+}
+
+.el-collapse-item__wrap {
+  top: 50px;
+  right: 20px;
+  left: 0;
+  z-index: 1;
+  padding: 10px;
+  background-color: rgb(242, 242, 242) !important;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.el-collapse-item__content {
+  user-select: none;
+}
 .patient-page-container:deep {
   @import '@/assets/elements/collapse.scss';
+}
+
+.collapseHeader {
+  padding-left: 10px;
+}
+.collapseStatus {
+  margin-left: 5%;
+  margin-top: 3px;
 }
 </style>

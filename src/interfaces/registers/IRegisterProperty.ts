@@ -9,4 +9,5 @@ export default interface IRegisterProperty {
   registerPropertySet: IRegisterPropertySet[];
   registerPropertyRadio: IRegisterPropertyRadio[];
   valueType?: IValueType;
+  withOther: boolean;
 }
