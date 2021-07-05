@@ -1,10 +1,10 @@
 <template>
-  <div v-if="mount" style="height: 100%">
+  <div v-if="mount" style="height: 100%; overflow: auto; padding-right: 50px">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
-    <el-pagination :page-size="20" :pager-count="11" layout="prev, pager, next" :total="1000"> </el-pagination>
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
+        v-loading.fullscreen="loading"
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="filterTable(patients)"
         class="table-shadow"
@@ -151,6 +151,8 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination style="margin-left: 25%; margin-top: 50px; margin-bottom: 50px" background layout="prev, pager, next" :total="240" @current-change="setPage">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -182,26 +184,36 @@ export default class PatientsList extends Vue {
   $message!: {
     error: any;
   };
-
-  getAll!: () => Promise<void>;
+  $loading: any;
+  getAll!: (pageNum: number) => Promise<void>;
   patients!: IPatient[];
-
+  loading = false;
   mount = false;
   search = '';
   searchFullName = '';
   searchAddress = '';
-
   title = 'Пациенты';
 
+  async setPage(pageNum: number) {
+    this.loading = true;
+    await this.getAll(pageNum - 1);
+    this.loading = false;
+  }
+
   async mounted(): Promise<void> {
+    const loading = this.$loading({
+      lock: true,
+      text: 'Загрузка',
+    });
     try {
-      await this.getAll();
+      await this.getAll(0);
     } catch (e) {
       this.$message.error(e.toString());
       return;
     }
 
     this.mount = true;
+    loading.close();
   }
 
   edit(id: string): void {

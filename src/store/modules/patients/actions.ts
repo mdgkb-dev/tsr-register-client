@@ -9,8 +9,8 @@ import { State } from './state';
 const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get());
+  getAll: async ({ commit }, pageNum: number): Promise<void> => {
+    commit('setAll', await httpClient.get({ query: `?offset=${pageNum}` }));
   },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get({ query: '?withDisabilities=true' }));
@@ -23,10 +23,16 @@ const actions: ActionTree<State, RootState> = {
     commit('create', await httpClient.post({ payload: patient, fileInfos: patient.human.fileInfos, isFormData: true }));
   },
   edit: async ({ commit }, patient: IPatient): Promise<void> => {
-    const fileInfos = patient.human.fileInfos.filter((info) => info.isDraft);
-    commit('update', await httpClient.put({
-      payload: patient, query: patient.id, isFormData: true, fileInfos,
-    }));
+    const fileInfos = patient.human.fileInfos.filter(info => info.isDraft);
+    commit(
+      'update',
+      await httpClient.put({
+        payload: patient,
+        query: patient.id,
+        isFormData: true,
+        fileInfos,
+      })
+    );
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete(id);
