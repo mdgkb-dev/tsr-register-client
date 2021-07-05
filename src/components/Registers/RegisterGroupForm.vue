@@ -9,6 +9,11 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column label="Порядковый номер группы" min-width="250">
+        <template #default="scope">
+          <el-input-number v-model="scope.row.order"></el-input-number>
+        </template>
+      </el-table-column>
       <el-table-column width="120">
         <template #default="scope">
           <el-button @click.prevent="remove(scope.row)" type="text" size="small" round>Удалить</el-button>
@@ -41,7 +46,7 @@ export default class RegisterGroupForm extends Vue {
     this.registerGroupToRegister.push(new RegisterGroupToRegister());
   }
 
-  remove(item: IRegisterGroup): void {
+  remove(item: IRegisterGroupToRegister): void {
     const index = this.registerGroupToRegister.indexOf(item);
     if (index !== -1) {
       this.registerGroupToRegister.splice(index, 1);

@@ -1,6 +1,7 @@
 <template>
   <div v-if="mount" style="height: 100%">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
+    <el-pagination :page-size="20" :pager-count="11" layout="prev, pager, next" :total="1000"> </el-pagination>
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table

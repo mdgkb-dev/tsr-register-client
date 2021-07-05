@@ -8,6 +8,7 @@ export default class RegisterPropertyToRegisterGroup implements IRegisterPropert
   id?: string;
   registerPropertyId?: string;
   registerGroupId?: string;
+  order = 0;
 
   registerProperty?: IRegisterProperty;
   registerGroup?: IRegisterGroup;
@@ -19,6 +20,7 @@ export default class RegisterPropertyToRegisterGroup implements IRegisterPropert
     this.id = item.id;
     this.registerPropertyId = item.registerPropertyId;
     this.registerGroupId = item.registerGroupId;
+    this.order = item.order;
     if (item.registerProperty) this.registerProperty = new RegisterProperty(item.registerProperty);
     if (item.registerGroup) this.registerGroup = new RegisterGroup(item.registerGroup);
   }

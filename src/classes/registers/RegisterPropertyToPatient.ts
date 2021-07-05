@@ -5,6 +5,7 @@ import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterProperty
 export default class RegisterPropertyToPatient implements IRegisterPropertyToPatient {
   id?: string;
   valueString?: string;
+  valueOther?: string;
   valueNumber?: number;
   valueDate?: Date;
   registerPropertyRadioId?: string;
@@ -18,6 +19,7 @@ export default class RegisterPropertyToPatient implements IRegisterPropertyToPat
     }
     this.id = item.id;
     this.valueString = item.valueString;
+    this.valueOther = item.valueOther;
     this.valueNumber = item.valueNumber;
     this.valueDate = item.valueDate;
     this.registerPropertyRadioId = item.registerPropertyRadioId;

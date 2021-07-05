@@ -9,6 +9,11 @@
         </el-select>
       </template>
     </el-table-column>
+    <el-table-column label="Порядковый номер свойства" min-width="250">
+      <template #default="scope">
+        <el-input-number v-model="scope.row.order"></el-input-number>
+      </template>
+    </el-table-column>
     <el-table-column fixed="right" width="200">
       <template #default="scope">
         <el-button @click.prevent="remove(scope.row)" round>Удалить свойство</el-button>

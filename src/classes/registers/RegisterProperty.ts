@@ -13,6 +13,7 @@ export default class RegisterProperty implements IRegisterProperty {
   registerPropertyRadio: IRegisterPropertyRadio[] = [];
   registerPropertySet: IRegisterPropertySet[] = [];
   valueType?: IValueType;
+  withOther = false;
 
   constructor(item?: IRegisterProperty) {
     if (!item) {
@@ -21,6 +22,7 @@ export default class RegisterProperty implements IRegisterProperty {
     this.id = item.id;
     this.name = item.name;
     this.valueTypeId = item.valueTypeId;
+    this.withOther = item.withOther;
     if (item.registerPropertySet) this.registerPropertySet = item.registerPropertySet.map((i: IRegisterPropertySet) => new RegisterPropertySet(i));
     if (item.registerPropertyRadio) this.registerPropertyRadio = item.registerPropertyRadio.map((i: IRegisterPropertyRadio) => new RegisterPropertyRadio(i));
     if (item.valueType) this.valueType = new ValueType(item.valueType);

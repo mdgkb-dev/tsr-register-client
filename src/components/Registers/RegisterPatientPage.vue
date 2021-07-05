@@ -51,6 +51,15 @@
                       >
                         {{ registerPropertySet.name }}</el-checkbox
                       >
+                      <el-form-item v-if="prop.registerProperty.withOther" :label="prop.registerProperty.name">
+                        <el-input
+                          type="textarea"
+                          :rows="3"
+                          label="Другое, указать:"
+                          :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                          @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
+                        />
+                      </el-form-item>
                     </el-form-item>
                     <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
                       <el-radio
