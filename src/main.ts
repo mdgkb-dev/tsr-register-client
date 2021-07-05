@@ -41,6 +41,7 @@ import {
   ElMessageBox,
   ElNotification,
   ElOption,
+  ElPagination,
   ElPopover,
   ElRadio,
   ElRow,
@@ -56,7 +57,6 @@ import {
   ElTooltip,
   ElTree,
   ElUpload,
-  ElPagination,
 } from 'element-plus';
 import locale from 'element-plus/lib/locale';
 import lang from 'element-plus/lib/locale/lang/ru';
@@ -126,10 +126,10 @@ app.config.globalProperties.$dateFormatRu = fillDateFormat;
 app.use(store);
 app.use(router);
 
-components.forEach(component => {
+components.forEach((component) => {
   app.component(component.name, component);
 });
-plugins.forEach(plugin => {
+plugins.forEach((plugin) => {
   app.use(plugin);
 });
 
