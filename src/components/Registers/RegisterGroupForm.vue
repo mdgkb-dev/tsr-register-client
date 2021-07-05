@@ -1,12 +1,21 @@
 <template>
   <div class="table-under-collapse">
     <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
-    <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow">
+    <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
+      <el-table-column type="index" width="60" align="center" />
+
       <el-table-column label="Наименование" min-width="250">
         <template #default="scope">
-          <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
-            <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
-          </el-select>
+          <el-form-item
+            label-width="0"
+            style="margin-bottom: 0"
+            :prop="'registerGroupToRegister.' + scope.$index + '.registerGroupId'"
+            :rules="[{ required: true, message: 'Необходимо выбрать группу', trigger: 'change' }]"
+          >
+            <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
+              <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+            </el-select>
+          </el-form-item>
         </template>
       </el-table-column>
       <el-table-column label="Порядковый номер группы" min-width="250">
@@ -16,7 +25,7 @@
       </el-table-column>
       <el-table-column width="120">
         <template #default="scope">
-          <el-button @click.prevent="remove(scope.row)" type="text" size="small" round>Удалить</el-button>
+          <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
         </template>
       </el-table-column>
     </el-table>
@@ -27,12 +36,16 @@
 import { Options, Vue } from 'vue-class-component';
 
 import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 @Options({
   name: 'RegisterGroupForm',
   props: ['inRegisterGroupToRegister', 'inRegisterGroupOptions'],
+  components: {
+    TableButtonGroup,
+  },
 })
 export default class RegisterGroupForm extends Vue {
   // Types.

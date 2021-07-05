@@ -3,7 +3,7 @@
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
+        <el-form :status-icon="true" ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
           <el-form-item label="Название параметра" prop="name">
             <el-input v-model="anthropometry.name"></el-input>
           </el-form-item>
@@ -18,9 +18,11 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
+import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 import PageHead from '@/components/PageHead.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
@@ -51,22 +53,7 @@ export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeav
   title = '';
   mount = false;
 
-  rules = {
-    name: [
-      {
-        required: true,
-        message: 'Пожалуйста, введите название параметра',
-        trigger: 'blur',
-      },
-    ],
-    measure: [
-      {
-        required: true,
-        message: 'Пожалуйста, введите единицы измерения',
-        trigger: 'blur',
-      },
-    ],
-  };
+  rules = AnthropometryRules;
 
   // Lifecycle methods.
   async mounted(): Promise<void> {
@@ -86,22 +73,16 @@ export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeav
     this.$watch('anthropometry', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  submitForm(): void {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
-    if (this.isEditMode) {
-      this.$store.dispatch('anthropometry/edit', this.anthropometry);
-    } else {
-      this.$store.dispatch('anthropometry/create', this.anthropometry);
-    }
-
-    this.$router.push('/anthropometry');
+    await this.submitHandling('anthropometry', this.anthropometry, next);
   }
 }
 </script>

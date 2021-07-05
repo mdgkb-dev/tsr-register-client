@@ -2,12 +2,13 @@
   <div class="wrapper" v-if="mount">
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
-      <el-form ref="form" label-width="20%" label-position="left" style="width: 100%">
+      <el-form :status-icon="true" :inline-message="true" :rules="rules" :model="register" ref="form" label-width="20%" label-position="left" style="width: 100%">
         <div class="table-background" style="margin-bottom: 20px; height: unset">
-          <el-form-item label="Название регистра">
+          <el-form-item label="Название регистра" prop="name">
             <el-input v-model="register.name"></el-input>
           </el-form-item>
         </div>
+
         <el-collapse>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Группы</h2></template>
@@ -25,6 +26,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import Register from '@/classes/registers/Register';
@@ -35,6 +37,8 @@ import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
   name: 'RegisterPage',
@@ -54,9 +58,8 @@ import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
     }),
   },
 })
-export default class RegisterPage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
+export default class RegisterPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   // Types.
-  isEditMode!: boolean;
   registerGroups!: IRegisterGroup[];
 
   registerGet!: (registerId: string) => Promise<void>;
@@ -66,6 +69,10 @@ export default class RegisterPage extends mixins(BreadCrumbsLinks, ConfirmLeaveP
   register: IRegister = new Register();
   title = '';
   mount = false;
+
+  rules = {
+    name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }],
+  };
 
   // Lifecycle methods.
   async mounted(): Promise<void> {
@@ -89,24 +96,16 @@ export default class RegisterPage extends mixins(BreadCrumbsLinks, ConfirmLeaveP
     this.$watch('register', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  async submitForm(): Promise<void> {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
-    try {
-      if (this.isEditMode) {
-        this.$store.dispatch('registers/edit', this.register);
-      } else {
-        this.$store.dispatch('registers/create', this.register);
-      }
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-    await this.$router.push('/registers');
+    if (!this.validate(this.$refs.form)) return;
+
+    await this.submitHandling('registers', this.register, next);
   }
 }
 </script>

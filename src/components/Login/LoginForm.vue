@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-card class="box-card" style="width: 50%">
-      <el-form class="login-form" @submit.prevent="submitForm">
+      <el-form :status-icon="true" class="login-form" @submit.prevent="submitForm">
         <div class="card-header">
           <h1>Войти в систему</h1>
           <el-button class="button" type="text">Забыли пароль?</el-button>

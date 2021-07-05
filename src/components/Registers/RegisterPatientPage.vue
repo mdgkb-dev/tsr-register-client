@@ -3,7 +3,7 @@
     <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <el-collapse>
-        <el-form ref="form" :model="patient">
+        <el-form :status-icon="true" ref="form" :model="patient">
           <div>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -84,6 +84,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import Patient from '@/classes/patients/Patient';
@@ -139,16 +140,15 @@ export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLi
     this.$watch('register', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  async submitForm() {
+  async submitForm(next?: NavigationGuardNext) {
     this.saveButtonClick = true;
     this.patient.registerToPatient = undefined;
-    await this.$store.dispatch('patients/edit', this.patient);
-    await this.$router.push(`/registers/patients/${this.$route.params.registerId}`);
+    await this.submitHandling('patients', this.patient, next, `registers/patients/${this.$route.params.registerId}`);
   }
 }
 </script>

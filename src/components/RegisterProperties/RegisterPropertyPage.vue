@@ -1,13 +1,13 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showAddButton="true" />
+    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form ref="form" label-width="150px" label-position="left" style="max-width: 800px">
-          <el-form-item label="Название свойства">
+        <el-form :status-icon="true" :inline-message="true" :model="registerProperty" :rules="rules" ref="form" label-width="150px" label-position="left" style="max-width: 800px">
+          <el-form-item label="Название свойства" prop="name">
             <el-input v-model="registerProperty.name"></el-input>
           </el-form-item>
-          <el-form-item label="Тип данных">
+          <el-form-item label="Тип данных" prop="valueTypeId">
             <el-select @change="changeRelation" v-model="registerProperty.valueTypeId">
               <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import RegisterProperty from '@/classes/registers/RegisterProperty';
@@ -58,6 +59,8 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
   name: 'RegisterPropertyPage',
@@ -75,9 +78,8 @@ import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
     }),
   },
 })
-export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
+export default class RegisterPropertyPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   // Types.
-  isEditMode!: boolean;
   valueTypes!: IValueType[];
 
   registerPropertyGet!: (registerId: string) => Promise<void>;
@@ -89,6 +91,11 @@ export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks, Confi
   mount = false;
   showSet = false;
   showRadio = false;
+
+  rules = {
+    name: [{ required: true, message: 'Необходимо заполнить название свойства', trigger: 'blur' }],
+    valueTypeId: [{ required: true, message: 'Необходимо выбрать тип данных', trigger: 'change' }],
+  };
 
   // Lifecycle methods.
   async created(): Promise<void> {
@@ -112,7 +119,7 @@ export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks, Confi
     this.$watch('registerProperty', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
@@ -147,19 +154,11 @@ export default class RegisterPropertyPage extends mixins(BreadCrumbsLinks, Confi
   removeRadioItem(i: number): void {
     this.registerProperty.registerPropertyRadio.splice(i, 1);
   }
-  async submitForm(): Promise<void> {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
-    try {
-      if (this.isEditMode) {
-        this.$store.dispatch('registerProperties/edit', this.registerProperty);
-      } else {
-        this.$store.dispatch('registerProperties/create', this.registerProperty);
-      }
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-    await this.$router.push('/register-properties');
+    if (!this.validate(this.$refs.form)) return;
+
+    await this.submitHandling('registerProperties', this.registerProperty, next, 'register-properties');
   }
 }
 </script>

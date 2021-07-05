@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="registrationForm" @submit.prevent="submitForm" label-width="130px">
+  <el-form :status-icon="true" :model="registrationForm" @submit.prevent="submitForm" label-width="130px">
     <el-form-item label="Логин">
       <el-input v-model="registrationForm.login"></el-input>
     </el-form-item>
