@@ -1,10 +1,11 @@
 <template>
-  <div class="form-under-collapse">
+  <div class="table-under-collapse">
     <el-button @click="addInsurance" style="margin-bottom: 20px">Добавить страховку</el-button>
 
-    <el-table :data="insuranceCompanies" style="width: 100%">
-      <el-table-column type="index" width="50" />
-      <el-table-column label="Компания" width="250" sortable>
+    <el-table :data="insuranceCompanies" style="width: 710px" class="table-shadow" header-row-class-name="header-style">
+      <el-table-column type="index" width="60" align="center" />
+
+      <el-table-column label="Компания" width="300" align="center" sortable>
         <template #default="scope">
           <el-form-item
             :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.insuranceCompanyId'"
@@ -18,7 +19,8 @@
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column label="Номер страховки">
+
+      <el-table-column label="Номер страховки" width="300" align="center">
         <template #default="scope">
           <el-form-item
             :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.number'"
@@ -30,9 +32,10 @@
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column>
+
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click.prevent="removeInsurance(scope.row)" round>Удалить страховку</el-button>
+          <TableButtonGroup @remove="removeInsurance(scope.row)" :showRemoveButton="true" />
         </template>
       </el-table-column>
     </el-table>
@@ -42,12 +45,16 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/patients/IOption';
 
 @Options({
   name: 'InsuranceForm',
   props: ['inInsuranceCompanyToHuman', 'inInsuranceCompaniesOptions'],
+  components: {
+    TableButtonGroup,
+  },
 })
 export default class InsuranceForm extends Vue {
   // Types.
@@ -73,8 +80,3 @@ export default class InsuranceForm extends Vue {
   }
 }
 </script>
-<style>
-.el-form-item__content {
-  margin-left: 0;
-}
-</style>

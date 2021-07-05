@@ -4,7 +4,7 @@
     <el-row><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <el-collapse>
-        <el-form ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="25%" label-position="left">
+        <el-form :status-icon="true" :inline-message="true" ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="25%" label-position="left">
           <div>
             <el-collapse-item>
               <template #title>
@@ -72,6 +72,7 @@
 <script lang="ts">
 import { defineAsyncComponent } from 'vue';
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
@@ -231,12 +232,12 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
     this.$watch('patient', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  async submitForm(): Promise<void> {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
@@ -257,7 +258,7 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
     });
 
     this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);
-    await this.submitHandling('patients', this.patient);
+    await this.submitHandling('patients', this.patient, next);
   }
 
   addEdv(edv: IEdv): void {

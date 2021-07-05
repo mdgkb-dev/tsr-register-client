@@ -1,21 +1,24 @@
 <template>
   <div class="table-under-collapse">
-    <el-button @click="add">Добавить измерение</el-button>
-    <el-table :data="heightWeight" style="width: 100%">
-      <el-table-column type="index" width="50" />
-      <el-table-column prop="human.dateBirth" label="Дата измерения" width="250" sortable>
+    <el-button @click="add" style="margin-bottom: 20px">Добавить измерение</el-button>
+
+    <el-table :data="heightWeight" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
+      <el-table-column type="index" width="60" align="center" />
+
+      <el-table-column prop="human.dateBirth" label="Дата измерения" width="250" sortable align="center">
         <template #default="scope">
           <el-form-item
             label-width="0"
             style="margin-bottom: 0"
             :prop="'heightWeight.' + scope.$index + '.date'"
-            :rules="[{ required: true, message: 'Необходимо заполнить дату антропометрии', trigger: 'blur' }]"
+            :rules="[{ required: true, message: 'Необходимо выбрать дату антропометрии', trigger: 'blur' }]"
           >
             <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.date"></el-date-picker>
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="height" label="Рост" width="250">
+
+      <el-table-column prop="height" label="Рост" width="200" align="center">
         <template #default="scope">
           <el-form-item
             label-width="0"
@@ -23,11 +26,12 @@
             :prop="'heightWeight.' + scope.$index + '.height'"
             :rules="[{ required: true, message: 'Необходимо заполнить значение роста', trigger: 'blur' }]"
           >
-            <el-input-number size="medium" controls-position="right" v-model="scope.row.height"></el-input-number>
+            <el-input-number size="medium" v-model="scope.row.height" min="0" style="width: 120px"></el-input-number>
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column prop="weight" label="Вес" width="250">
+
+      <el-table-column prop="weight" label="Вес" width="200" align="center">
         <template #default="scope">
           <el-form-item
             label-width="0"
@@ -35,18 +39,20 @@
             :prop="'heightWeight.' + scope.$index + '.weight'"
             :rules="[{ required: true, message: 'Необходимо заполнить значение веса', trigger: 'blur' }]"
           >
-            <el-input-number size="medium" controls-position="right" v-model="scope.row.weight"></el-input-number>
+            <el-input-number size="medium" v-model="scope.row.weight" min="0" style="width: 120px"></el-input-number>
           </el-form-item>
         </template>
       </el-table-column>
-      <el-table-column width="500" label="ИМТ">
+
+      <el-table-column label="ИМТ">
         <template #default="scope">
           {{ scope.row.getBmiGroup(inBirthDate, true) }}
         </template>
       </el-table-column>
-      <el-table-column width="120">
+
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click="remove(scope.$index)" type="text" size="small">Удалить</el-button>
+          <TableButtonGroup @remove="remove(scope.$index)" :showRemoveButton="true" />
         </template>
       </el-table-column>
     </el-table>
@@ -57,11 +63,15 @@
 import { Options, Vue } from 'vue-class-component';
 
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
 @Options({
   name: 'AnthropometryForm',
   props: ['inBirthDate', 'inHeightWeight', 'isMale'],
+  components: {
+    TableButtonGroup,
+  },
 })
 export default class AnthropometryForm extends Vue {
   // Types.

@@ -11,7 +11,7 @@
   <el-row>
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
-        <el-form ref="form" :model="user" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
+        <el-form :status-icon="true" ref="form" :model="user" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
@@ -79,12 +80,12 @@ export default class UserPage extends mixins(ConfirmLeavePage) {
     this.$watch('user', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  async submitForm(): Promise<void> {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
     try {
       if (this.isEditMode) {

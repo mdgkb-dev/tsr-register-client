@@ -3,8 +3,8 @@
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form ref="form" label-width="150px" label-position="left" style="max-width: 800px">
-          <el-form-item label="Название группы">
+        <el-form :status-icon="true" :inline-message="true" ref="form" :model="registerGroup" label-width="20%" label-position="left" :rules="rules">
+          <el-form-item label="Название группы" prop="name">
             <el-input v-model="registerGroup.name"></el-input>
           </el-form-item>
           <RegisterPropertyForm :inRegisterPropertyToRegisterGroup="registerGroup.registerPropertyToRegisterGroup" :inRegisterPropertyOptions="registerProperties" />
@@ -16,6 +16,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
@@ -25,6 +26,8 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import FormMixin from '@/mixins/FormMixin.vue';
+import ValidateMixin from '@/mixins/ValidateMixin.vue';
 
 @Options({
   name: 'RegisterGroupPage',
@@ -43,9 +46,8 @@ import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
     }),
   },
 })
-export default class RegisterGroupPage extends mixins(BreadCrumbsLinks, ConfirmLeavePage) {
+export default class RegisterGroupPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
   // Types.
-  isEditMode!: boolean;
   registerProperties!: IRegisterProperty[];
 
   registerGroupGet!: (registerGroupId: string) => Promise<void>;
@@ -55,6 +57,10 @@ export default class RegisterGroupPage extends mixins(BreadCrumbsLinks, ConfirmL
   registerGroup: IRegisterGroup = new RegisterGroup();
   title = '';
   mount = false;
+
+  rules = {
+    name: [{ required: true, message: 'Необходимо указать название группы', trigger: 'blur' }],
+  };
 
   // Lifecycle methods.
   async created(): Promise<void> {
@@ -78,24 +84,16 @@ export default class RegisterGroupPage extends mixins(BreadCrumbsLinks, ConfirmL
     this.$watch('registerGroup', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  async submitForm(): Promise<void> {
+  async submitForm(next?: NavigationGuardNext): Promise<void> {
     this.saveButtonClick = true;
-    try {
-      if (this.isEditMode) {
-        this.$store.dispatch('registerGroups/edit', this.registerGroup);
-      } else {
-        this.$store.dispatch('registerGroups/create', this.registerGroup);
-      }
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-    await this.$router.push('/register-groups');
+    if (!this.validate(this.$refs.form)) return;
+
+    await this.submitHandling('registerGroups', this.registerGroup, next, 'register-groups');
   }
 }
 </script>

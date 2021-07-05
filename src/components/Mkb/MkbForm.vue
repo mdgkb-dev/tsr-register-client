@@ -10,7 +10,16 @@
       />
     </el-space>
 
-    <el-table :data="diagnosisData" :row-key="row => row.id" :expand-row-keys="expandRowKeys" @expand-change="handleExpandChange" class="table-shadow">
+    <el-table
+      :data="diagnosisData"
+      :row-key="row => row.id"
+      :expand-row-keys="expandRowKeys"
+      @expand-change="handleExpandChange"
+      class="table-shadow"
+      header-row-class-name="header-style"
+    >
+      <el-table-column type="index" width="60" align="center" />
+
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
           <el-button @click="addAnamnesis(props.row)" style="margin: 10px">Добавить анамнез</el-button>
@@ -28,33 +37,45 @@
           </div>
         </template>
       </el-table-column>
+
       <el-table-column label="Группа диагноза" align="center" sortable>
         <template #default="scope">
-          <el-autocomplete
-            style="width: 100%"
-            popper-class="wide-dropdown"
-            @select="handleGroupSelect($event, scope.row.id)"
-            :fetch-suggestions="findGroups"
-            @input="syncSearchGroups($event, scope.row.id)"
-            v-model="queryStringsGroups[scope.row.id]"
-            placeholder="Выберите группу"
-          >
-          </el-autocomplete>
+          <el-form-item label-width="0" style="margin-bottom: 0">
+            <el-autocomplete
+              style="width: 100%"
+              popper-class="wide-dropdown"
+              @select="handleGroupSelect($event, scope.row.id)"
+              :fetch-suggestions="findGroups"
+              @input="syncSearchGroups($event, scope.row.id)"
+              v-model="queryStringsGroups[scope.row.id]"
+              placeholder="Выберите группу"
+            >
+            </el-autocomplete>
+          </el-form-item>
         </template>
       </el-table-column>
+
       <el-table-column label="Основной диагноз" align="center" sortable>
         <template #default="scope">
-          <el-autocomplete
-            style="width: 100%"
-            @select="handleDiagnosisSelect($event, scope.row.id)"
-            popper-class="wide-dropdown"
-            :fetch-suggestions="findDiagnosis"
-            @input="syncSearchDiagnosis($event, scope.row.id)"
-            placeholder="Выберите диагноз"
-            v-model="queryStringsDiagnosis[scope.row.id]"
-          />
+          <el-form-item
+            label-width="0"
+            style="margin-bottom: 0"
+            :prop="patientDiagnosis ? 'patientDiagnosis.' + scope.$index + '.mkbDiagnosisId' : 'registerDiagnosis.' + scope.$index + '.mkbDiagnosisId'"
+            :rules="[{ required: true, message: 'Необходимо указать основной диагноз', trigger: 'change' }]"
+          >
+            <el-autocomplete
+              style="width: 100%"
+              @select="handleDiagnosisSelect($event, scope.row.id)"
+              popper-class="wide-dropdown"
+              :fetch-suggestions="findDiagnosis"
+              @input="syncSearchDiagnosis($event, scope.row.id)"
+              placeholder="Выберите диагноз"
+              v-model="queryStringsDiagnosis[scope.row.id]"
+            />
+          </el-form-item>
         </template>
       </el-table-column>
+
       <el-table-column prop="height" label="Уточнённый диагноз" align="center">
         <template #default="scope">
           <el-select
@@ -68,14 +89,15 @@
           <el-select style="width: 100%" v-else disabled v-model="undefined" placeholder="Уточнённых диагнозов нет" />
         </template>
       </el-table-column>
+
       <el-table-column v-if="patientDiagnosis" prop="weight" label="Первичный" width="110" align="center">
         <template #default="scope">
           <el-checkbox v-model="scope.row.primary" />
         </template>
       </el-table-column>
-      <el-table-column width="120">
+      <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <el-button @click="removeDiagnosis(scope.row)" type="text" size="small" round>Удалить</el-button>
+          <TableButtonGroup @remove="removeDiagnosis(scope.row)" :showRemoveButton="true" />
         </template>
       </el-table-column>
     </el-table>
@@ -92,6 +114,7 @@ import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -107,6 +130,7 @@ const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/A
   components: {
     AnamnesisForm,
     MkbTreeDialog,
+    TableButtonGroup,
   },
   props: ['diagnosisData', 'patientDiagnosis'],
   computed: {

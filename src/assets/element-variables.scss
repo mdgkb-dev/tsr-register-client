@@ -82,3 +82,12 @@ body {
 .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
   color: #303133;
 }
+
+.el-message-box__btns {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.el-message-box__btns .el-button {
+  margin-right: 10px;
+}
