@@ -19,6 +19,8 @@ import {
   ElCollapseItem,
   ElContainer,
   ElDatePicker,
+  ElDescriptions,
+  ElDescriptionsItem,
   ElDialog,
   ElDivider,
   ElFooter,
@@ -113,6 +115,8 @@ const components = [
   ElTree,
   ElUpload,
   ElRadio,
+  ElDescriptions,
+  ElDescriptionsItem,
 ];
 const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification];
 const app = createApp(App);

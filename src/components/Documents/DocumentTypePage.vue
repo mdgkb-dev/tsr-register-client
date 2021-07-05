@@ -37,7 +37,6 @@
                 </el-form-item>
               </template>
             </el-table-column>
-
             <el-table-column width="40" fixed="right" align="center">
               <template #default="scope">
                 <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />

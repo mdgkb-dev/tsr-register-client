@@ -1,29 +1,52 @@
 <template>
   <div v-if="mount">
     <PageHead :title="title" :links="links" />
+    <el-row class="register-header">
+      <el-col>
+        <el-collapse>
+          <el-collapse-item name="1">
+            <template #title><h2 class="collapseHeader">Скрыть столбцы</h2></template>
+            <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
+              <el-col
+                v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
+                :key="registerPropertyToRegisterGroup.id"
+              >
+                <el-checkbox
+                  :model-value="!!user.registerPropertyToUser.find(prop => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId)"
+                  @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                  :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
+                  :value="registerPropertyToRegisterGroup.registerProperty.id"
+                  >{{ registerPropertyToRegisterGroup.registerProperty.name }}
+                </el-checkbox>
+              </el-col>
+            </el-row>
+          </el-collapse-item>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Общая информация о регистре</h2></template>
+            <el-descriptions class="margin-top" :column="3" direction="vertical" border>
+              <el-descriptions-item>
+                <template #label>
+                  <i class="el-icon-tickets"></i>
+                  Название
+                </template>
+                {{ register.name }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <i class="el-icon-user"></i>
+                  Количество пользователей
+                </template>
+                {{ register.registerToPatient.length }}
+              </el-descriptions-item>
+            </el-descriptions>
+          </el-collapse-item>
+        </el-collapse>
+      </el-col>
+    </el-row>
     <div class="table-background">
-      <el-collapse>
-        <el-collapse-item title="Скрыть столбцы" name="1" style="margin-left: 75%;width: 25%;">
-          <div v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-            <div
-              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-              :key="registerPropertyToRegisterGroup.id"
-            >
-              <el-checkbox
-                class="text item"
-                :model-value="!!user.registerPropertyToUser.find(prop => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId)"
-                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
-                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
-                :value="registerPropertyToRegisterGroup.registerProperty.id"
-                >{{ registerPropertyToRegisterGroup.registerProperty.name }}
-              </el-checkbox>
-            </div>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
       <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="register.registerToPatient" class="table-shadow" header-row-class-name="header-style" border>
         <el-table-column type="index" label="№" width="50" />
-        <el-table-column label="ФИО" sortable prop="patient.human.surname" align="left" resizable>
+        <el-table-column label="ФИО" sortable prop="patient.human.surname" align="left" width="400" resizable>
           <template #default="scope">
             {{ scope.row.patient.human.getFullName() }}
           </template>
@@ -34,8 +57,8 @@
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
-          <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name"
-            ><template #default="scope">
+          <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">
+            <template #default="scope">
               <div v-if="registerProperty.valueType.isDate()">
                 {{ $dateFormatRu(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}
               </div>
@@ -146,3 +169,9 @@ export default class RegisterPatientsPage extends mixins(BreadCrumbsLinks) {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.register-header:deep {
+  @import '@/assets/elements/collapse.scss';
+}
+</style>
