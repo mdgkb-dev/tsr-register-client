@@ -8,9 +8,11 @@ tr.header-style > th {
 
 .table-background {
   background-color: white;
+  background-size: cover;
   padding: 30px;
-  height:inherit;
+margin-bottom: 50px;
   border-radius: 10px;
+  position: relative;
 }
 
 .header-top-table {

@@ -1,9 +1,9 @@
 <template>
   <el-container class="main-container" style="height: 100%">
     <MainSidePanel />
-    <el-container direction="vertical" style="height: 100%;overflow: visible">
-      <el-row style="height: 100%; overflow: auto">
-        <div class="page-container" style="overflow: visible;">
+    <el-container direction="vertical" style="height: 100%;overflow: visible;position: relative">
+      <el-row style="height: 100%; overflow: auto;position: relative">
+        <div class="page-container" style="overflow: visible;position: relative">
           <slot />
         </div>
       </el-row>
