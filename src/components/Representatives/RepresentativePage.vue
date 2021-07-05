@@ -6,7 +6,7 @@
     </el-row>
     <el-row>
       <el-collapse>
-        <el-form ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
+        <el-form :status-icon="true" ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
           <div>
             <el-collapse-item>
               <template #title>
@@ -39,6 +39,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
@@ -143,7 +144,7 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
     this.$watch('representative', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 

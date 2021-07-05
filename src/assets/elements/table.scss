@@ -8,7 +8,7 @@ tr.header-style > th {
 
 .table-background {
   background-color: white;
-  padding: 50px;
+  padding: 30px;
   height: 100%;
   border-radius: 10px;
 }
@@ -117,4 +117,8 @@ tr.header-style > th {
 
 .el-input-number__increase {
   border-radius: 20px;
+}
+
+.el-form-item__content {
+  line-height: 0;
 }

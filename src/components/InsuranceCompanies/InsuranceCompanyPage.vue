@@ -3,7 +3,7 @@
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form ref="form" :model="insuranceCompany" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">
+        <el-form :status-icon="true" ref="form" :model="insuranceCompany" :rules="rules" label-width="180px" label-position="left" style="max-width: 800px">
           <el-form-item label="Название компании" prop="name">
             <el-input v-model="insuranceCompany.name"></el-input>
           </el-form-item>
@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import { mapActions, mapGetters } from 'vuex';
 
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
@@ -49,13 +50,7 @@ export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmL
   mount = false;
 
   rules = {
-    name: [
-      {
-        required: true,
-        message: 'Пожалуйста, введите название компании',
-        trigger: 'blur',
-      },
-    ],
+    name: [{ required: true, message: 'Пожалуйста, введите название компании', trigger: 'blur' }],
   };
 
   // Lifecycle methods.
@@ -77,22 +72,16 @@ export default class InsuranceCompanyPage extends mixins(ValidateMixin, ConfirmL
     this.$watch('insuranceCompany', this.formUpdated, { deep: true });
   }
 
-  beforeRouteLeave(to: any, from: any, next: any) {
+  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
     this.showConfirmModal(this.submitForm, next);
   }
 
   // Methods.
-  submitForm(): void {
+  async submitForm(next?: NavigationGuardNext) {
     this.saveButtonClick = true;
     if (!this.validate(this.$refs.form)) return;
 
-    if (this.isEditMode) {
-      this.$store.dispatch('insuranceCompanies/edit', this.insuranceCompany);
-    } else {
-      this.$store.dispatch('insuranceCompanies/create', this.insuranceCompany);
-    }
-
-    this.$router.push('/insurance-companies');
+    await this.submitHandling('insuranceCompanies', this.insuranceCompany, next, 'insurance-companies');
   }
 }
 </script>

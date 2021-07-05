@@ -1,5 +1,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { NavigationGuardNext } from 'vue-router';
 
 @Options({
   name: 'ConfirmLeavePage',
@@ -9,15 +10,15 @@ export default class ConfirmLeavePage extends Vue {
   $message: any;
 
   initialState = '';
-  confirmStay = false;
+  confirmLeave = false;
   saveButtonClick = false;
 
   formUpdated() {
-    this.confirmStay = true;
+    this.confirmLeave = true;
   }
 
   beforeWindowUnload(e: any) {
-    if (this.confirmStay) {
+    if (this.confirmLeave) {
       e.preventDefault();
       e.returnValue = '';
     }
@@ -27,8 +28,8 @@ export default class ConfirmLeavePage extends Vue {
     window.removeEventListener('beforeunload', this.beforeWindowUnload);
   }
 
-  showConfirmModal(submit: any, next: any) {
-    if (this.confirmStay && !this.saveButtonClick) {
+  showConfirmModal(submit: any, next: NavigationGuardNext) {
+    if (this.confirmLeave && !this.saveButtonClick) {
       this.$confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
         distinguishCancelAndClose: true,
         confirmButtonText: 'Сохранить',
@@ -36,7 +37,7 @@ export default class ConfirmLeavePage extends Vue {
       })
         .then(() => {
           // Вызывается при сохранении
-          submit();
+          submit(next);
         })
         .catch((action: any) => {
           if (action === 'cancel') {
