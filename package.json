@@ -6,15 +6,13 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix",
-    "prepare": "husky install",
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,css,vue}": [
       "npm run lint",
       "git add"
-    ],
-    "*.js": "eslint --cache --fix"
+    ]
   },
   "dependencies": {
     "@vuelidate/core": "2.0.0-alpha.12",
