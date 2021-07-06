@@ -7,7 +7,7 @@ interface IBmiMonth {
   '5th': number;
   '15th': number;
   '25th': number;
-  '50th': number;
+  '50th': umber;
   '75th': number;
   '85th': number;
   '95th': number;
