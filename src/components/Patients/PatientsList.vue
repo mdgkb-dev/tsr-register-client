@@ -1,6 +1,4 @@
 <template>
-  <!-- <div v-if="mount" style="height: 100%; overflow: hidden"> -->
-  <!-- <div v-if="mount" style="height: 100%; overflow: auto; padding-right: 50px"> -->
   <div v-if="mount" style="height: 100%; overflow: hidden; overflow-x: hidden">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
     <div class="table-background">
