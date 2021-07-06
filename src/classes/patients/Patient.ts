@@ -24,13 +24,17 @@ export default class Patient implements IPatient {
   id?: string;
   human: IHuman = new Human();
   anthropometryData: IAnthropometryData[] = [];
+
   representativeToPatient: IRepresentativeToPatient[] = [];
+
   disabilities: IDisability[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
+
   heightWeight: IHeightWeight[] = [];
   registerToPatient?: IRegisterToPatient[] = [];
 
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
+
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
 
   constructor(patient?: IPatient) {
