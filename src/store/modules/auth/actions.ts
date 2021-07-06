@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { ActionTree } from 'vuex';
 
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
