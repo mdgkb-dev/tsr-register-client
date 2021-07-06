@@ -139,7 +139,7 @@ export default class RegisterPatientsPage extends mixins(BreadCrumbsLinks) {
         prop.userId = this.user.id;
         this.user.registerPropertyToUser.push(prop);
       } else {
-        const index = this.user.registerPropertyToUser.findIndex(prop => prop.registerPropertyId === propertyId);
+        const index = this.user.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
         if (index > -1) {
           this.user.registerPropertyToUser.splice(index, 1);
         }
