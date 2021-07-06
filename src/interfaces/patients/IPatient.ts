@@ -22,6 +22,7 @@ export default interface IPatient {
   registerPropertySetToPatient: IRegisterPropertySetToPatient[];
 
   getAnthropometryDataFull: () => string;
+  getAnthropometryShortData: () => string;
   getActuallyDisability: () => IDisability;
   getLastAnthropometryValue: (name: string) => number;
   getBmiGroup: () => string;

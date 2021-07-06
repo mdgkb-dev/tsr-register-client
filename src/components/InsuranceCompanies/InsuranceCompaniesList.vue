@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount" style="height: 100%">
+  <div v-if="mount" style="height:100%; overflow: hidden">
     <PageHead :title="title" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-table
@@ -8,6 +8,8 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
+        height="auto"
+        max-height="75%"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название страховой компании" min-width="150" sortable />

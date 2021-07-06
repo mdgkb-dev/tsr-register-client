@@ -1,23 +1,27 @@
 <template>
-  <PageHead :title="title" @create="create" :showAddButton="true" />
-  <div v-if="mount" class="table-background">
-    <el-table
-      :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="anthropometries"
-      class="table-shadow"
-      header-row-class-name="header-style"
-      row-class-name="no-hover"
-    >
-      <el-table-column type="index" width="60" align="center" />
-      <el-table-column prop="name" label="Название параметра" min-width="150" sortable />
-      <el-table-column width="40" fixed="right" align="center">
-        <template #default="scope">
-          <el-space direction="vertical" class="icons">
-            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
-          </el-space>
-        </template>
-      </el-table-column>
-    </el-table>
+  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
+    <PageHead :title="title" @create="create" :showAddButton="true" />
+    <div class="table-background">
+      <el-table
+        :default-sort="{ prop: 'id', order: 'ascending' }"
+        :data="anthropometries"
+        class="table-shadow"
+        header-row-class-name="header-style"
+        row-class-name="no-hover"
+        height="auto"
+        max-height="75%"
+      >
+        <el-table-column type="index" width="60" align="center" />
+        <el-table-column prop="name" label="Название параметра" min-width="150" sortable />
+        <el-table-column width="40" fixed="right" align="center">
+          <template #default="scope">
+            <el-space direction="vertical" class="icons">
+              <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+            </el-space>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 

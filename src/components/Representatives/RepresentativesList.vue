@@ -1,9 +1,9 @@
 <template>
-  <div v-if="mount" style="height: 100%">
+  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
     <PageHead :title="title" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
-      <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
+      <el-table :data="filterTable(representatives)" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover" height="auto" max-height="75%">
         <el-table-column type="index" width="60" align="center" />
         <el-table-column width="150" align="left">
           <template #header>

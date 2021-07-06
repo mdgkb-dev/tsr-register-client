@@ -1,10 +1,12 @@
 <template>
-  <PageHead :title="title" />
-  <el-row>
-    <div class="table-background" style="width: 100%; margin-bottom: 20px">
-      <MkbTree></MkbTree>
-    </div>
-  </el-row>
+  <div class="wrapper" v-if="mount" style="height:100%">
+    <PageHead :title="title" />
+      <div class="table-background" style="height: auto">
+        <el-scrollbar>
+          <MkbTree></MkbTree>
+        </el-scrollbar>
+      </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,5 +26,10 @@ const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'
 })
 export default class MkbList extends Vue {
   title = 'МКБ10';
+  mount = false;
+
+  mounted() {
+    this.mount = true;
+  }
 }
 </script>

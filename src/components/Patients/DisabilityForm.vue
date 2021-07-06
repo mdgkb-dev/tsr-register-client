@@ -1,94 +1,115 @@
 <template>
-  <el-button @click="addDisability()" style="margin-bottom: 20px">Добавить инвалидность</el-button>
-  <el-table :data="disabilities" style="width: 100%; margin-bottom: 20px" row-key="id" border :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }">
-    <el-table-column label="" width="150">
-      <template #default="scope">
-        <span v-if="isEdv(scope.row)">ЕДВ</span>
-        <span v-else>Инвалидность</span>
-      </template>
-    </el-table-column>
+  <div class="wrapper">
+    <el-button @click="addDisability()" style="margin-bottom: 20px">Добавить инвалидность</el-button>
+    <el-table
+      :data="disabilities"
+      style="width: 950px; margin-bottom: 20px"
+      row-key="id"
+      border
+      :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
+      class="table-shadow"
+      header-row-class-name="header-style"
+    >
+      <el-table-column label="" width="150" align="center">
+        <template #default="scope">
+          <span v-if="isEdv(scope.row)">ЕДВ</span>
+          <span v-else>Инвалидность</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250">
-      <template #default="scope">
-        <el-form-item :prop="getProp(scope)" :rules="getRuleStart(scope)" label-width="0" style="margin-bottom: 0">
-          <el-date-picker
-            :disabled-date="disabledDate"
-            format="DD.MM.YYYY"
-            placeholder="Выберите дату"
-            ref="picker"
-            type="date"
-            v-model="scope.row.period.dateStart"
-          ></el-date-picker>
-        </el-form-item>
-      </template>
-    </el-table-column>
+      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="230" align="center">
+        <template #default="scope">
+          <el-form-item :prop="getProp(scope)" :rules="getRuleStart(scope)" label-width="0" style="margin-bottom: 0">
+            <el-date-picker
+              :disabled-date="disabledDate"
+              format="DD.MM.YYYY"
+              placeholder="Выберите дату"
+              ref="picker"
+              type="date"
+              v-model="scope.row.period.dateStart"
+            ></el-date-picker>
+          </el-form-item>
+        </template>
+      </el-table-column>
 
-    <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250">
-      <template #default="scope">
-        <el-form-item :prop="getProp(scope)" :rules="getRuleEnd(scope)" label-width="0" style="margin-bottom: 0">
-          <el-date-picker type="date" :disabled-date="disabledDate" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateEnd"></el-date-picker>
-        </el-form-item>
-      </template>
-    </el-table-column>
+      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="230" align="center">
+        <template #default="scope">
+          <el-form-item :prop="getProp(scope)" :rules="getRuleEnd(scope)" label-width="0" style="margin-bottom: 0">
+            <el-date-picker type="date" :disabled-date="disabledDate" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateEnd"></el-date-picker>
+          </el-form-item>
+        </template>
+      </el-table-column>
 
-    <el-table-column label="Инвалидность" width="180" sortable>
-      <template #default="scope">
-        <div v-if="isEdv(scope.row)">
-          <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1">A</el-button>
-          <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2">B</el-button>
-          <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3">C</el-button>
-        </div>
-      </template>
-    </el-table-column>
+      <el-table-column label="Инвалидность" width="180" sortable align="center">
+        <template #default="scope">
+          <div v-if="isEdv(scope.row)">
+            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1">A</el-button>
+            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2">B</el-button>
+            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3">C</el-button>
+          </div>
+        </template>
+      </el-table-column>
 
-    <el-table-column label="Действия" width="500" sortable>
-      <template #default="scope">
-        <div v-if="!isEdv(scope.row)">
-          <el-button @click="addEdv(scope.row)">Добавить справку ЕДВ</el-button>
-          <el-button type="text" size="small" @click.prevent="removeDisability(scope.row)">Удалить инвалидность</el-button>
-        </div>
-        <div v-else>
-          <el-button-group v-if="!fileInfos.some((info) => info.category === scope.row.id)">
-            <el-button @click="$refs[scope.row.id].click()">Приложить файл</el-button>
-            <input
-              type="file"
-              :ref="scope.row.id"
-              hidden
-              @change="
-                (event) => {
-                  addReplaceFile(event, scope.row.id);
-                }
-              "
-            />
-          </el-button-group>
-          <el-button-group v-else>
-            <el-button v-if="fileInfos.find((info) => info.category === scope.row.id).isDraft" disabled>Файл добавлен</el-button>
-            <el-button v-else :data-file-id="fileInfos.find((info) => info.category === scope.row.id).id" @click.prevent="downloadFile">Скачать файл</el-button>
-            <el-tooltip content="Загрузить новый файл (это заменит предыдущий)">
-              <el-button @click="$refs[scope.row.id].click()" icon="el-icon-upload" />
+      <el-table-column>
+        <template #default="scope">
+          <div v-if="!isEdv(scope.row)" class="card-button-group">
+            <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">
+              <el-button icon="el-icon-document-add" @click="addEdv(scope.row)"></el-button>
             </el-tooltip>
-            <input
-              type="file"
-              :ref="scope.row.id"
-              hidden
-              @change="
-                (event) => {
-                  addReplaceFile(event, scope.row.id);
-                }
-              "
-            />
-            <el-tooltip content="Удалить приложенный файл">
-              <el-button icon="el-icon-delete" @click.prevent="removeFile(scope.row.id)" />
+            <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">
+              <el-button icon="el-icon-delete" @click.prevent="removeDisability(scope.row)"></el-button>
             </el-tooltip>
-          </el-button-group>
-          <el-button-group>
-            <el-button type="text" size="small" @click.prevent="removeEdv(scope.row)">Удалить справку</el-button>
-          </el-button-group>
-        </div>
-      </template>
-    </el-table-column>
-  </el-table>
-  <a ref="fileAnchor" style="display: none" />
+          </div>
+
+          <div v-else class="card-button-group">
+            <el-button-group v-if="!fileInfos.some(info => info.category === scope.row.id)">
+              <el-tooltip v-if="!fileInfos.some(info => info.category === scope.row.id)" effect="light" placement="top-end" content="Приложить файл">
+                <el-button icon="el-icon-upload" @click="$refs[scope.row.id].click()"></el-button>
+              </el-tooltip>
+              <input
+                type="file"
+                :ref="scope.row.id"
+                hidden
+                @change="
+                  event => {
+                    addReplaceFile(event, scope.row.id);
+                  }
+                "
+              />
+            </el-button-group>
+
+            <el-button-group v-else>
+              <el-tooltip v-if="fileInfos.find(info => info.category === scope.row.id).isDraft" effect="light" placement="top-end" content="Файл добавлен">
+                <el-button disabled icon="el-icon-document-checked"></el-button>
+              </el-tooltip>
+              <el-button v-else :data-file-id="fileInfos.find(info => info.category === scope.row.id).id" @click.prevent="downloadFile">Скачать файл</el-button>
+              <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
+                <el-button @click="$refs[scope.row.id].click()" icon="el-icon-upload" />
+              </el-tooltip>
+              <input
+                type="file"
+                :ref="scope.row.id"
+                hidden
+                @change="
+                  event => {
+                    addReplaceFile(event, scope.row.id);
+                  }
+                "
+              />
+              <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">
+                <el-button icon="el-icon-document-delete" @click.prevent="removeFile(scope.row.id)" />
+              </el-tooltip>
+            </el-button-group>
+
+            <el-tooltip effect="light" placement="top-end" content="Удалить справку">
+              <el-button icon="el-icon-delete" @click.prevent="removeEdv(scope.row)"></el-button>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <a ref="fileAnchor" style="display: none" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -118,7 +139,7 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 export default class DisabilityForm extends Vue {
   // Types.
   declare $refs: {
-    fileAnchor: HTMLAnchorElement
+    fileAnchor: HTMLAnchorElement;
   };
 
   fileInfos!: IFileInfo[];
@@ -212,7 +233,11 @@ export default class DisabilityForm extends Vue {
 
     const file = Array.from(target.files)[0];
     const newInfo: IFileInfo = new FileInfo({
-      id: uuidv4(), category, originalName: file.name, file, isDraft: true,
+      id: uuidv4(),
+      category,
+      originalName: file.name,
+      file,
+      isDraft: true,
     });
 
     this.$emit('update:fileInfos', [...this.fileInfos.filter((info: IFileInfo): boolean => info.category !== category), newInfo]);
@@ -246,10 +271,15 @@ export default class DisabilityForm extends Vue {
     this.$refs.fileAnchor.click();
   }
 }
-
 </script>
-<style>
-.but {
-  border-radius: 50%;
+<style lang="scss" scoped>
+.wrapper:deep {
+  .card-button-group {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .but {
+    border-radius: 50%;
+  }
 }
 </style>

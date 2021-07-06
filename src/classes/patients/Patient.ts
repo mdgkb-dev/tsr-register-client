@@ -80,6 +80,19 @@ export default class Patient implements IPatient {
     return total;
   }
 
+  getAnthropometryShortData(): string {
+    let total = '';
+    const anthropometryNames: string[] = ['Вес', 'Рост'];
+    anthropometryNames.forEach((name: string) => {
+      const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
+      if (currentAnthropometryData.length) {
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+        total = `<div>${total} ${lastAnthropometry.getShortInfo()}</div>`;
+      }
+    });
+    return total;
+  }
+
   getActuallyDisability(): IDisability {
     return this.disabilities[this.disabilities.length - 1];
   }
