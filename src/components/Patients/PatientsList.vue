@@ -2,7 +2,17 @@
   <div v-if="mount" style="height: 100%; overflow: hidden; overflow-x: hidden">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
     <div class="table-background">
-      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
+      <el-autocomplete
+        style="width: 100%;margin-bottom: 20px"
+        popper-class="wide-dropdown"
+        @select="handlePatientSelect"
+        :fetch-suggestions="findPatients"
+        @input="handleSearchInput"
+        v-model="queryStringsPatient"
+        placeholder="Найти пациента"
+      >
+      </el-autocomplete>
+      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Отфильтровать текущий список" class="table-search" />
       <el-table
         ref="table"
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -153,7 +163,14 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination style="margin-left: 25%; margin-top: 50px; margin-bottom: 50px" background layout="prev, pager, next" :total="240" @current-change="setPage">
+      <el-pagination
+        style="margin-left: 25%; margin-top: 50px; margin-bottom: 50px"
+        :current-page="curPage"
+        background
+        layout="prev, pager, next"
+        :total="240"
+        @current-change="setPage"
+      >
       </el-pagination>
     </div>
   </div>
@@ -166,6 +183,8 @@ import { mapActions, mapState } from 'vuex';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import ISearch from '@/interfaces/shared/ISearch';
+import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 
 @Options({
   name: 'PatientsList',
@@ -174,11 +193,13 @@ import IPatient from '@/interfaces/patients/IPatient';
     TableButtonGroup,
   },
   computed: {
-    ...mapState('patients', ['patients']),
+    ...mapState('patients', ['patients', 'filteredPatients']),
   },
   methods: {
     ...mapActions({
       getAll: 'patients/getAll',
+      searchPatients: 'patients/searchPatients',
+      getAllById: 'patients/getAllById',
     }),
   },
 })
@@ -187,19 +208,47 @@ export default class PatientsList extends Vue {
     error: any;
   };
   $loading: any;
+
   getAll!: (pageNum: number) => Promise<void>;
   patients!: IPatient[];
+  filteredPatients!: IPatient[];
   loading = false;
   mount = false;
   search = '';
   searchFullName = '';
   searchAddress = '';
   title = 'Пациенты';
+  queryStringsPatient = '';
+  searchPatients!: (query: string) => Promise<void>;
+  getAllById!: (id: string) => Promise<void>;
+  curPage = 0;
 
   async setPage(pageNum: number) {
+    this.curPage = pageNum;
     this.loading = true;
     await this.getAll(pageNum - 1);
     this.loading = false;
+  }
+  async handleSearchInput(value: string): Promise<void> {
+    if (value.length === 0) {
+      await this.getAll(0);
+    }
+    this.curPage = 0;
+  }
+  async findPatients(query: string, resolve: any) {
+    const patients: ISearchPatient[] = [];
+    if (query.length > 2) {
+      await this.searchPatients(query);
+      this.filteredPatients.forEach((p: IPatient) => {
+        if (p.id) patients.push({ value: p.human.getFullName(), id: p.id, patient: p });
+      });
+    }
+
+    resolve(patients);
+  }
+
+  async handlePatientSelect(item: ISearch) {
+    await this.getAllById(item.id);
   }
 
   async mounted(): Promise<void> {

@@ -25,6 +25,9 @@ const mutations: MutationTree<State> = {
     const i = state.patients.findIndex((item: IPatient) => item.id === id);
     state.patients.splice(i, 1);
   },
+  setFilteredPatients(state, patients: IPatient[]) {
+    state.filteredPatients = patients.map((p: IPatient) => new Patient(p));
+  },
 };
 
 export default mutations;
