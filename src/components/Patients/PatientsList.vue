@@ -21,7 +21,7 @@
         header-row-class-name="header-style"
         row-class-name="no-hover"
         height="auto"
-        max-height="70%"
+        max-height="60%"
       >
         <el-table-column width="60" align="center" />
 
