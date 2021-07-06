@@ -18,6 +18,7 @@ const mutations: MutationTree<State> = {
     }
   },
   deAuthorize(state) {
+    state.isAuthorized = false;
     state.user = undefined;
     Cookies.remove('user_sid');
     window.localStorage.removeItem('user_sid');

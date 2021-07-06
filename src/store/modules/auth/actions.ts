@@ -33,7 +33,7 @@ const actions: ActionTree<State, RootState> = {
       commit('setError', 'Не удалось войти. Пожалуйста, обратитесь к разработчикам.');
       return;
     }
-
+    commit('setError', '');
     commit('authorize', await response.json());
   },
   register: async ({ commit }, userData: IUserRegister) => {
@@ -68,13 +68,10 @@ const actions: ActionTree<State, RootState> = {
       console.log(error);
       return;
     }
-    console.log(response);
     if (response.status !== 200) {
       console.log('Ошибка выхода.');
     }
 
-    Cookies.remove('user_sid');
-    window.localStorage.removeItem('user_sid');
     commit('deAuthorize');
   },
   deAuthorize: ({ commit }) => {
