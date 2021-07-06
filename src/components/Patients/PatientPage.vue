@@ -4,7 +4,16 @@
     <el-row><PatientPageInfo :patient="patient"/></el-row>
     <el-row>
       <el-collapse>
-        <el-form :status-icon="true" :inline-message="true" ref="form" :model="patient" :rules="rules" @submit.prevent="submitForm" label-width="25%" label-position="left">
+        <el-form
+          :status-icon="true"
+          :inline-message="true"
+          ref="form"
+          :model="patient"
+          :rules="rules"
+          @submit.prevent="submitForm"
+          label-width="25%"
+          label-position="left"
+        >
           <div>
             <el-collapse-item>
               <template #title>
@@ -174,7 +183,6 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
       this.patient = this.$store.getters['patients/patient'];
       this.title = this.patient.human.getFullName();
     }
-
     await this.insuranceCompaniesGetAll();
     await this.anthropometryGetAll();
     this.insuranceCompaniesOptions = [];

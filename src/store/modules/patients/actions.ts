@@ -16,6 +16,10 @@ const actions: ActionTree<State, RootState> = {
       commit('setAll', await httpClient.get());
     }
   },
+  getAllById: async ({ commit }, id: string): Promise<void> => {
+    const res = await httpClient.get({ query: id });
+    commit('setAll', [res]);
+  },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get({ query: '?withDisabilities=true' }));
   },
@@ -41,6 +45,9 @@ const actions: ActionTree<State, RootState> = {
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete(id);
     commit('delete', id);
+  },
+  searchPatients: async ({ commit }, query: string): Promise<void> => {
+    commit('setFilteredPatients', await httpClient.get({ query: `?query=${query}` }));
   },
 };
 

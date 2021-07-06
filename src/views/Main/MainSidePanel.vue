@@ -150,7 +150,6 @@ export default class MainSidePanel extends Vue {
     if (!this.$store.getters['auth/isAuthorized']) {
       this.$store.commit('setLayout', 'login-layout');
     }
-    this.$store.commit('setLayout', 'login-layout');
     await this.$router.push('/login');
   }
 }

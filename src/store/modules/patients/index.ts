@@ -10,6 +10,7 @@ import { State } from './state';
 export const state: State = {
   patients: [],
   patient: undefined,
+  filteredPatients: [],
 };
 
 const namespaced = true;

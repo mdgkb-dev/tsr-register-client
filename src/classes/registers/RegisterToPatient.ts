@@ -15,6 +15,7 @@ export default class RegisterToPatient implements IRegisterToPatient {
     if (!item) {
       return;
     }
+
     this.id = item.id;
     this.registerId = item.registerId;
     this.register = new Register(item.register);
