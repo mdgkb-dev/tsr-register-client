@@ -6,18 +6,15 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix",
-    "prepare": "husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.(js,jsx,ts,tsx,json,css,vue,scss)": [
+    "*.{js,jsx,ts,tsx,css,vue}": [
       "npm run lint",
       "git add"
-    ]
+    ],
+    "*.js": "eslint --cache --fix"
   },
   "dependencies": {
     "@vuelidate/core": "2.0.0-alpha.12",
@@ -26,7 +23,6 @@
     "dayjs": "^1.10.4",
     "element-plus": "1.0.2-beta.53",
     "js-cookie": "^2.2.1",
-    "lint-staged": "^11.0.0",
     "moment": "^2.29.1",
     "uuid": "^8.3.2",
     "vue": "^3.0.0",
@@ -58,6 +54,7 @@
     "eslint-plugin-unused-imports": "^1.1.1",
     "eslint-plugin-vue": "^7.0.0",
     "husky": "^7.0.1",
+    "lint-staged": "^11.0.0",
     "node-sass": "^6.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
