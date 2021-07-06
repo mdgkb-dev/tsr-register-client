@@ -42,7 +42,9 @@ export default class Patient implements IPatient {
     this.human = new Human(patient.human);
     if (patient.anthropometryData) {
       patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
       this.anthropometryData = patient.anthropometryData.map((a: IAnthropometryData) => new AnthropometryData(a));
+
       this.heightWeight = HeightWeight.anthropometryDataToHeightWeightArr(this.anthropometryData);
     }
     if (patient.patientDiagnosis) {
