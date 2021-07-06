@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount">
+  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
     <PageHead :title="title" :links="links" />
     <el-row class="register-header">
       <el-col>
@@ -44,7 +44,8 @@
       </el-col>
     </el-row>
     <div class="table-background">
-      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="register.registerToPatient" class="table-shadow" header-row-class-name="header-style" border>
+      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="register.registerToPatient" class="table-shadow" header-row-class-name="header-style" border height="auto"
+        max-height="75%">
         <el-table-column type="index" label="№" width="50" />
         <el-table-column label="ФИО" sortable prop="patient.human.surname" align="left" width="400" resizable>
           <template #default="scope">

@@ -1,23 +1,27 @@
 <template>
-  <el-table :data="representativeToPatient" style="width: 100%">
-    <el-table-column type="index" width="50" />
-    <el-table-column label="Представитель" width="250" sortable>
+  <!-- <el-button @click="add" style="margin-bottom: 20px">Добавить представителя</el-button> -->
+  <el-table :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
+    <el-table-column type="index" width="50" align="center" />
+
+    <el-table-column label="Представитель" width="250" sortable align="center">
       <template #default="scope">
         <el-select v-model="representativeToPatient[scope.$index].representativeId">
           <el-option v-for="item in inRepresentatives" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </template>
     </el-table-column>
-    <el-table-column label="Роль представителя">
+
+    <el-table-column label="Роль представителя" align="center">
       <template #default="scope">
         <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
-          <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          <el-option v-for="item in inRepresentativeTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
         </el-select>
       </template>
     </el-table-column>
-    <el-table-column>
+
+    <el-table-column width="40" fixed="right" align="center">
       <template #default="scope">
-        <el-button @click.prevent="remove(scope.row)" round>Удалить представителя</el-button>
+        <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
       </template>
     </el-table-column>
   </el-table>
@@ -27,11 +31,15 @@
 import { Options, Vue } from 'vue-class-component';
 
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IOption from '@/interfaces/shared/IOption';
 
 @Options({
   name: 'PatientToRepresentativeForm',
+  components: {
+    TableButtonGroup,
+  },
   props: ['inRepresentativeToPatient', 'inRepresentativeTypes', 'inRepresentatives'],
 })
 export default class PatientToRepresentativeForm extends Vue {

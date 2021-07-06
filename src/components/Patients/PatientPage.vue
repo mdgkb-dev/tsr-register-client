@@ -17,7 +17,7 @@
               <template #title>
                 <h2 class="collapseHeader">Антропометрия</h2>
               </template>
-              <AnthropometryForm :inHeightWeight="patient.heightWeight" :inAnthropometry="anthropometries" :inAnthropometryData="patient.anthropometryData" />
+              <AnthropometryForm :inHeightWeight="patient.heightWeight" :isMale="patient.human.isMale" :inBirthDate="patient.human.dateBirth" />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -54,7 +54,7 @@
               <template #title><h2 class="collapseHeader">Законные представители</h2></template>
               <PatientToRepresentativeForm
                 :inRepresentativeToPatient="patient.representativeToPatient"
-                :inRepresentativeTypes="representativeTypesOptions"
+                :inRepresentativeTypes="representativeTypes"
                 :inRepresentatives="representativeOptions"
               />
             </el-collapse-item>
@@ -198,18 +198,18 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
 
     await this.representativesGetAll();
     await this.representativeTypesGetAll();
-    this.representativeTypesOptions.splice(0, 1);
+    // this.representativeTypesOptions.splice(0, 1);
 
-    if (this.representativeTypes) {
-      for (const item of this.representativeTypes) {
-        if (item.id) {
-          this.representativeTypesOptions.push({
-            label: item.name,
-            value: item.id,
-          });
-        }
-      }
-    }
+    // if (this.representativeTypes) {
+    //   for (const item of this.representativeTypes) {
+    //     if (item.id) {
+    //       this.representativeTypesOptions.push({
+    //         label: item.name,
+    //         value: item.id,
+    //       });
+    //     }
+    //   }
+    // }
 
     this.representativeOptions.splice(0, 1);
 

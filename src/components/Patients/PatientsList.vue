@@ -1,17 +1,19 @@
 <template>
-  <div v-if="mount" style="height: 100%; overflow: auto; padding-right: 50px">
+  <div v-if="mount" style="height: 100%; overflow: hidden; overflow-x: hidden">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
       <el-table
-        v-loading.fullscreen="loading"
+        ref="table"
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="filterTable(patients)"
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
+        height="auto"
+        max-height="70%"
       >
-        <el-table-column type="index" width="60" align="center" />
+        <el-table-column width="60" align="center" />
 
         <el-table-column>
           <template #header>
@@ -61,7 +63,7 @@
         <el-table-column>
           <el-table-column width="75" label="ВЕС РОСТ" align="center">
             <template #default="scope">
-              <span v-html="scope.row.getAnthropometryDataFull()"></span>
+              <span v-html="scope.row.getAnthropometryShortData()"></span>
             </template>
           </el-table-column>
         </el-table-column>

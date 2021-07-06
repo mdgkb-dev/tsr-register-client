@@ -46,7 +46,7 @@
 
       <el-table-column label="ИМТ">
         <template #default="scope">
-          {{ scope.row.getBmiGroup(inBirthDate, true) }}
+          {{ scope.row.getBmiGroup(inBirthDate, isMale) }}
         </template>
       </el-table-column>
 

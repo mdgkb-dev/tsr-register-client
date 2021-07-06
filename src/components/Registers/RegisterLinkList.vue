@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height: 100%">
+  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
     <PageHead :title="title" />
     <div class="table-background">
       <el-table
@@ -8,6 +8,8 @@
         @row-click="link"
         class="table-shadow"
         header-row-class-name="header-style"
+        height="auto"
+        max-height="75%"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
