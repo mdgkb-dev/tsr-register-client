@@ -18,10 +18,10 @@
         <el-input type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }" v-model="anamnesis.value"> </el-input>
       </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
-      <div class="icons">
-        <i class="el-icon-folder-checked icon" v-if="anamnesis.isEditMode" @click="edit"></i>
-        <i class="el-icon-edit icon" v-else @click="edit"></i>
-        <i class="el-icon-delete icon" @click="remove"></i>
+      <div class="card-button-group">
+        <el-button icon="el-icon-folder-checked" v-if="anamnesis.isEditMode" @click="edit"></el-button>
+        <el-button icon="el-icon-edit" v-else @click="edit"></el-button>
+        <el-button icon="el-icon-delete" @click="remove"></el-button>
       </div>
     </el-card>
   </div>
@@ -65,15 +65,10 @@ export default class AnamnesisForm extends Vue {
     min-height: 100px;
   }
 
-  .icons {
+  .card-button-group {
     position: absolute;
     top: 10px;
     right: 10px;
-  }
-
-  .icons i {
-    font-size: 20px;
-    margin: 10px;
   }
 
   .el-input__inner,

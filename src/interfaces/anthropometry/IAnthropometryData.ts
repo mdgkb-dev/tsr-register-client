@@ -9,6 +9,7 @@ export default interface IAnthropometryData {
   anthropometry?: IAnthropometry;
 
   getFullInfo: () => string;
+  getShortInfo: () => string;
   isWeight: () => boolean;
   isHeight: () => boolean;
 }

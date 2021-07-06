@@ -1,47 +1,46 @@
 <template>
-  <el-row>
-    <el-form-item>
-      <el-row>
-        <el-form-item v-for="(item, index) in representativeToPatient" :key="index" v-model="representativeToPatient">
-          <el-space direction="horizontal" alignment="start" :size="1">
-            <span>Пациент</span>
-            <el-col :span="12">
-              <el-select v-model="representativeToPatient[index].patientId">
-                <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-              </el-select>
-            </el-col>
+  <el-button @click="add" style="margin-bottom: 20px">Добавить подопечного</el-button>
+  <el-table :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
+    <el-table-column type="index" width="50" align="center" />
 
-            <span>Роль представителя</span>
-            <el-col :span="11">
-              <el-select v-model="representativeToPatient[index].representativeTypeId">
-                <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="1">
-              <el-button @click.prevent="remove(item)">Удалить подопечного</el-button>
-            </el-col>
-          </el-space>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item>
-          <el-button @click="add">Добавить подопечного</el-button>
-        </el-form-item>
-      </el-row>
-    </el-form-item>
-  </el-row>
+    <el-table-column label="Пациент" width="250" sortable align="center">
+      <template #default="scope">
+        <el-select v-model="representativeToPatient[scope.$index].patientId">
+          <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Роль представителя" align="center">
+      <template #default="scope">
+        <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
+          <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </template>
+    </el-table-column>
+
+    <el-table-column width="40" fixed="right" align="center">
+      <template #default="scope">
+        <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import IOption from '@/interfaces/shared/IOption';
 
 @Options({
   name: 'RepresentativeToPatientForm',
   props: ['inRepresentativeToPatient', 'inRepresentativeTypes', 'inPatients'],
+  components: {
+    TableButtonGroup,
+  },
 })
 export default class RepresentativeToPatientForm extends Vue {
   // Types.

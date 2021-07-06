@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount">
+  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
     <PageHead :title="title" :links="links" />
     <div class="table-background">
       <el-collapse>
@@ -21,7 +21,15 @@
           </div>
         </el-collapse-item>
       </el-collapse>
-      <el-table :default-sort="{ prop: 'id', order: 'ascending' }" :data="register.registerToPatient" class="table-shadow" header-row-class-name="header-style" border>
+      <el-table
+        :default-sort="{ prop: 'id', order: 'ascending' }"
+        :data="register.registerToPatient"
+        class="table-shadow"
+        header-row-class-name="header-style"
+        border
+        height="auto"
+        max-height="75%"
+      >
         <el-table-column type="index" label="№" width="50" />
         <el-table-column label="ФИО" sortable prop="patient.human.surname" align="left" resizable>
           <template #default="scope">
@@ -131,7 +139,7 @@ export default class RegisterPatientsPage extends mixins(BreadCrumbsLinks) {
         prop.userId = this.user.id;
         this.user.registerPropertyToUser.push(prop);
       } else {
-        const index = this.user.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
+        const index = this.user.registerPropertyToUser.findIndex(prop => prop.registerPropertyId === propertyId);
         if (index > -1) {
           this.user.registerPropertyToUser.splice(index, 1);
         }

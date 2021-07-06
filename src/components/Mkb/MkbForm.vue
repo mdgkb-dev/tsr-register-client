@@ -25,7 +25,7 @@
           <el-button @click="addAnamnesis(props.row)" style="margin: 10px">Добавить анамнез</el-button>
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
-              <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="index" :timestamp="$dateFormatRu(anamnesis.date)" placement="top">
+              <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="anamnesis.id" :timestamp="$dateFormatRu(anamnesis.date)" placement="top">
                 <AnamnesisForm
                   :anamnesis="anamnesis"
                   :index="index"
