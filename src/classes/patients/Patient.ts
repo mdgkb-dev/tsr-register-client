@@ -128,6 +128,15 @@ export default class Patient implements IPatient {
     this.registerPropertyToPatient.push(registerPropertyToPatient);
   }
 
+  getOtherPropertyValue(property: IRegisterProperty): string | undefined {
+    if (property.id) {
+      const item = this.findProperty(property.id);
+      console.log(item?.valueOther);
+      return item?.valueOther;
+    }
+    return undefined;
+  }
+
   getRegisterPropertyValue(property: IRegisterProperty): boolean | string | number | Date | null {
     if (property.valueType?.isSet()) {
       const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === property.id);
@@ -146,6 +155,17 @@ export default class Patient implements IPatient {
 
   getRegisterPropertyValueSet(setId: string): boolean {
     return !!this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+  }
+
+  setRegisterPropertyValueOther(value: string, property: IRegisterProperty): void {
+    if (!property.id) return;
+    let item = this.findProperty(property.id);
+    if (!item) {
+      this.pushRegisterProperty(property.id);
+      item = this.findProperty(property.id);
+    }
+    if (!item) return;
+    item.valueOther = value as string;
   }
 
   setRegisterPropertyValue(value: number | string | Date, property: IRegisterProperty): void {

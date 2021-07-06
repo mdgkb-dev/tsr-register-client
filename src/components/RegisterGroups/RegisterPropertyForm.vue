@@ -17,8 +17,12 @@
         </el-form-item>
       </template>
     </el-table-column>
-
-    <el-table-column width="40" fixed="right" align="center">
+    <el-table-column label="Порядковый номер свойства" min-width="250">
+      <template #default="scope">
+        <el-input-number v-model="scope.row.order"></el-input-number>
+      </template>
+    </el-table-column>
+    <el-table-column fixed="right" width="200">
       <template #default="scope">
         <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
       </template>

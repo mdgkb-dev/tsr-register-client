@@ -3,7 +3,16 @@
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" :inline-message="true" :model="registerProperty" :rules="rules" ref="form" label-width="150px" label-position="left" style="max-width: 800px">
+        <el-form
+          :status-icon="true"
+          :inline-message="true"
+          :model="registerProperty"
+          :rules="rules"
+          ref="form"
+          label-width="150px"
+          label-position="left"
+          style="max-width: 800px"
+        >
           <el-form-item label="Название свойства" prop="name">
             <el-input v-model="registerProperty.name"></el-input>
           </el-form-item>
@@ -11,6 +20,9 @@
             <el-select @change="changeRelation" v-model="registerProperty.valueTypeId">
               <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item v-if="showSet || showRadio" label="Добавить поле 'Другое'">
+            <el-checkbox v-model="registerProperty.withOther" />
           </el-form-item>
 
           <div v-if="showSet">

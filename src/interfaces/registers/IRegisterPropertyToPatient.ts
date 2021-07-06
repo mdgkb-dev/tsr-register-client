@@ -3,6 +3,7 @@ import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadi
 export default interface IRegisterPropertyToPatient {
   id?: string;
   valueString?: string;
+  valueOther?: string;
   valueNumber?: number;
   valueDate?: Date;
   registerPropertyRadioId?: string;

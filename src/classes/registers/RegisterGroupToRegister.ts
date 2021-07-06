@@ -8,6 +8,7 @@ export default class RegisterGroupToRegister implements IRegisterGroupToRegister
   id?: string;
   registerId?: string;
   registerGroupId?: string;
+  order = 0;
 
   registerGroup?: IRegisterGroup;
   register?: IRegister;
@@ -19,6 +20,7 @@ export default class RegisterGroupToRegister implements IRegisterGroupToRegister
     this.id = item.id;
     this.registerId = item.registerId;
     this.registerGroupId = item.registerGroupId;
+    this.order = item.order;
     if (item.register) this.register = new Register(item.register);
     if (item.registerGroup) this.registerGroup = new RegisterGroup(item.registerGroup);
   }

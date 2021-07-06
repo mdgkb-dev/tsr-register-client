@@ -1,13 +1,11 @@
 <template>
   <div class="wrapper" v-if="mount" style="height:100%">
     <PageHead :title="title" />
-    <el-row>
-      <div class="table-background">
+      <div class="table-background" style="height: auto">
         <el-scrollbar>
           <MkbTree></MkbTree>
         </el-scrollbar>
       </div>
-    </el-row>
   </div>
 </template>
 
