@@ -1,4 +1,5 @@
 #!/bin/sh
 . "$(dirnam "$0")/_/husky.sh
 
-npm run lint
+eslint — fix ./src — ext .vue,.js,.ts
+
