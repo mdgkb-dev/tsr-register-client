@@ -10,7 +10,7 @@ const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }, pageNum?: number): Promise<void> => {
-    if (pageNum) {
+    if (pageNum !== undefined) {
       commit('setAll', await httpClient.get({ query: `?offset=${pageNum}` }));
     } else {
       commit('setAll', await httpClient.get());

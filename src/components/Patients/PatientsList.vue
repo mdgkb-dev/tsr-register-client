@@ -21,7 +21,7 @@
         header-row-class-name="header-style"
         row-class-name="no-hover"
         height="auto"
-        max-height="60%"
+        max-height="68%"
       >
         <el-table-column width="60" align="center" />
 
@@ -163,8 +163,9 @@
           </template>
         </el-table-column>
       </el-table>
+      <div style="text-align: center; width: 100%">
       <el-pagination
-        style="margin-left: 25%; margin-top: 50px; margin-bottom: 50px"
+        style="margin-top: 20px; margin-bottom: 20px"
         :current-page="curPage"
         background
         layout="prev, pager, next"
@@ -172,6 +173,7 @@
         @current-change="setPage"
       >
       </el-pagination>
+      </div>
     </div>
   </div>
 </template>
