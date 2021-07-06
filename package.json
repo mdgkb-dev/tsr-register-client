@@ -7,8 +7,17 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.(js|jsx|vue|ts)": ["npm run lint", "git add"]
+    "src/**/*.(js,jsx,ts,tsx,json,css,vue,scss)": [
+      "prettier --write",
+      "npm run lint",
+      "git add"
+    ]
   },
   "dependencies": {
     "@vuelidate/core": "2.0.0-alpha.12",
@@ -48,6 +57,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^1.1.1",
     "eslint-plugin-vue": "^7.0.0",
+    "husky": "^7.0.1",
     "node-sass": "^6.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
