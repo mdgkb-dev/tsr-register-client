@@ -13,8 +13,10 @@ export default class RepresentativeType implements IRepresentativeType {
     }
     this.id = representativeType.id;
     this.name = representativeType.name;
+
     this.childMaleType = representativeType.childMaleType;
     this.childWomanType = representativeType.childWomanType;
+
     this.isMale = representativeType.isMale;
   }
 }
