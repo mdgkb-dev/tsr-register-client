@@ -95,7 +95,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory('tsr'),
+  history: createWebHistory(''),
   routes,
 });
 

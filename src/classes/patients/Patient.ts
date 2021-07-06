@@ -74,7 +74,7 @@ export default class Patient implements IPatient {
       const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
       if (currentAnthropometryData.length) {
         const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
-        total = `<div>${total} ${lastAnthropometry.getFullInfo()}</div>`;
+        total = `${total} ${lastAnthropometry.getFullInfo()}`;
       }
     });
     return total;
@@ -131,7 +131,6 @@ export default class Patient implements IPatient {
   getOtherPropertyValue(property: IRegisterProperty): string | undefined {
     if (property.id) {
       const item = this.findProperty(property.id);
-      console.log(item?.valueOther);
       return item?.valueOther;
     }
     return undefined;

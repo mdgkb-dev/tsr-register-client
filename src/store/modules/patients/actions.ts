@@ -9,8 +9,12 @@ import { State } from './state';
 const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, pageNum: number): Promise<void> => {
-    commit('setAll', await httpClient.get({ query: `?offset=${pageNum}` }));
+  getAll: async ({ commit }, pageNum?: number): Promise<void> => {
+    if (pageNum) {
+      commit('setAll', await httpClient.get({ query: `?offset=${pageNum}` }));
+    } else {
+      commit('setAll', await httpClient.get());
+    }
   },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get({ query: '?withDisabilities=true' }));

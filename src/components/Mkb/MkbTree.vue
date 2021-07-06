@@ -195,7 +195,6 @@ export default class MkbTree extends Vue {
 
   checkDiagnosis(diagnosisArr: IMkbDiagnosis[]) {
     diagnosisArr.forEach((diagnosis: any) => {
-      console.log(this.checkDiagnosis);
       this.checkedDiagnosis.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
         if (diagnosis.id === d.mkbDiagnosisId) {
           this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);
@@ -206,7 +205,6 @@ export default class MkbTree extends Vue {
 
   checkSubDiagnosis(diagnosisArr: IMkbSubDiagnosis[]) {
     diagnosisArr.forEach((diagnosis: any) => {
-      console.log(this.checkDiagnosis);
       this.checkedDiagnosis.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
         if (diagnosis.id === d.mkbSubDiagnosisId) {
           this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);

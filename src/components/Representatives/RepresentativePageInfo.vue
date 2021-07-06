@@ -6,30 +6,55 @@
           <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
         </div>
         <h1 class="semi-bold-header">Контакты</h1>
-        <div>{{ representative.human.contact.phone }}</div>
-        <div>{{ representative.human.contact.email }}</div>
+        <el-space direction="vertical" class="light-title" :size="15" alignment="start">
+          <el-space alignment="center">
+            <i class="el-icon-message contact-icon"></i>
+            <span>{{ representative.human.contact.email ? representative.human.contact.email : 'Не указан' }}</span>
+          </el-space>
+          <el-space alignment="center">
+            <i class="el-icon-phone contact-icon"></i>
+            <span>{{ representative.human.contact.phone ? representative.human.contact.phone : 'Не указан' }}</span>
+          </el-space>
+        </el-space>
       </el-col>
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Зак. представитель</el-tag>
         <h2 v-html="representative.human.getFullName()" style="margin-bottom: 60px"></h2>
         <el-row>
-          <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
-          <el-col :span="12"> {{ $dateFormatRu(representative.human.dateBirth) }}</el-col>
+          <el-col :span="12" class="light-title upper">Дата рождения</el-col>
+          <el-col :span="12"> {{ representative.human.dateBirth ? $dateFormatRu(representative.human.dateBirth) : 'Не указана' }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
-          <el-col :span="12" style="color: #a1a8bd">Пол</el-col>
+          <el-col :span="12" class="light-title upper">Пол</el-col>
           <el-col :span="12"> {{ representative.human.getGender(true) }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
-          <el-col :span="12" style="color: #a1a8bd">Языки</el-col>
+          <el-col :span="12" class="light-title upper">Языки</el-col>
           <el-col :span="12"> Русский, английский </el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
-          <el-col :span="12" style="color: #a1a8bd">Адрес</el-col>
-          <el-col :span="12"> {{ representative.human.addressRegistration }} </el-col>
+          <el-col :span="12" class="light-title upper">Адрес</el-col>
+          <el-col :span="12"> {{ representative.human.addressRegistration ? representative.human.addressRegistration : 'Не указан' }} </el-col>
+        </el-row>
+        <el-divider></el-divider>
+        <el-row align="middle">
+          <el-col :span="12" class="light-title upper flex-center">Прикрепленные документы</el-col>
+          <el-col :span="12">
+            <el-space :wrap="true" v-if="representative.human.documents.length">
+              <div v-for="document in representative.human.documents" :key="document">
+                <el-tooltip class="item" effect="light" :content="document.documentType.name" placement="top-end">
+                  <el-tag>
+                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <span>{{ document.documentType.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
+              </div>
+            </el-space>
+            <div v-else>Документов нет</div>
+          </el-col>
         </el-row>
       </el-col>
     </el-row>
@@ -52,3 +77,9 @@ export default class RepresentativePageInfo extends Vue {
   fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 }
 </script>
+
+<style lang="scss" scoped>
+.table-background:deep {
+  @import '@/assets/elements/pageInfo.scss';
+}
+</style>

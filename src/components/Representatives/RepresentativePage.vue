@@ -71,8 +71,6 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
   },
   methods: {
     ...mapActions({
-      documentScansUpload: 'documentScans/upload',
-      patientsCreate: 'patients/create',
       patientsGetAll: 'patients/getAll',
       representativeGet: 'representatives/get',
       representativeTypesGetAll: 'representativeTypes/getAll',
@@ -85,8 +83,6 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
   offset: number[] = [0];
   representativeTypes!: IRepresentativeType[];
 
-  documentsGetAll!: () => Promise<void>;
-  documentsUpload!: () => Promise<void>;
   patientsGetAll!: () => Promise<void>;
   representativeGet!: (representativeId: string) => Promise<void>;
   representativeTypesGetAll!: () => Promise<void>;
