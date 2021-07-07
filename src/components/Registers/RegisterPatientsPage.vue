@@ -25,8 +25,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         border
-        height="auto"
-        max-height="75%"
+        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto;"
       >
         <el-table-column type="index" width="70" align="center" />
 

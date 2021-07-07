@@ -8,8 +8,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        height="auto"
-        max-height="75%"
+        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название группы" min-width="150" sortable />

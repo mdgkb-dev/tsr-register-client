@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount" style="height: 100%; overflow: hidden; overflow-x: hidden">
+  <div v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-autocomplete
@@ -20,8 +20,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        height="auto"
-        max-height="68%"
+        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
       >
         <el-table-column width="60" align="center" />
 
