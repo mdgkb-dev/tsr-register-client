@@ -164,15 +164,8 @@
         </el-table-column>
       </el-table>
       <div style="text-align: center; width: 100%">
-      <el-pagination
-        style="margin-top: 20px; margin-bottom: 20px"
-        :current-page="curPage"
-        background
-        layout="prev, pager, next"
-        :total="240"
-        @current-change="setPage"
-      >
-      </el-pagination>
+        <el-pagination style="margin-top: 20px; margin-bottom: 20px" :current-page="curPage" background layout="prev, pager, next" :total="240" @current-change="setPage">
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -206,14 +199,19 @@ import ISearchPatient from '@/interfaces/shared/ISearchPatient';
   },
 })
 export default class PatientsList extends Vue {
+  // Types.
   $message!: {
     error: any;
   };
   $loading: any;
-
-  getAll!: (pageNum: number) => Promise<void>;
   patients!: IPatient[];
   filteredPatients!: IPatient[];
+
+  getAll!: (pageNum: number) => Promise<void>;
+  searchPatients!: (query: string) => Promise<void>;
+  getAllById!: (id: string) => Promise<void>;
+
+  // Local state.
   loading = false;
   mount = false;
   search = '';
@@ -221,10 +219,26 @@ export default class PatientsList extends Vue {
   searchAddress = '';
   title = 'Пациенты';
   queryStringsPatient = '';
-  searchPatients!: (query: string) => Promise<void>;
-  getAllById!: (id: string) => Promise<void>;
   curPage = 0;
 
+  // Lifecycle methods.
+  async mounted(): Promise<void> {
+    const loading = this.$loading({
+      lock: true,
+      text: 'Загрузка',
+    });
+    try {
+      await this.getAll(0);
+    } catch (e) {
+      this.$message.error(e.toString());
+      return;
+    }
+
+    this.mount = true;
+    loading.close();
+  }
+
+  // Methods.
   async setPage(pageNum: number) {
     this.curPage = pageNum;
     this.loading = true;
@@ -251,22 +265,6 @@ export default class PatientsList extends Vue {
 
   async handlePatientSelect(item: ISearch) {
     await this.getAllById(item.id);
-  }
-
-  async mounted(): Promise<void> {
-    const loading = this.$loading({
-      lock: true,
-      text: 'Загрузка',
-    });
-    try {
-      await this.getAll(0);
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-
-    this.mount = true;
-    loading.close();
   }
 
   edit(id: string): void {

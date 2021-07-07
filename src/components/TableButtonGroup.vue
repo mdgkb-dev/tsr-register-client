@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <el-button icon="el-icon-download" v-if="showDownloadButton" @click="$emit('download')" />
-    <el-button icon="el-icon-edit" v-if="showEditButton" @click="$emit('edit')" />
-    <el-button icon="el-icon-delete" v-if="showRemoveButton" @click="$emit('remove')" />
+    <el-button class="table-button" icon="el-icon-download" v-if="showDownloadButton" @click="$emit('download')" />
+    <el-button class="table-button" icon="el-icon-edit" v-if="showEditButton" @click="$emit('edit')" />
+    <el-button class="table-button" icon="el-icon-delete" v-if="showRemoveButton" @click="$emit('remove')" />
   </div>
 </template>
 
@@ -19,12 +19,3 @@ export default class TableButtonGroup extends Vue {
   showRemoveButton!: boolean;
 }
 </script>
-
-<style scoped>
-.el-button {
-  padding: 5px;
-  margin: 0;
-  min-height: unset;
-  border: none;
-}
-</style>

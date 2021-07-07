@@ -9,6 +9,6 @@
   width: 100%;
   box-sizing: border-box;
 }
-:deep(.el-collapse-item__header, .el-collapse-item__wrap) {
+:deep(.el-collapse-item__header), :deep(.el-collapse-item__wrap) {
   border: none;
 }

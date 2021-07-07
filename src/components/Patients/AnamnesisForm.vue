@@ -70,7 +70,7 @@ article {
   right: 10px;
 }
 
-:deep(.el-input__inner, .el-textarea__inner) {
+:deep(.el-input__inner), :deep(.el-textarea__inner) {
   border-radius: 15px;
 }
 
