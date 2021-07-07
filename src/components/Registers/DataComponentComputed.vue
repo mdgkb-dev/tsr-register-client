@@ -29,7 +29,5 @@ export default class DataComponentComputed extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.patient-page-container:deep {
-  @import '@/assets/elements/collapse.scss';
-}
+@import '@/assets/elements/collapse.scss';
 </style>

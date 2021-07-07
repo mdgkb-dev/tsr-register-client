@@ -172,7 +172,5 @@ export default class RegisterPatientsPage extends mixins(BreadCrumbsLinks) {
 </script>
 
 <style lang="scss" scoped>
-.register-header:deep {
-  @import '@/assets/elements/collapse.scss';
-}
+@import '@/assets/elements/collapse.scss';
 </style>

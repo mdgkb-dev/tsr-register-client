@@ -20,13 +20,11 @@ export default class TableButtonGroup extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.wrapper:deep {
-  .el-button {
-    padding: 5px;
-    margin: 0;
-    min-height: unset;
-    border: none;
-  }
+<style scoped>
+.el-button {
+  padding: 5px;
+  margin: 0;
+  min-height: unset;
+  border: none;
 }
 </style>

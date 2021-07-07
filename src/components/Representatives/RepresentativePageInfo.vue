@@ -79,7 +79,5 @@ export default class RepresentativePageInfo extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.table-background:deep {
-  @import '@/assets/elements/pageInfo.scss';
-}
+@import '@/assets/elements/pageInfo.scss';
 </style>

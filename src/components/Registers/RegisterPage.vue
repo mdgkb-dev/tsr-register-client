@@ -111,7 +111,5 @@ export default class RegisterPage extends mixins(ValidateMixin, ConfirmLeavePage
 </script>
 
 <style lang="scss" scoped>
-.wrapper:deep {
-  @import '@/assets/elements/collapse.scss';
-}
+@import '@/assets/elements/collapse.scss';
 </style>

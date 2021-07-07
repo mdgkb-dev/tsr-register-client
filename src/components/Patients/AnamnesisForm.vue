@@ -55,29 +55,26 @@ export default class AnamnesisForm extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.card-wrapper:deep {
-  article {
-    width: calc(100% - 75px);
-  }
+<style scoped>
+article {
+  width: calc(100% - 75px);
+}
 
-  .el-card__body {
-    min-height: 100px;
-  }
+:deep(.el-card__body) {
+  min-height: 100px;
+}
 
-  .card-button-group {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+.card-button-group {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 
-  .el-input__inner,
-  .el-textarea__inner {
-    border-radius: 15px;
-  }
+:deep(.el-input__inner, .el-textarea__inner) {
+  border-radius: 15px;
+}
 
-  .el-timeline {
-    padding: 0;
-  }
+.el-timeline {
+  padding: 0;
 }
 </style>

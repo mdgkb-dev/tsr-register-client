@@ -298,7 +298,5 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
 </script>
 
 <style lang="scss" scoped>
-.patient-page-container:deep {
-  @import '@/assets/elements/collapse.scss';
-}
+@import '@/assets/elements/collapse.scss';
 </style>

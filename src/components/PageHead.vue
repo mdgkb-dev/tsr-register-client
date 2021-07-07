@@ -33,15 +33,13 @@ export default class PageHead extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.wrapper:deep {
-  .el-row {
-    background-color: #eef1f6;
-  }
-  .el-space {
-    width: 100%;
-    justify-content: space-between;
-    margin: 20px 8px;
-  }
+<style scoped>
+.el-row {
+  background-color: #eef1f6;
+}
+.el-space {
+  width: 100%;
+  justify-content: space-between;
+  margin: 20px 8px;
 }
 </style>

@@ -155,8 +155,7 @@ export default class MainSidePanel extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.wrapper {
+<style scoped>
   .menu-badge {
     width: 50%;
     background-color: rgba(238, 55, 116, 255);
@@ -211,5 +210,4 @@ export default class MainSidePanel extends Vue {
     justify-content: center;
     align-items: center;
   }
-}
 </style>

@@ -154,33 +154,5 @@ export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLi
 </script>
 
 <style lang="scss" scoped>
-.el-collapse-item__header {
-  background-color: rgb(242, 242, 242) !important;
-  border-bottom: 1px solid rgb(200, 200, 200) !important;
-}
-
-.el-collapse-item__wrap {
-  top: 50px;
-  right: 20px;
-  left: 0;
-  z-index: 1;
-  padding: 10px;
-  background-color: rgb(242, 242, 242) !important;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.el-collapse-item__content {
-  user-select: none;
-}
-.patient-page-container:deep {
-  @import '@/assets/elements/collapse.scss';
-}
-
-.collapseHeader {
-  padding-left: 10px;
-}
-.collapseStatus {
-  margin-left: 5%;
-  margin-top: 3px;
-}
+@import '@/assets/elements/collapse.scss';
 </style>

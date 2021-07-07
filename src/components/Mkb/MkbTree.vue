@@ -284,16 +284,14 @@ export default class MkbTree extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.wrapper:deep {
-  .el-input__inner {
-    border-radius: 10px;
-    height: 30px;
-    padding: 0 10px;
-  }
+<style scoped>
+:deep(.el-input__inner) {
+  border-radius: 10px;
+  height: 30px;
+  padding: 0 10px;
+}
 
-  .el-tree-node {
-    margin: 7px 0;
-  }
+:deep(.el-tree-node) {
+  margin: 7px 0;
 }
 </style>

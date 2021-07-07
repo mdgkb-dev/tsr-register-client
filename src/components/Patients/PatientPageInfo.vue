@@ -131,7 +131,5 @@ export default class PatientPageInfo extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.table-background:deep {
-  @import '@/assets/elements/pageInfo.scss';
-}
+@import '@/assets/elements/pageInfo.scss';
 </style>

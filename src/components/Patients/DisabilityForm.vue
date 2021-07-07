@@ -272,14 +272,12 @@ export default class DisabilityForm extends Vue {
   }
 }
 </script>
-<style lang="scss" scoped>
-.wrapper:deep {
-  .card-button-group {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .but {
-    border-radius: 50%;
-  }
+<style scoped>
+.card-button-group {
+  display: flex;
+  justify-content: flex-end;
+}
+.but {
+  border-radius: 50%;
 }
 </style>

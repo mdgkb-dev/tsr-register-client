@@ -159,9 +159,7 @@ export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLea
 </script>
 
 <style lang="scss" scoped>
-.representative-page-container:deep {
-  @import '@/assets/elements/collapse.scss';
-}
+@import '@/assets/elements/collapse.scss';
 
 .el-row {
   &:last-child {

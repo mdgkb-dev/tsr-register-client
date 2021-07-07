@@ -233,15 +233,13 @@ export default class DocumentForm extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.form-under-collapse:deep {
-  h3 {
-    margin-top: 0;
-  }
-  .card-button-group {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
+<style scoped>
+h3 {
+  margin-top: 0;
+}
+.card-button-group {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>
