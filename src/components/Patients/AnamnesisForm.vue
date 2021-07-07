@@ -21,7 +21,19 @@
       <div class="card-button-group">
         <el-button icon="el-icon-folder-checked" v-if="anamnesis.isEditMode" @click="edit"></el-button>
         <el-button icon="el-icon-edit" v-else @click="edit"></el-button>
-        <el-button icon="el-icon-delete" @click="remove"></el-button>
+        <el-popconfirm
+          confirmButtonText="Да"
+          cancelButtonText="Отмена"
+          icon="el-icon-info"
+          iconColor="red"
+          title="Вы уверен, что хотите удалить это?"
+          @confirm="remove"
+          @cancel="() => {}"
+        >
+          <template #reference>
+            <el-button icon="el-icon-delete"></el-button>
+          </template>
+        </el-popconfirm>
       </div>
     </el-card>
   </div>
@@ -70,7 +82,8 @@ article {
   right: 10px;
 }
 
-:deep(.el-input__inner), :deep(.el-textarea__inner) {
+:deep(.el-input__inner),
+:deep(.el-textarea__inner) {
   border-radius: 15px;
 }
 

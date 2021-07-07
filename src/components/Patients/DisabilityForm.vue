@@ -64,7 +64,7 @@
           <div v-else class="card-button-group">
             <el-button-group v-if="!fileInfos.some(info => info.category === scope.row.id)">
               <el-tooltip v-if="!fileInfos.some(info => info.category === scope.row.id)" effect="light" placement="top-end" content="Приложить файл">
-                <el-button icon="el-icon-upload" @click="$refs[scope.row.id].click()"></el-button>
+                <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()"></el-button>
               </el-tooltip>
               <input
                 type="file"
@@ -82,9 +82,11 @@
               <el-tooltip v-if="fileInfos.find(info => info.category === scope.row.id).isDraft" effect="light" placement="top-end" content="Файл добавлен">
                 <el-button disabled icon="el-icon-document-checked"></el-button>
               </el-tooltip>
-              <el-button v-else :data-file-id="fileInfos.find(info => info.category === scope.row.id).id" @click.prevent="downloadFile">Скачать файл</el-button>
+              <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
+                <el-button :data-file-id="fileInfos.find(info => info.category === scope.row.id).id" @click.prevent="downloadFile" icon="el-icon-download"></el-button>
+              </el-tooltip>
               <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
-                <el-button @click="$refs[scope.row.id].click()" icon="el-icon-upload" />
+                <el-button @click="$refs[scope.row.id].click()" icon="el-icon-paperclip" />
               </el-tooltip>
               <input
                 type="file"

@@ -84,12 +84,12 @@ body {
   color: #303133;
 }
 
-.el-message-box__btns {
+.el-message-box__btns, .el-popconfirm__action {
   display: flex;
   flex-direction: row-reverse;
 }
 
-.el-message-box__btns .el-button {
+.el-message-box__btns .el-button, .el-popconfirm__action .el-button {
   margin-right: 10px;
 }
 

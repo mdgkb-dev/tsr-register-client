@@ -16,9 +16,22 @@
         <h3>{{ document.documentType.name }}</h3>
         <div class="card-button-group">
           <el-tooltip effect="light" placement="top-end" content="Приложить файлы">
-            <el-button icon="el-icon-upload" @click="$refs[document.id].click()"></el-button>
+            <el-button icon="el-icon-paperclip" @click="$refs[document.id].click()"></el-button>
           </el-tooltip>
-          <el-button icon="el-icon-delete" @click="() => remove(document.id)"></el-button>
+          <el-popconfirm
+            confirmButtonText="Да"
+            cancelButtonText="Отмена"
+            icon="el-icon-info"
+            iconColor="red"
+            title="Вы уверен, что хотите удалить документ?"
+            @confirm="() => remove(document.id)"
+            @cancel="() => {}"
+          >
+            <template #reference>
+              <el-button class="table-button" icon="el-icon-delete" />
+              <el-button icon="el-icon-delete"></el-button>
+            </template>
+          </el-popconfirm>
         </div>
 
         <section v-for="(value, valueIndex) in document.documentFieldValues" :key="value.id">
@@ -75,6 +88,7 @@
                 @remove="removeFile(scope.row.id)"
                 :showRemoveButton="true"
                 :showDownloadButton="!scope.row.isDraft"
+                :horizontal="true"
               />
             </template>
           </el-table-column>
