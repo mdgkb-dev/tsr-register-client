@@ -5,6 +5,5 @@ module.exports = {
     disableHostCheck: true,
     host: 'localhost',
     proxy: process.env.DEV_BACKEND_URL,
-    port: 8082,
   },
 };
