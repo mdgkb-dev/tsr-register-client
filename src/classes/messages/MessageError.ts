@@ -3,7 +3,7 @@ import IMessage from '@/interfaces/shared/IMessage';
 export default class MessageError implements IMessage {
   dangerouslyUseHTMLString: boolean;
   message: string;
-  type: string;
+  type: 'error';
 
   constructor(errorFields: any) {
     this.dangerouslyUseHTMLString = true;

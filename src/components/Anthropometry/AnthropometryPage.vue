@@ -1,9 +1,17 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" ref="form" :model="anthropometry" label-width="180px" label-position="left" :rules="rules" style="max-width: 800px">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :model="anthropometry"
+          label-width="180px"
+          label-position="left"
+          :rules="rules"
+          style="max-width: 800px"
+        >
           <el-form-item label="Название параметра" prop="name">
             <el-input v-model="anthropometry.name"></el-input>
           </el-form-item>
@@ -17,72 +25,79 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
 import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 import PageHead from '@/components/PageHead.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
-@Options({
+export default defineComponent({
   name: 'AnthropometryPage',
   components: {
     PageHead,
   },
-  computed: {
-    ...mapGetters('anthropometry', ['anthropometry']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm();
+    const { validate } = useValidate();
+
+    const anthropometry: Ref<IAnthropometry> = ref(new Anthropometry());
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = AnthropometryRules;
+    const title: Ref<string> = ref('');
+
+    onBeforeMount(async () => {
+      if (!route.params.anthropometryId) {
+        isEditMode.value = false;
+        title.value = 'Создать параметр';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать параметр';
+        await store.dispatch('anthropometry/get', route.params.anthropometryId);
+        anthropometry.value = store.getters['anthropometry/anthropometry'];
+      }
+
+      pushToLinks(['/anthropometry'], ['Антропометрия']);
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(anthropometry, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+
+      await submitHandling('anthropometry', anthropometry.value, next);
+    };
+
+    return {
+      anthropometry,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      anthropometryGet: 'anthropometry/get',
-    }),
-  },
-})
-export default class AnthropometryPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  anthropometryGet!: (anthropometryId: string) => Promise<void>;
-
-  // Local state.
-  anthropometry: IAnthropometry = new Anthropometry();
-  title = '';
-  mount = false;
-
-  rules = AnthropometryRules;
-
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.anthropometryId) {
-      this.isEditMode = false;
-      this.title = 'Создать параметр';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать параметр';
-      await this.anthropometryGet(`${this.$route.params.anthropometryId}`);
-      this.anthropometry = this.$store.getters['anthropometry/anthropometry'];
-    }
-    this.pushToLinks(['/anthropometry'], ['Антропометрия']);
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('anthropometry', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    await this.submitHandling('anthropometry', this.anthropometry, next);
-  }
-}
+});
 </script>

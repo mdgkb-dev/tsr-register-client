@@ -5,7 +5,7 @@ import { isAuthorized } from '@/router/index';
 export default [
   {
     path: '/anthropometry',
-    name: 'Anthropometry',
+    name: 'AnthropometryList',
     component: AnthropometryList,
     beforeEnter: isAuthorized,
   },

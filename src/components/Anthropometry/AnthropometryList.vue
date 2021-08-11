@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
-    <PageHead :title="title" @create="create" :showAddButton="true" />
+  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
+    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -8,14 +8,19 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название параметра" min-width="150" sortable />
         <el-table-column width="40" fixed="right" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
-              <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+              <TableButtonGroup
+                :show-remove-button="true"
+                :show-edit-button="true"
+                @edit="edit(scope.row.id)"
+                @remove="remove(scope.row.id)"
+              />
             </el-space>
           </template>
         </el-table-column>
@@ -25,49 +30,52 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
-@Options({
-  name: 'Anthropometry',
+export default defineComponent({
+  name: 'AnthropometryList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('anthropometry', ['anthropometries']),
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Антропометрия');
+    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/anthropometry/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/anthropometry/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('anthropometry/delete', id);
+    };
+
+    onBeforeMount(async () => {
+      await store.dispatch('anthropometry/getAll');
+      mount.value = true;
+    });
+
+    return {
+      anthropometries,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAll: 'anthropometry/getAll',
-    }),
-  },
-})
-export default class Anthropometry extends Vue {
-  anthropometries!: IAnthropometry[];
-  getAll!: () => Promise<void>;
-  mount = false;
-  title = 'Антропометрия';
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: string): void {
-    this.$router.push(`/anthropometry/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/anthropometry/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('anthropometry/delete', id);
-  }
-}
+});
 </script>
