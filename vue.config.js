@@ -1,9 +1,9 @@
 module.exports = {
   lintOnSave: false,
   devServer: {
-    disableHostCheck: true,
-    host: 'localhost',
+    host: process.env.VUE_APP_HOST,
+    port: process.env.VUE_APP_PORT,
     proxy: process.env.DEV_BACKEND_URL,
-    port: 8082,
+    disableHostCheck: true,
   },
 };
