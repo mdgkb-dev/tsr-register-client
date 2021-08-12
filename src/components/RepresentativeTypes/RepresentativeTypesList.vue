@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" @create="create" :showAddButton="true" />
+  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
+    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -17,7 +17,12 @@
         <el-table-column width="40" fixed="right" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
-              <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+              <TableButtonGroup
+                :show-edit-button="true"
+                :show-remove-button="true"
+                @edit="edit(scope.row.id)"
+                @remove="remove(scope.row.id)"
+              />
             </el-space>
           </template>
         </el-table-column>
@@ -27,12 +32,13 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'RepresentativeTypesList',

@@ -31,7 +31,7 @@ const actions: ActionTree<State, RootState> = {
     commit('create', await httpClient.post({ payload: patient, fileInfos: patient.human.fileInfos, isFormData: true }));
   },
   edit: async ({ commit }, patient: IPatient): Promise<void> => {
-    const fileInfos = patient.human.fileInfos.filter(info => info.isDraft);
+    const fileInfos = patient.human.fileInfos.filter((info) => info.isDraft);
     commit(
       'update',
       await httpClient.put({

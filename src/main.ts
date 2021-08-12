@@ -59,8 +59,6 @@ import {
   ElTree,
   ElUpload,
 } from 'element-plus';
-import locale from 'element-plus/lib/locale';
-import lang from 'element-plus/lib/locale/lang/ru';
 import { createApp } from 'vue';
 
 import fillDateFormat from '@/services/DateFormat';

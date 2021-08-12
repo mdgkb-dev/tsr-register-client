@@ -1,11 +1,11 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
-          :status-icon="true"
           ref="form"
+          :status-icon="true"
           :model="representativeType"
           :rules="rules"
           label-width="30%"
@@ -16,11 +16,11 @@
             <el-input v-model="representativeType.name"></el-input>
           </el-form-item>
 
-          <el-form-item label="Подопечный мужского пола" prop="genderType">
+          <el-form-item label="Подопечный мужского пола" prop="childMaleType">
             <el-input v-model="representativeType.childMaleType"></el-input>
           </el-form-item>
 
-          <el-form-item label="Подопечный женского пола" prop="genderType">
+          <el-form-item label="Подопечный женского пола" prop="childWomanType">
             <el-input v-model="representativeType.childWomanType"></el-input>
           </el-form-item>
 
@@ -37,26 +37,18 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
+import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
-import { mapActions, mapGetters, useStore } from 'vuex';
+import { useStore } from 'vuex';
 
+import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
-import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
 import PageHead from '@/components/PageHead.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
-import { defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import Anthropometry from '@/classes/anthropometry/Anthropometry';
-import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',
