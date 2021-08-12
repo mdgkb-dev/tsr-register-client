@@ -28,7 +28,7 @@
         <el-table-column>
           <el-table-column prop="human.dateBirth" label="Дата постановки" min-width="160" align="center" sortable>
             <template #default="scope">
-              {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateStart) }}
+              {{ formatDate(scope.row.getActuallyDisability().period.dateStart) }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -36,7 +36,7 @@
         <el-table-column>
           <el-table-column prop="human.dateBirth" label="Дата завершения" min-width="160" align="center" sortable>
             <template #default="scope">
-              {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateEnd) }}
+              {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -45,8 +45,8 @@
           <el-table-column label="Справка ЕДВ" min-width="160" align="center" sortable>
             <template #default="scope">
               <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
-                {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
-                {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
+                {{ formatDate(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
+                {{ formatDate(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
               </div>
               <div v-else>Нет справок ЕДВ</div>
             </template>
@@ -104,73 +104,70 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { ElMessage } from 'element-plus';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import useDateFormat from '@/mixins/useDateFormat';
 
-@Options({
+export default defineComponent({
   name: 'PatientsList',
   components: {
     PageHead,
   },
-  computed: {
-    ...mapState('patients', ['patients']),
-  },
-  methods: {
-    ...mapActions({
-      getAllWithDisabilities: 'patients/getAllWithDisabilities',
-    }),
-  },
-})
-export default class PatientsList extends Vue {
-  $message!: {
-    error: any;
-  };
+  setup() {
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const search: Ref<string> = ref('');
+    const searchFullName: Ref<string> = ref('');
+    const title: Ref<string> = ref('Инвалидность');
+    const patients: ComputedRef<IPatient[]> = computed(store.getters['patients/patients']);
+    const { formatDate } = useDateFormat();
 
-  getAllWithDisabilities!: () => Promise<void>;
-  patients!: IPatient[];
+    onBeforeMount(async () => {
+      try {
+        await store.dispatch('patients/getAllWithDisabilities');
+      } catch (e) {
+        ElMessage.error(e.toString());
+        return;
+      }
 
-  mount = false;
-  search = '';
-  searchFullName = '';
-
-  title = 'Инвалидность';
-
-  async mounted(): Promise<void> {
-    try {
-      await this.getAllWithDisabilities();
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-
-    this.mount = true;
-  }
-
-  filterTable = (patients: IPatient[]) => {
-    let filteredPatients = patients;
-
-    const search = this.search.toLowerCase();
-    const searchFullName = this.searchFullName.toLowerCase();
-
-    filteredPatients = filteredPatients.filter((patient: IPatient) => {
-      const name = patient.human.getFullName().toLowerCase();
-      return !this.searchFullName || name.includes(searchFullName);
+      mount.value = true;
     });
 
-    filteredPatients = filteredPatients.filter((patient: IPatient) => {
-      const name = patient.human.getFullName().toLowerCase();
-      const date = patient.human.dateBirth;
-      return !this.search || name.includes(search) || date.includes(search);
-    });
+    const filterTable = (patients: IPatient[]): IPatient[] => {
+      let filteredPatients = patients;
 
-    return filteredPatients;
-  };
+      const localSearch = search.value.toLowerCase();
+      const localSearchFullName = searchFullName.value.toLowerCase();
 
-  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
-}
+      filteredPatients = filteredPatients.filter((patient: IPatient) => {
+        const name = patient.human.getFullName().toLowerCase();
+        return !searchFullName.value || name.includes(localSearchFullName);
+      });
+
+      filteredPatients = filteredPatients.filter((patient: IPatient) => {
+        const name = patient.human.getFullName().toLowerCase();
+        const date = patient.human.dateBirth;
+        return !search.value || name.includes(localSearch) || date.includes(localSearch);
+      });
+
+      return filteredPatients;
+    };
+
+    return {
+      mount,
+      patients,
+      search,
+      searchFullName,
+      title,
+      filterTable,
+      formatDate,
+    };
+  },
+});
 </script>
 
 <style>

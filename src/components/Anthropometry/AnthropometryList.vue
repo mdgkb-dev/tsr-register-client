@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -49,7 +49,7 @@ export default defineComponent({
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
     const title: Ref<string> = ref('Антропометрия');
-    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
+    const anthropometries: ComputedRef<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
 
     const edit = async (id: string): Promise<void> => {
       await router.push(`/anthropometry/${id}`);

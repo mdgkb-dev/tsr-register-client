@@ -63,8 +63,6 @@ import locale from 'element-plus/lib/locale';
 import lang from 'element-plus/lib/locale/lang/ru';
 import { createApp } from 'vue';
 
-import fillDateFormat from '@/services/DateFormat';
-
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -125,7 +123,6 @@ const components = [
 ];
 const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification];
 const app = createApp(App);
-app.config.globalProperties.$dateFormatRu = fillDateFormat;
 app.use(store);
 app.use(router);
 

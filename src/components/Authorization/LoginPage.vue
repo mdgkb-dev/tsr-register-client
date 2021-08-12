@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, Ref } from 'vue';
+import { computed, ComputedRef, defineComponent, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -26,11 +26,11 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
-    const authError: Ref<string> = computed(store.getters['auth/authError']);
     const loginForm: { login: string; password: string } = reactive({
       login: '',
       password: '',
     });
+    const authError: ComputedRef<string> = computed(store.getters['auth/authError']);
     const { showMessageError } = useMessage();
 
     const submitForm = async (): Promise<void> => {
