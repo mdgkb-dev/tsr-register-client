@@ -25,34 +25,43 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
+import { defineComponent, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import MessageMixin from '@/mixins/MessageMixin.vue';
+import useMessage from '@/mixins/useMessage';
 
-@Options({
+export default defineComponent({
   name: 'RegistrationPage',
-})
-export default class RegistrationPage extends mixins(MessageMixin) {
-  registrationForm = {
-    login: '',
-    password: '',
-    region: '',
-  };
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const { showMessageError } = useMessage();
+    const registrationForm: { login: string; password: string; region: string } = reactive({
+      login: '',
+      password: '',
+      region: '',
+    });
 
-  async submitForm(): Promise<void> {
-    try {
-      await this.$store.dispatch('auth/register', this.registrationForm);
-    } catch (error) {
-      console.log(error);
-      return;
-    }
+    const submitForm = async (): Promise<void> => {
+      try {
+        await store.dispatch('auth/register', registrationForm);
+      } catch (error) {
+        return;
+      }
 
-    if (!this.$store.getters['auth/isAuthorized']) {
-      this.showMessageError('Не удалось зарегистрироваться, обратитесь к разработчиками');
-      return;
-    }
+      if (!store.getters['auth/isAuthorized']) {
+        showMessageError('Не удалось зарегистрироваться, обратитесь к разработчиками');
+        return;
+      }
 
-    await this.$router.push('/patients');
-  }
-}
+      await router.push('/patients');
+    };
+
+    return {
+      registrationForm,
+      submitForm,
+    };
+  },
+});
 </script>
