@@ -7,8 +7,10 @@ import getters from './getters';
 import mutations from './mutations';
 import State from './state';
 
+import DocumentType from '@/classes/documents/DocumentType';
+
 export const state: State = {
-  documentType: undefined,
+  documentType: new DocumentType(),
   documentTypes: [],
 };
 

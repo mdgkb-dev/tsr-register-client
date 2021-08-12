@@ -56,7 +56,7 @@
                   :prop="'documentTypeFields.' + scope.$index + '.order'"
                   :rules="rules.rowNumber"
                 >
-                  <el-input-number v-model="scope.row.order" size="medium" min="0" style="width: 120px"></el-input-number>
+                  <el-input-number v-model="scope.row.order" size="medium" :min="0" style="width: 120px"></el-input-number>
                 </el-form-item>
               </template>
             </el-table-column>
@@ -73,102 +73,114 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, defineComponent, onBeforeMount, reactive, Ref, ref, watch, WritableComputedRef } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import DocumentTypeRules from '@/classes/documents/DocumentTypeRules';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
-@Options({
+export default defineComponent({
   name: 'DocumentTypePage',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapGetters('documentTypes', ['documentType']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const options: { label: string; value: string }[] = reactive([
+      { label: 'Строка', value: 'string' },
+      { label: 'Число', value: 'number' },
+      { label: 'Дата', value: 'date' },
+    ]);
+    const rules = DocumentTypeRules;
+    const title: Ref<string> = ref('');
+
+    const documentType: WritableComputedRef<IDocumentType> = computed({
+      get(): IDocumentType {
+        return store.getters['documentTypes/documentType'];
+      },
+      set(updatedType: IDocumentType): void {
+        store.commit('documentTypes/set', updatedType);
+      },
+    });
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { validate } = useValidate();
+    const { submitHandling } = useForm(isEditMode.value);
+
+    onBeforeMount(async (): Promise<void> => {
+      if (!route.params.documentTypeId) {
+        isEditMode.value = false;
+        title.value = 'Создать документ';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать документ';
+        await store.dispatch('documentTypes/get', String(route.params.documentTypeId));
+      }
+
+      pushToLinks(['/document-types'], ['Регистры пациентов']);
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(documentType, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const add = (): void => {
+      documentType.value.documentTypeFields.push(new DocumentTypeField());
+    };
+
+    const remove = (field: IDocumentTypeField): void => {
+      const index = documentType.value.documentTypeFields.indexOf(field);
+      if (index !== -1) {
+        documentType.value.documentTypeFields.splice(index, 1);
+      }
+    };
+
+    const cancel = async (): Promise<void> => {
+      await router.push('/document-types');
+    };
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+
+      await submitHandling('documentTypes', documentType.value, next, 'document-types');
+    };
+
+    return {
+      documentType,
+      form,
+      isEditMode,
+      links,
+      mount,
+      options,
+      rules,
+      title,
+      add,
+      cancel,
+      remove,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      documentTypesGet: 'documentTypes/get',
-      documentTypesGetAll: 'documentTypes/getAll',
-    }),
-  },
-})
-export default class DocumentTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  declare $refs: {
-    form: any;
-    message: any;
-  };
-  documentTypesGet!: (id: string) => Promise<void>;
-
-  // Local state.
-  documentType = new DocumentType();
-  title = '';
-  mount = false;
-
-  options = [
-    { label: 'Строка', value: 'string' },
-    { label: 'Число', value: 'number' },
-    { label: 'Дата', value: 'date' },
-  ];
-
-  rules = DocumentTypeRules;
-
-  // Lifecycle methods.
-  async created(): Promise<void> {
-    if (!this.$route.params.documentTypeId) {
-      this.isEditMode = false;
-      this.title = 'Создать документ';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать документ';
-      await this.documentTypesGet(String(this.$route.params.documentTypeId));
-      this.documentType = this.$store.getters['documentTypes/documentType'];
-    }
-    this.pushToLinks(['/document-types'], ['Регистры пациентов']);
-
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('documentType', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    await this.submitHandling('documentTypes', this.documentType, next, 'document-types');
-  }
-
-  remove(item: IDocumentTypeField): void {
-    const index = this.documentType.documentTypeFields.indexOf(item);
-    if (index !== -1) {
-      this.documentType.documentTypeFields.splice(index, 1);
-    }
-  }
-
-  add(): void {
-    this.documentType.documentTypeFields.push(new DocumentTypeField());
-  }
-
-  cancel(): void {
-    this.$router.push('/document-types');
-  }
-}
+});
 </script>

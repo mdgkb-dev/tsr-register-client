@@ -30,50 +30,52 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 
-@Options({
+export default defineComponent({
   name: 'DocumentTypeList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('documentTypes', ['documentTypes']),
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Типы документов');
+    const documentTypes: ComputedRef<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
+
+    onBeforeMount(async (): Promise<void> => {
+      await store.dispatch('documentTypes/getAll');
+      mount.value = true;
+    });
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/document-types/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/document-types/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('documentTypes/delete', id);
+    };
+
+    return {
+      documentTypes,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions('documentTypes', ['getAll']),
-  },
-})
-export default class DocumentTypeList extends Vue {
-  // Types.
-  documentTypes!: IDocumentType[];
-  getAll!: () => Promise<void>;
-
-  // Local state.
-  mount = false;
-  title = 'Типы документов';
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: string): void {
-    this.$router.push(`/document-types/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/document-types/new');
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.$store.dispatch('documentTypes/delete', id);
-  }
-}
+});
 </script>
