@@ -30,49 +30,51 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
-
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
+import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'RegisterList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('registers', ['registers']),
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Регистры пациентов');
+    const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/registers/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/registers/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('registers/delete', id);
+    };
+
+    onBeforeMount(async () => {
+      await store.dispatch('registers/getAll');
+      mount.value = true;
+    });
+
+    return {
+      registers,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAll: 'registers/getAll',
-    }),
-  },
-})
-export default class RegisterList extends Vue {
-  registers!: IRegister[];
-  title = 'Регистры пациентов';
-  getAll!: () => Promise<void>;
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/registers/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/registers/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('registers/delete', id);
-  }
-}
+});
 </script>

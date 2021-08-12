@@ -28,7 +28,7 @@
         <h1 class="semi-bold-header">Инвалидность</h1>
         <div v-if="patient.getActuallyDisability()">
           <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" :size="20">
-            <div style="color: #a1a8bd">До {{ $dateFormatRu(patient.getActuallyDisability().period.dateEnd) }}</div>
+            <div style="color: #a1a8bd">До {{ formatDate(patient.getActuallyDisability().period.dateEnd) }}</div>
             <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" :size="20" class="disability-circles">
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
                 >A</el-button
@@ -51,7 +51,7 @@
         <h2 style="margin-bottom: 60px" v-html="patient.human.getFullName()"></h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
-          <el-col :span="12"> {{ patient.human.dateBirth ? $dateFormatRu(patient.human.dateBirth) : 'Не указана' }}</el-col>
+          <el-col :span="12"> {{ patient.human.dateBirth ? formatDate(patient.human.dateBirth) : 'Не указана' }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
@@ -115,27 +115,34 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import { computed, defineComponent, Ref, ref } from 'vue';
+import useDateFormat from '@/mixins/useDateFormat';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'PatientPageInfo',
-  props: ['patient'],
   components: {
     PopoverInfo,
   },
-})
-export default class PatientPageInfo extends Vue {
-  // Types.
-  patient!: IPatient;
+  setup() {
+    const { formatDate } = useDateFormat();
+    const store = useStore();
+    const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
-  // Local state.
-  checked = true;
-  notChecked = false;
-  mount = false;
-}
+    // Local state.
+    const checked = ref(true);
+    const notChecked = ref(false);
+
+    return {
+      checked,
+      notChecked,
+      patient,
+      formatDate,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

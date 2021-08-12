@@ -12,8 +12,8 @@
             :prop="'registerGroupToRegister.' + scope.$index + '.registerGroupId'"
             :rules="[{ required: true, message: 'Необходимо выбрать группу', trigger: 'change' }]"
           >
-            <el-select v-model="inRegisterGroupToRegister[scope.$index].registerGroupId">
-              <el-option v-for="item in inRegisterGroupOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+            <el-select v-model="registerGroupToRegister[scope.$index].registerGroupId">
+              <el-option v-for="item in registerGroups" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
         </template>
@@ -33,37 +33,42 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-
-import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
+import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
+import { useStore } from 'vuex';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
-@Options({
+export default defineComponent({
   name: 'RegisterGroupForm',
-  props: ['inRegisterGroupToRegister', 'inRegisterGroupOptions'],
   components: {
     TableButtonGroup,
   },
-})
-export default class RegisterGroupForm extends Vue {
-  // Types.
-  inRegisterGroupToRegister!: IRegisterGroupToRegister[];
-  inRegisterGroupOptions!: IRegisterGroup[];
+  setup() {
+    const store = useStore();
 
-  // Local state.
-  registerGroupToRegister = this.inRegisterGroupToRegister;
+    const registerGroups: Ref<IRegisterGroup[]> = computed(() => store.getters['registerGroups/registerGroup']);
+    const registerGroupToRegister: Ref<IRegisterGroupToRegister[]> = computed(() => store.getters['registers/registerGroupToRegister']);
 
-  add(): void {
-    this.registerGroupToRegister.push(new RegisterGroupToRegister());
-  }
+    onBeforeMount(async () => {
+      await store.dispatch('registerGroups/getAll');
+    });
 
-  remove(item: IRegisterGroupToRegister): void {
-    const index = this.registerGroupToRegister.indexOf(item);
-    if (index !== -1) {
-      this.registerGroupToRegister.splice(index, 1);
-    }
-  }
-}
+    const add = (): void => {
+      store.commit('registers/addRegisterGroup');
+    };
+
+    const remove = (item: IRepresentativeToPatient): void => {
+      store.commit('representatives/removeRegisterGroup', item);
+    };
+
+    return {
+      registerGroupToRegister,
+      registerGroups,
+      add,
+      remove,
+    };
+  },
+});
 </script>
