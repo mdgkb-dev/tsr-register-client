@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
+  <div class="wrapper" v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="title" @create="create" :showAddButton="true" />
     <div class="table-background">
       <el-table
@@ -8,7 +8,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название типа" min-width="150" sortable />
@@ -27,47 +27,51 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
-
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'RepresentativeTypesList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('representativeTypes', ['representativeTypes']),
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Типы представителей');
+    const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/representative-types/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/representative-types/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('representativeTypes/delete', id);
+    };
+
+    onBeforeMount(async () => {
+      await store.dispatch('representativeTypes/getAll');
+      mount.value = true;
+    });
+
+    return {
+      representativeTypes,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions('representativeTypes', ['getAll']),
-  },
-})
-export default class RepresentativeTypesList extends Vue {
-  representativeTypes!: IRepresentativeType[];
-  getAll!: () => Promise<void>;
-  title = 'Типы представителей';
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/representative-types/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/representative-types/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('representativeTypes/delete', id);
-  }
-}
+});
 </script>

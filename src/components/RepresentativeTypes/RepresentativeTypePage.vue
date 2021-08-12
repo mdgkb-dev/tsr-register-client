@@ -3,7 +3,15 @@
     <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" ref="form" :model="representativeType" :rules="rules" label-width="30%" label-position="left" style="max-width: 800px">
+        <el-form
+          :status-icon="true"
+          ref="form"
+          :model="representativeType"
+          :rules="rules"
+          label-width="30%"
+          label-position="left"
+          style="max-width: 800px"
+        >
           <el-form-item label="Название типа" prop="name">
             <el-input v-model="representativeType.name"></el-input>
           </el-form-item>
@@ -30,8 +38,8 @@
 
 <script lang="ts">
 import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { mapActions, mapGetters, useStore } from 'vuex';
 
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
@@ -41,66 +49,75 @@ import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
 import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
 import FormMixin from '@/mixins/FormMixin.vue';
 import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import { defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import Anthropometry from '@/classes/anthropometry/Anthropometry';
+import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 
-@Options({
+export default defineComponent({
   name: 'RepresentativeTypePage',
   components: {
     PageHead,
   },
-  computed: {
-    ...mapGetters('representativeTypes', ['representativeTypes']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const representativeType: Ref<IRepresentativeType> = ref(new RepresentativeType());
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = AnthropometryRules;
+    const title: Ref<string> = ref('');
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
+
+    onBeforeMount(async () => {
+      if (!route.params.representativeTypeId) {
+        isEditMode.value = false;
+        title.value = 'Создать тип';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать тип';
+        await store.dispatch('representativeTypes/get', route.params.representativeTypeId);
+        representativeType.value = store.getters['representativeTypes/representativeType'];
+      }
+
+      pushToLinks(['/representative-types'], ['Типы представителей']);
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(representativeType, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+
+      await submitHandling('representativeTypes', representativeType.value, next);
+    };
+
+    return {
+      representativeType,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      representativeTypeGet: 'representativeTypes/get',
-    }),
-  },
-})
-export default class RepresentativeTypePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  representativeTypeGet!: (representativeTypeId: string) => Promise<void>;
-
-  // Local state.
-  representativeType: IRepresentativeType = new RepresentativeType();
-  title = '';
-  mount = false;
-
-  rules = RepresentativeTypeRules;
-
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.representativeTypeId) {
-      this.isEditMode = false;
-      this.title = 'Создать тип';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать тип';
-      await this.representativeTypeGet(`${this.$route.params.representativeTypeId}`);
-      this.representativeType = this.$store.getters['representativeTypes/representativeType'];
-    }
-    this.pushToLinks(['/representative-types'], ['Типы представителей']);
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('representativeType', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  submitForm(): void {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    if (this.isEditMode) {
-      this.$store.dispatch('representativeTypes/edit', this.representativeType);
-    } else {
-      this.$store.dispatch('representativeTypes/create', this.representativeType);
-    }
-
-    this.$router.push('/representative-types');
-  }
-}
+});
 </script>
