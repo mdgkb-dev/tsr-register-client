@@ -6,7 +6,7 @@
     <el-table-column label="Пациент" width="250" sortable align="center">
       <template #default="scope">
         <el-select v-model="representativeToPatient[scope.$index].patientId">
-          <el-option v-for="item in inPatients" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          <el-option v-for="item in patientsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </template>
     </el-table-column>
@@ -14,7 +14,7 @@
     <el-table-column label="Роль представителя" align="center">
       <template #default="scope">
         <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
-          <el-option v-for="item in inRepresentativeTypes" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </template>
     </el-table-column>
@@ -28,38 +28,68 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 
-import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
-import IOption from '@/interfaces/shared/IOption';
-
-@Options({
+import IOption from '@/interfaces/patients/IOption';
+import IPatient from '@/interfaces/patients/IPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+export default defineComponent({
   name: 'RepresentativeToPatientForm',
-  props: ['inRepresentativeToPatient', 'inRepresentativeTypes', 'inPatients'],
   components: {
     TableButtonGroup,
   },
-})
-export default class RepresentativeToPatientForm extends Vue {
-  // Types.
-  inRepresentativeToPatient!: IRepresetnationType[];
-  inRepresentativeTypes!: IOption[];
-  inPatients!: IOption[];
+  setup() {
+    const store = useStore();
 
-  // Local state.
-  representativeToPatient = this.inRepresentativeToPatient;
+    const patientsOptions = ref([{}]);
+    const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
+    const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(
+      () => store.getters['representatives/representativeToPatient']
+    );
+    const representativeTypesOptions: Ref<IOption[]> = ref([]);
 
-  add(): void {
-    this.representativeToPatient.push(new RepresentativeToPatient());
-  }
+    onBeforeMount(async () => {
+      await store.dispatch('representativeTypes/getAll');
+      await store.dispatch('patients/getAll');
 
-  remove(item: any): void {
-    const index = this.representativeToPatient.indexOf(item);
-    if (index !== -1) {
-      this.representativeToPatient.splice(index, 1);
-    }
-  }
-}
+      for (const item of representativeTypes.value) {
+        if (item.id) {
+          representativeTypesOptions.value.push({
+            label: item.name,
+            value: item.id,
+          });
+        }
+      }
+
+      patientsOptions.value.splice(0, 1);
+      for (const item of patients.value) {
+        patientsOptions.value.push({
+          label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+          value: item.id,
+          human: item.human,
+        });
+      }
+    });
+
+    const add = (): void => {
+      store.commit('representatives/addPatient');
+    };
+
+    const remove = (item: IRepresentativeToPatient): void => {
+      store.commit('representatives/removePatient', item);
+    };
+
+    return {
+      patientsOptions,
+      representativeTypesOptions,
+      representativeToPatient,
+      remove,
+      add,
+    };
+  },
+});
 </script>
