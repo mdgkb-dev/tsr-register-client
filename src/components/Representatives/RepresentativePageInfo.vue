@@ -64,20 +64,24 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, Ref } from 'vue';
+import { useStore } from 'vuex';
 
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
-@Options({
+export default defineComponent({
   name: 'RepresentativePageInfo',
-  props: ['representative'],
-})
-export default class RepresentativePageInfo extends Vue {
-  // Types.
-  representative!: IRepresentative;
+  setup() {
+    const store = useStore();
+    const representative: Ref<IRepresentative> = computed(() => store.getters['representatives/representative']);
+    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 
-  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
-}
+    return {
+      representative,
+      fillDateFormat,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

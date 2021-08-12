@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 
+import Representative from '@/classes/representatives/Representative';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
@@ -9,7 +10,7 @@ import { State } from './state';
 
 export const state: State = {
   representatives: [],
-  representative: undefined,
+  representative: new Representative(),
 };
 
 const namespaced = true;
