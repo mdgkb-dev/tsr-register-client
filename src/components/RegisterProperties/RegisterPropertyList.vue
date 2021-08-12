@@ -30,49 +30,52 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-@Options({
+export default defineComponent({
   name: 'RegisterPropertyList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('registerProperties', ['registerProperties']),
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Свойства для регистров');
+    const registerProperties: Ref<IRegisterProperty[]> = computed(() => store.getters['registerProperties/registerProperties']);
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/register-properties/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/register-properties/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('registerProperties/delete', id);
+    };
+
+    onBeforeMount(async () => {
+      await store.dispatch('registerProperties/getAll');
+      mount.value = true;
+    });
+
+    return {
+      registerProperties,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAll: 'registerProperties/getAll',
-    }),
-  },
-})
-export default class RegisterPropertyList extends Vue {
-  registerProperties!: IRegisterProperty[];
-  title = 'Свойства для регистров';
-  getAll!: () => Promise<void>;
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/register-properties/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/register-properties/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('registerProperties/delete', id);
-  }
-}
+});
 </script>

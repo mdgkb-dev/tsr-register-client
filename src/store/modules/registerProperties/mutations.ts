@@ -6,6 +6,8 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 import { State } from './state';
+import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
+import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 
 const mutations: MutationTree<State> = {
   setAll(state, registerProperties: RegisterProperty[]) {
@@ -29,6 +31,18 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.registerProperties.findIndex((item: IRegisterProperty) => item.id === id);
     state.registerProperties.splice(i, 1);
+  },
+  addSetItem(state) {
+    state.registerProperty.registerPropertySet.push(new RegisterPropertySet());
+  },
+  addRadioItem(state) {
+    state.registerProperty.registerPropertyRadio.push(new RegisterPropertyRadio());
+  },
+  removeSetItem(state, i: number) {
+    state.registerProperty.registerPropertySet.splice(i, 1);
+  },
+  removeRadioItem(state, i: number) {
+    state.registerProperty.registerPropertyRadio.splice(i, 1);
   },
 };
 

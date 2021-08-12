@@ -58,119 +58,123 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-import RegisterProperty from '@/classes/registers/RegisterProperty';
-import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
-import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
 import PageHead from '@/components/PageHead.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
-@Options({
-  name: 'RegisterPropertyPage',
+export default defineComponent({
+  name: 'RepresentativeTypePage',
   components: {
     PageHead,
   },
-  computed: {
-    ...mapGetters('registerProperties', ['registerProperty']),
-    ...mapGetters('registerProperties', ['valueTypes']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const registerProperty: Ref<IRegisterProperty> = computed(() => store.getters['registerProperties/registerProperty']);
+    const valueTypes: Ref<IValueType[]> = computed(() => store.getters['registerProperties/valueTypes']);
+
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = {
+      name: [{ required: true, message: 'Необходимо заполнить название свойства', trigger: 'blur' }],
+      valueTypeId: [{ required: true, message: 'Необходимо выбрать тип данных', trigger: 'change' }],
+    };
+    const title: Ref<string> = ref('');
+    const showSet: Ref<boolean> = ref(false);
+    const showRadio: Ref<boolean> = ref(false);
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
+
+    onBeforeMount(async () => {
+      if (!route.params.registerPropertyId) {
+        isEditMode.value = false;
+        title.value = 'Создать свойство';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать свойство';
+        await store.dispatch('registerProperties/get', route.params.registerPropertyId);
+      }
+      if (registerProperty.value.valueTypeId) changeRelation(registerProperty.value.valueTypeId);
+      await store.dispatch('registerProperties/getValueTypes');
+
+      pushToLinks(['/register-properties'], ['Свойства для регистров']);
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(registerProperty, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const changeRelation = (valueTypeId: string): void => {
+      const valueType = valueTypes.value.find((i) => i.id === valueTypeId);
+      if (valueType) {
+        if (valueType.valueRelation === ValueRelation.manyToMany) {
+          showSet.value = true;
+          showRadio.value = false;
+        }
+        if (valueType.valueRelation === ValueRelation.oneToMany) {
+          showRadio.value = true;
+          showSet.value = false;
+        }
+        if (valueType.valueRelation === ValueRelation.simple) {
+          showRadio.value = false;
+          showSet.value = false;
+        }
+      }
+    };
+
+    const addSetItem = (): void => {
+      store.commit('registerProperties/addSetItem');
+    };
+    const addRadioItem = (): void => {
+      store.commit('registerProperties/addRadioItem');
+    };
+
+    const removeSetItem = (i: number): void => {
+      store.commit('registerProperties/removeSetItem', i);
+    };
+    const removeRadioItem = (i: number): void => {
+      store.commit('registerProperties/removeRadioItem', i);
+    };
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+      await submitHandling('registerProperties', registerProperty.value, next);
+    };
+
+    return {
+      addSetItem,
+      addRadioItem,
+      removeSetItem,
+      removeRadioItem,
+      registerProperty,
+      valueTypes,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      registerPropertyGet: 'registerProperties/get',
-      getValueTypes: 'registerProperties/getValueTypes',
-    }),
-  },
-})
-export default class RegisterPropertyPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  valueTypes!: IValueType[];
-
-  registerPropertyGet!: (registerId: string) => Promise<void>;
-  getValueTypes!: () => Promise<void>;
-
-  // Local state.
-  registerProperty: IRegisterProperty = new RegisterProperty();
-  title = '';
-  mount = false;
-  showSet = false;
-  showRadio = false;
-
-  rules = {
-    name: [{ required: true, message: 'Необходимо заполнить название свойства', trigger: 'blur' }],
-    valueTypeId: [{ required: true, message: 'Необходимо выбрать тип данных', trigger: 'change' }],
-  };
-
-  // Lifecycle methods.
-  async created(): Promise<void> {
-    if (!this.$route.params.registerPropertyId) {
-      this.isEditMode = false;
-      this.title = 'Создать свойство';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать свойство';
-      await this.registerPropertyGet(`${this.$route.params.registerPropertyId}`);
-      this.registerProperty = this.$store.getters['registerProperties/registerProperty'];
-    }
-    if (this.registerProperty.valueTypeId) this.changeRelation(this.registerProperty.valueTypeId);
-    await this.getValueTypes();
-    this.valueTypes = this.$store.getters['registerProperties/valueTypes'];
-
-    this.pushToLinks(['/register-properties'], ['Свойства для регистров']);
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('registerProperty', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  changeRelation(valueTypeId: string): void {
-    const valueType = this.valueTypes.find((i) => i.id === valueTypeId);
-    if (valueType) {
-      if (valueType.valueRelation === ValueRelation.manyToMany) {
-        this.showSet = true;
-        this.showRadio = false;
-      }
-      if (valueType.valueRelation === ValueRelation.oneToMany) {
-        this.showRadio = true;
-        this.showSet = false;
-      }
-      if (valueType.valueRelation === ValueRelation.simple) {
-        this.showRadio = false;
-        this.showSet = false;
-      }
-    }
-  }
-
-  addSetItem(): void {
-    this.registerProperty.registerPropertySet.push(new RegisterPropertySet());
-  }
-  addRadioItem(): void {
-    this.registerProperty.registerPropertyRadio.push(new RegisterPropertyRadio());
-  }
-  removeSetItem(i: number): void {
-    this.registerProperty.registerPropertySet.splice(i, 1);
-  }
-  removeRadioItem(i: number): void {
-    this.registerProperty.registerPropertyRadio.splice(i, 1);
-  }
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    await this.submitHandling('registerProperties', this.registerProperty, next, 'register-properties');
-  }
-}
+});
 </script>
