@@ -47,17 +47,17 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm();
-    const { validate } = useValidate();
-
     const anthropometry: Ref<IAnthropometry> = ref(new Anthropometry());
     const form = ref();
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
     const rules = AnthropometryRules;
     const title: Ref<string> = ref('');
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
 
     onBeforeMount(async () => {
       if (!route.params.anthropometryId) {
