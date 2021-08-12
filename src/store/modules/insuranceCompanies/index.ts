@@ -7,9 +7,11 @@ import getters from './getters';
 import mutations from './mutations';
 import { State } from './state';
 
+import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
+
 export const state: State = {
   insuranceCompanies: [],
-  insuranceCompany: undefined,
+  insuranceCompany: new InsuranceCompany(),
 };
 
 const namespaced = true;
