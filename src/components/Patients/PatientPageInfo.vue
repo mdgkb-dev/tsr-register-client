@@ -6,14 +6,18 @@
           <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
         </div>
         <h1 class="semi-bold-header">Диагноз</h1>
-        <el-space direction="vertical" :size="5" alignment="start" v-if="patient.patientDiagnosis.length">
+        <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
           <div v-for="item in patient.patientDiagnosis" :key="item.id">
-            <el-space direction="horizontal" alignment="center" v-if="item.mkbSubDiagnosis">
-              <span class="underline-label" v-if="item.mkbSubDiagnosis" v-html="item.mkbDiagnosis.code + '.' + item.mkbSubDiagnosis.subCode"></span>
+            <el-space v-if="item.mkbSubDiagnosis" direction="horizontal" alignment="center">
+              <span
+                v-if="item.mkbSubDiagnosis"
+                class="underline-label"
+                v-html="item.mkbDiagnosis.code + '.' + item.mkbSubDiagnosis.subCode"
+              ></span>
               <PopoverInfo v-if="item.mkbSubDiagnosis" :content="item.mkbSubDiagnosis.name" />
             </el-space>
             <div v-else>
-              <span class="underline-label" v-if="item.mkbDiagnosis" v-html="item.mkbDiagnosis.code"></span>
+              <span v-if="item.mkbDiagnosis" class="underline-label" v-html="item.mkbDiagnosis.code"></span>
               <PopoverInfo v-if="item.mkbDiagnosis" :content="item.mkbDiagnosis.name" />
             </div>
           </div>
@@ -23,16 +27,20 @@
 
         <h1 class="semi-bold-header">Инвалидность</h1>
         <div v-if="patient.getActuallyDisability()">
-          <el-space direction="vertical" alignment="start" :size="20" v-if="patient.getActuallyDisability()">
+          <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" :size="20">
             <div style="color: #a1a8bd">До {{ $dateFormatRu(patient.getActuallyDisability().period.dateEnd) }}</div>
-            <el-space :size="20" v-if="patient.getActuallyDisability().getActuallyEdv()" class="disability-circles">
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+            <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" :size="20" class="disability-circles">
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
+                >A</el-button
+              >
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle
+                >B</el-button
+              >
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle
+                >C</el-button
+              >
             </el-space>
-            <div v-else>
-              Нет справок ЕДВ
-            </div>
+            <div v-else>Нет справок ЕДВ</div>
           </el-space>
         </div>
         <div v-else>Не установлена</div>
@@ -40,7 +48,7 @@
 
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Пациент</el-tag>
-        <h2 v-html="patient.human.getFullName()" style="margin-bottom: 60px"></h2>
+        <h2 style="margin-bottom: 60px" v-html="patient.human.getFullName()"></h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
           <el-col :span="12"> {{ patient.human.dateBirth ? $dateFormatRu(patient.human.dateBirth) : 'Не указана' }}</el-col>
@@ -74,7 +82,7 @@
         <el-row>
           <el-col :span="12" class="light-title upper flex-center">Значится в регистрах</el-col>
           <el-col :span="12">
-            <el-space :wrap="true" v-if="patient.registerToPatient.lenght">
+            <el-space v-if="patient.registerToPatient.lenght" :wrap="true">
               <div v-for="registerToPatient in patient.registerToPatient" :key="registerToPatient.id">
                 <el-tooltip class="item" effect="light" :content="registerToPatient.register.name" placement="top-end">
                   <el-tag>{{ registerToPatient.register.name }}</el-tag>
@@ -88,7 +96,7 @@
         <el-row align="middle">
           <el-col :span="12" class="light-title upper flex-center">Прикрепленные документы</el-col>
           <el-col :span="12">
-            <el-space :wrap="true" v-if="patient.human.documents.length">
+            <el-space v-if="patient.human.documents.length" :wrap="true">
               <div v-for="document in patient.human.documents" :key="document">
                 <el-tooltip class="item" effect="light" :content="document.documentType.name" placement="top-end">
                   <el-tag>

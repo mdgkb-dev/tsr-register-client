@@ -2,7 +2,7 @@
   <div v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="title" />
     <div class="table-background">
-      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
+      <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
         :cell-style="{ height: '70px' }"
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -10,7 +10,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
 
@@ -48,9 +48,7 @@
                 {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
                 {{ $dateFormatRu(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
               </div>
-              <div v-else>
-                Нет справок ЕДВ
-              </div>
+              <div v-else>Нет справок ЕДВ</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -59,13 +57,29 @@
           <el-table-column label="Инвалидность" min-width="180" align="center" sortable>
             <template #default="scope">
               <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disabityli-circles">
-                <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
-                <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
-                <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+                <el-button
+                  size="small"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
+                  circle
+                  >A</el-button
+                >
+                <el-button
+                  size="small"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
+                  circle
+                  >B</el-button
+                >
+                <el-button
+                  size="small"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
+                  circle
+                  >C</el-button
+                >
               </div>
-              <div v-else>
-                Нет справок ЕДВ
-              </div>
+              <div v-else>Нет справок ЕДВ</div>
             </template>
           </el-table-column>
         </el-table-column>

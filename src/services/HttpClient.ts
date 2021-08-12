@@ -109,10 +109,7 @@ export default class HttpClient {
 
       if (obj[item] && typeof obj[item].getMonth === 'function') {
         obj[item] = moment(obj[item]).add(+moment().utcOffset(), 'm');
-        obj[item] = obj[item]
-          .parseZone()
-          .utc()
-          .format();
+        obj[item] = obj[item].parseZone().utc().format();
       }
     }
 

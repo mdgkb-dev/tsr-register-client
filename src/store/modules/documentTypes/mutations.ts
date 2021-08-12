@@ -12,9 +12,7 @@ const mutations: MutationTree<State> = {
     state.documentTypes = [...documentTypes];
   },
   delete(state: State, id: string): void {
-    state.documentTypes = state.documentTypes
-      ? state.documentTypes.filter((type) => type.id !== id)
-      : [];
+    state.documentTypes = state.documentTypes ? state.documentTypes.filter((type) => type.id !== id) : [];
   },
 };
 

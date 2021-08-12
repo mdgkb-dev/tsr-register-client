@@ -1,6 +1,6 @@
 <template>
   <div class="table-under-collapse">
-    <el-button @click="add" style="margin-bottom: 20px">Добавить измерение</el-button>
+    <el-button style="margin-bottom: 20px" @click="add">Добавить измерение</el-button>
 
     <el-table :data="heightWeight" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
@@ -13,7 +13,7 @@
             :prop="'heightWeight.' + scope.$index + '.date'"
             :rules="[{ required: true, message: 'Необходимо выбрать дату антропометрии', trigger: 'blur' }]"
           >
-            <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.date"></el-date-picker>
+            <el-date-picker v-model="scope.row.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
           </el-form-item>
         </template>
       </el-table-column>
@@ -26,7 +26,7 @@
             :prop="'heightWeight.' + scope.$index + '.height'"
             :rules="[{ required: true, message: 'Необходимо заполнить значение роста', trigger: 'blur' }]"
           >
-            <el-input-number size="medium" v-model="scope.row.height" min="0" style="width: 120px"></el-input-number>
+            <el-input-number v-model="scope.row.height" size="medium" min="0" style="width: 120px"></el-input-number>
           </el-form-item>
         </template>
       </el-table-column>
@@ -39,7 +39,7 @@
             :prop="'heightWeight.' + scope.$index + '.weight'"
             :rules="[{ required: true, message: 'Необходимо заполнить значение веса', trigger: 'blur' }]"
           >
-            <el-input-number size="medium" v-model="scope.row.weight" min="0" style="width: 120px"></el-input-number>
+            <el-input-number v-model="scope.row.weight" size="medium" min="0" style="width: 120px"></el-input-number>
           </el-form-item>
         </template>
       </el-table-column>
@@ -52,7 +52,7 @@
 
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup @remove="remove(scope.$index)" :showRemoveButton="true" />
+          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.$index)" />
         </template>
       </el-table-column>
     </el-table>

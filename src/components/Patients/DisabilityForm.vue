@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-button @click="addDisability()" style="margin-bottom: 20px">Добавить инвалидность</el-button>
+    <el-button style="margin-bottom: 20px" @click="addDisability()">Добавить инвалидность</el-button>
     <el-table
       :data="disabilities"
       style="width: 950px; margin-bottom: 20px"
@@ -21,12 +21,12 @@
         <template #default="scope">
           <el-form-item :prop="getProp(scope)" :rules="getRuleStart(scope)" label-width="0" style="margin-bottom: 0">
             <el-date-picker
+              ref="picker"
+              v-model="scope.row.period.dateStart"
               :disabled-date="disabledDate"
               format="DD.MM.YYYY"
               placeholder="Выберите дату"
-              ref="picker"
               type="date"
-              v-model="scope.row.period.dateStart"
             ></el-date-picker>
           </el-form-item>
         </template>
@@ -35,7 +35,13 @@
       <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="230" align="center">
         <template #default="scope">
           <el-form-item :prop="getProp(scope)" :rules="getRuleEnd(scope)" label-width="0" style="margin-bottom: 0">
-            <el-date-picker type="date" :disabled-date="disabledDate" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="scope.row.period.dateEnd"></el-date-picker>
+            <el-date-picker
+              v-model="scope.row.period.dateEnd"
+              type="date"
+              :disabled-date="disabledDate"
+              format="DD.MM.YYYY"
+              placeholder="Выберите дату"
+            ></el-date-picker>
           </el-form-item>
         </template>
       </el-table-column>
@@ -43,9 +49,15 @@
       <el-table-column label="Инвалидность" width="180" sortable align="center">
         <template #default="scope">
           <div v-if="isEdv(scope.row)">
-            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1">A</el-button>
-            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2">B</el-button>
-            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3">C</el-button>
+            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1"
+              >A</el-button
+            >
+            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2"
+              >B</el-button
+            >
+            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3"
+              >C</el-button
+            >
           </div>
         </template>
       </el-table-column>
@@ -62,16 +74,21 @@
           </div>
 
           <div v-else class="card-button-group">
-            <el-button-group v-if="!fileInfos.some(info => info.category === scope.row.id)">
-              <el-tooltip v-if="!fileInfos.some(info => info.category === scope.row.id)" effect="light" placement="top-end" content="Приложить файл">
+            <el-button-group v-if="!fileInfos.some((info) => info.category === scope.row.id)">
+              <el-tooltip
+                v-if="!fileInfos.some((info) => info.category === scope.row.id)"
+                effect="light"
+                placement="top-end"
+                content="Приложить файл"
+              >
                 <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()"></el-button>
               </el-tooltip>
               <input
-                type="file"
                 :ref="scope.row.id"
+                type="file"
                 hidden
                 @change="
-                  event => {
+                  (event) => {
                     addReplaceFile(event, scope.row.id);
                   }
                 "
@@ -79,21 +96,30 @@
             </el-button-group>
 
             <el-button-group v-else>
-              <el-tooltip v-if="fileInfos.find(info => info.category === scope.row.id).isDraft" effect="light" placement="top-end" content="Файл добавлен">
+              <el-tooltip
+                v-if="fileInfos.find((info) => info.category === scope.row.id).isDraft"
+                effect="light"
+                placement="top-end"
+                content="Файл добавлен"
+              >
                 <el-button disabled icon="el-icon-document-checked"></el-button>
               </el-tooltip>
               <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
-                <el-button :data-file-id="fileInfos.find(info => info.category === scope.row.id).id" @click.prevent="downloadFile" icon="el-icon-download"></el-button>
+                <el-button
+                  :data-file-id="fileInfos.find((info) => info.category === scope.row.id).id"
+                  icon="el-icon-download"
+                  @click.prevent="downloadFile"
+                ></el-button>
               </el-tooltip>
               <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
-                <el-button @click="$refs[scope.row.id].click()" icon="el-icon-paperclip" />
+                <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()" />
               </el-tooltip>
               <input
-                type="file"
                 :ref="scope.row.id"
+                type="file"
                 hidden
                 @change="
-                  event => {
+                  (event) => {
                     addReplaceFile(event, scope.row.id);
                   }
                 "
@@ -214,7 +240,12 @@ export default class DisabilityForm extends Vue {
 
   validateDisabilityDates = (rule: any, value: any, callback: any): void => {
     this.disabilities.forEach((disability: IDisability) => {
-      if (disability.period && disability.period.dateStart && disability.period.dateEnd && disability.period.dateStart > disability.period?.dateEnd) {
+      if (
+        disability.period &&
+        disability.period.dateStart &&
+        disability.period.dateEnd &&
+        disability.period.dateStart > disability.period?.dateEnd
+      ) {
         callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
       }
     });

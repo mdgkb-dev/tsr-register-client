@@ -21,9 +21,17 @@ export default class FormMixin extends Vue {
 
   async submitHandling(
     store: string,
-    payload: IPatient | IRepresentative | IAnthropometry | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
+    payload:
+      | IPatient
+      | IRepresentative
+      | IAnthropometry
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
     next?: NavigationGuardNext,
-    path?: string,
+    path?: string
   ): Promise<void> {
     try {
       if (this.isEditMode) {
@@ -44,8 +52,16 @@ export default class FormMixin extends Vue {
 
   syncSubmitHandling(
     store: string,
-    payload: IPatient | IRepresentative | IAnthropometry | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
-    path?: string,
+    payload:
+      | IPatient
+      | IRepresentative
+      | IAnthropometry
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
+    path?: string
   ): void {
     try {
       if (this.isEditMode) {

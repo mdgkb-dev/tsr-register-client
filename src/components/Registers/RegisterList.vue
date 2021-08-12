@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height:100%; overflow: hidden">
-    <PageHead :title="title" @create="create" :showAddButton="true" />
+  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
+    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -8,14 +8,19 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
         <el-table-column width="40" fixed="right" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
-              <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+              <TableButtonGroup
+                :show-edit-button="true"
+                :show-remove-button="true"
+                @edit="edit(scope.row.id)"
+                @remove="remove(scope.row.id)"
+              />
             </el-space>
           </template>
         </el-table-column>

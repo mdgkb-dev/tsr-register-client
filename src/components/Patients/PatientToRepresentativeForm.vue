@@ -21,7 +21,7 @@
 
     <el-table-column width="40" fixed="right" align="center">
       <template #default="scope">
-        <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
       </template>
     </el-table-column>
   </el-table>

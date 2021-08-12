@@ -1,5 +1,5 @@
 <template>
-  <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="dataModel" />
+  <el-date-picker v-model="dataModel" type="date" format="DD.MM.YYYY" placeholder="Выберите дату" />
 </template>
 
 <script lang="ts">

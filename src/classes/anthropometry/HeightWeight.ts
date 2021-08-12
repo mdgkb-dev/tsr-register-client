@@ -47,7 +47,9 @@ export default class HeightWeight implements IHeightWeight {
         heightWeight.weight = a.value;
       }
       if (heightWeight.height && heightWeight.weight) {
-        resultHeightWeight.push(new HeightWeight(a.id, heightWeight.heightId, heightWeight.height, heightWeight.weightId, heightWeight.weight, a.date));
+        resultHeightWeight.push(
+          new HeightWeight(a.id, heightWeight.heightId, heightWeight.height, heightWeight.weightId, heightWeight.weight, a.date)
+        );
         heightWeight = new HeightWeight();
       }
     });

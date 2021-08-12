@@ -1,8 +1,17 @@
 <template>
-  <div class="wrapper" v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+  <div v-if="mount" class="wrapper">
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
-      <el-form :status-icon="true" :inline-message="true" :rules="rules" :model="register" ref="form" label-width="20%" label-position="left" style="width: 100%">
+      <el-form
+        ref="form"
+        :status-icon="true"
+        :inline-message="true"
+        :rules="rules"
+        :model="register"
+        label-width="20%"
+        label-position="left"
+        style="width: 100%"
+      >
         <div class="table-background" style="margin-bottom: 20px; height: unset">
           <el-form-item label="Название регистра" prop="name">
             <el-input v-model="register.name"></el-input>
@@ -12,7 +21,10 @@
         <el-collapse>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Группы</h2></template>
-            <RegisterGroupForm :inRegisterGroupToRegister="register.registerGroupToRegister" :inRegisterGroupOptions="registerGroups" />
+            <RegisterGroupForm
+              :in-register-group-to-register="register.registerGroupToRegister"
+              :in-register-group-options="registerGroups"
+            />
           </el-collapse-item>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Диагнозы</h2></template>

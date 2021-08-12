@@ -16,7 +16,7 @@ export default function () {
       return true;
     });
     return validationResult;
-  }
+  };
 
   return {
     validate,

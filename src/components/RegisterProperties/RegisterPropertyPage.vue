@@ -1,14 +1,14 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
+          ref="form"
           :status-icon="true"
           :inline-message="true"
           :model="registerProperty"
           :rules="rules"
-          ref="form"
           label-width="150px"
           label-position="left"
           style="max-width: 800px"
@@ -17,7 +17,7 @@
             <el-input v-model="registerProperty.name"></el-input>
           </el-form-item>
           <el-form-item label="Тип данных" prop="valueTypeId">
-            <el-select @change="changeRelation" v-model="registerProperty.valueTypeId">
+            <el-select v-model="registerProperty.valueTypeId" @change="changeRelation">
               <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
             </el-select>
           </el-form-item>
@@ -26,11 +26,11 @@
           </el-form-item>
 
           <div v-if="showSet">
-            <el-button @click="addSetItem" style="margin-bottom: 20px">Добавить в набор свойства</el-button>
+            <el-button style="margin-bottom: 20px" @click="addSetItem">Добавить в набор свойства</el-button>
             <el-row v-for="(item, i) in registerProperty.registerPropertySet" :key="i">
               <el-col :span="20">
                 <el-form-item>
-                  <el-input placeholder="Please input" v-model="item.name"></el-input>
+                  <el-input v-model="item.name" placeholder="Please input"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" :offset="2">
@@ -39,11 +39,11 @@
             </el-row>
           </div>
           <div v-if="showRadio">
-            <el-button @click="addRadioItem" style="margin-bottom: 20px">Добавить в набор свойства</el-button>
+            <el-button style="margin-bottom: 20px" @click="addRadioItem">Добавить в набор свойства</el-button>
             <el-row v-for="(item, i) in registerProperty.registerPropertyRadio" :key="i">
               <el-col :span="20">
                 <el-form-item>
-                  <el-input placeholder="Please input" v-model="item.name"></el-input>
+                  <el-input v-model="item.name" placeholder="Please input"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" :offset="2">

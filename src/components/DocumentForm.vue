@@ -19,10 +19,10 @@
             <el-button icon="el-icon-paperclip" @click="$refs[document.id].click()"></el-button>
           </el-tooltip>
           <el-popconfirm
-            confirmButtonText="Да"
-            cancelButtonText="Отмена"
+            confirm-button-text="Да"
+            cancel-button-text="Отмена"
             icon="el-icon-info"
-            iconColor="red"
+            icon-color="red"
             title="Вы уверен, что хотите удалить документ?"
             @confirm="() => remove(document.id)"
             @cancel="() => {}"
@@ -64,18 +64,18 @@
         </section>
 
         <input
-          type="file"
           :ref="document.id"
+          type="file"
           hidden
           multiple
           @change="
-            event => {
+            (event) => {
               addFiles(event, document.id);
             }
           "
         />
 
-        <el-table :data="fileInfos.filter(info => info.category === document.id)" size="mini" style="width: 100%">
+        <el-table :data="fileInfos.filter((info) => info.category === document.id)" size="mini" style="width: 100%">
           <el-table-column label="Приложенные файлы">
             <template #default="scope">
               {{ scope.row.originalName }}
@@ -84,11 +84,11 @@
           <el-table-column align="right">
             <template #default="scope">
               <TableButtonGroup
+                :show-remove-button="true"
+                :show-download-button="!scope.row.isDraft"
+                :horizontal="true"
                 @download="downloadFile(scope.row.id)"
                 @remove="removeFile(scope.row.id)"
-                :showRemoveButton="true"
-                :showDownloadButton="!scope.row.isDraft"
-                :horizontal="true"
               />
             </template>
           </el-table-column>
@@ -165,7 +165,7 @@ export default class DocumentForm extends Vue {
     }
 
     const documentFieldValues: DocumentFieldValue[] = this.selectedType.documentTypeFields.map(
-      (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField }),
+      (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
     );
 
     const document = new Document({
@@ -190,13 +190,14 @@ export default class DocumentForm extends Vue {
     }
 
     const newInfos: IFileInfo[] = Array.from(target.files).map(
-      (file: File) => new FileInfo({
-        id: uuidv4(),
-        category,
-        originalName: file.name,
-        file,
-        isDraft: true,
-      }),
+      (file: File) =>
+        new FileInfo({
+          id: uuidv4(),
+          category,
+          originalName: file.name,
+          file,
+          isDraft: true,
+        })
     );
 
     this.$emit('update:fileInfos', [...this.fileInfos, ...newInfos]);
@@ -205,7 +206,7 @@ export default class DocumentForm extends Vue {
   removeFile(fileId: string): void {
     this.$emit(
       'update:fileInfos',
-      this.fileInfos.filter((info) => info.id !== fileId),
+      this.fileInfos.filter((info) => info.id !== fileId)
     );
   }
 

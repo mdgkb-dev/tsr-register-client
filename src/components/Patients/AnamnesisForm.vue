@@ -7,7 +7,7 @@
         :prop="propName + '.date'"
         :rules="[{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }]"
       >
-        <el-date-picker type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="anamnesis.date"></el-date-picker>
+        <el-date-picker v-model="anamnesis.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
       </el-form-item>
       <el-form-item
         v-if="anamnesis.isEditMode"
@@ -15,17 +15,17 @@
         label-width="0"
         :rules="[{ required: true, message: 'Это поле не может быть пустым', trigger: 'blur' }]"
       >
-        <el-input type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }" v-model="anamnesis.value"> </el-input>
+        <el-input v-model="anamnesis.value" type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }"> </el-input>
       </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
       <div class="card-button-group">
-        <el-button icon="el-icon-folder-checked" v-if="anamnesis.isEditMode" @click="edit"></el-button>
-        <el-button icon="el-icon-edit" v-else @click="edit"></el-button>
+        <el-button v-if="anamnesis.isEditMode" icon="el-icon-folder-checked" @click="edit"></el-button>
+        <el-button v-else icon="el-icon-edit" @click="edit"></el-button>
         <el-popconfirm
-          confirmButtonText="Да"
-          cancelButtonText="Отмена"
+          confirm-button-text="Да"
+          cancel-button-text="Отмена"
           icon="el-icon-info"
-          iconColor="red"
+          icon-color="red"
           title="Вы уверен, что хотите удалить это?"
           @confirm="remove"
           @cancel="() => {}"

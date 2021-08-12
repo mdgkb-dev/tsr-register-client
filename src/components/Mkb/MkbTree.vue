@@ -12,19 +12,24 @@
       :render-after-expand="false"
       accordion
       :props="{ isLeaf: 'leaf' }"
-      @check="setDiagnosis"
-      @node-expand="handleNodeExpand"
       :show-checkbox="selectable"
       :expand-on-click-node="editing ? false : true"
+      @check="setDiagnosis"
+      @node-expand="handleNodeExpand"
     >
       <template #default="{ node, data }">
         <el-checkbox v-if="editing" v-model="data.relevant" @change="updateRelevantHandler(data)"></el-checkbox>
-        <i v-if="editing && !data.isEditMode" @click="data.isEditMode = true" class="el-icon-edit" style="margin: 0 5px; color: blue"></i>
-        <i v-else-if="editing && data.isEditMode" @click="updateNameHandler(data)" class="el-icon-folder-checked" style="margin: 0 5px; color: blue"></i>
+        <i v-if="editing && !data.isEditMode" class="el-icon-edit" style="margin: 0 5px; color: blue" @click="data.isEditMode = true"></i>
+        <i
+          v-else-if="editing && data.isEditMode"
+          class="el-icon-folder-checked"
+          style="margin: 0 5px; color: blue"
+          @click="updateNameHandler(data)"
+        ></i>
         <el-input v-if="editing && data.isEditMode" v-model="data.name"></el-input>
         <div v-else>
           <span class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">
-            <span style="margin-bottom: 10px" v-if="node.level === 1 && !data.code">
+            <span v-if="node.level === 1 && !data.code" style="margin-bottom: 10px">
               <span style="font-weight: bold">{{ data.number }} </span> <span>{{ data.name }}</span>
             </span>
             <span v-else-if="node.level === 1 && data.code">
@@ -121,7 +126,7 @@ export default class MkbTree extends Vue {
         if (child.checked) notChildrenChecked = false;
       });
       const curDiagnosis = this.checkedDiagnosis.find(
-        (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId,
+        (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
       );
       if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
       curNode.childNodes.forEach((child: any) => this.$refs.tree.setChecked(child.data.id, false, false));
@@ -245,7 +250,9 @@ export default class MkbTree extends Vue {
 
   async getNodeFour(node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> {
     await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
-    return this.onlyRelevant ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant) : this.findSubDiagnosisFromTree(mkbIdSet);
+    return this.onlyRelevant
+      ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant)
+      : this.findSubDiagnosisFromTree(mkbIdSet);
   }
 
   findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] {

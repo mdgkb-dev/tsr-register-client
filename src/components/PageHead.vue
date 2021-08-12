@@ -7,8 +7,12 @@
             <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
             <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-button type="success" round native-type="submit" v-if="showSaveButton" @click="$emit('submitForm')">Сохранить изменения</el-button>
-          <el-button type="success" round v-if="showAddButton" @click="$emit('create')">Добавить<i class="el-icon-plus" style="margin-left: 10px"></i></el-button>
+          <el-button v-if="showSaveButton" type="success" round native-type="submit" @click="$emit('submitForm')"
+            >Сохранить изменения</el-button
+          >
+          <el-button v-if="showAddButton" type="success" round @click="$emit('create')"
+            >Добавить<i class="el-icon-plus" style="margin-left: 10px"></i
+          ></el-button>
         </el-space>
       </el-row>
     </el-affix>

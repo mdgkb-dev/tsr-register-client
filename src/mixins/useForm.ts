@@ -1,7 +1,7 @@
-import { Ref, ref } from 'vue';
-import { useStore } from 'vuex';
-import { NavigationGuardNext, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { Ref, ref } from 'vue';
+import { NavigationGuardNext, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
@@ -12,16 +12,24 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
-export default function (isEditMode: boolean = false) {
+export default function (isEditMode = false) {
   const store = useStore();
   const router = useRouter();
   const title: Ref<string> = ref('');
 
   const submitHandling = async (
     module: string,
-    payload: IPatient | IRepresentative | IAnthropometry | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
+    payload:
+      | IPatient
+      | IRepresentative
+      | IAnthropometry
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
     next?: NavigationGuardNext,
-    path?: string,
+    path?: string
   ): Promise<void> => {
     try {
       if (isEditMode) {
@@ -42,8 +50,16 @@ export default function (isEditMode: boolean = false) {
 
   const syncSubmitHandling = (
     module: string,
-    payload: IPatient | IRepresentative | IAnthropometry | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
-    path?: string,
+    payload:
+      | IPatient
+      | IRepresentative
+      | IAnthropometry
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
+    path?: string
   ): void => {
     try {
       if (isEditMode) {
@@ -57,7 +73,7 @@ export default function (isEditMode: boolean = false) {
     }
 
     router.push(`/${path ?? module}`);
-  }
+  };
 
   return {
     title,

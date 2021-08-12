@@ -3,34 +3,39 @@
     <el-space style="margin-bottom: 10px">
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
       <MkbTreeDialog
-        @setDiagnosis="setDiagnosisFromModal($event)"
         v-model:checkedDiagnosis="diagnosisData"
         v-model:diagnosisData="diagnosisData"
         v-model:patientDiagnosis="patientDiagnosis"
+        @setDiagnosis="setDiagnosisFromModal($event)"
       />
     </el-space>
 
     <el-table
       :data="diagnosisData"
-      :row-key="row => row.id"
+      :row-key="(row) => row.id"
       :expand-row-keys="expandRowKeys"
-      @expand-change="handleExpandChange"
       class="table-shadow"
       header-row-class-name="header-style"
+      @expand-change="handleExpandChange"
     >
       <el-table-column type="index" width="60" align="center" />
 
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
-          <el-button @click="addAnamnesis(props.row)" style="margin: 10px">Добавить анамнез</el-button>
+          <el-button style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button>
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
-              <el-timeline-item v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis" :key="anamnesis.id" :timestamp="$dateFormatRu(anamnesis.date)" placement="top">
+              <el-timeline-item
+                v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis"
+                :key="anamnesis.id"
+                :timestamp="$dateFormatRu(anamnesis.date)"
+                placement="top"
+              >
                 <AnamnesisForm
                   :anamnesis="anamnesis"
                   :index="index"
                   :diagnosis="props.row"
-                  :propName="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
+                  :prop-name="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
                 />
               </el-timeline-item>
             </el-timeline>
@@ -42,13 +47,13 @@
         <template #default="scope">
           <el-form-item label-width="0" style="margin-bottom: 0">
             <el-autocomplete
+              v-model="queryStringsGroups[scope.row.id]"
               style="width: 100%"
               popper-class="wide-dropdown"
-              @select="handleGroupSelect($event, scope.row.id)"
               :fetch-suggestions="findGroups"
-              @input="syncSearchGroups($event, scope.row.id)"
-              v-model="queryStringsGroups[scope.row.id]"
               placeholder="Выберите группу"
+              @select="handleGroupSelect($event, scope.row.id)"
+              @input="syncSearchGroups($event, scope.row.id)"
             >
             </el-autocomplete>
           </el-form-item>
@@ -60,17 +65,21 @@
           <el-form-item
             label-width="0"
             style="margin-bottom: 0"
-            :prop="patientDiagnosis ? 'patientDiagnosis.' + scope.$index + '.mkbDiagnosisId' : 'registerDiagnosis.' + scope.$index + '.mkbDiagnosisId'"
+            :prop="
+              patientDiagnosis
+                ? 'patientDiagnosis.' + scope.$index + '.mkbDiagnosisId'
+                : 'registerDiagnosis.' + scope.$index + '.mkbDiagnosisId'
+            "
             :rules="[{ required: true, message: 'Необходимо указать основной диагноз', trigger: 'change' }]"
           >
             <el-autocomplete
+              v-model="queryStringsDiagnosis[scope.row.id]"
               style="width: 100%"
-              @select="handleDiagnosisSelect($event, scope.row.id)"
               popper-class="wide-dropdown"
               :fetch-suggestions="findDiagnosis"
-              @input="syncSearchDiagnosis($event, scope.row.id)"
               placeholder="Выберите диагноз"
-              v-model="queryStringsDiagnosis[scope.row.id]"
+              @select="handleDiagnosisSelect($event, scope.row.id)"
+              @input="syncSearchDiagnosis($event, scope.row.id)"
             />
           </el-form-item>
         </template>
@@ -79,14 +88,19 @@
       <el-table-column prop="height" label="Уточнённый диагноз" align="center">
         <template #default="scope">
           <el-select
-            style="width: 100%"
-            v-model="scope.row.mkbSubDiagnosisId"
             v-if="scope.row.mkbDiagnosisId && scope.row.mkbDiagnosis.mkbSubDiagnosis.length > 0"
+            v-model="scope.row.mkbSubDiagnosisId"
+            style="width: 100%"
             placeholder="Выберите уточнённый диагноз"
           >
-            <el-option v-for="i in scope.row.mkbDiagnosis.mkbSubDiagnosis" :key="i.id" :label="`${scope.row.mkbDiagnosis.code}.${i.getFullName()}`" :value="i.id" />
+            <el-option
+              v-for="i in scope.row.mkbDiagnosis.mkbSubDiagnosis"
+              :key="i.id"
+              :label="`${scope.row.mkbDiagnosis.code}.${i.getFullName()}`"
+              :value="i.id"
+            />
           </el-select>
-          <el-select style="width: 100%" v-else disabled v-model="undefined" placeholder="Уточнённых диагнозов нет" />
+          <el-select v-else v-model="undefined" style="width: 100%" disabled placeholder="Уточнённых диагнозов нет" />
         </template>
       </el-table-column>
 
@@ -97,7 +111,7 @@
       </el-table-column>
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup @remove="removeDiagnosis(scope.row)" :showRemoveButton="true" />
+          <TableButtonGroup :show-remove-button="true" @remove="removeDiagnosis(scope.row)" />
         </template>
       </el-table-column>
     </el-table>

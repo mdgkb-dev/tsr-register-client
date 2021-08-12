@@ -11,7 +11,10 @@ export default {
   },
   getters: {
     getAll: (state: IState): ISma[] => state.sma,
-    getById: (state: IState) => (id: string): ISma | undefined => state.sma.find((item: ISma) => item.id === id),
+    getById:
+      (state: IState) =>
+      (id: string): ISma | undefined =>
+        state.sma.find((item: ISma) => item.id === id),
   },
   mutations: {
     set: (state: IState, payload: ISma[]) => {

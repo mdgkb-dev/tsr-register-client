@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="add" style="margin-bottom: 20px">Добавить подопечного</el-button>
+  <el-button style="margin-bottom: 20px" @click="add">Добавить подопечного</el-button>
   <el-table :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
@@ -21,7 +21,7 @@
 
     <el-table-column width="40" fixed="right" align="center">
       <template #default="scope">
-        <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
       </template>
     </el-table-column>
   </el-table>

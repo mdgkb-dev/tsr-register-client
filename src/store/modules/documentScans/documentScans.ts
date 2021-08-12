@@ -8,7 +8,10 @@ export default {
   getters: {
     getPatientsNames: (state: any): void => state.documentScans,
     documentScans: (state: any): void => state.documentScans,
-    getById: (state: any) => (id: number): void => state.documentScans.find((human: any) => human.id === id),
+    getById:
+      (state: any) =>
+      (id: number): void =>
+        state.documentScans.find((human: any) => human.id === id),
   },
   mutations: {
     set: (state: any, payload: any): void => {
@@ -27,10 +30,11 @@ export default {
     },
   },
   actions: {
-    upload: async (context: any, payload: any): Promise<Response> => fetch(`${process.env.VUE_APP_BASE_URL}${api}upload`, {
-      method: 'POST',
-      body: payload,
-    }),
+    upload: async (context: any, payload: any): Promise<Response> =>
+      fetch(`${process.env.VUE_APP_BASE_URL}${api}upload`, {
+        method: 'POST',
+        body: payload,
+      }),
 
     download: async (context: any, file: any): Promise<void> => {
       const res = await fetch(`${process.env.VUE_APP_BASE_URL}${api}download/${file.url}`, {

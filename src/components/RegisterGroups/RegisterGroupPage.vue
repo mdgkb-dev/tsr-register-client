@@ -1,13 +1,24 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" :inline-message="true" ref="form" :model="registerGroup" label-width="20%" label-position="left" :rules="rules">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :inline-message="true"
+          :model="registerGroup"
+          label-width="20%"
+          label-position="left"
+          :rules="rules"
+        >
           <el-form-item label="Название группы" prop="name">
             <el-input v-model="registerGroup.name"></el-input>
           </el-form-item>
-          <RegisterPropertyForm :inRegisterPropertyToRegisterGroup="registerGroup.registerPropertyToRegisterGroup" :inRegisterPropertyOptions="registerProperties" />
+          <RegisterPropertyForm
+            :in-register-property-to-register-group="registerGroup.registerPropertyToRegisterGroup"
+            :in-register-property-options="registerProperties"
+          />
         </el-form>
       </div>
     </el-row>
