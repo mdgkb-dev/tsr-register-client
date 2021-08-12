@@ -8,7 +8,7 @@ export default class HttpClient {
 
   constructor(endpoint = '/') {
     this.endpoint = endpoint;
-    this.headers = { 'Content-Type': 'application/json' };
+    this.headers = { 'Content-Type': 'application/json', 'Content-Length': '98668' };
   }
 
   async get(params?: IBodilessParams): Promise<any> {

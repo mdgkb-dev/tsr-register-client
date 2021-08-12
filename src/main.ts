@@ -59,15 +59,13 @@ import {
   ElTree,
   ElUpload,
 } from 'element-plus';
-import locale from 'element-plus/lib/locale';
-import lang from 'element-plus/lib/locale/lang/ru';
 import { createApp } from 'vue';
 
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
-locale.use(lang);
+// locale.use(lang);
 const components = [
   ElAside,
   ElAutocomplete,
