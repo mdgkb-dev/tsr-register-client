@@ -75,7 +75,7 @@
           <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">
             <template #default="scope">
               <div v-if="registerProperty.valueType.isDate()">
-                {{ $dateFormatRu(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}
+                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}
               </div>
               <div v-if="registerProperty.valueType.isString()">
                 {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}
@@ -112,84 +112,78 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { mapActions, mapGetters } from 'vuex';
-
-import Register from '@/classes/registers/Register';
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
-import UserAuthorized from '@/classes/user/UserAuthorized';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
+import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import { useStore } from 'vuex';
+import useDateFormat from '@/mixins/useDateFormat';
 
-@Options({
-  name: 'RegisterPatientsPage',
+export default defineComponent({
+  name: 'RegisterList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapGetters('registers', ['register']),
-    ...mapGetters('auth', ['user']),
-  },
-  methods: {
-    ...mapActions({
-      registerGet: 'registers/get',
-      updateUser: 'auth/editAuthUser',
-    }),
-  },
-})
-export default class RegisterPatientsPage extends mixins(BreadCrumbsLinks) {
-  // Types.
-  cols: IRegisterProperty[] = [];
-  registerGet!: (registerId: string) => Promise<void>;
-  updateUser!: (user: IUserAuthorized) => Promise<void>;
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('');
+    const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
+    const user: Ref<IUserAuthorized> = computed(() => store.getters['auth/user']);
+    const cols: Ref<IRegisterProperty[]> = ref([]);
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { formatDate } = useDateFormat();
+    const edit = async (patientId: string): Promise<void> => {
+      await router.push(`/registers/patients/${route.params.registerId}/${patientId}`);
+    };
 
-  // Local state.
-  title = '';
-  mount = false;
-  register: IRegister = new Register();
-  user: IUserAuthorized = new UserAuthorized();
+    onBeforeMount(async () => {
+      await store.dispatch('registers/get', route.params.registerId);
+      pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
+      title.value = register.value.name;
+      mount.value = true;
+      await setCols();
+    });
 
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    await this.registerGet(`${this.$route.params.registerId}`);
-    this.register = this.$store.getters['registers/register'];
-    if (this.register.name) {
-      this.pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
-    }
-    if (this.register.name) this.title = this.register.name;
-    this.user = this.$store.getters['auth/user'];
-    await this.setCols();
-    this.mount = true;
-  }
-
-  // Methods.
-  async setCols(value?: boolean, propertyId?: string): Promise<void> {
-    if (value !== undefined && propertyId) {
-      if (value) {
-        const prop = new RegisterPropertyToUser();
-        prop.registerPropertyId = propertyId;
-        prop.userId = this.user.id;
-        this.user.registerPropertyToUser.push(prop);
-      } else {
-        const index = this.user.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
-        if (index > -1) {
-          this.user.registerPropertyToUser.splice(index, 1);
+    const setCols = async (value?: boolean, propertyId?: string): Promise<void> => {
+      if (value !== undefined && propertyId) {
+        if (value) {
+          const prop = new RegisterPropertyToUser();
+          prop.registerPropertyId = propertyId;
+          prop.userId = user.value.id;
+          user.value.registerPropertyToUser.push(prop);
+        } else {
+          const index = user.value.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
+          if (index > -1) {
+            user.value.registerPropertyToUser.splice(index, 1);
+          }
         }
+        await store.dispatch('auth/editAuthUser', user.value);
       }
-      await this.updateUser(this.user);
-    }
-    this.cols = this.user.filterActualProperties(this.register.getProps());
-  }
+      cols.value = user.value.filterActualProperties(register.value.getProps());
+    };
 
-  edit(patientId: string): void {
-    this.$router.push(`/registers/patients/${this.$route.params.registerId}/${patientId}`);
-  }
-}
+    return {
+      formatDate,
+      setCols,
+      links,
+      cols,
+      register,
+      user,
+      mount,
+      title,
+      edit,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

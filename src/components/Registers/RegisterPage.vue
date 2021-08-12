@@ -21,10 +21,7 @@
         <el-collapse>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Группы</h2></template>
-            <RegisterGroupForm
-              :in-register-group-to-register="register.registerGroupToRegister"
-              :in-register-group-options="registerGroups"
-            />
+            <RegisterGroupForm />
           </el-collapse-item>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
@@ -37,89 +34,82 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
-
-import Register from '@/classes/registers/Register';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'RegisterPage',
   components: {
     PageHead,
     RegisterGroupForm,
     MkbForm,
   },
-  computed: {
-    ...mapGetters('registers', ['register']),
-    ...mapGetters('registerGroups', ['registerGroup']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
+
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = { name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }] };
+    const title: Ref<string> = ref('');
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
+
+    onBeforeMount(async () => {
+      if (!route.params.registerId) {
+        isEditMode.value = false;
+        title.value = 'Создать регистр';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать регистр';
+        await store.dispatch('registers/get', route.params.representativeTypeId);
+        await store.dispatch('registerGroups/getAll');
+        mount.value = true;
+      }
+
+      pushToLinks(['/registers'], ['Регистры пациентов']);
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(register, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+
+      await submitHandling('registers', register.value, next);
+    };
+
+    return {
+      register,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      registerGet: 'registers/get',
-      registerGroupsGetAll: 'registerGroups/getAll',
-    }),
-  },
-})
-export default class RegisterPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  registerGroups!: IRegisterGroup[];
-
-  registerGet!: (registerId: string) => Promise<void>;
-  registerGroupsGetAll!: () => Promise<void>;
-
-  // Local state.
-  register: IRegister = new Register();
-  title = '';
-  mount = false;
-
-  rules = {
-    name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }],
-  };
-
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.registerId) {
-      this.isEditMode = false;
-      this.title = 'Создать регистр';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать регистр';
-      await this.registerGet(`${this.$route.params.registerId}`);
-      this.register = this.$store.getters['registers/register'];
-    }
-
-    await this.registerGroupsGetAll();
-    this.registerGroups = this.$store.getters['registerGroups/registerGroups'];
-
-    this.pushToLinks(['/registers'], ['Регистры пациентов']);
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('register', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    await this.submitHandling('registers', this.register, next);
-  }
-}
+});
 </script>
 
 <style lang="scss" scoped>
