@@ -5,17 +5,31 @@
 
     <el-table-column label="Пациент" width="250" sortable align="center">
       <template #default="scope">
-        <el-select v-model="representativeToPatient[scope.$index].patientId">
-          <el-option v-for="item in patientsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
+        <el-form-item
+          label-width="0"
+          style="margin: 0"
+          :rules="{ required: true, message: 'Необходимо указать подопечного', trigger: 'blur' }"
+          :prop="`representativeToPatient.${scope.$index}.patientId`"
+        >
+          <el-select placeholder="Подопечный" v-model="representativeToPatient[scope.$index].patientId">
+            <el-option v-for="item in patientsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
+        </el-form-item>
       </template>
     </el-table-column>
 
     <el-table-column label="Роль представителя" align="center">
       <template #default="scope">
-        <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
-          <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
+        <el-form-item
+          label-width="0"
+          style="margin: 0"
+          :rules="{ required: true, message: 'Необходимо указать тип представителя', trigger: 'blur' }"
+          :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
+        >
+          <el-select placeholder="Тип представителя" v-model="representativeToPatient[scope.$index].representativeTypeId">
+            <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
+        </el-form-item>
       </template>
     </el-table-column>
 
@@ -36,6 +50,7 @@ import IOption from '@/interfaces/patients/IOption';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
 export default defineComponent({
   name: 'RepresentativeToPatientForm',
   components: {
@@ -44,6 +59,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const rules = RepresentativeToPatientRules;
     const patientsOptions = ref([{}]);
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
@@ -84,6 +100,7 @@ export default defineComponent({
     };
 
     return {
+      rules,
       patientsOptions,
       representativeTypesOptions,
       representativeToPatient,
@@ -93,3 +110,8 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+:deep(.el-form-item__content) {
+  margin: 0 !important;
+}
+</style>
