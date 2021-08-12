@@ -15,42 +15,47 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { mapGetters } from 'vuex';
+import { computed, defineComponent, reactive, Ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import MessageMixin from '@/mixins/MessageMixin.vue';
+import useMessage from '@/mixins/useMessage';
 
-@Options({
+export default defineComponent({
   name: 'LoginPage',
-  computed: {
-    ...mapGetters('auth', ['authError']),
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const authError: Ref<string> = computed(store.getters['auth/authError']);
+    const loginForm: { login: string; password: string } = reactive({
+      login: '',
+      password: '',
+    });
+    const { showMessageError } = useMessage();
+
+    const submitForm = async (): Promise<void> => {
+      try {
+        await store.dispatch('auth/login', loginForm);
+      } catch (error) {
+        return;
+      }
+
+      if (authError.value) {
+        showMessageError(authError.value);
+      }
+
+      if (!store.getters['auth/isAuthorized']) {
+        await router.push('/login');
+        return;
+      }
+
+      await router.push('/patients');
+    };
+
+    return {
+      loginForm,
+      submitForm,
+    };
   },
-})
-export default class LoginPage extends mixins(MessageMixin) {
-  authError!: '';
-
-  loginForm = {
-    login: '',
-    password: '',
-  };
-
-  async submitForm(): Promise<void> {
-    try {
-      await this.$store.dispatch('auth/login', this.loginForm);
-    } catch (error) {
-      return;
-    }
-
-    if (this.authError) {
-      this.showMessageError(this.authError);
-    }
-
-    if (!this.$store.getters['auth/isAuthorized']) {
-      await this.$router.push('/login');
-      return;
-    }
-
-    await this.$router.push('/patients');
-  }
-}
+});
 </script>
