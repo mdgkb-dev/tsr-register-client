@@ -1,12 +1,12 @@
 <template>
-  <div class="representative-page-container" v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+  <div v-if="mount" class="representative-page-container">
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <RepresentativePageInfo :representative="representative" />
     </el-row>
     <el-row>
       <el-collapse>
-        <el-form :status-icon="true" ref="form" :model="representative" @submit.prevent="submitForm" label-width="150px" :rules="rules">
+        <el-form ref="form" :status-icon="true" :model="representative" label-width="150px" :rules="rules" @submit.prevent="submitForm">
           <div>
             <el-collapse-item>
               <template #title>
@@ -25,9 +25,9 @@
                 <h2 class="collapseHeader">Подопечные</h2>
               </template>
               <RepresentativeToPatientForm
-                :inRepresentativeToPatient="representative.representativeToPatient"
-                :inRepresentativeTypes="representativeTypesOptions"
-                :inPatients="patientsOptions"
+                :in-representative-to-patient="representative.representativeToPatient"
+                :in-representative-types="representativeTypesOptions"
+                :in-patients="patientsOptions"
               />
             </el-collapse-item>
           </div>

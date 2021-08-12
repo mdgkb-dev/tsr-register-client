@@ -1,7 +1,17 @@
 <template>
   <div class="wrapper">
     <el-aside width="250px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
-      <div style="background-color: white; position: fixed; width: 250px; height: 100%; display: flex; flex-direction: column; justify-content: space-between">
+      <div
+        style="
+          background-color: white;
+          position: fixed;
+          width: 250px;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        "
+      >
         <div>
           <el-row style="line-height: 100px; margin-top: 50px">
             <el-col>
@@ -25,7 +35,7 @@
                       <i :class="menu.class"></i>
                       <span>{{ menu.title }} </span>
                     </template>
-                    <div v-for="(item, j) in menu.links" v-bind:key="item.title">
+                    <div v-for="(item, j) in menu.links" :key="item.title">
                       <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">
                         <span>{{ item.title }} </span>
                       </el-menu-item>
@@ -156,58 +166,58 @@ export default class MainSidePanel extends Vue {
 </script>
 
 <style scoped>
-  .menu-badge {
-    width: 50%;
-    background-color: rgba(238, 55, 116, 255);
-    border-radius: 25px;
-    color: white;
-  }
-  .el-header,
-  .el-footer {
-    background-color: #b3c0d1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
+.menu-badge {
+  width: 50%;
+  background-color: rgba(238, 55, 116, 255);
+  border-radius: 25px;
+  color: white;
+}
+.el-header,
+.el-footer {
+  background-color: #b3c0d1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
 
-  .el-aside {
-    background-color: #d3dce6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
 
-  .el-main {
-    background-color: #e9eef3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
+.el-main {
+  background-color: #e9eef3;
+  color: #333;
+  text-align: center;
+  line-height: 160px;
+}
 
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+  line-height: 260px;
+}
 
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
+.el-container:nth-child(7) .el-aside {
+  line-height: 320px;
+}
 
-  .el-menu-item.is-active,
-  .el-menu-item.is-active i {
-    background-color: #3370ff !important;
-    color: #fff;
-  }
+.el-menu-item.is-active,
+.el-menu-item.is-active i {
+  background-color: #3370ff !important;
+  color: #fff;
+}
 
-  i {
-    color: #3370ff;
-  }
+i {
+  color: #3370ff;
+}
 
-  .logout-button-container {
-    height: 150px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.logout-button-container {
+  height: 150px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

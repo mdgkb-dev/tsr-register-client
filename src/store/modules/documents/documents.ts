@@ -14,7 +14,10 @@ export default {
     getPatientsNames: (state: any): void => state.documents,
     documents: (state: any): void => state.documents,
     document: (state: any): void => state.document,
-    getById: (state: any) => (id: number): void => state.documents.find((human: any) => human.id === id),
+    getById:
+      (state: any) =>
+      (id: number): void =>
+        state.documents.find((human: any) => human.id === id),
   },
   mutations: {
     setAll: (state: any, documents: IDocument[]) => {

@@ -1,20 +1,33 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" :inline-message="true" ref="form" :model="documentType" label-width="10vw" label-position="right" :rules="rules">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :inline-message="true"
+          :model="documentType"
+          label-width="10vw"
+          label-position="right"
+          :rules="rules"
+        >
           <el-form-item label="Название документа" prop="name">
             <el-input v-model="documentType.name"></el-input>
           </el-form-item>
-          <el-button @click="add" style="margin-bottom: 10px">Добавить поле</el-button>
+          <el-button style="margin-bottom: 10px" @click="add">Добавить поле</el-button>
 
           <el-table :data="documentType.documentTypeFields" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
             <el-table-column type="index" width="60" align="center" />
 
             <el-table-column label="Название поля" min-width="250" align="center">
               <template #default="scope">
-                <el-form-item label-width="0" style="margin-bottom: 0" :prop="'documentTypeFields.' + scope.$index + '.name'" :rules="rules.rowName">
+                <el-form-item
+                  label-width="0"
+                  style="margin-bottom: 0"
+                  :prop="'documentTypeFields.' + scope.$index + '.name'"
+                  :rules="rules.rowName"
+                >
                   <el-input v-model="scope.row.name"></el-input>
                 </el-form-item>
               </template>
@@ -22,8 +35,13 @@
 
             <el-table-column label="Тип поля" min-width="250" align="center">
               <template #default="scope">
-                <el-form-item label-width="0" style="margin-bottom: 0" :prop="'documentTypeFields.' + scope.$index + '.type'" :rules="rules.rowType">
-                  <el-select placeholder="Выберите тип поля" v-model="scope.row.type">
+                <el-form-item
+                  label-width="0"
+                  style="margin-bottom: 0"
+                  :prop="'documentTypeFields.' + scope.$index + '.type'"
+                  :rules="rules.rowType"
+                >
+                  <el-select v-model="scope.row.type" placeholder="Выберите тип поля">
                     <el-option v-for="option in options" :key="option.value" :label="option.label" :value="option.value"> </el-option>
                   </el-select>
                 </el-form-item>
@@ -32,14 +50,19 @@
 
             <el-table-column label="Порядковый номер поля" min-width="250" align="center">
               <template #default="scope">
-                <el-form-item label-width="0" style="margin-bottom: 0" :prop="'documentTypeFields.' + scope.$index + '.order'" :rules="rules.rowNumber">
-                  <el-input-number size="medium" v-model="scope.row.order" min="0" style="width: 120px"></el-input-number>
+                <el-form-item
+                  label-width="0"
+                  style="margin-bottom: 0"
+                  :prop="'documentTypeFields.' + scope.$index + '.order'"
+                  :rules="rules.rowNumber"
+                >
+                  <el-input-number v-model="scope.row.order" size="medium" min="0" style="width: 120px"></el-input-number>
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column width="40" fixed="right" align="center">
               <template #default="scope">
-                <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+                <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
               </template>
             </el-table-column>
           </el-table>

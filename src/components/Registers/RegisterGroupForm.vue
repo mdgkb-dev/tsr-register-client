@@ -1,6 +1,6 @@
 <template>
   <div class="table-under-collapse">
-    <el-button @click="add" style="margin-bottom: 10px">Добавить группу</el-button>
+    <el-button style="margin-bottom: 10px" @click="add">Добавить группу</el-button>
     <el-table :data="registerGroupToRegister" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column width="120">
         <template #default="scope">
-          <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
         </template>
       </el-table-column>
     </el-table>

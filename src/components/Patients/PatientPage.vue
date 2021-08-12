@@ -1,18 +1,18 @@
 <template>
-  <div class="patient-page-container" v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
-    <el-row><PatientPageInfo :patient="patient"/></el-row>
+  <div v-if="mount" class="patient-page-container">
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
+    <el-row><PatientPageInfo :patient="patient" /></el-row>
     <el-row>
       <el-collapse>
         <el-form
+          ref="form"
           :status-icon="true"
           :inline-message="true"
-          ref="form"
           :model="patient"
           :rules="rules"
-          @submit.prevent="submitForm"
           label-width="25%"
           label-position="left"
+          @submit.prevent="submitForm"
         >
           <div>
             <el-collapse-item>
@@ -26,14 +26,21 @@
               <template #title>
                 <h2 class="collapseHeader">Антропометрия</h2>
               </template>
-              <AnthropometryForm :inHeightWeight="patient.heightWeight" :isMale="patient.human.isMale" :inBirthDate="patient.human.dateBirth" />
+              <AnthropometryForm
+                :in-height-weight="patient.heightWeight"
+                :is-male="patient.human.isMale"
+                :in-birth-date="patient.human.dateBirth"
+              />
             </el-collapse-item>
 
             <el-collapse-item>
               <template #title>
                 <h2 class="collapseHeader">Страховки</h2>
               </template>
-              <InsuranceForm :inInsuranceCompaniesOptions="insuranceCompaniesOptions" :inInsuranceCompanyToHuman="patient.human.insuranceCompanyToHuman" />
+              <InsuranceForm
+                :in-insurance-companies-options="insuranceCompaniesOptions"
+                :in-insurance-company-to-human="patient.human.insuranceCompanyToHuman"
+              />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -45,15 +52,15 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-              <MkbForm v-model:diagnosisData="patient.patientDiagnosis" :patientDiagnosis="true" />
+              <MkbForm v-model:diagnosisData="patient.patientDiagnosis" :patient-diagnosis="true" />
             </el-collapse-item>
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
               <DisabilityForm
                 v-model:disabilities="patient.disabilities"
-                :birthDate="patient.human.dateBirth"
                 v-model:fileInfos="patient.human.fileInfos"
+                :birth-date="patient.human.dateBirth"
                 @addEdv="addEdv"
                 @removeEdv="removeEdv"
               />
@@ -62,14 +69,14 @@
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Законные представители</h2></template>
               <PatientToRepresentativeForm
-                :inRepresentativeToPatient="patient.representativeToPatient"
-                :inRepresentativeTypes="representativeTypes"
-                :inRepresentatives="representativeOptions"
+                :in-representative-to-patient="patient.representativeToPatient"
+                :in-representative-types="representativeTypes"
+                :in-representatives="representativeOptions"
               />
             </el-collapse-item>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Регистры</h2></template>
-              <PatientRegistersForm v-model:registerToPatient="patient.registerToPatient" :patientDiagnosis="patient.patientDiagnosis" />
+              <PatientRegistersForm v-model:registerToPatient="patient.registerToPatient" :patient-diagnosis="patient.patientDiagnosis" />
             </el-collapse-item>
           </div>
         </el-form>

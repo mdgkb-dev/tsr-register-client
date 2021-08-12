@@ -7,11 +7,19 @@
       <el-button type="success" round native-type="submit" @click="submitForm()">Сохранить изменения</el-button>
     </el-col>
   </el-row>
-  <el-row v-if="mount"><PageInfo :human="user.human"/></el-row>
+  <el-row v-if="mount"><PageInfo :human="user.human" /></el-row>
   <el-row>
     <div class="table-background" style="width: 100%; height: 100%">
       <el-collapse>
-        <el-form :status-icon="true" ref="form" :model="user" :rules="rules" @submit.prevent="submitForm" label-width="20%" label-position="left">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :model="user"
+          :rules="rules"
+          label-width="20%"
+          label-position="left"
+          @submit.prevent="submitForm"
+        >
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>

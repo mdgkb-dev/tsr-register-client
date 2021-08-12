@@ -15,7 +15,7 @@ export default class RegisterGroup implements IRegisterGroup {
     this.name = registerGroup.name;
     if (registerGroup.registerPropertyToRegisterGroup) {
       this.registerPropertyToRegisterGroup = registerGroup.registerPropertyToRegisterGroup.map(
-        (registerProperty: IRegisterPropertyToRegisterGroup) => new RegisterPropertyToRegisterGroup(registerProperty),
+        (registerProperty: IRegisterPropertyToRegisterGroup) => new RegisterPropertyToRegisterGroup(registerProperty)
       );
     }
   }

@@ -1,13 +1,13 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
-    <el-button class="table-button" icon="el-icon-download" v-if="showDownloadButton" @click="$emit('download')" />
-    <el-button class="table-button" icon="el-icon-edit" v-if="showEditButton" @click="$emit('edit')" />
+    <el-button v-if="showDownloadButton" class="table-button" icon="el-icon-download" @click="$emit('download')" />
+    <el-button v-if="showEditButton" class="table-button" icon="el-icon-edit" @click="$emit('edit')" />
     <el-popconfirm
       v-if="showRemoveButton"
-      confirmButtonText="Да"
-      cancelButtonText="Отмена"
+      confirm-button-text="Да"
+      cancel-button-text="Отмена"
       icon="el-icon-info"
-      iconColor="red"
+      icon-color="red"
       title="Вы уверен, что хотите удалить это?"
       @confirm="$emit('remove')"
       @cancel="() => {}"

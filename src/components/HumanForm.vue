@@ -1,34 +1,40 @@
 <template>
   <div class="form-under-collapse">
     <el-form-item label="Фамилия" prop="human.surname">
-      <el-input :readonly="readonly" v-model="editHuman.surname"></el-input>
+      <el-input v-model="editHuman.surname" :readonly="readonly"></el-input>
     </el-form-item>
     <el-form-item label="Имя" prop="human.name">
-      <el-input :readonly="readonly" v-model="editHuman.name"></el-input>
+      <el-input v-model="editHuman.name" :readonly="readonly"></el-input>
     </el-form-item>
     <el-form-item label="Отчество" prop="human.patronymic">
-      <el-input :readonly="readonly" v-model="editHuman.patronymic"></el-input>
+      <el-input v-model="editHuman.patronymic" :readonly="readonly"></el-input>
     </el-form-item>
     <el-form-item label="Пол" prop="human.isMale">
-      <el-select :disabled="readonly" v-model="editHuman.isMale" placeholder="Выберите пол">
+      <el-select v-model="editHuman.isMale" :disabled="readonly" placeholder="Выберите пол">
         <el-option label="Мужчина" :value="true"></el-option>
         <el-option label="Женщина" :value="false"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="Дата рождения" prop="human.dateBirth">
-      <el-date-picker :readonly="readonly" type="date" format="DD.MM.YYYY" placeholder="Выберите дату" v-model="editHuman.dateBirth"></el-date-picker>
+      <el-date-picker
+        v-model="editHuman.dateBirth"
+        :readonly="readonly"
+        type="date"
+        format="DD.MM.YYYY"
+        placeholder="Выберите дату"
+      ></el-date-picker>
     </el-form-item>
     <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
-      <el-input :readonly="readonly" v-model="editHuman.addressRegistration"></el-input>
+      <el-input v-model="editHuman.addressRegistration" :readonly="readonly"></el-input>
     </el-form-item>
     <el-form-item label="Адрес проживания" prop="human.addressResidential">
-      <el-input :readonly="readonly" v-model="editHuman.addressResidential"></el-input>
+      <el-input v-model="editHuman.addressResidential" :readonly="readonly"></el-input>
     </el-form-item>
     <el-form-item label="Телефон" prop="human.contact.phone">
-      <el-input :readonly="readonly" v-model="editHuman.contact.phone" @input="editHuman.contact.formatPhoneNumber()"></el-input>
+      <el-input v-model="editHuman.contact.phone" :readonly="readonly" @input="editHuman.contact.formatPhoneNumber()"></el-input>
     </el-form-item>
     <el-form-item label="Email" prop="human.contact.email">
-      <el-input :readonly="readonly" v-model="editHuman.contact.email"></el-input>
+      <el-input v-model="editHuman.contact.email" :readonly="readonly"></el-input>
     </el-form-item>
   </div>
 </template>

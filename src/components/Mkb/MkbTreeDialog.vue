@@ -1,16 +1,16 @@
 <template>
   <el-button @click="addDiagnosisModal">Добавить диагноз из списка</el-button>
-  <el-dialog width="90%" v-if="diagnosisModalVisible" v-model="diagnosisModalVisible">
+  <el-dialog v-if="diagnosisModalVisible" v-model="diagnosisModalVisible" width="90%">
     <el-row>
       <el-col :span="12">
         <h3>Список диагнозов</h3>
         <MkbTree
           v-model:checkedDiagnosis="diagnosisData"
           :selectable="true"
+          :patient-diagnosis="patientDiagnosis"
           @setDiagnosis="setDiagnosis"
           @removeDiagnosis="removeCheckedDiagnosis"
           @setSubDiagnosis="setSubDiagnosis"
-          :patientDiagnosis="patientDiagnosis"
         ></MkbTree>
       </el-col>
       <el-col :span="10" :offset="2">
@@ -123,7 +123,7 @@ export default class MkbTreeDialog extends Vue {
 
   removeCheckedDiagnosis(item: any): void {
     const checkedDiagnosis = this.diagnosisData.filter(
-      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id,
+      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
     );
     checkedDiagnosis.forEach((d: any) => {
       const index = this.diagnosisData.indexOf(d);

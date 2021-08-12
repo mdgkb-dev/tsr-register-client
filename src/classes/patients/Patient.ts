@@ -40,7 +40,9 @@ export default class Patient implements IPatient {
     this.id = patient.id;
     this.human = new Human(patient.human);
     if (patient.anthropometryData) {
-      patient.anthropometryData.sort((a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      patient.anthropometryData.sort(
+        (a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
       this.anthropometryData = patient.anthropometryData.map((a: IAnthropometryData) => new AnthropometryData(a));
       this.heightWeight = HeightWeight.anthropometryDataToHeightWeightArr(this.anthropometryData);
     }
@@ -49,7 +51,7 @@ export default class Patient implements IPatient {
     }
     if (patient.representativeToPatient) {
       this.representativeToPatient = patient.representativeToPatient.map(
-        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient),
+        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient)
       );
     }
     if (patient.disabilities) {
@@ -59,10 +61,14 @@ export default class Patient implements IPatient {
       this.registerToPatient = patient.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
     }
     if (patient.registerPropertyToPatient) {
-      this.registerPropertyToPatient = patient.registerPropertyToPatient.map((i: IRegisterPropertyToPatient) => new RegisterPropertyToPatient(i));
+      this.registerPropertyToPatient = patient.registerPropertyToPatient.map(
+        (i: IRegisterPropertyToPatient) => new RegisterPropertyToPatient(i)
+      );
     }
     if (patient.registerPropertySetToPatient) {
-      this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map((i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i));
+      this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map(
+        (i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i)
+      );
     }
   }
 
@@ -71,9 +77,13 @@ export default class Patient implements IPatient {
     // const anthropometryNames: (string | undefined)[] = [...new Set(this.anthropometryData.map((data: IAnthropometryData) => data.anthropometry?.name))];
     const anthropometryNames: string[] = ['Вес', 'Рост'];
     anthropometryNames.forEach((name: string) => {
-      const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
+      const currentAnthropometryData = this.anthropometryData.filter(
+        (data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase()
+      );
       if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
+          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
+        );
         total = `${total} ${lastAnthropometry.getFullInfo()}`;
       }
     });
@@ -84,9 +94,13 @@ export default class Patient implements IPatient {
     let total = '';
     const anthropometryNames: string[] = ['Вес', 'Рост'];
     anthropometryNames.forEach((name: string) => {
-      const currentAnthropometryData = this.anthropometryData.filter((data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
+      const currentAnthropometryData = this.anthropometryData.filter(
+        (data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase()
+      );
       if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
+          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
+        );
         total = `<div>${total} ${lastAnthropometry.getShortInfo()}</div>`;
       }
     });
@@ -100,7 +114,9 @@ export default class Patient implements IPatient {
   getLastAnthropometryValue(name: string): number {
     const currentAnthropometryData = this.anthropometryData.filter((data) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
     if (!currentAnthropometryData.length) return 0;
-    const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) => (new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent));
+    const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
+      new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
+    );
     return lastAnthropometry.value;
   }
 

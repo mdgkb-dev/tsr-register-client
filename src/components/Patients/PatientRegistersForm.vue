@@ -2,12 +2,12 @@
   <div class="form-under-collapse">
     <el-table
       ref="tableRegisters"
-      @selection-change="handleSelectionChange"
       :default-sort="{ prop: 'id', order: 'ascending' }"
       :data="registers"
       class="table-shadow"
       header-row-class-name="header-style"
       border
+      @selection-change="handleSelectionChange"
     >
       <el-table-column :selectable="selectable" type="selection" width="55"> </el-table-column>
       <el-table-column prop="name" label="Название регистра" min-width="150" />

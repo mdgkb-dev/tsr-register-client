@@ -1,9 +1,9 @@
 <template>
-  <div class="patient-page-container" v-if="mount">
-    <PageHead :title="patient.human.getFullName()" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+  <div v-if="mount" class="patient-page-container">
+    <PageHead :title="patient.human.getFullName()" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <el-collapse>
-        <el-form label-position="top" :status-icon="true" ref="form" :model="patient">
+        <el-form ref="form" label-position="top" :status-icon="true" :model="patient">
           <div>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
@@ -14,11 +14,19 @@
                 <template #title>
                   <h2 class="collapseHeader">{{ registerGroupToRegister.registerGroup.name }}</h2>
                 </template>
-                <span v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup" :key="j" style="margin-bottom: 10px">
+                <span
+                  v-for="(prop, j) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
+                  :key="j"
+                  style="margin-bottom: 10px"
+                >
                   <el-form-item v-if="prop.registerProperty.valueType.isString()" :label="prop.registerProperty.name">
                     <el-input
                       :label="prop.registerProperty.name"
-                      :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      :model-value="
+                        patient.getRegisterPropertyValue(
+                          registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty
+                        )
+                      "
                       @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
                     />
                   </el-form-item>
@@ -27,7 +35,11 @@
                       type="textarea"
                       :rows="3"
                       :label="prop.registerProperty.name"
-                      :model-value="patient.getRegisterPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      :model-value="
+                        patient.getRegisterPropertyValue(
+                          registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty
+                        )
+                      "
                       @input="patient.setRegisterPropertyValue($event, prop.registerProperty)"
                     />
                   </el-form-item>
@@ -44,8 +56,8 @@
                     <el-checkbox-group>
                       <el-checkbox
                         v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
-                        :label="registerPropertySet.name"
                         :key="registerPropertySet.id"
+                        :label="registerPropertySet.name"
                         :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
                         @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
                       >
@@ -56,19 +68,23 @@
                   <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
                     <el-radio
                       v-for="registerPropertyRadio in prop.registerProperty.registerPropertyRadio"
-                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
-                      @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty)"
-                      :label="registerPropertyRadio.id"
                       :key="registerPropertyRadio.id"
+                      :model-value="patient.getRegisterPropertyValue(prop.registerProperty)"
+                      :label="registerPropertyRadio.id"
+                      @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop.registerProperty)"
                       >{{ registerPropertyRadio.name }}
                     </el-radio>
                     <el-input
-                      style="margin-top: 10px"
                       v-if="prop.registerProperty.withOther"
+                      style="margin-top: 10px"
                       placeholder="Другое, указать"
                       type="textarea"
                       :rows="3"
-                      :model-value="patient.getOtherPropertyValue(registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty)"
+                      :model-value="
+                        patient.getOtherPropertyValue(
+                          registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[j].registerProperty
+                        )
+                      "
                       @input="patient.setRegisterPropertyValueOther($event, prop.registerProperty)"
                     />
                   </el-form-item>
@@ -132,7 +148,10 @@ export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLi
     this.register = this.$store.getters['registers/register'];
     await this.patientGet(`${this.$route.params.patientId}`);
     this.patient = this.$store.getters['patients/patient'];
-    this.pushToLinks(['/register-link-list/', `/registers/patients/${this.$route.params.registerId}`], ['Регистры пациентов', this.register.name]);
+    this.pushToLinks(
+      ['/register-link-list/', `/registers/patients/${this.$route.params.registerId}`],
+      ['Регистры пациентов', this.register.name]
+    );
     this.mount = true;
 
     window.addEventListener('beforeunload', this.beforeWindowUnload);

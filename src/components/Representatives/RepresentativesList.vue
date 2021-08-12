@@ -1,14 +1,14 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height:100%">
-    <PageHead :title="title" @create="create" :showAddButton="true" />
+  <div v-if="mount" class="wrapper" style="height: 100%">
+    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
-      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Поиск" class="table-search" />
+      <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
         :data="filterTable(representatives)"
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column width="150" align="left">
@@ -56,7 +56,7 @@
                   :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
                   placement="top-end"
                 >
-                  <el-tag class="tag-link" @click="this.$router.push(`/patients/${rep.patient.id}`)">{{ children(rep) }}</el-tag>
+                  <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">{{ children(rep) }}</el-tag>
                 </el-tooltip>
               </div>
             </template>
@@ -88,7 +88,12 @@
 
         <el-table-column width="40" fixed="right" align="center">
           <template #default="scope">
-            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+            <TableButtonGroup
+              :show-edit-button="true"
+              :show-remove-button="true"
+              @edit="edit(scope.row.id)"
+              @remove="remove(scope.row.id)"
+            />
           </template>
         </el-table-column>
       </el-table>
@@ -166,7 +171,9 @@ export default class RepresentativesList extends Vue {
 
   children = (representative: IRepresetnationType) => {
     if (representative.patient) {
-      return representative.patient.human.isMale ? representative.representativeType?.childMaleType : representative.representativeType?.childWomanType;
+      return representative.patient.human.isMale
+        ? representative.representativeType?.childMaleType
+        : representative.representativeType?.childWomanType;
     }
     return '';
   };

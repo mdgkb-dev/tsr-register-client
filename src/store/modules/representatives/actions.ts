@@ -21,9 +21,15 @@ const actions: ActionTree<State, RootState> = {
   },
   edit: async ({ commit }, representative: IRepresentative): Promise<void> => {
     const fileInfos = representative.human.fileInfos.filter((info) => info.isDraft);
-    commit('update', await httpClient.put({
-      payload: representative, query: representative.id, isFormData: true, fileInfos,
-    }));
+    commit(
+      'update',
+      await httpClient.put({
+        payload: representative,
+        query: representative.id,
+        isFormData: true,
+        fileInfos,
+      })
+    );
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete(id);

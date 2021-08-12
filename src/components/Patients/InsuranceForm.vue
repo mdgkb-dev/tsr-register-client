@@ -1,6 +1,6 @@
 <template>
   <div class="table-under-collapse">
-    <el-button @click="addInsurance" style="margin-bottom: 20px">Добавить страховку</el-button>
+    <el-button style="margin-bottom: 20px" @click="addInsurance">Добавить страховку</el-button>
 
     <el-table :data="insuranceCompanies" style="width: 710px" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
@@ -13,7 +13,7 @@
             label-width="0"
             style="margin-bottom: 0"
           >
-            <el-select placeholder="Выберите компанию" v-model="insuranceCompanies[scope.$index].insuranceCompanyId">
+            <el-select v-model="insuranceCompanies[scope.$index].insuranceCompanyId" placeholder="Выберите компанию">
               <el-option v-for="item in inInsuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
@@ -28,14 +28,14 @@
             style="margin-bottom: 0"
             label-width="0"
           >
-            <el-input label="Введите номер страховки" v-model.lazy="insuranceCompanies[scope.$index].number"></el-input>
+            <el-input v-model.lazy="insuranceCompanies[scope.$index].number" label="Введите номер страховки"></el-input>
           </el-form-item>
         </template>
       </el-table-column>
 
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup @remove="removeInsurance(scope.row)" :showRemoveButton="true" />
+          <TableButtonGroup :show-remove-button="true" @remove="removeInsurance(scope.row)" />
         </template>
       </el-table-column>
     </el-table>

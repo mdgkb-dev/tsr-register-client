@@ -38,7 +38,9 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
       this.patient = new Patient(patientDiagnosis.patient);
     }
     if (patientDiagnosis.patientDiagnosisAnamnesis) {
-      this.patientDiagnosisAnamnesis = patientDiagnosis.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
+      this.patientDiagnosisAnamnesis = patientDiagnosis.patientDiagnosisAnamnesis.map(
+        (a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a)
+      );
     }
   }
 }

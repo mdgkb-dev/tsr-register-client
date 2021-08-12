@@ -1,18 +1,24 @@
 <template>
   <div v-if="mount" style="height: 100%; overflow: hidden">
-    <PageHead :title="'Список пациентов'" @create="create" :showAddButton="true" />
+    <PageHead :title="'Список пациентов'" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-autocomplete
-        style="width: 100%;margin-bottom: 20px"
-        popper-class="wide-dropdown"
-        @select="handlePatientSelect"
-        :fetch-suggestions="findPatients"
-        @input="handleSearchInput"
         v-model="queryStringsPatient"
+        style="width: 100%; margin-bottom: 20px"
+        popper-class="wide-dropdown"
+        :fetch-suggestions="findPatients"
         placeholder="Найти пациента"
+        @select="handlePatientSelect"
+        @input="handleSearchInput"
       >
       </el-autocomplete>
-      <el-input prefix-icon="el-icon-search" style="border-radius: 90%" v-model="search" placeholder="Отфильтровать текущий список" class="table-search" />
+      <el-input
+        v-model="search"
+        prefix-icon="el-icon-search"
+        style="border-radius: 90%"
+        placeholder="Отфильтровать текущий список"
+        class="table-search"
+      />
       <el-table
         ref="table"
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -20,7 +26,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column width="60" align="center" />
 
@@ -62,7 +68,9 @@
                   :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
                   placement="top-end"
                 >
-                  <el-tag class="tag-link" size="small" @click="this.$router.push(`/representatives/${rep.representative.id}`)">{{ rep.representativeType.name }}</el-tag>
+                  <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">{{
+                    rep.representativeType.name
+                  }}</el-tag>
                 </el-tooltip>
               </div>
             </template>
@@ -82,14 +90,30 @@
             <template #default="scope">
               <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
                 <div v-if="diagnosis.mkbSubDiagnosis">
-                  <span class="underline-label" v-if="diagnosis.mkbSubDiagnosis" v-html="diagnosis.mkbDiagnosis.code + '.' + diagnosis.mkbSubDiagnosis.subCode"></span>
-                  <el-tooltip class="item" effect="dark" v-if="diagnosis.mkbSubDiagnosis" :content="diagnosis.mkbSubDiagnosis.name" placement="top-end">
+                  <span
+                    v-if="diagnosis.mkbSubDiagnosis"
+                    class="underline-label"
+                    v-html="diagnosis.mkbDiagnosis.code + '.' + diagnosis.mkbSubDiagnosis.subCode"
+                  ></span>
+                  <el-tooltip
+                    v-if="diagnosis.mkbSubDiagnosis"
+                    class="item"
+                    effect="dark"
+                    :content="diagnosis.mkbSubDiagnosis.name"
+                    placement="top-end"
+                  >
                     <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
                   </el-tooltip>
                 </div>
                 <div v-else>
-                  <span class="underline-label" v-if="diagnosis.mkbDiagnosis" v-html="diagnosis.mkbDiagnosis.code"></span>
-                  <el-tooltip class="item" effect="dark" v-if="diagnosis.mkbDiagnosis" :content="diagnosis.mkbDiagnosis.name" placement="top-end">
+                  <span v-if="diagnosis.mkbDiagnosis" class="underline-label" v-html="diagnosis.mkbDiagnosis.code"></span>
+                  <el-tooltip
+                    v-if="diagnosis.mkbDiagnosis"
+                    class="item"
+                    effect="dark"
+                    :content="diagnosis.mkbDiagnosis.name"
+                    placement="top-end"
+                  >
                     <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
                   </el-tooltip>
                 </div>
@@ -114,7 +138,7 @@
                   <el-tag
                     class="tag-link"
                     size="small"
-                    @click="this.$router.push(`/registers/patients/${registerToPatient.registerId}/${registerToPatient.patientId}`)"
+                    @click="$router.push(`/registers/patients/${registerToPatient.registerId}/${registerToPatient.patientId}`)"
                     >{{ registerToPatient.register.name }}</el-tag
                   >
                 </el-tooltip>
@@ -126,16 +150,32 @@
         <el-table-column>
           <el-table-column label="ИНВАЛИДНОСТЬ" width="140" align="center">
             <template #default="scope">
-              <el-space direction="vertical" v-if="scope.row.getActuallyDisability()">
+              <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
                 <span>До {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateEnd) }}</span>
                 <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
-                  <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A</el-button>
-                  <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B</el-button>
-                  <el-button size="small" disabled :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C</el-button>
+                  <el-button
+                    size="small"
+                    disabled
+                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
+                    circle
+                    >A</el-button
+                  >
+                  <el-button
+                    size="small"
+                    disabled
+                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
+                    circle
+                    >B</el-button
+                  >
+                  <el-button
+                    size="small"
+                    disabled
+                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
+                    circle
+                    >C</el-button
+                  >
                 </div>
-                <div v-else>
-                  Нет справок ЕДВ
-                </div>
+                <div v-else>Нет справок ЕДВ</div>
               </el-space>
             </template>
           </el-table-column>
@@ -158,12 +198,24 @@
 
         <el-table-column width="40" fixed="right" align="center">
           <template #default="scope">
-            <TableButtonGroup @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" :showEditButton="true" :showRemoveButton="true" />
+            <TableButtonGroup
+              :show-edit-button="true"
+              :show-remove-button="true"
+              @edit="edit(scope.row.id)"
+              @remove="remove(scope.row.id)"
+            />
           </template>
         </el-table-column>
       </el-table>
       <div style="text-align: center; width: 100%">
-        <el-pagination style="margin-top: 20px; margin-bottom: 20px" :current-page="curPage" background layout="prev, pager, next" :total="240" @current-change="setPage">
+        <el-pagination
+          style="margin-top: 20px; margin-bottom: 20px"
+          :current-page="curPage"
+          background
+          layout="prev, pager, next"
+          :total="240"
+          @current-change="setPage"
+        >
         </el-pagination>
       </div>
     </div>

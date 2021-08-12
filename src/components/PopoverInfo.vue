@@ -1,7 +1,7 @@
 <template>
   <el-popover placement="top-start" :title="title" width="auto" trigger="hover" :content="content">
     <template #reference>
-      <i style="margin-left: 10px;" class="custom-icon el-icon-question"></i>
+      <i style="margin-left: 10px" class="custom-icon el-icon-question"></i>
     </template>
   </el-popover>
 </template>

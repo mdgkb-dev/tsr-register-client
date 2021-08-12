@@ -39,7 +39,7 @@ const actions: ActionTree<State, RootState> = {
         query: patient.id,
         isFormData: true,
         fileInfos,
-      }),
+      })
     );
   },
   delete: async ({ commit }, id: string): Promise<void> => {

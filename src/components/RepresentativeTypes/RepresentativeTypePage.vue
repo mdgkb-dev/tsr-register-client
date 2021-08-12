@@ -1,9 +1,17 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" @submitForm="submitForm" :showSaveButton="true" />
+    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
-        <el-form :status-icon="true" ref="form" :model="representativeType" :rules="rules" label-width="30%" label-position="left" style="max-width: 800px">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :model="representativeType"
+          :rules="rules"
+          label-width="30%"
+          label-position="left"
+          style="max-width: 800px"
+        >
           <el-form-item label="Название типа" prop="name">
             <el-input v-model="representativeType.name"></el-input>
           </el-form-item>

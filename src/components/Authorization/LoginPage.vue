@@ -1,6 +1,6 @@
 <template>
   <div style="width: 50%; padding-left: 25%">
-    <el-form :status-icon="true" :model="loginForm" @submit.prevent="submitForm" label-width="130px">
+    <el-form :status-icon="true" :model="loginForm" label-width="130px" @submit.prevent="submitForm">
       <el-form-item label="Логин">
         <el-input v-model="loginForm.login"></el-input>
       </el-form-item>

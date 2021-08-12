@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="add" style="margin-bottom: 10px">Добавить свойство</el-button>
+  <el-button style="margin-bottom: 10px" @click="add">Добавить свойство</el-button>
   <el-table :data="registerPropertyToRegisterGroup" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="60" align="center" />
 
@@ -24,7 +24,7 @@
     </el-table-column>
     <el-table-column fixed="right" width="200">
       <template #default="scope">
-        <TableButtonGroup @remove="remove(scope.row)" :showRemoveButton="true" />
+        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
       </template>
     </el-table-column>
   </el-table>

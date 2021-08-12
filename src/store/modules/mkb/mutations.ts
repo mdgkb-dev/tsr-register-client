@@ -31,8 +31,12 @@ const mutations: MutationTree<State> = {
     state.mkbSubDiagnosis = mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
   },
   setGroupByClassId(state, mkbComposition: MkbComposition) {
-    const groups = mkbComposition.mkbGroupAnswer.mkbGroups ? mkbComposition.mkbGroupAnswer.mkbGroups.map((m: IMkbGroup) => new MkbGroup(m)) : undefined;
-    const diagnosis = mkbComposition.mkbGroupAnswer.mkbDiagnosis ? mkbComposition.mkbGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d)) : undefined;
+    const groups = mkbComposition.mkbGroupAnswer.mkbGroups
+      ? mkbComposition.mkbGroupAnswer.mkbGroups.map((m: IMkbGroup) => new MkbGroup(m))
+      : undefined;
+    const diagnosis = mkbComposition.mkbGroupAnswer.mkbDiagnosis
+      ? mkbComposition.mkbGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d))
+      : undefined;
     if (!state.mkbClasses) return;
     const i = state.mkbClasses.findIndex((item: any) => item.id === mkbComposition.mkbIdSet.classId);
     if (i >= 0 && state.mkbClasses) {
@@ -59,7 +63,9 @@ const mutations: MutationTree<State> = {
     const diagnosis = mkbComposition.mkbSubSubGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
     const classI = state.mkbClasses.findIndex((item: any) => item.id === mkbComposition.mkbIdSet.classId);
     const groupId = state.mkbClasses[classI].mkbGroups.findIndex((i: any) => i.id === mkbComposition.mkbIdSet.groupId);
-    const subGroupId = state.mkbClasses[classI].mkbGroups[groupId].mkbSubGroups.findIndex((i: IMkbSubGroup) => i.id === mkbComposition.mkbIdSet.subGroupId);
+    const subGroupId = state.mkbClasses[classI].mkbGroups[groupId].mkbSubGroups.findIndex(
+      (i: IMkbSubGroup) => i.id === mkbComposition.mkbIdSet.subGroupId
+    );
     state.mkbClasses[classI].mkbGroups[groupId].mkbSubGroups[subGroupId].mkbDiagnosis = diagnosis;
   },
 

@@ -21,10 +21,14 @@ export default class Register implements IRegister {
     this.id = register.id;
     this.name = register.name;
     if (register.registerGroupToRegister) {
-      this.registerGroupToRegister = register.registerGroupToRegister.map((group: IRegisterGroupToRegister) => new RegisterGroupToRegister(group));
+      this.registerGroupToRegister = register.registerGroupToRegister.map(
+        (group: IRegisterGroupToRegister) => new RegisterGroupToRegister(group)
+      );
     }
     if (register.registerDiagnosis) {
-      this.registerDiagnosis = register.registerDiagnosis.map((registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis));
+      this.registerDiagnosis = register.registerDiagnosis.map(
+        (registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis)
+      );
     }
     if (register.registerToPatient) {
       this.registerToPatient = register.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
@@ -33,9 +37,11 @@ export default class Register implements IRegister {
 
   getProps(): IRegisterProperty[] {
     const props: IRegisterProperty[] = [];
-    this.registerGroupToRegister.forEach((groupToRegister) => groupToRegister.registerGroup?.registerPropertyToRegisterGroup.forEach((propToRegister) => {
-      if (propToRegister.registerProperty) props.push(propToRegister.registerProperty);
-    }));
+    this.registerGroupToRegister.forEach((groupToRegister) =>
+      groupToRegister.registerGroup?.registerPropertyToRegisterGroup.forEach((propToRegister) => {
+        if (propToRegister.registerProperty) props.push(propToRegister.registerProperty);
+      })
+    );
     return props as IRegisterProperty[];
   }
 }

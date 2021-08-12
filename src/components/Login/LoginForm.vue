@@ -7,8 +7,12 @@
           <el-button class="button" type="text">Забыли пароль?</el-button>
         </div>
         <el-form-item label="">
-          <el-input v-model="v$.loginForm.login.$model" :class="{ 'wrong-input': v$.loginForm.login.$errors.length > 0 }" placeholder="Логин"></el-input>
-          <div :class="['error-message']" v-for="(error, loginIndex) of v$.loginForm.login.$errors" :key="loginIndex">
+          <el-input
+            v-model="v$.loginForm.login.$model"
+            :class="{ 'wrong-input': v$.loginForm.login.$errors.length > 0 }"
+            placeholder="Логин"
+          ></el-input>
+          <div v-for="(error, loginIndex) of v$.loginForm.login.$errors" :key="loginIndex" :class="['error-message']">
             {{ error.$message }}
           </div>
         </el-form-item>
@@ -19,7 +23,7 @@
             placeholder="Пароль"
             show-password
           ></el-input>
-          <div :class="['error-message']" v-for="(error, passwordIndex) of v$.loginForm.password.$errors" :key="passwordIndex">
+          <div v-for="(error, passwordIndex) of v$.loginForm.password.$errors" :key="passwordIndex" :class="['error-message']">
             {{ error.$message }}
           </div>
         </el-form-item>

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" v-if="mount" style="height:100%">
+  <div v-if="mount" class="wrapper" style="height: 100%">
     <PageHead :title="title" :links="links" />
     <div class="table-background" style="height: auto; margin-bottom: 20px">
       <el-row>
@@ -25,7 +25,7 @@
         class="table-shadow"
         header-row-class-name="header-style"
         border
-        style="width: 100%;margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto;"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto"
       >
         <el-table-column type="index" width="70" align="center" />
 
@@ -50,10 +50,14 @@
                       :key="registerPropertyToRegisterGroup.id"
                     >
                       <el-checkbox
-                        :model-value="!!user.registerPropertyToUser.find(prop => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId)"
-                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                        :model-value="
+                          !!user.registerPropertyToUser.find(
+                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
+                          )
+                        "
                         :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
                         :value="registerPropertyToRegisterGroup.registerProperty.id"
+                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
                         >{{ registerPropertyToRegisterGroup.registerProperty.name }}
                       </el-checkbox>
                     </el-col>
@@ -64,7 +68,7 @@
             </el-popover>
           </template>
           <template #default="scope">
-            <TableButtonGroup @edit="edit(scope.row.patient.id)" :showEditButton="true" />
+            <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
@@ -82,9 +86,9 @@
               <div v-if="registerProperty.valueType.isRadio()">
                 <el-radio
                   v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"
+                  :key="registerPropertyRadio.id"
                   :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"
                   :label="registerPropertyRadio.id"
-                  :key="registerPropertyRadio.id"
                   >{{ registerPropertyRadio.name }}</el-radio
                 >
                 {{ registerProperty.registerPropertySet }}
@@ -92,8 +96,8 @@
               <div v-if="registerProperty.valueType.isSet()">
                 <el-checkbox
                   v-for="registerPropertySet in registerProperty.registerPropertySet"
-                  :label="registerPropertySet.name"
                   :key="registerPropertySet.id"
+                  :label="registerPropertySet.name"
                   :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"
                 >
                   {{ registerPropertySet.name }}</el-checkbox

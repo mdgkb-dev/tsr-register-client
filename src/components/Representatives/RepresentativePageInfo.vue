@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Зак. представитель</el-tag>
-        <h2 v-html="representative.human.getFullName()" style="margin-bottom: 60px"></h2>
+        <h2 style="margin-bottom: 60px" v-html="representative.human.getFullName()"></h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
           <el-col :span="12"> {{ representative.human.dateBirth ? $dateFormatRu(representative.human.dateBirth) : 'Не указана' }}</el-col>
@@ -37,13 +37,15 @@
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" class="light-title upper">Адрес</el-col>
-          <el-col :span="12"> {{ representative.human.addressRegistration ? representative.human.addressRegistration : 'Не указан' }} </el-col>
+          <el-col :span="12">
+            {{ representative.human.addressRegistration ? representative.human.addressRegistration : 'Не указан' }}
+          </el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row align="middle">
           <el-col :span="12" class="light-title upper flex-center">Прикрепленные документы</el-col>
           <el-col :span="12">
-            <el-space :wrap="true" v-if="representative.human.documents.length">
+            <el-space v-if="representative.human.documents.length" :wrap="true">
               <div v-for="document in representative.human.documents" :key="document">
                 <el-tooltip class="item" effect="light" :content="document.documentType.name" placement="top-end">
                   <el-tag>

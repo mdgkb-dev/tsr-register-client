@@ -15,6 +15,8 @@ export default class Representative implements IRepresentative {
     }
     this.id = representative.id;
     this.human = new Human(representative.human);
-    this.representativeToPatient = representative.representativeToPatient.map((r: RepresentativeToPatient) => new RepresentativeToPatient(r));
+    this.representativeToPatient = representative.representativeToPatient.map(
+      (r: RepresentativeToPatient) => new RepresentativeToPatient(r)
+    );
   }
 }
