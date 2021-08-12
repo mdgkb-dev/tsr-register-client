@@ -18,42 +18,37 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
-
-import PageHead from '@/components/PageHead.vue';
+import { useStore } from 'vuex';
 import IRegister from '@/interfaces/registers/IRegister';
+import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-@Options({
+export default defineComponent({
   name: 'RegisterLinkList',
-  components: {
-    PageHead,
-  },
-  computed: {
-    ...mapState('registers', ['registers']),
-  },
-  methods: {
-    ...mapActions({
-      getAll: 'registers/getAll',
-    }),
-  },
-})
-export default class RegisterLinkList extends Vue {
-  registers!: IRegister[];
-  title = 'Регистры пациентов';
-  getAll!: () => Promise<void>;
-  mount = false;
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Регистры пациентов');
+    const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
 
-  async mounted(): Promise<void> {
-    await this.getAll();
-    console.log(this.registers);
-    this.mount = true;
-  }
+    const link = (row: any): void => {
+      router.push(`/registers/patients/${row.id}`);
+    };
 
-  link(row: any): void {
-    this.$router.push(`/registers/patients/${row.id}`);
-  }
-}
+    onBeforeMount(async () => {
+      await store.dispatch('registers/getAll');
+      mount.value = true;
+    });
+
+    return {
+      registers,
+      mount,
+      title,
+      link,
+    };
+  },
+});
 </script>
 
 <style scoped>

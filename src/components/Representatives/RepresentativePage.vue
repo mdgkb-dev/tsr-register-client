@@ -38,7 +38,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
+import RepresentativeRules from '@/classes/representatives/RepresentativeRules';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
@@ -68,7 +68,7 @@ export default defineComponent({
     const form = ref();
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
-    const rules = AnthropometryRules;
+    const rules = RepresentativeRules;
     const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();

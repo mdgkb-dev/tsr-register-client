@@ -4,6 +4,8 @@ import Register from '@/classes/registers/Register';
 import IRegister from '@/interfaces/registers/IRegister';
 
 import { State } from './state';
+import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
+import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 const mutations: MutationTree<State> = {
   setAll(state, registers: IRegister[]) {
@@ -24,6 +26,15 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.registers.findIndex((item: IRegister) => item.id === id);
     state.registers.splice(i, 1);
+  },
+  addRegisterGroup(state) {
+    state.register.registerGroupToRegister.push(new RegisterGroupToRegister());
+  },
+  removeRegisterGroup(state, item: IRegisterGroupToRegister) {
+    const index = state.register.registerGroupToRegister.indexOf(item);
+    if (index !== -1) {
+      state.register.registerGroupToRegister.splice(index, 1);
+    }
   },
 };
 

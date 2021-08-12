@@ -41,7 +41,6 @@ import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import PageHead from '@/components/PageHead.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
@@ -49,6 +48,7 @@ import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
+import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',
@@ -63,7 +63,7 @@ export default defineComponent({
     const form = ref();
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
-    const rules = AnthropometryRules;
+    const rules = RepresentativeTypeRules;
     const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();

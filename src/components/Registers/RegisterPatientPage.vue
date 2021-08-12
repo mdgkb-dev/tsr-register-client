@@ -99,77 +99,75 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-import Patient from '@/classes/patients/Patient';
-import Register from '@/classes/registers/Register';
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
 import IRegister from '@/interfaces/registers/IRegister';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
+import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
+import IPatient from '@/interfaces/patients/IPatient';
 
-@Options({
+export default defineComponent({
   name: 'RegisterPatientPage',
   components: {
     PageHead,
     HumanForm,
     DataComponentComputed,
   },
-  computed: {
-    ...mapGetters('registers', ['register']),
-    ...mapGetters('patients', ['patient']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
+    const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
+
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(true);
+    const mount: Ref<boolean> = ref(false);
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
+
+    onBeforeMount(async () => {
+      await store.dispatch('registers/get', route.params.representativeTypeId);
+      await store.dispatch('patient/get', route.params.patientId);
+
+      pushToLinks(['/register-link-list/', `/registers/patients/${route.params.registerId}`], ['Регистры пациентов', register.value.name]);
+
+      mount.value = true;
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(register, formUpdated, { deep: true });
+      watch(patient, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+
+      await submitHandling('patients', patient.value, next, `registers/patients/${route.params.registerId}`);
+    };
+
+    return {
+      register,
+      isEditMode,
+      links,
+      mount,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      patientGet: 'patients/get',
-      registerGet: 'registers/get',
-    }),
-  },
-})
-export default class RegisterPatientPage extends mixins(FormMixin, BreadCrumbsLinks, ConfirmLeavePage) {
-  // Types.
-  registerGet!: (registerId: string) => Promise<void>;
-  patientGet!: (patientId: string) => Promise<void>;
-
-  // Local state.
-  mount = false;
-  register: IRegister = new Register();
-  patient = new Patient();
-  isEditMode = true;
-
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    await this.registerGet(`${this.$route.params.registerId}`);
-    this.register = this.$store.getters['registers/register'];
-    await this.patientGet(`${this.$route.params.patientId}`);
-    this.patient = this.$store.getters['patients/patient'];
-    this.pushToLinks(
-      ['/register-link-list/', `/registers/patients/${this.$route.params.registerId}`],
-      ['Регистры пациентов', this.register.name]
-    );
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('patient', this.formUpdated, { deep: true });
-    this.$watch('register', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext) {
-    this.saveButtonClick = true;
-    this.patient.registerToPatient = undefined;
-    await this.submitHandling('patients', this.patient, next, `registers/patients/${this.$route.params.registerId}`);
-  }
-}
+});
 </script>
 
 <style lang="scss" scoped>
