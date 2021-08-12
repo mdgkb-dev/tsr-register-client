@@ -22,7 +22,7 @@
         <h2 style="margin-bottom: 60px" v-html="representative.human.getFullName()"></h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
-          <el-col :span="12"> {{ representative.human.dateBirth ? $dateFormatRu(representative.human.dateBirth) : 'Не указана' }}</el-col>
+          <el-col :span="12"> {{ representative.human.dateBirth ? formatDate(representative.human.dateBirth) : 'Не указана' }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
@@ -68,17 +68,18 @@ import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'RepresentativePageInfo',
   setup() {
+    const { formatDate } = useDateFormat();
     const store = useStore();
     const representative: Ref<IRepresentative> = computed(() => store.getters['representatives/representative']);
-    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 
     return {
       representative,
-      fillDateFormat,
+      formatDate,
     };
   },
 });
