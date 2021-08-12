@@ -1,7 +1,9 @@
 import { MutationTree } from 'vuex';
 
 import Representative from '@/classes/representatives/Representative';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
 
@@ -24,6 +26,13 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.representatives.findIndex((item: IRepresentative) => item.id === id);
     state.representatives.splice(i, 1);
+  },
+  addPatient(state) {
+    state.representative.representativeToPatient.push(new RepresentativeToPatient());
+  },
+  removePatient(state, item: IRepresentativeToPatient) {
+    const index = state.representative.representativeToPatient.indexOf(item);
+    if (index !== -1) state.representative.representativeToPatient.splice(index, 1);
   },
 };
 

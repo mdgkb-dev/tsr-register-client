@@ -102,108 +102,106 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-import Filter from '@/classes/filters/Filter';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IFilter from '@/interfaces/filters/IFilter';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
-
-@Options({
+export default defineComponent({
   name: 'RepresentativesList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('representatives', ['representatives']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
+    const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
+
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Представители');
+
+    const filterName: Ref<IFilter[]> = ref([]);
+    const filterDate: Ref<IFilter[]> = ref([]);
+    const searchFullName = ref('');
+    const searchAddress = ref('');
+    const search = ref('');
+
+    onBeforeMount(async () => {
+      await store.dispatch('representatives/getAll', route.params.representativeId);
+      filterName.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
+      filterDate.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));
+      mount.value = true;
+    });
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/representatives/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/representatives/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('representatives/delete', id);
+    };
+
+    const children = (representative: IRepresetnationType) => {
+      if (representative.patient) {
+        return representative.patient.human.isMale
+          ? representative.representativeType?.childMaleType
+          : representative.representativeType?.childWomanType;
+      }
+      return '';
+    };
+
+    const filterTable = (representatives: IRepresentative[]) => {
+      let filteredRepresentatives = representatives;
+
+      const searchLocal = search.value.toLowerCase();
+      searchFullName.value = searchFullName.value.toLowerCase();
+      searchAddress.value = searchAddress.value.toLowerCase();
+
+      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
+        const address = representative.human.addressRegistration.toLowerCase();
+        return !searchAddress.value || address.includes(searchAddress.value);
+      });
+
+      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
+        const name = representative.human.getFullName().toLowerCase();
+        return !searchFullName.value || name.includes(searchFullName.value);
+      });
+
+      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
+        const name = representative.human.getFullName().toLowerCase();
+        const date = representative.human.dateBirth;
+        return !search.value || name.includes(searchLocal) || date.includes(searchLocal);
+      });
+
+      return filteredRepresentatives;
+    };
+
+    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
+
+    return {
+      children,
+      create,
+      remove,
+      edit,
+      filterTable,
+      fillDateFormat,
+      representatives,
+      mount,
+      title,
+      search,
+      searchFullName,
+      searchAddress,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAll: 'representatives/getAll',
-    }),
-  },
-})
-export default class RepresentativesList extends Vue {
-  $message!: {
-    error: any;
-  };
-
-  representatives!: IRepresentative[];
-  getAll!: () => Promise<void>;
-  search = '';
-
-  filterName: IFilter[] = [];
-  filterDate: IFilter[] = [];
-  searchFullName = '';
-  searchAddress = '';
-  filter = new Filter();
-  title = 'Представители';
-  mount = false;
-
-  async mounted(): Promise<void> {
-    try {
-      await this.getAll();
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-
-    this.filterName = this.representatives.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
-    this.filterDate = this.representatives.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/representatives/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/representatives/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('representatives/delete', id);
-  }
-
-  children = (representative: IRepresetnationType) => {
-    if (representative.patient) {
-      return representative.patient.human.isMale
-        ? representative.representativeType?.childMaleType
-        : representative.representativeType?.childWomanType;
-    }
-    return '';
-  };
-
-  filterTable = (representatives: IRepresentative[]) => {
-    let filteredRepresentatives = representatives;
-
-    const search = this.search.toLowerCase();
-    const searchFullName = this.searchFullName.toLowerCase();
-    const searchAddress = this.searchAddress.toLowerCase();
-
-    filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-      const address = representative.human.addressRegistration.toLowerCase();
-      return !this.searchAddress || address.includes(searchAddress);
-    });
-
-    filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-      const name = representative.human.getFullName().toLowerCase();
-      return !this.searchFullName || name.includes(searchFullName);
-    });
-
-    filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-      const name = representative.human.getFullName().toLowerCase();
-      const date = representative.human.dateBirth;
-      return !this.search || name.includes(search) || date.includes(search);
-    });
-
-    return filteredRepresentatives;
-  };
-
-  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
-}
+});
 </script>

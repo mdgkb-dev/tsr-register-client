@@ -24,11 +24,7 @@
               <template #title>
                 <h2 class="collapseHeader">Подопечные</h2>
               </template>
-              <RepresentativeToPatientForm
-                :in-representative-to-patient="representative.representativeToPatient"
-                :in-representative-types="representativeTypesOptions"
-                :in-patients="patientsOptions"
-              />
+              <RepresentativeToPatientForm />
             </el-collapse-item>
           </div>
         </el-form>
@@ -38,26 +34,24 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-import HumanRules from '@/classes/humans/HumanRules';
-import Representative from '@/classes/representatives/Representative';
+import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import RepresentativePageInfo from '@/components/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
-import IPatient from '@/interfaces/patients/IPatient';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
-@Options({
-  name: 'RepresentativePage',
+export default defineComponent({
+  name: 'RepresentativeTypePage',
   components: {
     HumanForm,
     DocumentForm,
@@ -65,97 +59,62 @@ import ValidateMixin from '@/mixins/ValidateMixin.vue';
     RepresentativePageInfo,
     PageHead,
   },
-  computed: {
-    ...mapGetters('patients', ['patients']),
-    ...mapGetters('representativeTypes', ['representativeTypes']),
-  },
-  methods: {
-    ...mapActions({
-      patientsGetAll: 'patients/getAll',
-      representativeGet: 'representatives/get',
-      representativeTypesGetAll: 'representativeTypes/getAll',
-    }),
-  },
-})
-export default class RepresentativePage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  patients!: IPatient[];
-  offset: number[] = [0];
-  representativeTypes!: IRepresentativeType[];
+  setup() {
+    const store = useStore();
+    const route = useRoute();
 
-  patientsGetAll!: () => Promise<void>;
-  representativeGet!: (representativeId: string) => Promise<void>;
-  representativeTypesGetAll!: () => Promise<void>;
+    const representative: Ref<IRepresentative> = computed(() => store.getters['representatives/representative']);
 
-  // Local state.
-  mount = false;
-  representative = new Representative();
-  patientsOptions = [{}];
-  representativeTypesOptions = [{}];
-  title = '';
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = AnthropometryRules;
+    const title: Ref<string> = ref('');
 
-  rules = {
-    human: HumanRules,
-  };
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
 
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.representativeId) {
-      this.isEditMode = false;
-      this.title = 'Создать представителя';
-    } else {
-      this.isEditMode = true;
-      await this.representativeGet(`${this.$route.params.representativeId}`);
-      this.representative = this.$store.getters['representatives/representative'];
-      this.title = this.representative.human.getFullName();
-    }
-
-    await this.patientsGetAll();
-    await this.representativeTypesGetAll();
-    this.representativeTypesOptions.splice(0, 1);
-
-    for (const item of this.representativeTypes) {
-      if ((this.representative.human.isMale && item.isMale) || (!this.representative.human.isMale && !item.isMale)) {
-        this.representativeTypesOptions.push({
-          label: item.name,
-          value: item.id,
-        });
+    onBeforeMount(async () => {
+      if (!route.params.representativeId) {
+        isEditMode.value = false;
+        title.value = 'Создать представителя';
+      } else {
+        isEditMode.value = true;
+        await store.dispatch('representatives/get', route.params.representativeId);
+        title.value = representative.value.human.getFullName();
       }
-    }
+      pushToLinks(['/representatives'], ['Список представителей']);
+      mount.value = true;
 
-    this.patientsOptions.splice(0, 1);
-    for (const item of this.patients) {
-      this.patientsOptions.push({
-        label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-        value: item.id,
-        human: item.human,
-      });
-    }
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(representative, formUpdated, { deep: true });
+    });
 
-    this.pushToLinks(['/representatives'], ['Список представителей']);
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
 
-    this.mount = true;
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
 
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('representative', this.formUpdated, { deep: true });
-  }
+      await submitHandling('representatives', representative.value, next);
+    };
 
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  submitForm(): void {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    for (const item of this.representative.representativeToPatient) {
-      item.patient = undefined;
-    }
-
-    this.syncSubmitHandling('representatives', this.representative);
-  }
-}
+    return {
+      representative,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
