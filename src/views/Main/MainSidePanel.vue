@@ -116,7 +116,7 @@ export default class MainSidePanel extends Vue {
       class: 'el-icon-setting',
       links: [
         {
-          name: 'Anthropometry',
+          name: 'AnthropometryList',
           title: 'Антропометрия',
           link: '/anthropometry',
         },

@@ -74,11 +74,11 @@ export default defineComponent({
     });
 
     const add = (): void => {
-      store.commit('representatives/addPatient');
+      store.commit('patients/addInsurance');
     };
 
     const remove = (item: IRepresentativeToPatient): void => {
-      store.commit('representatives/removePatient', item);
+      store.commit('patients/removeInsurance', item);
     };
 
     return {

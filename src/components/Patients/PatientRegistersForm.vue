@@ -84,6 +84,7 @@ export default defineComponent({
     };
 
     return {
+      tableRegisters,
       handleSelectionChange,
       patientDiagnosis,
       registers,
