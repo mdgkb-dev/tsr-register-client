@@ -5,41 +5,51 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, onBeforeMount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import LoginLayout from './views/Login/LoginLayout.vue';
 import MainLayout from './views/Main/MainLayout.vue';
 
-@Options({
+export default defineComponent({
   name: 'App',
   components: {
-    MainLayout,
     LoginLayout,
+    MainLayout,
   },
-})
-export default class App extends Vue {
-  async mounted(): Promise<void> {
-    try {
-      await this.$store.dispatch('auth/setAuthorization');
-    } catch (e) {
-      console.log(e);
-    }
-    if (this.$store.getters['auth/isAuthorized']) {
-      this.$store.commit('setLayout', 'main-layout');
-    } else {
-      await this.$router.push('/login/');
-    }
-  }
+  setup() {
+    const store = useStore();
+    const router = useRouter();
 
-  get layout(): string {
-    if (this.$store.getters['auth/isAuthorized']) {
-      this.$store.commit('setLayout', 'main-layout');
-    } else {
-      this.$store.commit('setLayout', 'login-layout');
-    }
-    return this.$store.getters.layout;
-  }
-}
+    const layout = computed(() => {
+      if (store.getters['auth/isAuthorized']) {
+        store.commit('setLayout', 'main-layout');
+      } else {
+        store.commit('setLayout', 'login-layout');
+      }
+
+      return store.getters.layout;
+    });
+
+    onBeforeMount(async (): Promise<void> => {
+      try {
+        await store.dispatch('auth/setAuthorization');
+      } catch (e) {
+        console.log(e);
+      }
+      if (store.getters['auth/isAuthorized']) {
+        store.commit('setLayout', 'main-layout');
+      } else {
+        await router.push('/login/');
+      }
+    });
+
+    return {
+      layout,
+    };
+  },
+});
 </script>
 
 <style lang="scss"></style>

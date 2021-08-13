@@ -4,22 +4,21 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapState } from 'vuex';
+import { computed, ComputedRef, defineComponent } from 'vue';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'MainHeader',
-  computed: {
-    ...mapState(['auth']),
-  },
-})
-export default class MainHeader extends Vue {
-  userName = '';
+  setup() {
+    const store = useStore();
 
-  mounted(): void {
-    this.userName = this.$store.getters['auth/getUserName'];
-  }
-}
+    const userName: ComputedRef = computed(() => store.getters['auth/getUserName']);
+
+    return {
+      userName,
+    };
+  },
+});
 </script>
 
 <style scoped>

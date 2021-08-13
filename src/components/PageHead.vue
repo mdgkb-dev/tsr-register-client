@@ -20,21 +20,32 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, PropType } from 'vue';
 
 import Link from '@/classes/shared/Link';
 
-@Options({
+export default defineComponent({
   name: 'PageHead',
-  props: ['title', 'links', 'showSaveButton', 'showAddButton'],
-})
-export default class PageHead extends Vue {
-  // Types.
-  title!: string;
-  links!: Link[];
-  showSaveButton!: boolean;
-  showAddButton!: boolean;
-}
+  props: {
+    title: {
+      type: String as PropType<string>,
+      required: true,
+    },
+    links: {
+      type: Array as PropType<Link[]>,
+      required: true,
+    },
+    showSaveButton: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+    showAddButton: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+  },
+  emits: ['create', 'submitForm'],
+});
 </script>
 
 <style scoped>

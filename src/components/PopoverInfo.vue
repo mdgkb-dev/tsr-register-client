@@ -7,16 +7,21 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, PropType } from 'vue';
 
-@Options({
+export default defineComponent({
   name: 'PopoverInfo',
-  props: ['content', 'title'],
-})
-export default class PopoverInfo extends Vue {
-  content!: string;
-  title!: string;
-}
+  props: {
+    content: {
+      type: String as PropType<string>,
+      required: true,
+    },
+    title: {
+      type: String as PropType<string>,
+      required: true,
+    },
+  },
+});
 </script>
 
 <style>

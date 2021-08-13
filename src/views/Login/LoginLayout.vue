@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent } from 'vue';
 
-@Options({
+export default defineComponent({
   name: 'LoginLayout',
-})
-export default class LoginLayout extends Vue {}
+});
 </script>
+
 <style>
 #app {
   height: 100%;

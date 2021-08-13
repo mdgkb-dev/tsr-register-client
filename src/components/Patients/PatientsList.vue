@@ -2,6 +2,7 @@
   <div v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="'Список пациентов'" :show-add-button="true" @create="create" />
     <div class="table-background">
+      <!-- TODO: Откуда должна браться queryStringsPatient? -->
       <el-autocomplete
         v-model="queryStringsPatient"
         style="width: 100%; margin-bottom: 20px"
@@ -347,23 +348,24 @@ export default defineComponent({
     const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
 
     return {
-      setPage,
-      handleSearchInput,
-      findPatients,
-      handlePatientSelect,
       children,
       create,
-      remove,
+      curPage,
       edit,
-      filterTable,
       fillDateFormat,
-      patients,
       filteredPatients,
+      filterTable,
+      findPatients,
+      handlePatientSelect,
+      handleSearchInput,
       mount,
-      title,
+      patients,
+      remove,
       search,
-      searchFullName,
       searchAddress,
+      searchFullName,
+      setPage,
+      title,
     };
   },
 });

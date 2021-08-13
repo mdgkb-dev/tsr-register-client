@@ -20,16 +20,28 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, PropType } from 'vue';
 
-@Options({
+export default defineComponent({
   name: 'TableButtonGroup',
-  props: ['showDownloadButton', 'showEditButton', 'showRemoveButton', 'horizontal'],
-})
-export default class TableButtonGroup extends Vue {
-  showDownloadButton!: boolean;
-  showEditButton!: boolean;
-  showRemoveButton!: boolean;
-  horizontal!: boolean;
-}
+  props: {
+    showDownloadButton: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+    showEditButton: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+    showRemoveButton: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+    horizontal: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+    },
+  },
+  emits: ['download', 'edit', 'remove'],
+});
 </script>

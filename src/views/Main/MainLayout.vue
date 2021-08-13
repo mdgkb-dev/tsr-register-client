@@ -12,17 +12,14 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent } from 'vue';
 
-import MainHeader from './MainHeader.vue';
 import MainSidePanel from './MainSidePanel.vue';
 
-@Options({
+export default defineComponent({
   name: 'MainLayout',
   components: {
-    MainHeader,
     MainSidePanel,
   },
-})
-export default class MainLayout extends Vue {}
+});
 </script>

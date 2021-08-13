@@ -23,7 +23,7 @@
               <el-tag class="menu-badge">Пользователь</el-tag>
             </el-col>
           </el-row>
-          <h1 class="main-side-menu-user-name">{{ $store.getters['auth/getUserLogin'] }}</h1>
+          <h1 class="main-side-menu-user-name">{{ userLogin }}</h1>
         </div>
         <el-scrollbar>
           <el-menu style="text-align: start">
@@ -59,110 +59,128 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, ComputedRef, defineComponent, reactive, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-@Options({
+import IMenuItemMultipleLinks from '@/interfaces/menu/IMenuItemMultipleLinks';
+import IMenuItemSingleLink from '@/interfaces/menu/IMenuItemSingleLink';
+
+export default defineComponent({
   name: 'MainSidePanel',
-})
-export default class MainSidePanel extends Vue {
-  circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png';
+  setup() {
+    const store = useStore();
+    const router = useRouter();
 
-  menuItems = [
-    {
-      title: 'Персоналии',
-      class: 'el-icon-user-solid',
-      links: [
-        {
-          name: 'Patients',
-          title: 'Пациенты',
-          link: '/patients',
-        },
-        {
-          name: 'Representatives',
-          title: 'Представители',
-          link: '/representatives',
-        },
-        {
-          name: 'Disabilities',
-          title: 'Инвалидность',
-          link: '/disabilities',
-        },
-      ],
-    },
-    {
-      title: 'Справочники',
-      class: 'el-icon-notebook-2',
-      links: [
-        {
-          name: 'Mkb',
-          title: 'МКБ10',
-          link: '/mkb',
-        },
-        {
-          name: 'InsuranceCompanies',
-          title: 'Страховые Компании',
-          link: '/insurance-companies',
-        },
-      ],
-    },
-    {
-      title: 'Регистры',
-      class: 'el-icon-s-order',
-      name: 'RegisterLinkList',
-      link: '/register-link-list',
-    },
-    {
-      title: 'Администрирование',
-      class: 'el-icon-setting',
-      links: [
-        {
-          name: 'AnthropometryList',
-          title: 'Антропометрия',
-          link: '/anthropometry',
-        },
-        {
-          name: 'Users',
-          title: 'Пользователи',
-          link: 'users',
-        },
-        {
-          name: 'DocumentTypes',
-          title: 'Типы документов',
-          link: '/document-types',
-        },
-        {
-          name: 'RepresentativeTypes',
-          title: 'Типы представителей',
-          link: '/representative-types',
-        },
-        {
-          name: 'Registers',
-          title: 'Регистры пациентов',
-          link: '/registers',
-        },
-        {
-          name: 'RegisterGroups',
-          title: 'Группы для регистров',
-          link: '/register-groups',
-        },
-        {
-          name: 'RegisterProperties',
-          title: 'Свойства для регистров',
-          link: '/register-properties',
-        },
-      ],
-    },
-  ];
+    const circleUrl: Ref<string> = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
+    const menuItems: (IMenuItemSingleLink | IMenuItemMultipleLinks)[] = reactive([
+      {
+        title: 'Персоналии',
+        class: 'el-icon-user-solid',
+        links: [
+          {
+            name: 'Patients',
+            title: 'Пациенты',
+            link: '/patients',
+          },
+          {
+            name: 'Representatives',
+            title: 'Представители',
+            link: '/representatives',
+          },
+          {
+            name: 'Disabilities',
+            title: 'Инвалидность',
+            link: '/disabilities',
+          },
+        ],
+      },
+      {
+        title: 'Справочники',
+        class: 'el-icon-notebook-2',
+        links: [
+          {
+            name: 'Mkb',
+            title: 'МКБ10',
+            link: '/mkb',
+          },
+          {
+            name: 'InsuranceCompanies',
+            title: 'Страховые Компании',
+            link: '/insurance-companies',
+          },
+        ],
+      },
+      {
+        title: 'Регистры',
+        class: 'el-icon-s-order',
+        name: 'RegisterLinkList',
+        link: '/register-link-list',
+      },
+      {
+        title: 'Администрирование',
+        class: 'el-icon-setting',
+        links: [
+          {
+            name: 'AnthropometryList',
+            title: 'Антропометрия',
+            link: '/anthropometry',
+          },
+          {
+            name: 'Users',
+            title: 'Пользователи',
+            link: 'users',
+          },
+          {
+            name: 'DocumentTypes',
+            title: 'Типы документов',
+            link: '/document-types',
+          },
+          {
+            name: 'RepresentativeTypes',
+            title: 'Типы представителей',
+            link: '/representative-types',
+          },
+          {
+            name: 'Registers',
+            title: 'Регистры пациентов',
+            link: '/registers',
+          },
+          {
+            name: 'RegisterGroups',
+            title: 'Группы для регистров',
+            link: '/register-groups',
+          },
+          {
+            name: 'RegisterProperties',
+            title: 'Свойства для регистров',
+            link: '/register-properties',
+          },
+        ],
+      },
+    ]);
 
-  async logout(): Promise<void> {
-    await this.$store.dispatch('auth/logout');
-    await this.$store.dispatch('auth/setAuthorization');
-    if (!this.$store.getters['auth/isAuthorized']) {
-      this.$store.commit('setLayout', 'login-layout');
-    }
-    await this.$router.push('/login');
-  }
-}
+    const userLogin: ComputedRef = computed(() => store.getters['auth/getUserLogin']);
+
+    const logout = async (): Promise<void> => {
+      await store.dispatch('auth/logout');
+      await store.dispatch('auth/setAuthorization');
+
+      if (!store.getters['auth/isAuthorized']) {
+        store.commit('setLayout', 'login-layout');
+      }
+
+      await router.push('/login');
+    };
+
+    return {
+      circleUrl,
+      menuItems,
+      userLogin,
+      logout,
+    };
+  },
+});
 </script>
 
 <style scoped>
