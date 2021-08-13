@@ -3,33 +3,37 @@
     <PageHead :title="title" />
     <div class="table-background" style="height: auto">
       <el-scrollbar>
-        <MkbTree></MkbTree>
+        <MkbTree />
       </el-scrollbar>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue';
-import { Options, Vue } from 'vue-class-component';
+import { defineAsyncComponent, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
 import PageHead from '@/components/PageHead.vue';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 
-@Options({
+export default defineComponent({
   name: 'MkbList',
   components: {
     PageHead,
     MkbTree,
   },
-})
-export default class MkbList extends Vue {
-  title = 'МКБ10';
-  mount = false;
+  setup() {
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('МКБ10');
 
-  mounted() {
-    this.mount = true;
-  }
-}
+    onBeforeMount(() => {
+      mount.value = true;
+    });
+
+    return {
+      mount,
+      title,
+    };
+  },
+});
 </script>

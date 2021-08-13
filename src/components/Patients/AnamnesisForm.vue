@@ -40,31 +40,48 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, PropType, toRefs } from 'vue';
 
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
-@Options({
+export default defineComponent({
   name: 'AnamnesisForm',
-  props: ['anamnesis', 'index', 'diagnosis', 'propName'],
-})
-export default class AnamnesisForm extends Vue {
-  // Types.
+  props: {
+    anamnesis: {
+      type: Object as PropType<IPatientDiagnosisAnamnesis>,
+      required: true,
+    },
+    index: {
+      type: Number as PropType<number>,
+      required: true,
+    },
+    diagnosis: {
+      type: Object as PropType<IPatientDiagnosis>,
+      required: true,
+    },
+    propName: {
+      type: String as PropType<string>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { anamnesis, diagnosis, index } = toRefs(props);
 
-  anamnesis!: IPatientDiagnosisAnamnesis;
-  index!: number;
-  diagnosis!: IPatientDiagnosis;
-  propName!: string;
+    const edit = () => {
+      anamnesis.value.isEditMode = !anamnesis.value.isEditMode;
+    };
 
-  remove = () => {
-    this.diagnosis.patientDiagnosisAnamnesis.splice(this.index, 1);
-  };
+    const remove = () => {
+      diagnosis.value.patientDiagnosisAnamnesis.splice(index.value, 1);
+    };
 
-  edit = () => {
-    this.anamnesis.isEditMode = !this.anamnesis.isEditMode;
-  };
-}
+    return {
+      edit,
+      remove,
+    };
+  },
+});
 </script>
 
 <style scoped>

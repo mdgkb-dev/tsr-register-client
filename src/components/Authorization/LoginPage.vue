@@ -30,7 +30,7 @@ export default defineComponent({
       login: '',
       password: '',
     });
-    const authError: ComputedRef<string> = computed(store.getters['auth/authError']);
+    const authError: ComputedRef<string> = computed(() => store.getters['auth/authError']);
     const { showMessageError } = useMessage();
 
     const submitForm = async (): Promise<void> => {

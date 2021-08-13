@@ -33,104 +33,112 @@
 
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { defineAsyncComponent } from 'vue';
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import ISearch from '@/interfaces/shared/ISearch';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
-const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
+// TODO: Лишний импорт?
+// const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
-@Options({
+export default defineComponent({
   name: 'MkbTreeDialog',
   components: {
     MkbTree,
-    AnamnesisForm,
+    // AnamnesisForm, // TODO: Не используемый компонент?
   },
-  props: ['diagnosisData', 'patientDiagnosis'],
-  computed: {
-    ...mapGetters('mkb', ['mkbDiagnosis', 'mkbGroups', 'mkbSubDiagnosis', 'filteredDiagnosis']),
+  props: {
+    diagnosisData: {
+      type: Array as PropType<(IPatientDiagnosis | IRegisterDiagnosis)[]>,
+      default: () => [],
+    },
+    patientDiagnosis: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
   },
-  methods: {
-    ...mapActions({
-      searchGroups: 'mkb/searchGroups',
-      searchDiagnosis: 'mkb/searchDiagnosis',
-      searchSubDiagnosis: 'mkb/searchSubDiagnosis',
-      getDiagnosisByGroupId: 'mkb/getDiagnosisByGroupId',
-    }),
-  },
-})
-export default class MkbTreeDialog extends Vue {
-  // Types.
-  mkbDiagnosis!: IMkbDiagnosis[];
-  mkbGroups!: IMkbGroup[];
-  mkbSubDiagnosis!: IMkbSubDiagnosis[];
+  emits: ['setDiagnosis'],
+  setup(props, { emit }) {
+    const store = useStore();
+    const { diagnosisData, patientDiagnosis } = toRefs(props);
 
-  diagnosisData!: Array<IPatientDiagnosis | IRegisterDiagnosis>;
-  patientDiagnosis?: boolean;
+    const diagnosisModalVisible: Ref<boolean> = ref(false);
 
-  diagnosis: ISearch[] = [];
+    const mkbDiagnosis: ComputedRef = computed(() => store.getters['mkb/mkbDiagnosis']);
+    const mkbSubDiagnosis: ComputedRef = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
-  // Local state.
-  diagnosisModalVisible = false;
+    const addDiagnosisModal = (): void => {
+      diagnosisModalVisible.value = true;
+    };
 
-  addDiagnosisModal(): void {
-    this.diagnosisModalVisible = true;
-  }
+    const cancelDiagnosisFromModal = (): void => {
+      diagnosisModalVisible.value = false;
+    };
 
-  cancelDiagnosisFromModal(): void {
-    this.diagnosisModalVisible = false;
-  }
+    const setDiagnosis = (diagnosis: IMkbDiagnosis): void => {
+      let newDiagnosisData: IPatientDiagnosis | IRegisterDiagnosis;
 
-  setDiagnosis(diagnosis: IMkbDiagnosis): void {
-    let diagnosisData;
-    if (this.patientDiagnosis) {
-      diagnosisData = new PatientDiagnosis();
-    } else {
-      diagnosisData = new RegisterDiagnosis();
-    }
-    diagnosisData.id = uuidv4();
-    diagnosisData.mkbDiagnosis = diagnosis;
-    diagnosisData.mkbDiagnosisId = diagnosis.id;
-    this.diagnosisData.push(diagnosisData);
-    this.$emit('setDiagnosis', diagnosisData);
-  }
-
-  setSubDiagnosis(subDiagnosis: IMkbSubDiagnosis, diagnosis: IMkbDiagnosis): void {
-    let diagnosisData;
-    if (this.patientDiagnosis) {
-      diagnosisData = new PatientDiagnosis();
-    } else {
-      diagnosisData = new RegisterDiagnosis();
-    }
-    diagnosisData.id = uuidv4();
-    diagnosisData.mkbSubDiagnosis = subDiagnosis;
-    diagnosisData.mkbSubDiagnosisId = subDiagnosis.id;
-
-    diagnosisData.mkbDiagnosis = diagnosis;
-    diagnosisData.mkbDiagnosisId = diagnosis.id;
-    this.diagnosisData.push(diagnosisData);
-    this.$emit('setDiagnosis', diagnosisData);
-  }
-
-  removeCheckedDiagnosis(item: any): void {
-    const checkedDiagnosis = this.diagnosisData.filter(
-      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
-    );
-    checkedDiagnosis.forEach((d: any) => {
-      const index = this.diagnosisData.indexOf(d);
-      if (index !== -1) {
-        this.diagnosisData.splice(index, 1);
+      if (patientDiagnosis.value) {
+        newDiagnosisData = new PatientDiagnosis();
+      } else {
+        newDiagnosisData = new RegisterDiagnosis();
       }
-    });
-  }
-}
+
+      newDiagnosisData.id = uuidv4();
+      newDiagnosisData.mkbDiagnosis = diagnosis;
+      newDiagnosisData.mkbDiagnosisId = diagnosis.id;
+      diagnosisData.value.push(newDiagnosisData);
+      emit('setDiagnosis', newDiagnosisData);
+    };
+
+    const setSubDiagnosis = (subDiagnosis: IMkbSubDiagnosis, diagnosis: IMkbDiagnosis): void => {
+      let newDiagnosisData: IPatientDiagnosis | IRegisterDiagnosis;
+
+      if (patientDiagnosis.value) {
+        newDiagnosisData = new PatientDiagnosis();
+      } else {
+        newDiagnosisData = new RegisterDiagnosis();
+      }
+
+      newDiagnosisData.id = uuidv4();
+      newDiagnosisData.mkbSubDiagnosis = subDiagnosis;
+      newDiagnosisData.mkbSubDiagnosisId = subDiagnosis.id;
+
+      newDiagnosisData.mkbDiagnosis = diagnosis;
+      newDiagnosisData.mkbDiagnosisId = diagnosis.id;
+      diagnosisData.value.push(newDiagnosisData);
+      emit('setDiagnosis', newDiagnosisData);
+    };
+
+    const removeCheckedDiagnosis = (item: any): void => {
+      const checkedDiagnosis = diagnosisData.value.filter(
+        (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) =>
+          diagnosis.mkbDiagnosisId === item.id || diagnosis.mkbSubDiagnosisId === item.id
+      );
+      checkedDiagnosis.forEach((d: any) => {
+        const index = diagnosisData.value.indexOf(d);
+        if (index !== -1) {
+          diagnosisData.value.splice(index, 1);
+        }
+      });
+    };
+
+    return {
+      diagnosisModalVisible,
+      mkbDiagnosis,
+      mkbSubDiagnosis,
+      addDiagnosisModal,
+      cancelDiagnosisFromModal,
+      removeCheckedDiagnosis,
+      setDiagnosis,
+      setSubDiagnosis,
+    };
+  },
+});
 </script>
