@@ -3,29 +3,50 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, PropType, toRefs, WritableComputedRef } from 'vue';
 
-import Patient from '@/classes/patients/Patient';
+import IPatient from '@/interfaces/patients/IPatient';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
-@Options({
+export default defineComponent({
   name: 'DataComponentComputed',
-  props: ['patient', 'property'],
-})
-export default class DataComponentComputed extends Vue {
-  patient!: Patient;
-  property!: IRegisterProperty;
+  props: {
+    patient: {
+      type: Object as PropType<IPatient>,
+      required: true,
+    },
+    property: {
+      type: Object as PropType<IRegisterProperty>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const { patient, property } = toRefs(props);
 
-  get dataModel() {
-    return this.patient.getRegisterPropertyValue(this.property);
-  }
+    const dataModel: WritableComputedRef<boolean | string | number | Date | null> = computed({
+      get(): boolean | string | number | Date | null {
+        return patient.value.getRegisterPropertyValue(property.value);
+      },
+      set(value: boolean | string | number | Date | null): void {
+        let newValue: number | string | Date;
 
-  set dataModel(value: any) {
-    if (this.property.id) {
-      this.patient.setRegisterPropertyValue(value, this.property);
-    }
-  }
-}
+        if (typeof value === 'number' || typeof value === 'string' || value instanceof Date) {
+          newValue = value;
+        } else {
+          return;
+        }
+
+        if (property.value.id) {
+          patient.value.setRegisterPropertyValue(newValue, property.value);
+        }
+      },
+    });
+
+    return {
+      dataModel,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

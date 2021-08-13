@@ -8,6 +8,7 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 
 import IAnthropometryData from '../anthropometry/IAnthropometryData';
 import IHuman from '../humans/IHuman';
+import IRegisterProperty from '../registers/IRegisterProperty';
 
 export default interface IPatient {
   id?: string;
@@ -26,4 +27,6 @@ export default interface IPatient {
   getActuallyDisability: () => IDisability;
   getLastAnthropometryValue: (name: string) => number;
   getBmiGroup: () => string;
+  getRegisterPropertyValue: (property: IRegisterProperty) => boolean | string | number | Date | null;
+  setRegisterPropertyValue: (value: number | string | Date, property: IRegisterProperty) => void;
 }
