@@ -102,8 +102,7 @@
 
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapGetters } from 'vuex';
+import { useStore } from 'vuex';
 
 import Document from '@/classes/documents/Document';
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
@@ -113,139 +112,109 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
-@Options({
+export default defineComponent({
   name: 'DocumentForm',
   components: {
     TableButtonGroup,
   },
-  computed: {
-    ...mapGetters('documentTypes', ['documentTypes']),
-    ...mapGetters('files', ['fileAnchor']),
+  props: {
+    store: {
+      type: String,
+      default: '',
+    },
   },
-  methods: {
-    ...mapActions({
-      documentTypesGetAll: 'documentTypes/getAll',
-      generateDownloadLink: 'files/generateLink',
-    }),
-  },
-  props: ['documents', 'fileInfos'],
-  emits: ['update:documents', 'update:fileInfos'],
-})
-export default class DocumentForm extends Vue {
-  // Types.
-  declare $refs: {
-    fileAnchor: HTMLAnchorElement;
-  };
+  setup(props) {
+    const store = useStore();
 
-  documents!: IDocument[];
-  downloadLink!: string;
-  fileInfos!: IFileInfo[];
-  selectedType!: IDocumentType | undefined;
+    const documents: Ref<IDocument[]> = computed(() => store.getters[`${props.store}/documents`]);
+    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${props.store}/fileInfos`]);
+    const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
+    const fileAnchor: Ref<HTMLAnchorElement> = computed(() => store.getters['files/fileAnchor']);
 
-  documentTypesGetAll!: () => Promise<void>;
-  generateDownloadLink!: (fileId: string) => Promise<void>;
+    const selectedDocumentTypeId = ref('');
+    let selectedType: IDocumentType | undefined;
 
-  // Local state.
-  documentTypes: IDocumentType[] = [];
-  selectedDocumentTypeId = '';
-
-  // Lifecycle methods.
-  async created(): Promise<void> {
-    await this.documentTypesGetAll();
-    this.documentTypes = [...(await this.$store.getters['documentTypes/documentTypes'])];
-  }
-
-  // Methods.
-  add(): void {
-    this.selectedType = this.documentTypes.find((type) => type.id === this.selectedDocumentTypeId);
-
-    if (!this.selectedType || !this.selectedType.id || !this.selectedType?.documentTypeFields) {
-      return;
-    }
-
-    const documentFieldValues: DocumentFieldValue[] = this.selectedType.documentTypeFields.map(
-      (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
-    );
-
-    const document = new Document({
-      id: uuidv4(),
-      documentType: { ...this.selectedType },
-      documentFieldValues,
-      isDraft: true,
+    onBeforeMount(async () => {
+      await store.dispatch('documentTypes/getAll');
     });
 
-    this.$emit('update:documents', [...this.documents, document]);
-  }
+    // Methods.
+    const add = (): void => {
+      selectedType = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
 
-  remove(documentId: string): void {
-    this.$emit('update:documents', [...this.documents.filter((document) => document.id !== documentId)]);
-  }
+      if (!selectedType || !selectedType.id || !selectedType?.documentTypeFields) {
+        return;
+      }
 
-  addFiles(event: InputEvent, category: string): void {
-    const target = event.target as HTMLInputElement;
+      const documentFieldValues: DocumentFieldValue[] = selectedType.documentTypeFields.map(
+        (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
+      );
 
-    if (!target || !target.files) {
-      return;
-    }
+      const document = new Document({
+        id: uuidv4(),
+        documentType: { ...selectedType },
+        documentFieldValues,
+        isDraft: true,
+      });
+      store.commit(`${props.store}/addDocument`, document);
+    };
 
-    const newInfos: IFileInfo[] = Array.from(target.files).map(
-      (file: File) =>
-        new FileInfo({
-          id: uuidv4(),
-          category,
-          originalName: file.name,
-          file,
-          isDraft: true,
-        })
-    );
+    const remove = (documentId: string): void => {
+      store.commit(`${props.store}/removeDocument`, documentId);
+    };
 
-    this.$emit('update:fileInfos', [...this.fileInfos, ...newInfos]);
-  }
+    const addFiles = (event: InputEvent, category: string): void => {
+      const target = event.target as HTMLInputElement;
 
-  removeFile(fileId: string): void {
-    this.$emit(
-      'update:fileInfos',
-      this.fileInfos.filter((info) => info.id !== fileId)
-    );
-  }
+      if (!target || !target.files) {
+        return;
+      }
 
-  // async downloadFile(event: MouseEvent): Promise<void> {
-  //   if (!event || !event.target) {
-  //     return;
-  //   }
+      const newInfos: IFileInfo[] = Array.from(target.files).map(
+        (file: File) =>
+          new FileInfo({
+            id: uuidv4(),
+            category,
+            originalName: file.name,
+            file,
+            isDraft: true,
+          })
+      );
+      store.commit(`${props.store}/addFiles`, newInfos);
+    };
 
-  //   const anchorElement = event.target as HTMLAnchorElement;
-  //   const { fileId } = anchorElement.dataset;
+    const removeFile = (fileId: string): void => {
+      store.commit(`${props.store}/removeFile`, fileId);
+    };
 
-  //   if (!fileId) {
-  //     return;
-  //   }
+    const downloadFile = async (fileId: string): Promise<void> => {
+      try {
+        await store.dispatch('files/generateLink', fileId);
+      } catch (error) {
+        return;
+      }
 
-  //   try {
-  //     await this.generateDownloadLink(fileId);
-  //   } catch (error) {
-  //     return;
-  //   }
-
-  //   const anchor: IFileAnchor = this.$store.getters['files/fileAnchor'];
-  //   this.$refs.fileAnchor.href = anchor.href;
-  //   this.$refs.fileAnchor.download = String(anchor.download);
-  //   this.$refs.fileAnchor.click();
-  // }
-  async downloadFile(fileId: string): Promise<void> {
-    try {
-      await this.generateDownloadLink(fileId);
-    } catch (error) {
-      return;
-    }
-
-    const anchor: IFileAnchor = this.$store.getters['files/fileAnchor'];
-    this.$refs.fileAnchor.href = anchor.href;
-    this.$refs.fileAnchor.download = String(anchor.download);
-    this.$refs.fileAnchor.click();
-  }
-}
+      const anchor: IFileAnchor = store.getters['files/fileAnchor'];
+      fileAnchor.value.href = anchor.href;
+      fileAnchor.value.download = String(anchor.download);
+      fileAnchor.value.click();
+    };
+    return {
+      selectedDocumentTypeId,
+      documentTypes,
+      fileInfos,
+      documents,
+      downloadFile,
+      fileAnchor,
+      removeFile,
+      addFiles,
+      remove,
+      add,
+    };
+  },
+});
 </script>
 
 <style scoped>

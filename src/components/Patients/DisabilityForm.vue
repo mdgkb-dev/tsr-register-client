@@ -163,7 +163,7 @@ export default defineComponent({
     const fileAnchor = ref();
 
     onBeforeMount(async () => {
-      await store.dispatch('disabilities/getAll', 0);
+      await store.dispatch('disabilities/getAll');
     });
 
     const add = (): void => {

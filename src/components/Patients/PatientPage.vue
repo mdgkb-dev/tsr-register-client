@@ -26,11 +26,7 @@
               <template #title>
                 <h2 class="collapseHeader">Антропометрия</h2>
               </template>
-              <AnthropometryForm
-                :in-height-weight="patient.heightWeight"
-                :is-male="patient.human.isMale"
-                :in-birth-date="patient.human.dateBirth"
-              />
+              <AnthropometryForm />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -44,7 +40,7 @@
               <template #title>
                 <h2 class="collapseHeader">Документы</h2>
               </template>
-              <DocumentForm v-model:documents="patient.human.documents" v-model:fileInfos="patient.human.fileInfos" />
+              <DocumentForm :store="'patients'" />
             </el-collapse-item>
 
             <el-collapse-item>
