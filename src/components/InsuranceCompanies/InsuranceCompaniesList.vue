@@ -30,47 +30,52 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
-@Options({
+export default defineComponent({
   name: 'InsuranceCompanies',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('insuranceCompanies', ['insuranceCompanies']),
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const title: Ref<string> = ref('Страховые компании');
+    const mount: Ref<boolean> = ref(false);
+    const insuranceCompanies: ComputedRef<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
+
+    onBeforeMount(async (): Promise<void> => {
+      await store.dispatch('insuranceCompanies/getAll');
+      mount.value = true;
+    });
+
+    const edit = (id: number): void => {
+      router.push(`/insurance-companies/${id}`);
+    };
+
+    const create = (): void => {
+      router.push('/insurance-companies/new');
+    };
+
+    const remove = (id: number): void => {
+      store.dispatch('insuranceCompanies/delete', id);
+    };
+
+    return {
+      insuranceCompanies,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions('insuranceCompanies', ['getAll']),
-  },
-})
-export default class InsuranceCompanies extends Vue {
-  insuranceCompanies!: IInsuranceCompany[];
-  getAll!: () => Promise<void>;
-  title = 'Страховые компании';
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/insurance-companies/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/insurance-companies/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('insuranceCompanies/delete', id);
-  }
-}
+});
 </script>
