@@ -42,13 +42,13 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
+import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
 import PageHead from '@/components/PageHead.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
-import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',

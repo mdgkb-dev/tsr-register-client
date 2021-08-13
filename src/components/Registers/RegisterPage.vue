@@ -34,17 +34,18 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
-import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'RegisterPage',

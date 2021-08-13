@@ -1,11 +1,11 @@
 import { MutationTree } from 'vuex';
 
 import Register from '@/classes/registers/Register';
+import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 import { State } from './state';
-import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
-import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 const mutations: MutationTree<State> = {
   setAll(state, registers: IRegister[]) {

@@ -33,11 +33,12 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
+import { useStore } from 'vuex';
+
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
-import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
-import { useStore } from 'vuex';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 export default defineComponent({

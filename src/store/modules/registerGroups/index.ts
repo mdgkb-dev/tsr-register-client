@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 
+import RegisterGroup from '@/classes/registers/RegisterGroup';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
@@ -9,7 +10,7 @@ import { State } from './state';
 
 export const state: State = {
   registerGroups: [],
-  registerGroup: undefined,
+  registerGroup: new RegisterGroup(),
 };
 
 const namespaced = true;
