@@ -1,5 +1,6 @@
 import { GetterTree } from 'vuex';
 
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
@@ -33,6 +34,15 @@ const getters: GetterTree<State, RootState> = {
   },
   representativeToPatient(state): IRepresentativeToPatient[] {
     return state.patient.representativeToPatient;
+  },
+  birthDate(state): string {
+    return state.patient.human.dateBirth;
+  },
+  isMale(state): boolean {
+    return state.patient.human.isMale;
+  },
+  heightWeight(state): IHeightWeight[] {
+    return state.patient.heightWeight;
   },
 };
 

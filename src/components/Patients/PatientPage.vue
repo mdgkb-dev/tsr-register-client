@@ -37,10 +37,7 @@
               <template #title>
                 <h2 class="collapseHeader">Страховки</h2>
               </template>
-              <InsuranceForm
-                :in-insurance-companies-options="insuranceCompaniesOptions"
-                :in-insurance-company-to-human="patient.human.insuranceCompanyToHuman"
-              />
+              <InsuranceForm />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -57,13 +54,7 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Инвалидность</h2></template>
-              <DisabilityForm
-                v-model:disabilities="patient.disabilities"
-                v-model:fileInfos="patient.human.fileInfos"
-                :birth-date="patient.human.dateBirth"
-                @addEdv="addEdv"
-                @removeEdv="removeEdv"
-              />
+              <DisabilityForm />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -82,14 +73,12 @@
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue';
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, defineAsyncComponent, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
-import Patient from '@/classes/patients/Patient';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
@@ -100,20 +89,15 @@ import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import IDisability from '@/interfaces/disabilities/IDisability';
-import IEdv from '@/interfaces/disabilities/IEdv';
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import IOption from '@/interfaces/shared/IOption';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import IPatient from '@/interfaces/patients/IPatient';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
 const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Patients/PatientRegistersForm.vue'));
 
-@Options({
+export default defineComponent({
   name: 'PatientPage',
   components: {
     PatientPageInfo,
@@ -127,127 +111,78 @@ const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Pat
     PageHead,
     PatientRegistersForm,
   },
-  computed: {
-    ...mapGetters('anthropometry', ['anthropometries']),
-    ...mapGetters('disabilities', ['disabilities']),
-    ...mapGetters('patients', ['patient']),
-  },
-  methods: {
-    ...mapActions({
-      anthropometryGetAll: 'anthropometry/getAll',
-      disabilitiesGetAll: 'disabilities/getAll',
-      patientGet: 'patients/get',
-    }),
-  },
-})
-export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
+  setup() {
+    const store = useStore();
+    const route = useRoute();
 
-  anthropometries!: IAnthropometry[];
-  disabilities!: IDisability[];
-  insuranceCompanies!: IInsuranceCompany[];
-  insuranceCompaniesOptions!: IOption[];
-  representativeTypes!: IRepresentativeType[];
-  representatives!: IRepresentative[];
+    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometries/anthropometries']);
+    const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
-  anthropometryGetAll!: () => Promise<void>;
-  patientGet!: (patientId: string) => Promise<void>;
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = {
+      human: HumanRules,
+    };
+    const title: Ref<string> = ref('');
 
-  // Local state.
-  diagnosisMount = false;
-  mount = false;
-  offset: number[] = [0];
-  patient = new Patient();
-  title = '';
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
 
-  rules = {
-    human: HumanRules,
-  };
-
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.patientId) {
-      this.isEditMode = false;
-      this.title = 'Создать пациента';
-    } else {
-      this.isEditMode = true;
-      await this.patientGet(`${this.$route.params.patientId}`);
-      this.patient = this.$store.getters['patients/patient'];
-      this.title = this.patient.human.getFullName();
-    }
-    await this.anthropometryGetAll();
-
-    if (this.patient.disabilities) {
-      for (const disability of this.patient.disabilities) {
-        if (!disability.edvs) {
-          disability.edvs = [];
-        }
+    onBeforeMount(async () => {
+      if (!route.params.patientId) {
+        isEditMode.value = false;
+        title.value = 'Создать пациента';
+      } else {
+        isEditMode.value = true;
+        await store.dispatch('patients/get', route.params.patientId);
+        title.value = patient.value.human.getFullName();
       }
-    }
+      await store.dispatch('anthropometry/getAll', route.params.patientId);
+      pushToLinks(['/patients'], ['Список пациентов']);
+      mount.value = true;
 
-    this.pushToLinks(['/patients'], ['Список пациентов']);
-    this.mount = true;
-    this.diagnosisMount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('patient', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    for (const item of this.patient.representativeToPatient) {
-      item.patient = undefined;
-    }
-
-    let heightId: string | undefined = '';
-    let weightId: string | undefined = '';
-
-    this.anthropometries.forEach((a: IAnthropometry) => {
-      if (a.isHeight()) {
-        heightId = a.id;
-      }
-      if (a.isWeight()) {
-        weightId = a.id;
-      }
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(patient, formUpdated, { deep: true });
     });
 
-    this.patient.anthropometryData = HeightWeight.toAnthropometryData(this.patient.heightWeight, heightId, weightId, this.patient.id);
-    await this.submitHandling('patients', this.patient, next);
-  }
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
 
-  addEdv(edv: IEdv): void {
-    const disabilitiy = this.patient.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
 
-    if (!disabilitiy) {
-      return;
-    }
+      for (const item of patient.value.representativeToPatient) {
+        item.patient = undefined;
+      }
 
-    disabilitiy.edvs.push(edv);
-  }
+      let heightId: string | undefined = '';
+      let weightId: string | undefined = '';
 
-  removeEdv(edv: IEdv): void {
-    const disabilitiy = this.patient.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
+      anthropometries.value.forEach((a: IAnthropometry) => {
+        if (a.isHeight()) heightId = a.id;
+        if (a.isWeight()) weightId = a.id;
+      });
+      patient.value.anthropometryData = HeightWeight.toAnthropometryData(patient.value.heightWeight, heightId, weightId, patient.value.id);
+      await submitHandling('representatives', patient.value, next);
+    };
 
-    if (!disabilitiy) {
-      return;
-    }
-
-    const edvIndex = disabilitiy.edvs.findIndex((e: IEdv): boolean => e.id === edv.id);
-
-    if (edvIndex < 0) {
-      return;
-    }
-
-    disabilitiy.edvs.splice(edvIndex, 1);
-  }
-}
+    return {
+      patient,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
