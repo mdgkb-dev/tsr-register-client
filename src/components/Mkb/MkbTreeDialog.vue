@@ -70,8 +70,8 @@ export default defineComponent({
 
     const diagnosisModalVisible: Ref<boolean> = ref(false);
 
-    const mkbDiagnosis: ComputedRef = computed(() => store.getters['mkb/mkbDiagnosis']);
-    const mkbSubDiagnosis: ComputedRef = computed(() => store.getters['mkb/mkbSubDiagnosis']);
+    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
+    const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis[]> = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
     const addDiagnosisModal = (): void => {
       diagnosisModalVisible.value = true;

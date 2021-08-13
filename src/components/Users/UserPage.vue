@@ -4,7 +4,7 @@
       <h2 class="header-top-table">Пользователи <i class="el-icon-arrow-right"> </i> Профиль</h2>
     </el-col>
     <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-      <el-button type="success" round native-type="submit" @click="submitForm()">Сохранить изменения</el-button>
+      <el-button type="success" round native-type="submit" @click="submitForm">Сохранить изменения</el-button>
     </el-col>
   </el-row>
   <el-row v-if="mount"><PageInfo :human="user.human" /></el-row>
@@ -33,80 +33,83 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { ElMessage } from 'element-plus';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
-import User from '@/classes/user/User';
 import HumanForm from '@/components/HumanForm.vue';
 import PageInfo from '@/components/Users/PageInfo.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
+import IUser from '@/interfaces/users/IUser';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
-@Options({
+export default defineComponent({
   name: 'UserPage',
   components: {
-    PageInfo,
     HumanForm,
+    PageInfo,
   },
-  computed: {
-    ...mapGetters('users', ['user']),
-  },
-  methods: {
-    ...mapActions({
-      userGet: 'users/get',
-    }),
-  },
-})
-export default class UserPage extends mixins(ConfirmLeavePage) {
-  // Types.
-  // Local state.
-  rules = {
-    human: HumanRules,
-  };
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const router = useRouter();
 
-  isEditMode!: boolean;
-  userGet!: (userId: string) => Promise<void>;
-  user = new User();
-  title = '';
-  mount = false;
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('');
 
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    if (!this.$route.params.userId) {
-      this.isEditMode = false;
-      this.title = 'Создать юзера';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать юзера';
-      await this.userGet(`${this.$route.params.userId}`);
-      this.user = this.$store.getters['users/user'];
-    }
-    this.mount = true;
+    const rules: ComputedRef<any> = computed(() => {
+      return { human: HumanRules };
+    });
+    const user: ComputedRef<IUser | undefined> = computed(() => store.getters['users/user']);
 
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('user', this.formUpdated, { deep: true });
-  }
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
 
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    try {
-      if (this.isEditMode) {
-        await this.$store.dispatch('users/edit', this.user);
+    onBeforeMount(async (): Promise<void> => {
+      if (!route.params.userId) {
+        isEditMode.value = false;
+        title.value = 'Создать юзера';
       } else {
-        await this.$store.dispatch('users/create', this.user);
+        isEditMode.value = true;
+        title.value = 'Редактировать юзера';
+        await store.dispatch('users/get', route.params.userId);
       }
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
 
-    await this.$router.push('/users');
-  }
-}
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(user, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (): Promise<void> => {
+      saveButtonClick.value = true;
+
+      try {
+        if (isEditMode.value) {
+          await store.dispatch('users/edit', user.value);
+        } else {
+          await store.dispatch('users/create', user.value);
+        }
+      } catch (e) {
+        ElMessage.error(e.toString());
+        return;
+      }
+
+      await router.push('/users');
+    };
+
+    return {
+      mount,
+      rules,
+      title,
+      user,
+      submitForm,
+    };
+  },
+});
 </script>

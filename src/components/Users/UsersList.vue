@@ -31,50 +31,55 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 
 import IUser from '../../interfaces/users/IUser';
 
-@Options({
+export default defineComponent({
   name: 'UsersList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('users', ['users']),
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    const title: Ref<string> = ref('Пользователи');
+    const mount: Ref<boolean> = ref(false);
+
+    const users: ComputedRef<IUser[]> = computed(() => store.getters['users/users']);
+
+    onBeforeMount(async (): Promise<void> => {
+      await store.dispatch('users/getAll');
+      mount.value = true;
+    });
+
+    const edit = async (id: number): Promise<void> => {
+      await router.push(`/users/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/users/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('users/delete', id);
+    };
+
+    return {
+      mount,
+      title,
+      users,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAllUsers: 'users/getAll',
-    }),
-  },
-})
-export default class UsersList extends Vue {
-  users!: IUser[];
-  getAllUsers!: () => Promise<void>;
-  title = 'Пользователи';
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAllUsers();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/users/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/users/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('users/delete', id);
-  }
-}
+});
 </script>

@@ -38,20 +38,17 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, PropType } from 'vue';
 
-import PopoverInfo from '@/components/PopoverInfo.vue';
 import IHuman from '@/interfaces/humans/IHuman';
 
-@Options({
+export default defineComponent({
   name: 'PageInfo',
-  props: ['human'],
-  components: {
-    PopoverInfo,
+  props: {
+    human: {
+      type: Object as PropType<IHuman>,
+      required: true,
+    },
   },
-})
-export default class PageInfo extends Vue {
-  // Types.
-  human!: IHuman;
-}
+});
 </script>
