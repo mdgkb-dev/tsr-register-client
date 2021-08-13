@@ -55,8 +55,9 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { ElTree } from 'element-plus';
+import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbGroup from '@/classes/mkb/MkbGroup';
@@ -74,221 +75,271 @@ import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
-@Options({
+export default defineComponent({
   name: 'MkbTree',
-  props: ['selectable', 'checkedDiagnosis', 'patientDiagnosis'],
-  computed: {
-    ...mapState('mkb', ['mkbClasses']),
+  props: {
+    selectable: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    checkedDiagnosis: {
+      type: Array as PropType<(IPatientDiagnosis | IRegisterDiagnosis)[]>,
+      default: () => [],
+      // required: true,
+    },
+    // TODO: Бесполезная переменная?
+    // patientDiagnosis: {
+    //   type: Boolean as PropType<boolean>,
+    //   default: false,
+    // },
   },
-  methods: {
-    ...mapActions({
-      getAllMkbClasses: 'mkb/getAllMkbClasses',
-      getGroupById: 'mkb/getGroupById',
-      getSubGroupById: 'mkb/getSubGroupById',
-      getSubSubGroupById: 'mkb/getSubSubGroupById',
-      getSubDiagnosisByDiagnosisId: 'mkb/getSubDiagnosisByDiagnosisId',
-      updateRelevant: 'mkb/updateRelevant',
-      updateName: 'mkb/updateName',
-    }),
-  },
-})
-export default class MkbTree extends Vue {
-  declare $refs: {
-    tree: any;
-  };
-  $message!: any;
+  emits: ['removeDiagnosis', 'setDiagnosis', 'setSubDiagnosis'],
+  setup(props, { emit }) {
+    const store = useStore();
+    const { selectable, checkedDiagnosis } = toRefs(props);
 
-  checkedDiagnosis!: Array<IPatientDiagnosis | IRegisterDiagnosis>;
-  patientDiagnosis!: IPatientDiagnosis[];
+    const tree = ref<InstanceType<typeof ElTree>>();
+    const editing: Ref<boolean> = ref(false);
+    // const mount: Ref<boolean> = ref(false); // TODO: Бесполезная переменная?
+    const onlyRelevant: Ref<boolean> = ref(false);
+    // const title: Ref<string> = ref('МКБ10'); // TODO: Бесполезная переменная?
 
-  getAllMkbClasses!: () => Promise<void>;
-  getGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
-  getSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
-  getSubSubGroupById!: (mkbIdSet: MkbIdSet) => Promise<void>;
-  getSubDiagnosisByDiagnosisId!: (mkbIdSet: MkbIdSet) => Promise<void>;
-  updateRelevant!: (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => Promise<void>;
-  updateName!: (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => Promise<void>;
+    const mkbClasses: ComputedRef<IMkbClass[]> = computed(() => store.getters['mkb/mkbClasses']);
 
-  mount = false;
-  title = 'МКБ10';
-  mkbClasses: IMkbClass[] = [];
-  selectable!: boolean;
-  onlyRelevant = false;
-  editing = false;
-
-  setDiagnosis(checkedNode: any): void {
-    const curNode = this.$refs.tree.getNode(checkedNode.id);
-
-    if (!curNode.checked) {
-      this.$refs.tree.setChecked(checkedNode.id, false, false);
-      let notChildrenChecked = true;
-      curNode.parent.childNodes.forEach((child: any) => {
-        if (child.checked) notChildrenChecked = false;
-      });
-      const curDiagnosis = this.checkedDiagnosis.find(
-        (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
-      );
-      if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
-      curNode.childNodes.forEach((child: any) => this.$refs.tree.setChecked(child.data.id, false, false));
-      if (checkedNode.code || checkedNode.subCode > -1) this.$emit('removeDiagnosis', checkedNode);
-      return;
-    }
-
-    if (checkedNode.code) {
-      this.$refs.tree.getCheckedNodes();
-      this.$refs.tree.setChecked(checkedNode.id, true, false);
-      if (checkedNode.code) this.$emit('setDiagnosis', checkedNode);
-    }
-
-    if (checkedNode.subCode > -1) {
-      this.$refs.tree.setChecked(checkedNode.id, true, false);
-      this.$refs.tree.setChecked(checkedNode.mkbDiagnosisId, true, false);
-      const diagnosis = this.$refs.tree.getNode(checkedNode.id).parent.data;
-      if (checkedNode.subCode > -1) this.$emit('setSubDiagnosis', checkedNode, diagnosis);
-    }
-  }
-
-  handleNodeExpand(first: any) {
-    if (!this.selectable) return;
-    setTimeout(() => {
-      if (first.mkbDiagnosis && first.mkbDiagnosis.length > 0) this.checkDiagnosis(first.mkbDiagnosis);
-      if (first.mkbSubDiagnosis > -1 && first.mkbSubDiagnosis.length > 0) this.checkSubDiagnosis(first.mkbSubDiagnosis);
-    }, 100);
-  }
-
-  async mounted(): Promise<void> {
-    await this.getAllMkbClasses();
-    this.mkbClasses = [];
-    await this.getAllMkbClasses();
-    this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
-    this.mount = true;
-  }
-
-  async load(node: any, resolve: any): Promise<void> {
-    const mkbIdSet = new MkbIdSet();
-    if (node.level === 0) return resolve(this.mkbClasses);
-
-    if (node.level === 1) {
-      mkbIdSet.classId = node.data.id;
-      return resolve(await this.getNodeOne(node, mkbIdSet));
-    }
-
-    if (node.level === 2) {
-      mkbIdSet.classId = node.parent.data.id;
-      mkbIdSet.groupId = node.data.id;
-      mkbIdSet.diagnosisId = node.data.id;
-      return resolve(await this.getNodeTwo(node, mkbIdSet));
-    }
-
-    if (node.level === 3) {
-      mkbIdSet.classId = node.parent.parent.data.id;
-      mkbIdSet.groupId = node.parent.data.id;
-      mkbIdSet.subGroupId = node.data.id;
-      mkbIdSet.diagnosisId = node.data.id;
-      return resolve(await this.getNodeThree(node, mkbIdSet));
-    }
-
-    if (node.level === 4) {
-      mkbIdSet.classId = node.parent.parent.parent.data.id;
-      mkbIdSet.groupId = node.parent.parent.data.id;
-      mkbIdSet.subGroupId = node.parent.data.id;
-      mkbIdSet.diagnosisId = node.data.id;
-      return resolve(await this.getNodeFour(node, mkbIdSet));
-    }
-    return resolve([]);
-  }
-
-  checkDiagnosis(diagnosisArr: IMkbDiagnosis[]) {
-    diagnosisArr.forEach((diagnosis: any) => {
-      this.checkedDiagnosis.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-        if (diagnosis.id === d.mkbDiagnosisId) {
-          this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);
-        }
-      });
+    onBeforeMount(async (): Promise<void> => {
+      await store.dispatch('mkb/getAllMkbClasses');
+      // mount.value = true; // TODO: Бесполезная переменная?
     });
-  }
 
-  checkSubDiagnosis(diagnosisArr: IMkbSubDiagnosis[]) {
-    diagnosisArr.forEach((diagnosis: any) => {
-      this.checkedDiagnosis.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-        if (diagnosis.id === d.mkbSubDiagnosisId) {
-          this.$refs.tree.setChecked(this.$refs.tree.getNode(diagnosis.id), true, false);
-        }
-      });
-    });
-  }
-
-  async getNodeOne(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbGroup | IMkbDiagnosis)[]> {
-    await this.getGroupById(mkbIdSet);
-    const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
-    return classN ? classN.getChildren(this.onlyRelevant) : [];
-  }
-
-  async getNodeTwo(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubGroup | IMkbDiagnosis)[]> {
-    await this.getSubGroupById(mkbIdSet);
-    const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
-
-    if (classN && classN.mkbGroups) {
-      const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
-      return group ? group.getChildren(this.onlyRelevant) : [];
-    }
-    return [];
-  }
-
-  async getNodeThree(node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubSubGroup | IMkbDiagnosis | IMkbSubDiagnosis)[]> {
-    if (!node.data.code) {
-      await this.getSubSubGroupById(mkbIdSet);
-      const classN = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
-      if (classN && classN.mkbGroups) {
-        const subGroup = classN.getSubGroup(mkbIdSet);
-        return subGroup ? subGroup.getChildren(this.onlyRelevant) : [];
+    const setDiagnosis = (checkedNode: any): void => {
+      if (!tree?.value) {
+        return;
       }
-    }
-    await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
-    return this.findSubDiagnosisFromTree(mkbIdSet);
-  }
 
-  async getNodeFour(node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> {
-    await this.getSubDiagnosisByDiagnosisId(mkbIdSet);
-    return this.onlyRelevant
-      ? this.findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant)
-      : this.findSubDiagnosisFromTree(mkbIdSet);
-  }
+      const curNode = tree.value.getNode(checkedNode.id);
 
-  findSubDiagnosisFromTree(mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] {
-    let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
-    const mkbClass = this.mkbClasses.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+      if (!curNode) {
+        return;
+      }
 
-    if (!mkbClass) return [];
-    diagnosis = mkbClass.getDiagnosisFromTree(mkbIdSet);
-    if (diagnosis) return diagnosis.mkbSubDiagnosis;
-    return [];
-  }
+      if (!curNode.checked) {
+        tree.value.setChecked(checkedNode.id, false, false);
+        let notChildrenChecked = true;
 
-  async showRelevant() {
-    if (this.onlyRelevant) {
-      await this.getAllMkbClasses();
-      this.mkbClasses = this.$store.getters['mkb/mkbClasses'];
-    } else {
-      this.mkbClasses = this.mkbClasses.filter((item) => item.relevant);
-    }
-    this.onlyRelevant = !this.onlyRelevant;
-  }
+        curNode.parent.childNodes.forEach((child: any) => {
+          if (child.checked) {
+            notChildrenChecked = false;
+          }
+        });
 
-  editMkbTree() {
-    this.editing = !this.editing;
-  }
+        const curDiagnosis = checkedDiagnosis.value.find(
+          (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
+        );
 
-  updateNameHandler(data: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) {
-    const mkb = data;
-    mkb.isEditMode = false;
-    this.updateName(data);
-  }
+        if (notChildrenChecked && !curDiagnosis) {
+          curNode.parent.checked = false;
+        }
 
-  updateRelevantHandler(mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) {
-    this.updateRelevant(mkb);
-  }
-}
+        curNode.childNodes.forEach((child: any) => tree?.value?.setChecked(child.data.id, false, false));
+
+        if (checkedNode.code || checkedNode.subCode > -1) {
+          emit('removeDiagnosis', checkedNode);
+        }
+
+        return;
+      }
+
+      if (checkedNode.code) {
+        tree.value.getCheckedNodes(false, false);
+        tree.value.setChecked(checkedNode.id, true, false);
+
+        if (checkedNode.code) {
+          emit('setDiagnosis', checkedNode);
+        }
+      }
+
+      if (checkedNode.subCode > -1) {
+        tree.value.setChecked(checkedNode.id, true, false);
+        tree.value.setChecked(checkedNode.mkbDiagnosisId, true, false);
+        const diagnosis = tree.value.getNode(checkedNode.id).parent.data;
+
+        if (checkedNode.subCode > -1) {
+          emit('setSubDiagnosis', checkedNode, diagnosis);
+        }
+      }
+    };
+
+    const handleNodeExpand = async (first: any): Promise<void> => {
+      if (!selectable.value) {
+        return;
+      }
+
+      setTimeout(() => {
+        if (first.mkbDiagnosis && first.mkbDiagnosis.length > 0) {
+          checkDiagnosis(first.mkbDiagnosis);
+        }
+
+        if (first.mkbSubDiagnosis > -1 && first.mkbSubDiagnosis.length > 0) {
+          checkSubDiagnosis(first.mkbSubDiagnosis);
+        }
+      }, 100);
+    };
+
+    const load = async (node: any, resolve: any): Promise<void> => {
+      const mkbIdSet = new MkbIdSet();
+
+      if (node.level === 0) {
+        return resolve(mkbClasses.value);
+      }
+
+      if (node.level === 1) {
+        mkbIdSet.classId = node.data.id;
+        return resolve(await getNodeOne(node, mkbIdSet));
+      }
+
+      if (node.level === 2) {
+        mkbIdSet.classId = node.parent.data.id;
+        mkbIdSet.groupId = node.data.id;
+        mkbIdSet.diagnosisId = node.data.id;
+        return resolve(await getNodeTwo(node, mkbIdSet));
+      }
+
+      if (node.level === 3) {
+        mkbIdSet.classId = node.parent.parent.data.id;
+        mkbIdSet.groupId = node.parent.data.id;
+        mkbIdSet.subGroupId = node.data.id;
+        mkbIdSet.diagnosisId = node.data.id;
+        return resolve(await getNodeThree(node, mkbIdSet));
+      }
+
+      if (node.level === 4) {
+        mkbIdSet.classId = node.parent.parent.parent.data.id;
+        mkbIdSet.groupId = node.parent.parent.data.id;
+        mkbIdSet.subGroupId = node.parent.data.id;
+        mkbIdSet.diagnosisId = node.data.id;
+        return resolve(await getNodeFour(node, mkbIdSet));
+      }
+
+      return resolve([]);
+    };
+
+    const checkDiagnosis = (diagnosisArr: IMkbDiagnosis[]): void => {
+      diagnosisArr.forEach((diagnosis: any) => {
+        checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
+          if (diagnosis.id === d.mkbDiagnosisId) {
+            tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
+          }
+        });
+      });
+    };
+
+    const checkSubDiagnosis = (diagnosisArr: IMkbSubDiagnosis[]): void => {
+      diagnosisArr.forEach((diagnosis: any) => {
+        checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
+          if (diagnosis.id === d.mkbSubDiagnosisId) {
+            tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
+          }
+        });
+      });
+    };
+
+    const getNodeOne = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbGroup | IMkbDiagnosis)[]> => {
+      await store.dispatch('mkb/getGroupById', mkbIdSet);
+      const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+      return classN ? classN.getChildren(onlyRelevant.value) : [];
+    };
+
+    const getNodeTwo = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubGroup | IMkbDiagnosis)[]> => {
+      await store.dispatch('mkb/getSubGroupById', mkbIdSet);
+      const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+
+      if (classN && classN.mkbGroups) {
+        const group = classN.mkbGroups.find((g: IMkbGroup) => g.id === mkbIdSet.groupId);
+        return group ? group.getChildren(onlyRelevant.value) : [];
+      }
+
+      return [];
+    };
+
+    const getNodeThree = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubSubGroup | IMkbDiagnosis | IMkbSubDiagnosis)[]> => {
+      if (!node.data.code) {
+        await store.dispatch('mkb/getSubSubGroupById', mkbIdSet);
+        const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+
+        if (classN && classN.mkbGroups) {
+          const subGroup = classN.getSubGroup(mkbIdSet);
+          return subGroup ? subGroup.getChildren(onlyRelevant.value) : [];
+        }
+      }
+
+      await store.dispatch('mkb/getSubDiagnosisByDiagnosisId', mkbIdSet);
+      return findSubDiagnosisFromTree(mkbIdSet);
+    };
+
+    const getNodeFour = async (node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> => {
+      await store.dispatch('mkb/getSubDiagnosisByDiagnosisId', mkbIdSet);
+      return onlyRelevant.value ? findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant) : findSubDiagnosisFromTree(mkbIdSet);
+    };
+
+    const findSubDiagnosisFromTree = (mkbIdSet: MkbIdSet): IMkbSubDiagnosis[] => {
+      let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
+      const mkbClass = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
+
+      if (!mkbClass) {
+        return [];
+      }
+
+      diagnosis = mkbClass.getDiagnosisFromTree(mkbIdSet);
+
+      if (diagnosis) {
+        return diagnosis.mkbSubDiagnosis;
+      }
+
+      return [];
+    };
+
+    const showRelevant = async () => {
+      if (onlyRelevant.value) {
+        await store.dispatch('mkb/getAllMkbClasses');
+      } else {
+        store.commit(
+          'mkb/setAll',
+          mkbClasses.value.filter((item) => item.relevant)
+        );
+      }
+
+      onlyRelevant.value = !onlyRelevant.value;
+    };
+
+    const editMkbTree = () => {
+      editing.value = !editing.value;
+    };
+
+    const updateNameHandler = (data: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
+      const mkb = data;
+      mkb.isEditMode = false;
+      store.dispatch('mkb/updateName', data);
+    };
+
+    const updateRelevantHandler = (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
+      store.dispatch('mkb/updateRelevant', mkb);
+    };
+
+    return {
+      editing,
+      mkbClasses,
+      onlyRelevant,
+      tree,
+      editMkbTree,
+      handleNodeExpand,
+      load,
+      setDiagnosis,
+      showRelevant,
+      updateNameHandler,
+      updateRelevantHandler,
+    };
+  },
+});
 </script>
 
 <style scoped>

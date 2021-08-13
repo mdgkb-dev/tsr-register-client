@@ -123,7 +123,7 @@ export default defineComponent({
     const search: Ref<string> = ref('');
     const searchFullName: Ref<string> = ref('');
     const title: Ref<string> = ref('Инвалидность');
-    const patients: ComputedRef<IPatient[]> = computed(store.getters['patients/patients']);
+    const patients: ComputedRef<IPatient[]> = computed(() => store.getters['patients/patients']);
     const { formatDate } = useDateFormat();
 
     onBeforeMount(async () => {

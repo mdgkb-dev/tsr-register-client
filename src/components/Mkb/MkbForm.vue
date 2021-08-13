@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Переписать props на store. -->
   <div class="table-under-collapse">
     <el-space style="margin-bottom: 10px">
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
@@ -120,9 +121,8 @@
 
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { defineAsyncComponent } from 'vue';
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, ComputedRef, defineAsyncComponent, defineComponent, onBeforeMount, PropType, reactive, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
@@ -139,195 +139,215 @@ import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
-@Options({
+export default defineComponent({
   name: 'MkbForm',
   components: {
     AnamnesisForm,
     MkbTreeDialog,
     TableButtonGroup,
   },
-  props: ['diagnosisData', 'patientDiagnosis'],
-  computed: {
-    ...mapGetters('mkb', ['mkbDiagnosis', 'mkbGroups', 'mkbSubDiagnosis', 'filteredDiagnosis']),
+  props: {
+    diagnosisData: {
+      type: Array as PropType<(IPatientDiagnosis | IRegisterDiagnosis)[]>,
+      default: () => [],
+    },
+    patientDiagnosis: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
   },
-  methods: {
-    ...mapActions({
-      searchGroups: 'mkb/searchGroups',
-      searchDiagnosis: 'mkb/searchDiagnosis',
-      searchSubDiagnosis: 'mkb/searchSubDiagnosis',
-      getDiagnosisByGroupId: 'mkb/getDiagnosisByGroupId',
-    }),
-  },
-})
-export default class MkbForm extends Vue {
-  // Types.
-  queryStringsGroups: Record<string, string> = {};
-  queryStringsDiagnosis: Record<string, string> = {};
+  setup(props) {
+    const store = useStore();
+    const { diagnosisData, patientDiagnosis } = toRefs(props);
+    let expandRowKeys: (string | undefined)[] = reactive([]);
+    const queryStringsDiagnosis: Record<string, string> = reactive({});
+    const queryStringsGroups: Record<string, string> = reactive({});
 
-  mkbDiagnosis!: IMkbDiagnosis[];
-  mkbGroups!: IMkbGroup[];
-  mkbSubDiagnosis!: IMkbSubDiagnosis[];
-  filteredDiagnosis!: IMkbDiagnosis[];
+    const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
+    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
+    const mkbGroups: ComputedRef<IMkbGroup[]> = computed(() => store.getters['mkb/mkbGroups']);
+    const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis[]> = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
-  diagnosisData!: Array<IPatientDiagnosis | IRegisterDiagnosis>;
-  patientDiagnosis?: boolean;
-
-  searchGroups!: (query: string) => Promise<void>;
-
-  searchDiagnosis!: (query: string) => Promise<void>;
-  searchSubDiagnosis!: (diagnosisId: string) => Promise<void>;
-  getDiagnosisByGroupId!: (groupId: string) => Promise<void>;
-
-  // Local state.
-  expandRowKeys: (string | undefined)[] = [];
-
-  mounted(): void {
-    this.diagnosisData.forEach((diagnosisData: PatientDiagnosis | RegisterDiagnosis) => {
-      if (diagnosisData.mkbDiagnosis && diagnosisData.id) {
-        this.queryStringsDiagnosis[diagnosisData.id] = diagnosisData.mkbDiagnosis.getFullName();
-        if (diagnosisData.mkbDiagnosis.mkbGroup && diagnosisData.mkbDiagnosis.mkbGroup.name) {
-          this.queryStringsGroups[diagnosisData.id] = diagnosisData.mkbDiagnosis.mkbGroup.getFullName();
+    onBeforeMount(() => {
+      diagnosisData.value.forEach((diagnosisData: PatientDiagnosis | RegisterDiagnosis) => {
+        if (diagnosisData.mkbDiagnosis && diagnosisData.id) {
+          queryStringsDiagnosis[diagnosisData.id] = diagnosisData.mkbDiagnosis.getFullName();
+          if (diagnosisData.mkbDiagnosis.mkbGroup && diagnosisData.mkbDiagnosis.mkbGroup.name) {
+            queryStringsGroups[diagnosisData.id] = diagnosisData.mkbDiagnosis.mkbGroup.getFullName();
+          }
         }
-      }
+      });
     });
-  }
 
-  addDiagnosis(): void {
-    let diagnosisData;
-    if (this.patientDiagnosis) {
-      diagnosisData = new PatientDiagnosis();
-    } else {
-      diagnosisData = new RegisterDiagnosis();
-    }
-    diagnosisData.id = uuidv4();
-    this.diagnosisData.push(diagnosisData);
-    this.queryStringsDiagnosis[diagnosisData.id] = '';
-    this.queryStringsGroups[diagnosisData.id] = '';
-  }
-
-  syncSearchDiagnosis(query: string, id: string): void {
-    if (query.length === 0) {
-      this.queryStringsGroups[id] = '';
-      this.filteredDiagnosis = [];
-      const diagnosis = this.diagnosisData.find((d) => d.id === id);
-      if (diagnosis) {
-        diagnosis.mkbDiagnosis = undefined;
-        diagnosis.mkbDiagnosisId = undefined;
-        diagnosis.mkbSubDiagnosis = undefined;
-        diagnosis.mkbSubDiagnosisId = undefined;
+    const addDiagnosis = (): void => {
+      let newDiagnosisData: IPatientDiagnosis | IRegisterDiagnosis;
+      if (patientDiagnosis.value) {
+        newDiagnosisData = new PatientDiagnosis();
+      } else {
+        newDiagnosisData = new RegisterDiagnosis();
       }
-    }
-  }
 
-  syncSearchGroups(query: string, id: string): void {
-    if (query.length === 0) {
-      this.queryStringsDiagnosis[id] = '';
-      this.filteredDiagnosis = [];
-      const diagnosis = this.diagnosisData.find((d) => d.id === id);
-      if (diagnosis) {
-        diagnosis.mkbDiagnosis = undefined;
-        diagnosis.mkbDiagnosisId = undefined;
-        diagnosis.mkbSubDiagnosis = undefined;
-        diagnosis.mkbSubDiagnosisId = undefined;
+      newDiagnosisData.id = uuidv4();
+      diagnosisData.value.push(newDiagnosisData);
+      queryStringsDiagnosis[newDiagnosisData.id] = '';
+      queryStringsGroups[newDiagnosisData.id] = '';
+    };
+
+    const syncSearchDiagnosis = (query: string, id: string): void => {
+      if (query.length === 0) {
+        queryStringsGroups[id] = '';
+        store.commit('mkb/setFilteredDiagnosis', []);
+        const diagnosis = diagnosisData.value.find((d) => d.id === id);
+
+        if (diagnosis) {
+          diagnosis.mkbDiagnosis = undefined;
+          diagnosis.mkbDiagnosisId = undefined;
+          diagnosis.mkbSubDiagnosis = undefined;
+          diagnosis.mkbSubDiagnosisId = undefined;
+        }
       }
-    }
-  }
+    };
 
-  setDiagnosisFromModal(diagnosis: IPatientDiagnosis | IRegisterDiagnosis): void {
-    if (diagnosis.id && diagnosis.mkbDiagnosis && diagnosis.mkbDiagnosis.mkbGroup) {
-      this.queryStringsDiagnosis[diagnosis.id] = diagnosis.mkbDiagnosis.getFullName();
-      this.queryStringsGroups[diagnosis.id] = diagnosis.mkbDiagnosis.mkbGroup.getFullName();
-    }
-  }
+    const syncSearchGroups = (query: string, id: string): void => {
+      if (query.length === 0) {
+        queryStringsDiagnosis[id] = '';
+        store.commit('mkb/setFilteredDiagnosis', []);
+        const diagnosis = diagnosisData.value.find((d) => d.id === id);
 
-  addAnamnesis = (diagnosis: IPatientDiagnosis) => {
-    const anamnesis = new PatientDiagnosisAnamnesis();
-    anamnesis.isEditMode = true;
-    diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
-  };
-
-  handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis) => {
-    this.expandRowKeys = row.id === this.expandRowKeys[0] ? [] : [row.id];
-  };
-
-  async findDiagnosis(query: string, resolve: any) {
-    let diagnosis: ISearchDiagnosis[] = [];
-    if (this.filteredDiagnosis.length > 0 && query.length === 0) {
-      this.filteredDiagnosis.forEach((d: IMkbDiagnosis) => {
-        if (d.id) {
-          diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
+        if (diagnosis) {
+          diagnosis.mkbDiagnosis = undefined;
+          diagnosis.mkbDiagnosisId = undefined;
+          diagnosis.mkbSubDiagnosis = undefined;
+          diagnosis.mkbSubDiagnosisId = undefined;
         }
-      });
-    }
+      }
+    };
 
-    if (query.length > 2) {
-      diagnosis = [];
-      await this.searchDiagnosis(query);
-      this.mkbDiagnosis.forEach((d: IMkbDiagnosis) => {
-        if (d.id) {
-          diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
-        }
-      });
-    }
-    resolve(diagnosis);
-  }
+    const setDiagnosisFromModal = (diagnosis: IPatientDiagnosis | IRegisterDiagnosis): void => {
+      if (diagnosis.id && diagnosis.mkbDiagnosis && diagnosis.mkbDiagnosis.mkbGroup) {
+        queryStringsDiagnosis[diagnosis.id] = diagnosis.mkbDiagnosis.getFullName();
+        queryStringsGroups[diagnosis.id] = diagnosis.mkbDiagnosis.mkbGroup.getFullName();
+      }
+    };
 
-  async findGroups(query: string, resolve: any) {
-    const groups: ISearch[] = [];
-    if (query.length === 0) {
-      await this.searchGroups(query);
+    const addAnamnesis = (diagnosis: IPatientDiagnosis): void => {
+      const anamnesis = new PatientDiagnosisAnamnesis();
+      anamnesis.isEditMode = true;
+      diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
+    };
+
+    const handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis): void => {
+      expandRowKeys = row.id === expandRowKeys[0] ? reactive([]) : reactive([row.id]);
+    };
+
+    const findDiagnosis = async (query: string, resolve: any): Promise<void> => {
+      let diagnosis: ISearchDiagnosis[] = [];
+      if (filteredDiagnosis.value.length > 0 && query.length === 0) {
+        filteredDiagnosis.value.forEach((d: IMkbDiagnosis) => {
+          if (d.id) {
+            diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
+          }
+        });
+      }
+
+      if (query.length > 2) {
+        diagnosis = [];
+        await store.dispatch('mkb/searchDiagnosis', query);
+        mkbDiagnosis.value.forEach((d: IMkbDiagnosis) => {
+          if (d.id) {
+            diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
+          }
+        });
+      }
+
+      resolve(diagnosis);
+    };
+
+    const findGroups = async (query: string, resolve: any) => {
+      const groups: ISearch[] = [];
+
+      if (query.length === 0) {
+        await store.dispatch('mkb/searchGroups', query);
+        resolve(groups);
+        return;
+      }
+
+      if (query.length > 0) {
+        await store.dispatch('mkb/searchGroups', query);
+        mkbGroups.value.forEach((d: IMkbGroup) => {
+          if (d.id && d.name) {
+            groups.push({ value: d.getFullName(), id: d.id });
+          }
+        });
+      }
+
       resolve(groups);
-      return;
-    }
-    if (query.length > 0) {
-      await this.searchGroups(query);
-      this.mkbGroups.forEach((d: IMkbGroup) => {
-        if (d.id && d.name) {
-          groups.push({ value: d.getFullName(), id: d.id });
+    };
+
+    const findSubDiagnosis = async (diagnosisId: string) => {
+      await store.dispatch('mkb/searchSubDiagnosis', diagnosisId);
+      diagnosisData.value.forEach((d: IPatientDiagnosis | RegisterDiagnosis) => {
+        if (d.mkbDiagnosis && d.mkbDiagnosisId === diagnosisId) {
+          d.mkbDiagnosis.mkbSubDiagnosis.push(...mkbSubDiagnosis.value);
         }
       });
-    }
-    resolve(groups);
-  }
+    };
 
-  async findSubDiagnosis(diagnosisId: string) {
-    await this.searchSubDiagnosis(diagnosisId);
-    this.diagnosisData.forEach((d: IPatientDiagnosis | RegisterDiagnosis) => {
-      if (d.mkbDiagnosis && d.mkbDiagnosisId === diagnosisId) {
-        d.mkbDiagnosis.mkbSubDiagnosis.push(...this.mkbSubDiagnosis);
+    const handleGroupSelect = async (item: ISearch, id: string): Promise<void> => {
+      await store.dispatch('mkb/getDiagnosisByGroupId', item.id);
+      const diagnosis = diagnosisData.value.find((d) => d.id === id);
+      queryStringsDiagnosis[id] = '';
+
+      if (diagnosis) {
+        diagnosis.mkbDiagnosis = undefined;
+        diagnosis.mkbDiagnosisId = undefined;
+        diagnosis.mkbSubDiagnosis = undefined;
+        diagnosis.mkbSubDiagnosisId = undefined;
       }
-    });
-  }
+    };
 
-  async handleGroupSelect(item: ISearch, id: string) {
-    await this.getDiagnosisByGroupId(item.id);
-    const diagnosis = this.diagnosisData.find((d) => d.id === id);
-    this.queryStringsDiagnosis[id] = '';
-    if (diagnosis) {
-      diagnosis.mkbDiagnosis = undefined;
-      diagnosis.mkbDiagnosisId = undefined;
-      diagnosis.mkbSubDiagnosis = undefined;
-      diagnosis.mkbSubDiagnosisId = undefined;
-    }
-  }
+    const handleDiagnosisSelect = async (item: ISearchDiagnosis, id: string): Promise<void> => {
+      const diagnosis = diagnosisData.value.find((d) => d.id === id);
 
-  async handleDiagnosisSelect(item: ISearchDiagnosis, id: string) {
-    const diagnosis = this.diagnosisData.find((d) => d.id === id);
-    if (diagnosis) {
-      diagnosis.mkbDiagnosisId = item.id;
-      diagnosis.mkbDiagnosis = item.diagnosis;
-    }
-    if (item.diagnosis.mkbGroup) {
-      this.queryStringsGroups[id] = item.diagnosis.mkbGroup.getFullName();
-    }
-    await this.findSubDiagnosis(item.id);
-  }
+      if (diagnosis) {
+        diagnosis.mkbDiagnosisId = item.id;
+        diagnosis.mkbDiagnosis = item.diagnosis;
+      }
 
-  removeDiagnosis(item: any): void {
-    const index = this.diagnosisData.indexOf(item);
-    if (index !== -1) {
-      this.diagnosisData.splice(index, 1);
-    }
-  }
-}
+      if (item.diagnosis.mkbGroup) {
+        queryStringsGroups[id] = item.diagnosis.mkbGroup.getFullName();
+      }
+
+      await findSubDiagnosis(item.id);
+    };
+
+    const removeDiagnosis = (item: any): void => {
+      const index = diagnosisData.value.indexOf(item);
+      if (index !== -1) {
+        diagnosisData.value.splice(index, 1);
+      }
+    };
+
+    return {
+      expandRowKeys,
+      filteredDiagnosis,
+      mkbDiagnosis,
+      mkbGroups,
+      mkbSubDiagnosis,
+      queryStringsDiagnosis,
+      queryStringsGroups,
+      addAnamnesis,
+      addDiagnosis,
+      findDiagnosis,
+      findGroups,
+      handleDiagnosisSelect,
+      handleExpandChange,
+      handleGroupSelect,
+      removeDiagnosis,
+      setDiagnosisFromModal,
+      syncSearchDiagnosis,
+      syncSearchGroups,
+    };
+  },
+});
 </script>
