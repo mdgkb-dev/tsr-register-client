@@ -1,13 +1,12 @@
 import { Module } from 'vuex';
 
+import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 import { State } from './state';
-
-import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 
 export const state: State = {
   insuranceCompanies: [],

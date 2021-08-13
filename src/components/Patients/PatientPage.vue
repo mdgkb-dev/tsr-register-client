@@ -68,15 +68,11 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Законные представители</h2></template>
-              <PatientToRepresentativeForm
-                :in-representative-to-patient="patient.representativeToPatient"
-                :in-representative-types="representativeTypes"
-                :in-representatives="representativeOptions"
-              />
+              <PatientToRepresentativeForm />
             </el-collapse-item>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Регистры</h2></template>
-              <PatientRegistersForm v-model:registerToPatient="patient.registerToPatient" :patient-diagnosis="patient.patientDiagnosis" />
+              <PatientRegistersForm />
             </el-collapse-item>
           </div>
         </el-form>
@@ -134,19 +130,13 @@ const PatientRegistersForm = defineAsyncComponent(() => import('@/components/Pat
   computed: {
     ...mapGetters('anthropometry', ['anthropometries']),
     ...mapGetters('disabilities', ['disabilities']),
-    ...mapGetters('insuranceCompanies', ['insuranceCompanies']),
     ...mapGetters('patients', ['patient']),
-    ...mapGetters('representativeTypes', ['representativeTypes']),
-    ...mapGetters('representatives', ['representatives']),
   },
   methods: {
     ...mapActions({
       anthropometryGetAll: 'anthropometry/getAll',
       disabilitiesGetAll: 'disabilities/getAll',
-      insuranceCompaniesGetAll: 'insuranceCompanies/getAll',
       patientGet: 'patients/get',
-      representativeTypesGetAll: 'representativeTypes/getAll',
-      representativesGetAll: 'representatives/getAll',
     }),
   },
 })
@@ -161,18 +151,13 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
   representatives!: IRepresentative[];
 
   anthropometryGetAll!: () => Promise<void>;
-  insuranceCompaniesGetAll!: () => Promise<void>;
   patientGet!: (patientId: string) => Promise<void>;
-  representativeTypesGetAll!: () => Promise<void>;
-  representativesGetAll!: () => Promise<void>;
 
   // Local state.
   diagnosisMount = false;
   mount = false;
   offset: number[] = [0];
   patient = new Patient();
-  representativeOptions: IOption[] = [];
-  representativeTypesOptions: IOption[] = [];
   title = '';
 
   rules = {
@@ -190,51 +175,12 @@ export default class PatientPage extends mixins(ValidateMixin, ConfirmLeavePage,
       this.patient = this.$store.getters['patients/patient'];
       this.title = this.patient.human.getFullName();
     }
-    await this.insuranceCompaniesGetAll();
     await this.anthropometryGetAll();
-    this.insuranceCompaniesOptions = [];
 
     if (this.patient.disabilities) {
       for (const disability of this.patient.disabilities) {
         if (!disability.edvs) {
           disability.edvs = [];
-        }
-      }
-    }
-
-    if (this.insuranceCompanies) {
-      for (const item of this.insuranceCompanies) {
-        this.insuranceCompaniesOptions.push({
-          label: `${item.name}`,
-          value: `${item.id}`,
-        });
-      }
-    }
-
-    await this.representativesGetAll();
-    await this.representativeTypesGetAll();
-    // this.representativeTypesOptions.splice(0, 1);
-
-    // if (this.representativeTypes) {
-    //   for (const item of this.representativeTypes) {
-    //     if (item.id) {
-    //       this.representativeTypesOptions.push({
-    //         label: item.name,
-    //         value: item.id,
-    //       });
-    //     }
-    //   }
-    // }
-
-    this.representativeOptions.splice(0, 1);
-
-    if (this.representatives) {
-      for (const item of this.representatives) {
-        if (item.id) {
-          this.representativeOptions.push({
-            label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-            value: item.id,
-          });
         }
       }
     }

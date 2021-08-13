@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 
+import Patient from '@/classes/patients/Patient';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
@@ -9,7 +10,7 @@ import { State } from './state';
 
 export const state: State = {
   patients: [],
-  patient: undefined,
+  patient: new Patient(),
   filteredPatients: [],
 };
 

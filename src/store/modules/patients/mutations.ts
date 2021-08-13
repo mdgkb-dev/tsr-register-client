@@ -1,7 +1,11 @@
 import { MutationTree } from 'vuex';
 
 import Patient from '@/classes/patients/Patient';
+import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
 
@@ -27,6 +31,31 @@ const mutations: MutationTree<State> = {
   },
   setFilteredPatients(state, patients: IPatient[]) {
     state.filteredPatients = patients.map((p: IPatient) => new Patient(p));
+  },
+  addInsurance(state) {
+    state.patient.human.insuranceCompanyToHuman.push({
+      number: '',
+      insuranceCompanyId: '',
+      humanId: undefined,
+    });
+  },
+  removeInsurance(state, item: IInsuranceCompanyToHuman): void {
+    const index = state.patient.human.insuranceCompanyToHuman.indexOf(item);
+    if (index !== -1) {
+      state.patient.human.insuranceCompanyToHuman.splice(index, 1);
+    }
+  },
+  setRegisterts(state, registerToPatient: IRegisterToPatient[]) {
+    state.patient.registerToPatient = registerToPatient;
+  },
+  addRepresentative(state) {
+    state.patient.representativeToPatient.push(new RepresentativeToPatient());
+  },
+  removeRepresentative(state, item: IRepresentativeToPatient): void {
+    const index = state.patient.representativeToPatient.indexOf(item);
+    if (index !== -1) {
+      state.patient.representativeToPatient.splice(index, 1);
+    }
   },
 };
 
