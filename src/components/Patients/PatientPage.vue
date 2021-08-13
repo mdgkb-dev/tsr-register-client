@@ -115,7 +115,7 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometries/anthropometries']);
+    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
     const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
     const form = ref();
@@ -168,7 +168,7 @@ export default defineComponent({
         if (a.isWeight()) weightId = a.id;
       });
       patient.value.anthropometryData = HeightWeight.toAnthropometryData(patient.value.heightWeight, heightId, weightId, patient.value.id);
-      await submitHandling('representatives', patient.value, next);
+      await submitHandling('patients', patient.value, next);
     };
 
     return {

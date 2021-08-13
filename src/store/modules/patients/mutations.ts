@@ -14,6 +14,7 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -39,17 +40,11 @@ const mutations: MutationTree<State> = {
     state.filteredPatients = patients.map((p: IPatient) => new Patient(p));
   },
   addInsurance(state) {
-    state.patient.human.insuranceCompanyToHuman.push({
-      number: '',
-      insuranceCompanyId: '',
-      humanId: undefined,
-    });
+    state.patient.human.insuranceCompanyToHuman.push(new InsuranceCompanyToHuman());
   },
   removeInsurance(state, item: IInsuranceCompanyToHuman): void {
     const index = state.patient.human.insuranceCompanyToHuman.indexOf(item);
-    if (index !== -1) {
-      state.patient.human.insuranceCompanyToHuman.splice(index, 1);
-    }
+    if (index > -1) state.patient.human.insuranceCompanyToHuman.splice(index, 1);
   },
   setRegisterts(state, registerToPatient: IRegisterToPatient[]) {
     state.patient.registerToPatient = registerToPatient;
