@@ -39,39 +39,50 @@
 <script lang="ts">
 import useVuelidate from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
-import { Options, Vue } from 'vue-class-component';
+import { defineComponent, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-@Options({
+export default defineComponent({
   name: 'LoginForm',
-  validations: {
-    loginForm: {
-      login: {
-        required: helpers.withMessage('Пожалуйста, введите логин.', required),
+  validations() {
+    return {
+      loginForm: {
+        login: {
+          required: helpers.withMessage('Пожалуйста, введите логин.', required),
+        },
+        password: {
+          required: helpers.withMessage('Пожалуйста, введите пароль.', required),
+        },
       },
-      password: {
-        required: helpers.withMessage('Пожалуйста, введите пароль.', required),
-      },
-    },
+    };
   },
-})
-export default class LoginForm extends Vue {
-  loginForm = {
-    login: '',
-    password: '',
-  };
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const loginForm: { login: string; password: string } = reactive({
+      login: '',
+      password: '',
+    });
+    const v$ = reactive(useVuelidate());
 
-  v$ = useVuelidate();
+    const submitForm = async (): Promise<void> => {
+      try {
+        await store.dispatch('auth/login', loginForm);
+        store.commit('setLayout', 'main-layout');
+        await router.push('/patients');
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
-  async submitForm(): Promise<void> {
-    try {
-      await this.$store.dispatch('auth/login', this.loginForm);
-      this.$store.commit('setLayout', 'main-layout');
-      await this.$router.push('/patients');
-    } catch (e) {
-      console.log(e);
-    }
-  }
-}
+    return {
+      loginForm,
+      v$,
+      submitForm,
+    };
+  },
+});
 </script>
 
 <style scoped>
