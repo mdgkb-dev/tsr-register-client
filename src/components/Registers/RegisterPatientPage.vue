@@ -99,19 +99,19 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import HumanForm from '@/components/HumanForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
+import IPatient from '@/interfaces/patients/IPatient';
 import IRegister from '@/interfaces/registers/IRegister';
-import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
-import IPatient from '@/interfaces/patients/IPatient';
 
 export default defineComponent({
   name: 'RegisterPatientPage',

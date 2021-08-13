@@ -18,10 +18,11 @@
 </template>
 
 <script lang="ts">
-import { useStore } from 'vuex';
-import IRegister from '@/interfaces/registers/IRegister';
-import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+import IRegister from '@/interfaces/registers/IRegister';
 
 export default defineComponent({
   name: 'RegisterLinkList',

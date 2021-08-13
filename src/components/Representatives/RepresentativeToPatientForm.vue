@@ -11,7 +11,7 @@
           :rules="{ required: true, message: 'Необходимо указать подопечного', trigger: 'blur' }"
           :prop="`representativeToPatient.${scope.$index}.patientId`"
         >
-          <el-select placeholder="Подопечный" v-model="representativeToPatient[scope.$index].patientId">
+          <el-select v-model="representativeToPatient[scope.$index].patientId" placeholder="Подопечный">
             <el-option v-for="item in patientsOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
@@ -26,7 +26,7 @@
           :rules="{ required: true, message: 'Необходимо указать тип представителя', trigger: 'blur' }"
           :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
         >
-          <el-select placeholder="Тип представителя" v-model="representativeToPatient[scope.$index].representativeTypeId">
+          <el-select v-model="representativeToPatient[scope.$index].representativeTypeId" placeholder="Тип представителя">
             <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
@@ -45,12 +45,12 @@
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IOption from '@/interfaces/patients/IOption';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
 export default defineComponent({
   name: 'RepresentativeToPatientForm',
   components: {

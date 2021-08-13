@@ -26,85 +26,78 @@
 </template>
 
 <script lang="ts">
-import { mixins, Options } from 'vue-class-component';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
-import { mapActions, mapGetters } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
 
-import RegisterGroup from '@/classes/registers/RegisterGroup';
 import PageHead from '@/components/PageHead.vue';
-import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import BreadCrumbsLinks from '@/mixins/BreadCrumbsLinks.vue';
-import ConfirmLeavePage from '@/mixins/ConfirmLeavePage.vue';
-import FormMixin from '@/mixins/FormMixin.vue';
-import ValidateMixin from '@/mixins/ValidateMixin.vue';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
+import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
+import useForm from '@/mixins/useForm';
+import useValidate from '@/mixins/useValidate';
 
-@Options({
+export default defineComponent({
   name: 'RegisterGroupPage',
   components: {
     PageHead,
-    RegisterPropertyForm,
   },
-  computed: {
-    ...mapGetters('registerGroups', ['registerGroup']),
-    ...mapGetters('registerProperties', ['registerProperties']),
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const registerGroup: Ref<IRegisterProperty> = computed(() => store.getters['registerGroups/registerGroup']);
+
+    const form = ref();
+    const isEditMode: Ref<boolean> = ref(false);
+    const mount: Ref<boolean> = ref(false);
+    const rules = {
+      name: [{ required: true, message: 'Необходимо указать название группы', trigger: 'blur' }],
+    };
+    const title: Ref<string> = ref('');
+
+    const { links, pushToLinks } = useBreadCrumbsLinks();
+    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { submitHandling } = useForm(isEditMode.value);
+    const { validate } = useValidate();
+
+    onBeforeMount(async () => {
+      if (!route.params.registerGroupId) {
+        isEditMode.value = false;
+        title.value = 'Создать группу';
+      } else {
+        isEditMode.value = true;
+        title.value = 'Редактировать группу';
+        await store.dispatch('registerGroups/get', route.params.registerGroupId);
+      }
+
+      pushToLinks(['/register-groups'], ['Группы для регистров']);
+      mount.value = true;
+
+      window.addEventListener('beforeunload', beforeWindowUnload);
+      watch(registerGroup, formUpdated, { deep: true });
+    });
+
+    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      showConfirmModal(submitForm, next);
+    });
+
+    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+      saveButtonClick.value = true;
+      if (!validate(form.value)) return;
+      await submitHandling('registerGroups', registerGroup.value, next, 'register-groups');
+    };
+
+    return {
+      registerGroup,
+      form,
+      isEditMode,
+      links,
+      mount,
+      rules,
+      title,
+      submitForm,
+    };
   },
-  methods: {
-    ...mapActions({
-      registerGroupGet: 'registerGroups/get',
-      registerPropertiesGetAll: 'registerProperties/getAll',
-    }),
-  },
-})
-export default class RegisterGroupPage extends mixins(ValidateMixin, ConfirmLeavePage, FormMixin, BreadCrumbsLinks) {
-  // Types.
-  registerProperties!: IRegisterProperty[];
-
-  registerGroupGet!: (registerGroupId: string) => Promise<void>;
-  registerPropertiesGetAll!: () => Promise<void>;
-
-  // Local state.
-  registerGroup: IRegisterGroup = new RegisterGroup();
-  title = '';
-  mount = false;
-
-  rules = {
-    name: [{ required: true, message: 'Необходимо указать название группы', trigger: 'blur' }],
-  };
-
-  // Lifecycle methods.
-  async created(): Promise<void> {
-    if (!this.$route.params.registerGroupId) {
-      this.isEditMode = false;
-      this.title = 'Создать группу';
-    } else {
-      this.isEditMode = true;
-      this.title = 'Редактировать группу';
-      await this.registerGroupGet(`${this.$route.params.registerGroupId}`);
-      this.registerGroup = this.$store.getters['registerGroups/registerGroup'];
-    }
-
-    await this.registerPropertiesGetAll();
-    this.registerProperties = this.$store.getters['registerProperties/registerProperties'];
-
-    this.pushToLinks(['/register-groups'], ['Группы для регистров']);
-    this.mount = true;
-
-    window.addEventListener('beforeunload', this.beforeWindowUnload);
-    this.$watch('registerGroup', this.formUpdated, { deep: true });
-  }
-
-  beforeRouteLeave(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) {
-    this.showConfirmModal(this.submitForm, next);
-  }
-
-  // Methods.
-  async submitForm(next?: NavigationGuardNext): Promise<void> {
-    this.saveButtonClick = true;
-    if (!this.validate(this.$refs.form)) return;
-
-    await this.submitHandling('registerGroups', this.registerGroup, next, 'register-groups');
-  }
-}
+});
 </script>

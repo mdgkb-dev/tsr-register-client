@@ -112,16 +112,17 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
-import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import { useStore } from 'vuex';
 import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({

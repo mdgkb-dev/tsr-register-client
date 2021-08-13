@@ -44,14 +44,6 @@ import { Options, Vue } from 'vue-class-component';
 
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import { useStore } from 'vuex';
-import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
-import IPatient from '@/interfaces/patients/IPatient';
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import IOption from '@/interfaces/patients/IOption';
 
 @Options({
   name: 'AnamnesisForm',

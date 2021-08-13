@@ -31,37 +31,40 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
+import { useStore } from 'vuex';
 
-import RegisterPropertyToRegisterGroup from '@/classes/registers/RegisterPropertyToRegisterGroup';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
 
-@Options({
-  name: 'RegisterPropertyForm',
-  props: ['inRegisterPropertyToRegisterGroup', 'inRegisterPropertyOptions'],
-  components: {
-    TableButtonGroup,
+export default defineComponent({
+  name: 'RegisterGroupPage',
+
+  setup() {
+    const store = useStore();
+
+    const registerPropertyToRegisterGroup: Ref<IRegisterPropertyToRegisterGroup[]> = computed(
+      () => store.getters['registerGroups/registerPropertyToRegisterGroup']
+    );
+    const registerProperties: Ref<IRegisterProperty[]> = computed(() => store.getters['registerProperties/registerProperties']);
+
+    onBeforeMount(async () => {
+      await store.dispatch('registerProperties/getAll');
+    });
+
+    const add = (): void => {
+      store.commit('registerGroups/addProperty');
+    };
+    const remove = (item: IRegisterPropertyToRegisterGroup): void => {
+      store.commit('registerProperties/addRadioItem', item);
+    };
+
+    return {
+      add,
+      remove,
+      registerProperties,
+      registerPropertyToRegisterGroup,
+    };
   },
-})
-export default class RegisterPropertyForm extends Vue {
-  // Types.
-  inRegisterPropertyToRegisterGroup!: IRegisterPropertyToRegisterGroup[];
-  inRegisterPropertyOptions!: IRegisterProperty[];
-
-  // Local state.
-  registerPropertyToRegisterGroup = this.inRegisterPropertyToRegisterGroup;
-
-  add(): void {
-    this.registerPropertyToRegisterGroup.push(new RegisterPropertyToRegisterGroup());
-  }
-
-  remove(item: IRegisterPropertyToRegisterGroup): void {
-    const index = this.registerPropertyToRegisterGroup.indexOf(item);
-    if (index !== -1) {
-      this.registerPropertyToRegisterGroup.splice(index, 1);
-    }
-  }
-}
+});
 </script>

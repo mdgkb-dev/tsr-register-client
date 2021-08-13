@@ -30,49 +30,52 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
-@Options({
-  name: 'RegisterGroupList',
+export default defineComponent({
+  name: 'RegisterPropertyList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('registerGroups', ['registerGroups']),
+  setup() {
+    const router = useRouter();
+    const store = useStore();
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Группы для регистров');
+    const registerGroups: Ref<IRegisterProperty[]> = computed(() => store.getters['registerGroups/registerGroups']);
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/register-groups/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/register-groups/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('registerGroups/delete', id);
+    };
+
+    onBeforeMount(async () => {
+      await store.dispatch('registerGroups/getAll');
+      mount.value = true;
+    });
+
+    return {
+      registerGroups,
+      mount,
+      title,
+      create,
+      edit,
+      remove,
+    };
   },
-  methods: {
-    ...mapActions({
-      getAll: 'registerGroups/getAll',
-    }),
-  },
-})
-export default class RegisterGroupList extends Vue {
-  registerGroups!: IRegisterGroup[];
-  title = 'Группы для регистров';
-  getAll!: () => Promise<void>;
-  mount = false;
-
-  async mounted(): Promise<void> {
-    await this.getAll();
-    this.mount = true;
-  }
-
-  edit(id: number): void {
-    this.$router.push(`/register-groups/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/register-groups/new');
-  }
-
-  remove(id: number): void {
-    this.$store.dispatch('registerGroups/delete', id);
-  }
-}
+});
 </script>

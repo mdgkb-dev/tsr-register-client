@@ -1,13 +1,13 @@
 import { MutationTree } from 'vuex';
 
 import RegisterProperty from '@/classes/registers/RegisterProperty';
+import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
+import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
 import ValueType from '@/classes/valueTypes/ValueType';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 import { State } from './state';
-import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
-import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 
 const mutations: MutationTree<State> = {
   setAll(state, registerProperties: RegisterProperty[]) {
