@@ -1,6 +1,11 @@
 import { GetterTree } from 'vuex';
 
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import { RootState } from '@/store/types';
 
 import { State } from './state';
@@ -17,6 +22,27 @@ const getters: GetterTree<State, RootState> = {
   },
   getById(state, id: string): IPatient | undefined {
     return state.patients.find((item: IPatient) => item.id === id);
+  },
+  insuranceCompanies(state): IInsuranceCompanyToHuman[] {
+    return state.patient.human.insuranceCompanyToHuman;
+  },
+  patientDiagnosis(state): IPatientDiagnosis[] {
+    return state.patient.patientDiagnosis;
+  },
+  registerToPatient(state): IRegisterToPatient[] {
+    return state.patient.registerToPatient;
+  },
+  representativeToPatient(state): IRepresentativeToPatient[] {
+    return state.patient.representativeToPatient;
+  },
+  birthDate(state): string {
+    return state.patient.human.dateBirth;
+  },
+  isMale(state): boolean {
+    return state.patient.human.isMale;
+  },
+  heightWeight(state): IHeightWeight[] {
+    return state.patient.heightWeight;
   },
 };
 

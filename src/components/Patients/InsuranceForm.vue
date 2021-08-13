@@ -1,8 +1,8 @@
 <template>
   <div class="table-under-collapse">
-    <el-button style="margin-bottom: 20px" @click="addInsurance">Добавить страховку</el-button>
+    <el-button style="margin-bottom: 20px" @click="add">Добавить страховку</el-button>
 
-    <el-table :data="insuranceCompanies" style="width: 710px" class="table-shadow" header-row-class-name="header-style">
+    <el-table :data="insuranceCompaniesOfPatient" style="width: 710px" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
       <el-table-column label="Компания" width="300" align="center" sortable>
@@ -13,8 +13,8 @@
             label-width="0"
             style="margin-bottom: 0"
           >
-            <el-select v-model="insuranceCompanies[scope.$index].insuranceCompanyId" placeholder="Выберите компанию">
-              <el-option v-for="item in inInsuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            <el-select v-model="insuranceCompaniesOfPatient[scope.$index].insuranceCompanyId" placeholder="Выберите компанию">
+              <el-option v-for="item in insuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
         </template>
@@ -28,14 +28,14 @@
             style="margin-bottom: 0"
             label-width="0"
           >
-            <el-input v-model.lazy="insuranceCompanies[scope.$index].number" label="Введите номер страховки"></el-input>
+            <el-input v-model.lazy="insuranceCompaniesOfPatient[scope.$index].number" label="Введите номер страховки"></el-input>
           </el-form-item>
         </template>
       </el-table-column>
 
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup :show-remove-button="true" @remove="removeInsurance(scope.row)" />
+          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -43,40 +43,50 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
+import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IOption from '@/interfaces/patients/IOption';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
-@Options({
+export default defineComponent({
   name: 'InsuranceForm',
-  props: ['inInsuranceCompanyToHuman', 'inInsuranceCompaniesOptions'],
   components: {
     TableButtonGroup,
   },
-})
-export default class InsuranceForm extends Vue {
-  // Types.
-  inInsuranceCompanyToHuman!: IInsuranceCompanyToHuman[];
-  inInsuranceCompaniesOptions!: IOption[];
+  setup() {
+    const store = useStore();
 
-  // Local state.
-  insuranceCompanies = this.inInsuranceCompanyToHuman;
+    const insuranceCompanies: Ref<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
+    const insuranceCompaniesOfPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/insuranceCompanies']);
+    const insuranceCompaniesOptions: Ref<IOption[]> = ref([]);
 
-  addInsurance(): void {
-    this.insuranceCompanies.push({
-      number: '',
-      insuranceCompanyId: '',
-      humanId: undefined,
+    onBeforeMount(async () => {
+      await store.dispatch('insuranceCompanies/getAll');
+      for (const item of insuranceCompanies.value) {
+        insuranceCompaniesOptions.value.push({
+          label: `${item.name}`,
+          value: `${item.id}`,
+        });
+      }
     });
-  }
 
-  removeInsurance(item: any): void {
-    const index = this.insuranceCompanies.indexOf(item);
-    if (index !== -1) {
-      this.insuranceCompanies.splice(index, 1);
-    }
-  }
-}
+    const add = (): void => {
+      store.commit('representatives/addPatient');
+    };
+
+    const remove = (item: IRepresentativeToPatient): void => {
+      store.commit('representatives/removePatient', item);
+    };
+
+    return {
+      insuranceCompaniesOfPatient,
+      insuranceCompaniesOptions,
+      remove,
+      add,
+    };
+  },
+});
 </script>

@@ -17,7 +17,7 @@ export default interface IPatient {
   representativeToPatient: IRepresentativeToPatient[];
   disabilities: IDisability[];
   heightWeight: IHeightWeight[];
-  registerToPatient?: IRegisterToPatient[];
+  registerToPatient: IRegisterToPatient[];
   registerPropertyToPatient: IRegisterPropertyToPatient[];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[];
 

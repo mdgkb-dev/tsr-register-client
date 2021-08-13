@@ -46,7 +46,7 @@
 
       <el-table-column label="ИМТ">
         <template #default="scope">
-          {{ scope.row.getBmiGroup(inBirthDate, isMale) }}
+          {{ scope.row.getBmiGroup(birthDate, isMale) }}
         </template>
       </el-table-column>
 
@@ -60,32 +60,39 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { computed, defineComponent, Ref } from 'vue';
+import { useStore } from 'vuex';
 
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
-@Options({
+export default defineComponent({
   name: 'AnthropometryForm',
-  props: ['inBirthDate', 'inHeightWeight', 'isMale'],
   components: {
     TableButtonGroup,
   },
-})
-export default class AnthropometryForm extends Vue {
-  // Types.
-  inBirthDate!: string;
-  isMale!: boolean;
-  inHeightWeight!: IHeightWeight[];
-  // Local state.
-  heightWeight = this.inHeightWeight;
+  setup() {
+    const store = useStore();
 
-  add(): void {
-    this.heightWeight.push(new HeightWeight());
-  }
-  remove(index: number): void {
-    this.heightWeight.splice(index, 1);
-  }
-}
+    const birthDate: Ref<string> = computed(() => store.getters['patients/birthDate']);
+    const isMale: Ref<boolean> = computed(() => store.getters['patients/isMale']);
+    const heightWeight: Ref<IHeightWeight[]> = computed(() => store.getters['patients/heightWeight']);
+
+    const add = (): void => {
+      store.commit('patients/addHeightWeight');
+    };
+
+    const remove = (index: number): void => {
+      store.commit('patients/removeHeightWeight', index);
+    };
+
+    return {
+      birthDate,
+      isMale,
+      heightWeight,
+      remove,
+      add,
+    };
+  },
+});
 </script>

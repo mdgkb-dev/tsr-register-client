@@ -115,11 +115,12 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
+
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import IPatient from '@/interfaces/patients/IPatient';
-import { computed, defineComponent, Ref, ref } from 'vue';
 import useDateFormat from '@/mixins/useDateFormat';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'PatientPageInfo',

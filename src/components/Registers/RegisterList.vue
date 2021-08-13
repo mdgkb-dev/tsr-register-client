@@ -30,12 +30,13 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
-import { computed, defineComponent, onBeforeMount, ref, Ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'RegisterList',

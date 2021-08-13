@@ -1,12 +1,12 @@
 import { Module } from 'vuex';
 
+import Register from '@/classes/registers/Register';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 import { State } from './state';
-import Register from '@/classes/registers/Register';
 
 export const state: State = {
   registers: [],

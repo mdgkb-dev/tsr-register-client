@@ -223,139 +223,148 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { mapActions, mapState } from 'vuex';
+import { ElLoading } from 'element-plus';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 
-@Options({
-  name: 'PatientsList',
+export default defineComponent({
+  name: 'RepresentativesList',
   components: {
     PageHead,
     TableButtonGroup,
   },
-  computed: {
-    ...mapState('patients', ['patients', 'filteredPatients']),
-  },
-  methods: {
-    ...mapActions({
-      getAll: 'patients/getAll',
-      searchPatients: 'patients/searchPatients',
-      getAllById: 'patients/getAllById',
-    }),
-  },
-})
-export default class PatientsList extends Vue {
-  // Types.
-  $message!: {
-    error: any;
-  };
-  $loading: any;
-  patients!: IPatient[];
-  filteredPatients!: IPatient[];
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
 
-  getAll!: (pageNum: number) => Promise<void>;
-  searchPatients!: (query: string) => Promise<void>;
-  getAllById!: (id: string) => Promise<void>;
+    const mount: Ref<boolean> = ref(false);
+    const title: Ref<string> = ref('Пациенты');
 
-  // Local state.
-  loading = false;
-  mount = false;
-  search = '';
-  searchFullName = '';
-  searchAddress = '';
-  title = 'Пациенты';
-  queryStringsPatient = '';
-  curPage = 0;
+    const searchFullName = ref('');
+    const searchAddress = ref('');
+    const search = ref('');
+    const curPage = ref(0);
+    const loading = ref(false);
 
-  // Lifecycle methods.
-  async mounted(): Promise<void> {
-    const loading = this.$loading({
-      lock: true,
-      text: 'Загрузка',
-    });
-    try {
-      await this.getAll(0);
-    } catch (e) {
-      this.$message.error(e.toString());
-      return;
-    }
-
-    this.mount = true;
-    loading.close();
-  }
-
-  // Methods.
-  async setPage(pageNum: number) {
-    this.curPage = pageNum;
-    this.loading = true;
-    await this.getAll(pageNum - 1);
-    this.loading = false;
-  }
-  async handleSearchInput(value: string): Promise<void> {
-    if (value.length === 0) {
-      await this.getAll(0);
-    }
-    this.curPage = 0;
-  }
-  async findPatients(query: string, resolve: any) {
-    const patients: ISearchPatient[] = [];
-    if (query.length > 2) {
-      await this.searchPatients(query);
-      this.filteredPatients.forEach((p: IPatient) => {
-        if (p.id) patients.push({ value: p.human.getFullName(), id: p.id, patient: p });
+    onBeforeMount(async () => {
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Загрузка',
       });
-    }
 
-    resolve(patients);
-  }
-
-  async handlePatientSelect(item: ISearch) {
-    await this.getAllById(item.id);
-  }
-
-  edit(id: string): void {
-    this.$router.push(`/patients/${id}`);
-  }
-
-  create(): void {
-    this.$router.push('/patients/new');
-  }
-
-  remove(id: string): void {
-    this.$store.dispatch('patients/delete', id);
-  }
-
-  filterTable = (patients: IPatient[]) => {
-    let filteredPatients = patients;
-
-    const search = this.search.toLowerCase();
-    const searchFullName = this.searchFullName.toLowerCase();
-    const searchAddress = this.searchAddress.toLowerCase();
-
-    filteredPatients = filteredPatients.filter((patient: IPatient) => {
-      const address = patient.human.addressRegistration.toLowerCase();
-      return !this.searchAddress || address.includes(searchAddress);
+      await store.dispatch('patients/getAll', 0);
+      mount.value = true;
+      loading.close();
     });
 
-    filteredPatients = filteredPatients.filter((patient: IPatient) => {
-      const name = patient.human.getFullName().toLowerCase();
-      return !this.searchFullName || name.includes(searchFullName);
-    });
+    const setPage = async (pageNum: number): Promise<void> => {
+      curPage.value = pageNum;
+      loading.value = true;
+      await store.dispatch('patients/getAll', pageNum - 1);
+      loading.value = false;
+    };
 
-    filteredPatients = filteredPatients.filter((patient: IPatient) => {
-      const name = patient.human.getFullName().toLowerCase();
-      const date = patient.human.dateBirth;
-      return !this.search || name.includes(search) || date.includes(search);
-    });
+    const handleSearchInput = async (value: string): Promise<void> => {
+      if (value.length === 0) {
+        await store.dispatch('patients/getAll', 0);
+      }
+      curPage.value = 0;
+    };
 
-    return filteredPatients;
-  };
+    const findPatients = async (query: string, resolve: any): Promise<void> => {
+      const patients: ISearchPatient[] = [];
+      if (query.length > 2) {
+        await store.dispatch('patients/searchPatients', query);
+        filteredPatients.value.forEach((p: IPatient) => {
+          if (p.id) patients.push({ value: p.human.getFullName(), id: p.id, patient: p });
+        });
+      }
 
-  fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
-}
+      resolve(patients);
+    };
+
+    const handlePatientSelect = async (item: ISearch): Promise<void> => {
+      await store.dispatch('patients/getAllById', item.id);
+    };
+
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/patients/${id}`);
+    };
+
+    const create = async (): Promise<void> => {
+      await router.push('/patients/new');
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('patients/delete', id);
+    };
+
+    const children = (representative: IRepresetnationType) => {
+      if (representative.patient) {
+        return representative.patient.human.isMale
+          ? representative.representativeType?.childMaleType
+          : representative.representativeType?.childWomanType;
+      }
+      return '';
+    };
+
+    const filterTable = (patients: IPatient[]) => {
+      let filteredPatients = patients;
+
+      const searchLocal = search.value.toLowerCase();
+      const searchFullNameLocal = searchFullName.value.toLowerCase();
+      const searchAddressLocal = searchAddress.value.toLowerCase();
+
+      filteredPatients = filteredPatients.filter((patient: IPatient) => {
+        const address = patient.human.addressRegistration.toLowerCase();
+        return !searchAddress.value || address.includes(searchAddressLocal);
+      });
+
+      filteredPatients = filteredPatients.filter((patient: IPatient) => {
+        const name = patient.human.getFullName().toLowerCase();
+        return !searchFullName.value || name.includes(searchFullNameLocal);
+      });
+
+      filteredPatients = filteredPatients.filter((patient: IPatient) => {
+        const name = patient.human.getFullName().toLowerCase();
+        const date = patient.human.dateBirth;
+        return !search.value || name.includes(searchLocal) || date.includes(searchLocal);
+      });
+
+      return filteredPatients;
+    };
+
+    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
+
+    return {
+      setPage,
+      handleSearchInput,
+      findPatients,
+      handlePatientSelect,
+      children,
+      create,
+      remove,
+      edit,
+      filterTable,
+      fillDateFormat,
+      patients,
+      filteredPatients,
+      mount,
+      title,
+      search,
+      searchFullName,
+      searchAddress,
+    };
+  },
+});
 </script>

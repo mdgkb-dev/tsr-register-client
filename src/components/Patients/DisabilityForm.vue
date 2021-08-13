@@ -142,11 +142,9 @@
 
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { Options, Vue } from 'vue-class-component';
-import { mapActions } from 'vuex';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 
-import Disability from '@/classes/disability/Disability';
-import Edv from '@/classes/disability/Edv';
 import FileInfo from '@/classes/files/FileInfo';
 import PeriodRules from '@/classes/shared/PeriodRules';
 import IDisability from '@/interfaces/disabilities/IDisability';
@@ -154,156 +152,159 @@ import IEdv from '@/interfaces/disabilities/IEdv';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 
-@Options({
+export default defineComponent({
   name: 'DisabilityForm',
-  props: ['disabilities', 'birthDate', 'fileInfos'],
-  emits: ['update:disabilities', 'update:fileInfos', 'addEdv', 'removeEdv'],
-  methods: {
-    ...mapActions({
-      generateDownloadLink: 'files/generateLink',
-    }),
-  },
-})
-export default class DisabilityForm extends Vue {
-  // Types.
-  declare $refs: {
-    fileAnchor: HTMLAnchorElement;
-  };
+  setup() {
+    const store = useStore();
 
-  fileInfos!: IFileInfo[];
-  birthDate!: string;
-  disabilities!: IDisability[];
+    const birthDate: Ref<string> = computed(() => store.getters['patients/birthDate']);
+    const disabilities: Ref<IDisability[]> = computed(() => store.getters['patients/disabilities']);
+    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters['patients/fileInfos']);
+    const fileAnchor = ref();
 
-  generateDownloadLink!: (fileId: string) => Promise<void>;
+    onBeforeMount(async () => {
+      await store.dispatch('disabilities/getAll', 0);
+    });
 
-  // Methods.
-  addDisability(): void {
-    const disability = new Disability();
-    disability.id = uuidv4();
-    this.$emit('update:disabilities', [...this.disabilities, disability]);
-  }
+    const add = (): void => {
+      store.commit('patients/addDisability');
+    };
 
-  addEdv = (disability: IDisability): void => {
-    const edv = new Edv();
-    edv.id = uuidv4();
-    edv.disabilityId = disability.id;
-    this.$emit('addEdv', edv);
-  };
+    const addEdv = (disability: IDisability): void => {
+      store.commit('patients/addEdv', disability.id);
+    };
 
-  getRuleStart = (scope: any) => {
-    const rule = new PeriodRules();
-    rule.dateStart[0].options = scope.row.period;
-    return rule.dateStart;
-  };
+    const removeEdv = (edv: IEdv): void => {
+      store.commit('patients/removeEdv', edv);
+    };
 
-  getRuleEnd = (scope: any) => {
-    const rule = new PeriodRules();
-    rule.dateEnd[0].options = scope.row.period;
-    return rule.dateEnd;
-  };
+    const getRuleStart = (scope: any) => {
+      const rule = new PeriodRules();
+      rule.dateStart[0].options = scope.row.period;
+      return rule.dateStart;
+    };
 
-  getProp = (scope: any): string | undefined => {
-    if (!this.isEdv(scope.row) && this.disabilities.indexOf(scope.row) >= 0) {
-      return `disabilities.${this.disabilities.indexOf(scope.row)}.period.startDate`;
-    }
+    const getRuleEnd = (scope: any) => {
+      const rule = new PeriodRules();
+      rule.dateEnd[0].options = scope.row.period;
+      return rule.dateEnd;
+    };
 
-    const disabilityIndex = this.disabilities.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
-
-    if (disabilityIndex < 0) {
-      return undefined;
-    }
-
-    let edvIndex = -1;
-
-    if (this.disabilities[disabilityIndex].edvs) {
-      edvIndex = this.disabilities[disabilityIndex].edvs.indexOf(scope.row);
-    }
-
-    if (edvIndex >= 0) {
-      return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.startDate`;
-    }
-
-    return undefined;
-  };
-
-  removeDisability(item: IDisability): void {
-    this.$emit('update:disabilities', [...this.disabilities.filter((disability: IDisability): boolean => disability.id !== item.id)]);
-  }
-
-  disabledDate(time: any) {
-    return time.getTime() < Date.parse(this.birthDate);
-  }
-
-  removeEdv = (edv: IEdv): void => {
-    this.$emit('removeEdv', edv);
-  };
-
-  validateDisabilityDates = (rule: any, value: any, callback: any): void => {
-    this.disabilities.forEach((disability: IDisability) => {
-      if (
-        disability.period &&
-        disability.period.dateStart &&
-        disability.period.dateEnd &&
-        disability.period.dateStart > disability.period?.dateEnd
-      ) {
-        callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
+    const getProp = (scope: any): string | undefined => {
+      if (!isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
+        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.startDate`;
       }
-    });
-    callback();
-  };
 
-  // eslint-disable-next-line class-methods-use-this
-  isEdv(row: { ['parameter1']: boolean | undefined }): boolean {
-    return typeof row.parameter1 === 'boolean';
-  }
+      const disabilityIndex = disabilities.value.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
 
-  addReplaceFile(event: InputEvent, category: string): void {
-    const target = event.target as HTMLInputElement;
+      if (disabilityIndex < 0) {
+        return undefined;
+      }
 
-    if (!target || !target.files) {
-      return;
-    }
+      let edvIndex = -1;
 
-    const file = Array.from(target.files)[0];
-    const newInfo: IFileInfo = new FileInfo({
-      id: uuidv4(),
-      category,
-      originalName: file.name,
-      file,
-      isDraft: true,
-    });
+      if (disabilities.value[disabilityIndex].edvs) {
+        edvIndex = disabilities.value[disabilityIndex].edvs.indexOf(scope.row);
+      }
 
-    this.$emit('update:fileInfos', [...this.fileInfos.filter((info: IFileInfo): boolean => info.category !== category), newInfo]);
-  }
+      if (edvIndex >= 0) {
+        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.startDate`;
+      }
 
-  removeFile(id: string): void {
-    this.$emit('update:fileInfos', [...this.fileInfos.filter((info: IFileInfo): boolean => info.category !== id)]);
-  }
+      return undefined;
+    };
 
-  async downloadFile(event: MouseEvent): Promise<void> {
-    if (!event || !event.target) {
-      return;
-    }
+    const removeDisability = (item: IDisability): void => {
+      store.commit('patients/removeDisability', item);
+    };
 
-    const anchorElement = (event.target as HTMLSpanElement).parentElement as HTMLAnchorElement;
-    const { fileId } = anchorElement.dataset;
+    const disabledDate = (time: Date) => {
+      return time.getTime() < Date.parse(birthDate.value);
+    };
 
-    if (!fileId) {
-      return;
-    }
+    const validateDisabilityDates = (rule: any, value: any, callback: any): void => {
+      disabilities.value.forEach((disability: IDisability) => {
+        if (
+          disability.period &&
+          disability.period.dateStart &&
+          disability.period.dateEnd &&
+          disability.period.dateStart > disability.period?.dateEnd
+        ) {
+          callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
+        }
+      });
+      callback();
+    };
 
-    try {
-      await this.generateDownloadLink(fileId);
-    } catch (error) {
-      return;
-    }
+    // eslint-disable-next-line class-methods-use-this
+    const isEdv = (row: { ['parameter1']: boolean | undefined }): boolean => {
+      return typeof row.parameter1 === 'boolean';
+    };
 
-    const anchor: IFileAnchor = this.$store.getters['files/fileAnchor'];
-    this.$refs.fileAnchor.href = anchor.href;
-    this.$refs.fileAnchor.download = String(anchor.download);
-    this.$refs.fileAnchor.click();
-  }
-}
+    const addReplaceFile = (event: InputEvent, category: string): void => {
+      const target = event.target as HTMLInputElement;
+      if (!target || !target.files) {
+        return;
+      }
+      const file = Array.from(target.files)[0];
+      const newInfo: IFileInfo = new FileInfo({
+        id: uuidv4(),
+        category,
+        originalName: file.name,
+        file,
+        isDraft: true,
+      });
+      fileInfos.value = [...fileInfos.value.filter((info: IFileInfo): boolean => info.category !== category), newInfo];
+    };
+
+    const removeFile = (id: string): void => {
+      fileInfos.value = [...fileInfos.value.filter((info: IFileInfo): boolean => info.category !== id)];
+    };
+
+    const downloadFile = async (event: MouseEvent): Promise<void> => {
+      if (!event || !event.target) {
+        return;
+      }
+
+      const anchorElement = (event.target as HTMLSpanElement).parentElement as HTMLAnchorElement;
+      const { fileId } = anchorElement.dataset;
+
+      if (!fileId) {
+        return;
+      }
+
+      try {
+        await store.dispatch('files/generateLink', fileId);
+      } catch (error) {
+        return;
+      }
+
+      const anchor: IFileAnchor = store.getters['files/fileAnchor'];
+      fileAnchor.value.href = anchor.href;
+      fileAnchor.value.download = String(anchor.download);
+      fileAnchor.value.click();
+    };
+
+    return {
+      fileInfos,
+      fileAnchor,
+      downloadFile,
+      removeFile,
+      addReplaceFile,
+      getRuleStart,
+      getRuleEnd,
+      isEdv,
+      getProp,
+      removeDisability,
+      disabledDate,
+      validateDisabilityDates,
+      addEdv,
+      removeEdv,
+      birthDate,
+      add,
+    };
+  },
+});
 </script>
 <style scoped>
 .card-button-group {

@@ -58,6 +58,7 @@
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -65,7 +66,6 @@ import PageHead from '@/components/PageHead.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
-import { computed, defineComponent, onBeforeMount, ref, Ref, watch } from 'vue';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
