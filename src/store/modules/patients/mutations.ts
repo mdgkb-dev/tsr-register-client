@@ -15,6 +15,8 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 
 import { State } from './state';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -85,6 +87,21 @@ const mutations: MutationTree<State> = {
   removeDisability(state, item: IDisability) {
     const index = state.patient.disabilities.indexOf(item);
     if (index !== -1) state.patient.disabilities.splice(index, 1);
+  },
+  addDocument(state, item: IDocument) {
+    console.log(item);
+    state.patient.human.documents.push(item);
+  },
+  removeDocument(state, id: string) {
+    const i = state.patient.human.documents.findIndex((item: IDocument) => item.id === id);
+    if (i > -1) state.patient.human.documents.splice(i, 1);
+  },
+  addFiles(state, item: IFileInfo) {
+    state.patient.human.fileInfos.push(item);
+  },
+  removeFile(state, id: string) {
+    const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
+    if (i > -1) state.patient.human.fileInfos.splice(i, 1);
   },
 };
 

@@ -120,27 +120,24 @@ export default defineComponent({
     TableButtonGroup,
   },
   props: {
-    documents: {
-      type: Object as PropType<IDocument[]>,
-      required: true,
-    },
-    fileInfos: {
-      type: Object as PropType<IFileInfo[]>,
-      required: true,
+    storeModule: {
+      type: String as PropType<string>,
+      default: '',
     },
   },
-  emits: ['update:documents', 'update:fileInfos'],
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
 
     const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
     const selectedDocumentTypeId: Ref<string> = ref('');
     const selectedType: Ref<IDocumentType | undefined> = ref(undefined);
 
-    const documentTypes: ComputedRef<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
+    const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule}/documents`]);
+    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule}/fileInfos`]);
+    const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
     const anchorInfo: ComputedRef<IFileAnchor> = computed(() => store.getters['files/fileAnchor']);
 
-    const { documents, fileInfos } = toRefs(props);
+    const { storeModule } = toRefs(props);
 
     onBeforeMount(async (): Promise<void> => {
       await store.dispatch('documentTypes/getAll');
@@ -149,7 +146,7 @@ export default defineComponent({
     const add = (): void => {
       selectedType.value = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
 
-      if (!selectedType.value || !selectedType.value.id || !selectedType.value.documentTypeFields) {
+      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) {
         return;
       }
 
@@ -164,11 +161,11 @@ export default defineComponent({
         isDraft: true,
       });
 
-      emit('update:documents', [...documents.value, document]);
+      store.commit(`${storeModule}/addDocument`, document);
     };
 
     const remove = (documentId: string): void => {
-      emit('update:documents', [...documents.value.filter((document) => document.id !== documentId)]);
+      store.commit(`${storeModule}/removeDocument`, documentId);
     };
 
     const addFiles = (event: InputEvent, category: string): void => {
@@ -189,14 +186,11 @@ export default defineComponent({
           })
       );
 
-      emit('update:fileInfos', [...fileInfos.value, ...newInfos]);
+      store.commit(`${storeModule}/addFiles`, newInfos);
     };
 
     const removeFile = (fileId: string): void => {
-      emit(
-        'update:fileInfos',
-        fileInfos.value.filter((info) => info.id !== fileId)
-      );
+      store.commit(`${storeModule}/removeFile`, fileId);
     };
 
     const downloadFile = async (fileId: string): Promise<void> => {
@@ -216,8 +210,10 @@ export default defineComponent({
     };
 
     return {
+      documents,
       documentTypes,
       fileAnchor,
+      fileInfos,
       selectedDocumentTypeId,
       add,
       addFiles,

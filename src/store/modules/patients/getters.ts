@@ -9,6 +9,8 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import { RootState } from '@/store/types';
 
 import { State } from './state';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
@@ -43,6 +45,12 @@ const getters: GetterTree<State, RootState> = {
   },
   heightWeight(state): IHeightWeight[] {
     return state.patient.heightWeight;
+  },
+  documents(state): IDocument[] {
+    return state.patient.human.documents;
+  },
+  fileInfos(state): IFileInfo[] {
+    return state.patient.human.fileInfos;
   },
 };
 
