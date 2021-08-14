@@ -21,6 +21,7 @@ const mutations: MutationTree<State> = {
   },
   create(state, payload: IRegisterProperty) {
     state.registerProperties.push(new RegisterProperty(payload));
+    state.registerProperty = new RegisterProperty();
   },
   update(state, payload: IRegisterProperty) {
     const item = state.registerProperties.find((i: IRegisterProperty) => i.id === payload.id);

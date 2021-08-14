@@ -78,8 +78,7 @@ export default defineComponent({
       } else {
         isEditMode.value = true;
         title.value = 'Редактировать регистр';
-        await store.dispatch('registers/get', route.params.representativeTypeId);
-        await store.dispatch('registerGroups/getAll');
+        await store.dispatch('registers/get', route.params.registerId);
         mount.value = true;
       }
 
@@ -101,6 +100,7 @@ export default defineComponent({
     };
 
     return {
+      form,
       register,
       isEditMode,
       links,

@@ -89,7 +89,6 @@ const mutations: MutationTree<State> = {
     if (index !== -1) state.patient.disabilities.splice(index, 1);
   },
   addDocument(state, item: IDocument) {
-    console.log(item);
     state.patient.human.documents.push(item);
   },
   removeDocument(state, id: string) {

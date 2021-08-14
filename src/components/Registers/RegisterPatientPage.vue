@@ -137,8 +137,8 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
-      await store.dispatch('registers/get', route.params.representativeTypeId);
-      await store.dispatch('patient/get', route.params.patientId);
+      await store.dispatch('registers/get', route.params.registerId);
+      await store.dispatch('patients/get', route.params.patientId);
 
       pushToLinks(['/register-link-list/', `/registers/patients/${route.params.registerId}`], ['Регистры пациентов', register.value.name]);
 
@@ -146,6 +146,7 @@ export default defineComponent({
       window.addEventListener('beforeunload', beforeWindowUnload);
       watch(register, formUpdated, { deep: true });
       watch(patient, formUpdated, { deep: true });
+      console.log(patient);
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
@@ -160,6 +161,8 @@ export default defineComponent({
     };
 
     return {
+      form,
+      patient,
       register,
       isEditMode,
       links,

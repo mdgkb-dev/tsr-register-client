@@ -132,12 +132,12 @@ export default defineComponent({
     const selectedDocumentTypeId: Ref<string> = ref('');
     const selectedType: Ref<IDocumentType | undefined> = ref(undefined);
 
-    const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule}/documents`]);
-    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule}/fileInfos`]);
+    const { storeModule } = toRefs(props);
+
+    const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
+    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
     const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
     const anchorInfo: ComputedRef<IFileAnchor> = computed(() => store.getters['files/fileAnchor']);
-
-    const { storeModule } = toRefs(props);
 
     onBeforeMount(async (): Promise<void> => {
       await store.dispatch('documentTypes/getAll');
@@ -146,9 +146,7 @@ export default defineComponent({
     const add = (): void => {
       selectedType.value = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
 
-      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) {
-        return;
-      }
+      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) return;
 
       const documentFieldValues: DocumentFieldValue[] = selectedType.value.documentTypeFields.map(
         (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
@@ -160,38 +158,20 @@ export default defineComponent({
         documentFieldValues,
         isDraft: true,
       });
-
-      store.commit(`${storeModule}/addDocument`, document);
+      console.log(`${storeModule.value}/addDocument`);
+      store.commit(`${storeModule.value}/addDocument`, document);
     };
 
-    const remove = (documentId: string): void => {
-      store.commit(`${storeModule}/removeDocument`, documentId);
-    };
+    const remove = (documentId: string): void => store.commit(`${storeModule.value}/removeDocument`, documentId);
 
     const addFiles = (event: InputEvent, category: string): void => {
       const target = event.target as HTMLInputElement;
-
-      if (!target || !target.files) {
-        return;
-      }
-
-      const newInfos: IFileInfo[] = Array.from(target.files).map(
-        (file: File) =>
-          new FileInfo({
-            id: uuidv4(),
-            category,
-            originalName: file.name,
-            file,
-            isDraft: true,
-          })
-      );
-
-      store.commit(`${storeModule}/addFiles`, newInfos);
+      if (!target || !target.files) return;
+      const newInfos: IFileInfo[] = Array.from(target.files).map((file: File) => FileInfo.CreateDraft(file, category));
+      store.commit(`${storeModule.value}/addFiles`, newInfos);
     };
 
-    const removeFile = (fileId: string): void => {
-      store.commit(`${storeModule}/removeFile`, fileId);
-    };
+    const removeFile = (fileId: string): void => store.commit(`${storeModule.value}/removeFile`, fileId);
 
     const downloadFile = async (fileId: string): Promise<void> => {
       try {
@@ -200,10 +180,7 @@ export default defineComponent({
         return;
       }
 
-      if (!fileAnchor.value) {
-        return;
-      }
-
+      if (!fileAnchor.value) return;
       fileAnchor.value.href = anchorInfo.value.href;
       fileAnchor.value.download = String(anchorInfo.value.download);
       fileAnchor.value.click();

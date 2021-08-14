@@ -157,7 +157,7 @@ export default defineComponent({
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
       if (!validate(form.value)) return;
-      await submitHandling('registerProperties', registerProperty.value, next);
+      await submitHandling('registerProperties', registerProperty.value, next, 'register-properties');
     };
 
     return {

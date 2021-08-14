@@ -115,7 +115,7 @@ export default defineComponent({
     const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.patientId);
     const mount: Ref<boolean> = ref(false);
     const rules = {
       human: HumanRules,
@@ -124,15 +124,13 @@ export default defineComponent({
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm(isEditMode.value);
     const { validate } = useValidate();
+    const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async () => {
       if (!route.params.patientId) {
-        isEditMode.value = false;
         title.value = 'Создать пациента';
       } else {
-        isEditMode.value = true;
         await store.dispatch('patients/get', route.params.patientId);
         title.value = patient.value.human.getFullName();
       }

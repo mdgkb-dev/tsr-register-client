@@ -11,6 +11,7 @@ import { RootState } from '@/store/types';
 import { State } from './state';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IDisability from '@/interfaces/disabilities/IDisability';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
@@ -51,6 +52,9 @@ const getters: GetterTree<State, RootState> = {
   },
   fileInfos(state): IFileInfo[] {
     return state.patient.human.fileInfos;
+  },
+  disabilities(state): IDisability[] {
+    return state.patient.disabilities;
   },
 };
 

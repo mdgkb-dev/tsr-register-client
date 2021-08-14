@@ -29,7 +29,7 @@
               <el-timeline-item
                 v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis"
                 :key="anamnesis.id"
-                :timestamp="$dateFormatRu(anamnesis.date)"
+                :timestamp="formatDate(anamnesis.date)"
                 placement="top"
               >
                 <AnamnesisForm
@@ -136,6 +136,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
+import useDateFormat from '@/mixins/useDateFormat';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
@@ -162,6 +163,8 @@ export default defineComponent({
     let expandRowKeys: (string | undefined)[] = reactive([]);
     const queryStringsDiagnosis: Record<string, string> = reactive({});
     const queryStringsGroups: Record<string, string> = reactive({});
+
+    const { formatDate } = useDateFormat();
 
     const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
     const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
@@ -329,6 +332,7 @@ export default defineComponent({
     };
 
     return {
+      formatDate,
       expandRowKeys,
       filteredDiagnosis,
       mkbDiagnosis,

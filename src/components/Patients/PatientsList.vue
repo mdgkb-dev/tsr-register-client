@@ -54,7 +54,7 @@
         <el-table-column>
           <el-table-column prop="human.dateBirth" label="ДАТА РОЖДЕНИЯ" width="120" align="center" sortable>
             <template #default="scope">
-              {{ fillDateFormat(scope.row.human.dateBirth) }}
+              {{ formatDate(scope.row.human.dateBirth) }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -152,7 +152,7 @@
           <el-table-column label="ИНВАЛИДНОСТЬ" width="140" align="center">
             <template #default="scope">
               <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
-                <span>До {{ $dateFormatRu(scope.row.getActuallyDisability().period.dateEnd) }}</span>
+                <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
                 <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
                   <el-button
                     size="small"
@@ -235,6 +235,7 @@ import IPatient from '@/interfaces/patients/IPatient';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
+import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'RepresentativesList',
@@ -247,6 +248,8 @@ export default defineComponent({
     const router = useRouter();
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
+
+    const { formatDate } = useDateFormat();
 
     const mount: Ref<boolean> = ref(false);
     const title: Ref<string> = ref('Пациенты');
@@ -345,14 +348,12 @@ export default defineComponent({
       return filteredPatients;
     };
 
-    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
-
     return {
+      formatDate,
       children,
       create,
       curPage,
       edit,
-      fillDateFormat,
       filteredPatients,
       filterTable,
       findPatients,

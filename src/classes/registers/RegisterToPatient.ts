@@ -18,8 +18,8 @@ export default class RegisterToPatient implements IRegisterToPatient {
 
     this.id = item.id;
     this.registerId = item.registerId;
-    this.register = new Register(item.register);
+    if (item.register) this.register = new Register(item.register);
     this.patientId = item.patientId;
-    this.patient = new Patient(item.patient);
+    if (item.patient) this.patient = new Patient(item.patient);
   }
 }

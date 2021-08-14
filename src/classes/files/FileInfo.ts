@@ -20,4 +20,14 @@ export default class FileInfo implements IFileInfo {
 
     this.isDraft = fileInfo.isDraft ?? false;
   }
+
+  static CreateDraft(file: File, category: string): IFileInfo {
+    return new FileInfo({
+      id: uuidv4(),
+      category,
+      originalName: file.name,
+      file,
+      isDraft: true,
+    });
+  }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-button style="margin-bottom: 20px" @click="addDisability()">Добавить инвалидность</el-button>
+    <el-button style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
     <el-table
       :data="disabilities"
       style="width: 950px; margin-bottom: 20px"
@@ -166,9 +166,7 @@ export default defineComponent({
       await store.dispatch('disabilities/getAll');
     });
 
-    const add = (): void => {
-      store.commit('patients/addDisability');
-    };
+    const addDisability = (): void => store.commit('patients/addDisability');
 
     const addEdv = (disability: IDisability): void => {
       store.commit('patients/addEdv', disability.id);
@@ -286,6 +284,7 @@ export default defineComponent({
     };
 
     return {
+      disabilities,
       fileInfos,
       fileAnchor,
       downloadFile,
@@ -301,7 +300,7 @@ export default defineComponent({
       addEdv,
       removeEdv,
       birthDate,
-      add,
+      addDisability,
     };
   },
 });

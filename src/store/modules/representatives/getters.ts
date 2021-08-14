@@ -5,6 +5,8 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import { RootState } from '@/store/types';
 
 import { State } from './state';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const getters: GetterTree<State, RootState> = {
   representatives(state): IRepresentative[] {
@@ -18,6 +20,12 @@ const getters: GetterTree<State, RootState> = {
   },
   representativeToPatient(state): IRepresentativeToPatient[] {
     return state.representative.representativeToPatient;
+  },
+  documents(state): IDocument[] {
+    return state.representative.human.documents;
+  },
+  fileInfos(state): IFileInfo[] {
+    return state.representative.human.fileInfos;
   },
 };
 

@@ -49,7 +49,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const registerGroups: Ref<IRegisterGroup[]> = computed(() => store.getters['registerGroups/registerGroup']);
+    const registerGroups: Ref<IRegisterGroup[]> = computed(() => store.getters['registerGroups/registerGroups']);
     const registerGroupToRegister: Ref<IRegisterGroupToRegister[]> = computed(() => store.getters['registers/registerGroupToRegister']);
 
     onBeforeMount(async () => {
