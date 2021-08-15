@@ -1,6 +1,17 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
     <PageHead :title="title" :show-add-button="true" @create="create" />
+
+    <el-autocomplete
+      v-model="queryStringsRepresentative"
+      style="width: 100%; margin-bottom: 20px"
+      popper-class="wide-dropdown"
+      :fetch-suggestions="findRepresentatives"
+      placeholder="Найти пациента"
+      @select="handleRepresentativeSelect"
+      @input="handleSearchInput"
+    />
+
     <div class="table-background">
       <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
@@ -34,7 +45,7 @@
         <el-table-column>
           <el-table-column prop="human.dateBirth" label="ДАТА РОЖДЕНИЯ" width="120" align="center" sortable>
             <template #default="scope">
-              {{ fillDateFormat(scope.row.human.dateBirth) }}
+              {{ formatDate(scope.row.human.dateBirth) }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -97,20 +108,34 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        style="margin-top: 20px; margin-bottom: 20px"
+        :current-page="curPage"
+        background
+        layout="prev, pager, next"
+        :page-count="Math.round(count / 25)"
+        @current-change="setPage"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IFilter from '@/interfaces/filters/IFilter';
+import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import ISearch from '@/interfaces/shared/ISearch';
+import ISearchRepresentative from '@/interfaces/shared/ISearchRepresentative';
+import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
@@ -119,10 +144,16 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const route = useRoute();
     const router = useRouter();
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
+    const filteredRepresentatives: Ref<IPatient[]> = computed(() => store.getters['representatives/filteredRepresentatives']);
 
+    const queryStringsRepresentative: Ref<string> = ref('');
+
+    const { formatDate } = useDateFormat();
+
+    const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
+    const curPage = ref(0);
     const mount: Ref<boolean> = ref(false);
     const title: Ref<string> = ref('Представители');
 
@@ -133,11 +164,27 @@ export default defineComponent({
     const search = ref('');
 
     onBeforeMount(async () => {
-      await store.dispatch('representatives/getAll', route.params.representativeId);
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Загрузка',
+      });
+      await store.dispatch('representatives/getAll', 0);
+      await store.dispatch('meta/getCount', 'representative');
       filterName.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
       filterDate.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));
       mount.value = true;
+      loading.close();
     });
+
+    const setPage = async (pageNum: number): Promise<void> => {
+      curPage.value = pageNum;
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Загрузка',
+      });
+      await store.dispatch('representatives/getAll', pageNum);
+      loading.close();
+    };
 
     const edit = async (id: string): Promise<void> => {
       await router.push(`/representatives/${id}`);
@@ -186,15 +233,43 @@ export default defineComponent({
       return filteredRepresentatives;
     };
 
-    const fillDateFormat = (date: Date) => (date ? Intl.DateTimeFormat('ru-RU').format(new Date(date)) : '');
+    const handleSearchInput = async (value: string): Promise<void> => {
+      if (value.length === 0) {
+        await store.dispatch('representatives/getAll', 0);
+      }
+      curPage.value = 0;
+    };
+
+    const findRepresentatives = async (query: string, resolve: any): Promise<void> => {
+      const items: ISearchRepresentative[] = [];
+      if (query.length > 2) {
+        await store.dispatch('representatives/search', query);
+        filteredRepresentatives.value.forEach((i: IRepresentative) => {
+          if (i.id) items.push({ value: i.human.getFullName(), id: i.id, representative: i });
+        });
+      }
+      console.log(filteredRepresentatives);
+      resolve(items);
+    };
+
+    const handleRepresentativeSelect = async (item: ISearch): Promise<void> => {
+      await store.dispatch('representatives/getAllById', item.id);
+    };
 
     return {
+      findRepresentatives,
+      handleRepresentativeSelect,
+      handleSearchInput,
+      formatDate,
+      queryStringsRepresentative,
+      count,
+      curPage,
+      setPage,
       children,
       create,
       remove,
       edit,
       filterTable,
-      fillDateFormat,
       representatives,
       mount,
       title,

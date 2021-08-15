@@ -4,19 +4,19 @@ import { MutationTree } from 'vuex';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
+import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import Patient from '@/classes/patients/Patient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {

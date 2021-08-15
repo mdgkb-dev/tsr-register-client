@@ -1,6 +1,5 @@
 import { Module } from 'vuex';
 
-import Representative from '@/classes/representatives/Representative';
 import { RootState } from '@/store/types';
 
 import actions from './actions';
@@ -9,15 +8,12 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  representatives: [],
-  representative: new Representative(),
   count: 0,
-  filteredRepresentatives: [],
 };
 
 const namespaced = true;
 
-export const representatives: Module<State, RootState> = {
+export const meta: Module<State, RootState> = {
   namespaced,
   state,
   getters,

@@ -2,7 +2,6 @@
   <div v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="'Список пациентов'" :show-add-button="true" @create="create" />
     <div class="table-background">
-      <!-- TODO: Откуда должна браться queryStringsPatient? -->
       <el-autocomplete
         v-model="queryStringsPatient"
         style="width: 100%; margin-bottom: 20px"
@@ -214,7 +213,7 @@
           :current-page="curPage"
           background
           layout="prev, pager, next"
-          :total="240"
+          :page-count="Math.round(count / 25)"
           @current-change="setPage"
         >
         </el-pagination>
@@ -232,6 +231,7 @@ import { useStore } from 'vuex';
 import PageHead from '@/components/PageHead.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
@@ -248,11 +248,12 @@ export default defineComponent({
     const router = useRouter();
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
-
+    const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
     const { formatDate } = useDateFormat();
 
     const mount: Ref<boolean> = ref(false);
     const title: Ref<string> = ref('Пациенты');
+    const queryStringsPatient: Ref<string> = ref('');
 
     const searchFullName = ref('');
     const searchAddress = ref('');
@@ -267,6 +268,7 @@ export default defineComponent({
       });
 
       await store.dispatch('patients/getAll', 0);
+      await store.dispatch('meta/getCount', 'patient');
       mount.value = true;
       loading.close();
     });
@@ -349,6 +351,8 @@ export default defineComponent({
     };
 
     return {
+      queryStringsPatient,
+      count,
       formatDate,
       children,
       create,

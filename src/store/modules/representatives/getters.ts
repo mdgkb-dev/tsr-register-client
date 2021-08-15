@@ -1,12 +1,12 @@
 import { GetterTree } from 'vuex';
 
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import { RootState } from '@/store/types';
 
 import { State } from './state';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const getters: GetterTree<State, RootState> = {
   representatives(state): IRepresentative[] {
@@ -26,6 +26,12 @@ const getters: GetterTree<State, RootState> = {
   },
   fileInfos(state): IFileInfo[] {
     return state.representative.human.fileInfos;
+  },
+  count(state): number {
+    return state.count;
+  },
+  filteredRepresentatives(state): IRepresentative[] {
+    return state.filteredRepresentatives;
   },
 };
 

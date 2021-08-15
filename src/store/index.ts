@@ -6,6 +6,7 @@ import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
 import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
+import { meta } from '@/store/modules/meta';
 import { mkb } from '@/store/modules/mkb';
 import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
@@ -48,6 +49,7 @@ const store: StoreOptions<RootState> = {
     representatives,
     sma,
     users,
+    meta,
   },
 };
 

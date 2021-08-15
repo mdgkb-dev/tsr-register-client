@@ -2,16 +2,20 @@ import { MutationTree } from 'vuex';
 
 import Representative from '@/classes/representatives/Representative';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
+import ICount from '@/interfaces/meta/ICount';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {
     state.representatives = representatives.map((r: IRepresentative) => new Representative(r));
+  },
+  setCount(state, count: ICount[]) {
+    state.count = Number(count[0].count);
   },
   set(state, representative: IRepresentative) {
     state.representative = new Representative(representative);
@@ -49,6 +53,9 @@ const mutations: MutationTree<State> = {
   removeFile(state, id: string) {
     const i = state.representative.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
     if (i > -1) state.representative.human.fileInfos.splice(i, 1);
+  },
+  setFilteredItems(state, items: IRepresentative[]) {
+    state.filteredRepresentatives = items.map((p: IRepresentative) => new Representative(p));
   },
 };
 
