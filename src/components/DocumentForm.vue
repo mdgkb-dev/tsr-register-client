@@ -11,7 +11,7 @@
       </el-col>
     </el-row>
 
-    <section v-for="document in documents" :key="document.id">
+    <section v-for="(document, documentIndex) in documents" :key="document.id">
       <el-card class="box-card" style="margin-top: 20px; position: relative">
         <h3>{{ document.documentType.name }}</h3>
         <div class="card-button-group">
@@ -38,7 +38,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'string'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueString`"
             size="mini"
           >
             <el-input v-model="document.documentFieldValues[valueIndex].valueString" size="mini" />
@@ -47,7 +47,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'number'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueNumber`"
             size="mini"
           >
             <el-input-number v-model="document.documentFieldValues[valueIndex].valueNumber" size="mini" />
@@ -56,7 +56,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'date'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueDate`"
             size="mini"
           >
             <el-date-picker v-model="document.documentFieldValues[valueIndex].valueDate" size="mini" />

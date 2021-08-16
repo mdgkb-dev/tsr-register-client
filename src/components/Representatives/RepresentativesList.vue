@@ -7,7 +7,7 @@
       style="width: 100%; margin-bottom: 20px"
       popper-class="wide-dropdown"
       :fetch-suggestions="findRepresentatives"
-      placeholder="Найти пациента"
+      placeholder="Найти представителя"
       @select="handleRepresentativeSelect"
       @input="handleSearchInput"
     />
