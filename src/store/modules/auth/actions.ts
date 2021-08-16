@@ -84,7 +84,7 @@ const actions: ActionTree<State, RootState> = {
       commit('deAuthorize');
       return;
     }
-    console.log();
+
     if (response.status === 200 || response.status === 304) {
       commit('authorize', await response.json());
       return;
