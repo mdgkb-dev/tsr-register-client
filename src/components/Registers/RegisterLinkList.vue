@@ -22,10 +22,13 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import PageHead from '@/components/PageHead.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 
 export default defineComponent({
   name: 'RegisterLinkList',
+  components: { PageHead },
+
   setup() {
     const router = useRouter();
     const store = useStore();

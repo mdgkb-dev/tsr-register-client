@@ -56,23 +56,23 @@
         <el-table-column>
           <el-table-column label="Инвалидность" min-width="180" align="center" sortable>
             <template #default="scope">
-              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disabityli-circles">
+              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
                 <el-button
-                  size="small"
+                  size="mini"
                   disabled
                   :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
                   circle
                   >A</el-button
                 >
                 <el-button
-                  size="small"
+                  size="mini"
                   disabled
                   :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
                   circle
                   >B</el-button
                 >
                 <el-button
-                  size="small"
+                  size="mini"
                   disabled
                   :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
                   circle
@@ -170,19 +170,4 @@ export default defineComponent({
 });
 </script>
 
-<style>
-.disabityli-circles .el-button.is-disabled {
-  cursor: initial;
-}
-.disabityli-circles .el-button--primary {
-  color: black;
-  background-color: initial;
-  border-color: initial;
-}
-
-.disabityli-circles .el-button--primary:hover {
-  color: initial;
-  background-color: initial;
-  border-color: initial;
-}
-</style>
+<style></style>

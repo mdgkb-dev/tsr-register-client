@@ -4,6 +4,7 @@ import { anthropometry } from '@/store/modules/anthropometry';
 import { auth } from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
+import { drawer } from '@/store/modules/drawer';
 import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { meta } from '@/store/modules/meta';
@@ -37,6 +38,7 @@ const store: StoreOptions<RootState> = {
     anthropometry,
     auth,
     disabilities,
+    drawer,
     documentTypes,
     files,
     insuranceCompanies,

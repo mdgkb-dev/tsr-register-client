@@ -27,19 +27,19 @@ export default defineComponent({
   props: {
     showDownloadButton: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
     showEditButton: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
     showRemoveButton: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
     horizontal: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
   },
   emits: ['download', 'edit', 'remove'],

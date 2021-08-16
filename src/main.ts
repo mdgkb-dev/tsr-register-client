@@ -23,6 +23,7 @@ import {
   ElDescriptionsItem,
   ElDialog,
   ElDivider,
+  ElDrawer,
   ElFooter,
   ElForm,
   ElFormItem,
@@ -85,6 +86,7 @@ const components = [
   ElDatePicker,
   ElDialog,
   ElDivider,
+  ElDrawer,
   ElFooter,
   ElForm,
   ElFormItem,
@@ -117,7 +119,6 @@ const components = [
   ElRadio,
   ElDescriptions,
   ElDescriptionsItem,
-  ElPagination,
 ];
 const plugins = [ElInfiniteScroll, ElLoading, ElMessage, ElMessageBox, ElNotification];
 const app = createApp(App);

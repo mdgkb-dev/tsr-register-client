@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-aside width="250px" style="background-color: white; margin-left: 10vh; margin-right: 5vh">
+    <el-aside width="250px" style="background-color: white">
       <div
         style="
           background-color: white;
@@ -28,7 +28,7 @@
         <el-scrollbar>
           <el-menu style="text-align: start">
             <el-menu-item-group :router="true">
-              <el-menu :router="true" :default-openeds="[0]">
+              <el-menu :router="true" :default-openeds="[0]" @select="closeDrawer">
                 <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
                   <el-submenu v-if="menu.links" :index="i.toString()">
                     <template #title>
@@ -161,6 +161,7 @@ export default defineComponent({
     ]);
 
     const userLogin: ComputedRef = computed(() => store.getters['auth/getUserLogin']);
+    const closeDrawer = () => store.commit('drawer/closeDrawer');
 
     const logout = async (): Promise<void> => {
       await store.dispatch('auth/logout');
@@ -178,6 +179,7 @@ export default defineComponent({
       menuItems,
       userLogin,
       logout,
+      closeDrawer,
     };
   },
 });
@@ -214,11 +216,11 @@ export default defineComponent({
 
 .el-container:nth-child(5) .el-aside,
 .el-container:nth-child(6) .el-aside {
-  line-height: 260px;
+  /* line-height: 260px; */
 }
 
 .el-container:nth-child(7) .el-aside {
-  line-height: 320px;
+  /* line-height: 320px; */
 }
 
 .el-menu-item.is-active,
