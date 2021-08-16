@@ -38,7 +38,7 @@ const mutations: MutationTree<State> = {
       ? mkbComposition.mkbGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d))
       : undefined;
     if (!state.mkbClasses) return;
-    const i = state.mkbClasses.findIndex((item: any) => item.id === mkbComposition.mkbIdSet.classId);
+    const i = state.mkbClasses.findIndex((item: IMkbClass) => item.id === mkbComposition.mkbIdSet.classId);
     if (i >= 0 && state.mkbClasses) {
       if (groups) {
         state.mkbClasses[i].mkbGroups = groups;
@@ -52,8 +52,8 @@ const mutations: MutationTree<State> = {
   setGroupChildren(state, mkbComposition: MkbComposition) {
     const subGroups = mkbComposition.mkbSubGroupAnswer.mkbSubGroups.map((m: IMkbSubGroup) => new MkbSubGroup(m));
     const diagnosis = mkbComposition.mkbSubGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
-    const classI = state.mkbClasses.findIndex((item: any) => item.id === mkbComposition.mkbIdSet.classId);
-    const groupId = state.mkbClasses[classI].mkbGroups.findIndex((i: any) => i.id === mkbComposition.mkbIdSet.groupId);
+    const classI = state.mkbClasses.findIndex((item: IMkbClass) => item.id === mkbComposition.mkbIdSet.classId);
+    const groupId = state.mkbClasses[classI].mkbGroups.findIndex((i: IMkbGroup) => i.id === mkbComposition.mkbIdSet.groupId);
 
     state.mkbClasses[classI].mkbGroups[groupId].mkbSubGroups = subGroups;
     state.mkbClasses[classI].mkbGroups[groupId].mkbDiagnosis = diagnosis;
@@ -61,8 +61,8 @@ const mutations: MutationTree<State> = {
 
   setSubGroupChildren: (state, mkbComposition: MkbComposition) => {
     const diagnosis = mkbComposition.mkbSubSubGroupAnswer.mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
-    const classI = state.mkbClasses.findIndex((item: any) => item.id === mkbComposition.mkbIdSet.classId);
-    const groupId = state.mkbClasses[classI].mkbGroups.findIndex((i: any) => i.id === mkbComposition.mkbIdSet.groupId);
+    const classI = state.mkbClasses.findIndex((item: IMkbClass) => item.id === mkbComposition.mkbIdSet.classId);
+    const groupId = state.mkbClasses[classI].mkbGroups.findIndex((i: IMkbGroup) => i.id === mkbComposition.mkbIdSet.groupId);
     const subGroupId = state.mkbClasses[classI].mkbGroups[groupId].mkbSubGroups.findIndex(
       (i: IMkbSubGroup) => i.id === mkbComposition.mkbIdSet.subGroupId
     );

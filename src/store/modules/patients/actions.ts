@@ -16,7 +16,7 @@ const actions: ActionTree<State, RootState> = {
       commit('setAll', await httpClient.get());
     }
   },
-  getCount: async ({ commit }, pageNum?: number): Promise<void> => {
+  getCount: async ({ commit }): Promise<void> => {
     commit('setCount', await httpClient.get({ query: `count` }));
   },
   getAllById: async ({ commit }, id: string): Promise<void> => {

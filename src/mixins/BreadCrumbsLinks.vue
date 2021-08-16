@@ -9,7 +9,7 @@ import Link from '../classes/shared/Link';
 export default class BreadCrumbsLinks extends Vue {
   links: Link[] = [];
 
-  pushToLinks(links: string[], text: string[]) {
+  pushToLinks(links: string[], text: string[]): void {
     links.forEach((link, i) => this.links.push(new Link(link, text[i])));
   }
 }

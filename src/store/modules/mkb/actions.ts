@@ -60,16 +60,10 @@ const actions: ActionTree<State, RootState> = {
   searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
     commit('setSubDiagnosisByDiagnosisId', await httpClient.get({ query: `diagnosis/${diagnosisId}` }));
   },
-  updateRelevant: async (
-    { commit },
-    mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis
-  ): Promise<void> => {
+  updateRelevant: async (_, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
     await httpClient.put({ query: `${mkb.id}?mkbType=${mkb.constructor.name}` });
   },
-  updateName: async (
-    { commit },
-    mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis
-  ): Promise<void> => {
+  updateName: async (_, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
     await httpClient.put({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
   },
 };
