@@ -123,52 +123,28 @@
         </el-table-column>
 
         <el-table-column>
-          <template #header>
-            <el-input v-model="searchAddress" size="mini" placeholder="Поиск по адресу..." />
-          </template>
-          <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
-        </el-table-column>
-
-        <el-table-column>
-          <template #header> </template>
-          <el-table-column label="РЕГИСТРЫ" width="100" align="center">
-            <template #default="scope">
-              <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
-                <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
-                  <el-tag
-                    class="tag-link"
-                    size="small"
-                    @click="$router.push(`/registers/patients/${registerToPatient.registerId}/${registerToPatient.patientId}`)"
-                    >{{ registerToPatient.register.name }}</el-tag
-                  >
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column label="ИНВАЛИДНОСТЬ" width="140" align="center">
+          <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
             <template #default="scope">
               <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
                 <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
                 <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
                   <el-button
-                    size="small"
+                    size="mini"
                     disabled
                     :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
                     circle
-                    >A</el-button
                   >
+                    A
+                  </el-button>
                   <el-button
-                    size="small"
+                    size="mini"
                     disabled
                     :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
                     circle
                     >B</el-button
                   >
                   <el-button
-                    size="small"
+                    size="mini"
                     disabled
                     :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
                     circle

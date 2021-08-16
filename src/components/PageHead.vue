@@ -3,10 +3,13 @@
     <el-affix target=".wrapper">
       <el-row>
         <el-space>
-          <el-breadcrumb separator-class="el-icon-arrow-right custom">
-            <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
-          </el-breadcrumb>
+          <div class="left-side">
+            <el-button size="mini" icon="el-icon-menu" class="hidden-lg-and-up" @click="openDrawer"></el-button>
+            <el-breadcrumb separator-class="el-icon-arrow-right custom">
+              <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
+              <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
           <el-button v-if="showSaveButton" type="success" round native-type="submit" @click="$emit('submitForm')"
             >Сохранить изменения</el-button
           >
@@ -21,6 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
+import { useStore } from 'vuex';
 
 import Link from '@/classes/shared/Link';
 
@@ -37,18 +41,27 @@ export default defineComponent({
     },
     showSaveButton: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
     showAddButton: {
       type: Boolean as PropType<boolean>,
-      required: true,
+      default: false,
     },
   },
   emits: ['create', 'submitForm'],
+
+  setup() {
+    const store = useStore();
+
+    const openDrawer = () => store.commit('drawer/openDrawer');
+    return {
+      openDrawer,
+    };
+  },
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-row {
   background-color: #eef1f6;
 }
@@ -56,5 +69,16 @@ export default defineComponent({
   width: 100%;
   justify-content: space-between;
   margin: 20px 8px;
+}
+.left-side {
+  display: flex;
+  align-items: center;
+
+  :deep(.el-button) {
+    margin-right: 10px;
+    i {
+      // font-size: 20px;
+    }
+  }
 }
 </style>

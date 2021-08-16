@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item ref="selectDocType" :error="docTypeError">
-          <el-select @change="selectDocTypeEvent" v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
+          <el-select v-model="selectedDocumentTypeId" placeholder="Выберите тип документа" @change="selectDocTypeEvent">
             <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
           </el-select>
         </el-form-item>
