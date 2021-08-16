@@ -5,13 +5,15 @@
         <el-button @click="add">Добавить документ</el-button>
       </el-col>
       <el-col :span="12">
-        <el-select v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
-          <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
-        </el-select>
+        <el-form-item ref="selectDocType" :error="docTypeError">
+          <el-select @change="selectDocTypeEvent" v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
+            <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
+          </el-select>
+        </el-form-item>
       </el-col>
     </el-row>
 
-    <section v-for="document in documents" :key="document.id">
+    <section v-for="(document, documentIndex) in documents" :key="document.id">
       <el-card class="box-card" style="margin-top: 20px; position: relative">
         <h3>{{ document.documentType.name }}</h3>
         <div class="card-button-group">
@@ -38,7 +40,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'string'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueString`"
             size="mini"
           >
             <el-input v-model="document.documentFieldValues[valueIndex].valueString" size="mini" />
@@ -47,7 +49,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'number'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueNumber`"
             size="mini"
           >
             <el-input-number v-model="document.documentFieldValues[valueIndex].valueNumber" size="mini" />
@@ -56,7 +58,7 @@
           <el-form-item
             v-if="value.documentTypeField.type === 'date'"
             :label="value.documentTypeField.name"
-            :prop="document.documentFieldValues[valueIndex].valueString"
+            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueDate`"
             size="mini"
           >
             <el-date-picker v-model="document.documentFieldValues[valueIndex].valueDate" size="mini" />
@@ -131,9 +133,9 @@ export default defineComponent({
     const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
     const selectedDocumentTypeId: Ref<string> = ref('');
     const selectedType: Ref<IDocumentType | undefined> = ref(undefined);
-
+    const selectDocType = ref();
+    const docTypeError = ref('');
     const { storeModule } = toRefs(props);
-
     const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
     const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
     const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
@@ -143,10 +145,17 @@ export default defineComponent({
       await store.dispatch('documentTypes/getAll');
     });
 
+    const selectDocTypeEvent = (): void => {
+      docTypeError.value = '';
+    };
+
     const add = (): void => {
       selectedType.value = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
 
-      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) return;
+      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) {
+        docTypeError.value = 'Необходим тип документа';
+        return;
+      }
 
       const documentFieldValues: DocumentFieldValue[] = selectedType.value.documentTypeFields.map(
         (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
@@ -187,6 +196,9 @@ export default defineComponent({
     };
 
     return {
+      selectDocTypeEvent,
+      docTypeError,
+      selectDocType,
       documents,
       documentTypes,
       fileAnchor,

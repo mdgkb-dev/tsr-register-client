@@ -6,6 +6,7 @@
       style="width: 950px; margin-bottom: 20px"
       row-key="id"
       border
+      :default-expand-all="true"
       :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
       class="table-shadow"
       header-row-class-name="header-style"

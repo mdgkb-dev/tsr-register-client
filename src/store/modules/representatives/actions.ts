@@ -10,7 +10,7 @@ const httpClient = new HttpClient('representatives');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }, offset: number): Promise<void> => {
-    if (offset !== 0) commit('setAll', await httpClient.get({ query: `?offset=${offset}` }));
+    if (offset || offset === 0) commit('setAll', await httpClient.get({ query: `?offset=${offset}` }));
     else commit('setAll', await httpClient.get());
   },
   getCount: async ({ commit }): Promise<void> => {

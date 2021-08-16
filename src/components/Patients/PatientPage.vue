@@ -152,6 +152,8 @@ export default defineComponent({
 
       for (const item of patient.value.representativeToPatient) {
         item.patient = undefined;
+        item.representative = undefined;
+        item.representativeType = undefined;
       }
 
       let heightId: string | undefined = '';

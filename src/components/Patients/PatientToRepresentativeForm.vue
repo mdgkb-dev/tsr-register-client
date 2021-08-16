@@ -1,6 +1,6 @@
 <template>
   <!-- <el-button @click="add" style="margin-bottom: 20px">Добавить представителя</el-button> -->
-  <el-table :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
+  <el-table v-if="mount" :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
     <el-table-column label="Представитель" width="250" sortable align="center">
@@ -14,7 +14,7 @@
     <el-table-column label="Роль представителя" align="center">
       <template #default="scope">
         <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
-          <el-option v-for="item in representativeTypesOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </template>
     </el-table-column>
@@ -49,7 +49,7 @@ export default defineComponent({
     const rules = RepresentativeToPatientRules;
     const representativeOptions = ref([{}]);
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
-
+    const mount = ref(false);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
     const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/representativeToPatient']);
     const representativeTypesOptions: Ref<IOption[]> = ref([]);
@@ -74,6 +74,7 @@ export default defineComponent({
           human: item.human,
         });
       }
+      mount.value = true;
     });
 
     const add = (): void => {
@@ -85,7 +86,9 @@ export default defineComponent({
     };
 
     return {
+      mount,
       rules,
+      representativeTypes,
       representativeOptions,
       representativeTypesOptions,
       representativeToPatient,
