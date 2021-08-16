@@ -15,7 +15,6 @@ import { registerProperties } from '@/store/modules/registerProperties';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
-import sma from '@/store/modules/sma/sma';
 import { users } from '@/store/modules/users';
 
 import { RootState } from './types';
@@ -49,7 +48,6 @@ const store: StoreOptions<RootState> = {
     registers,
     representativeTypes,
     representatives,
-    sma,
     users,
     meta,
   },
