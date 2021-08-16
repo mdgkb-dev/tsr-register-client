@@ -1,25 +1,23 @@
 <template>
-  <div class="wrapper">
-    <el-affix target=".wrapper">
-      <el-row>
-        <el-space>
-          <div class="left-side">
-            <el-button size="mini" icon="el-icon-menu" class="hidden-lg-and-up" @click="openDrawer"></el-button>
-            <el-breadcrumb separator-class="el-icon-arrow-right custom">
-              <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
-              <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
-            </el-breadcrumb>
-          </div>
-          <el-button v-if="showSaveButton" type="success" round native-type="submit" @click="$emit('submitForm')"
-            >Сохранить изменения</el-button
-          >
-          <el-button v-if="showAddButton" type="success" round @click="$emit('create')"
-            >Добавить<i class="el-icon-plus" style="margin-left: 10px"></i
-          ></el-button>
-        </el-space>
-      </el-row>
-    </el-affix>
-  </div>
+  <!-- <div class="wrapper"> -->
+  <el-affix>
+    <div class="head-container">
+      <div class="left-side">
+        <el-button size="mini" icon="el-icon-menu" class="hidden-lg-and-up" @click="openDrawer"></el-button>
+        <el-breadcrumb separator-class="el-icon-arrow-right custom">
+          <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <el-button v-if="showSaveButton" type="success" round native-type="submit" @click="$emit('submitForm')"
+        >Сохранить изменения</el-button
+      >
+      <el-button v-if="showAddButton" type="success" round @click="$emit('create')"
+        >Добавить<i class="el-icon-plus" style="margin-left: 10px"></i
+      ></el-button>
+    </div>
+  </el-affix>
+  <!-- </div> -->
 </template>
 
 <script lang="ts">
@@ -62,13 +60,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.el-row {
+.head-container {
   background-color: #eef1f6;
-}
-.el-space {
   width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin: 20px 8px;
+  padding: 20px 0;
 }
 .left-side {
   display: flex;
@@ -76,9 +74,6 @@ export default defineComponent({
 
   :deep(.el-button) {
     margin-right: 10px;
-    i {
-      // font-size: 20px;
-    }
   }
 }
 </style>

@@ -4,11 +4,11 @@
       <MainSidePanel />
     </div>
     <el-container direction="vertical" style="height: 100%; overflow: visible">
-      <!-- <div style="height: 100%; overflow: auto; overflow-x: unset"> -->
-      <div class="page-container">
-        <slot />
+      <div class="right-container">
+        <div class="page-container">
+          <slot />
+        </div>
       </div>
-      <!-- </div> -->
     </el-container>
     <MainSideDrawer />
   </el-container>
@@ -35,15 +35,19 @@ export default defineComponent({
   background-color: rgb(238, 241, 246);
   height: 100%;
   overflow: visible;
-  padding: 0 160px;
+  padding-left: 160px;
+}
+
+.right-container {
+  height: 100%;
+  overflow: auto;
+  overflow-x: unset;
+  padding-right: 160px;
 }
 
 .page-container {
   margin-right: 100px;
   overflow: visible;
-  height: 100%;
-  // overflow: auto;
-  // overflow-x: unset;
 }
 
 .side-panel-container {
@@ -52,8 +56,13 @@ export default defineComponent({
 
 @media only screen and (max-width: 1500px) {
   .main-container {
-    padding: 0 80px;
+    padding-left: 80px;
   }
+
+  .right-container {
+    padding-right: 80px;
+  }
+
   .side-panel-container {
     margin-right: 30px;
   }
