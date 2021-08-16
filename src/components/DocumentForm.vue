@@ -5,9 +5,11 @@
         <el-button @click="add">Добавить документ</el-button>
       </el-col>
       <el-col :span="12">
-        <el-select v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
-          <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
-        </el-select>
+        <el-form-item ref="selectDocType" :error="docTypeError">
+          <el-select @change="selectDocTypeEvent" v-model="selectedDocumentTypeId" placeholder="Выберите тип документа">
+            <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
+          </el-select>
+        </el-form-item>
       </el-col>
     </el-row>
 
@@ -131,9 +133,9 @@ export default defineComponent({
     const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
     const selectedDocumentTypeId: Ref<string> = ref('');
     const selectedType: Ref<IDocumentType | undefined> = ref(undefined);
-
+    const selectDocType = ref();
+    const docTypeError = ref('');
     const { storeModule } = toRefs(props);
-
     const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
     const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
     const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
@@ -143,10 +145,17 @@ export default defineComponent({
       await store.dispatch('documentTypes/getAll');
     });
 
+    const selectDocTypeEvent = (): void => {
+      docTypeError.value = '';
+    };
+
     const add = (): void => {
       selectedType.value = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
 
-      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) return;
+      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) {
+        docTypeError.value = 'Необходим тип документа';
+        return;
+      }
 
       const documentFieldValues: DocumentFieldValue[] = selectedType.value.documentTypeFields.map(
         (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
@@ -187,6 +196,9 @@ export default defineComponent({
     };
 
     return {
+      selectDocTypeEvent,
+      docTypeError,
+      selectDocType,
       documents,
       documentTypes,
       fileAnchor,
