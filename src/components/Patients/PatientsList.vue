@@ -196,7 +196,7 @@
           </el-table-column>
         </el-table-column>
 
-        <el-table-column width="40" fixed="right" align="center">
+        <el-table-column width="40" align="center">
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
