@@ -31,7 +31,6 @@ export default function (isEditMode = false) {
     next?: NavigationGuardNext,
     path?: string
   ): Promise<void> => {
-    console.log(isEditMode, payload);
     try {
       if (isEditMode) {
         await store.dispatch(`${module}/edit`, payload);

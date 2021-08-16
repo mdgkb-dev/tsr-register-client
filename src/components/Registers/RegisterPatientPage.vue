@@ -146,7 +146,6 @@ export default defineComponent({
       window.addEventListener('beforeunload', beforeWindowUnload);
       watch(register, formUpdated, { deep: true });
       watch(patient, formUpdated, { deep: true });
-      console.log(patient);
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {

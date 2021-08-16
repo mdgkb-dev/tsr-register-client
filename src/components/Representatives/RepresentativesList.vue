@@ -248,7 +248,7 @@ export default defineComponent({
           if (i.id) items.push({ value: i.human.getFullName(), id: i.id, representative: i });
         });
       }
-      console.log(filteredRepresentatives);
+
       resolve(items);
     };
 

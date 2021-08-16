@@ -158,7 +158,7 @@ export default defineComponent({
         documentFieldValues,
         isDraft: true,
       });
-      console.log(`${storeModule.value}/addDocument`);
+
       store.commit(`${storeModule.value}/addDocument`, document);
     };
 
