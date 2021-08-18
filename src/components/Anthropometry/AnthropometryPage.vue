@@ -61,6 +61,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.anthropometryId) {
+        store.commit('anthropometry/set', new Anthropometry());
         title.value = 'Создать параметр';
       } else {
         title.value = 'Редактировать параметр';

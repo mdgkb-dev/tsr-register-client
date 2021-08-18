@@ -39,6 +39,7 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
+import User from '@/classes/user/User';
 import HumanForm from '@/components/HumanForm.vue';
 import PageInfo from '@/components/Users/PageInfo.vue';
 import IUser from '@/interfaces/users/IUser';
@@ -69,6 +70,7 @@ export default defineComponent({
     onBeforeMount(async (): Promise<void> => {
       if (!route.params.userId) {
         isEditMode.value = false;
+        store.commit('users/set', new User());
         title.value = 'Создать юзера';
       } else {
         isEditMode.value = true;

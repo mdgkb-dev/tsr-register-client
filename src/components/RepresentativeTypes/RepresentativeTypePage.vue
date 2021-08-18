@@ -74,6 +74,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.representativeTypeId) {
         isEditMode.value = false;
+        store.commit('representativeTypes/set', new RepresentativeType());
         title.value = 'Создать тип';
       } else {
         isEditMode.value = true;

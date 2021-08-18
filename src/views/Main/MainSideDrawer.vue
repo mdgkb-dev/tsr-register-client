@@ -18,8 +18,8 @@ export default defineComponent({
 
   setup() {
     const store = useStore();
-    const isDrawerOpen = computed(() => store.getters['drawer/isDrawerOpen']);
-    const closeDrawer = () => store.commit('drawer/closeDrawer');
+    const isDrawerOpen = computed(() => store.getters['main/isDrawerOpen']);
+    const closeDrawer = () => store.commit('main/closeDrawer');
 
     return { isDrawerOpen, closeDrawer };
   },

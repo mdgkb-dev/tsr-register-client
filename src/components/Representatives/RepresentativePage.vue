@@ -2,7 +2,7 @@
   <div v-if="mount" class="representative-page-container">
     <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
-      <RepresentativePageInfo :representative="representative" />
+      <RepresentativePageInfo />
     </el-row>
     <el-row>
       <el-collapse>
@@ -79,6 +79,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.representativeId) {
         isEditMode.value = false;
+        store.commit('representatives/resetRepresentative');
         title.value = 'Создать представителя';
       } else {
         isEditMode.value = true;

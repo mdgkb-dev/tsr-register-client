@@ -25,6 +25,7 @@ const mutations: MutationTree<State> = {
   set(state, patient: IPatient) {
     state.patient = new Patient(patient);
   },
+  // setHuman(state)
   create(state, patient: IPatient) {
     state.patients.push(new Patient(patient));
   },
@@ -101,6 +102,9 @@ const mutations: MutationTree<State> = {
   removeFile(state, id: string) {
     const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
     if (i > -1) state.patient.human.fileInfos.splice(i, 1);
+  },
+  resetPatient(state) {
+    state.patient = new Patient();
   },
 };
 
