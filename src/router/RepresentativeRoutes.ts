@@ -1,24 +1,31 @@
 import RepresentativePage from '@/components/Representatives/RepresentativePage.vue';
 import RepresentativesList from '@/components/Representatives/RepresentativesList.vue';
 import { isAuthorized } from '@/router/index';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {
     path: '/representatives',
     name: 'Representatives',
     component: RepresentativesList,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/representatives/new',
     name: 'CreateRepresentative',
     component: RepresentativePage,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/representatives/:representativeId',
     name: 'EditRepresentative',
     component: RepresentativePage,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
 ];

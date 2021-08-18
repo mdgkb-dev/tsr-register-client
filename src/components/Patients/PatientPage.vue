@@ -170,7 +170,6 @@ export default defineComponent({
     return {
       patient,
       form,
-      isEditMode,
       links,
       mount,
       rules,

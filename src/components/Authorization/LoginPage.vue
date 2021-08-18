@@ -44,7 +44,7 @@ export default defineComponent({
         showMessageError(authError.value);
       }
 
-      if (!store.getters['auth/isAuthorized']) {
+      if (!store.getters['auth/isAuth']) {
         await router.push('/login');
         return;
       }

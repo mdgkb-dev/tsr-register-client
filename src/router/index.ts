@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 
 import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
@@ -17,29 +17,15 @@ import RegisterGroupsRoutes from './RegisterGroupsRoutes';
 import RegisterPropertiesRoutes from './RegisterPropertiesRoutes';
 import RegistersRoutes from './RegistersRoutes';
 
-export const isAuthorized = async (to: any, from: any, next: any) => {
-  let response;
-
-  try {
-    response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
-  } catch (error) {
-    Cookies.remove('user_sid');
-    window.localStorage.removeItem('user_sid');
+export const isAuthorized = (next: NavigationGuardNext): void => {
+  const userId = localStorage.getItem('userId');
+  if (userId) {
+    store.commit('auth/setIsAuth', true);
     store.commit('setLayout', 'login-layout');
-    next('/login');
-    return;
-  }
-  if (response.status === 200 || response.status === 304) {
-    const cookie = Cookies.get('user_sid');
-    window.localStorage.setItem('user_sid', String(cookie));
     next();
-    return;
   }
-  Cookies.remove('user_sid');
-  window.localStorage.removeItem('user_sid');
   store.commit('setLayout', 'login-layout');
   next('/login');
-  next();
 };
 
 export const isNotAuthorized = async (to: any, from: any, next: any) => {
@@ -80,13 +66,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/mkb',
     name: 'Mkb',
     component: MkbList,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/disabilities',
     name: 'Disabilities',
     component: DisabilitiesList,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/:pathMatch(.*)*',

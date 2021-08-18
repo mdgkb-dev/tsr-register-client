@@ -1,3 +1,5 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import LoginPage from '@/components/Authorization/LoginPage.vue';
 import RegistrationPage from '@/components/Authorization/RegistrationPage.vue';
 import HomePage from '@/components/HomePage.vue';
@@ -24,6 +26,8 @@ export default [
     path: '/home',
     name: 'Home',
     component: HomePage,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
 ];

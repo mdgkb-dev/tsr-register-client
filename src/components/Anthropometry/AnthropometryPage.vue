@@ -49,7 +49,7 @@ export default defineComponent({
 
     const anthropometry: Ref<IAnthropometry> = ref(new Anthropometry());
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.anthropometryId);
     const mount: Ref<boolean> = ref(false);
     const rules = AnthropometryRules;
     const title: Ref<string> = ref('');
@@ -61,10 +61,8 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.anthropometryId) {
-        isEditMode.value = false;
         title.value = 'Создать параметр';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать параметр';
         await store.dispatch('anthropometry/get', route.params.anthropometryId);
         anthropometry.value = store.getters['anthropometry/anthropometry'];
@@ -91,7 +89,6 @@ export default defineComponent({
     return {
       anthropometry,
       form,
-      isEditMode,
       links,
       mount,
       rules,

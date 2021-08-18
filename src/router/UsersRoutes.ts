@@ -1,24 +1,31 @@
 import UserPage from '@/components/Users/UserPage.vue';
 import UsersList from '@/components/Users/UsersList.vue';
 import { isAuthorized } from '@/router/index';
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {
     path: '/users',
     name: 'Users',
     component: UsersList,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/users/new',
     name: 'CreateUser',
     component: UserPage,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
   {
     path: '/users/:userId',
     name: 'EditUser',
     component: UserPage,
-    beforeEnter: isAuthorized,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
   },
 ];
