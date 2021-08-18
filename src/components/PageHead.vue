@@ -51,7 +51,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const openDrawer = () => store.commit('drawer/openDrawer');
+    const openDrawer = () => store.commit('main/openDrawer');
     return {
       openDrawer,
     };

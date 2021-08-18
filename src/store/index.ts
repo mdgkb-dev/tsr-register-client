@@ -4,9 +4,9 @@ import { anthropometry } from '@/store/modules/anthropometry';
 import { auth } from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
-import { drawer } from '@/store/modules/drawer';
 import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
+import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
 import { mkb } from '@/store/modules/mkb';
 import { patients } from '@/store/modules/patients';
@@ -38,7 +38,7 @@ const store: StoreOptions<RootState> = {
     anthropometry,
     auth,
     disabilities,
-    drawer,
+    main,
     documentTypes,
     files,
     insuranceCompanies,
