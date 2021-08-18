@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex';
 
 import IUser from '@/interfaces/users/IUser';
 import HttpClient from '@/services/HttpClient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

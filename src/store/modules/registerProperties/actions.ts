@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex';
 
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import HttpClient from '@/services/HttpClient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

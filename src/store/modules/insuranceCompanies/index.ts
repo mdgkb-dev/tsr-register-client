@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';

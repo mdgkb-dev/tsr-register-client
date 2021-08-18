@@ -9,7 +9,7 @@ import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

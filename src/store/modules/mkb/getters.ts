@@ -4,7 +4,7 @@ import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

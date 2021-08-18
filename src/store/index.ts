@@ -1,7 +1,7 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import { anthropometry } from '@/store/modules/anthropometry';
-import { auth } from '@/store/modules/auth';
+import auth from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
 import { drawer } from '@/store/modules/drawer';
@@ -17,7 +17,7 @@ import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { users } from '@/store/modules/users';
 
-import { RootState } from './types';
+import RootState from './types';
 
 const store: StoreOptions<RootState> = {
   state: {

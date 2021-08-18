@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IDisability from '@/interfaces/disabilities/IDisability';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

@@ -10,7 +10,7 @@ import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
 import MkbCLass from '@/classes/mkb/MkbСlass';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import HttpClient from '@/services/HttpClient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

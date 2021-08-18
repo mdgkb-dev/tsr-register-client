@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 
 import DocumentType from '@/classes/documents/DocumentType';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';

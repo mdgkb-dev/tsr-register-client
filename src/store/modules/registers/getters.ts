@@ -2,7 +2,7 @@ import { GetterTree } from 'vuex';
 
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

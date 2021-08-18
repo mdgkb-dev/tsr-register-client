@@ -2,7 +2,7 @@ import { ActionContext, ActionTree } from 'vuex';
 
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import HttpClient from '@/services/HttpClient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import State from './state';
 

@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex';
 
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import HttpClient from '@/services/HttpClient';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import { State } from './state';
 

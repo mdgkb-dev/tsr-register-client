@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 
 import Representative from '@/classes/representatives/Representative';
-import { RootState } from '@/store/types';
+import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';

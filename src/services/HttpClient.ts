@@ -89,11 +89,15 @@ export default class HttpClient {
   }
 
   private baseUrl(query?: string): string {
-    if (!query) {
-      return process.env.VUE_APP_BASE_URL + this.endpoint;
+    const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
+    const apiVersion = process.env.VUE_APP_API_V1 ?? '';
+
+    if (query) {
+      const queryString = query ?? '';
+      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
     }
 
-    return `${process.env.VUE_APP_BASE_URL + this.endpoint}/${query}`;
+    return baseUrl + apiVersion + this.endpoint;
   }
 
   private toUtc(payload: Record<string, any>): Record<string, any> {

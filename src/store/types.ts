@@ -1,3 +1,3 @@
-export interface RootState {
+export default interface RootState {
   layout: string;
 }
