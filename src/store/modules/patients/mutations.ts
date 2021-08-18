@@ -102,6 +102,9 @@ const mutations: MutationTree<State> = {
     const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
     if (i > -1) state.patient.human.fileInfos.splice(i, 1);
   },
+  resetPatient(state) {
+    state.patient = new Patient();
+  },
 };
 
 export default mutations;
