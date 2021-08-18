@@ -35,7 +35,7 @@ export default defineComponent({
     },
     links: {
       type: Array as PropType<Link[]>,
-      required: true,
+      default: () => [],
     },
     showSaveButton: {
       type: Boolean as PropType<boolean>,
@@ -51,7 +51,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const openDrawer = () => store.commit('drawer/openDrawer');
+    const openDrawer = () => store.commit('main/openDrawer');
     return {
       openDrawer,
     };

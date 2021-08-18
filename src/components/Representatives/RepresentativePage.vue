@@ -2,7 +2,7 @@
   <div v-if="mount" class="representative-page-container">
     <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
-      <RepresentativePageInfo :representative="representative" />
+      <RepresentativePageInfo />
     </el-row>
     <el-row>
       <el-collapse>

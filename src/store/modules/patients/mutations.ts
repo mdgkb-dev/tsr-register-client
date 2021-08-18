@@ -25,6 +25,7 @@ const mutations: MutationTree<State> = {
   set(state, patient: IPatient) {
     state.patient = new Patient(patient);
   },
+  // setHuman(state)
   create(state, patient: IPatient) {
     state.patients.push(new Patient(patient));
   },

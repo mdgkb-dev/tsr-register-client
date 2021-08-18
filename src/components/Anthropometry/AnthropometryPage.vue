@@ -62,6 +62,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.anthropometryId) {
         isEditMode.value = false;
+        store.commit('anthropometry/set', new Anthropometry());
         title.value = 'Создать параметр';
       } else {
         isEditMode.value = true;

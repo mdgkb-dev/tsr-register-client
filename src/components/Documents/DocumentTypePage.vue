@@ -77,6 +77,7 @@ import { computed, defineComponent, onBeforeMount, reactive, Ref, ref, watch, Wr
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import DocumentTypeRules from '@/classes/documents/DocumentTypeRules';
 import PageHead from '@/components/PageHead.vue';
@@ -127,6 +128,7 @@ export default defineComponent({
     onBeforeMount(async (): Promise<void> => {
       if (!route.params.documentTypeId) {
         isEditMode.value = false;
+        store.commit('documentTypes/set', new DocumentType());
         title.value = 'Создать документ';
       } else {
         isEditMode.value = true;

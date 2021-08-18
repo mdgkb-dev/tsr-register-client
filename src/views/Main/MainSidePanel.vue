@@ -161,7 +161,7 @@ export default defineComponent({
     ]);
 
     const userLogin: ComputedRef = computed(() => store.getters['auth/getUserLogin']);
-    const closeDrawer = () => store.commit('drawer/closeDrawer');
+    const closeDrawer = () => store.commit('main/closeDrawer');
 
     const logout = async (): Promise<void> => {
       await store.dispatch('auth/logout');

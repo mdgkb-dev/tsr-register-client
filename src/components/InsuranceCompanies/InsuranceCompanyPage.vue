@@ -26,6 +26,7 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch 
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 import InsuranceCompanyRules from '@/classes/insuranceCompanies/InsuranceCompanyRules';
 import PageHead from '@/components/PageHead.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
@@ -59,6 +60,7 @@ export default defineComponent({
     onBeforeMount(async (): Promise<void> => {
       if (!route.params.insuranceCompanyId) {
         isEditMode.value = false;
+        store.commit('insuranceCompanies/set', new InsuranceCompany());
         title.value = 'Создать компанию';
       } else {
         isEditMode.value = true;

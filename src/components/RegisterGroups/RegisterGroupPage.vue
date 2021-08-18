@@ -30,6 +30,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import RegisterGroup from '@/classes/registers/RegisterGroup';
 import PageHead from '@/components/PageHead.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
@@ -64,6 +65,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.registerGroupId) {
         isEditMode.value = false;
+        store.commit('registerGroups/set', new RegisterGroup());
         title.value = 'Создать группу';
       } else {
         isEditMode.value = true;
