@@ -2,16 +2,19 @@
   <div v-if="mount" style="height: 100%; overflow: hidden">
     <PageHead :title="'Список пациентов'" :show-add-button="true" @create="create" />
     <div class="table-background">
-      <el-autocomplete
-        v-model="queryStringsPatient"
-        style="width: 100%; margin-bottom: 20px"
-        popper-class="wide-dropdown"
-        :fetch-suggestions="findPatients"
-        placeholder="Найти пациента"
-        @select="handlePatientSelect"
-        @input="handleSearchInput"
-      >
-      </el-autocomplete>
+      <div style="display: flex; align-items: flex-start">
+        <el-autocomplete
+          v-model="queryStringsPatient"
+          style="width: 100%; margin-bottom: 20px; margin-right: 10px"
+          popper-class="wide-dropdown"
+          :fetch-suggestions="findPatients"
+          placeholder="Найти пациента"
+          @select="handlePatientSelect"
+          @input="handleSearchInput"
+        >
+        </el-autocomplete>
+        <PatientsFilters />
+      </div>
       <el-input
         v-model="search"
         prefix-icon="el-icon-search"
@@ -205,6 +208,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import PageHead from '@/components/PageHead.vue';
+import PatientsFilters from '@/components/Patients/PatientsFilters.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
@@ -218,6 +222,7 @@ export default defineComponent({
   components: {
     PageHead,
     TableButtonGroup,
+    PatientsFilters,
   },
   setup() {
     const store = useStore();
