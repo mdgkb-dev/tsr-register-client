@@ -35,7 +35,7 @@ export default defineComponent({
     },
     links: {
       type: Array as PropType<Link[]>,
-      required: true,
+      default: () => [],
     },
     showSaveButton: {
       type: Boolean as PropType<boolean>,

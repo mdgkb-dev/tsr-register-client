@@ -62,6 +62,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import RegisterProperty from '@/classes/registers/RegisterProperty';
 import PageHead from '@/components/PageHead.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
@@ -102,6 +103,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.registerPropertyId) {
         isEditMode.value = false;
+        store.commit('registerProperties/set', new RegisterProperty());
         title.value = 'Создать свойство';
       } else {
         isEditMode.value = true;

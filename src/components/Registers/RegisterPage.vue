@@ -38,6 +38,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Register from '@/classes/registers/Register';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import PageHead from '@/components/PageHead.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
@@ -74,15 +75,16 @@ export default defineComponent({
     onBeforeMount(async () => {
       if (!route.params.registerId) {
         isEditMode.value = false;
+        store.commit('registers/set', new Register());
         title.value = 'Создать регистр';
       } else {
         isEditMode.value = true;
         title.value = 'Редактировать регистр';
         await store.dispatch('registers/get', route.params.registerId);
-        mount.value = true;
       }
 
       pushToLinks(['/registers'], ['Регистры пациентов']);
+      mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
       watch(register, formUpdated, { deep: true });
