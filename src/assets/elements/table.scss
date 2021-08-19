@@ -113,3 +113,8 @@ tr.header-style > th {
   min-height: unset;
   border: none;
 }
+
+.table-header {
+  display: flex;
+  align-items: flex-start;
+}

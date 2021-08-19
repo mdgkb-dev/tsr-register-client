@@ -13,7 +13,6 @@
           @input="handleSearchInput"
         >
         </el-autocomplete>
-        <PatientsFilters />
       </div>
       <el-input
         v-model="search"
@@ -33,146 +32,144 @@
       >
         <el-table-column width="60" align="center" />
 
-        <el-table-column>
+        <el-table-column sortable prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
-            <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
+            <div class="table-header">
+              <span>Фамилия Имя Отчевство</span>
+              <FilterTextForm />
+            </div>
           </template>
-          <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="human.surname" align="left" min-width="130" resizable>
-            <template #default="scope">
-              {{ scope.row.human.getFullName() }}
-            </template>
-          </el-table-column>
+          <template #default="scope">
+            {{ scope.row.human.getFullName() }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <template #header> </template>
-          <el-table-column width="75" label="ПОЛ" sortable prop="human.isMale" align="center">
-            <template #default="scope">
-              {{ scope.row.human.getGender() }}
-            </template>
-          </el-table-column>
+        <el-table-column width="75" sortable prop="human.isMale" align="center">
+          <template #header>
+            <div class="table-header">
+              <span>Пол</span>
+              <FilterSelectForm :select-list="genderFilter" />
+            </div>
+          </template>
+          <template #default="scope">
+            {{ scope.row.human.getGender() }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <el-table-column prop="human.dateBirth" label="ДАТА РОЖДЕНИЯ" width="120" align="center" sortable>
-            <template #default="scope">
-              {{ formatDate(scope.row.human.dateBirth) }}
-            </template>
-          </el-table-column>
+        <el-table-column prop="human.dateBirth" width="120" align="center" sortable>
+          <template #header>
+            <div class="table-header">
+              <span>Дата рождения</span>
+              <FilterDateForm />
+            </div>
+          </template>
+          <template #default="scope">
+            {{ formatDate(scope.row.human.dateBirth) }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
-            <template #default="scope">
-              <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+        <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
+          <template #default="scope">
+            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
+                placement="top-end"
+              >
+                <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">{{
+                  rep.representativeType.name
+                }}</el-tag>
+              </el-tooltip>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="75" label="ВЕС РОСТ" align="center">
+          <template #default="scope">
+            <span v-html="scope.row.getAnthropometryShortData()"></span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="95" label="ДИАГНОЗЫ" align="center">
+          <template #default="scope">
+            <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
+              <div v-if="diagnosis.mkbSubDiagnosis">
+                <span
+                  v-if="diagnosis.mkbSubDiagnosis"
+                  class="underline-label"
+                  v-html="diagnosis.mkbDiagnosis.code + '.' + diagnosis.mkbSubDiagnosis.subCode"
+                ></span>
                 <el-tooltip
+                  v-if="diagnosis.mkbSubDiagnosis"
                   class="item"
                   effect="dark"
-                  :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
+                  :content="diagnosis.mkbSubDiagnosis.name"
                   placement="top-end"
                 >
-                  <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">{{
-                    rep.representativeType.name
-                  }}</el-tag>
+                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
                 </el-tooltip>
               </div>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column width="75" label="ВЕС РОСТ" align="center">
-            <template #default="scope">
-              <span v-html="scope.row.getAnthropometryShortData()"></span>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column width="95" label="ДИАГНОЗЫ" align="center">
-            <template #default="scope">
-              <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
-                <div v-if="diagnosis.mkbSubDiagnosis">
-                  <span
-                    v-if="diagnosis.mkbSubDiagnosis"
-                    class="underline-label"
-                    v-html="diagnosis.mkbDiagnosis.code + '.' + diagnosis.mkbSubDiagnosis.subCode"
-                  ></span>
-                  <el-tooltip
-                    v-if="diagnosis.mkbSubDiagnosis"
-                    class="item"
-                    effect="dark"
-                    :content="diagnosis.mkbSubDiagnosis.name"
-                    placement="top-end"
-                  >
-                    <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
-                  </el-tooltip>
-                </div>
-                <div v-else>
-                  <span v-if="diagnosis.mkbDiagnosis" class="underline-label" v-html="diagnosis.mkbDiagnosis.code"></span>
-                  <el-tooltip
-                    v-if="diagnosis.mkbDiagnosis"
-                    class="item"
-                    effect="dark"
-                    :content="diagnosis.mkbDiagnosis.name"
-                    placement="top-end"
-                  >
-                    <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
-                  </el-tooltip>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
-            <template #default="scope">
-              <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
-                <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
-                <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
-                  <el-button
-                    size="mini"
-                    disabled
-                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
-                    circle
-                  >
-                    A
-                  </el-button>
-                  <el-button
-                    size="mini"
-                    disabled
-                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
-                    circle
-                    >B</el-button
-                  >
-                  <el-button
-                    size="mini"
-                    disabled
-                    :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
-                    circle
-                    >C</el-button
-                  >
-                </div>
-                <div v-else>Нет справок ЕДВ</div>
-              </el-space>
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-            <template #default="scope">
-              <div v-for="document in scope.row.human.documents" :key="document">
-                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                  <el-tag size="small">
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
-                    <span>{{ document.documentType.getTagName() }}</span>
-                  </el-tag>
+              <div v-else>
+                <span v-if="diagnosis.mkbDiagnosis" class="underline-label" v-html="diagnosis.mkbDiagnosis.code"></span>
+                <el-tooltip
+                  v-if="diagnosis.mkbDiagnosis"
+                  class="item"
+                  effect="dark"
+                  :content="diagnosis.mkbDiagnosis.name"
+                  placement="top-end"
+                >
+                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
                 </el-tooltip>
               </div>
-            </template>
-          </el-table-column>
+            </div>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
+          <template #default="scope">
+            <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
+              <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
+              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
+                <el-button
+                  size="mini"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
+                  circle
+                >
+                  A
+                </el-button>
+                <el-button
+                  size="mini"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
+                  circle
+                  >B</el-button
+                >
+                <el-button
+                  size="mini"
+                  disabled
+                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
+                  circle
+                  >C</el-button
+                >
+              </div>
+              <div v-else>Нет справок ЕДВ</div>
+            </el-space>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-for="document in scope.row.human.documents" :key="document">
+              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                <el-tag size="small">
+                  <i class="el-icon-document" style="margin-right: 3px"></i>
+                  <span>{{ document.documentType.getTagName() }}</span>
+                </el-tag>
+              </el-tooltip>
+            </div>
+          </template>
         </el-table-column>
 
         <el-table-column width="40" align="center">
@@ -207,9 +204,13 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import SelectFilter from '@/classes/filters/SelectFilter';
 import PageHead from '@/components/PageHead.vue';
-import PatientsFilters from '@/components/Patients/PatientsFilters.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
+import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
+import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
+import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -222,7 +223,9 @@ export default defineComponent({
   components: {
     PageHead,
     TableButtonGroup,
-    PatientsFilters,
+    FilterTextForm,
+    FilterSelectForm,
+    FilterDateForm,
   },
   setup() {
     const store = useStore();
@@ -231,6 +234,7 @@ export default defineComponent({
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
     const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
     const { formatDate } = useDateFormat();
+    const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: ['м', 'ж'] })]);
 
     const mount: Ref<boolean> = ref(false);
     const title: Ref<string> = ref('Пациенты');
@@ -352,6 +356,7 @@ export default defineComponent({
       searchFullName,
       setPage,
       title,
+      genderFilter,
     };
   },
 });

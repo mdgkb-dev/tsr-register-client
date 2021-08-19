@@ -69,17 +69,6 @@ const mutations: MutationTree<State> = {
     disability.id = uuidv4();
     state.patient.disabilities.push(disability);
   },
-  setDisabilityDateEnd(state, id: string) {
-    state.patient.disabilities = state.patient.disabilities.map((i: IDisability) => {
-      if (i.id === id && i.period) {
-        const date = new Date(i.period.dateStart);
-        date.setFullYear(date.getFullYear() + 1);
-        i.period.dateEnd = date.toDateString();
-        return i;
-      }
-      return i;
-    });
-  },
   setEdvDateEnd(state, id: string) {
     state.patient.disabilities = state.patient.disabilities.map((disability: IDisability) => {
       disability.edvs = disability.edvs.map((i: IEdv) => {
@@ -90,7 +79,7 @@ const mutations: MutationTree<State> = {
           return i;
         }
         return i;
-      })
+      });
       return disability;
     });
   },

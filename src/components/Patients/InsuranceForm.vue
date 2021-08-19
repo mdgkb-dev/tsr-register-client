@@ -48,8 +48,8 @@ import { useStore } from 'vuex';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import IOption from '@/interfaces/patients/IOption';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IOption from '@/interfaces/shared/IOption';
 
 export default defineComponent({
   name: 'InsuranceForm',
