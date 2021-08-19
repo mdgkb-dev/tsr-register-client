@@ -27,7 +27,7 @@
           :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
         >
           <el-select v-model="representativeToPatient[scope.$index].representativeTypeId" placeholder="Тип представителя">
-            <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            <el-option v-for="item in representativeTypesOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
       </template>
@@ -49,6 +49,7 @@ import RepresentativeToPatientRules from '@/classes/representatives/Representati
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IOption from '@/interfaces/patients/IOption';
 import IPatient from '@/interfaces/patients/IPatient';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 export default defineComponent({
@@ -62,24 +63,18 @@ export default defineComponent({
     const rules = RepresentativeToPatientRules;
     const patientsOptions = ref([{}]);
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const representative: Ref<IRepresentative> = computed(() => store.getters['representatives/representative']);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
     const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(
       () => store.getters['representatives/representativeToPatient']
     );
-    const representativeTypesOptions: Ref<IOption[]> = ref([]);
+    const representativeTypesOptions: Ref<IRepresentativeType[]> = computed(() => {
+      return representativeTypes.value.filter((i: IRepresentativeType) => i.isMale === representative.value.human.isMale);
+    });
 
     onBeforeMount(async () => {
       await store.dispatch('representativeTypes/getAll');
       await store.dispatch('patients/getAll');
-
-      for (const item of representativeTypes.value) {
-        if (item.id) {
-          representativeTypesOptions.value.push({
-            label: item.name,
-            value: item.id,
-          });
-        }
-      }
 
       patientsOptions.value.splice(0, 1);
       for (const item of patients.value) {

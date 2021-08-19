@@ -1,5 +1,5 @@
 <template>
-  <!-- <el-button @click="add" style="margin-bottom: 20px">Добавить представителя</el-button> -->
+  <el-button @click="add" style="margin-bottom: 20px">Добавить представителя</el-button>
   <el-table v-if="mount" :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
@@ -13,8 +13,17 @@
 
     <el-table-column label="Роль представителя" align="center">
       <template #default="scope">
-        <el-select v-model="representativeToPatient[scope.$index].representativeTypeId">
-          <el-option v-for="item in representativeTypesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        <el-select
+          v-model="representativeToPatient[scope.$index].representativeTypeId"
+          :disabled="representativeToPatient[scope.$index].representativeId ? false : true"
+        >
+          <el-option
+            v-for="item in getRepresentativeTypes(representativeToPatient[scope.$index].representativeId)"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          >
+          </el-option>
         </el-select>
       </template>
     </el-table-column>
@@ -52,20 +61,11 @@ export default defineComponent({
     const mount = ref(false);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
     const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/representativeToPatient']);
-    const representativeTypesOptions: Ref<IOption[]> = ref([]);
 
     onBeforeMount(async () => {
       await store.dispatch('representativeTypes/getAll');
       await store.dispatch('representatives/getAll');
 
-      for (const item of representativeTypes.value) {
-        if (item.id) {
-          representativeTypesOptions.value.push({
-            label: item.name,
-            value: item.id,
-          });
-        }
-      }
       representativeOptions.value.splice(0, 1);
       for (const item of representatives.value) {
         representativeOptions.value.push({
@@ -85,15 +85,20 @@ export default defineComponent({
       store.commit('patients/removeRepresentative', item);
     };
 
+    const getRepresentativeTypes = (id: string): IRepresentativeType[] => {
+      const representative = representatives.value.find((i: IRepresentative) => i.id === id);
+      return representativeTypes.value.filter((i: IRepresentativeType) => i.isMale === representative?.human.isMale);
+    };
+
     return {
       mount,
       rules,
       representativeTypes,
       representativeOptions,
-      representativeTypesOptions,
       representativeToPatient,
       remove,
       add,
+      getRepresentativeTypes,
     };
   },
 });

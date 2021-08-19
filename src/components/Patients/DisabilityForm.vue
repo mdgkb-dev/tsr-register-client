@@ -20,14 +20,19 @@
 
       <el-table-column prop="period.dateStart" label="Дата начала" sortable width="230" align="center">
         <template #default="scope">
-          <el-form-item :prop="getProp(scope)" :rules="getRuleStart(scope)" label-width="0" style="margin-bottom: 0">
+          <el-form-item
+            :prop="getProp(scope, true)"
+            :rules="[{ required: true, message: 'Пожалуйста, укажите дату начала', trigger: 'change' }]"
+            label-width="0"
+            style="margin-bottom: 0"
+          >
             <el-date-picker
               ref="picker"
               v-model="scope.row.period.dateStart"
-              :disabled-date="disabledDate"
               format="DD.MM.YYYY"
               placeholder="Выберите дату"
               type="date"
+              @change="isEdv(scope.row) ? edvDateStartChangeHandler(scope.row.id) : null"
             ></el-date-picker>
           </el-form-item>
         </template>
@@ -35,13 +40,20 @@
 
       <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="230" align="center">
         <template #default="scope">
-          <el-form-item :prop="getProp(scope)" :rules="getRuleEnd(scope)" label-width="0" style="margin-bottom: 0">
+          <el-form-item
+            :prop="getProp(scope, false)"
+            :rules="[{ required: true, message: 'Пожалуйста, укажите дату конца', trigger: 'change' }]"
+            label-width="0"
+            style="margin-bottom: 0"
+          >
             <el-date-picker
               v-model="scope.row.period.dateEnd"
               type="date"
               :disabled-date="disabledDate"
               format="DD.MM.YYYY"
               placeholder="Выберите дату"
+              :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"
+              @focus="dateEndFocusHandler(scope.row.period.dateStart)"
             ></el-date-picker>
           </el-form-item>
         </template>
@@ -147,9 +159,9 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import FileInfo from '@/classes/files/FileInfo';
-import PeriodRules from '@/classes/shared/PeriodRules';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
+import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 
@@ -177,23 +189,13 @@ export default defineComponent({
       store.commit('patients/removeEdv', edv);
     };
 
-    const getRuleStart = (scope: any) => {
-      const rule = new PeriodRules();
-      rule.dateStart[0].options = scope.row.period;
-      return rule.dateStart;
-    };
-
-    const getRuleEnd = (scope: any) => {
-      const rule = new PeriodRules();
-      rule.dateEnd[0].options = scope.row.period;
-      return rule.dateEnd;
-    };
-
-    const getProp = (scope: any): string | undefined => {
-      if (!isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
-        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.startDate`;
+    const getProp = (scope: any, isStartDate: boolean): string | undefined => {
+      if (isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
+        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateStart`;
       }
-
+      if (!isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
+        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateEnd`;
+      }
       const disabilityIndex = disabilities.value.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
 
       if (disabilityIndex < 0) {
@@ -201,13 +203,14 @@ export default defineComponent({
       }
 
       let edvIndex = -1;
-
       if (disabilities.value[disabilityIndex].edvs) {
         edvIndex = disabilities.value[disabilityIndex].edvs.indexOf(scope.row);
       }
-
-      if (edvIndex >= 0) {
-        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.startDate`;
+      if (edvIndex >= 0 && isStartDate) {
+        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateStart`;
+      }
+      if (edvIndex >= 0 && !isStartDate) {
+        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateEnd`;
       }
 
       return undefined;
@@ -217,11 +220,20 @@ export default defineComponent({
       store.commit('patients/removeDisability', item);
     };
 
+    const edvDateStartChangeHandler = (id: string): void => {
+      store.commit('patients/setEdvDateEnd', id);
+    };
+    const endDateEdge: Ref<string | undefined> = ref();
+    const dateEndFocusHandler = (date: string): void => {
+      endDateEdge.value = date;
+    };
     const disabledDate = (time: Date) => {
-      return time.getTime() < Date.parse(birthDate.value);
+      if (endDateEdge.value) {
+        return time.getTime() < Date.parse(endDateEdge.value);
+      }
     };
 
-    const validateDisabilityDates = (rule: any, value: any, callback: any): void => {
+    const validateDisabilityDates = (_: unknown, __: unknown, callback: MyCallbackWithOptParam): void => {
       disabilities.value.forEach((disability: IDisability) => {
         if (
           disability.period &&
@@ -235,7 +247,6 @@ export default defineComponent({
       callback();
     };
 
-    // eslint-disable-next-line class-methods-use-this
     const isEdv = (row: { ['parameter1']: boolean | undefined }): boolean => {
       return typeof row.parameter1 === 'boolean';
     };
@@ -291,8 +302,6 @@ export default defineComponent({
       downloadFile,
       removeFile,
       addReplaceFile,
-      getRuleStart,
-      getRuleEnd,
       isEdv,
       getProp,
       removeDisability,
@@ -302,6 +311,8 @@ export default defineComponent({
       removeEdv,
       birthDate,
       addDisability,
+      edvDateStartChangeHandler,
+      dateEndFocusHandler,
     };
   },
 });

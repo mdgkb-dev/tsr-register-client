@@ -3,7 +3,7 @@
   <el-affix>
     <div class="head-container">
       <div class="left-side">
-        <el-button size="mini" icon="el-icon-menu" class="hidden-lg-and-up" @click="openDrawer"></el-button>
+        <el-button size="mini" class="hidden-lg-and-up" @click="openDrawer"><MenuOutlined /></el-button>
         <el-breadcrumb separator-class="el-icon-arrow-right custom">
           <el-breadcrumb-item v-for="link in links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
           <el-breadcrumb-item>{{ title }}</el-breadcrumb-item>
@@ -21,6 +21,7 @@
 </template>
 
 <script lang="ts">
+import { MenuOutlined } from '@ant-design/icons-vue';
 import { defineComponent, PropType } from 'vue';
 import { useStore } from 'vuex';
 
@@ -28,6 +29,7 @@ import Link from '@/classes/shared/Link';
 
 export default defineComponent({
   name: 'PageHead',
+  components: { MenuOutlined },
   props: {
     title: {
       type: String as PropType<string>,
@@ -35,7 +37,7 @@ export default defineComponent({
     },
     links: {
       type: Array as PropType<Link[]>,
-      required: true,
+      default: () => [],
     },
     showSaveButton: {
       type: Boolean as PropType<boolean>,
@@ -51,7 +53,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const openDrawer = () => store.commit('drawer/openDrawer');
+    const openDrawer = () => store.commit('main/openDrawer');
     return {
       openDrawer,
     };
@@ -60,6 +62,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.el-breadcrumb {
+  display: flex;
+  align-items: center;
+}
 .head-container {
   background-color: #eef1f6;
   width: 100%;
@@ -73,7 +79,13 @@ export default defineComponent({
   align-items: center;
 
   :deep(.el-button) {
-    margin-right: 10px;
+    margin-right: 20px;
+    padding: 0;
+    border: none;
+    background-color: inherit;
+  }
+  :deep(.anticon) {
+    font-size: 25px;
   }
 }
 </style>

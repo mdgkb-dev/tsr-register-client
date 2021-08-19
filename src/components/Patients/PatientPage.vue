@@ -129,6 +129,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.patientId) {
+        await store.commit('patients/resetPatient');
         title.value = 'Создать пациента';
       } else {
         await store.dispatch('patients/get', route.params.patientId);

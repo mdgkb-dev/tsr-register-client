@@ -1,3 +1,4 @@
+import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default class Period implements IPeriod {
@@ -10,7 +11,7 @@ export default class Period implements IPeriod {
     this.dateEnd = period.dateEnd;
   }
 
-  static StartLessEnd(rule: any, value: any, callback: any): void {
+  static StartLessEnd(rule: any, _: unknown, callback: MyCallbackWithOptParam): void {
     if (new Date(rule.options.dateStart) < new Date(rule.options.dateEnd)) {
       callback();
     } else {

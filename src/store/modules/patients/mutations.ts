@@ -69,6 +69,31 @@ const mutations: MutationTree<State> = {
     disability.id = uuidv4();
     state.patient.disabilities.push(disability);
   },
+  setDisabilityDateEnd(state, id: string) {
+    state.patient.disabilities = state.patient.disabilities.map((i: IDisability) => {
+      if (i.id === id && i.period) {
+        const date = new Date(i.period.dateStart);
+        date.setFullYear(date.getFullYear() + 1);
+        i.period.dateEnd = date.toDateString();
+        return i;
+      }
+      return i;
+    });
+  },
+  setEdvDateEnd(state, id: string) {
+    state.patient.disabilities = state.patient.disabilities.map((disability: IDisability) => {
+      disability.edvs = disability.edvs.map((i: IEdv) => {
+        if (i.id === id && i.period) {
+          const date = new Date(i.period.dateStart);
+          date.setFullYear(date.getFullYear() + 1);
+          i.period.dateEnd = date.toDateString();
+          return i;
+        }
+        return i;
+      })
+      return disability;
+    });
+  },
   addEdv(state, disabilityId: string) {
     const edv = new Edv();
     edv.id = uuidv4();
@@ -101,6 +126,9 @@ const mutations: MutationTree<State> = {
   removeFile(state, id: string) {
     const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
     if (i > -1) state.patient.human.fileInfos.splice(i, 1);
+  },
+  resetPatient(state) {
+    state.patient = new Patient();
   },
 };
 

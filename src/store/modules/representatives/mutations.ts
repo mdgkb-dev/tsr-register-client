@@ -9,6 +9,7 @@ import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import Patient from '@/classes/patients/Patient';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {
@@ -56,6 +57,9 @@ const mutations: MutationTree<State> = {
   },
   setFilteredItems(state, items: IRepresentative[]) {
     state.filteredRepresentatives = items.map((p: IRepresentative) => new Representative(p));
+  },
+  resetRepresentative(state) {
+    state.representative = new Representative();
   },
 };
 
