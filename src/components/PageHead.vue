@@ -12,9 +12,9 @@
       <el-button v-if="showSaveButton" type="success" round native-type="submit" @click="$emit('submitForm')"
         >Сохранить изменения</el-button
       >
-      <el-button v-if="showAddButton" type="success" round @click="$emit('create')"
-        >Добавить<i class="el-icon-plus" style="margin-left: 10px"></i
-      ></el-button>
+      <el-button v-if="showAddButton" type="success" round data-test="PageHeadAddButton" @click="$emit('create')">
+        Добавить<i class="el-icon-plus" style="margin-left: 10px"></i>
+      </el-button>
     </div>
   </el-affix>
   <!-- </div> -->
