@@ -5,7 +5,7 @@ import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
-import MkbCLass from '@/classes/mkb/MkbСlass';
+import MkbClass from '@/classes/mkb/MkbСlass';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -16,7 +16,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, mkbClasses: IMkbClass[]) {
-    state.mkbClasses = mkbClasses.map((m: IMkbClass) => new MkbCLass(m));
+    state.mkbClasses = mkbClasses.map((m: IMkbClass) => new MkbClass(m));
   },
   setDiagnosis(state, mkbDiagnosis: IMkbDiagnosis[]) {
     state.mkbDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
