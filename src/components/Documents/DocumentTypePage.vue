@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -80,7 +79,7 @@ import { useStore } from 'vuex';
 import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import DocumentTypeRules from '@/classes/documents/DocumentTypeRules';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
@@ -92,7 +91,6 @@ import useValidate from '@/mixins/useValidate';
 export default defineComponent({
   name: 'DocumentTypePage',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
@@ -109,7 +107,6 @@ export default defineComponent({
       { label: 'Дата', value: 'date' },
     ]);
     const rules = DocumentTypeRules;
-    const title: Ref<string> = ref('');
 
     const documentType: WritableComputedRef<IDocumentType> = computed({
       get(): IDocumentType {
@@ -126,15 +123,17 @@ export default defineComponent({
     const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async (): Promise<void> => {
+      let title: string;
       if (!route.params.documentTypeId) {
         store.commit('documentTypes/set', new DocumentType());
-        title.value = 'Создать документ';
+        title = 'Создать документ';
       } else {
-        title.value = 'Редактировать документ';
+        title = 'Редактировать документ';
         await store.dispatch('documentTypes/get', String(route.params.documentTypeId));
       }
 
       pushToLinks(['/document-types'], ['Регистры пациентов']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -171,7 +170,6 @@ export default defineComponent({
       mount,
       options,
       rules,
-      title,
       add,
       cancel,
       remove,

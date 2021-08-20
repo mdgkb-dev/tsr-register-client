@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
-    <PageHead :title="title" :links="links" />
     <div class="table-background" style="height: auto; margin-bottom: 20px">
       <el-row>
         <el-col :span="15">
@@ -117,7 +116,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
@@ -126,9 +125,8 @@ import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
-  name: 'RegisterList',
+  name: 'RegisterPatientsPage',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
@@ -136,7 +134,6 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('');
     const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
     const user: Ref<IUserAuthorized> = computed(() => store.getters['auth/user']);
     const cols: Ref<IRegisterProperty[]> = ref([]);
@@ -149,7 +146,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       await store.dispatch('registers/get', route.params.registerId);
       pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
-      title.value = register.value.name;
+      store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
       mount.value = true;
       await setCols();
     });
@@ -180,7 +177,6 @@ export default defineComponent({
       register,
       user,
       mount,
-      title,
       edit,
     };
   },

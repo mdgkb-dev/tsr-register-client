@@ -49,11 +49,10 @@
             <el-date-picker
               v-model="scope.row.period.dateEnd"
               type="date"
-              :disabled-date="disabledDate"
+              :disabled-date="(time) => disabledDate(time, scope.row.period.dateStart)"
               format="DD.MM.YYYY"
               placeholder="Выберите дату"
               :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"
-              @focus="dateEndFocusHandler(scope.row.period.dateStart)"
             ></el-date-picker>
           </el-form-item>
         </template>
@@ -223,13 +222,9 @@ export default defineComponent({
     const edvDateStartChangeHandler = (id: string): void => {
       store.commit('patients/setEdvDateEnd', id);
     };
-    const endDateEdge: Ref<string | undefined> = ref();
-    const dateEndFocusHandler = (date: string): void => {
-      endDateEdge.value = date;
-    };
-    const disabledDate = (time: Date) => {
-      if (endDateEdge.value) {
-        return time.getTime() < Date.parse(endDateEdge.value);
+    const disabledDate = (time: Date, dateStart: Date) => {
+      if (dateStart) {
+        return time.getTime() < new Date(dateStart).getTime();
       }
     };
 
@@ -312,7 +307,6 @@ export default defineComponent({
       birthDate,
       addDisability,
       edvDateStartChangeHandler,
-      dateEndFocusHandler,
     };
   },
 });

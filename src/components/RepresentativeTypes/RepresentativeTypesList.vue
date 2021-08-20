@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -36,14 +35,13 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 export default defineComponent({
   name: 'RepresentativeTypesList',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
@@ -66,6 +64,7 @@ export default defineComponent({
     };
 
     onBeforeMount(async () => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Типы представителей', create }));
       await store.dispatch('representativeTypes/getAll');
       mount.value = true;
     });

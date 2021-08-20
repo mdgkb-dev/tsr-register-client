@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -22,18 +21,16 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IRegister from '@/interfaces/registers/IRegister';
 
 export default defineComponent({
   name: 'RegisterLinkList',
-  components: { PageHead },
 
   setup() {
     const router = useRouter();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Регистры пациентов');
     const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
 
     const link = (row: any): void => {
@@ -41,6 +38,7 @@ export default defineComponent({
     };
 
     onBeforeMount(async () => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Регистры пациентов' }));
       await store.dispatch('registers/getAll');
       mount.value = true;
     });
@@ -48,7 +46,6 @@ export default defineComponent({
     return {
       registers,
       mount,
-      title,
       link,
     };
   },

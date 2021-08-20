@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -31,7 +30,7 @@ import { useStore } from 'vuex';
 
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
 import AnthropometryRules from '@/classes/anthropometry/AnthropometryRules';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
@@ -40,9 +39,6 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'AnthropometryPage',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -52,7 +48,6 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(!!route.params.anthropometryId);
     const mount: Ref<boolean> = ref(false);
     const rules = AnthropometryRules;
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -60,16 +55,18 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.anthropometryId) {
         store.commit('anthropometry/set', new Anthropometry());
-        title.value = 'Создать параметр';
+        title = 'Создать параметр';
       } else {
-        title.value = 'Редактировать параметр';
+        title = 'Редактировать параметр';
         await store.dispatch('anthropometry/get', route.params.anthropometryId);
         anthropometry.value = store.getters['anthropometry/anthropometry'];
       }
 
       pushToLinks(['/anthropometry'], ['Антропометрия']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -93,7 +90,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

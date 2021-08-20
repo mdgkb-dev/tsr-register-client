@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -34,24 +33,23 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 
 export default defineComponent({
   name: 'DocumentTypeList',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
     const store = useStore();
     const router = useRouter();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Типы документов');
     const documentTypes: ComputedRef<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
 
     onBeforeMount(async (): Promise<void> => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Типы документов', create }));
       await store.dispatch('documentTypes/getAll');
       mount.value = true;
     });
@@ -71,7 +69,6 @@ export default defineComponent({
     return {
       documentTypes,
       mount,
-      title,
       create,
       edit,
       remove,

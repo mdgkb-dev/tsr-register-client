@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="patient-page-container">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row><PatientPageInfo :patient="patient" /></el-row>
     <el-row>
       <el-collapse>
@@ -75,10 +74,10 @@ import { useStore } from 'vuex';
 
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
+import MainHeader from '@/classes/shared/MainHeader';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import PageHead from '@/components/PageHead.vue';
 import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
@@ -104,7 +103,6 @@ export default defineComponent({
     MkbForm,
     DisabilityForm,
     PatientToRepresentativeForm,
-    PageHead,
     PatientRegistersForm,
   },
   setup() {
@@ -120,7 +118,6 @@ export default defineComponent({
     const rules = {
       human: HumanRules,
     };
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -128,15 +125,17 @@ export default defineComponent({
     const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.patientId) {
         await store.commit('patients/resetPatient');
-        title.value = 'Создать пациента';
+        title = 'Создать пациента';
       } else {
         await store.dispatch('patients/get', route.params.patientId);
-        title.value = patient.value.human.getFullName();
+        title = patient.value.human.getFullName();
       }
       await store.dispatch('anthropometry/getAll', route.params.patientId);
       pushToLinks(['/patients'], ['Список пациентов']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -174,7 +173,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

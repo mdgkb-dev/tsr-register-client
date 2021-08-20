@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -43,7 +42,7 @@ import { useStore } from 'vuex';
 
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
@@ -52,9 +51,6 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -64,7 +60,6 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(!!route.params.representativeTypeId);
     const mount: Ref<boolean> = ref(false);
     const rules = RepresentativeTypeRules;
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -72,16 +67,18 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.representativeTypeId) {
         store.commit('representativeTypes/set', new RepresentativeType());
-        title.value = 'Создать тип';
+        title = 'Создать тип';
       } else {
-        title.value = 'Редактировать тип';
+        title = 'Редактировать тип';
         await store.dispatch('representativeTypes/get', route.params.representativeTypeId);
         representativeType.value = store.getters['representativeTypes/representativeType'];
       }
 
       pushToLinks(['/representative-types'], ['Типы представителей']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -105,7 +102,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

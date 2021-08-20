@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="representative-page-container">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <RepresentativePageInfo />
     </el-row>
@@ -39,9 +38,9 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import RepresentativeRules from '@/classes/representatives/RepresentativeRules';
+import MainHeader from '@/classes/shared/MainHeader';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
-import PageHead from '@/components/PageHead.vue';
 import RepresentativePageInfo from '@/components/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/Representatives/RepresentativeToPatientForm.vue';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
@@ -57,7 +56,6 @@ export default defineComponent({
     DocumentForm,
     RepresentativeToPatientForm,
     RepresentativePageInfo,
-    PageHead,
   },
   setup() {
     const store = useStore();
@@ -69,7 +67,6 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
     const rules = RepresentativeRules;
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -77,16 +74,18 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.representativeId) {
         isEditMode.value = false;
         store.commit('representatives/resetRepresentative');
-        title.value = 'Создать представителя';
+        title = 'Создать представителя';
       } else {
         isEditMode.value = true;
         await store.dispatch('representatives/get', route.params.representativeId);
-        title.value = representative.value.human.getFullName();
+        title = representative.value.human.getFullName();
       }
       pushToLinks(['/representatives'], ['Список представителей']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -111,7 +110,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },
