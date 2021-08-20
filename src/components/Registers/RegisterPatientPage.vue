@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="patient-page-container">
-    <PageHead :title="patient.human.getFullName()" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <el-collapse>
         <el-form ref="form" label-position="top" :status-icon="true" :model="patient">
@@ -103,8 +102,8 @@ import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import MainHeader from '@/classes/shared/MainHeader';
 import HumanForm from '@/components/HumanForm.vue';
-import PageHead from '@/components/PageHead.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRegister from '@/interfaces/registers/IRegister';
@@ -116,7 +115,6 @@ import useValidate from '@/mixins/useValidate';
 export default defineComponent({
   name: 'RegisterPatientPage',
   components: {
-    PageHead,
     HumanForm,
     DataComponentComputed,
   },
@@ -141,6 +139,7 @@ export default defineComponent({
       await store.dispatch('patients/get', route.params.patientId);
 
       pushToLinks(['/register-link-list/', `/registers/patients/${route.params.registerId}`], ['Регистры пациентов', register.value.name]);
+      store.commit('main/setMainHeader', new MainHeader({ title: patient.value.human.getFullName(), links, save: submitForm }));
 
       mount.value = true;
       window.addEventListener('beforeunload', beforeWindowUnload);

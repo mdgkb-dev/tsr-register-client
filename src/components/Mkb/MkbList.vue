@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
-    <PageHead :title="title" />
     <div class="table-background" style="height: auto">
       <el-scrollbar>
         <MkbTree />
@@ -11,28 +10,28 @@
 
 <script lang="ts">
 import { defineAsyncComponent, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 
 export default defineComponent({
   name: 'MkbList',
   components: {
-    PageHead,
     MkbTree,
   },
   setup() {
+    const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('МКБ10');
 
     onBeforeMount(() => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'МКБ10' }));
       mount.value = true;
     });
 
     return {
       mount,
-      title,
     };
   },
 });

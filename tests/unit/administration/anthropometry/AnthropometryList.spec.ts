@@ -78,7 +78,7 @@ describe('AnthropometryList.vue', () => {
 
     // Act
     await flushPromises();
-    await wrapper.find('[data-test="PageHeadAddButton"]').trigger('click');
+    await wrapper.find('[data-test="MainHeadAddButton"]').trigger('click');
 
     // Assert
     expect(mockRouterPush).toHaveBeenCalledWith(redirectPath);

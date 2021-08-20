@@ -47,7 +47,6 @@ import { useStore } from 'vuex';
 
 import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IOption from '@/interfaces/patients/IOption';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';

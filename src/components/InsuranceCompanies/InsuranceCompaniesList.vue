@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -34,24 +33,23 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 
 export default defineComponent({
   name: 'InsuranceCompanies',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
     const store = useStore();
     const router = useRouter();
-    const title: Ref<string> = ref('Страховые компании');
     const mount: Ref<boolean> = ref(false);
     const insuranceCompanies: ComputedRef<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
 
     onBeforeMount(async (): Promise<void> => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Страховые компании', create }));
       await store.dispatch('insuranceCompanies/getAll');
       mount.value = true;
     });
@@ -71,7 +69,6 @@ export default defineComponent({
     return {
       insuranceCompanies,
       mount,
-      title,
       create,
       edit,
       remove,

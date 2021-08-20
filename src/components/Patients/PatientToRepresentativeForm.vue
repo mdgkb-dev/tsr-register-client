@@ -1,5 +1,5 @@
 <template>
-  <el-button @click="add" style="margin-bottom: 20px">Добавить представителя</el-button>
+  <el-button style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
   <el-table v-if="mount" :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
@@ -45,7 +45,6 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import IOption from '@/interfaces/shared/IOption';
 
 export default defineComponent({
   name: 'PatientToRepresentativeForm',

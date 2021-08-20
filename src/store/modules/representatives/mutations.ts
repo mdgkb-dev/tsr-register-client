@@ -9,7 +9,6 @@ import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import Patient from '@/classes/patients/Patient';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {

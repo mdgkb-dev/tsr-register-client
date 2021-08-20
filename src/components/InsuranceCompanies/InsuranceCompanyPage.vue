@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -28,7 +27,7 @@ import { useStore } from 'vuex';
 
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 import InsuranceCompanyRules from '@/classes/insuranceCompanies/InsuranceCompanyRules';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
@@ -37,9 +36,6 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'InsuranceCompanyPage',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -48,7 +44,6 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
     const rules = InsuranceCompanyRules;
-    const title: Ref<string> = ref('');
 
     const insuranceCompany: ComputedRef<IInsuranceCompany> = computed(() => store.getters['insuranceCompanies/insuranceCompany']);
 
@@ -58,17 +53,19 @@ export default defineComponent({
     const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async (): Promise<void> => {
+      let title: string;
       if (!route.params.insuranceCompanyId) {
         isEditMode.value = false;
         store.commit('insuranceCompanies/set', new InsuranceCompany());
-        title.value = 'Создать компанию';
+        title = 'Создать компанию';
       } else {
         isEditMode.value = true;
-        title.value = 'Редактировать компанию';
+        title = 'Редактировать компанию';
         await store.dispatch('insuranceCompanies/get', route.params.insuranceCompanyId);
       }
 
       pushToLinks(['/insurance-companies'], ['Страховые компании']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -96,7 +93,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

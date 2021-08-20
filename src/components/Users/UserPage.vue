@@ -39,10 +39,12 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
+import MainHeader from '@/classes/shared/MainHeader';
 import User from '@/classes/user/User';
 import HumanForm from '@/components/HumanForm.vue';
 import PageInfo from '@/components/Users/PageInfo.vue';
 import IUser from '@/interfaces/users/IUser';
+import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
 export default defineComponent({
@@ -58,7 +60,6 @@ export default defineComponent({
 
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('');
 
     const rules: ComputedRef<any> = computed(() => {
       return { human: HumanRules };
@@ -66,18 +67,22 @@ export default defineComponent({
     const user: ComputedRef<IUser | undefined> = computed(() => store.getters['users/user']);
 
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    const { links, pushToLinks } = useBreadCrumbsLinks();
 
     onBeforeMount(async (): Promise<void> => {
+      let title: string;
       if (!route.params.userId) {
         isEditMode.value = false;
         store.commit('users/set', new User());
-        title.value = 'Создать юзера';
+        title = 'Создать юзера';
       } else {
         isEditMode.value = true;
-        title.value = 'Редактировать юзера';
+        title = 'Редактировать юзера';
         await store.dispatch('users/get', route.params.userId);
       }
 
+      pushToLinks(['/users'], ['Список пользователей']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -108,7 +113,6 @@ export default defineComponent({
     return {
       mount,
       rules,
-      title,
       user,
       submitForm,
     };

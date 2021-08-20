@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 
+import MainHeader from '@/classes/shared/MainHeader';
 import { RootState } from '@/store/types';
 
 import getters from './getters';
@@ -9,6 +10,7 @@ import { State } from './state';
 export const getDefaultState = (): State => {
   return {
     isDrawerOpen: false,
+    mainHeader: new MainHeader(),
   };
 };
 

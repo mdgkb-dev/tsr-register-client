@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -35,21 +34,19 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
 export default defineComponent({
   name: 'AnthropometryList',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
     const router = useRouter();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Антропометрия');
     const anthropometries: ComputedRef<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
 
     const edit = async (id: string): Promise<void> => {
@@ -65,6 +62,7 @@ export default defineComponent({
     };
 
     onBeforeMount(async () => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Антропометрия', create }));
       await store.dispatch('anthropometry/getAll');
       mount.value = true;
     });
@@ -72,7 +70,6 @@ export default defineComponent({
     return {
       anthropometries,
       mount,
-      title,
       create,
       edit,
       remove,
