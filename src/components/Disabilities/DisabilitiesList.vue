@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" />
     <div class="table-background">
       <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
@@ -108,25 +107,22 @@ import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
+import MainHeader from '@/classes/shared/MainHeader';
 
 export default defineComponent({
   name: 'PatientsList',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
     const search: Ref<string> = ref('');
     const searchFullName: Ref<string> = ref('');
-    const title: Ref<string> = ref('Инвалидность');
     const patients: ComputedRef<IPatient[]> = computed(() => store.getters['patients/patients']);
     const { formatDate } = useDateFormat();
 
     onBeforeMount(async () => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Инвалидность' }));
       try {
         await store.dispatch('patients/getAllWithDisabilities');
       } catch (e) {
@@ -162,7 +158,6 @@ export default defineComponent({
       patients,
       search,
       searchFullName,
-      title,
       filterTable,
       formatDate,
     };

@@ -1,29 +1,68 @@
 <template>
-  <el-col :span="23"></el-col>
-  <!--  <el-col :span="1"> <el-button @click="logout()">Выйти</el-button></el-col>-->
+  <div class="head-container">
+    <div class="left-side">
+      <el-button size="mini" class="hidden-lg-and-up" @click="openDrawer"><MenuOutlined /></el-button>
+      <el-breadcrumb separator-class="el-icon-arrow-right custom">
+        <el-breadcrumb-item v-for="link in mainHeader.links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ mainHeader.title }}</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+    <el-button v-if="mainHeader.save" type="success" round native-type="submit" @click="mainHeader.save()">Сохранить изменения</el-button>
+    <el-button v-if="mainHeader.create" type="success" round @click="mainHeader.create()">
+      <span>Добавить</span>
+      <i class="el-icon-plus" style="margin-left: 10px"></i>
+    </el-button>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent } from 'vue';
+import { MenuOutlined } from '@ant-design/icons-vue';
+import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
+
+import IMainHeader from '@/interfaces/shared/IMainHeader';
 
 export default defineComponent({
   name: 'MainHeader',
+  components: { MenuOutlined },
   setup() {
     const store = useStore();
-
-    const userName: ComputedRef = computed(() => store.getters['auth/getUserName']);
+    const openDrawer = (): void => store.commit('main/openDrawer');
+    const mainHeader: Ref<IMainHeader[]> = computed(() => store.getters['main/mainHeader']);
 
     return {
-      userName,
+      openDrawer,
+      mainHeader,
     };
   },
 });
 </script>
 
-<style scoped>
-.h {
+<style lang="scss" scoped>
+.el-breadcrumb {
   display: flex;
-  justify-content: right;
+  align-items: center;
+}
+.head-container {
+  background-color: #eef1f6;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+.left-side {
+  display: flex;
+  align-items: center;
+
+  :deep(.el-button) {
+    margin-right: 20px;
+    padding: 0;
+    border: none;
+    background-color: inherit;
+  }
+  :deep(.anticon) {
+    font-size: 25px;
+  }
 }
 </style>

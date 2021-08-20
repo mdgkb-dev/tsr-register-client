@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -31,7 +30,7 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
@@ -40,9 +39,6 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RegisterGroupPage',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -55,7 +51,6 @@ export default defineComponent({
     const rules = {
       name: [{ required: true, message: 'Необходимо указать название группы', trigger: 'blur' }],
     };
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -63,17 +58,19 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.registerGroupId) {
         isEditMode.value = false;
         store.commit('registerGroups/set', new RegisterGroup());
-        title.value = 'Создать группу';
+        title = 'Создать группу';
       } else {
         isEditMode.value = true;
-        title.value = 'Редактировать группу';
+        title = 'Редактировать группу';
         await store.dispatch('registerGroups/get', route.params.registerGroupId);
       }
 
       pushToLinks(['/register-groups'], ['Группы для регистров']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -97,7 +94,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

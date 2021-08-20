@@ -1,19 +1,16 @@
 <template>
   <div v-if="mount" style="height: 100%; overflow: hidden">
-    <PageHead :title="'Список пациентов'" :show-add-button="true" @create="create" />
     <div class="table-background">
-      <div style="display: flex; align-items: flex-start">
-        <el-autocomplete
-          v-model="queryStringsPatient"
-          style="width: 100%; margin-bottom: 20px; margin-right: 10px"
-          popper-class="wide-dropdown"
-          :fetch-suggestions="findPatients"
-          placeholder="Найти пациента"
-          @select="handlePatientSelect"
-          @input="handleSearchInput"
-        >
-        </el-autocomplete>
-      </div>
+      <el-autocomplete
+        v-model="queryStringsPatient"
+        style="width: 100%; margin-bottom: 20px; margin-right: 10px"
+        popper-class="wide-dropdown"
+        :fetch-suggestions="findPatients"
+        placeholder="Найти пациента"
+        @select="handlePatientSelect"
+        @input="handleSearchInput"
+      >
+      </el-autocomplete>
       <el-input
         v-model="search"
         prefix-icon="el-icon-search"
@@ -205,7 +202,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
@@ -221,7 +218,6 @@ import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
-    PageHead,
     TableButtonGroup,
     FilterTextForm,
     FilterSelectForm,
@@ -237,7 +233,6 @@ export default defineComponent({
     const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: ['м', 'ж'] })]);
 
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Пациенты');
     const queryStringsPatient: Ref<string> = ref('');
 
     const searchFullName = ref('');
@@ -251,7 +246,7 @@ export default defineComponent({
         lock: true,
         text: 'Загрузка',
       });
-
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create }));
       await store.dispatch('patients/getAll', 0);
       await store.dispatch('meta/getCount', 'patient');
       mount.value = true;
@@ -355,7 +350,6 @@ export default defineComponent({
       searchAddress,
       searchFullName,
       setPage,
-      title,
       genderFilter,
     };
   },

@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form
@@ -63,7 +62,7 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import RegisterProperty from '@/classes/registers/RegisterProperty';
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
@@ -74,9 +73,6 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',
-  components: {
-    PageHead,
-  },
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -91,7 +87,6 @@ export default defineComponent({
       name: [{ required: true, message: 'Необходимо заполнить название свойства', trigger: 'blur' }],
       valueTypeId: [{ required: true, message: 'Необходимо выбрать тип данных', trigger: 'change' }],
     };
-    const title: Ref<string> = ref('');
     const showSet: Ref<boolean> = ref(false);
     const showRadio: Ref<boolean> = ref(false);
 
@@ -101,19 +96,21 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.registerPropertyId) {
         isEditMode.value = false;
         store.commit('registerProperties/set', new RegisterProperty());
-        title.value = 'Создать свойство';
+        title = 'Создать свойство';
       } else {
         isEditMode.value = true;
-        title.value = 'Редактировать свойство';
+        title = 'Редактировать свойство';
         await store.dispatch('registerProperties/get', route.params.registerPropertyId);
       }
       if (registerProperty.value.valueTypeId) changeRelation(registerProperty.value.valueTypeId);
       await store.dispatch('registerProperties/getValueTypes');
 
       pushToLinks(['/register-properties'], ['Свойства для регистров']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -174,7 +171,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },

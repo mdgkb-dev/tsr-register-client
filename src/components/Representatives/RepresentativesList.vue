@@ -1,7 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
-
     <el-autocomplete
       v-model="queryStringsRepresentative"
       style="width: 100%; margin-bottom: 20px"
@@ -127,7 +125,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IFilter from '@/interfaces/filters/IFilter';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -139,7 +137,6 @@ import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
@@ -155,7 +152,6 @@ export default defineComponent({
     const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
     const curPage = ref(0);
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Представители');
 
     const filterName: Ref<IFilter[]> = ref([]);
     const filterDate: Ref<IFilter[]> = ref([]);
@@ -168,6 +164,7 @@ export default defineComponent({
         lock: true,
         text: 'Загрузка',
       });
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create }));
       await store.dispatch('representatives/getAll', 0);
       await store.dispatch('meta/getCount', 'representative');
       filterName.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
@@ -272,7 +269,6 @@ export default defineComponent({
       filterTable,
       representatives,
       mount,
-      title,
       search,
       searchFullName,
       searchAddress,

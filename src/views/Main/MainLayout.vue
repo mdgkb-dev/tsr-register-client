@@ -5,6 +5,7 @@
     </div>
     <el-container direction="vertical" style="height: 100%; overflow: visible">
       <div class="right-container">
+        <MainHeader />
         <div class="page-container">
           <slot />
         </div>
@@ -17,6 +18,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import MainHeader from './MainHeader.vue';
 import MainSideDrawer from './MainSideDrawer.vue';
 import MainSidePanel from './MainSidePanel.vue';
 
@@ -25,29 +27,34 @@ export default defineComponent({
   components: {
     MainSideDrawer,
     MainSidePanel,
+    MainHeader,
   },
 });
 </script>
 
 <style lang="scss" scoped>
+$max-side-padding: 160px;
+$min-side-padding: 80px;
+
 .main-container {
   border: 1px solid #eee;
   background-color: rgb(238, 241, 246);
   height: 100%;
-  overflow: visible;
-  padding-left: 160px;
+  padding-left: $max-side-padding;
 }
 
 .right-container {
   height: 100%;
-  overflow: auto;
-  overflow-x: unset;
-  padding-right: 160px;
+  // overflow: auto;
+  // overflow-x: unset;
+  overflow: hidden;
+  padding-right: $max-side-padding;
 }
 
 .page-container {
-  margin-right: 100px;
-  overflow: visible;
+  padding-right: $max-side-padding;
+  height: calc(100vh - 56px);
+  overflow: overlay;
 }
 
 .side-panel-container {
@@ -56,11 +63,12 @@ export default defineComponent({
 
 @media only screen and (max-width: 1500px) {
   .main-container {
-    padding-left: 80px;
+    padding-left: $min-side-padding;
   }
 
-  .right-container {
-    padding-right: 80px;
+  .right-container,
+  .page-container {
+    padding-right: $min-side-padding;
   }
 
   .side-panel-container {

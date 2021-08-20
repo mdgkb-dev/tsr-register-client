@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <PageHead :title="title" :show-add-button="true" @create="create" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -34,21 +33,19 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import PageHead from '@/components/PageHead.vue';
+import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 export default defineComponent({
   name: 'RegisterPropertyList',
   components: {
-    PageHead,
     TableButtonGroup,
   },
   setup() {
     const router = useRouter();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Свойства для регистров');
     const registerProperties: Ref<IRegisterProperty[]> = computed(() => store.getters['registerProperties/registerProperties']);
 
     const edit = async (id: string): Promise<void> => {
@@ -64,6 +61,7 @@ export default defineComponent({
     };
 
     onBeforeMount(async () => {
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Свойства для регистров', create }));
       await store.dispatch('registerProperties/getAll');
       mount.value = true;
     });
@@ -71,7 +69,6 @@ export default defineComponent({
     return {
       registerProperties,
       mount,
-      title,
       create,
       edit,
       remove,

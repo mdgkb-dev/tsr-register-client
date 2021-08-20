@@ -1,8 +1,8 @@
 <template>
   <div class="filter-popover">
-    <el-popover placement="bottom-end" width="auto" trigger="click">
+    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" trigger="click">
       <template #reference>
-        <FilterFilled />
+        <FilterFilled @click.stop="visible = !visible" />
       </template>
       <slot></slot>
       <el-button-group>
@@ -15,11 +15,18 @@
 
 <script lang="ts">
 import { FilterFilled } from '@ant-design/icons-vue';
-import { defineComponent } from 'vue';
+import { defineComponent, Ref, ref } from 'vue';
 export default defineComponent({
   name: 'FilterPopover',
   components: {
     FilterFilled,
+  },
+  setup() {
+    const visible: Ref<boolean> = ref(false);
+
+    return {
+      visible,
+    };
   },
 });
 </script>
@@ -31,7 +38,7 @@ export default defineComponent({
     color: #5cb6ff;
   }
 }
-// Временно скрыты
+// Чтобы скрыть фильтры
 .filter-popover {
   display: none;
   position: absolute;

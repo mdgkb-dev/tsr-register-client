@@ -1,6 +1,5 @@
 <template>
   <div v-if="mount" class="wrapper">
-    <PageHead :title="title" :links="links" :show-save-button="true" @submitForm="submitForm" />
     <el-row>
       <el-form
         ref="form"
@@ -39,8 +38,8 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import Register from '@/classes/registers/Register';
+import MainHeader from '@/classes/shared/MainHeader';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import PageHead from '@/components/PageHead.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
@@ -51,7 +50,6 @@ import useValidate from '@/mixins/useValidate';
 export default defineComponent({
   name: 'RegisterPage',
   components: {
-    PageHead,
     RegisterGroupForm,
     MkbForm,
   },
@@ -65,7 +63,6 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
     const rules = { name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }] };
-    const title: Ref<string> = ref('');
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -73,17 +70,19 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      let title: string;
       if (!route.params.registerId) {
         isEditMode.value = false;
         store.commit('registers/set', new Register());
-        title.value = 'Создать регистр';
+        title = 'Создать регистр';
       } else {
         isEditMode.value = true;
-        title.value = 'Редактировать регистр';
+        title = 'Редактировать регистр';
         await store.dispatch('registers/get', route.params.registerId);
       }
 
       pushToLinks(['/registers'], ['Регистры пациентов']);
+      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
@@ -108,7 +107,6 @@ export default defineComponent({
       links,
       mount,
       rules,
-      title,
       submitForm,
     };
   },
