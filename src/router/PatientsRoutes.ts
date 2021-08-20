@@ -1,7 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import PatientPage from '@/components/Patients/PatientPage.vue';
 import PatientsList from '@/components/Patients/PatientsList.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

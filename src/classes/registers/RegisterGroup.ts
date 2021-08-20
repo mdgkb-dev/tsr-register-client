@@ -6,7 +6,7 @@ export default class RegisterGroup implements IRegisterGroup {
   id?: string;
   name?: string;
   registerPropertyToRegisterGroup: IRegisterPropertyToRegisterGroup[] = [];
-
+  registerPropertyToRegisterGroupForDelete: string[] = [];
   constructor(registerGroup?: IRegisterGroup) {
     if (!registerGroup) {
       return;

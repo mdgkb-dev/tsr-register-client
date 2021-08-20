@@ -1,7 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import RegisterGroupList from '@/components/RegisterGroups/RegisterGroupList.vue';
 import RegisterGroupPage from '@/components/RegisterGroups/RegisterGroupPage.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

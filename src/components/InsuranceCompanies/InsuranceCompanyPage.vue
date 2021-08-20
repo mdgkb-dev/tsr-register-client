@@ -45,7 +45,7 @@ export default defineComponent({
     const route = useRoute();
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.insuranceCompanyId);
     const mount: Ref<boolean> = ref(false);
     const rules = InsuranceCompanyRules;
     const title: Ref<string> = ref('');
@@ -59,11 +59,9 @@ export default defineComponent({
 
     onBeforeMount(async (): Promise<void> => {
       if (!route.params.insuranceCompanyId) {
-        isEditMode.value = false;
         store.commit('insuranceCompanies/set', new InsuranceCompany());
         title.value = 'Создать компанию';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать компанию';
         await store.dispatch('insuranceCompanies/get', route.params.insuranceCompanyId);
       }
@@ -82,7 +80,7 @@ export default defineComponent({
     const submitForm = async (next?: NavigationGuardNext) => {
       saveButtonClick.value = true;
 
-      if (!validate(form)) {
+      if (!validate(form.value)) {
         return;
       }
 
@@ -92,7 +90,6 @@ export default defineComponent({
     return {
       form,
       insuranceCompany,
-      isEditMode,
       links,
       mount,
       rules,

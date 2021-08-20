@@ -1,7 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import UserPage from '@/components/Users/UserPage.vue';
 import UsersList from '@/components/Users/UsersList.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

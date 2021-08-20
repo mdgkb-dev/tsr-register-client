@@ -12,7 +12,7 @@
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название страховой компании" min-width="150" sortable />
-        <el-table-column width="40" fixed="right" align="center">
+        <el-table-column width="40" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
               <TableButtonGroup

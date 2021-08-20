@@ -15,10 +15,7 @@
           <el-form-item label="Название группы" prop="name">
             <el-input v-model="registerGroup.name"></el-input>
           </el-form-item>
-          <RegisterPropertyForm
-            :in-register-property-to-register-group="registerGroup.registerPropertyToRegisterGroup"
-            :in-register-property-options="registerProperties"
-          />
+          <RegisterPropertyForm />
         </el-form>
       </div>
     </el-row>
@@ -32,25 +29,27 @@ import { useStore } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
 import PageHead from '@/components/PageHead.vue';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
 
 export default defineComponent({
   name: 'RegisterGroupPage',
   components: {
     PageHead,
+    RegisterPropertyForm,
   },
   setup() {
     const store = useStore();
     const route = useRoute();
 
-    const registerGroup: Ref<IRegisterProperty> = computed(() => store.getters['registerGroups/registerGroup']);
+    const registerGroup: Ref<IRegisterGroup> = computed(() => store.getters['registerGroups/registerGroup']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.registerGroupId);
     const mount: Ref<boolean> = ref(false);
     const rules = {
       name: [{ required: true, message: 'Необходимо указать название группы', trigger: 'blur' }],
@@ -64,11 +63,9 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.registerGroupId) {
-        isEditMode.value = false;
         store.commit('registerGroups/set', new RegisterGroup());
         title.value = 'Создать группу';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать группу';
         await store.dispatch('registerGroups/get', route.params.registerGroupId);
       }
@@ -93,7 +90,6 @@ export default defineComponent({
     return {
       registerGroup,
       form,
-      isEditMode,
       links,
       mount,
       rules,

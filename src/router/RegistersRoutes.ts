@@ -1,10 +1,11 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import RegisterLinkList from '@/components/Registers/RegisterLinkList.vue';
 import RegisterList from '@/components/Registers/RegisterList.vue';
 import RegisterPage from '@/components/Registers/RegisterPage.vue';
 import RegisterPatientPage from '@/components/Registers/RegisterPatientPage.vue';
 import RegisterPatientsPage from '@/components/Registers/RegisterPatientsPage.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

@@ -8,6 +8,7 @@ export default interface IRegister {
   name: string;
   registerDiagnosis: IRegisterDiagnosis[];
   registerGroupToRegister: IRegisterGroupToRegister[];
+  registerGroupToRegisterForDelete: string[];
   registerToPatient: IRegisterToPatient[];
 
   getProps: () => IRegisterProperty[];

@@ -101,7 +101,7 @@ export default defineComponent({
     const router = useRouter();
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.documentTypeId);
     const mount: Ref<boolean> = ref(false);
     const options: { label: string; value: string }[] = reactive([
       { label: 'Строка', value: 'string' },
@@ -127,11 +127,9 @@ export default defineComponent({
 
     onBeforeMount(async (): Promise<void> => {
       if (!route.params.documentTypeId) {
-        isEditMode.value = false;
         store.commit('documentTypes/set', new DocumentType());
         title.value = 'Создать документ';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать документ';
         await store.dispatch('documentTypes/get', String(route.params.documentTypeId));
       }
@@ -152,10 +150,7 @@ export default defineComponent({
     };
 
     const remove = (field: IDocumentTypeField): void => {
-      const index = documentType.value.documentTypeFields.indexOf(field);
-      if (index !== -1) {
-        documentType.value.documentTypeFields.splice(index, 1);
-      }
+      store.commit('documentTypes/removeField', field);
     };
 
     const cancel = async (): Promise<void> => {
@@ -172,7 +167,6 @@ export default defineComponent({
     return {
       documentType,
       form,
-      isEditMode,
       links,
       mount,
       options,

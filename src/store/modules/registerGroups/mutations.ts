@@ -34,6 +34,7 @@ const mutations: MutationTree<State> = {
     const index = state.registerGroup.registerPropertyToRegisterGroup.indexOf(item);
     if (index !== -1) {
       state.registerGroup.registerPropertyToRegisterGroup.splice(index, 1);
+      if (item.id) state.registerGroup.registerPropertyToRegisterGroupForDelete.push(item.id);
     }
   },
 };

@@ -1,7 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import DocumentTypeList from '@/components/Documents/DocumentTypeList.vue';
 import DocumentTypePage from '@/components/Documents/DocumentTypePage.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

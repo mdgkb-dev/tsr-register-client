@@ -61,7 +61,7 @@ export default defineComponent({
     };
 
     const remove = (item: IRepresentativeToPatient): void => {
-      store.commit('representatives/removeRegisterGroup', item);
+      store.commit('registers/removeRegisterGroup', item);
     };
 
     return {

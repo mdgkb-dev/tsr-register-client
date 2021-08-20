@@ -1,7 +1,8 @@
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+
 import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
 import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
 import { isAuthorized } from '@/router/index';
-import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 export default [
   {

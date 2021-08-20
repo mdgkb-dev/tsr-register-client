@@ -5,8 +5,9 @@ import ICount from '@/interfaces/meta/ICount';
 import { State } from './state';
 
 const mutations: MutationTree<State> = {
-  setCount(state, count: ICount[]) {
-    state.count = Number(count[0].count);
+  setCount(state, count: number) {
+    console.log(count);
+    state.count = count;
   },
 };
 

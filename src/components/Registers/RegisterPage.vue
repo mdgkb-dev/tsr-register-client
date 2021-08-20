@@ -62,7 +62,7 @@ export default defineComponent({
     const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.registerId);
     const mount: Ref<boolean> = ref(false);
     const rules = { name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }] };
     const title: Ref<string> = ref('');
@@ -74,11 +74,9 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.registerId) {
-        isEditMode.value = false;
         store.commit('registers/set', new Register());
         title.value = 'Создать регистр';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать регистр';
         await store.dispatch('registers/get', route.params.registerId);
       }
@@ -104,7 +102,6 @@ export default defineComponent({
     return {
       form,
       register,
-      isEditMode,
       links,
       mount,
       rules,

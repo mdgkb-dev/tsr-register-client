@@ -61,7 +61,7 @@ export default defineComponent({
 
     const representativeType: Ref<IRepresentativeType> = ref(new RepresentativeType());
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.representativeTypeId);
     const mount: Ref<boolean> = ref(false);
     const rules = RepresentativeTypeRules;
     const title: Ref<string> = ref('');
@@ -73,11 +73,9 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.representativeTypeId) {
-        isEditMode.value = false;
         store.commit('representativeTypes/set', new RepresentativeType());
         title.value = 'Создать тип';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать тип';
         await store.dispatch('representativeTypes/get', route.params.representativeTypeId);
         representativeType.value = store.getters['representativeTypes/representativeType'];
@@ -98,13 +96,12 @@ export default defineComponent({
       saveButtonClick.value = true;
       if (!validate(form.value)) return;
 
-      await submitHandling('representativeTypes', representativeType.value, next);
+      await submitHandling('representativeTypes', representativeType.value, next, 'representative-types');
     };
 
     return {
       representativeType,
       form,
-      isEditMode,
       links,
       mount,
       rules,

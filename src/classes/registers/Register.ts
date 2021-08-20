@@ -13,6 +13,7 @@ export default class Register implements IRegister {
   registerDiagnosis: IRegisterDiagnosis[] = [];
   registerGroupToRegister: IRegisterGroupToRegister[] = [];
   registerToPatient: IRegisterToPatient[] = [];
+  registerGroupToRegisterForDelete: string[] = [];
 
   constructor(register?: IRegister) {
     if (!register) {

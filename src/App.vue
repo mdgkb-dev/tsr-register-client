@@ -5,13 +5,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount } from 'vue';
+import { computed, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import LoginLayout from './views/Login/LoginLayout.vue';
 import MainLayout from './views/Main/MainLayout.vue';
-import store from '@/store';
 
 export default defineComponent({
   name: 'App',

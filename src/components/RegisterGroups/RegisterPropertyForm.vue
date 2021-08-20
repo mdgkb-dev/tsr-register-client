@@ -11,8 +11,8 @@
           :prop="'registerPropertyToRegisterGroup.' + scope.$index + '.registerPropertyId'"
           :rules="[{ required: true, message: 'Необходимо выбрать группу', trigger: 'change' }]"
         >
-          <el-select v-model="inRegisterPropertyToRegisterGroup[scope.$index].registerPropertyId">
-            <el-option v-for="item in inRegisterPropertyOptions" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          <el-select v-model="registerPropertyToRegisterGroup[scope.$index].registerPropertyId">
+            <el-option v-for="item in registerProperties" :key="item.id" :label="item.name" :value="item.id"> </el-option>
           </el-select>
         </el-form-item>
       </template>
@@ -36,10 +36,10 @@ import { useStore } from 'vuex';
 
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
-
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 export default defineComponent({
   name: 'RegisterGroupPage',
-
+  components: { TableButtonGroup },
   setup() {
     const store = useStore();
 
@@ -56,7 +56,7 @@ export default defineComponent({
       store.commit('registerGroups/addProperty');
     };
     const remove = (item: IRegisterPropertyToRegisterGroup): void => {
-      store.commit('registerProperties/addRadioItem', item);
+      store.commit('registerGroups/removeProperty', item);
     };
 
     return {

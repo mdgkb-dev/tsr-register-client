@@ -85,7 +85,7 @@ export default defineComponent({
     const valueTypes: Ref<IValueType[]> = computed(() => store.getters['registerProperties/valueTypes']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.registerPropertyId);
     const mount: Ref<boolean> = ref(false);
     const rules = {
       name: [{ required: true, message: 'Необходимо заполнить название свойства', trigger: 'blur' }],
@@ -102,11 +102,9 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       if (!route.params.registerPropertyId) {
-        isEditMode.value = false;
         store.commit('registerProperties/set', new RegisterProperty());
         title.value = 'Создать свойство';
       } else {
-        isEditMode.value = true;
         title.value = 'Редактировать свойство';
         await store.dispatch('registerProperties/get', route.params.registerPropertyId);
       }
@@ -170,7 +168,6 @@ export default defineComponent({
       registerProperty,
       valueTypes,
       form,
-      isEditMode,
       links,
       mount,
       rules,
