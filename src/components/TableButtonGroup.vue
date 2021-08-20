@@ -1,7 +1,13 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
     <el-button v-if="showDownloadButton" class="table-button" icon="el-icon-download" @click="$emit('download')" />
-    <el-button v-if="showEditButton" class="table-button" icon="el-icon-edit" @click="$emit('edit')" />
+    <el-button
+      v-if="showEditButton"
+      class="table-button"
+      icon="el-icon-edit"
+      data-test="tableButtonGroupEditButton"
+      @click="$emit('edit')"
+    />
     <el-popconfirm
       v-if="showRemoveButton"
       confirm-button-text="Да"
@@ -13,7 +19,7 @@
       @cancel="() => {}"
     >
       <template #reference>
-        <el-button class="table-button" icon="el-icon-delete" />
+        <el-button class="table-button" icon="el-icon-delete" data-test="tableButtonGroupDeleteButton" />
       </template>
     </el-popconfirm>
   </el-space>

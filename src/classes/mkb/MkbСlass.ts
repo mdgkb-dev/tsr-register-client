@@ -5,7 +5,7 @@ import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 
-export default class MkbCLass implements IMkbClass {
+export default class MkbClass implements IMkbClass {
   id?: string;
   number?: string;
   name?: string;

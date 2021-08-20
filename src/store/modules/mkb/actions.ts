@@ -7,7 +7,7 @@ import MkbIdSet from '@/classes/mkb/MkbIdSet';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
-import MkbCLass from '@/classes/mkb/MkbСlass';
+import MkbClass from '@/classes/mkb/MkbСlass';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
@@ -60,10 +60,10 @@ const actions: ActionTree<State, RootState> = {
   searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
     commit('setSubDiagnosisByDiagnosisId', await httpClient.get({ query: `diagnosis/${diagnosisId}` }));
   },
-  updateRelevant: async (_, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
+  updateRelevant: async (_, mkb: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
     await httpClient.put({ query: `${mkb.id}?mkbType=${mkb.constructor.name}` });
   },
-  updateName: async (_, mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
+  updateName: async (_, mkb: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
     await httpClient.put({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
   },
 };

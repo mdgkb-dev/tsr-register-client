@@ -65,7 +65,7 @@ import MkbIdSet from '@/classes/mkb/MkbIdSet';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
-import MkbCLass from '@/classes/mkb/MkbСlass';
+import MkbClass from '@/classes/mkb/MkbСlass';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -315,13 +315,13 @@ export default defineComponent({
       editing.value = !editing.value;
     };
 
-    const updateNameHandler = (data: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
+    const updateNameHandler = (data: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
       const mkb = data;
       mkb.isEditMode = false;
       store.dispatch('mkb/updateName', data);
     };
 
-    const updateRelevantHandler = (mkb: MkbCLass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
+    const updateRelevantHandler = (mkb: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
       store.dispatch('mkb/updateRelevant', mkb);
     };
 
