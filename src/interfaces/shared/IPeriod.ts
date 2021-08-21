@@ -1,4 +1,5 @@
 export default interface IPeriod {
+  id?: string;
   dateStart: string;
   dateEnd: string;
 

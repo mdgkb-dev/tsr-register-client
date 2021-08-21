@@ -15,6 +15,7 @@ export default interface IHuman {
   contact: IContact;
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
   documents: IDocument[];
+  documentsForDelete: string[];
   fileInfos: FileInfo[];
 
   getFullName: () => string;

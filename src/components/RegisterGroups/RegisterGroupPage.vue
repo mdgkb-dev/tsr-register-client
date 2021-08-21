@@ -27,9 +27,7 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRo
 import { useStore } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
-import PageHead from '@/components/PageHead.vue';
 import MainHeader from '@/classes/shared/MainHeader';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
@@ -40,7 +38,6 @@ import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyFo
 export default defineComponent({
   name: 'RegisterGroupPage',
   components: {
-    PageHead,
     RegisterPropertyForm,
   },
   setup() {

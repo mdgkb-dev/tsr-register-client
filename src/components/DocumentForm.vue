@@ -158,11 +158,12 @@ export default defineComponent({
       }
 
       const documentFieldValues: DocumentFieldValue[] = selectedType.value.documentTypeFields.map(
-        (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField })
+        (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField, documentTypeFieldId: typeField.id })
       );
 
       const document = new Document({
         id: uuidv4(),
+        documentTypeId: selectedType.value.id,
         documentType: { ...selectedType.value },
         documentFieldValues,
         isDraft: true,

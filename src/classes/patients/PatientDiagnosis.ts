@@ -15,7 +15,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
   mkbSubDiagnosis?: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
   mkbDiagnosis?: IMkbDiagnosis;
-  patientId = '';
+  patientId?: string;
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[] = [];
 

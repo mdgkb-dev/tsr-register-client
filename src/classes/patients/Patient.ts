@@ -25,7 +25,9 @@ export default class Patient implements IPatient {
   human: IHuman = new Human();
   anthropometryData: IAnthropometryData[] = [];
   representativeToPatient: IRepresentativeToPatient[] = [];
+  representativeToPatientForDelete: string[] = [];
   disabilities: IDisability[] = [];
+  disabilitiesForDelete: string[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
   heightWeight: IHeightWeight[] = [];
   registerToPatient: IRegisterToPatient[] = [];

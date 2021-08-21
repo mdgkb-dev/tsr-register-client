@@ -8,22 +8,26 @@ import IPeriod from '@/interfaces/shared/IPeriod';
 export default class Disability implements IDisability {
   id?: string;
   period?: IPeriod = new Period();
+  periodId?: string;
   patient?: IPatient;
   patientId?: string;
   edvs: IEdv[] = [];
 
-  constructor(disability?: IDisability) {
-    if (!disability) {
-      return;
-    }
-    this.id = disability.id;
-    if (disability.period) this.period = new Period(disability.period);
-    this.patientId = disability.patientId;
-    this.patient = disability.patient;
-    if (disability.edvs) this.edvs = disability.edvs.map((e) => new Edv(e));
+  constructor(i?: IDisability) {
+    if (!i) return;
+    this.id = i.id;
+    if (i.period) this.period = new Period(i.period);
+    this.periodId = i.periodId;
+    this.patientId = i.patientId;
+    this.patient = i.patient;
+    if (i.edvs) this.edvs = i.edvs.map((e) => new Edv(e));
   }
 
   getActuallyEdv(): IEdv {
     return this.edvs[this.edvs.length - 1];
+  }
+
+  dateIsCorrect(): boolean {
+    return !(this.period && this.period.dateStart && this.period.dateEnd && this.period.dateStart > this.period.dateEnd);
   }
 }

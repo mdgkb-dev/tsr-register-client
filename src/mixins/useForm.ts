@@ -41,11 +41,11 @@ export default function (isEditMode = false) {
       ElMessage.error(e.toString());
       return;
     }
-    if (next) {
-      next();
-    } else {
-      await router.push(`/${path ?? module}`);
-    }
+    // if (next) {
+    //   next();
+    // } else {
+    //   await router.push(`/${path ?? module}`);
+    // }
   };
 
   const syncSubmitHandling = (

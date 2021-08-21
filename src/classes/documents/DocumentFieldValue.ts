@@ -5,6 +5,7 @@ export default class DocumentFieldValue implements IDocumentFieldValue {
   id?: string;
   documentId?: string;
   documentTypeField!: IDocumentTypeField;
+  documentTypeFieldId?: string;
   valueString?: string;
   valueNumber?: number;
   valueDate?: Date;
@@ -17,6 +18,7 @@ export default class DocumentFieldValue implements IDocumentFieldValue {
     this.id = value.id;
     this.documentId = value.documentId;
     this.documentTypeField = value.documentTypeField;
+    this.documentTypeFieldId = value.documentTypeFieldId;
 
     if (value.valueString) {
       this.valueString = value.valueString;

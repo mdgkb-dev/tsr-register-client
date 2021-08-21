@@ -16,7 +16,9 @@ export default interface IPatient {
   anthropometryData: IAnthropometryData[];
   patientDiagnosis: IPatientDiagnosis[];
   representativeToPatient: IRepresentativeToPatient[];
+  representativeToPatientForDelete: string[];
   disabilities: IDisability[];
+  disabilitiesForDelete: string[];
   heightWeight: IHeightWeight[];
   registerToPatient: IRegisterToPatient[];
   registerPropertyToPatient: IRegisterPropertyToPatient[];

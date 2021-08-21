@@ -9,6 +9,7 @@ import IDocumentType from '@/interfaces/documents/IDocumentType';
 export default class Document implements IDocument {
   id?: string = uuidv4();
   documentType!: IDocumentType;
+  documentTypeId?: string;
   humanId?: string = '';
   documentFieldValues: IDocumentFieldValue[] = [];
   isDraft? = false;
@@ -23,6 +24,7 @@ export default class Document implements IDocument {
     }
     this.documentType = new DocumentType(document.documentType);
     this.humanId = document.humanId;
+    this.documentTypeId = document.documentTypeId;
 
     if (document.documentFieldValues) {
       this.documentFieldValues = document.documentFieldValues.map((value) => new DocumentFieldValue(value));

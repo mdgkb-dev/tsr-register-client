@@ -57,6 +57,7 @@ const mutations: MutationTree<State> = {
   removeRepresentative(state, item: IRepresentativeToPatient): void {
     const index = state.patient.representativeToPatient.indexOf(item);
     if (index !== -1) state.patient.representativeToPatient.splice(index, 1);
+    if (item.id) state.patient.representativeToPatientForDelete.push(item.id);
   },
   addHeightWeight(state) {
     state.patient.heightWeight.push(new HeightWeight());
@@ -101,6 +102,7 @@ const mutations: MutationTree<State> = {
   removeDisability(state, item: IDisability) {
     const index = state.patient.disabilities.indexOf(item);
     if (index !== -1) state.patient.disabilities.splice(index, 1);
+    if (item.id) state.patient.disabilitiesForDelete.push(item.id);
   },
   addDocument(state, item: IDocument) {
     state.patient.human.documents.push(item);
@@ -108,6 +110,7 @@ const mutations: MutationTree<State> = {
   removeDocument(state, id: string) {
     const i = state.patient.human.documents.findIndex((item: IDocument) => item.id === id);
     if (i > -1) state.patient.human.documents.splice(i, 1);
+    state.patient.human.documentsForDelete.push(id);
   },
   addFiles(state, item: IFileInfo) {
     state.patient.human.fileInfos.push(item);

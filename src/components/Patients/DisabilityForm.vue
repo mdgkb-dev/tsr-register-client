@@ -154,7 +154,7 @@
 
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, defineComponent, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import FileInfo from '@/classes/files/FileInfo';
@@ -173,10 +173,6 @@ export default defineComponent({
     const disabilities: Ref<IDisability[]> = computed(() => store.getters['patients/disabilities']);
     const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters['patients/fileInfos']);
     const fileAnchor = ref();
-
-    onBeforeMount(async () => {
-      await store.dispatch('disabilities/getAll');
-    });
 
     const addDisability = (): void => store.commit('patients/addDisability');
 
@@ -230,14 +226,7 @@ export default defineComponent({
 
     const validateDisabilityDates = (_: unknown, __: unknown, callback: MyCallbackWithOptParam): void => {
       disabilities.value.forEach((disability: IDisability) => {
-        if (
-          disability.period &&
-          disability.period.dateStart &&
-          disability.period.dateEnd &&
-          disability.period.dateStart > disability.period?.dateEnd
-        ) {
-          callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
-        }
+        if (disability.dateIsCorrect()) callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
       });
       callback();
     };

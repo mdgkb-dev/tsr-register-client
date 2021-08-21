@@ -18,6 +18,7 @@ export default class Human implements IHuman {
   contact = new Contact();
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[] = [];
   documents: IDocument[] = [];
+  documentsForDelete: string[] = [];
   fileInfos: IFileInfo[] = [];
 
   constructor(human?: IHuman) {
