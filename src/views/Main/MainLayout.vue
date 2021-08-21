@@ -35,6 +35,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 $max-side-padding: 160px;
 $min-side-padding: 80px;
+// Вычитается высота mainHeader
+$page-container-height: calc(100vh - 80px);
 
 .main-container {
   border: 1px solid #eee;
@@ -53,7 +55,7 @@ $min-side-padding: 80px;
 
 .page-container {
   padding-right: $max-side-padding;
-  height: calc(100vh - 56px);
+  height: $page-container-height;
   overflow: overlay;
 }
 

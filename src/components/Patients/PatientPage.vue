@@ -181,4 +181,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
+.patient-page-container {
+  margin-bottom: 20px;
+}
 </style>
