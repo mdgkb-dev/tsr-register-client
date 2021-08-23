@@ -19,6 +19,9 @@ import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPrope
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IFileInfo from '@/interfaces/files/IFileInfo';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -211,5 +214,15 @@ export default class Patient implements IPatient {
     if (index > -1) {
       this.registerPropertySetToPatient.splice(index, 1);
     }
+  }
+
+  getFileInfos(): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    this.human.documents.forEach((doc: IDocument) => {
+      doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
+        if (fileInfoToDoc.fileInfo) fileInfos.push(fileInfoToDoc.fileInfo);
+      });
+    });
+    return fileInfos;
   }
 }

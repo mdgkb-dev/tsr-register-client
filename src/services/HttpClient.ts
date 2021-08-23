@@ -1,5 +1,5 @@
 import moment from 'moment';
-
+import { v4 as uuidv4 } from 'uuid';
 import { IBodilessParams, IBodyfulParams } from '@/interfaces/fetchApi/IHTTPTypes';
 
 export default class HttpClient {
@@ -37,7 +37,7 @@ export default class HttpClient {
       if (fileInfos) {
         for (const fileInfo of fileInfos) {
           if (fileInfo.file) {
-            body.append('files', fileInfo.file, fileInfo.originalName);
+            body.append(fileInfo.category ?? 'files', fileInfo.file, fileInfo.originalName);
           }
         }
       }
@@ -65,7 +65,7 @@ export default class HttpClient {
       if (fileInfos) {
         for (const fileInfo of fileInfos) {
           if (fileInfo.file) {
-            body.append('files', fileInfo.file, fileInfo.originalName);
+            body.append(fileInfo.category ?? 'files', fileInfo.file, fileInfo.originalName);
           }
         }
       }

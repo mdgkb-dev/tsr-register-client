@@ -80,6 +80,7 @@ export default defineComponent({
         r.register = undefined;
         return r;
       });
+      console.log(newObj);
       store.commit('patients/setRegisterts', newObj);
     };
 

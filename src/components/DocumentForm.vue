@@ -76,21 +76,20 @@
             }
           "
         />
-
-        <el-table :data="fileInfos.filter((info) => info.category === document.id)" size="mini" style="width: 100%">
+        <el-table :data="document.fileInfoToDocument" size="mini" style="width: 100%">
           <el-table-column label="Приложенные файлы">
             <template #default="scope">
-              {{ scope.row.originalName }}
+              {{ scope.row.fileInfo.originalName }}
             </template>
           </el-table-column>
           <el-table-column align="right">
             <template #default="scope">
               <TableButtonGroup
                 :show-remove-button="true"
-                :show-download-button="!scope.row.isDraft"
+                :show-download-button="!scope.row.fileInfo.isDraft"
                 :horizontal="true"
-                @download="downloadFile(scope.row.id)"
-                @remove="removeFile(scope.row.id)"
+                @download="downloadFile(scope.row.fileInfo.id)"
+                @remove="removeFile(scope.row.fileInfo.id)"
               />
             </template>
           </el-table-column>
@@ -115,6 +114,8 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 
 export default defineComponent({
   name: 'DocumentForm',
@@ -167,6 +168,7 @@ export default defineComponent({
         documentType: { ...selectedType.value },
         documentFieldValues,
         isDraft: true,
+        fileInfoToDocument: [],
       });
 
       store.commit(`${storeModule.value}/addDocument`, document);
@@ -174,11 +176,18 @@ export default defineComponent({
 
     const remove = (documentId: string): void => store.commit(`${storeModule.value}/removeDocument`, documentId);
 
-    const addFiles = (event: InputEvent, category: string): void => {
+    const addFiles = (event: InputEvent, documentId: string): void => {
       const target = event.target as HTMLInputElement;
       if (!target || !target.files) return;
-      const newInfos: IFileInfo[] = Array.from(target.files).map((file: File) => FileInfo.CreateDraft(file, category));
-      store.commit(`${storeModule.value}/addFiles`, newInfos);
+      const newInfos: IFileInfoToDocument[] = Array.from(target.files).map((file: File) => {
+        const fileInfo = FileInfo.CreateDraft(file, documentId);
+        return new FileInfoToDocument({
+          documentId: documentId,
+          fileInfoId: fileInfo.id,
+          fileInfo: fileInfo,
+        });
+      });
+      store.commit(`${storeModule.value}/addDocumentsFiles`, newInfos);
     };
 
     const removeFile = (fileId: string): void => store.commit(`${storeModule.value}/removeFile`, fileId);
@@ -196,7 +205,12 @@ export default defineComponent({
       fileAnchor.value.click();
     };
 
+    const filterFilesByDocId = (docId: string): IFileInfo[] => {
+      return fileInfos.value.filter((info: IFileInfo) => info.category === docId);
+    };
+
     return {
+      filterFilesByDocId,
       selectDocTypeEvent,
       docTypeError,
       selectDocType,

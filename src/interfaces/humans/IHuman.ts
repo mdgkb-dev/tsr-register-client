@@ -13,7 +13,9 @@ export default interface IHuman {
   addressRegistration: string;
   addressResidential: string;
   contact: IContact;
+  contactId?: string;
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
+  insuranceCompanyToHumanForDelete: string[];
   documents: IDocument[];
   documentsForDelete: string[];
   fileInfos: FileInfo[];

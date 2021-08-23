@@ -5,6 +5,8 @@ import DocumentType from '@/classes/documents/DocumentType';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 
 export default class Document implements IDocument {
   id?: string = uuidv4();
@@ -13,23 +15,17 @@ export default class Document implements IDocument {
   humanId?: string = '';
   documentFieldValues: IDocumentFieldValue[] = [];
   isDraft? = false;
+  fileInfoToDocument: IFileInfoToDocument[] = [];
 
-  constructor(document?: IDocument) {
-    if (!document) {
-      return;
-    }
-
-    if (document.id) {
-      this.id = document.id;
-    }
-    this.documentType = new DocumentType(document.documentType);
-    this.humanId = document.humanId;
-    this.documentTypeId = document.documentTypeId;
-
-    if (document.documentFieldValues) {
-      this.documentFieldValues = document.documentFieldValues.map((value) => new DocumentFieldValue(value));
-    }
-
-    this.isDraft = document.isDraft ?? false;
+  constructor(i?: IDocument) {
+    if (!i) return;
+    this.id = i.id;
+    this.documentType = new DocumentType(i.documentType);
+    this.humanId = i.humanId;
+    this.documentTypeId = i.documentTypeId;
+    if (i.documentFieldValues) this.documentFieldValues = i.documentFieldValues.map((value) => new DocumentFieldValue(value));
+    this.isDraft = i.isDraft ?? false;
+    if (i.fileInfoToDocument)
+      this.fileInfoToDocument = i.fileInfoToDocument.map((item: IFileInfoToDocument) => new FileInfoToDocument(item));
   }
 }

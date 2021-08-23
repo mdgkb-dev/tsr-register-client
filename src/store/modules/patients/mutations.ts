@@ -17,6 +17,7 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -47,6 +48,7 @@ const mutations: MutationTree<State> = {
   removeInsurance(state, item: IInsuranceCompanyToHuman): void {
     const index = state.patient.human.insuranceCompanyToHuman.indexOf(item);
     if (index > -1) state.patient.human.insuranceCompanyToHuman.splice(index, 1);
+    if (item.id) state.patient.human.insuranceCompanyToHumanForDelete.push(item.id);
   },
   setRegisterts(state, registerToPatient: IRegisterToPatient[]) {
     state.patient.registerToPatient = registerToPatient;
@@ -112,8 +114,12 @@ const mutations: MutationTree<State> = {
     if (i > -1) state.patient.human.documents.splice(i, 1);
     state.patient.human.documentsForDelete.push(id);
   },
-  addFiles(state, item: IFileInfo) {
-    state.patient.human.fileInfos.push(item);
+  addDocumentsFiles(state, items: IFileInfoToDocument[]) {
+    const i = state.patient.human.documents.findIndex((doc: IDocument) => doc.id === items[0].documentId);
+    if (i > -1) {
+      console.log(state.patient.human.documents[i]);
+      state.patient.human.documents[i].fileInfoToDocument = [...state.patient.human.documents[i].fileInfoToDocument, ...items];
+    }
   },
   removeFile(state, id: string) {
     const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);

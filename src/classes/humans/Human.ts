@@ -16,15 +16,15 @@ export default class Human implements IHuman {
   addressRegistration = '';
   addressResidential = '';
   contact = new Contact();
+  contactId?: string;
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[] = [];
+  insuranceCompanyToHumanForDelete: string[] = [];
   documents: IDocument[] = [];
   documentsForDelete: string[] = [];
   fileInfos: IFileInfo[] = [];
 
   constructor(human?: IHuman) {
-    if (!human) {
-      return;
-    }
+    if (!human) return;
 
     this.id = human.id;
     this.name = human.name ?? '';
@@ -35,7 +35,7 @@ export default class Human implements IHuman {
     this.addressRegistration = human.addressRegistration ?? '';
     this.addressResidential = human.addressResidential ?? '';
     this.contact = new Contact(human.contact);
-
+    this.contactId = human.contactId;
     if (human.insuranceCompanyToHuman) {
       this.insuranceCompanyToHuman = human.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
     }

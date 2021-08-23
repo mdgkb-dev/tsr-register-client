@@ -51,6 +51,7 @@ const getters: GetterTree<State, RootState> = {
     return state.patient.human.documents;
   },
   fileInfos(state): IFileInfo[] {
+    console.log('state.patient.human.fileInfos', state.patient.human.fileInfos);
     return state.patient.human.fileInfos;
   },
   disabilities(state): IDisability[] {

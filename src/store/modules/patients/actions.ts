@@ -31,17 +31,16 @@ const actions: ActionTree<State, RootState> = {
   },
   create: async ({ commit }, patient: IPatient): Promise<void> => {
     patient.human.removeDocumentFieldValuesIds();
-    commit('create', await httpClient.post({ payload: patient, fileInfos: patient.human.fileInfos, isFormData: true }));
+    commit('create', await httpClient.post({ payload: patient, fileInfos: patient.getFileInfos(), isFormData: true }));
   },
   edit: async ({ commit }, patient: IPatient): Promise<void> => {
-    const fileInfos = patient.human.fileInfos.filter((info) => info.isDraft);
     commit(
       'update',
       await httpClient.put({
         payload: patient,
         query: patient.id,
         isFormData: true,
-        fileInfos,
+        fileInfos: patient.getFileInfos(),
       })
     );
   },

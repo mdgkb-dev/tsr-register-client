@@ -150,7 +150,7 @@ export default defineComponent({
     const { formatDate } = useDateFormat();
 
     const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
-    const curPage = ref(0);
+    const curPage = ref(1);
     const mount: Ref<boolean> = ref(false);
 
     const filterName: Ref<IFilter[]> = ref([]);
@@ -179,7 +179,7 @@ export default defineComponent({
         lock: true,
         text: 'Загрузка',
       });
-      await store.dispatch('representatives/getAll', pageNum);
+      await store.dispatch('representatives/getAll', pageNum - 1);
       loading.close();
     };
 

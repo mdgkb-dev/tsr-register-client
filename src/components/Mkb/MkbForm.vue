@@ -2,6 +2,7 @@
   <!-- TODO: Переписать props на store. -->
   <div class="table-under-collapse">
     <el-space style="margin-bottom: 10px">
+      {{ patientDiagnosis }}
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
       <MkbTreeDialog
         v-model:checkedDiagnosis="diagnosisData"

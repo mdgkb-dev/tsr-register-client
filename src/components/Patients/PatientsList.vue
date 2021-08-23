@@ -238,7 +238,7 @@ export default defineComponent({
     const searchFullName = ref('');
     const searchAddress = ref('');
     const search = ref('');
-    const curPage = ref(0);
+    const curPage = ref(1);
     const loading = ref(false);
 
     onBeforeMount(async () => {
