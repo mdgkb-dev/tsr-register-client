@@ -36,6 +36,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+
     const { showMessageError } = useMessage();
     const registrationForm: { login: string; password: string; region: string } = reactive({
       login: '',
@@ -50,7 +51,7 @@ export default defineComponent({
         return;
       }
 
-      if (!store.getters['auth/isAuthorized']) {
+      if (!store.getters['auth/isAuth']) {
         showMessageError('Не удалось зарегистрироваться, обратитесь к разработчиками');
         return;
       }
