@@ -3,7 +3,6 @@ import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNorma
 
 import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
-import AnthropometriesRoutes from '@/router/AnthropometriesRoutes';
 import AuthRoutes from '@/router/AuthRoutes';
 import DocumentsRoutes from '@/router/DocumentsRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
@@ -57,7 +56,6 @@ const routes: Array<RouteRecordRaw> = [
   ...InsuranceCompaniesRoutes,
   ...RepresentativeTypesRoutes,
   ...DocumentsRoutes,
-  ...AnthropometriesRoutes,
   ...UsersRoutes,
   ...RegistersRoutes,
   ...RegisterGroupsRoutes,

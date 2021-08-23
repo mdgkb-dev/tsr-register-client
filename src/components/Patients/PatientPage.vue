@@ -72,7 +72,6 @@ import { computed, defineAsyncComponent, defineComponent, onBeforeMount, Ref, re
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import HumanRules from '@/classes/humans/HumanRules';
 import MainHeader from '@/classes/shared/MainHeader';
 import DocumentForm from '@/components/DocumentForm.vue';
@@ -83,7 +82,6 @@ import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IPatient from '@/interfaces/patients/IPatient';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
@@ -109,7 +107,6 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const anthropometries: Ref<IAnthropometry[]> = computed(() => store.getters['anthropometry/anthropometries']);
     const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
     const form = ref();
@@ -133,7 +130,6 @@ export default defineComponent({
         await store.dispatch('patients/get', route.params.patientId);
         title = patient.value.human.getFullName();
       }
-      await store.dispatch('anthropometry/getAll', route.params.patientId);
       pushToLinks(['/patients'], ['Список пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
@@ -156,14 +152,6 @@ export default defineComponent({
         item.representativeType = undefined;
       }
 
-      let heightId: string | undefined = '';
-      let weightId: string | undefined = '';
-
-      anthropometries.value.forEach((a: IAnthropometry) => {
-        if (a.isHeight()) heightId = a.id;
-        if (a.isWeight()) weightId = a.id;
-      });
-      patient.value.anthropometryData = HeightWeight.toAnthropometryData(patient.value.heightWeight, heightId, weightId, patient.value.id);
       await submitHandling('patients', patient.value, next);
     };
 

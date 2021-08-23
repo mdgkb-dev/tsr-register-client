@@ -5,13 +5,13 @@
     <el-table :data="heightWeight" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
-      <el-table-column prop="human.dateBirth" label="Дата измерения" width="250" sortable align="center">
+      <el-table-column prop="human.dateBirth" label="Дата измерения" width="250" align="center">
         <template #default="scope">
           <el-form-item
             label-width="0"
             style="margin-bottom: 0"
             :prop="'heightWeight.' + scope.$index + '.date'"
-            :rules="[{ required: true, message: 'Необходимо выбрать дату антропометрии', trigger: 'blur' }]"
+            :rules="[{ required: true, message: 'Необходимо выбрать дату измерения', trigger: 'blur' }]"
           >
             <el-date-picker v-model="scope.row.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
           </el-form-item>
@@ -52,7 +52,7 @@
 
       <el-table-column width="40" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.$index)" />
+          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
@@ -82,8 +82,8 @@ export default defineComponent({
       store.commit('patients/addHeightWeight');
     };
 
-    const remove = (index: number): void => {
-      store.commit('patients/removeHeightWeight', index);
+    const remove = (item: IHeightWeight): void => {
+      store.commit('patients/removeHeightWeight', item);
     };
 
     return {

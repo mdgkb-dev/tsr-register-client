@@ -2,7 +2,6 @@
 import { Options, Vue } from 'vue-class-component';
 import { NavigationGuardNext } from 'vue-router';
 
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -21,15 +20,7 @@ export default class FormMixin extends Vue {
 
   async submitHandling(
     store: string,
-    payload:
-      | IPatient
-      | IRepresentative
-      | IAnthropometry
-      | IRegisterProperty
-      | IDocumentType
-      | IRegister
-      | IRegisterGroup
-      | IInsuranceCompany,
+    payload: IPatient | IRepresentative | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
     next?: NavigationGuardNext,
     path?: string
   ): Promise<void> {
@@ -52,15 +43,7 @@ export default class FormMixin extends Vue {
 
   syncSubmitHandling(
     store: string,
-    payload:
-      | IPatient
-      | IRepresentative
-      | IAnthropometry
-      | IRegisterProperty
-      | IDocumentType
-      | IRegister
-      | IRegisterGroup
-      | IInsuranceCompany,
+    payload: IPatient | IRepresentative | IRegisterProperty | IDocumentType | IRegister | IRegisterGroup | IInsuranceCompany,
     path?: string
   ): void {
     try {
