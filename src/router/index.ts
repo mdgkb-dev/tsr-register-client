@@ -21,7 +21,7 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
   const userId = localStorage.getItem('userId');
   if (userId) {
     store.commit('auth/setIsAuth', true);
-    store.commit('setLayout', 'login-layout');
+    store.commit('setLayout', 'main-layout');
     next();
   }
   store.commit('setLayout', 'login-layout');

@@ -78,7 +78,7 @@ const mutations: MutationTree<State> = {
         if (i.id === id && i.period) {
           const date = new Date(i.period.dateStart);
           date.setFullYear(date.getFullYear() + 1);
-          i.period.dateEnd = date.toDateString();
+          i.period.dateEnd = date.toISOString();
           return i;
         }
         return i;
