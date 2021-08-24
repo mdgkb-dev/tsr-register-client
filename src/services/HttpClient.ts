@@ -20,8 +20,13 @@ export default class HttpClient {
       method: 'GET',
       headers: headers ?? this.headers,
     });
-
-    return !isBlob ? res.json() : { href: URL.createObjectURL(await res.blob()), download: String(res.headers.get('Download-File-Name')) };
+    if (!isBlob) {
+      return res.json();
+    }
+    let filename: string | undefined | null = res.headers.get('content-disposition');
+    if (filename) filename = filename.split(';').find((n) => n.includes('filename='));
+    if (filename) filename = filename.replace('filename=', '').trim();
+    return { href: URL.createObjectURL(await res.blob()), download: filename };
   }
 
   async post(params: IBodyfulParams): Promise<any> {
@@ -37,7 +42,7 @@ export default class HttpClient {
       if (fileInfos) {
         for (const fileInfo of fileInfos) {
           if (fileInfo.file) {
-            body.append(fileInfo.category ?? 'files', fileInfo.file, fileInfo.originalName);
+            body.append(fileInfo.id ?? 'files', fileInfo.file, fileInfo.originalName);
           }
         }
       }
@@ -65,7 +70,7 @@ export default class HttpClient {
       if (fileInfos) {
         for (const fileInfo of fileInfos) {
           if (fileInfo.file) {
-            body.append(fileInfo.category ?? 'files', fileInfo.file, fileInfo.originalName);
+            body.append(fileInfo.id ?? 'files', fileInfo.file, fileInfo.originalName);
           }
         }
       }

@@ -5,7 +5,7 @@
 
     <el-table-column label="Представитель" width="250" sortable align="center">
       <template #default="scope">
-        <el-select v-model="representativeToPatient[scope.$index].representativeId">
+        <el-select v-model="representativeToPatient[scope.$index].representativeId" filterable>
           <el-option v-for="item in representativeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </template>
@@ -45,6 +45,7 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import IOptionHuman from '@/interfaces/shared/IOptionHuman';
 
 export default defineComponent({
   name: 'PatientToRepresentativeForm',
@@ -55,7 +56,7 @@ export default defineComponent({
     const store = useStore();
 
     const rules = RepresentativeToPatientRules;
-    const representativeOptions = ref([{}]);
+    const representativeOptions: Ref<IOptionHuman[]> = ref([]);
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
     const mount = ref(false);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
@@ -65,13 +66,14 @@ export default defineComponent({
       await store.dispatch('representativeTypes/getAll');
       await store.dispatch('representatives/getAll');
 
-      representativeOptions.value.splice(0, 1);
       for (const item of representatives.value) {
-        representativeOptions.value.push({
-          label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-          value: item.id,
-          human: item.human,
-        });
+        if (item.id) {
+          representativeOptions.value.push({
+            label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+            value: item.id,
+            human: item.human,
+          });
+        }
       }
       mount.value = true;
     });
