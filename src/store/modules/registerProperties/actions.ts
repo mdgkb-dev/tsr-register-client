@@ -1,12 +1,11 @@
 import { ActionTree } from 'vuex';
 
-import HttpClient from '@/services/HttpClient';
-
-import { State } from './state';
-import RootState from '@/store/types';
-
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
+import HttpClient from '@/services/HttpClient';
+import RootState from '@/store/types';
+
+import { State } from './state';
 
 const httpClient = new HttpClient('register-properties');
 

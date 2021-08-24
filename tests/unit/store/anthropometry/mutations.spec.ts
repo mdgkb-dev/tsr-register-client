@@ -1,8 +1,7 @@
-import StateType from '@/store/modules/anthropometry/state';
-import mutations from '@/store/modules/anthropometry/mutations';
-
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
+import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
+import mutations from '@/store/modules/anthropometry/mutations';
+import StateType from '@/store/modules/anthropometry/state';
 
 describe('Vuex Anthropometry Mutations', () => {
   let state: StateType;
@@ -17,7 +16,11 @@ describe('Vuex Anthropometry Mutations', () => {
   test('Мутация create добавляет в state параметр антропометрии.', () => {
     // Arrange
     expect(state.anthropometries).toHaveLength(0);
-    const anthropometry: IAnthropometry = new Anthropometry({ id: '65bc6bb1-20cc-44dc-96a7-27bfafc0e5a5', name: 'Обхват груди', measure: 'см' });
+    const anthropometry: IAnthropometry = new Anthropometry({
+      id: '65bc6bb1-20cc-44dc-96a7-27bfafc0e5a5',
+      name: 'Обхват груди',
+      measure: 'см',
+    });
     const { create } = mutations;
 
     // Act

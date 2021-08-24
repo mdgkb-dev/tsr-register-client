@@ -34,9 +34,9 @@
 import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
 import { useStore } from 'vuex';
 
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 export default defineComponent({
   name: 'RegisterGroupPage',
   components: { TableButtonGroup },

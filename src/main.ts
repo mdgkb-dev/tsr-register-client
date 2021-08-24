@@ -5,14 +5,13 @@ import router from '@/router';
 import store from '@/store';
 import { components, plugins } from '@/plugins/ElementPlus';
 
-import 'dayjs/locale/ru'; 
+import 'dayjs/locale/ru';
 import '@/assets/element-variables.scss';
 import '@/router/componentHooks';
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
-
 
 for (const [_, component] of Object.entries(components)) {
   app.component(component.name, component);

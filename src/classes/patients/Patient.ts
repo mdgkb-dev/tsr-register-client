@@ -34,6 +34,7 @@ export default class Patient implements IPatient {
   registerToPatient: IRegisterToPatient[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
+  registerPropertySetToPatientForDelete: string[] = [];
 
   constructor(patient?: IPatient) {
     if (!patient) {
@@ -178,7 +179,10 @@ export default class Patient implements IPatient {
     }
     const index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
     if (index > -1) {
+      const idForDelete = this.registerPropertySetToPatient[index].id;
+      if (idForDelete) this.registerPropertySetToPatientForDelete.push(idForDelete);
       this.registerPropertySetToPatient.splice(index, 1);
+      console.log(this.registerPropertySetToPatient);
     }
   }
 

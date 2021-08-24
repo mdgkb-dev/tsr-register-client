@@ -28,12 +28,12 @@ import { useStore } from 'vuex';
 
 import RegisterGroup from '@/classes/registers/RegisterGroup';
 import MainHeader from '@/classes/shared/MainHeader';
+import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import RegisterPropertyForm from '@/components/RegisterGroups/RegisterPropertyForm.vue';
 
 export default defineComponent({
   name: 'RegisterGroupPage',
