@@ -5,7 +5,15 @@
     </el-row>
     <el-row>
       <el-collapse>
-        <el-form ref="form" :status-icon="true" :model="representative" label-width="150px" :rules="rules" @submit.prevent="submitForm">
+        <el-form
+          ref="form"
+          :status-icon="true"
+          :inline-message="true"
+          :model="representative"
+          label-width="150px"
+          :rules="rules"
+          @submit.prevent="submitForm"
+        >
           <div>
             <el-collapse-item>
               <template #title>
@@ -64,7 +72,7 @@ export default defineComponent({
     const representative: Ref<IRepresentative> = computed(() => store.getters['representatives/representative']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(false);
+    const isEditMode: Ref<boolean> = ref(!!route.params.representativeId);
     const mount: Ref<boolean> = ref(false);
     const rules = RepresentativeRules;
 
@@ -76,11 +84,9 @@ export default defineComponent({
     onBeforeMount(async () => {
       let title: string;
       if (!route.params.representativeId) {
-        isEditMode.value = false;
         store.commit('representatives/resetRepresentative');
         title = 'Создать представителя';
       } else {
-        isEditMode.value = true;
         await store.dispatch('representatives/get', route.params.representativeId);
         title = representative.value.human.getFullName();
       }

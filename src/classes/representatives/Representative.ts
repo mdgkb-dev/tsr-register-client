@@ -8,6 +8,7 @@ export default class Representative implements IRepresentative {
   id?: string;
   human: IHuman = new Human();
   representativeToPatient: IRepresetnationType[] = [];
+  representativeToPatientForDelete: string[] = [];
 
   constructor(representative?: IRepresentative) {
     if (!representative) {
@@ -15,9 +16,10 @@ export default class Representative implements IRepresentative {
     }
     this.id = representative.id;
     this.human = new Human(representative.human);
-    if (representative.representativeToPatient)
+    if (representative.representativeToPatient) {
       this.representativeToPatient = representative.representativeToPatient.map(
         (r: RepresentativeToPatient) => new RepresentativeToPatient(r)
       );
+    }
   }
 }

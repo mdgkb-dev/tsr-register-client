@@ -2,19 +2,19 @@ import IRepresentativeType from '@/interfaces/representatives/IRepresentativeTyp
 
 export default class RepresentativeType implements IRepresentativeType {
   id?: string;
-  name = '';
+  parentMaleType = '';
+  parentWomanType = '';
   childMaleType = '';
   childWomanType = '';
-  isMale = false;
 
   constructor(representativeType?: IRepresentativeType) {
     if (!representativeType) {
       return;
     }
     this.id = representativeType.id;
-    this.name = representativeType.name;
+    this.parentMaleType = representativeType.parentMaleType;
+    this.parentWomanType = representativeType.parentWomanType;
     this.childMaleType = representativeType.childMaleType;
     this.childWomanType = representativeType.childWomanType;
-    this.isMale = representativeType.isMale;
   }
 }

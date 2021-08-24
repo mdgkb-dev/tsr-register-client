@@ -1,30 +1,45 @@
 <template>
   <el-button style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
-  <el-table v-if="mount" :data="representativeToPatient" style="width: 950px" class="table-shadow" header-row-class-name="header-style">
+  <el-table v-if="mount" :data="representativeToPatient" style="width: 600px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
     <el-table-column label="Представитель" width="250" sortable align="center">
       <template #default="scope">
-        <el-select v-model="representativeToPatient[scope.$index].representativeId">
-          <el-option v-for="item in representativeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
+        <el-form-item
+          label-width="0"
+          style="margin: 0"
+          :rules="rules.representativeId"
+          :prop="`representativeToPatient.${scope.$index}.representativeId`"
+        >
+          <el-select v-model="representativeToPatient[scope.$index].representativeId" filterable placeholder="Представитель">
+            <el-option v-for="item in representativeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
+        </el-form-item>
       </template>
     </el-table-column>
 
-    <el-table-column label="Роль представителя" align="center">
+    <el-table-column label="Роль представителя" width="250" align="center">
       <template #default="scope">
-        <el-select
-          v-model="representativeToPatient[scope.$index].representativeTypeId"
-          :disabled="representativeToPatient[scope.$index].representativeId ? false : true"
+        <el-form-item
+          label-width="0"
+          style="margin: 0"
+          :rules="rules.representativeTypeId"
+          :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
         >
-          <el-option
-            v-for="item in getRepresentativeTypes(representativeToPatient[scope.$index].representativeId)"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+          <el-select
+            v-model="representativeToPatient[scope.$index].representativeTypeId"
+            placeholder="Роль представителя"
+            :disabled="representativeToPatient[scope.$index].representativeId ? false : true"
           >
-          </el-option>
-        </el-select>
+            <el-option
+              v-for="item in representativeTypes"
+              :key="item.id"
+              :label="getRepresentativeTypeLabel(item, scope.$index)"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
       </template>
     </el-table-column>
 
@@ -54,10 +69,10 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const mount = ref(false);
     const rules = RepresentativeToPatientRules;
     const representativeOptions = ref([{}]);
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
-    const mount = ref(false);
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
     const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/representativeToPatient']);
 
@@ -84,9 +99,15 @@ export default defineComponent({
       store.commit('patients/removeRepresentative', item);
     };
 
-    const getRepresentativeTypes = (id: string): IRepresentativeType[] => {
-      const representative = representatives.value.find((i: IRepresentative) => i.id === id);
-      return representativeTypes.value.filter((i: IRepresentativeType) => i.isMale === representative?.human.isMale);
+    const getRepresentativeTypeLabel = (item: IRepresentativeType, index: number): string => {
+      const representative = representatives.value.find((i: IRepresentative) => {
+        return i.id === representativeToPatient.value[index].representativeId;
+      });
+      if (representative?.human.isMale) {
+        return item.parentMaleType;
+      } else {
+        return item.parentWomanType;
+      }
     };
 
     return {
@@ -97,7 +118,7 @@ export default defineComponent({
       representativeToPatient,
       remove,
       add,
-      getRepresentativeTypes,
+      getRepresentativeTypeLabel,
     };
   },
 });

@@ -25,4 +25,21 @@ export default class RepresentativeToPatient implements IRepresentativeToPatient
     this.representativeId = representativeToPatient.representativeId;
     this.representative = representativeToPatient.representative;
   }
+
+  getRepresentativeParentType(): string {
+    if (!this.representativeType) return '';
+    if (this.representative?.human.isMale) {
+      return this.representativeType.parentMaleType;
+    } else {
+      return this.representativeType.parentWomanType;
+    }
+  }
+  getRepresentativeChildType(): string {
+    if (!this.representativeType) return '';
+    if (this.patient?.human.isMale) {
+      return this.representativeType.childMaleType;
+    } else {
+      return this.representativeType.childWomanType;
+    }
+  }
 }
