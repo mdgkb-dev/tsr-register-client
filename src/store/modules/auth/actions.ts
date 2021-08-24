@@ -1,6 +1,7 @@
 import { ActionTree } from 'vuex';
 
 import IUser from '@/interfaces/users/IUser';
+import IUserResponse from '@/interfaces/users/IUserResponse';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
@@ -10,7 +11,7 @@ const httpClient = new HttpClient('auth');
 
 const actions: ActionTree<State, RootState> = {
   login: async ({ commit }, user: IUser): Promise<void> => {
-    const { user: newUser, token } = await httpClient.post({ query: 'login', payload: user });
+    const { user: newUser, token } = await httpClient.post<IUser, IUserResponse>({ query: 'login', payload: user });
     localStorage.setItem('token', token.accessToken);
     if (newUser.id) localStorage.setItem('userId', newUser.id);
     if (newUser.email) localStorage.setItem('userEmail', newUser.email);
@@ -19,7 +20,7 @@ const actions: ActionTree<State, RootState> = {
     commit('setIsAuth', true);
   },
   register: async ({ commit }, user: IUser): Promise<void> => {
-    const { user: newUser, token } = await httpClient.post({ query: 'register', payload: user });
+    const { user: newUser, token } = await httpClient.post<IUser, IUserResponse>({ query: 'register', payload: user });
     localStorage.setItem('token', token.accessToken);
     if (newUser.id) localStorage.setItem('userId', newUser.id);
     commit('setToken', token.accessToken);

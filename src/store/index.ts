@@ -1,6 +1,5 @@
 import Vuex, { StoreOptions } from 'vuex';
 
-import { anthropometry } from '@/store/modules/anthropometry';
 import auth from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
@@ -34,22 +33,21 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
-    anthropometry,
     auth,
     disabilities,
-    main,
     documentTypes,
     files,
     insuranceCompanies,
+    main,
+    meta,
     mkb,
     patients,
     registerGroups,
     registerProperties,
     registers,
-    representativeTypes,
     representatives,
+    representativeTypes,
     users,
-    meta,
   },
 };
 

@@ -66,7 +66,7 @@
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" class="light-title upper">Вес - Рост</el-col>
-          <el-col :span="12"> {{ patient.getAnthropometryDataFull() ? patient.getAnthropometryDataFull() : 'Нет данных' }}</el-col>
+          <el-col :span="12"> {{ patient.getHeightWeightShort() ? patient.getHeightWeightShort() : 'Нет данных' }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>

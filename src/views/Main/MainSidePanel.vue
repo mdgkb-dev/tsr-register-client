@@ -122,11 +122,6 @@ export default defineComponent({
         class: 'el-icon-setting',
         links: [
           {
-            name: 'AnthropometryList',
-            title: 'Антропометрия',
-            link: '/anthropometry',
-          },
-          {
             name: 'Users',
             title: 'Пользователи',
             link: 'users',

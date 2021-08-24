@@ -3,7 +3,6 @@ import { Ref, ref } from 'vue';
 import { NavigationGuardNext, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -22,7 +21,6 @@ export default function (isEditMode = false) {
     payload:
       | IPatient
       | IRepresentative
-      | IAnthropometry
       | IRegisterProperty
       | IDocumentType
       | IRegister
@@ -41,11 +39,11 @@ export default function (isEditMode = false) {
       ElMessage.error(e.toString());
       return;
     }
-    // if (next) {
-    //   next();
-    // } else {
-    //   await router.push(`/${path ?? module}`);
-    // }
+    if (next) {
+      next();
+    } else {
+      await router.push(`/${path ?? module}`);
+    }
   };
 
   const syncSubmitHandling = (
@@ -53,7 +51,6 @@ export default function (isEditMode = false) {
     payload:
       | IPatient
       | IRepresentative
-      | IAnthropometry
       | IRegisterProperty
       | IDocumentType
       | IRegister

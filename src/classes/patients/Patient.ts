@@ -1,4 +1,3 @@
-import AnthropometryData from '@/classes/anthropometry/AnthropometryData';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
@@ -8,9 +7,11 @@ import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySe
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
+import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
@@ -19,20 +20,17 @@ import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPrope
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import IFileInfo from '@/interfaces/files/IFileInfo';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 
 export default class Patient implements IPatient {
   id?: string;
   human: IHuman = new Human();
-  anthropometryData: IAnthropometryData[] = [];
   representativeToPatient: IRepresentativeToPatient[] = [];
   representativeToPatientForDelete: string[] = [];
   disabilities: IDisability[] = [];
   disabilitiesForDelete: string[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
   heightWeight: IHeightWeight[] = [];
+  heightWeightForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
@@ -44,12 +42,8 @@ export default class Patient implements IPatient {
 
     this.id = patient.id;
     this.human = new Human(patient.human);
-    if (patient.anthropometryData) {
-      patient.anthropometryData.sort(
-        (a: IAnthropometryData, b: IAnthropometryData) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
-      this.anthropometryData = patient.anthropometryData.map((a: IAnthropometryData) => new AnthropometryData(a));
-      this.heightWeight = HeightWeight.anthropometryDataToHeightWeightArr(this.anthropometryData);
+    if (patient.heightWeight) {
+      this.heightWeight = patient.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
     }
     if (patient.patientDiagnosis) {
       this.patientDiagnosis = patient.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
@@ -77,57 +71,29 @@ export default class Patient implements IPatient {
     }
   }
 
-  getAnthropometryDataFull(): string {
-    let total = '';
-    // const anthropometryNames: (string | undefined)[] = [...new Set(this.anthropometryData.map((data: IAnthropometryData) => data.anthropometry?.name))];
-    const anthropometryNames: string[] = ['Вес', 'Рост'];
-    anthropometryNames.forEach((name: string) => {
-      const currentAnthropometryData = this.anthropometryData.filter(
-        (data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase()
-      );
-      if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
-          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
-        );
-        total = `${total} ${lastAnthropometry.getFullInfo()}`;
-      }
-    });
-    return total;
-  }
-
-  getAnthropometryShortData(): string {
-    let total = '';
-    const anthropometryNames: string[] = ['Вес', 'Рост'];
-    anthropometryNames.forEach((name: string) => {
-      const currentAnthropometryData = this.anthropometryData.filter(
-        (data: IAnthropometryData) => data.anthropometry?.name.toLowerCase() === name.toLowerCase()
-      );
-      if (currentAnthropometryData.length) {
-        const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
-          new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
-        );
-        total = `<div>${total} ${lastAnthropometry.getShortInfo()}</div>`;
-      }
-    });
-    return total;
-  }
-
   getActuallyDisability(): IDisability {
     return this.disabilities[this.disabilities.length - 1];
   }
 
-  getLastAnthropometryValue(name: string): number {
-    const currentAnthropometryData = this.anthropometryData.filter((data) => data.anthropometry?.name.toLowerCase() === name.toLowerCase());
-    if (!currentAnthropometryData.length) return 0;
-    const lastAnthropometry = currentAnthropometryData.reduce((mostRecent: IAnthropometryData, item: IAnthropometryData) =>
+  getHeightWeightShort(): string {
+    const lastHeightWeight = this.getLastHeightWeight();
+    if (lastHeightWeight?.weight && lastHeightWeight.height) {
+      return `${lastHeightWeight.weight} кг ${lastHeightWeight.height} см`;
+    }
+    return '';
+  }
+
+  getLastHeightWeight(): IHeightWeight | undefined {
+    if (!this.heightWeight.length) return;
+    return this.heightWeight.reduce((mostRecent: IHeightWeight, item: IHeightWeight) =>
       new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
     );
-    return lastAnthropometry.value;
   }
 
   getBmiGroup(): string {
-    const lastWeight = this.getLastAnthropometryValue('вес');
-    const lastHeight = this.getLastAnthropometryValue('рост');
+    const lastHeightWeight = this.getLastHeightWeight();
+    const lastWeight = lastHeightWeight?.weight;
+    const lastHeight = lastHeightWeight?.height;
     if (!lastWeight || !lastHeight) return 'Недостаточно данных';
     const bmi = Bmi.calculate(lastWeight, lastHeight);
     const month = Bmi.birthDateToMonth(this.human.dateBirth);

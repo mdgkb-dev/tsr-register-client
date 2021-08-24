@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount" class="wrapper" style="height: 100%">
+  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
     <el-autocomplete
       v-model="queryStringsRepresentative"
       style="width: 100%; margin-bottom: 20px"
@@ -106,15 +106,17 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        style="margin-top: 20px; margin-bottom: 20px"
-        :current-page="curPage"
-        background
-        layout="prev, pager, next"
-        :page-count="Math.round(count / 25)"
-        @current-change="setPage"
-      >
-      </el-pagination>
+      <div style="text-align: center; width: 100%">
+        <el-pagination
+          style="margin-top: 20px; margin-bottom: 20px"
+          :current-page="curPage"
+          background
+          layout="prev, pager, next"
+          :page-count="Math.round(count / 25)"
+          @current-change="setPage"
+        >
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>

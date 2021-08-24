@@ -1,4 +1,4 @@
-import { createStore, Store } from 'vuex';
+/* import { createStore, Store } from 'vuex';
 import { mount, flushPromises, VueWrapper } from '@vue/test-utils';
 
 import { components } from '@/plugins/ElementPlus';
@@ -115,3 +115,4 @@ describe('AnthropometryList.vue', () => {
   //   expect(mockDeleteAction).toHaveBeenCalledWith(anthropometryId);
   // });
 });
+ */

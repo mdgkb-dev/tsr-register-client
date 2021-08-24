@@ -1,127 +1,120 @@
-import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
-import { IBodilessParams, IBodyfulParams } from '@/interfaces/fetchApi/IHTTPTypes';
+import axios from 'axios';
+// import moment from 'moment';
 
-export default class HttpClient {
+import { IHttpClient, IBodilessParams, IBodyfulParams } from '@/interfaces/httpClient/IHTTPTypes';
+import IFileInfo from '@/interfaces/files/IFileInfo';
+// import IToUtcDateMethods from '@/interfaces/httpClient/IToUtcDateMethods';
+
+export default class HttpClient implements IHttpClient {
+
   endpoint: string;
   headers: Record<string, string>;
 
-  constructor(endpoint = '/') {
+  constructor(endpoint = '') {
     this.endpoint = endpoint;
     this.headers = { 'Content-Type': 'application/json', 'Content-Length': '98668' };
   }
 
-  async get(params?: IBodilessParams): Promise<any> {
-    const query = params?.query;
-    const headers = params?.headers;
+  async get<ReturnType>(params?: IBodilessParams): Promise<ReturnType> {
     const isBlob = params?.isBlob;
+    const headers = params?.headers;
 
-    const res = await fetch(this.baseUrl(query), {
-      method: 'GET',
-      headers: headers ?? this.headers,
+    const { data, headers: resHeaders } = await axios({
+      url: this.buildUrl(params?.query),
+      method: 'get',
+      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      responseType: !isBlob ? 'json' : 'blob',
     });
-    if (!isBlob) {
-      return res.json();
-    }
-    let filename: string | undefined | null = res.headers.get('content-disposition');
-    if (filename) filename = filename.split(';').find((n) => n.includes('filename='));
-    if (filename) filename = filename.replace('filename=', '').trim();
-    return { href: URL.createObjectURL(await res.blob()), download: filename };
+
+    return !isBlob ? data : { href: URL.createObjectURL(data), download: String(resHeaders.get('Download-File-Name')) };
   }
 
-  async post(params: IBodyfulParams): Promise<any> {
+  async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
+    const { payload, fileInfos, query, headers, isFormData } = params;
+    const { data } = await axios({
+      url: this.buildUrl(query),
+      method: 'post',
+      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
+    });
+
+    return data;
+  }
+
+  async put<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
     const { payload, fileInfos, query, headers, isFormData } = params;
 
-    this.toUtc(payload);
-    let body: string | FormData = JSON.stringify(payload);
-
-    if (isFormData) {
-      body = new FormData();
-      body.append('form', JSON.stringify(payload));
-
-      if (fileInfos) {
-        for (const fileInfo of fileInfos) {
-          if (fileInfo.file) {
-            body.append(fileInfo.id ?? 'files', fileInfo.file, fileInfo.originalName);
-          }
-        }
-      }
-    }
-
-    const res = await fetch(this.baseUrl(query), {
-      method: 'POST',
-      headers: headers ?? isFormData ? {} : this.headers,
-      body,
+    const { data } = await axios({
+      url: this.buildUrl(query),
+      method: 'put',
+      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 
-    return res.json();
+    return data;
   }
 
-  async put(params: IBodyfulParams): Promise<any> {
+  async delete<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
     const { payload, fileInfos, query, headers, isFormData } = params;
 
-    this.toUtc(payload);
-    let body: string | FormData = JSON.stringify(payload);
-
-    if (isFormData) {
-      body = new FormData();
-      body.append('form', JSON.stringify(payload));
-
-      if (fileInfos) {
-        for (const fileInfo of fileInfos) {
-          if (fileInfo.file) {
-            body.append(fileInfo.id ?? 'files', fileInfo.file, fileInfo.originalName);
-          }
-        }
-      }
-    }
-
-    const res = await fetch(this.baseUrl(query), {
-      method: 'PUT',
-      headers: headers ?? isFormData ? {} : this.headers,
-      body,
+    const { data } = await axios({
+      url: this.buildUrl(query),
+      method: 'delete',
+      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 
-    return res.json();
+    return data;
   }
 
-  async delete(query?: string): Promise<any> {
-    const res = await fetch(this.baseUrl(query), {
-      method: 'DELETE',
-      headers: this.headers,
-    });
-    return res.json();
-  }
-
-  private baseUrl(query?: string): string {
+  private buildUrl(query?: string): string {
     const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
     const apiVersion = process.env.VUE_APP_API_V1 ?? '';
 
     if (query) {
       const queryString = query ?? '';
+
       return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
     }
 
     return baseUrl + apiVersion + this.endpoint;
   }
 
-  private toUtc(payload: Record<string, any>): Record<string, any> {
-    const obj = payload;
-    if (!obj) {
-      return obj;
-    }
+  private createFormDataPayload<PayloadType>(payload?: PayloadType, fileInfos?: IFileInfo[]): FormData {
+    const data = new FormData();
+    data.append('form', JSON.stringify(payload));
 
-    for (const item of Object.keys(obj)) {
-      if (obj[item] && typeof obj[item].getMonth !== 'function' && typeof obj[item] === 'object') {
-        this.toUtc(obj[item]);
-      }
-
-      if (obj[item] && typeof obj[item].getMonth === 'function') {
-        obj[item] = moment(obj[item]).add(+moment().utcOffset(), 'm');
-        obj[item] = obj[item].parseZone().utc().format();
+    if (fileInfos) {
+      for (const fileInfo of fileInfos) {
+        if (fileInfo.file) {
+          data.append(fileInfo.id ?? 'files', fileInfo.file, fileInfo.originalName);
+        }
       }
     }
 
-    return obj;
+    return data;
   }
+
+  // private toUtc<PayloadType>(payload: PayloadType): void {
+  //   if (!payload || typeof payload !== 'object') {
+  //     return;
+  //   }
+
+  //   for (const key in payload) {
+  //     if (Object.prototype.hasOwnProperty.call(payload, key)) {
+  //       this.convertToUtc<PayloadType[Extract<keyof PayloadType, string>]>(payload[key]);
+  //     }
+  //   }
+  // }
+
+  // private convertToUtc<PropertyType extends IToUtcDateMethods>(property: PropertyType): void {
+  //   if (property && typeof property === 'object' && typeof property.getMonth !== 'function') {
+  //     this.toUtc(property);
+  //   }
+
+  //   if (property && typeof property.getMonth === 'function') {
+  //     property = moment(property).add(+moment().utcOffset(), 'm');
+  //     property = property.parseZone().utc().format();
+  //   }
+  // }
 }

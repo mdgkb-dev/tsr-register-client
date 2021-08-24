@@ -1,23 +1,20 @@
-import AnthropometryDate from '@/classes/anthropometry/AnthropometryData';
 import Bmi from '@/classes/bmi/Bmi';
-import IAnthropometryData from '@/interfaces/anthropometry/IAnthropometryData';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 
 export default class HeightWeight implements IHeightWeight {
-  id: string;
-  heightId: string;
-  weightId: string;
-  height: number;
-  weight: number;
-  date: string;
+  id?: string;
+  height = 0;
+  weight = 0;
+  date = '';
+  patientId?: string;
 
-  constructor(id = '', heightId = '', height = 0, weightId = '', weight = 0, date = '') {
-    this.id = id;
-    this.heightId = heightId;
-    this.height = height;
-    this.weightId = weightId;
-    this.weight = weight;
-    this.date = date;
+  constructor(i?: IHeightWeight) {
+    if (!i) return;
+    this.id = i.id;
+    this.height = i.height;
+    this.weight = i.weight;
+    this.date = i.date;
+    this.patientId = i.patientId;
   }
 
   getBmiGroup(birthDate: string, isMale: boolean): string {
@@ -30,53 +27,5 @@ export default class HeightWeight implements IHeightWeight {
     if (!group) return 'Некорректные данные антропометрии';
     const weightClass = Bmi.getWeightClass(group);
     return `${group}, ${weightClass}`;
-  }
-
-  static anthropometryDataToHeightWeightArr(anthropometryData: IAnthropometryData[]): IHeightWeight[] {
-    let heightWeight = new HeightWeight();
-    const resultHeightWeight: IHeightWeight[] = [];
-
-    anthropometryData.forEach((a: IAnthropometryData) => {
-      if (!a.anthropometry) return;
-      if (a.isHeight()) {
-        heightWeight.heightId = a.id ?? '';
-        heightWeight.height = a.value;
-      }
-      if (a.isWeight()) {
-        heightWeight.weightId = a.id ?? '';
-        heightWeight.weight = a.value;
-      }
-      if (heightWeight.height && heightWeight.weight) {
-        resultHeightWeight.push(
-          new HeightWeight(a.id, heightWeight.heightId, heightWeight.height, heightWeight.weightId, heightWeight.weight, a.date)
-        );
-        heightWeight = new HeightWeight();
-      }
-    });
-
-    return resultHeightWeight;
-  }
-
-  static toAnthropometryData(heightWeight: IHeightWeight[], heightId: string, weightId: string, patientId?: string): IAnthropometryData[] {
-    const result: IAnthropometryData[] = [];
-    heightWeight.forEach((heightWightItem: IHeightWeight) => {
-      const anthro = new AnthropometryDate();
-      if (heightWightItem.id !== '') anthro.id = heightWightItem.heightId;
-      anthro.patientId = patientId;
-      anthro.date = heightWightItem.date;
-      anthro.anthropometryId = heightId;
-      anthro.value = heightWightItem.height;
-      result.push(anthro);
-
-      const anthro2 = new AnthropometryDate();
-      if (heightWightItem.id !== '') anthro2.id = heightWightItem.weightId;
-      anthro2.patientId = patientId;
-      anthro2.date = heightWightItem.date;
-      anthro2.anthropometryId = weightId;
-      anthro2.value = heightWightItem.weight;
-      result.push(anthro2);
-    });
-
-    return result;
   }
 }
