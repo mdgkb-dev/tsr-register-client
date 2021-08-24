@@ -1,16 +1,16 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <el-autocomplete
-      v-model="queryStringsRepresentative"
-      style="width: 100%; margin-bottom: 20px"
-      popper-class="wide-dropdown"
-      :fetch-suggestions="findRepresentatives"
-      placeholder="Найти представителя"
-      @select="handleRepresentativeSelect"
-      @input="handleSearchInput"
-    />
-
     <div class="table-background">
+      <el-autocomplete
+        v-model="queryStringsRepresentative"
+        style="width: 100%; margin-bottom: 20px"
+        popper-class="wide-dropdown"
+        :fetch-suggestions="findRepresentatives"
+        placeholder="Найти представителя"
+        @select="handleRepresentativeSelect"
+        @input="handleSearchInput"
+      />
+
       <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
         :data="filterTable(representatives)"
@@ -65,7 +65,9 @@
                   :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
                   placement="top-end"
                 >
-                  <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">{{ children(rep) }}</el-tag>
+                  <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
+                    {{ rep.getRepresentativeChildType() }}
+                  </el-tag>
                 </el-tooltip>
               </div>
             </template>

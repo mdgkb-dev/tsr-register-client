@@ -10,6 +10,7 @@ import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 export default function (isEditMode = false) {
   const store = useStore();
@@ -20,6 +21,7 @@ export default function (isEditMode = false) {
     module: string,
     payload:
       | IPatient
+      | IRepresentativeType
       | IRepresentative
       | IRegisterProperty
       | IDocumentType
@@ -50,6 +52,7 @@ export default function (isEditMode = false) {
     module: string,
     payload:
       | IPatient
+      | IRepresentativeType
       | IRepresentative
       | IRegisterProperty
       | IDocumentType

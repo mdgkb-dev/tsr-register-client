@@ -11,8 +11,12 @@
           label-position="left"
           style="max-width: 800px"
         >
-          <el-form-item label="Название типа" prop="name">
-            <el-input v-model="representativeType.name"></el-input>
+          <el-form-item label="Представитель мужского пола" prop="parentMaleType">
+            <el-input v-model="representativeType.parentMaleType"></el-input>
+          </el-form-item>
+
+          <el-form-item label="Представитель женского пола" prop="parentWomanType">
+            <el-input v-model="representativeType.parentWomanType"></el-input>
           </el-form-item>
 
           <el-form-item label="Подопечный мужского пола" prop="childMaleType">
@@ -23,12 +27,6 @@
             <el-input v-model="representativeType.childWomanType"></el-input>
           </el-form-item>
 
-          <el-form-item label="Пол" prop="isMale">
-            <el-select v-model="representativeType.isMale" placeholder="Выберите пол">
-              <el-option label="Мужчина" :value="true"></el-option>
-              <el-option label="Женщина" :value="false"></el-option>
-            </el-select>
-          </el-form-item>
         </el-form>
       </div>
     </el-row>

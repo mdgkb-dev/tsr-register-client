@@ -1,18 +1,17 @@
 import axios from 'axios';
-// import moment from 'moment';
 
-import { IHttpClient, IBodilessParams, IBodyfulParams } from '@/interfaces/httpClient/IHTTPTypes';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+// import moment from 'moment';
+import { IBodilessParams, IBodyfulParams, IHttpClient } from '@/interfaces/httpClient/IHTTPTypes';
 // import IToUtcDateMethods from '@/interfaces/httpClient/IToUtcDateMethods';
 
 export default class HttpClient implements IHttpClient {
-
   endpoint: string;
   headers: Record<string, string>;
 
   constructor(endpoint = '') {
     this.endpoint = endpoint;
-    this.headers = { 'Content-Type': 'application/json', 'Content-Length': '98668' };
+    this.headers = { 'Content-Type': 'application/json' };
   }
 
   async get<ReturnType>(params?: IBodilessParams): Promise<ReturnType> {

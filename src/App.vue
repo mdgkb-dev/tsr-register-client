@@ -24,7 +24,6 @@ export default defineComponent({
 
     const layout = computed(() => {
       const userId = localStorage.getItem('userId');
-      console.log(userId);
       if (userId) {
         store.commit('auth/setIsAuth', true);
         store.commit('setLayout', 'main-layout');
