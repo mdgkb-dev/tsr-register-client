@@ -10,19 +10,19 @@ const httpClient = new HttpClient('anthropometries');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get());
+    commit('setAll', await httpClient.get<IAnthropometry[]>());
   },
   get: async ({ commit }, anthropometryId: string) => {
-    commit('set', await httpClient.get({ query: anthropometryId }));
+    commit('set', await httpClient.get<IAnthropometry>({ query: anthropometryId }));
   },
   create: async ({ commit }, payload: IAnthropometry): Promise<void> => {
-    commit('create', await httpClient.post({ payload }));
+    commit('create', await httpClient.post<IAnthropometry, IAnthropometry>({ payload }));
   },
   edit: async ({ commit }, payload: IAnthropometry): Promise<void> => {
-    commit('update', await httpClient.put({ payload, query: payload.id }));
+    commit('update', await httpClient.put<IAnthropometry, IAnthropometry>({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
-    await httpClient.delete(id);
+    await httpClient.delete<IAnthropometry, IAnthropometry>({ query: id });
     commit('delete', id);
   },
 };

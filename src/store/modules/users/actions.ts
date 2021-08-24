@@ -10,19 +10,19 @@ const httpClient = new HttpClient('users');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get());
+    commit('setAll', await httpClient.get<IUser[]>());
   },
   get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get({ query: id }));
+    commit('set', await httpClient.get<IUser>({ query: id }));
   },
   create: async ({ commit }, payload: IUser): Promise<void> => {
-    commit('create', await httpClient.post({ payload }));
+    commit('create', await httpClient.post<IUser, IUser>({ payload }));
   },
   edit: async ({ commit }, payload: IUser): Promise<void> => {
-    commit('update', await httpClient.put({ payload, query: payload.id }));
+    commit('update', await httpClient.put<IUser, IUser>({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
-    await httpClient.delete(id);
+    await httpClient.delete<IUser, IUser>({ query: id });
     commit('delete', id);
   },
 };

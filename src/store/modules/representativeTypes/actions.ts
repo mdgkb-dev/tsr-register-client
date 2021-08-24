@@ -10,19 +10,19 @@ const httpClient = new HttpClient('representative-types');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get());
+    commit('setAll', await httpClient.get<IRepresentativeType[]>());
   },
   get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get({ query: id }));
+    commit('set', await httpClient.get<IRepresentativeType>({ query: id }));
   },
   create: async ({ commit }, payload: IRepresentativeType): Promise<void> => {
-    commit('create', await httpClient.post({ payload }));
+    commit('create', await httpClient.post<IRepresentativeType, IRepresentativeType>({ payload }));
   },
   edit: async ({ commit }, payload: IRepresentativeType): Promise<void> => {
-    commit('update', await httpClient.put({ payload, query: payload.id }));
+    commit('update', await httpClient.put<IRepresentativeType, IRepresentativeType>({ payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
-    await httpClient.delete(id);
+    await httpClient.delete<IRepresentativeType, IRepresentativeType>({ query: id });
     commit('delete', id);
   },
 };

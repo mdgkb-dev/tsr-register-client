@@ -1,70 +1,72 @@
 import { ActionTree } from 'vuex';
 
-import MkbComposition from '@/classes/mkb/MkbComposition';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import MkbGroup from '@/classes/mkb/MkbGroup';
-import MkbIdSet from '@/classes/mkb/MkbIdSet';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
-import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
-import MkbSubSubGroup from '@/classes/mkb/MkbSubSubGroup';
-import MkbClass from '@/classes/mkb/MkbСlass';
-import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
-import HttpClient from '@/services/HttpClient';
-import RootState from '@/store/types';
-
 import { State } from './state';
+import RootState from '@/store/types';
+import HttpClient from '@/services/HttpClient';
+
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
+import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IMkbSuperSet from '@/interfaces/mkb/IMkbSuperSet';
+
+import MkbComposition from '@/classes/mkb/MkbComposition';
+import MkbGroupAnswer from '@/classes/mkb/MkbGroupAnswer';
+import MkbSubGroupAnswer from '@/classes/mkb/MkbSubGroupAnswer';
+import MkbSubSubGroupAnswer from '@/classes/mkb/MkbSubSubGroupAnswer';
 
 const httpClient = new HttpClient('mkb');
 
 const actions: ActionTree<State, RootState> = {
   getAllMkbClasses: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get());
+    commit('setAll', await httpClient.get<IMkbClass[]>());
   },
   getGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbGroupAnswer = await httpClient.get({ query: `groups/${idSet.classId}` });
+    res.mkbGroupAnswer = await httpClient.get<MkbGroupAnswer>({ query: `groups/${idSet.classId}` });
     res.mkbIdSet = idSet;
     commit('setGroupByClassId', res);
   },
-  getSubGroupById: async ({ commit }, idSet: MkbIdSet): Promise<void> => {
+  getSubGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubGroupAnswer = await httpClient.get({ query: `sub-groups/${idSet.groupId}` });
+    res.mkbSubGroupAnswer = await httpClient.get<MkbSubGroupAnswer>({ query: `sub-groups/${idSet.groupId}` });
     res.mkbIdSet = idSet;
     commit('setGroupChildren', res);
   },
-  getSubSubGroupById: async ({ commit }, idSet: MkbIdSet): Promise<void> => {
+  getSubSubGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubSubGroupAnswer = await httpClient.get({ query: `sub-sub-groups/${idSet.subGroupId}` });
+    res.mkbSubSubGroupAnswer = await httpClient.get<MkbSubSubGroupAnswer>({ query: `sub-sub-groups/${idSet.subGroupId}` });
     res.mkbIdSet = idSet;
     commit('setSubGroupChildren', res);
   },
-  getSubDiagnosisByDiagnosisId: async ({ commit }, idSet: MkbIdSet): Promise<void> => {
+  getSubDiagnosisByDiagnosisId: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubDiagnosisAnswer.mkbSubDiagnosis = await httpClient.get({ query: `diagnosis/${idSet.diagnosisId}` });
+    res.mkbSubDiagnosisAnswer.mkbSubDiagnosis = await httpClient.get<IMkbSubDiagnosis[]>({ query: `diagnosis/${idSet.diagnosisId}` });
     res.mkbIdSet = idSet;
     commit('setSubDiagnosis', res);
   },
   getDiagnosisByGroupId: async ({ commit }, groupId: string): Promise<void> => {
-    commit('setFilteredDiagnosis', await httpClient.get({ query: `diagnosis/byGroupId/${groupId}` }));
+    commit('setFilteredDiagnosis', await httpClient.get<IMkbDiagnosis[]>({ query: `diagnosis/byGroupId/${groupId}` }));
   },
   searchGroups: async ({ commit }, query: string): Promise<void> => {
     if (query.length === 0) {
       commit('setFilteredDiagnosis', []);
       return;
     }
-    commit('setGroups', await httpClient.get({ query: `groups?query=${query}` }));
+    commit('setGroups', await httpClient.get<IMkbGroup>({ query: `groups?query=${query}` }));
   },
   searchDiagnosis: async ({ commit }, query: string): Promise<void> => {
-    commit('setDiagnosis', await httpClient.get({ query: `diagnosis?query=${query}` }));
+    commit('setDiagnosis', await httpClient.get<IMkbDiagnosis>({ query: `diagnosis?query=${query}` }));
   },
   searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
-    commit('setSubDiagnosisByDiagnosisId', await httpClient.get({ query: `diagnosis/${diagnosisId}` }));
+    commit('setSubDiagnosisByDiagnosisId', await httpClient.get<IMkbSubDiagnosis[]>({ query: `diagnosis/${diagnosisId}` }));
   },
-  updateRelevant: async (_, mkb: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
-    await httpClient.put({ query: `${mkb.id}?mkbType=${mkb.constructor.name}` });
+  updateRelevant: async (_, mkb: IMkbSuperSet): Promise<void> => {
+    await httpClient.put<IMkbSuperSet, IMkbSuperSet>({ query: `${mkb.id}?mkbType=${mkb.constructor.name}` });
   },
-  updateName: async (_, mkb: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis): Promise<void> => {
-    await httpClient.put({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
+  updateName: async (_, mkb: IMkbSuperSet): Promise<void> => {
+    await httpClient.put<IMkbSuperSet, IMkbSuperSet>({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
   },
 };
 
