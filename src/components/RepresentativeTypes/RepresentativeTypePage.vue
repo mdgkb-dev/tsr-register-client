@@ -26,7 +26,6 @@
           <el-form-item label="Подопечный женского пола" prop="childWomanType">
             <el-input v-model="representativeType.childWomanType"></el-input>
           </el-form-item>
-
         </el-form>
       </div>
     </el-row>
