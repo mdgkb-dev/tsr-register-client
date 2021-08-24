@@ -84,7 +84,7 @@
 
         <el-table-column width="75" label="ВЕС РОСТ" align="center">
           <template #default="scope">
-            <span v-html="scope.row.getAnthropometryShortData()"></span>
+            <span v-html="scope.row.getHeightWeightShort()"></span>
           </template>
         </el-table-column>
 
@@ -184,7 +184,6 @@
         <el-pagination
           style="margin-top: 20px; margin-bottom: 20px"
           :current-page="curPage"
-          background
           layout="prev, pager, next"
           :page-count="Math.round(count / 25)"
           @current-change="setPage"

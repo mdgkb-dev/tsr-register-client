@@ -1,6 +1,9 @@
 import Vuex, { StoreOptions } from 'vuex';
 
+import auth from '@/store/modules/auth';
 import { disabilities } from '@/store/modules/disabilities';
+import documentTypes from '@/store/modules/documentTypes';
+import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
@@ -12,10 +15,6 @@ import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { users } from '@/store/modules/users';
-import anthropometry from '@/store/modules/anthropometry';
-import auth from '@/store/modules/auth';
-import documentTypes from '@/store/modules/documentTypes';
-import files from '@/store/modules/files';
 
 import RootState from './types';
 
@@ -34,7 +33,6 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
-    anthropometry,
     auth,
     disabilities,
     documentTypes,

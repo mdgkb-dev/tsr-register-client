@@ -71,8 +71,4 @@ export default class Bmi {
         return '';
     }
   };
-
-  // findDegree(bmi: number, bmiMonth: IBmiMonth) {
-  //   const group = this.calculateGroup(bmi, bmiMonth);
-  // }
 }
