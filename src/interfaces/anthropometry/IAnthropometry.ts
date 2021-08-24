@@ -3,6 +3,6 @@ export default interface IAnthropometry {
   name: string;
   measure: string;
 
-  isWeight(): boolean;
-  isHeight(): boolean;
+  isWeight?(): boolean;
+  isHeight?(): boolean;
 }

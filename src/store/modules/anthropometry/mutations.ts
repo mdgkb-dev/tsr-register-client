@@ -3,25 +3,25 @@ import { MutationTree } from 'vuex';
 import Anthropometry from '@/classes/anthropometry/Anthropometry';
 import IAnthropometry from '@/interfaces/anthropometry/IAnthropometry';
 
-import { State } from './state';
+import State from './state';
 
 const mutations: MutationTree<State> = {
-  setAll(state, anthropometries: IAnthropometry[]) {
+  setAll(state, anthropometries: IAnthropometry[]): void {
     state.anthropometries = anthropometries.map((a: IAnthropometry) => new Anthropometry(a));
   },
-  set(state, anthropometry: IAnthropometry) {
+  set(state, anthropometry: IAnthropometry): void {
     state.anthropometry = new Anthropometry(anthropometry);
   },
-  create(state, payload: IAnthropometry) {
+  create(state, payload: IAnthropometry): void {
     state.anthropometries.push(new Anthropometry(payload));
   },
-  update(state, payload: IAnthropometry) {
+  update(state, payload: IAnthropometry): void {
     const item = state.anthropometries.find((i: IAnthropometry) => i.id === payload.id);
     if (item) {
       Object.assign(item, payload);
     }
   },
-  delete(state, id: string) {
+  delete(state, id: string): void {
     const i = state.anthropometries.findIndex((item: IAnthropometry) => item.id === id);
     state.anthropometries.splice(i, 1);
   },
