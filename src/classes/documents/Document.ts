@@ -2,11 +2,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
 import DocumentType from '@/classes/documents/DocumentType';
+import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
-import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 
 export default class Document implements IDocument {
   id?: string = uuidv4();

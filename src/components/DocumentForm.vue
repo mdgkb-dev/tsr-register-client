@@ -108,14 +108,14 @@ import { useStore } from 'vuex';
 
 import Document from '@/classes/documents/Document';
 import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
+import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 import FileInfo from '@/classes/files/FileInfo';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
-import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 
 export default defineComponent({
   name: 'DocumentForm',

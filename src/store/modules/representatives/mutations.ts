@@ -39,6 +39,7 @@ const mutations: MutationTree<State> = {
   removePatient(state, item: IRepresentativeToPatient) {
     const index = state.representative.representativeToPatient.indexOf(item);
     if (index !== -1) state.representative.representativeToPatient.splice(index, 1);
+    if (item.id) state.representative.representativeToPatientForDelete.push(item.id);
   },
   addDocument(state, item: IDocument) {
     state.representative.human.documents.push(item);

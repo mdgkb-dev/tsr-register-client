@@ -1,7 +1,5 @@
 import { MutationTree } from 'vuex';
 
-import ICount from '@/interfaces/meta/ICount';
-
 import { State } from './state';
 
 const mutations: MutationTree<State> = {

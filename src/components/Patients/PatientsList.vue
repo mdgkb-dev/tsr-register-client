@@ -74,9 +74,9 @@
                 :content="`${rep.representative.human.surname} ${rep.representative.human.name} ${rep.representative.human.patronymic}`"
                 placement="top-end"
               >
-                <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">{{
-                  rep.representativeType.name
-                }}</el-tag>
+                <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">
+                  {{ rep.getRepresentativeParentType() }}
+                </el-tag>
               </el-tooltip>
             </div>
           </template>

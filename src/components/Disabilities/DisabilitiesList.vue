@@ -107,9 +107,9 @@ import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import MainHeader from '@/classes/shared/MainHeader';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-import MainHeader from '@/classes/shared/MainHeader';
 
 export default defineComponent({
   name: 'PatientsList',

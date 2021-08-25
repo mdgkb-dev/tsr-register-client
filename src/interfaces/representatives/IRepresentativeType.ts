@@ -1,7 +1,7 @@
 export default interface IRepresentativeType {
   id?: string;
-  name: string;
+  parentMaleType: string;
+  parentWomanType: string;
   childMaleType: string;
   childWomanType: string;
-  isMale: boolean;
 }

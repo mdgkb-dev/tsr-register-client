@@ -10,4 +10,7 @@ export default interface IRepresentativeToPatient {
   patient?: IPatient;
   representativeId?: string;
   representative?: IRepresentative;
+
+  getRepresentativeParentType: () => string;
+  getRepresentativeChildType: () => string;
 }

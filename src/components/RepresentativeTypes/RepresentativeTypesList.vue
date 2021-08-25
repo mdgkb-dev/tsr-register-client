@@ -10,7 +10,8 @@
         style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
-        <el-table-column prop="name" label="Название типа" min-width="150" sortable />
+        <el-table-column prop="parentMaleType" label="Представитель мужского пола" min-width="150" />
+        <el-table-column prop="parentWomanType" label="Представитель женского пола" min-width="150" />
         <el-table-column prop="childMaleType" label="Подопечный мужского пола" min-width="150" />
         <el-table-column prop="childWomanType" label="Подопечный женского пола" min-width="150" />
         <el-table-column width="40" fixed="right" align="center">

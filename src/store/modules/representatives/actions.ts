@@ -1,11 +1,11 @@
 import { ActionTree } from 'vuex';
 
-import HttpClient from '@/services/HttpClient';
-import RootState from '@/store/types';
-import { State } from './state';
-
 import ICount from '@/interfaces/meta/ICount';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import HttpClient from '@/services/HttpClient';
+import RootState from '@/store/types';
+
+import { State } from './state';
 
 const httpClient = new HttpClient('representatives');
 
@@ -22,7 +22,14 @@ const actions: ActionTree<State, RootState> = {
   },
   create: async ({ commit }, representative: IRepresentative): Promise<void> => {
     representative.human.removeDocumentFieldValuesIds();
-    commit('create', await httpClient.post<IRepresentative, IRepresentative>({ payload: representative, fileInfos: representative.human.fileInfos, isFormData: true }));
+    commit(
+      'create',
+      await httpClient.post<IRepresentative, IRepresentative>({
+        payload: representative,
+        fileInfos: representative.human.fileInfos,
+        isFormData: true,
+      })
+    );
   },
   edit: async ({ commit }, representative: IRepresentative): Promise<void> => {
     const fileInfos = representative.human.fileInfos.filter((info) => info.isDraft);
