@@ -73,6 +73,8 @@ export default defineComponent({
     };
 
     const remove = () => {
+      const idForDelete = diagnosis.value.patientDiagnosisAnamnesis[index.value].id;
+      if (idForDelete) diagnosis.value.patientDiagnosisAnamnesisForDelete.push(idForDelete);
       diagnosis.value.patientDiagnosisAnamnesis.splice(index.value, 1);
     };
 

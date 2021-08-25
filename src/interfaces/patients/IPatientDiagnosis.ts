@@ -13,4 +13,5 @@ export default interface IPatientDiagnosis {
   patientId?: string;
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[];
+  patientDiagnosisAnamnesisForDelete: string[];
 }

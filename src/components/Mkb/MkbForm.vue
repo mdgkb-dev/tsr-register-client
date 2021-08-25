@@ -14,9 +14,9 @@
     <el-table
       :data="diagnosisData"
       :row-key="(row) => row.id"
-      :expand-row-keys="expandRowKeys"
       class="table-shadow"
       header-row-class-name="header-style"
+      :default-expand-all="true"
       @expand-change="handleExpandChange"
     >
       <el-table-column type="index" width="60" align="center" />
