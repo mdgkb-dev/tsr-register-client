@@ -1,18 +1,18 @@
 <template>
   <div class="form-under-collapse">
     <el-form-item label="Фамилия" prop="human.surname">
-      <el-input v-model="human.surname" :readonly="readonly"></el-input>
+      <el-input v-model="human.surname" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Имя" prop="human.name">
-      <el-input v-model="human.name" :readonly="readonly"></el-input>
+      <el-input v-model="human.name" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Отчество" prop="human.patronymic">
-      <el-input v-model="human.patronymic" :readonly="readonly"></el-input>
+      <el-input v-model="human.patronymic" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Пол" prop="human.isMale">
-      <el-select v-model="human.isMale" :disabled="readonly" placeholder="Выберите пол">
-        <el-option label="Мужчина" :value="true"></el-option>
-        <el-option label="Женщина" :value="false"></el-option>
+      <el-select v-model="human.isMale" :disabled="readonly" placeholder="Выберите пол" @change="updateHuman">
+        <el-option label="Мужчина" :value="true" />
+        <el-option label="Женщина" :value="false" />
       </el-select>
     </el-form-item>
     <el-form-item label="Дата рождения" prop="human.dateBirth">
@@ -22,39 +22,52 @@
         type="date"
         format="DD.MM.YYYY"
         placeholder="Выберите дату"
-      ></el-date-picker>
+        @change="updateHuman"
+      />
     </el-form-item>
     <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
-      <el-input v-model="human.addressRegistration" :readonly="readonly"></el-input>
+      <el-input v-model="human.addressRegistration" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Адрес проживания" prop="human.addressResidential">
-      <el-input v-model="human.addressResidential" :readonly="readonly"></el-input>
+      <el-input v-model="human.addressResidential" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Телефон" prop="human.contact.phone">
-      <el-input v-model="human.contact.phone" :readonly="readonly" @input="human.contact.formatPhoneNumber()"></el-input>
+      <el-input v-model="human.contact.phone" :readonly="readonly" @input="human.contact.formatPhoneNumber()" @change="updateHuman" />
     </el-form-item>
     <el-form-item label="Email" prop="human.contact.email">
-      <el-input v-model="human.contact.email" :readonly="readonly"></el-input>
+      <el-input v-model="human.contact.email" :readonly="readonly" @change="updateHuman" />
     </el-form-item>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import cloneDeep from 'lodash/cloneDeep';
+import { computed, ComputedRef, defineComponent, PropType, reactive } from 'vue';
+import { useStore } from 'vuex';
 
 import IHuman from '@/interfaces/humans/IHuman';
 
 export default defineComponent({
   name: 'HumanForm',
   props: {
-    human: {
-      type: Object as PropType<IHuman>,
-      required: true,
-    },
     readonly: {
       type: Boolean as PropType<boolean>,
       required: true,
     },
+  },
+  setup() {
+    const store = useStore();
+    const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters['patients/patient'].human);
+    const human: IHuman = reactive<IHuman>(cloneDeep(humanComputed.value));
+
+    const updateHuman = () => {
+      store.commit('patients/setHuman', human);
+    };
+
+    return {
+      human,
+      updateHuman,
+    };
   },
 });
 </script>

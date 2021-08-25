@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { v4 as uuidv4 } from 'uuid';
 import { MutationTree } from 'vuex';
 
@@ -18,6 +19,7 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -38,6 +40,9 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.patients.findIndex((item: IPatient) => item.id === id);
     state.patients.splice(i, 1);
+  },
+  setHuman(state, human: IHuman) {
+    state.patient.human = cloneDeep(human);
   },
   setFilteredPatients(state, patients: IPatient[]) {
     state.filteredPatients = patients.map((p: IPatient) => new Patient(p));
