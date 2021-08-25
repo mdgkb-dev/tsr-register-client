@@ -56,7 +56,7 @@ $page-container-height: calc(100vh - 80px);
 .page-container {
   padding-right: $max-side-padding;
   height: $page-container-height;
-  overflow: overlay;
+  overflow: auto;
 }
 
 .side-panel-container {
