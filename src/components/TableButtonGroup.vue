@@ -1,5 +1,7 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
+    <el-button v-if="showMoveUpButton" class="table-button" icon="el-icon-arrow-up" @click="$emit('moveUp')" />
+    <el-button v-if="showMoveDownButton" class="table-button" icon="el-icon-arrow-down" @click="$emit('moveDown')" />
     <el-button v-if="showDownloadButton" class="table-button" icon="el-icon-download" @click="$emit('download')" />
     <el-button
       v-if="showEditButton"
@@ -43,11 +45,19 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
+    showMoveUpButton: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+    showMoveDownButton: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
     horizontal: {
       type: Boolean as PropType<boolean>,
       default: false,
     },
   },
-  emits: ['download', 'edit', 'remove'],
+  emits: ['download', 'edit', 'remove', 'moveUp', 'moveDown'],
 });
 </script>
