@@ -23,6 +23,7 @@ export default interface IPatient {
   registerToPatient: IRegisterToPatient[];
   registerPropertyToPatient: IRegisterPropertyToPatient[];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[];
+  registerPropertySetToPatientForDelete: string[];
 
   getActuallyDisability: () => IDisability;
   getHeightWeightShort: () => string;

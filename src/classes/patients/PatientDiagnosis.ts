@@ -18,6 +18,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
   patientId?: string;
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[] = [];
+  patientDiagnosisAnamnesisForDelete: string[] = [];
 
   constructor(i?: IPatientDiagnosis) {
     if (!i) return;

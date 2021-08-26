@@ -1,6 +1,8 @@
 import BmiBoys from '@/classes/bmi/BmiBoys';
 import BmiGirls from '@/classes/bmi/BmiGirls';
 
+type BmiMonths = '1st' | '3rd' | '5th' | '15th' | '25th' | '50th' | '75th' | '85th' | '95th' | '97th' | '99th';
+
 interface IBmiMonth {
   '1st': number;
   '3rd': number;
@@ -38,9 +40,11 @@ export default class Bmi {
 
   static calculateGroup = (bmi: number, bmiMonth: IBmiMonth): string => {
     let groupBmi = 0;
-    for (const group in bmiMonth) {
+    for (const groupProp in bmiMonth) {
+      const group: BmiMonths = groupProp as BmiMonths;
+
       if (Object.prototype.hasOwnProperty.call(bmiMonth, group)) {
-        groupBmi = (bmiMonth as any)[group];
+        groupBmi = bmiMonth[group];
         if (bmi < groupBmi) {
           return group;
         }

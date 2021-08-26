@@ -20,7 +20,6 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
 
     const layout = computed(() => {
       const userId = localStorage.getItem('userId');

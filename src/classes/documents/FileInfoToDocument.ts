@@ -1,4 +1,5 @@
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+
 import FileInfo from '../files/FileInfo';
 
 export default class FileInfoToDocument implements IFileInfoToDocument {
