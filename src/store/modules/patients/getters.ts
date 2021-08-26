@@ -12,6 +12,7 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
@@ -25,6 +26,9 @@ const getters: GetterTree<State, RootState> = {
   },
   getById(state, id: string): IPatient | undefined {
     return state.patients.find((item: IPatient) => item.id === id);
+  },
+  getHuman(state: State): IHuman {
+    return state.patient.human;
   },
   insuranceCompanies(state): IInsuranceCompanyToHuman[] {
     return state.patient.human.insuranceCompanyToHuman;

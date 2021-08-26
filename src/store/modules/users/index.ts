@@ -6,10 +6,11 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 import { State } from './state';
+import User from '@/classes/user/User';
 
 export const state: State = {
   users: [],
-  user: undefined,
+  user: new User(),
 };
 
 const namespaced = true;

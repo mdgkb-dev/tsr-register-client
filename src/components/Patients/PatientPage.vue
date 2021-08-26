@@ -18,7 +18,7 @@
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
               </template>
-              <HumanForm />
+              <HumanForm store-name="patients" />
             </el-collapse-item>
 
             <el-collapse-item>

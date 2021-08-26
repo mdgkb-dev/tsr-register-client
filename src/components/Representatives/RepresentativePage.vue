@@ -19,7 +19,7 @@
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
               </template>
-              <HumanForm :human="representative.human" />
+              <HumanForm store-name="representatives" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>

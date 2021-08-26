@@ -4,6 +4,8 @@ import User from '@/classes/user/User';
 import IUser from '@/interfaces/users/IUser';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
+import cloneDeep from 'lodash/cloneDeep';
 
 const mutations: MutationTree<State> = {
   setAll(state, users: IUser[]) {
@@ -24,6 +26,9 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.users.findIndex((item: IUser) => item.id === id);
     state.users.splice(i, 1);
+  },
+  setHuman(state, human: IHuman): void {
+    state.user.human = cloneDeep(human);
   },
 };
 

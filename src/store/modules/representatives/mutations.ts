@@ -9,6 +9,8 @@ import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
+import cloneDeep from 'lodash/cloneDeep';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {
@@ -60,6 +62,9 @@ const mutations: MutationTree<State> = {
   },
   resetRepresentative(state) {
     state.representative = new Representative();
+  },
+  setHuman(state, human: IHuman): void {
+    state.representative.human = cloneDeep(human);
   },
 };
 

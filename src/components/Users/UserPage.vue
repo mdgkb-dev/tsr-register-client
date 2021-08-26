@@ -23,7 +23,7 @@
           <div v-if="mount">
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
-              <HumanForm :human="user.human" />
+              <HumanForm store-name="users" />
             </el-collapse-item>
           </div>
         </el-form>

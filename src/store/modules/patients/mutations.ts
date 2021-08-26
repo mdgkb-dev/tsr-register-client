@@ -41,7 +41,7 @@ const mutations: MutationTree<State> = {
     const i = state.patients.findIndex((item: IPatient) => item.id === id);
     state.patients.splice(i, 1);
   },
-  setHuman(state, human: IHuman) {
+  setHuman(state, human: IHuman): void {
     state.patient.human = cloneDeep(human);
   },
   setFilteredPatients(state, patients: IPatient[]) {

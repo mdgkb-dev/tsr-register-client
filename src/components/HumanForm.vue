@@ -54,14 +54,18 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       required: true,
     },
+    storeName: {
+      type: String as PropType<string>,
+      required: true,
+    },
   },
-  setup() {
+  setup(props) {
     const store = useStore();
-    const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters['patients/patient'].human);
+    const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters[`${props.storeName}/getHuman`]);
     const human: IHuman = reactive<IHuman>(cloneDeep(humanComputed.value));
 
     const updateHuman = () => {
-      store.commit('patients/setHuman', human);
+      store.commit(`${props.storeName}/setHuman`, human);
     };
 
     return {
