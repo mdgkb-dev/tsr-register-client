@@ -4,15 +4,16 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import RootState from '@/store/types';
 
 import { State } from './state';
-import IHuman from '@/interfaces/humans/IHuman';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
@@ -33,8 +34,11 @@ const getters: GetterTree<State, RootState> = {
   insuranceCompanies(state): IInsuranceCompanyToHuman[] {
     return state.patient.human.insuranceCompanyToHuman;
   },
-  patientDiagnosis(state): IPatientDiagnosis[] {
+  getDiagnosis(state): IPatientDiagnosis[] {
     return state.patient.patientDiagnosis;
+  },
+  getAnamnesis(state, indices: { diagnosisIndex: number; anamnesisIndex: number }): IPatientDiagnosisAnamnesis {
+    return state.patient.patientDiagnosis[indices.diagnosisIndex].patientDiagnosisAnamnesis[indices.anamnesisIndex];
   },
   registerToPatient(state): IRegisterToPatient[] {
     return state.patient.registerToPatient;

@@ -16,6 +16,8 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
@@ -134,6 +136,12 @@ const mutations: MutationTree<State> = {
   },
   resetPatient(state) {
     state.patient = new Patient();
+  },
+  setDiagnosis(state, patientDiagnosis: IPatientDiagnosis[]): void {
+    state.patient.patientDiagnosis = patientDiagnosis;
+  },
+  setAnamnesis(state, payload: { anamnesis: IPatientDiagnosisAnamnesis; diagnosisIndex: number; anamnesisIndex: number }): void {
+    state.patient.patientDiagnosis[payload.diagnosisIndex].patientDiagnosisAnamnesis[payload.anamnesisIndex] = payload.anamnesis;
   },
 };
 

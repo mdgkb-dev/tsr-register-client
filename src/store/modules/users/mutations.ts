@@ -1,11 +1,11 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { MutationTree } from 'vuex';
 
 import User from '@/classes/user/User';
+import IHuman from '@/interfaces/humans/IHuman';
 import IUser from '@/interfaces/users/IUser';
 
 import { State } from './state';
-import IHuman from '@/interfaces/humans/IHuman';
-import cloneDeep from 'lodash/cloneDeep';
 
 const mutations: MutationTree<State> = {
   setAll(state, users: IUser[]) {

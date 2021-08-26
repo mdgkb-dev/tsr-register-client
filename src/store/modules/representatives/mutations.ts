@@ -1,16 +1,16 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { MutationTree } from 'vuex';
 
 import Representative from '@/classes/representatives/Representative';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IHuman from '@/interfaces/humans/IHuman';
 import ICount from '@/interfaces/meta/ICount';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IHuman from '@/interfaces/humans/IHuman';
-import cloneDeep from 'lodash/cloneDeep';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {

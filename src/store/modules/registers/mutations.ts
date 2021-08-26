@@ -3,6 +3,7 @@ import { MutationTree } from 'vuex';
 import Register from '@/classes/registers/Register';
 import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 import { State } from './state';
@@ -36,6 +37,9 @@ const mutations: MutationTree<State> = {
       state.register.registerGroupToRegister.splice(index, 1);
       if (item.id) state.register.registerGroupToRegisterForDelete.push(item.id);
     }
+  },
+  setDiagnosis(state, registerDiagnosis: IRegisterDiagnosis[]): void {
+    state.register.registerDiagnosis = registerDiagnosis;
   },
 };
 

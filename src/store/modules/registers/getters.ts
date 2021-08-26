@@ -1,6 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 import RootState from '@/store/types';
 
@@ -21,6 +22,9 @@ const getters: GetterTree<State, RootState> = {
   },
   registerGroupToRegister(state): IRegisterGroupToRegister[] {
     return state.register.registerGroupToRegister;
+  },
+  getDiagnosis(state): IRegisterDiagnosis[] {
+    return state.register.registerDiagnosis;
   },
 };
 

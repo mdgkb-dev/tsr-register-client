@@ -6,8 +6,9 @@
         label-width="0"
         :prop="propName + '.date'"
         :rules="[{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }]"
+        @change="updateAnamnesis"
       >
-        <el-date-picker v-model="anamnesis.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
+        <el-date-picker v-model="anamnesis.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату" @change="updateAnamnesis" />
       </el-form-item>
       <el-form-item
         v-if="anamnesis.isEditMode"
@@ -15,12 +16,18 @@
         label-width="0"
         :rules="[{ required: true, message: 'Это поле не может быть пустым', trigger: 'blur' }]"
       >
-        <el-input v-model="anamnesis.value" type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }"> </el-input>
+        <el-input
+          v-model="anamnesis.value"
+          type="textarea"
+          class="textarea"
+          :autosize="{ minRows: 3, maxRows: 7 }"
+          @change="updateAnamnesis"
+        />
       </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
       <div class="card-button-group">
-        <el-button v-if="anamnesis.isEditMode" icon="el-icon-folder-checked" @click="edit"></el-button>
-        <el-button v-else icon="el-icon-edit" @click="edit"></el-button>
+        <el-button v-if="anamnesis.isEditMode" icon="el-icon-folder-checked" @click="edit" />
+        <el-button v-else icon="el-icon-edit" @click="edit" />
         <el-popconfirm
           confirm-button-text="Да"
           cancel-button-text="Отмена"
@@ -31,7 +38,7 @@
           @cancel="() => {}"
         >
           <template #reference>
-            <el-button icon="el-icon-delete"></el-button>
+            <el-button icon="el-icon-delete" />
           </template>
         </el-popconfirm>
       </div>
@@ -40,7 +47,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
+import cloneDeep from 'lodash/cloneDeep';
+import { computed, ComputedRef, defineComponent, PropType, reactive, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
@@ -48,8 +57,16 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 export default defineComponent({
   name: 'AnamnesisForm',
   props: {
-    anamnesis: {
+    /*anamnesis: {
       type: Object as PropType<IPatientDiagnosisAnamnesis>,
+      required: true,
+    },*/
+    storeName: {
+      type: String as PropType<string>,
+      required: true,
+    },
+    diagnosisIndex: {
+      type: Number as PropType<number>,
       required: true,
     },
     index: {
@@ -66,21 +83,37 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { anamnesis, diagnosis, index } = toRefs(props);
+    const store = useStore();
+
+    const { diagnosis, diagnosisIndex, index } = toRefs(props);
+    const anamnesisComputed: ComputedRef<IPatientDiagnosisAnamnesis> = computed<IPatientDiagnosisAnamnesis>(() =>
+      store.getters[`${props.storeName}/getAnamnesis`]({ diagnosisIndex, anamnesisIndex: index })
+    );
+    const anamnesis: IPatientDiagnosisAnamnesis = reactive<IPatientDiagnosisAnamnesis>(cloneDeep(anamnesisComputed.value));
 
     const edit = () => {
-      anamnesis.value.isEditMode = !anamnesis.value.isEditMode;
+      anamnesis.isEditMode = !anamnesis.isEditMode;
     };
 
     const remove = () => {
       const idForDelete = diagnosis.value.patientDiagnosisAnamnesis[index.value].id;
-      if (idForDelete) diagnosis.value.patientDiagnosisAnamnesisForDelete.push(idForDelete);
+
+      if (idForDelete) {
+        diagnosis.value.patientDiagnosisAnamnesisForDelete.push(idForDelete);
+      }
+
       diagnosis.value.patientDiagnosisAnamnesis.splice(index.value, 1);
     };
 
+    const updateAnamnesis = () => {
+      store.commit(`${props.storeName}/setAnamnesis`, { anamnesis, diagnosisIndex, anamnesisIndex: index });
+    };
+
     return {
+      anamnesis,
       edit,
       remove,
+      updateAnamnesis,
     };
   },
 });

@@ -30,7 +30,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const patientDiagnosis: Ref<IPatientDiagnosis[]> = computed(() => store.getters['patients/patientDiagnosis']);
+    const patientDiagnosis: Ref<IPatientDiagnosis[]> = computed(() => store.getters['patients/getPatientDiagnosis']);
     const registerToPatient: Ref<IRegisterToPatient[]> = computed(() => store.getters['patients/registerToPatient']);
     const registers: Ref<IRegisterToPatient[]> = computed(() => store.getters['registers/registers']);
     const tableRegisters = ref();
