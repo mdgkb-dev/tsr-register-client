@@ -5,6 +5,7 @@ import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
 import MkbList from '@/components/Mkb/MkbList.vue';
 import AuthRoutes from '@/router/AuthRoutes';
 import DocumentsRoutes from '@/router/DocumentsRoutes';
+import DrugsRoutes from '@/router/DrugsRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
@@ -50,6 +51,7 @@ export const isNotAuthorized = async (to: any, from: any, next: any) => {
 };
 
 const routes: Array<RouteRecordRaw> = [
+  ...DrugsRoutes,
   ...PatientsRoutes,
   ...AuthRoutes,
   ...RepresentativeRoutes,

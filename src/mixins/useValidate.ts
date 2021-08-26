@@ -18,7 +18,20 @@ export default function () {
     return validationResult;
   };
 
+  const validateWithoutMessageBox = (form: any): boolean => {
+    let validationResult = true;
+    form.validate((valid: boolean) => {
+      if (!valid) {
+        validationResult = false;
+        return false;
+      }
+      return true;
+    });
+    return validationResult;
+  };
+
   return {
     validate,
+    validateWithoutMessageBox,
   };
 }

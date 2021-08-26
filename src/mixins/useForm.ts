@@ -4,6 +4,7 @@ import { NavigationGuardNext, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import IDocumentType from '@/interfaces/documents/IDocumentType';
+import IDrug from '@/interfaces/drugs/IDrug';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRegister from '@/interfaces/registers/IRegister';
@@ -21,6 +22,7 @@ export default function (isEditMode = false) {
     module: string,
     payload:
       | IPatient
+      | IDrug
       | IRepresentativeType
       | IRepresentative
       | IRegisterProperty
@@ -52,6 +54,7 @@ export default function (isEditMode = false) {
     module: string,
     payload:
       | IPatient
+      | IDrug
       | IRepresentativeType
       | IRepresentative
       | IRegisterProperty
