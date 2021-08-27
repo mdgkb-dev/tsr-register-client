@@ -12,6 +12,7 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IFIlesList from '@/interfaces/files/IFIlesList';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
@@ -51,11 +52,16 @@ const getters: GetterTree<State, RootState> = {
     return state.patient.human.documents;
   },
   fileInfos(state): IFileInfo[] {
-    console.log('state.patient.human.fileInfos', state.patient.human.fileInfos);
     return state.patient.human.fileInfos;
   },
   disabilities(state): IDisability[] {
     return state.patient.disabilities;
+  },
+  fileList(state): IFIlesList[] {
+    return state.photoFileList;
+  },
+  fileInfo(state): IFileInfo | undefined {
+    return state.patient.human.photo;
   },
 };
 

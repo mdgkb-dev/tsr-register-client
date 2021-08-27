@@ -7,6 +7,7 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IFIlesList from '@/interfaces/files/IFIlesList';
 
 const getters: GetterTree<State, RootState> = {
   representatives(state): IRepresentative[] {
@@ -32,6 +33,12 @@ const getters: GetterTree<State, RootState> = {
   },
   filteredRepresentatives(state): IRepresentative[] {
     return state.filteredRepresentatives;
+  },
+  fileList(state): IFIlesList[] {
+    return state.photoFileList;
+  },
+  fileInfo(state): IFileInfo | undefined {
+    return state.representative.human.photo;
   },
 };
 

@@ -2,8 +2,8 @@
   <div class="table-background" style="width: 100%; margin-bottom: 20px">
     <el-row>
       <el-col :span="8">
-        <div>
-          <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+        <div class="block">
+          <Uploader :store-module="'patients'" :set-file-mutation="'setPhoto'" :remove-file-mutation="'removePhoto'" />
         </div>
         <h1 class="semi-bold-header">Диагноз</h1>
         <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
@@ -121,10 +121,11 @@ import { useStore } from 'vuex';
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-
+import Uploader from '@/components/Uploader.vue';
 export default defineComponent({
   name: 'PatientPageInfo',
   components: {
+    Uploader,
     PopoverInfo,
   },
   setup() {

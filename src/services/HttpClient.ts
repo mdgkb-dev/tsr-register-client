@@ -24,8 +24,7 @@ export default class HttpClient implements IHttpClient {
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
       responseType: !isBlob ? 'json' : 'blob',
     });
-
-    return !isBlob ? data : { href: URL.createObjectURL(data), download: String(resHeaders.get('Download-File-Name')) };
+    return !isBlob ? data : { href: URL.createObjectURL(data), download: resHeaders['download-file-name'] };
   }
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {

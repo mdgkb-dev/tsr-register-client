@@ -11,20 +11,23 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IFile from '@/interfaces/files/IFile';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
     state.patients = patients.map((p: IPatient) => new Patient(p));
   },
   set(state, patient: IPatient) {
+    state.photoFileList = [];
     state.patient = new Patient(patient);
+    if (state.patient.human.photo) state.photoFileList[0] = state.patient.human.photo.getFileListObject();
   },
   create(state, patient: IPatient) {
     state.patients.push(new Patient(patient));
@@ -119,16 +122,36 @@ const mutations: MutationTree<State> = {
   addDocumentsFiles(state, items: IFileInfoToDocument[]) {
     const i = state.patient.human.documents.findIndex((doc: IDocument) => doc.id === items[0].documentId);
     if (i > -1) {
-      console.log(state.patient.human.documents[i]);
       state.patient.human.documents[i].fileInfoToDocument = [...state.patient.human.documents[i].fileInfoToDocument, ...items];
     }
   },
-  removeFile(state, id: string) {
-    const i = state.patient.human.fileInfos.findIndex((item: IFileInfo) => item.id === id);
-    if (i > -1) state.patient.human.fileInfos.splice(i, 1);
+  removeFile(state, fileInfoToDocumentId: string) {
+    state.patient.human.documents.forEach((doc: IDocument) => {
+      doc.fileInfoToDocument.forEach((fileInfoToDocument: IFileInfoToDocument, i: number) => {
+        if (fileInfoToDocument.id === fileInfoToDocumentId) {
+          doc.fileInfoToDocumentForDelete.push(fileInfoToDocumentId);
+          doc.fileInfoToDocument.splice(i, 1);
+        }
+      });
+    });
   },
   resetPatient(state) {
     state.patient = new Patient();
+  },
+  setPhoto(state, file: IFileInfo) {
+    state.patient.human.photo = file;
+    state.patient.human.photoId = file.id;
+  },
+  setFileList(state, file: IFile) {
+    if (!state.patient.human.photo) return;
+    state.patient.human.photo.file = file.blob;
+    if (state.patient.human.photo.fileSystemPath) {
+      state.photoFileList[0] = { name: state.patient.human.photo.fileSystemPath, url: file.src };
+    }
+  },
+  removePhoto(state) {
+    state.patient.human.photo = undefined;
+    state.patient.human.photoId = undefined;
   },
 };
 
