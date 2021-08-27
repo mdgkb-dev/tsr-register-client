@@ -3,7 +3,11 @@
     <el-form ref="form" :inline-message="true" :status-icon="true" :model="drug" label-position="left" style="width: 100%">
       <el-row>
         <div class="table-background" style="width: 100%; margin-bottom: 20px">
-          <el-form-item label="Наименование лекарства" prop="name">
+          <el-form-item
+            label="Наименование лекарства"
+            prop="name"
+            :rules="{ required: true, message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }"
+          >
             <el-input v-model="drug.name"></el-input>
           </el-form-item>
         </div>
@@ -106,6 +110,23 @@
                     <el-input-number v-else v-model="scope.row.daysCount" size="mini" controls-position="right" :min="1"></el-input-number>
                   </template>
                 </el-table-column>
+                <el-table-column label="Раз в день">
+                  <template #default="scope">
+                    <TableButtonGroup
+                      v-if="!scope.row.timesPerDay"
+                      :show-add-button="true"
+                      @add="addTimesPerDay(drugRegimenIndex, drugRegimenBlockIndex, scope.$index)"
+                    />
+                    <span v-else-if="scope.row.timesPerDay && !drugRegimenBlock.isEdit">{{ scope.row.timesPerDay }}</span>
+                    <el-input-number
+                      v-else
+                      v-model="scope.row.timesPerDay"
+                      size="mini"
+                      controls-position="right"
+                      :min="1"
+                    ></el-input-number>
+                  </template>
+                </el-table-column>
                 <el-table-column align="center" width="50">
                   <template #default="scope">
                     <TableButtonGroup
@@ -199,25 +220,27 @@ export default defineComponent({
     const addDrugRegimen = (): void => {
       if (!validateWithoutMessageBox(newDrugRegimenForm.value)) return;
       store.commit('drugs/addDrugRegimen', newDrugRegimen.value);
+      store.commit('drugs/editDrugRegimenBlock');
       newDrugRegimen.value = new DrugRegimen();
       activeName.value = String(drug.value.drugRegimens.length);
     };
-    const editDrugRegimen = (drugIndex: number): void => {
-      if (drug.value.drugRegimens[drugIndex].name) {
-        store.commit('drugs/editDrugRegimen', drugIndex);
+    const editDrugRegimen = (drugRegimenIndex: number): void => {
+      if (drug.value.drugRegimens[drugRegimenIndex].name) {
+        store.commit('drugs/editDrugRegimen', drugRegimenIndex);
       }
-      activeName.value = String(drugIndex + 1);
+      activeName.value = String(drugRegimenIndex + 1);
     };
-    const removeDrugRegimen = (drugIndex: number): void => {
-      store.commit('drugs/removeDrugRegimen', drugIndex);
-      if (Number(activeName.value) !== drugIndex && Number(activeName.value) - 1 > drugIndex) {
+    const removeDrugRegimen = (drugRegimenIndex: number): void => {
+      store.commit('drugs/removeDrugRegimen', drugRegimenIndex);
+      if (Number(activeName.value) !== drugRegimenIndex && Number(activeName.value) - 1 > drugRegimenIndex) {
         activeName.value = String(Number(activeName.value) - 1);
       }
-      if (Number(activeName.value) - 1 === drugIndex) activeName.value = '';
+      if (Number(activeName.value) - 1 === drugRegimenIndex) activeName.value = '';
     };
-    const addDrugRegimenBlock = (drugIndex: number): void => {
-      store.commit('drugs/addDrugRegimenBlock', drugIndex);
-      activeName.value = String(drugIndex + 1);
+    const addDrugRegimenBlock = (drugRegimenIndex: number): void => {
+      store.commit('drugs/addDrugRegimenBlock', drugRegimenIndex);
+      activeName.value = String(drugRegimenIndex + 1);
+      store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex }));
     };
     const editDrugRegimenBlock = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
       store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
@@ -263,6 +286,12 @@ export default defineComponent({
         'drugs/moveDrugRegimenBlockItemDown',
         new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex })
       );
+    };
+    const addTimesPerDay = (drugRegimenIndex: number, drugRegimenBlockIndex: number, drugRegimenBlockItemIndex: number): void => {
+      store.commit('drugs/addTimesPerDay', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex }));
+      if (!drug.value.drugRegimens[drugRegimenIndex].drugRegimenBlocks[drugRegimenBlockIndex].isEdit) {
+        store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+      }
     };
 
     onBeforeMount(async () => {
@@ -313,6 +342,7 @@ export default defineComponent({
       moveDrugRegimenBlockItemDown,
       moveDrugRegimenBlockUp,
       moveDrugRegimenBlockDown,
+      addTimesPerDay,
     };
   },
 });

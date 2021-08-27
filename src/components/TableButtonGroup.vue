@@ -1,5 +1,6 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
+    <el-button v-if="showAddButton" class="table-button" icon="el-icon-plus" @click="$emit('add')" />
     <el-button v-if="showMoveUpButton" class="table-button" icon="el-icon-arrow-up" @click="$emit('moveUp')" />
     <el-button v-if="showMoveDownButton" class="table-button" icon="el-icon-arrow-down" @click="$emit('moveDown')" />
     <el-button v-if="showDownloadButton" class="table-button" icon="el-icon-download" @click="$emit('download')" />
@@ -53,11 +54,15 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
+    showAddButton: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
     horizontal: {
       type: Boolean as PropType<boolean>,
       default: false,
     },
   },
-  emits: ['download', 'edit', 'remove', 'moveUp', 'moveDown'],
+  emits: ['download', 'edit', 'remove', 'moveUp', 'moveDown', 'add'],
 });
 </script>

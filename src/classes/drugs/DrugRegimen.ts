@@ -26,6 +26,5 @@ export default class DrugRegimen implements IDrugRegimen {
     if (i.drugRegimenBlocks) {
       this.drugRegimenBlocks = i.drugRegimenBlocks.map((item: IDrugRegimenBlock) => new DrugRegimenBlock(item));
     }
-    console.log(this.drugRegimenBlocks);
   }
 }

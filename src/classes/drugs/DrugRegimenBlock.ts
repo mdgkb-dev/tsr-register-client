@@ -14,7 +14,7 @@ export default class DrugRegimenBlock implements IDrugRegimenBlock {
   drugRegimenId?: string;
   drugRegimen?: IDrugRegimen;
 
-  drugRegimenBlockItems: IDrugRegimenBlockItem[] = [];
+  drugRegimenBlockItems: IDrugRegimenBlockItem[] = [new DrugRegimenBlockItem()];
   drugRegimenBlockItemsForDelete: string[] = [];
 
   constructor(i?: IDrugRegimenBlock) {

@@ -49,10 +49,20 @@ const mutations: MutationTree<State> = {
     state.drug.drugRegimens[index].drugRegimenBlocks[lastIndex].infinitely = false;
     state.drug.drugRegimens[index].drugRegimenBlocks.push(new DrugRegimenBlock());
   },
-  editDrugRegimenBlock(state, indexes: IDrugIndexes) {
-    if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
-      const isEdit = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].isEdit;
-      state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].isEdit = !isEdit;
+  editDrugRegimenBlock(state, indexes?: IDrugIndexes) {
+    if (!indexes) {
+      const lastDrugRegimenIndex = state.drug.drugRegimens.length - 1;
+      const lastDrugRegimenBlockIndex = state.drug.drugRegimens[lastDrugRegimenIndex].drugRegimenBlocks.length - 1;
+      state.drug.drugRegimens[lastDrugRegimenIndex].drugRegimenBlocks[lastDrugRegimenBlockIndex].isEdit = true;
+    } else {
+      if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex === undefined) {
+        const lastDrugRegimenBlockIndex = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks.length - 1;
+        state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[lastDrugRegimenBlockIndex].isEdit = true;
+      }
+      if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
+        const isEdit = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].isEdit;
+        state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].isEdit = !isEdit;
+      }
     }
   },
   removeDrugRegimenBlock(state, indexes: IDrugIndexes) {
@@ -91,6 +101,17 @@ const mutations: MutationTree<State> = {
         indexes.drugRegimenBlockItemIndex,
         1
       );
+    }
+  },
+  addTimesPerDay(state, indexes: IDrugIndexes) {
+    if (
+      indexes.drugRegimenIndex !== undefined &&
+      indexes.drugRegimenBlockIndex !== undefined &&
+      indexes.drugRegimenBlockItemIndex !== undefined
+    ) {
+      state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].drugRegimenBlockItems[
+        indexes.drugRegimenBlockItemIndex
+      ].timesPerDay = 1;
     }
   },
   moveDrugRegimenBlockItemUp(state, indexes: IDrugIndexes) {
@@ -138,8 +159,7 @@ const mutations: MutationTree<State> = {
   moveDrugRegimenBlockUp(state, indexes: IDrugIndexes) {
     if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
       const elementToMove = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex];
-      // elementToMove.isEdit = false;
-      // console.log(elementToMove.isEdit);
+      if (elementToMove.infinitely) elementToMove.infinitely = false;
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex] =
         state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex - 1];
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex - 1] = elementToMove;
