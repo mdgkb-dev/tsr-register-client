@@ -5,10 +5,9 @@ export default interface IDrugRegimen {
   id?: string;
   name: string;
   isEdit: boolean;
-
   drugId?: string;
-  drug?: IDrug;
 
+  drug?: IDrug;
   drugRegimenBlocks: IDrugRegimenBlock[];
   drugRegimenBlocksForDelete: string[];
 }

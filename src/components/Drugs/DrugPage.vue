@@ -202,20 +202,22 @@ export default defineComponent({
       newDrugRegimen.value = new DrugRegimen();
       activeName.value = String(drug.value.drugRegimens.length);
     };
-    const editDrugRegimen = (index: number): void => {
-      if (drug.value.drugRegimens[index].name) {
-        store.commit('drugs/editDrugRegimen', index);
+    const editDrugRegimen = (drugIndex: number): void => {
+      if (drug.value.drugRegimens[drugIndex].name) {
+        store.commit('drugs/editDrugRegimen', drugIndex);
       }
+      activeName.value = String(drugIndex + 1);
     };
-    const removeDrugRegimen = (index: number): void => {
-      store.commit('drugs/removeDrugRegimen', index);
-      if (Number(activeName.value) !== index && Number(activeName.value) - 1 > index) {
+    const removeDrugRegimen = (drugIndex: number): void => {
+      store.commit('drugs/removeDrugRegimen', drugIndex);
+      if (Number(activeName.value) !== drugIndex && Number(activeName.value) - 1 > drugIndex) {
         activeName.value = String(Number(activeName.value) - 1);
       }
-      if (Number(activeName.value) - 1 === index) activeName.value = '';
+      if (Number(activeName.value) - 1 === drugIndex) activeName.value = '';
     };
-    const addDrugRegimenBlock = (index: number): void => {
-      store.commit('drugs/addDrugRegimenBlock', index);
+    const addDrugRegimenBlock = (drugIndex: number): void => {
+      store.commit('drugs/addDrugRegimenBlock', drugIndex);
+      activeName.value = String(drugIndex + 1);
     };
     const editDrugRegimenBlock = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
       store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
@@ -261,7 +263,6 @@ export default defineComponent({
         'drugs/moveDrugRegimenBlockItemDown',
         new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex })
       );
-      store.commit('drugs/updateOrder');
     };
 
     onBeforeMount(async () => {
@@ -289,7 +290,7 @@ export default defineComponent({
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
       if (!validate(form.value)) return;
-
+      store.commit('drugs/updateOrder');
       await submitHandling('drugs', drug.value, next, 'drugs');
     };
 

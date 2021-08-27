@@ -63,7 +63,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       store.commit('main/setMainHeader', new MainHeader({ title: 'Список лекарств', create }));
-      // await store.dispatch('drugs/getAll');
+      await store.dispatch('drugs/getAll');
       mount.value = true;
     });
 
