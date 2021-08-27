@@ -1,26 +1,21 @@
 import { Module } from 'vuex';
 
-import Patient from '@/classes/patients/Patient';
+import Cropper from '@/classes/cropper/Cropper';
 import RootState from '@/store/types';
 
-import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  patients: [],
-  patient: new Patient(),
-  filteredPatients: [],
-  photoFileList: [],
+  cropper: new Cropper(),
 };
 
 const namespaced = true;
 
-export const patients: Module<State, RootState> = {
+export const cropper: Module<State, RootState> = {
   namespaced,
   state,
   getters,
-  actions,
   mutations,
 };

@@ -7,6 +7,7 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IDocumentFieldValue from '@/interfaces/documents/IDocumentFieldValue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default class Document implements IDocument {
   id?: string = uuidv4();
@@ -16,6 +17,7 @@ export default class Document implements IDocument {
   documentFieldValues: IDocumentFieldValue[] = [];
   isDraft? = false;
   fileInfoToDocument: IFileInfoToDocument[] = [];
+  fileInfoToDocumentForDelete: string[] = [];
 
   constructor(i?: IDocument) {
     if (!i) return;
@@ -27,5 +29,11 @@ export default class Document implements IDocument {
     this.isDraft = i.isDraft ?? false;
     if (i.fileInfoToDocument)
       this.fileInfoToDocument = i.fileInfoToDocument.map((item: IFileInfoToDocument) => new FileInfoToDocument(item));
+  }
+
+  getFileInfos(): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+
+    return fileInfos;
   }
 }

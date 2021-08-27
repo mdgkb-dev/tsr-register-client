@@ -84,15 +84,9 @@
               <el-button icon="el-icon-delete" @click.prevent="removeDisability(scope.row)"></el-button>
             </el-tooltip>
           </div>
-
           <div v-else class="card-button-group">
-            <el-button-group v-if="!fileInfos.some((info) => info.category === scope.row.id)">
-              <el-tooltip
-                v-if="!fileInfos.some((info) => info.category === scope.row.id)"
-                effect="light"
-                placement="top-end"
-                content="Приложить файл"
-              >
+            <el-button-group v-if="!scope.row.fileInfo">
+              <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">
                 <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()"></el-button>
               </el-tooltip>
               <input
@@ -108,20 +102,11 @@
             </el-button-group>
 
             <el-button-group v-else>
-              <el-tooltip
-                v-if="fileInfos.find((info) => info.category === scope.row.id).isDraft"
-                effect="light"
-                placement="top-end"
-                content="Файл добавлен"
-              >
+              <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">
                 <el-button disabled icon="el-icon-document-checked"></el-button>
               </el-tooltip>
               <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
-                <el-button
-                  :data-file-id="fileInfos.find((info) => info.category === scope.row.id).id"
-                  icon="el-icon-download"
-                  @click.prevent="downloadFile"
-                ></el-button>
+                <el-button :data-file-id="scope.row.fileInfo.id" icon="el-icon-download" @click.prevent="downloadFile"></el-button>
               </el-tooltip>
               <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
                 <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()" />
@@ -153,7 +138,6 @@
 </template>
 
 <script lang="ts">
-import { v4 as uuidv4 } from 'uuid';
 import { computed, defineComponent, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -162,7 +146,6 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default defineComponent({
   name: 'DisabilityForm',
@@ -171,7 +154,6 @@ export default defineComponent({
 
     const birthDate: Ref<string> = computed(() => store.getters['patients/birthDate']);
     const disabilities: Ref<IDisability[]> = computed(() => store.getters['patients/disabilities']);
-    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters['patients/fileInfos']);
     const fileAnchor = ref();
 
     const addDisability = (): void => store.commit('patients/addDisability');
@@ -235,24 +217,33 @@ export default defineComponent({
       return typeof row.parameter1 === 'boolean';
     };
 
-    const addReplaceFile = (event: InputEvent, category: string): void => {
+    const addReplaceFile = (event: InputEvent, edvId: string): void => {
       const target = event.target as HTMLInputElement;
       if (!target || !target.files) {
         return;
       }
       const file = Array.from(target.files)[0];
-      const newInfo: IFileInfo = new FileInfo({
-        id: uuidv4(),
-        category,
-        originalName: file.name,
-        file,
-        isDraft: true,
+
+      disabilities.value.forEach((i: IDisability) => {
+        i.edvs.forEach((e: IEdv) => {
+          if (e.id === edvId) {
+            const newInfo = FileInfo.CreateDraft(file, edvId);
+            e.fileInfoId = newInfo.id;
+            e.fileInfo = newInfo;
+          }
+        });
       });
-      fileInfos.value = [...fileInfos.value.filter((info: IFileInfo): boolean => info.category !== category), newInfo];
     };
 
     const removeFile = (id: string): void => {
-      fileInfos.value = [...fileInfos.value.filter((info: IFileInfo): boolean => info.category !== id)];
+      disabilities.value.forEach((i: IDisability) => {
+        i.edvs.forEach((e: IEdv) => {
+          if (e.id === id) {
+            e.fileInfoId = undefined;
+            e.fileInfo = undefined;
+          }
+        });
+      });
     };
 
     const downloadFile = async (event: MouseEvent): Promise<void> => {
@@ -281,7 +272,6 @@ export default defineComponent({
 
     return {
       disabilities,
-      fileInfos,
       fileAnchor,
       downloadFile,
       removeFile,

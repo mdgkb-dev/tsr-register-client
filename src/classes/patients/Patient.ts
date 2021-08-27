@@ -9,8 +9,6 @@ import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -182,17 +180,10 @@ export default class Patient implements IPatient {
       const idForDelete = this.registerPropertySetToPatient[index].id;
       if (idForDelete) this.registerPropertySetToPatientForDelete.push(idForDelete);
       this.registerPropertySetToPatient.splice(index, 1);
-      console.log(this.registerPropertySetToPatient);
     }
   }
 
   getFileInfos(): IFileInfo[] {
-    const fileInfos: IFileInfo[] = [];
-    this.human.documents.forEach((doc: IDocument) => {
-      doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
-        if (fileInfoToDoc.fileInfo) fileInfos.push(fileInfoToDoc.fileInfo);
-      });
-    });
-    return fileInfos;
+    return [...Human.GetFileInfos(this.human), ...Disability.GetFileInfos(this.disabilities)];
   }
 }

@@ -1,6 +1,5 @@
 import { ActionTree } from 'vuex';
 
-import ICount from '@/interfaces/meta/ICount';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
@@ -14,9 +13,6 @@ const actions: ActionTree<State, RootState> = {
     if (offset || offset === 0) commit('setAll', await httpClient.get<IRepresentative>({ query: `?offset=${offset}` }));
     else commit('setAll', await httpClient.get<IRepresentative>());
   },
-  getCount: async ({ commit }): Promise<void> => {
-    commit('setCount', await httpClient.get<ICount[]>({ query: `count` }));
-  },
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get<IRepresentative>({ query: id }));
   },
@@ -26,7 +22,7 @@ const actions: ActionTree<State, RootState> = {
       'create',
       await httpClient.post<IRepresentative, IRepresentative>({
         payload: representative,
-        fileInfos: representative.human.fileInfos,
+        fileInfos: representative.getFileInfos(),
         isFormData: true,
       })
     );
@@ -39,7 +35,7 @@ const actions: ActionTree<State, RootState> = {
         payload: representative,
         query: representative.id,
         isFormData: true,
-        fileInfos,
+        fileInfos: representative.getFileInfos(),
       })
     );
   },

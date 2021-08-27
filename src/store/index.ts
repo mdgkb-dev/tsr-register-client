@@ -16,6 +16,7 @@ import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { users } from '@/store/modules/users';
+import { cropper } from '@/store/modules/cropper';
 
 import RootState from './types';
 
@@ -38,6 +39,7 @@ const store: StoreOptions<RootState> = {
     disabilities,
     documentTypes,
     drugs,
+    cropper,
     files,
     insuranceCompanies,
     main,

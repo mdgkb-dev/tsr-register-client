@@ -1,7 +1,13 @@
+import IFilesList from '@/interfaces/files/IFIlesList';
+
 export default interface IFileInfo {
   id?: string;
   category: string;
   originalName: string;
-  file?: File;
+  fileSystemPath?: string;
+  file?: Blob;
   isDraft?: boolean;
+
+  getImageUrl?: () => string;
+  getFileListObject: () => IFilesList;
 }
