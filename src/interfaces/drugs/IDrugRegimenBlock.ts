@@ -6,10 +6,9 @@ export default interface IDrugRegimenBlock {
   infinitely: boolean;
   isEdit: boolean;
   orderItem: number;
-
   drugRegimenId?: string;
-  drugRegimen?: IDrugRegimen;
 
+  drugRegimen?: IDrugRegimen;
   drugRegimenBlockItems: IDrugRegimenBlockItem[];
   drugRegimenBlockItemsForDelete: string[];
 }

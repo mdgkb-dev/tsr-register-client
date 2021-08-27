@@ -38,6 +38,10 @@ const mutations: MutationTree<State> = {
     state.drug.drugRegimens[index].isEdit = !state.drug.drugRegimens[index].isEdit;
   },
   removeDrugRegimen(state, index: number) {
+    const itemId = state.drug.drugRegimens[index].id;
+    if (itemId) {
+      state.drug.drugRegimensForDelete.push(itemId);
+    }
     state.drug.drugRegimens.splice(index, 1);
   },
   addDrugRegimenBlock(state, index: number) {
@@ -53,6 +57,10 @@ const mutations: MutationTree<State> = {
   },
   removeDrugRegimenBlock(state, indexes: IDrugIndexes) {
     if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
+      const itemId = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].id;
+      if (itemId) {
+        state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocksForDelete.push(itemId);
+      }
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks.splice(indexes.drugRegimenBlockIndex, 1);
     }
   },
@@ -70,6 +78,15 @@ const mutations: MutationTree<State> = {
       indexes.drugRegimenBlockIndex !== undefined &&
       indexes.drugRegimenBlockItemIndex !== undefined
     ) {
+      const itemId =
+        state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].drugRegimenBlockItems[
+          indexes.drugRegimenBlockItemIndex
+        ].id;
+      if (itemId) {
+        state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[
+          indexes.drugRegimenBlockIndex
+        ].drugRegimenBlockItemsForDelete.push(itemId);
+      }
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].drugRegimenBlockItems.splice(
         indexes.drugRegimenBlockItemIndex,
         1
@@ -121,6 +138,8 @@ const mutations: MutationTree<State> = {
   moveDrugRegimenBlockUp(state, indexes: IDrugIndexes) {
     if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
       const elementToMove = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex];
+      // elementToMove.isEdit = false;
+      // console.log(elementToMove.isEdit);
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex] =
         state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex - 1];
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex - 1] = elementToMove;
