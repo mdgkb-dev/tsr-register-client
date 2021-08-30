@@ -1,7 +1,9 @@
 import Document from '@/classes/documents/Document';
+import FileInfo from '@/classes/files/FileInfo';
 import Contact from '@/classes/humans/Contact';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
@@ -22,29 +24,28 @@ export default class Human implements IHuman {
   documents: IDocument[] = [];
   documentsForDelete: string[] = [];
   fileInfos: IFileInfo[] = [];
+  photo?: IFileInfo;
+  photoId?: string;
+  constructor(i?: IHuman) {
+    if (!i) return;
 
-  constructor(human?: IHuman) {
-    if (!human) return;
+    this.id = i.id;
+    this.name = i.name ?? '';
+    this.surname = i.surname ?? '';
+    this.patronymic = i.patronymic ?? '';
+    this.isMale = i.isMale ?? true;
+    this.dateBirth = i.dateBirth ?? '';
+    this.addressRegistration = i.addressRegistration ?? '';
+    this.addressResidential = i.addressResidential ?? '';
+    this.contact = new Contact(i.contact);
+    this.contactId = i.contactId;
+    if (i.insuranceCompanyToHuman)
+      this.insuranceCompanyToHuman = i.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
+    if (i.documents) this.documents = i.documents.map((i: IDocument) => new Document(i));
 
-    this.id = human.id;
-    this.name = human.name ?? '';
-    this.surname = human.surname ?? '';
-    this.patronymic = human.patronymic ?? '';
-    this.isMale = human.isMale ?? true;
-    this.dateBirth = human.dateBirth ?? '';
-    this.addressRegistration = human.addressRegistration ?? '';
-    this.addressResidential = human.addressResidential ?? '';
-    this.contact = new Contact(human.contact);
-    this.contactId = human.contactId;
-    if (human.insuranceCompanyToHuman) {
-      this.insuranceCompanyToHuman = human.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
-    }
-
-    if (human.documents) {
-      this.documents = human.documents.map((i: IDocument) => new Document(i));
-    }
-
-    this.fileInfos = human.fileInfos ?? [];
+    this.fileInfos = i.fileInfos ?? [];
+    if (i.photo) this.photo = new FileInfo(i.photo);
+    this.photoId = i.photoId;
   }
 
   getFullName(): string {
@@ -66,5 +67,16 @@ export default class Human implements IHuman {
         }
       }
     }
+  }
+
+  static GetFileInfos(item: IHuman): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    item.documents.forEach((doc: IDocument) => {
+      doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
+        if (fileInfoToDoc.fileInfo) fileInfos.push(fileInfoToDoc.fileInfo);
+      });
+    });
+    if (item.photo) fileInfos.push(item.photo);
+    return fileInfos;
   }
 }

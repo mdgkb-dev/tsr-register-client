@@ -1,5 +1,6 @@
 import Human from '@/classes/humans/Human';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -21,5 +22,9 @@ export default class Representative implements IRepresentative {
         (r: RepresentativeToPatient) => new RepresentativeToPatient(r)
       );
     }
+  }
+
+  getFileInfos(): IFileInfo[] {
+    return [...Human.GetFileInfos(this.human)];
   }
 }

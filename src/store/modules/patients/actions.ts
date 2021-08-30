@@ -16,10 +16,6 @@ const actions: ActionTree<State, RootState> = {
       commit('setAll', await httpClient.get<IPatient[]>());
     }
   },
-  getCount: async ({ commit }): Promise<void> => {
-    // TODO: Нет такой мутации 'setCount'. Лишний action?
-    commit('setCount', await httpClient.get<number>({ query: `count` }));
-  },
   getAllById: async ({ commit }, id: string): Promise<void> => {
     const res = await httpClient.get<IPatient[]>({ query: id });
     commit('setAll', [res]);

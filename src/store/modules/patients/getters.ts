@@ -4,6 +4,7 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IFIlesList from '@/interfaces/files/IFIlesList';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -59,11 +60,16 @@ const getters: GetterTree<State, RootState> = {
     return state.patient.human.documents;
   },
   fileInfos(state): IFileInfo[] {
-    console.log('state.patient.human.fileInfos', state.patient.human.fileInfos);
     return state.patient.human.fileInfos;
   },
   disabilities(state): IDisability[] {
     return state.patient.disabilities;
+  },
+  fileList(state): IFIlesList[] {
+    return state.photoFileList;
+  },
+  fileInfo(state): IFileInfo | undefined {
+    return state.patient.human.photo;
   },
 };
 

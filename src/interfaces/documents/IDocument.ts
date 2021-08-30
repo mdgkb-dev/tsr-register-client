@@ -10,4 +10,5 @@ export default interface IDocument {
   documentFieldValues: IDocumentFieldValue[];
   isDraft?: boolean;
   fileInfoToDocument: IFileInfoToDocument[];
+  fileInfoToDocumentForDelete: string[];
 }

@@ -1,3 +1,4 @@
+import IFilesList from '@/interfaces/files/IFIlesList';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
 export interface State {
@@ -5,4 +6,5 @@ export interface State {
   representative: IRepresentative;
   count: number;
   filteredRepresentatives: IRepresentative[];
+  photoFileList: IFilesList[];
 }

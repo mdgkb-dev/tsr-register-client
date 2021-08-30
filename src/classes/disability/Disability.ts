@@ -2,6 +2,7 @@ import Edv from '@/classes/disability/Edv';
 import Period from '@/classes/shared/Period';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPeriod from '@/interfaces/shared/IPeriod';
 
@@ -29,5 +30,14 @@ export default class Disability implements IDisability {
 
   dateIsCorrect(): boolean {
     return !(this.period && this.period.dateStart && this.period.dateEnd && this.period.dateStart > this.period.dateEnd);
+  }
+  static GetFileInfos(items: IDisability[]): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    items.forEach((i: IDisability) => {
+      i.edvs.forEach((e: IEdv) => {
+        if (e.fileInfo) fileInfos.push(e.fileInfo);
+      });
+    });
+    return fileInfos;
   }
 }

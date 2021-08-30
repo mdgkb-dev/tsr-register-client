@@ -12,6 +12,7 @@ export const state: State = {
   patients: [],
   patient: new Patient(),
   filteredPatients: [],
+  photoFileList: [],
 };
 
 const namespaced = true;

@@ -1,8 +1,10 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import auth from '@/store/modules/auth';
+import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
+import { drugs } from '@/store/modules/drugs';
 import files from '@/store/modules/files';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
@@ -36,6 +38,8 @@ const store: StoreOptions<RootState> = {
     auth,
     disabilities,
     documentTypes,
+    drugs,
+    cropper,
     files,
     insuranceCompanies,
     main,

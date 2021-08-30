@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="8">
         <div class="block">
-          <el-avatar shape="square" :size="312" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+          <Uploader :store-module="'representatives'" :set-file-mutation="'setPhoto'" :remove-file-mutation="'removePhoto'" />
         </div>
         <h1 class="semi-bold-header">Контакты</h1>
         <el-space direction="vertical" class="light-title" :size="15" alignment="start">
@@ -67,11 +67,12 @@
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
+import Uploader from '@/components/Uploader.vue';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
-
 export default defineComponent({
   name: 'RepresentativePageInfo',
+  components: { Uploader },
   setup() {
     const { formatDate } = useDateFormat();
     const store = useStore();

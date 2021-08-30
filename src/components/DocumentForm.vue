@@ -89,7 +89,7 @@
                 :show-download-button="!scope.row.fileInfo.isDraft"
                 :horizontal="true"
                 @download="downloadFile(scope.row.fileInfo.id)"
-                @remove="removeFile(scope.row.fileInfo.id)"
+                @remove="removeFile(scope.row.id)"
               />
             </template>
           </el-table-column>
@@ -169,6 +169,7 @@ export default defineComponent({
         documentFieldValues,
         isDraft: true,
         fileInfoToDocument: [],
+        fileInfoToDocumentForDelete: [],
       });
 
       store.commit(`${storeModule.value}/addDocument`, document);

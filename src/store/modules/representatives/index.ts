@@ -13,6 +13,7 @@ export const state: State = {
   representative: new Representative(),
   count: 0,
   filteredRepresentatives: [],
+  photoFileList: [],
 };
 
 const namespaced = true;

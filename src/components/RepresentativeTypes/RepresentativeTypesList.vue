@@ -49,7 +49,6 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const title: Ref<string> = ref('Типы представителей');
     const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
 
     const edit = async (id: string): Promise<void> => {
@@ -73,7 +72,6 @@ export default defineComponent({
     return {
       representativeTypes,
       mount,
-      title,
       create,
       edit,
       remove,

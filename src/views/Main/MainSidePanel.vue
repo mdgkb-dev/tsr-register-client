@@ -118,6 +118,12 @@ export default defineComponent({
         link: '/register-link-list',
       },
       {
+        title: 'Лекарства',
+        class: 'el-icon-first-aid-kit',
+        name: 'DrugsList',
+        link: '/grugs',
+      },
+      {
         title: 'Администрирование',
         class: 'el-icon-setting',
         links: [
