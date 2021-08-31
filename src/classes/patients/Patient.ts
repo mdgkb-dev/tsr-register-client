@@ -3,6 +3,7 @@ import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
@@ -13,13 +14,12 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 export default class Patient implements IPatient {
   id?: string;

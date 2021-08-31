@@ -67,9 +67,9 @@
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
+import Uploader from '@/components/Uploader.vue';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
-import Uploader from '@/components/Uploader.vue';
 export default defineComponent({
   name: 'RepresentativePageInfo',
   components: { Uploader },

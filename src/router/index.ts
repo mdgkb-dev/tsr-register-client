@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 
 import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
@@ -26,28 +25,6 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
   }
   store.commit('setLayout', 'login-layout');
   next('/login');
-};
-
-export const isNotAuthorized = async (to: any, from: any, next: any) => {
-  let response;
-  try {
-    response = await fetch(`${process.env.VUE_APP_BASE_URL}login`);
-  } catch (error) {
-    Cookies.remove('user_sid');
-    window.localStorage.removeItem('user_sid');
-    next();
-    return;
-  }
-
-  if (response.status === 200 || response.status === 304) {
-    const cookie = Cookies.get('user_sid');
-    window.localStorage.setItem('user_sid', String(cookie));
-    next('/patients');
-    return;
-  }
-  Cookies.remove('user_sid');
-  window.localStorage.removeItem('user_sid');
-  next();
 };
 
 const routes: Array<RouteRecordRaw> = [

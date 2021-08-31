@@ -1,5 +1,5 @@
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IFilesList from '@/interfaces/files/IFIlesList';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
 
 export interface State {
   representatives: IRepresentative[];

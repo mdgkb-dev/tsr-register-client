@@ -114,7 +114,6 @@
 import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, reactive, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';

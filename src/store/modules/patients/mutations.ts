@@ -6,28 +6,28 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import Patient from '@/classes/patients/Patient';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IFile from '@/interfaces/files/IFile';
-import RegisterToPatient from '@/classes/registers/RegisterToPatient';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {

@@ -1,6 +1,6 @@
 import IDisability from '@/interfaces/disabilities/IDisability';
-import IPeriod from '@/interfaces/shared/IPeriod';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default interface IEdv {
   id?: string;

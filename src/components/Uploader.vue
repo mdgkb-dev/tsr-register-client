@@ -38,10 +38,10 @@ import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
 import Cropper from '@/classes/cropper/Cropper';
+import FileInfo from '@/classes/files/FileInfo';
 import ImageCropper from '@/components/ImageCropper.vue';
 import IFile from '@/interfaces/files/IFile';
 import IFilesList from '@/interfaces/files/IFIlesList';
-import FileInfo from '@/classes/files/FileInfo';
 
 export default defineComponent({
   name: 'Uploader',

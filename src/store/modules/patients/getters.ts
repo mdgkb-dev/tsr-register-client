@@ -4,6 +4,7 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IFIlesList from '@/interfaces/files/IFIlesList';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
@@ -12,7 +13,6 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
-import IFIlesList from '@/interfaces/files/IFIlesList';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {

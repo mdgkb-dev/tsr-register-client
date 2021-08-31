@@ -1,14 +1,14 @@
 import { MutationTree } from 'vuex';
 
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import Register from '@/classes/registers/Register';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 import { State } from './state';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 
 const mutations: MutationTree<State> = {
   setAll(state, registers: IRegister[]) {

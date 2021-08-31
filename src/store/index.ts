@@ -1,6 +1,7 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import auth from '@/store/modules/auth';
+import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
 import { drugs } from '@/store/modules/drugs';
@@ -16,7 +17,6 @@ import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { users } from '@/store/modules/users';
-import { cropper } from '@/store/modules/cropper';
 
 import RootState from './types';
 

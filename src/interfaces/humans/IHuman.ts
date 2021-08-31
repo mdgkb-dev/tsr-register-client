@@ -2,7 +2,6 @@ import IContact from '@/interfaces//humans/IContact';
 import IDocument from '@/interfaces/documents/IDocument';
 import FileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default interface IHuman {
   id?: string;

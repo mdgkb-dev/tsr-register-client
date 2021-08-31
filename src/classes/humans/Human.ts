@@ -1,12 +1,12 @@
 import Document from '@/classes/documents/Document';
+import FileInfo from '@/classes/files/FileInfo';
 import Contact from '@/classes/humans/Contact';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
-import FileInfo from '@/classes/files/FileInfo';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 
 export default class Human implements IHuman {
   id?: string;

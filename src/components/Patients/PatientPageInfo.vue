@@ -119,9 +119,9 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import PopoverInfo from '@/components/PopoverInfo.vue';
+import Uploader from '@/components/Uploader.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-import Uploader from '@/components/Uploader.vue';
 export default defineComponent({
   name: 'PatientPageInfo',
   components: {

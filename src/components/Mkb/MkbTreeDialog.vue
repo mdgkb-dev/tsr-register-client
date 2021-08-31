@@ -35,11 +35,11 @@
 import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 
 const MkbTree = defineAsyncComponent(() => import('@/components/Mkb/MkbTree.vue'));
 

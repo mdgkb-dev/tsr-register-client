@@ -2,6 +2,7 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -9,7 +10,6 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 
 import IHuman from '../humans/IHuman';
 import IRegisterProperty from '../registers/IRegisterProperty';
-import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 export default interface IPatient {
   id?: string;

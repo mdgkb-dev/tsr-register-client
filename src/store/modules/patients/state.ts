@@ -1,5 +1,5 @@
-import IPatient from '@/interfaces/patients/IPatient';
 import IFilesList from '@/interfaces/files/IFIlesList';
+import IPatient from '@/interfaces/patients/IPatient';
 
 export interface State {
   patients: IPatient[];

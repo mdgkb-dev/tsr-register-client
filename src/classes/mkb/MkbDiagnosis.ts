@@ -1,13 +1,14 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
-import { v4 as uuidv4 } from 'uuid';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;

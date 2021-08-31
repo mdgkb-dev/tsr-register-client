@@ -1,7 +1,7 @@
+import FileInfo from '@/classes/files/FileInfo';
 import Period from '@/classes/shared/Period';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IPeriod from '@/interfaces/shared/IPeriod';
-import FileInfo from '@/classes/files/FileInfo';
 
 export default class Edv implements IEdv {
   id?: string;

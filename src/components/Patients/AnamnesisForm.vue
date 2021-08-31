@@ -41,9 +41,9 @@
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, PropType, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'AnamnesisForm',

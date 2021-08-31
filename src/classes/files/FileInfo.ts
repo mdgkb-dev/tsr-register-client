@@ -1,13 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IFilesList from '@/interfaces/files/IFIlesList';
-import IFile from '@/interfaces/files/IFile';
 
 export default class FileInfo implements IFileInfo {
   id?: string = uuidv4();
-  category: string = '';
-  originalName: string = '';
+  category = '';
+  originalName = '';
   fileSystemPath?: string;
   file?: Blob;
   isDraft?: boolean = false;

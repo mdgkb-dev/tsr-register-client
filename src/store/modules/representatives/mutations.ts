@@ -3,14 +3,13 @@ import { MutationTree } from 'vuex';
 import Representative from '@/classes/representatives/Representative';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDocument from '@/interfaces/documents/IDocument';
+import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import ICount from '@/interfaces/meta/ICount';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IFile from '@/interfaces/files/IFile';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 
 const mutations: MutationTree<State> = {
   setAll(state, representatives: IRepresentative[]) {

@@ -1,8 +1,8 @@
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 
 export default interface IRegister {
   id?: string;
