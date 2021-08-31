@@ -11,26 +11,18 @@ export default class RegisterDiagnosis implements IRegisterDiagnosis {
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis?: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
-  mkbDiagnosis?: IMkbDiagnosis;
+  mkbDiagnosis: IMkbDiagnosis = new MkbDiagnosis();
   registerId?: string;
   register?: IRegister;
 
-  constructor(registerDiagnosis?: IRegisterDiagnosis) {
-    if (!registerDiagnosis) {
-      return;
-    }
-    this.id = registerDiagnosis.id;
-    this.mkbDiagnosisId = registerDiagnosis.mkbDiagnosisId;
-    if (registerDiagnosis.mkbDiagnosis) {
-      this.mkbDiagnosis = new MkbDiagnosis(registerDiagnosis.mkbDiagnosis);
-    }
-    this.mkbSubDiagnosisId = registerDiagnosis.mkbSubDiagnosisId;
-    if (registerDiagnosis.mkbSubDiagnosis) {
-      this.mkbSubDiagnosis = new MkbSubDiagnosis(registerDiagnosis.mkbSubDiagnosis);
-    }
-    this.registerId = registerDiagnosis.registerId;
-    if (registerDiagnosis.register) {
-      this.register = new Register(registerDiagnosis.register);
-    }
+  constructor(i?: IRegisterDiagnosis) {
+    if (!i) return;
+    this.id = i.id;
+    this.mkbDiagnosisId = i.mkbDiagnosisId;
+    if (i.mkbDiagnosis) this.mkbDiagnosis = new MkbDiagnosis(i.mkbDiagnosis);
+    this.mkbSubDiagnosisId = i.mkbSubDiagnosisId;
+    if (i.mkbSubDiagnosis) this.mkbSubDiagnosis = new MkbSubDiagnosis(i.mkbSubDiagnosis);
+    this.registerId = i.registerId;
+    if (i.register) this.register = new Register(i.register);
   }
 }
