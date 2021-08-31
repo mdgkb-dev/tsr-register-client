@@ -21,6 +21,11 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 
 import { State } from './state';
 import IFile from '@/interfaces/files/IFile';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -58,8 +63,18 @@ const mutations: MutationTree<State> = {
     if (index > -1) state.patient.human.insuranceCompanyToHuman.splice(index, 1);
     if (item.id) state.patient.human.insuranceCompanyToHumanForDelete.push(item.id);
   },
-  setRegisterts(state, registerToPatient: IRegisterToPatient[]) {
-    state.patient.registerToPatient = registerToPatient;
+  addRegister(state, registerId: string) {
+    const registerToPatient = new RegisterToPatient();
+    registerToPatient.registerId = registerId;
+    state.patient.registerToPatient.push(registerToPatient);
+  },
+  removeRegister(state, registerId: string) {
+    const index = state.patient.registerToPatient.findIndex((i: IRegisterToPatient) => i.registerId === registerId);
+    if (index > -1) {
+      const idForDelete = state.patient.registerToPatient[index].id;
+      if (idForDelete) state.patient.registerToPatientForDelete.push(idForDelete);
+      state.patient.registerToPatient.splice(index, 1);
+    }
   },
   addRepresentative(state) {
     state.patient.representativeToPatient.push(new RepresentativeToPatient());
@@ -157,6 +172,39 @@ const mutations: MutationTree<State> = {
   removePhoto(state) {
     state.patient.human.photo = undefined;
     state.patient.human.photoId = undefined;
+  },
+  addDiagnosis(state, patientDiagnosis?: IPatientDiagnosis) {
+    if (patientDiagnosis) {
+      state.patient.patientDiagnosis.push(patientDiagnosis);
+      return;
+    }
+    const diagnosis = new PatientDiagnosis();
+    diagnosis.id = uuidv4();
+    state.patient.patientDiagnosis.push(diagnosis);
+  },
+  removeDiagnosis(state, id: string) {
+    const index = state.patient.patientDiagnosis.findIndex((i: IPatientDiagnosis) => i.id === id);
+    if (index !== -1) state.patient.patientDiagnosis.splice(index, 1);
+    state.patient.patientDiagnosisForDelete.push(id);
+  },
+  removeDiagnosisByDiagnosisOrSubDiagnosisId(state, id: string) {
+    const checkedDiagnosis = state.patient.patientDiagnosis.filter(
+      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === id || diagnosis.mkbSubDiagnosisId === id
+    );
+    checkedDiagnosis.forEach((d: IPatientDiagnosis) => {
+      const index = state.patient.patientDiagnosis.indexOf(d);
+      if (index !== -1) state.patient.patientDiagnosis.splice(index, 1);
+    });
+    state.patient.patientDiagnosisForDelete.push(id);
+  },
+  clearDiagnosis(state, id: string) {
+    const diagnosis = state.patient.patientDiagnosis.find((d: IPatientDiagnosis) => d.id === id);
+    if (diagnosis) {
+      diagnosis.mkbDiagnosis = new MkbDiagnosis();
+      diagnosis.mkbDiagnosisId = undefined;
+      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosisId = undefined;
+    }
   },
 };
 

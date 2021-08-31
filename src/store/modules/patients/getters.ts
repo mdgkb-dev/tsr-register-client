@@ -30,7 +30,7 @@ const getters: GetterTree<State, RootState> = {
   insuranceCompanies(state): IInsuranceCompanyToHuman[] {
     return state.patient.human.insuranceCompanyToHuman;
   },
-  patientDiagnosis(state): IPatientDiagnosis[] {
+  diagnosis(state): IPatientDiagnosis[] {
     return state.patient.patientDiagnosis;
   },
   registerToPatient(state): IRegisterToPatient[] {

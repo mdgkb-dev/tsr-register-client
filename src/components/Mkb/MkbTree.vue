@@ -85,13 +85,7 @@ export default defineComponent({
     checkedDiagnosis: {
       type: Array as PropType<(IPatientDiagnosis | IRegisterDiagnosis)[]>,
       default: () => [],
-      // required: true,
     },
-    // TODO: Бесполезная переменная?
-    // patientDiagnosis: {
-    //   type: Boolean as PropType<boolean>,
-    //   default: false,
-    // },
   },
   emits: ['removeDiagnosis', 'setDiagnosis', 'setSubDiagnosis'],
   setup(props, { emit }) {
@@ -100,15 +94,12 @@ export default defineComponent({
 
     const tree = ref<InstanceType<typeof ElTree>>();
     const editing: Ref<boolean> = ref(false);
-    // const mount: Ref<boolean> = ref(false); // TODO: Бесполезная переменная?
     const onlyRelevant: Ref<boolean> = ref(false);
-    // const title: Ref<string> = ref('МКБ10'); // TODO: Бесполезная переменная?
 
     const mkbClasses: ComputedRef<IMkbClass[]> = computed(() => store.getters['mkb/mkbClasses']);
 
     onBeforeMount(async (): Promise<void> => {
       await store.dispatch('mkb/getAllMkbClasses');
-      // mount.value = true; // TODO: Бесполезная переменная?
     });
 
     const setDiagnosis = (checkedNode: any): void => {
@@ -127,35 +118,24 @@ export default defineComponent({
         let notChildrenChecked = true;
 
         curNode.parent.childNodes.forEach((child: any) => {
-          if (child.checked) {
-            notChildrenChecked = false;
-          }
+          if (child.checked) notChildrenChecked = false;
         });
 
         const curDiagnosis = checkedDiagnosis.value.find(
           (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
         );
 
-        if (notChildrenChecked && !curDiagnosis) {
-          curNode.parent.checked = false;
-        }
+        if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
 
         curNode.childNodes.forEach((child: any) => tree?.value?.setChecked(child.data.id, false, false));
-
-        if (checkedNode.code || checkedNode.subCode > -1) {
-          emit('removeDiagnosis', checkedNode);
-        }
-
+        if (checkedNode.code || checkedNode.subCode > -1) emit('removeDiagnosis', checkedNode);
         return;
       }
 
       if (checkedNode.code) {
         tree.value.getCheckedNodes(false, false);
         tree.value.setChecked(checkedNode.id, true, false);
-
-        if (checkedNode.code) {
-          emit('setDiagnosis', checkedNode);
-        }
+        if (checkedNode.code) emit('setDiagnosis', checkedNode);
       }
 
       if (checkedNode.subCode > -1) {
@@ -163,9 +143,7 @@ export default defineComponent({
         tree.value.setChecked(checkedNode.mkbDiagnosisId, true, false);
         const diagnosis = tree.value.getNode(checkedNode.id).parent.data;
 
-        if (checkedNode.subCode > -1) {
-          emit('setSubDiagnosis', checkedNode, diagnosis);
-        }
+        if (checkedNode.subCode > -1) emit('setSubDiagnosis', checkedNode, diagnosis);
       }
     };
 
@@ -226,9 +204,7 @@ export default defineComponent({
     const checkDiagnosis = (diagnosisArr: IMkbDiagnosis[]): void => {
       diagnosisArr.forEach((diagnosis: any) => {
         checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-          if (diagnosis.id === d.mkbDiagnosisId) {
-            tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
-          }
+          if (diagnosis.id === d.mkbDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
         });
       });
     };
@@ -236,9 +212,7 @@ export default defineComponent({
     const checkSubDiagnosis = (diagnosisArr: IMkbSubDiagnosis[]): void => {
       diagnosisArr.forEach((diagnosis: any) => {
         checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-          if (diagnosis.id === d.mkbSubDiagnosisId) {
-            tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
-          }
+          if (diagnosis.id === d.mkbSubDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
         });
       });
     };
@@ -285,15 +259,11 @@ export default defineComponent({
       let diagnosis: IMkbDiagnosis | undefined = new MkbDiagnosis();
       const mkbClass = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
 
-      if (!mkbClass) {
-        return [];
-      }
+      if (!mkbClass) return [];
 
       diagnosis = mkbClass.getDiagnosisFromTree(mkbIdSet);
 
-      if (diagnosis) {
-        return diagnosis.mkbSubDiagnosis;
-      }
+      if (diagnosis) return diagnosis.mkbSubDiagnosis;
 
       return [];
     };
@@ -316,8 +286,7 @@ export default defineComponent({
     };
 
     const updateNameHandler = (data: MkbClass | MkbGroup | MkbSubGroup | MkbSubSubGroup | MkbDiagnosis | MkbSubDiagnosis) => {
-      const mkb = data;
-      mkb.isEditMode = false;
+      data.isEditMode = false;
       store.dispatch('mkb/updateName', data);
     };
 

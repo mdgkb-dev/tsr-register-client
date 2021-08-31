@@ -15,9 +15,12 @@ export default interface IMkbDiagnosis {
   disabled: boolean;
   checked: boolean;
   isEditMode: boolean;
+  queryStringDiagnosis: string;
+  queryStringGroup: string;
 
   mkbSubDiagnosis: IMkbSubDiagnosis[];
   mkbGroup?: IMkbGroup;
 
   getFullName: () => string;
+  setQueryStrings: () => void;
 }

@@ -6,6 +6,10 @@ import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
 
 import { State } from './state';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 
 const mutations: MutationTree<State> = {
   setAll(state, registers: IRegister[]) {
@@ -36,6 +40,16 @@ const mutations: MutationTree<State> = {
       state.register.registerGroupToRegister.splice(index, 1);
       if (item.id) state.register.registerGroupToRegisterForDelete.push(item.id);
     }
+  },
+  addDiagnosis(state, id: string) {
+    const diagnosis = new RegisterDiagnosis();
+    diagnosis.id = id;
+    state.register.registerDiagnosis.push(diagnosis);
+  },
+  removeDiagnosis(state, id: string) {
+    const index = state.register.registerDiagnosis.findIndex((i: IRegisterDiagnosis) => i.id === id);
+    if (index !== -1) state.register.registerDiagnosis.splice(index, 1);
+    state.register.registerDiagnosisForDelete.push(id);
   },
 };
 

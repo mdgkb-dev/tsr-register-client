@@ -3,6 +3,11 @@ import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id?: string;
@@ -22,27 +27,58 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   mkbSubDiagnosis: IMkbSubDiagnosis[] = [];
   mkbGroup?: IMkbGroup;
 
-  constructor(mkbDiagnosis?: IMkbDiagnosis) {
-    if (!mkbDiagnosis) {
-      return;
-    }
-    this.id = mkbDiagnosis.id;
-    this.name = mkbDiagnosis.name;
-    this.code = mkbDiagnosis.code;
-    this.comment = mkbDiagnosis.comment;
-    this.mkbClassId = mkbDiagnosis.mkbClassId;
-    this.mkbGroupId = mkbDiagnosis.mkbGroupId;
-    this.mkbSubGroupId = mkbDiagnosis.mkbSubGroupId;
-    this.mkbSubSubGroupId = mkbDiagnosis.mkbSubSubGroupId;
-    this.leaf = mkbDiagnosis.leaf;
-    this.relevant = mkbDiagnosis.relevant;
-    if (mkbDiagnosis.mkbSubDiagnosis) {
-      this.mkbSubDiagnosis = mkbDiagnosis.mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
+  queryStringDiagnosis = '';
+  queryStringGroup = '';
+
+  constructor(i?: IMkbDiagnosis) {
+    if (!i) return;
+
+    this.id = i.id;
+    this.name = i.name;
+    this.code = i.code;
+    this.comment = i.comment;
+    this.mkbClassId = i.mkbClassId;
+    this.mkbGroupId = i.mkbGroupId;
+    this.mkbSubGroupId = i.mkbSubGroupId;
+    this.mkbSubSubGroupId = i.mkbSubSubGroupId;
+    this.leaf = i.leaf;
+    this.relevant = i.relevant;
+    if (i.mkbSubDiagnosis) {
+      this.mkbSubDiagnosis = i.mkbSubDiagnosis.map((d: IMkbSubDiagnosis) => new MkbSubDiagnosis(d));
     }
     this.disabled = false;
-    this.mkbGroup = new MkbGroup(mkbDiagnosis.mkbGroup);
-    this.isEditMode = mkbDiagnosis.isEditMode;
+    this.mkbGroup = new MkbGroup(i.mkbGroup);
+    this.isEditMode = i.isEditMode;
+
+    this.setQueryStrings();
   }
 
   getFullName = () => `${this.code} ${this.name}`;
+
+  setQueryStrings(): void {
+    this.queryStringDiagnosis = this.getFullName();
+    if (this.mkbGroup) this.queryStringGroup = this.mkbGroup.getFullName();
+  }
+
+  static CreateRelationDiagnosis(
+    patientDiagnosis: boolean,
+    diagnosis: IMkbDiagnosis,
+    subDiagnosis?: IMkbSubDiagnosis
+  ): IPatientDiagnosis | IRegisterDiagnosis {
+    let newDiagnosisData: IPatientDiagnosis | IRegisterDiagnosis;
+
+    if (patientDiagnosis) newDiagnosisData = new PatientDiagnosis();
+    else newDiagnosisData = new RegisterDiagnosis();
+
+    newDiagnosisData.id = uuidv4();
+    newDiagnosisData.mkbDiagnosis = diagnosis;
+    newDiagnosisData.mkbDiagnosis.setQueryStrings();
+    newDiagnosisData.mkbDiagnosisId = diagnosis.id;
+
+    if (subDiagnosis) {
+      newDiagnosisData.mkbSubDiagnosis = subDiagnosis;
+      newDiagnosisData.mkbSubDiagnosisId = subDiagnosis.id;
+    }
+    return newDiagnosisData;
+  }
 }

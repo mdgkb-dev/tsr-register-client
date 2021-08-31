@@ -32,7 +32,7 @@
         <el-table-column sortable prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
             <div class="table-header">
-              <span>Фамилия Имя Отчевство</span>
+              <span>Фамилия Имя Отчество</span>
               <FilterTextForm />
             </div>
           </template>
@@ -156,15 +156,27 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="РЕГИСТРЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length > 1">
+              <el-tag v-for="register in scope.row.registerToPatient" :key="register.id" size="small">
+                <span>{{ register.name }}</span>
+              </el-tag>
+            </div>
+          </template>
+        </el-table-column>
+
         <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
           <template #default="scope">
-            <div v-for="document in scope.row.human.documents" :key="document">
-              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                <el-tag size="small">
-                  <i class="el-icon-document" style="margin-right: 3px"></i>
-                  <span>{{ document.documentType.getTagName() }}</span>
-                </el-tag>
-              </el-tooltip>
+            <div v-if="scope.row.human.documents">
+              <div v-for="document in scope.row.human.documents" :key="document">
+                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                  <el-tag size="small">
+                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <span>{{ document.documentType.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -208,6 +220,9 @@ import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISearch from '@/interfaces/shared/ISearch';
@@ -226,6 +241,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
     const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
     const { formatDate } = useDateFormat();
@@ -247,6 +263,7 @@ export default defineComponent({
       });
       store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create }));
       await store.dispatch('patients/getAll', 0);
+      await store.dispatch('registers/getAll');
       await store.dispatch('meta/getCount', 'patient');
       mount.value = true;
       loading.close();
@@ -354,3 +371,10 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss" scoped>
+.registers-tooltip {
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>

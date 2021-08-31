@@ -14,6 +14,7 @@ export default interface IPatient {
   id?: string;
   human: IHuman;
   patientDiagnosis: IPatientDiagnosis[];
+  patientDiagnosisForDelete: string[];
   representativeToPatient: IRepresentativeToPatient[];
   representativeToPatientForDelete: string[];
   disabilities: IDisability[];
@@ -21,6 +22,7 @@ export default interface IPatient {
   heightWeight: IHeightWeight[];
   heightWeightForDelete: string[];
   registerToPatient: IRegisterToPatient[];
+  registerToPatientForDelete: string[];
   registerPropertyToPatient: IRegisterPropertyToPatient[];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[];
   registerPropertySetToPatientForDelete: string[];

@@ -27,9 +27,11 @@ export default class Patient implements IPatient {
   disabilities: IDisability[] = [];
   disabilitiesForDelete: string[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
+  patientDiagnosisForDelete: string[] = [];
   heightWeight: IHeightWeight[] = [];
   heightWeightForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
+  registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];

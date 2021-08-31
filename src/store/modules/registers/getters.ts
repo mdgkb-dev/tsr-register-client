@@ -5,6 +5,7 @@ import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToReg
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
 const getters: GetterTree<State, RootState> = {
   registers(state): IRegister[] | undefined {
@@ -12,8 +13,10 @@ const getters: GetterTree<State, RootState> = {
     return registers;
   },
   register(state): IRegister | undefined {
-    const { register } = state;
-    return register;
+    return state.register;
+  },
+  diagnosis(state): IRegisterDiagnosis[] {
+    return state.register.registerDiagnosis;
   },
   getById(state, id: string): IRegister | undefined {
     const { registers } = state;

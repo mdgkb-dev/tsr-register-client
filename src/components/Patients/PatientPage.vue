@@ -44,7 +44,7 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-              <MkbForm v-model:diagnosisData="patient.patientDiagnosis" :patient-diagnosis="true" />
+              <MkbForm :store-module="'patients'" />
             </el-collapse-item>
 
             <el-collapse-item>
