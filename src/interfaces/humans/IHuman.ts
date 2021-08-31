@@ -1,27 +1,6 @@
-import IContact from '@/interfaces//humans/IContact';
-import IDocument from '@/interfaces/documents/IDocument';
-import FileInfo from '@/interfaces/files/IFileInfo';
-import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
+import IHumanConstructor from './IHumanConstructor';
 
-export default interface IHuman {
-  id?: string;
-  name: string;
-  surname: string;
-  patronymic: string;
-  isMale: boolean;
-  dateBirth: string;
-  addressRegistration: string;
-  addressResidential: string;
-  contact: IContact;
-  contactId?: string;
-  insuranceCompanyToHuman: IInsuranceCompanyToHuman[];
-  insuranceCompanyToHumanForDelete: string[];
-  documents: IDocument[];
-  documentsForDelete: string[];
-  fileInfos: FileInfo[];
-  photo?: FileInfo;
-  photoId?: string;
-
+export default interface IHuman extends IHumanConstructor {
   getFullName: () => string;
   getGender: (full?: boolean) => string;
   removeDocumentFieldValuesIds: () => void;
