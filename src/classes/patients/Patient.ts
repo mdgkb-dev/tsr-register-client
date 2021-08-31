@@ -12,6 +12,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
@@ -34,7 +35,7 @@ export default class Patient implements IPatient {
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];
 
-  constructor(patient?: IPatient) {
+  constructor(patient?: IPatientConstructor) {
     if (!patient) {
       return;
     }
@@ -139,7 +140,7 @@ export default class Patient implements IPatient {
   }
 
   getRegisterPropertyValueSet(setId: string): boolean {
-    return !!this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+    return this.registerPropertySetToPatient?.some((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
   }
 
   setRegisterPropertyValueOther(value: string, property: IRegisterProperty): void {

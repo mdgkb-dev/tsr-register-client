@@ -12,17 +12,16 @@ import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsurance
 
 describe('Class Human', () => {
   let human: IHuman | undefined;
+  const emptyString = '';
+  const truthyValue = true;
+  const falsyValue = false;
 
   afterEach(() => {
     human = undefined;
   });
 
-  test('Конструктор без параметров создаёт объект пустыми исходными значениями', () => {
+  test('Конструктор без параметров создаёт объект с пустыми свойствами', () => {
     // Arrange
-    const emptyString = '';
-    const truthyValue = true;
-
-    // Act
     human = new Human();
 
     // Assert
@@ -45,7 +44,7 @@ describe('Class Human', () => {
     expect(human.photoId).toBeUndefined();
   });
 
-  test('Конструктор корректно заполняет поля объекта', () => {
+  test('Конструктор корректно заполняет свойства объекта', () => {
     // Arrange
     const id = '06950b91-62bf-4183-8a4f-2756dacaf32c';
     const name = 'Имя';
@@ -136,7 +135,6 @@ describe('Class Human', () => {
 
   test('getGender() возвращает мужской пол', () => {
     // Arrange
-    const truthyValue = true;
     const maleFullForm = 'Мужской';
     const maleShortForm = 'М';
 
@@ -164,8 +162,6 @@ describe('Class Human', () => {
 
   test('getGender() возвращает женский пол', () => {
     // Arrange
-    const truthyValue = true;
-    const falsyValue = false;
     const femaleFullForm = 'Женский';
     const femaleShortForm = 'Ж';
 
@@ -193,8 +189,6 @@ describe('Class Human', () => {
 
   test('removeDocumentFieldValuesIds() удаляет ID в массиве documentFieldValues для черновых документов', () => {
     // Arrange
-    const truthyValue = true;
-    const falsyValue = false;
     const uuid1 = '9e9e78c7-30dc-4a93-9ecc-e2e612d4db65';
     const uuid2 = 'e45b1efb-6c45-4040-9e05-82e7b7857850';
     const uuid3 = '357a6f4b-4a19-4096-bca5-fb9acc18e51d';
