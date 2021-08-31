@@ -26,6 +26,8 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -204,6 +206,24 @@ const mutations: MutationTree<State> = {
       diagnosis.mkbDiagnosisId = undefined;
       diagnosis.mkbSubDiagnosis = undefined;
       diagnosis.mkbSubDiagnosisId = undefined;
+    }
+  },
+  removeAnamnesis(state, id: string) {
+    state.patient.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
+      const index = d.patientDiagnosisAnamnesis.findIndex((a: IPatientDiagnosisAnamnesis) => a.id === id);
+      if (index > -1) {
+        const idForDelete = d.patientDiagnosisAnamnesis[index].id;
+        if (idForDelete) d.patientDiagnosisAnamnesisForDelete.push(idForDelete);
+        d.patientDiagnosisAnamnesis.splice(index, 1);
+      }
+    });
+  },
+  addAnamnesis(state, diagnosisId: string) {
+    const diagnosis = state.patient.patientDiagnosis.find((d: IPatientDiagnosis) => d.id === diagnosisId);
+    if (diagnosis) {
+      const anamnesis = new PatientDiagnosisAnamnesis();
+      anamnesis.isEditMode = true;
+      diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
     }
   },
 };

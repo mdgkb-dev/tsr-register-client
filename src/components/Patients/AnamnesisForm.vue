@@ -40,24 +40,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, toRefs } from 'vue';
 
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import { useStore } from 'vuex';
 
 export default defineComponent({
   name: 'AnamnesisForm',
   props: {
-    anamnesis: {
-      type: Object as PropType<IPatientDiagnosisAnamnesis>,
-      required: true,
-    },
-    index: {
-      type: Number as PropType<number>,
-      required: true,
-    },
-    diagnosis: {
-      type: Object as PropType<IPatientDiagnosis>,
+    anamnesisId: {
+      type: String as PropType<string>,
       required: true,
     },
     propName: {
@@ -66,19 +58,18 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { anamnesis, diagnosis, index } = toRefs(props);
+    const store = useStore();
+    const { anamnesisId } = toRefs(props);
 
-    const edit = () => {
-      anamnesis.value.isEditMode = !anamnesis.value.isEditMode;
-    };
+    const anamnesis: ComputedRef<IPatientDiagnosisAnamnesis> = computed(() =>
+      store.getters['patients/patient'].getAnamnesis(anamnesisId.value)
+    );
 
-    const remove = () => {
-      const idForDelete = diagnosis.value.patientDiagnosisAnamnesis[index.value].id;
-      if (idForDelete) diagnosis.value.patientDiagnosisAnamnesisForDelete.push(idForDelete);
-      diagnosis.value.patientDiagnosisAnamnesis.splice(index.value, 1);
-    };
+    const edit = () => (anamnesis.value.isEditMode = !anamnesis.value.isEditMode);
+    const remove = () => store.commit('patients/removeAnamnesis', anamnesisId);
 
     return {
+      anamnesis,
       edit,
       remove,
     };

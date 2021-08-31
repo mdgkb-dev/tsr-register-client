@@ -18,6 +18,8 @@ import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPrope
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -187,5 +189,14 @@ export default class Patient implements IPatient {
 
   getFileInfos(): IFileInfo[] {
     return [...Human.GetFileInfos(this.human), ...Disability.GetFileInfos(this.disabilities)];
+  }
+
+  getAnamnesis(id: string): IPatientDiagnosisAnamnesis {
+    let anamnesis = new PatientDiagnosisAnamnesis();
+    this.patientDiagnosis.forEach((diagnosis: IPatientDiagnosis) => {
+      const item = diagnosis.patientDiagnosisAnamnesis.find((i: IPatientDiagnosisAnamnesis) => i.id === id);
+      if (item) anamnesis = item;
+    });
+    return anamnesis;
   }
 }

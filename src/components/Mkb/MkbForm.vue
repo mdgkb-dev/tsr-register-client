@@ -26,9 +26,7 @@
                 placement="top"
               >
                 <AnamnesisForm
-                  :anamnesis="anamnesis"
-                  :index="index"
-                  :diagnosis="props.row"
+                  :anamnesis-id="anamnesis.id"
                   :prop-name="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
                 />
               </el-timeline-item>
@@ -163,12 +161,9 @@ export default defineComponent({
     const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis[]> = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
     const addDiagnosis = (): void => store.commit(`${storeModule.value}/addDiagnosis`);
+    const removeDiagnosis = (id: string): void => store.commit(`${storeModule.value}/removeDiagnosis`, id);
 
-    const addAnamnesis = (diagnosis: IPatientDiagnosis): void => {
-      const anamnesis = new PatientDiagnosisAnamnesis();
-      anamnesis.isEditMode = true;
-      diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
-    };
+    const addAnamnesis = (diagnosis: IPatientDiagnosis): void => store.commit(`patients/addDiagnosis`, diagnosis.id);
 
     const handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis): void => {
       expandRowKeys = row.id === expandRowKeys[0] ? reactive([]) : reactive([row.id]);
@@ -233,8 +228,6 @@ export default defineComponent({
       if (item.diagnosis.mkbGroup) queryStringsGroups[id] = item.diagnosis.mkbGroup.getFullName();
       await findSubDiagnosis(item.id);
     };
-
-    const removeDiagnosis = (id: string): void => store.commit(`${storeModule.value}/removeDiagnosis`, id);
 
     const clearForm = (query: string, id: string): void => {
       if (query.length === 0) return;

@@ -9,6 +9,7 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 
 import IHuman from '../humans/IHuman';
 import IRegisterProperty from '../registers/IRegisterProperty';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 export default interface IPatient {
   id?: string;
@@ -34,4 +35,5 @@ export default interface IPatient {
   getRegisterPropertyValue: (property: IRegisterProperty) => boolean | string | number | Date | null;
   setRegisterPropertyValue: (value: number | string | Date, property: IRegisterProperty) => void;
   getFileInfos: () => IFileInfo[];
+  getAnamnesis: (id: string) => IPatientDiagnosisAnamnesis;
 }
