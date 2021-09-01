@@ -1,5 +1,6 @@
 import { ActionTree } from 'vuex';
 
+import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IPatient from '@/interfaces/patients/IPatient';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
@@ -9,12 +10,8 @@ import { State } from './state';
 const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, pageNum?: number): Promise<void> => {
-    if (pageNum !== undefined) {
-      commit('setAll', await httpClient.get<IPatient[]>({ query: `?offset=${pageNum}` }));
-    } else {
-      commit('setAll', await httpClient.get<IPatient[]>());
-    }
+  getAll: async ({ commit }, filterQuery: IFilterQuery): Promise<void> => {
+    commit('setAll', await httpClient.get<IPatient[]>({ query: `?${filterQuery.toUrl()}` }));
   },
   getAllById: async ({ commit }, id: string): Promise<void> => {
     const res = await httpClient.get<IPatient[]>({ query: id });

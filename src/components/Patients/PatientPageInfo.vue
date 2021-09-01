@@ -9,15 +9,13 @@
         <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
           <div v-for="item in patient.patientDiagnosis" :key="item.id">
             <el-space v-if="item.mkbSubDiagnosis" direction="horizontal" alignment="center">
-              <span
-                v-if="item.mkbSubDiagnosis"
-                class="underline-label"
-                v-html="item.mkbDiagnosis.code + '.' + item.mkbSubDiagnosis.subCode"
-              ></span>
+              <span v-if="item.mkbSubDiagnosis" class="underline-label"
+                >{{ item.mkbDiagnosis.code }}.{{ item.mkbSubDiagnosis.subCode }}</span
+              >
               <PopoverInfo v-if="item.mkbSubDiagnosis" :content="item.mkbSubDiagnosis.name" />
             </el-space>
             <div v-else>
-              <span v-if="item.mkbDiagnosis" class="underline-label" v-html="item.mkbDiagnosis.code"></span>
+              <span v-if="item.mkbDiagnosis" class="underline-label">{{ item.mkbDiagnosis.code }}</span>
               <PopoverInfo v-if="item.mkbDiagnosis" :content="item.mkbDiagnosis.name" />
             </div>
           </div>
@@ -48,7 +46,7 @@
 
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Пациент</el-tag>
-        <h2 style="margin-bottom: 60px" v-html="patient.human.getFullName()"></h2>
+        <h2 style="margin-bottom: 60px">{{ patient.human.getFullName() }}</h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
           <el-col :span="12"> {{ patient.human.dateBirth ? formatDate(patient.human.dateBirth) : 'Не указана' }}</el-col>

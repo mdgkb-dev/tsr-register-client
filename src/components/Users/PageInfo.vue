@@ -12,7 +12,7 @@
       </el-col>
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Пользователь</el-tag>
-        <h2 style="margin-bottom: 60px" v-html="human.getFullName()"></h2>
+        <h2 style="margin-bottom: 60px">{{ human.getFullName() }}</h2>
         <el-row>
           <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
           <el-col :span="12"> {{ formatDate(human.dateBirth) }}</el-col>

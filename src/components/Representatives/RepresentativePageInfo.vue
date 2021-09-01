@@ -19,7 +19,7 @@
       </el-col>
       <el-col :span="15" :offset="1">
         <el-tag class="menu-badge">Зак. представитель</el-tag>
-        <h2 style="margin-bottom: 60px" v-html="representative.human.getFullName()"></h2>
+        <h2 style="margin-bottom: 60px">{{ representative.human.getFullName() }}</h2>
         <el-row>
           <el-col :span="12" class="light-title upper">Дата рождения</el-col>
           <el-col :span="12"> {{ representative.human.dateBirth ? formatDate(representative.human.dateBirth) : 'Не указана' }}</el-col>

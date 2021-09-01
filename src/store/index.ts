@@ -6,6 +6,7 @@ import { disabilities } from '@/store/modules/disabilities';
 import documentTypes from '@/store/modules/documentTypes';
 import { drugs } from '@/store/modules/drugs';
 import files from '@/store/modules/files';
+import { filter } from '@/store/modules/filter';
 import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
@@ -52,6 +53,7 @@ const store: StoreOptions<RootState> = {
     representatives,
     representativeTypes,
     users,
+    filter,
   },
 };
 
