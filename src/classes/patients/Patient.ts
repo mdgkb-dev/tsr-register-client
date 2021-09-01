@@ -15,11 +15,14 @@ import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+
+import PatientDrugRegimen from './PatientDrugRegimen';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -37,6 +40,8 @@ export default class Patient implements IPatient {
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];
+  patientDrugRegimen: IPatientDrugRegimen[] = [];
+  patientDrugRegimenForDelete: string[] = [];
 
   constructor(patient?: IPatient) {
     if (!patient) {
@@ -71,6 +76,9 @@ export default class Patient implements IPatient {
       this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map(
         (i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i)
       );
+    }
+    if (patient.patientDrugRegimen) {
+      this.patientDrugRegimen = patient.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
     }
   }
 

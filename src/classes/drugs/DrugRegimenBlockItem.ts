@@ -12,13 +12,17 @@ export default class DrugRegimenBlockItem implements IDrugRegimenBlockItem {
   drugRegimenBlockId?: string;
   drugRegimenBlock?: IDrugRegimenBlock;
 
-  constructor(i?: IDrugRegimenBlockItem) {
-    if (!i) return;
-    this.id = i.id;
-    this.daysCount = i.daysCount;
-    this.orderItem = i.orderItem;
-    this.timesPerDay = i.timesPerDay;
-    this.drugRegimenBlockId = i.drugRegimenBlockId;
-    this.drugRegimenBlock = new DrugRegimenBlock(i.drugRegimenBlock);
+  constructor(drugRegimenBlockItem?: IDrugRegimenBlockItem) {
+    if (!drugRegimenBlockItem) {
+      return;
+    }
+    this.id = drugRegimenBlockItem.id;
+    this.daysCount = drugRegimenBlockItem.daysCount;
+    this.orderItem = drugRegimenBlockItem.orderItem;
+    this.timesPerDay = drugRegimenBlockItem.timesPerDay;
+    this.drugRegimenBlockId = drugRegimenBlockItem.drugRegimenBlockId;
+    if (drugRegimenBlockItem.drugRegimenBlock) {
+      this.drugRegimenBlock = new DrugRegimenBlock(drugRegimenBlockItem.drugRegimenBlock);
+    }
   }
 }

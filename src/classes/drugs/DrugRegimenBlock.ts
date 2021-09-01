@@ -17,16 +17,22 @@ export default class DrugRegimenBlock implements IDrugRegimenBlock {
   drugRegimenBlockItems: IDrugRegimenBlockItem[] = [new DrugRegimenBlockItem()];
   drugRegimenBlockItemsForDelete: string[] = [];
 
-  constructor(i?: IDrugRegimenBlock) {
-    if (!i) return;
-    this.id = i.id;
-    this.infinitely = i.infinitely;
-    this.isEdit = i.isEdit;
-    this.orderItem = i.orderItem;
-    this.drugRegimenId = i.drugRegimenId;
-    this.drugRegimen = new DrugRegimen(i.drugRegimen);
-    if (i.drugRegimenBlockItems) {
-      this.drugRegimenBlockItems = i.drugRegimenBlockItems.map((item: IDrugRegimenBlockItem) => new DrugRegimenBlockItem(item));
+  constructor(drugRegimenBlock?: IDrugRegimenBlock) {
+    if (!drugRegimenBlock) {
+      return;
+    }
+    this.id = drugRegimenBlock.id;
+    this.infinitely = drugRegimenBlock.infinitely;
+    this.isEdit = drugRegimenBlock.isEdit;
+    this.orderItem = drugRegimenBlock.orderItem;
+    this.drugRegimenId = drugRegimenBlock.drugRegimenId;
+    if (drugRegimenBlock.drugRegimen) {
+      this.drugRegimen = new DrugRegimen(drugRegimenBlock.drugRegimen);
+    }
+    if (drugRegimenBlock.drugRegimenBlockItems) {
+      this.drugRegimenBlockItems = drugRegimenBlock.drugRegimenBlockItems.map(
+        (item: IDrugRegimenBlockItem) => new DrugRegimenBlockItem(item)
+      );
     }
   }
 }
