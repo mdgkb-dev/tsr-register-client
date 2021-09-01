@@ -11,6 +11,7 @@ import { State } from './state';
 export const state: State = {
   drugs: [],
   drug: new Drug(),
+  activeCollapseName: '0',
 };
 
 const namespaced = true;

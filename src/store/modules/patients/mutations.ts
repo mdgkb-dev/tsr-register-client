@@ -7,20 +7,22 @@ import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import Patient from '@/classes/patients/Patient';
+import PatientDrugRegimen from '@/classes/patients/PatientDrugRegimen';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
+import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IFile from '@/interfaces/files/IFile';
 
 const mutations: MutationTree<State> = {
   setAll(state, patients: IPatient[]) {
@@ -157,6 +159,14 @@ const mutations: MutationTree<State> = {
   removePhoto(state) {
     state.patient.human.photo = undefined;
     state.patient.human.photoId = undefined;
+  },
+  addPatientDrugRegimen(state, item: IPatientDrugRegimen) {
+    state.patient.patientDrugRegimen.push(item);
+  },
+  removePatientDrugRegimen(state, id: string) {
+    const i = state.patient.patientDrugRegimen.findIndex((item: IPatientDrugRegimen) => item.id === id);
+    if (i > -1) state.patient.patientDrugRegimen.splice(i, 1);
+    state.patient.patientDrugRegimenForDelete.push(id);
   },
 };
 
