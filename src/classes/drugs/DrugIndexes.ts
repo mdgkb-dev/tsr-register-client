@@ -5,10 +5,12 @@ export default class DrugIndexes implements IDrugIndexes {
   drugRegimenBlockIndex?: number;
   drugRegimenBlockItemIndex?: number;
 
-  constructor(i?: IDrugIndexes) {
-    if (!i) return;
-    this.drugRegimenIndex = i.drugRegimenIndex;
-    this.drugRegimenBlockIndex = i.drugRegimenBlockIndex;
-    this.drugRegimenBlockItemIndex = i.drugRegimenBlockItemIndex;
+  constructor(drugIndexes?: IDrugIndexes) {
+    if (!drugIndexes) {
+      return;
+    }
+    this.drugRegimenIndex = drugIndexes.drugRegimenIndex;
+    this.drugRegimenBlockIndex = drugIndexes.drugRegimenBlockIndex;
+    this.drugRegimenBlockItemIndex = drugIndexes.drugRegimenBlockItemIndex;
   }
 }

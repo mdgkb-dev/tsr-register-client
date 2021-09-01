@@ -31,6 +31,9 @@ const mutations: MutationTree<State> = {
     const i = state.drugs.findIndex((item: IDrug) => item.id === id);
     state.drugs.splice(i, 1);
   },
+  setActiveCollapseName(state, index: string) {
+    state.activeCollapseName = index;
+  },
   addDrugRegimen(state, item: IDrugRegimen) {
     state.drug.drugRegimens.push(item);
   },
@@ -74,6 +77,13 @@ const mutations: MutationTree<State> = {
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks.splice(indexes.drugRegimenBlockIndex, 1);
     }
   },
+  copyDrugRegimenBlock(state, indexes: IDrugIndexes) {
+    if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
+      const elementToCopy = state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex];
+      state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks.splice(indexes.drugRegimenBlockIndex + 1, 0, elementToCopy);
+    }
+  },
+
   addDrugRegimenBlockItem(state, indexes: IDrugIndexes) {
     if (indexes.drugRegimenIndex !== undefined && indexes.drugRegimenBlockIndex !== undefined) {
       state.drug.drugRegimens[indexes.drugRegimenIndex].drugRegimenBlocks[indexes.drugRegimenBlockIndex].drugRegimenBlockItems.push(

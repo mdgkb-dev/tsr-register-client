@@ -23,6 +23,7 @@ import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsurance
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -225,6 +226,14 @@ const mutations: MutationTree<State> = {
       anamnesis.isEditMode = true;
       diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
     }
+  },
+  addPatientDrugRegimen(state, item: IPatientDrugRegimen) {
+    state.patient.patientDrugRegimen.push(item);
+  },
+  removePatientDrugRegimen(state, id: string) {
+    const i = state.patient.patientDrugRegimen.findIndex((item: IPatientDrugRegimen) => item.id === id);
+    if (i > -1) state.patient.patientDrugRegimen.splice(i, 1);
+    state.patient.patientDrugRegimenForDelete.push(id);
   },
 };
 

@@ -8,6 +8,7 @@ import IFIlesList from '@/interfaces/files/IFIlesList';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import RootState from '@/store/types';
@@ -35,6 +36,9 @@ const getters: GetterTree<State, RootState> = {
   },
   registerToPatient(state): IRegisterToPatient[] {
     return state.patient.registerToPatient;
+  },
+  patientDrugRegimens(state): IPatientDrugRegimen[] {
+    return state.patient.patientDrugRegimen;
   },
   representativeToPatient(state): IRepresentativeToPatient[] {
     return state.patient.representativeToPatient;
