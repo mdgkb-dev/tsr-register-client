@@ -5,8 +5,8 @@
         <TableButtonGroup
           :show-move-up-button="scope.$index !== 0 ? true : false"
           :show-move-down-button="scope.$index !== drugRegimenBlock.drugRegimenBlockItems.length - 1 ? true : false"
-          @moveUp="moveDrugRegimenBlockItemUp(drugRegimenIndex, drugRegimenBlockIndex, scope.$index)"
-          @moveDown="moveDrugRegimenBlockItemDown(drugRegimenIndex, drugRegimenBlockIndex, scope.$index)"
+          @moveUp="moveDrugRegimenBlockItemUp(scope.$index)"
+          @moveDown="moveDrugRegimenBlockItemDown(scope.$index)"
         />
       </template>
     </el-table-column>
@@ -19,12 +19,7 @@
     <el-table-column label="Раз в день">
       <template #default="scope">
         <div style="display: flex">
-          <el-button
-            v-if="!scope.row.timesPerDay"
-            class="table-button"
-            icon="el-icon-plus"
-            @click="addTimesPerDay(drugRegimenIndex, drugRegimenBlockIndex, scope.$index)"
-          />
+          <el-button v-if="!scope.row.timesPerDay" class="table-button" icon="el-icon-plus" @click="addTimesPerDay(scope.row)" />
           <span v-else-if="scope.row.timesPerDay && !drugRegimenBlock.isEdit">{{ scope.row.timesPerDay }}</span>
           <el-input-number v-else v-model="scope.row.timesPerDay" size="mini" controls-position="right" :min="0"></el-input-number>
         </div>
@@ -32,23 +27,18 @@
     </el-table-column>
     <el-table-column align="center" width="50">
       <template #default="scope">
-        <TableButtonGroup
-          :show-remove-button="true"
-          @remove="removeDrugRegimenBlockItem(drugRegimenIndex, drugRegimenBlockIndex, scope.$index)"
-        />
+        <TableButtonGroup :show-remove-button="true" @remove="removeDrugRegimenBlockItem(scope.$index)" />
       </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, PropType } from 'vue';
 
-import DrugIndexes from '@/classes/drugs/DrugIndexes';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
+import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
 
 export default defineComponent({
   name: 'DrugRegimenBlockItemsForm',
@@ -58,56 +48,21 @@ export default defineComponent({
       type: Object as PropType<IDrugRegimenBlock>,
       required: true,
     },
-    drugRegimenBlockIndex: {
-      type: Number as PropType<number>,
-      required: true,
-    },
-    drugRegimenIndex: {
-      type: Number as PropType<number>,
-      required: true,
-    },
-},
+  },
 
-  setup() {
-    const store = useStore();
-
-    const drug: Ref<IDrug> = computed(() => store.getters['drugs/drug']);
-
-    const removeDrugRegimenBlockItem = (
-      drugRegimenIndex: number,
-      drugRegimenBlockIndex: number,
-      drugRegimenBlockItemIndex: number
-    ): void => {
-      store.commit(
-        'drugs/removeDrugRegimenBlockItem',
-        new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex })
-      );
+  setup(prop) {
+    const removeDrugRegimenBlockItem = (drugRegimenBlockItemIndex: number): void => {
+      prop.drugRegimenBlock.removeDrugRegimenBlockItem(drugRegimenBlockItemIndex);
     };
-    const moveDrugRegimenBlockItemUp = (
-      drugRegimenIndex: number,
-      drugRegimenBlockIndex: number,
-      drugRegimenBlockItemIndex: number
-    ): void => {
-      store.commit(
-        'drugs/moveDrugRegimenBlockItemUp',
-        new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex })
-      );
+    const moveDrugRegimenBlockItemUp = (drugRegimenBlockItemIndex: number): void => {
+      prop.drugRegimenBlock.moveDrugRegimenBlockItemUp(drugRegimenBlockItemIndex);
     };
-    const moveDrugRegimenBlockItemDown = (
-      drugRegimenIndex: number,
-      drugRegimenBlockIndex: number,
-      drugRegimenBlockItemIndex: number
-    ): void => {
-      store.commit(
-        'drugs/moveDrugRegimenBlockItemDown',
-        new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex })
-      );
+    const moveDrugRegimenBlockItemDown = (drugRegimenBlockItemIndex: number): void => {
+      prop.drugRegimenBlock.moveDrugRegimenBlockItemDown(drugRegimenBlockItemIndex);
     };
-    const addTimesPerDay = (drugRegimenIndex: number, drugRegimenBlockIndex: number, drugRegimenBlockItemIndex: number): void => {
-      store.commit('drugs/addTimesPerDay', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex, drugRegimenBlockItemIndex }));
-      if (!drug.value.drugRegimens[drugRegimenIndex].drugRegimenBlocks[drugRegimenBlockIndex].isEdit) {
-        store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
-      }
+    const addTimesPerDay = (drugRegimenBlockItem: IDrugRegimenBlockItem): void => {
+      drugRegimenBlockItem.timesPerDay = 1;
+      prop.drugRegimenBlock.editDrugRegimenBlock(true);
     };
 
     return {

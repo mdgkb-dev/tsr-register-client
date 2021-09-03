@@ -20,4 +20,15 @@ export default class Drug implements IDrug {
       this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
     }
   }
+
+  addDrugRegimen(item: IDrugRegimen): void {
+    this.drugRegimens.push(item);
+  }
+  removeDrugRegimen(index: number): void {
+    const itemId = this.drugRegimens[index].id;
+    if (itemId) {
+      this.drugRegimensForDelete.push(itemId);
+    }
+    this.drugRegimens.splice(index, 1);
+  }
 }

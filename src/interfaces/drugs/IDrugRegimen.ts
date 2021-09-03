@@ -10,4 +10,11 @@ export default interface IDrugRegimen {
   drug?: IDrug;
   drugRegimenBlocks: IDrugRegimenBlock[];
   drugRegimenBlocksForDelete: string[];
+
+  addDrugRegimenBlock: () => void;
+  removeDrugRegimenBlock: (index: number) => void;
+  copyDrugRegimenBlock: (index: number) => void;
+  moveDrugRegimenBlockUp: (index: number) => void;
+  moveDrugRegimenBlockDown: (index: number) => void;
+  editDrugRegimen: (isEdit?: boolean) => void;
 }
