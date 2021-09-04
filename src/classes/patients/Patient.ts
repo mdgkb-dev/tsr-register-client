@@ -1,16 +1,17 @@
-import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
+import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
+import PatientDrugRegimen from '@/classes/patients/PatientDrugRegimen';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
@@ -23,7 +24,6 @@ import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterProperty
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
-import PatientDrugRegimen from './PatientDrugRegimen';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -266,11 +266,14 @@ export default class Patient implements IPatient {
   }
 
   getAnamnesis(id: string): IPatientDiagnosisAnamnesis {
-    let anamnesis = new PatientDiagnosisAnamnesis();
-    this.patientDiagnosis.forEach((diagnosis: IPatientDiagnosis) => {
-      const item = diagnosis.patientDiagnosisAnamnesis.find((i: IPatientDiagnosisAnamnesis) => i.id === id);
-      if (item) anamnesis = item;
-    });
-    return anamnesis;
+    for (const diagnosis of this.patientDiagnosis) {
+      const anamnesis = diagnosis.patientDiagnosisAnamnesis.find((i: IPatientDiagnosisAnamnesis) => i.id === id);
+      
+      if (anamnesis) {
+        return anamnesis;
+      }
+    }
+
+    return new PatientDiagnosisAnamnesis();
   }
 }

@@ -6,6 +6,8 @@ import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 import FileInfo from '@/classes/files/FileInfo';
 import Human from '@/classes/humans/Human';
 import Patient from '@/classes/patients/Patient';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterProperty from '@/classes/registers/RegisterProperty';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
@@ -14,6 +16,7 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -35,6 +38,7 @@ describe('Class Patient', () => {
     expect(patient.id).toBeUndefined();
     expect(patient.human).toBeInstanceOf(Human);
     expect(patient.patientDiagnosis).toHaveLength(0);
+    expect(patient.patientDiagnosisForDelete).toHaveLength(0);
     expect(patient.representativeToPatient).toHaveLength(0);
     expect(patient.representativeToPatientForDelete).toHaveLength(0);
     expect(patient.disabilities).toHaveLength(0);
@@ -42,9 +46,12 @@ describe('Class Patient', () => {
     expect(patient.heightWeight).toHaveLength(0);
     expect(patient.heightWeightForDelete).toHaveLength(0);
     expect(patient.registerToPatient).toHaveLength(0);
+    expect(patient.registerToPatientForDelete).toHaveLength(0);
     expect(patient.registerPropertyToPatient).toHaveLength(0);
     expect(patient.registerPropertySetToPatient).toHaveLength(0);
     expect(patient.registerPropertySetToPatientForDelete).toHaveLength(0);
+    expect(patient.patientDrugRegimen).toHaveLength(0);
+    expect(patient.patientDrugRegimenForDelete).toHaveLength(0);
   });
 
   test('Конструктор корректно заполняет свойства объекта', () => {
@@ -52,6 +59,7 @@ describe('Class Patient', () => {
     const id = 'df2bac20-de21-4187-b361-27c432a1f520';
     const human = new Human();
     const patientDiagnosis: IPatientDiagnosis[] = [];
+    const patientDiagnosisForDelete: string[] = [];
     const representativeToPatient: IRepresentativeToPatient[] = [];
     const representativeToPatientForDelete: string[] = [];
     const disabilities: IDisability[] = [];
@@ -59,15 +67,19 @@ describe('Class Patient', () => {
     const heightWeight: IHeightWeight[] = [];
     const heightWeightForDelete: string[] = [];
     const registerToPatient: IRegisterToPatient[] = [];
+    const registerToPatientForDelete: string[] = [];
     const registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
     const registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
     const registerPropertySetToPatientForDelete: string[] = [];
+    const patientDrugRegimen: IPatientDrugRegimen[] = [];
+    const patientDrugRegimenForDelete: string[] = [];
 
     // Act
     patient = new Patient({
       id,
       human,
       patientDiagnosis,
+      patientDiagnosisForDelete,
       representativeToPatient,
       representativeToPatientForDelete,
       disabilities,
@@ -75,9 +87,12 @@ describe('Class Patient', () => {
       heightWeight,
       heightWeightForDelete,
       registerToPatient,
+      registerToPatientForDelete,
       registerPropertyToPatient,
       registerPropertySetToPatient,
       registerPropertySetToPatientForDelete,
+      patientDrugRegimen,
+      patientDrugRegimenForDelete,
     });
 
     // Assert
@@ -1109,5 +1124,48 @@ describe('Class Patient', () => {
     expect(patient.getFileInfos()[7]).toBe(edvFileInfo4);
     expect(patient.getFileInfos()[8]).toBe(edvFileInfo5);
     expect(patient.getFileInfos()[9]).toBe(edvFileInfo6);
+  });
+
+  test('getAnamnesis() возвращает новый объект типа IPatientDiagnosisAnamnesis когда в patientDiagnosis[] нет записи у которой в patientDiagnosisAnamnesis[] была бы запись с переданным ID', () => {
+    // Arrange
+    const id = '81ab85b0-463d-4599-be0d-74ebb4b23ffd';
+    patient = new Patient();
+
+    // Assert
+    expect(patient.getAnamnesis(id)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(id).id).toBeUndefined();
+  });
+
+  test('getAnamnesis() возвращает запись с переданным ID из свойства patientDiagnosisAnamnesis[] записи из patientDiagnosis[]', () => {
+    // Arrange
+    const uuid1 = '88591e56-641c-4bba-8316-7053f8d357d1';
+    const uuid2 = '5c5ca9aa-5509-4540-a589-6e6d4f22030b';
+    const uuid3 = '144e526a-8961-4519-b761-f92445fef766';
+    const uuid4 = '3758f082-b550-4103-bbea-4ab6cdd9f0c4';
+    const patientDiagnosisAnamnesis1 = new PatientDiagnosisAnamnesis();
+    const patientDiagnosisAnamnesis2 = new PatientDiagnosisAnamnesis();
+    const patientDiagnosisAnamnesis3 = new PatientDiagnosisAnamnesis();
+    const patientDiagnosisAnamnesis4 = new PatientDiagnosisAnamnesis();
+    patientDiagnosisAnamnesis1.id = uuid1;
+    patientDiagnosisAnamnesis2.id = uuid2;
+    patientDiagnosisAnamnesis3.id = uuid3;
+    patientDiagnosisAnamnesis4.id = uuid4;
+
+    const patientDiagnosis1 = new PatientDiagnosis();
+    const patientDiagnosis2 = new PatientDiagnosis();
+    const patientDiagnosis3 = new PatientDiagnosis();
+    const patientDiagnosis4 = new PatientDiagnosis();
+
+    patientDiagnosis1.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis1];
+    patientDiagnosis2.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis2, patientDiagnosisAnamnesis3];
+    patientDiagnosis3.patientDiagnosisAnamnesis = [];
+    patientDiagnosis4.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis4];
+
+    patient = new Patient();
+    patient.patientDiagnosis = [patientDiagnosis1, patientDiagnosis2, patientDiagnosis3, patientDiagnosis4];
+
+    // Assert
+    expect(patient.getAnamnesis(uuid2)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(uuid2).id).toBe(uuid2);
   });
 });
