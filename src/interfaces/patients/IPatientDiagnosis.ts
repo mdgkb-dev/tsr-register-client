@@ -9,7 +9,7 @@ export default interface IPatientDiagnosis {
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis?: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
-  mkbDiagnosis?: IMkbDiagnosis;
+  mkbDiagnosis: IMkbDiagnosis;
   patientId?: string;
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[];

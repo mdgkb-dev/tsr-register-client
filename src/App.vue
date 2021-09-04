@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, onBeforeMount } from 'vue';
 import { useStore } from 'vuex';
 
 import LoginLayout from './views/Login/LoginLayout.vue';
@@ -19,7 +19,6 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-
     const layout = computed(() => {
       const userId = localStorage.getItem('userId');
       if (userId) {
@@ -32,18 +31,9 @@ export default defineComponent({
       return store.getters.layout;
     });
 
-    // onBeforeMount(async (): Promise<void> => {
-    //   try {
-    //     await store.dispatch('auth/setAuthorization');
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    //   if (store.getters['auth/isAuthorized']) {
-    //     store.commit('setLayout', 'main-layout');
-    //   } else {
-    //     await router.push('/login/');
-    //   }
-    // });
+    onBeforeMount(async (): Promise<void> => {
+      await store.dispatch('meta/getSchema');
+    });
 
     return {
       layout,

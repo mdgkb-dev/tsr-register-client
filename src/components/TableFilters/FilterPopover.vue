@@ -1,13 +1,13 @@
 <template>
   <div class="filter-popover">
-    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" trigger="click">
+    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger" :popover-append-to-body="false">
       <template #reference>
-        <FilterFilled @click.stop="visible = !visible" />
+        <FilterFilled :class="{ set: isSet }" />
       </template>
       <slot></slot>
       <el-button-group>
-        <el-button size="mini" type="success">Применить</el-button>
-        <el-button size="mini">Сбросить</el-button>
+        <el-button size="mini" type="success" @click="setFilter">Применить</el-button>
+        <el-button size="mini" @click="dropFilter">Сбросить</el-button>
       </el-button-group>
     </el-popover>
   </div>
@@ -15,16 +15,44 @@
 
 <script lang="ts">
 import { FilterFilled } from '@ant-design/icons-vue';
-import { defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, Ref, ref } from 'vue';
+import { useStore } from 'vuex';
 export default defineComponent({
   name: 'FilterPopover',
   components: {
     FilterFilled,
   },
-  setup() {
+  props: {},
+  emits: ['addFilterModel', 'dropFilterModel'],
+  setup(props, { emit }) {
     const visible: Ref<boolean> = ref(false);
+    const isSet: Ref<boolean> = ref(false);
+    const store = useStore();
+    const trigger: Ref<string> = computed(() => store.getters['filter/trigger']);
+    const storeModule: string = store.getters['filter/storeModule'];
+    const storeAction: string = store.getters['filter/storeAction'];
+
+    const setFilter = async () => {
+      emit('addFilterModel');
+      await sendQueryAndClose();
+    };
+
+    const dropFilter = async () => {
+      emit('dropFilterModel');
+      await sendQueryAndClose();
+    };
+
+    const sendQueryAndClose = async () => {
+      await store.dispatch(`${storeModule}/${storeAction}`, store.getters['filter/filterQuery']);
+      visible.value = !visible.value;
+      isSet.value = !isSet.value;
+    };
 
     return {
+      dropFilter,
+      isSet,
+      setFilter,
+      trigger,
       visible,
     };
   },
@@ -34,13 +62,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 .anticon {
   margin: 4px 2px 2px 2px;
+
   &:hover {
     color: #5cb6ff;
   }
 }
-// Чтобы скрыть фильтры
-.filter-popover {
-  display: none;
-  position: absolute;
+.set {
+  color: #5cb6ff;
 }
 </style>

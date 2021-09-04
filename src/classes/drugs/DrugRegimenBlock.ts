@@ -17,16 +17,46 @@ export default class DrugRegimenBlock implements IDrugRegimenBlock {
   drugRegimenBlockItems: IDrugRegimenBlockItem[] = [new DrugRegimenBlockItem()];
   drugRegimenBlockItemsForDelete: string[] = [];
 
-  constructor(i?: IDrugRegimenBlock) {
-    if (!i) return;
-    this.id = i.id;
-    this.infinitely = i.infinitely;
-    this.isEdit = i.isEdit;
-    this.orderItem = i.orderItem;
-    this.drugRegimenId = i.drugRegimenId;
-    this.drugRegimen = new DrugRegimen(i.drugRegimen);
-    if (i.drugRegimenBlockItems) {
-      this.drugRegimenBlockItems = i.drugRegimenBlockItems.map((item: IDrugRegimenBlockItem) => new DrugRegimenBlockItem(item));
+  constructor(drugRegimenBlock?: IDrugRegimenBlock) {
+    if (!drugRegimenBlock) {
+      return;
     }
+    this.id = drugRegimenBlock.id;
+    this.infinitely = drugRegimenBlock.infinitely;
+    this.isEdit = drugRegimenBlock.isEdit;
+    this.orderItem = drugRegimenBlock.orderItem;
+    this.drugRegimenId = drugRegimenBlock.drugRegimenId;
+    if (drugRegimenBlock.drugRegimen) {
+      this.drugRegimen = new DrugRegimen(drugRegimenBlock.drugRegimen);
+    }
+    if (drugRegimenBlock.drugRegimenBlockItems) {
+      this.drugRegimenBlockItems = drugRegimenBlock.drugRegimenBlockItems.map(
+        (item: IDrugRegimenBlockItem) => new DrugRegimenBlockItem(item)
+      );
+    }
+  }
+
+  addDrugRegimenBlockItem(): void {
+    this.drugRegimenBlockItems.push(new DrugRegimenBlockItem());
+  }
+  removeDrugRegimenBlockItem(index: number): void {
+    const itemId = this.drugRegimenBlockItems[index].id;
+    if (itemId) {
+      this.drugRegimenBlockItemsForDelete.push(itemId);
+    }
+    this.drugRegimenBlockItems.splice(index, 1);
+  }
+  moveDrugRegimenBlockItemUp(index: number): void {
+    const elementToMove = this.drugRegimenBlockItems[index];
+    this.drugRegimenBlockItems[index] = this.drugRegimenBlockItems[index - 1];
+    this.drugRegimenBlockItems[index - 1] = elementToMove;
+  }
+  moveDrugRegimenBlockItemDown(index: number): void {
+    const elementToMove = this.drugRegimenBlockItems[index];
+    this.drugRegimenBlockItems[index] = this.drugRegimenBlockItems[index + 1];
+    this.drugRegimenBlockItems[index + 1] = elementToMove;
+  }
+  editDrugRegimenBlock(isEdit?: boolean): void {
+    this.isEdit = isEdit ?? !this.isEdit;
   }
 }

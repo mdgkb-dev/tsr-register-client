@@ -1,4 +1,4 @@
-import IHumanConstructor from './IHumanConstructor';
+import IHumanConstructor from '@/interfaces/humans/IHumanConstructor';
 
 export default interface IHuman extends IHumanConstructor {
   getFullName: () => string;

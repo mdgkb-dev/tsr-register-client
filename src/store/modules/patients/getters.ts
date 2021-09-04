@@ -5,11 +5,10 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IFIlesList from '@/interfaces/files/IFIlesList';
-import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import RootState from '@/store/types';
@@ -29,20 +28,17 @@ const getters: GetterTree<State, RootState> = {
   getById(state, id: string): IPatient | undefined {
     return state.patients.find((item: IPatient) => item.id === id);
   },
-  getHuman(state: State): IHuman {
-    return state.patient.human;
-  },
   insuranceCompanies(state): IInsuranceCompanyToHuman[] {
     return state.patient.human.insuranceCompanyToHuman;
   },
-  getDiagnosis(state): IPatientDiagnosis[] {
+  diagnosis(state): IPatientDiagnosis[] {
     return state.patient.patientDiagnosis;
-  },
-  getAnamnesis(state, indices: { diagnosisIndex: number; anamnesisIndex: number }): IPatientDiagnosisAnamnesis {
-    return state.patient.patientDiagnosis[indices.diagnosisIndex].patientDiagnosisAnamnesis[indices.anamnesisIndex];
   },
   registerToPatient(state): IRegisterToPatient[] {
     return state.patient.registerToPatient;
+  },
+  patientDrugRegimens(state): IPatientDrugRegimen[] {
+    return state.patient.patientDrugRegimen;
   },
   representativeToPatient(state): IRepresentativeToPatient[] {
     return state.patient.representativeToPatient;

@@ -6,4 +6,7 @@ export default interface IDrug {
 
   drugRegimens: IDrugRegimen[];
   drugRegimensForDelete: string[];
+
+  addDrugRegimen: (item: IDrugRegimen) => void;
+  removeDrugRegimen: (index: number) => void;
 }

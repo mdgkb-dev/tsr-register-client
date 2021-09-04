@@ -18,7 +18,7 @@
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
               </template>
-              <HumanForm store-name="patients" />
+              <HumanForm />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -44,7 +44,14 @@
 
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-              <MkbForm store-name="patients" :patient-diagnosis="true" />
+              <MkbForm :store-module="'patients'" />
+            </el-collapse-item>
+
+            <el-collapse-item>
+              <template #title>
+                <h2 class="collapseHeader">Лекарства</h2>
+              </template>
+              <DrugForm />
             </el-collapse-item>
 
             <el-collapse-item>
@@ -79,6 +86,7 @@ import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
+import DrugForm from '@/components/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';
 import PatientPageInfo from '@/components/Patients/PatientPageInfo.vue';
 import PatientToRepresentativeForm from '@/components/Patients/PatientToRepresentativeForm.vue';
@@ -102,6 +110,7 @@ export default defineComponent({
     DisabilityForm,
     PatientToRepresentativeForm,
     PatientRegistersForm,
+    DrugForm,
   },
   setup() {
     const store = useStore();

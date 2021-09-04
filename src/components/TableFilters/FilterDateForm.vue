@@ -1,11 +1,24 @@
 <template>
-  <component :is="'FilterPopover'">
+  <component :is="'FilterPopover'" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
-      <el-form label-position="top">
+      <el-form label-position="top" :model="filterModel">
         <el-form-item label="Дата рождения">
-          <el-select v-model="value" size="mini" placeholder="Выберите дату...">
-            <el-option v-for="(item, index) in filterList" :key="index" :label="item.label" :value="item.value"></el-option>
+          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
+            <el-option
+              v-for="(item, index) in filterList"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              @click="setTrigger('click')"
+            ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="filterModel.isUnaryFilter()">
+          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
+        </el-form-item>
+        <el-form-item v-if="filterModel.isBetweenFilter()">
+          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
+          <el-date-picker v-model="filterModel.date2" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
         </el-form-item>
       </el-form>
     </div>
@@ -13,26 +26,54 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
+import { useStore } from 'vuex';
 
+import FilterModel from '@/classes/filters/FilterModel';
+import OperatorsOptions from '@/classes/filters/OperatorsOptions';
 import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
+import { DataTypes } from '@/interfaces/filters/DataTypes';
 import IOption from '@/interfaces/shared/IOption';
 
 export default defineComponent({
   name: 'FilterSelectForm',
   components: { FilterPopover },
-
-  setup() {
-    const filterList: Ref<IOption[]> = ref([
-      { label: 'Равна', value: 'equals' },
-      { label: 'Больше чем', value: 'greaterThan' },
-      { label: 'Меньше чем', value: 'lessThan' },
-      { label: 'Не равна', value: 'notEqual' },
-      { label: 'В промежутке', value: 'inRange' },
-    ]);
+  props: {
+    table: {
+      type: String as PropType<string>,
+      default: '',
+    },
+    col: {
+      type: String as PropType<string>,
+      default: '',
+    },
+  },
+  setup(props) {
+    const { table, col } = toRefs(props);
+    const store = useStore();
+    const filterList: IOption[] = OperatorsOptions;
+    const filterModel = ref(FilterModel.CreateFilterModel(table.value, col.value, DataTypes.Date));
     const value: Ref<string> = ref('');
+    const lenOfFilterModels: Ref<number> = computed(() => store.getters['filter/lenOfFilterModels']);
+
+    const setTrigger = (trigger: string) => {
+      store.commit('filter/setTrigger', trigger);
+    };
+    const addFilterModel = () => {
+      filterModel.value.index = lenOfFilterModels.value;
+      store.commit('filter/setFilterModel', filterModel.value);
+    };
+
+    const dropFilterModel = () => {
+      store.commit('filter/spliceFilterModel', filterModel.value.index);
+      filterModel.value = FilterModel.CreateFilterModel(table.value, col.value, DataTypes.Date);
+    };
 
     return {
+      dropFilterModel,
+      addFilterModel,
+      filterModel,
+      setTrigger,
       filterList,
       value,
     };

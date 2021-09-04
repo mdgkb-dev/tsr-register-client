@@ -3,6 +3,7 @@ import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
@@ -14,11 +15,15 @@ import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+
+import PatientDrugRegimen from './PatientDrugRegimen';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -28,12 +33,16 @@ export default class Patient implements IPatient {
   disabilities: IDisability[] = [];
   disabilitiesForDelete: string[] = [];
   patientDiagnosis: IPatientDiagnosis[] = [];
+  patientDiagnosisForDelete: string[] = [];
   heightWeight: IHeightWeight[] = [];
   heightWeightForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
+  registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];
+  patientDrugRegimen: IPatientDrugRegimen[] = [];
+  patientDrugRegimenForDelete: string[] = [];
 
   constructor(patient?: IPatientConstructor) {
     if (!patient) {
@@ -68,6 +77,9 @@ export default class Patient implements IPatient {
       this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map(
         (i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i)
       );
+    }
+    if (patient.patientDrugRegimen) {
+      this.patientDrugRegimen = patient.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
     }
   }
 
@@ -251,5 +263,14 @@ export default class Patient implements IPatient {
 
   getFileInfos(): IFileInfo[] {
     return [...Human.GetFileInfos(this.human), ...Disability.GetFileInfos(this.disabilities)];
+  }
+
+  getAnamnesis(id: string): IPatientDiagnosisAnamnesis {
+    let anamnesis = new PatientDiagnosisAnamnesis();
+    this.patientDiagnosis.forEach((diagnosis: IPatientDiagnosis) => {
+      const item = diagnosis.patientDiagnosisAnamnesis.find((i: IPatientDiagnosisAnamnesis) => i.id === id);
+      if (item) anamnesis = item;
+    });
+    return anamnesis;
   }
 }

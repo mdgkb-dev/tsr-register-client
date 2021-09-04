@@ -28,7 +28,6 @@ const actions: ActionTree<State, RootState> = {
     );
   },
   edit: async ({ commit }, representative: IRepresentative): Promise<void> => {
-    const fileInfos = representative.human.fileInfos.filter((info) => info.isDraft);
     commit(
       'update',
       await httpClient.put<IRepresentative, IRepresentative>({

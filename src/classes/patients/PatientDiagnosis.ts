@@ -14,7 +14,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis?: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
-  mkbDiagnosis?: IMkbDiagnosis;
+  mkbDiagnosis: IMkbDiagnosis = new MkbDiagnosis();
   patientId?: string;
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[] = [];
@@ -30,8 +30,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
     if (i.mkbSubDiagnosis) this.mkbSubDiagnosis = new MkbSubDiagnosis(i.mkbSubDiagnosis);
     this.patientId = i.patientId;
     if (i.patient) this.patient = new Patient(i.patient);
-    if (i.patientDiagnosisAnamnesis) {
+    if (i.patientDiagnosisAnamnesis)
       this.patientDiagnosisAnamnesis = i.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
-    }
   }
 }

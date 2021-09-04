@@ -7,7 +7,7 @@ export default interface IRegisterDiagnosis {
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis?: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
-  mkbDiagnosis?: IMkbDiagnosis;
+  mkbDiagnosis: IMkbDiagnosis;
   registerId?: string;
   register?: IRegister;
 }

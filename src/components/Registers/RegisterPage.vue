@@ -24,7 +24,7 @@
           </el-collapse-item>
           <el-collapse-item>
             <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-            <MkbForm store-name="registers" />
+            <MkbForm :store-module="'registers'" />
           </el-collapse-item>
         </el-collapse>
       </el-form>

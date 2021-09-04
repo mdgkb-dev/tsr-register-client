@@ -1,6 +1,8 @@
 import { MutationTree } from 'vuex';
 
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import Register from '@/classes/registers/Register';
+import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
@@ -38,8 +40,24 @@ const mutations: MutationTree<State> = {
       if (item.id) state.register.registerGroupToRegisterForDelete.push(item.id);
     }
   },
-  setDiagnosis(state, registerDiagnosis: IRegisterDiagnosis[]): void {
-    state.register.registerDiagnosis = registerDiagnosis;
+  addDiagnosis(state, id: string) {
+    const diagnosis = new RegisterDiagnosis();
+    diagnosis.id = id;
+    state.register.registerDiagnosis.push(diagnosis);
+  },
+  removeDiagnosis(state, id: string) {
+    const index = state.register.registerDiagnosis.findIndex((i: IRegisterDiagnosis) => i.id === id);
+    if (index !== -1) state.register.registerDiagnosis.splice(index, 1);
+    state.register.registerDiagnosisForDelete.push(id);
+  },
+  clearDiagnosis(state, id: string) {
+    const diagnosis = state.register.registerDiagnosis.find((d: IRegisterDiagnosis) => d.id === id);
+    if (diagnosis) {
+      diagnosis.mkbDiagnosis = new MkbDiagnosis();
+      diagnosis.mkbDiagnosisId = undefined;
+      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosisId = undefined;
+    }
   },
 };
 

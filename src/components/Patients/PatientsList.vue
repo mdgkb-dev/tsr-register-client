@@ -32,7 +32,7 @@
         <el-table-column sortable prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
             <div class="table-header">
-              <span>Фамилия Имя Отчевство</span>
+              <span>Фамилия Имя Отчество</span>
               <FilterTextForm />
             </div>
           </template>
@@ -53,11 +53,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="human.dateBirth" width="120" align="center" sortable>
+        <el-table-column prop="human.dateBirth" width="120" align="center">
           <template #header>
             <div class="table-header">
               <span>Дата рождения</span>
-              <FilterDateForm />
+              <FilterDateForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.dateBirth" />
             </div>
           </template>
           <template #default="scope">
@@ -84,7 +84,7 @@
 
         <el-table-column width="75" label="ВЕС РОСТ" align="center">
           <template #default="scope">
-            <span v-html="scope.row.getHeightWeightShort()"></span>
+            <span>{{ scope.row.getHeightWeightShort() }}</span>
           </template>
         </el-table-column>
 
@@ -92,11 +92,9 @@
           <template #default="scope">
             <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
               <div v-if="diagnosis.mkbSubDiagnosis">
-                <span
-                  v-if="diagnosis.mkbSubDiagnosis"
-                  class="underline-label"
-                  v-html="diagnosis.mkbDiagnosis.code + '.' + diagnosis.mkbSubDiagnosis.subCode"
-                ></span>
+                <span v-if="diagnosis.mkbSubDiagnosis" class="underline-label"
+                  >{{ diagnosis.mkbDiagnosis.code }}.{{ diagnosis.mkbSubDiagnosis.subCode }}</span
+                >
                 <el-tooltip
                   v-if="diagnosis.mkbSubDiagnosis"
                   class="item"
@@ -108,7 +106,7 @@
                 </el-tooltip>
               </div>
               <div v-else>
-                <span v-if="diagnosis.mkbDiagnosis" class="underline-label" v-html="diagnosis.mkbDiagnosis.code"></span>
+                <span v-if="diagnosis.mkbDiagnosis" class="underline-label">{{ diagnosis.mkbDiagnosis.code }}</span>
                 <el-tooltip
                   v-if="diagnosis.mkbDiagnosis"
                   class="item"
@@ -156,15 +154,27 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="РЕГИСТРЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length > 1">
+              <el-tag v-for="register in scope.row.registerToPatient" :key="register.id" size="small">
+                <span>{{ register.name }}</span>
+              </el-tag>
+            </div>
+          </template>
+        </el-table-column>
+
         <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
           <template #default="scope">
-            <div v-for="document in scope.row.human.documents" :key="document">
-              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                <el-tag size="small">
-                  <i class="el-icon-document" style="margin-right: 3px"></i>
-                  <span>{{ document.documentType.getTagName() }}</span>
-                </el-tag>
-              </el-tooltip>
+            <div v-if="scope.row.human.documents">
+              <div v-for="document in scope.row.human.documents" :key="document">
+                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                  <el-tag size="small">
+                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <span>{{ document.documentType.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -210,6 +220,7 @@ import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
@@ -228,6 +239,7 @@ export default defineComponent({
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
     const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
+    const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
     const { formatDate } = useDateFormat();
     const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: ['м', 'ж'] })]);
 
@@ -246,7 +258,9 @@ export default defineComponent({
         text: 'Загрузка',
       });
       store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create }));
-      await store.dispatch('patients/getAll', 0);
+      store.commit('filter/setStoreModule', 'patients');
+      await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
+      await store.dispatch('registers/getAll');
       await store.dispatch('meta/getCount', 'patient');
       mount.value = true;
       loading.close();
@@ -255,7 +269,8 @@ export default defineComponent({
     const setPage = async (pageNum: number): Promise<void> => {
       curPage.value = pageNum;
       loading.value = true;
-      await store.dispatch('patients/getAll', pageNum - 1);
+      store.commit('filter/setOffset', pageNum - 1);
+      await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
       loading.value = false;
     };
 
@@ -330,6 +345,7 @@ export default defineComponent({
     };
 
     return {
+      schema,
       queryStringsPatient,
       count,
       formatDate,
@@ -354,3 +370,10 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss" scoped>
+.registers-tooltip {
+  &:hover {
+    cursor: pointer;
+  }
+}
+</style>

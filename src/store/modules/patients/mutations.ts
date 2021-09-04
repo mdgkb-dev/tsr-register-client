@@ -6,7 +6,11 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import Patient from '@/classes/patients/Patient';
+import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
+import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
@@ -19,6 +23,8 @@ import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsurance
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
+import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
@@ -46,7 +52,7 @@ const mutations: MutationTree<State> = {
     const i = state.patients.findIndex((item: IPatient) => item.id === id);
     state.patients.splice(i, 1);
   },
-  setHuman(state, human: IHuman): void {
+  setHuman(state, human: IHuman) {
     state.patient.human = cloneDeep(human);
   },
   setFilteredPatients(state, patients: IPatient[]) {
@@ -60,8 +66,18 @@ const mutations: MutationTree<State> = {
     if (index > -1) state.patient.human.insuranceCompanyToHuman.splice(index, 1);
     if (item.id) state.patient.human.insuranceCompanyToHumanForDelete.push(item.id);
   },
-  setRegisterts(state, registerToPatient: IRegisterToPatient[]) {
-    state.patient.registerToPatient = registerToPatient;
+  addRegister(state, registerId: string) {
+    const registerToPatient = new RegisterToPatient();
+    registerToPatient.registerId = registerId;
+    state.patient.registerToPatient.push(registerToPatient);
+  },
+  removeRegister(state, registerId: string) {
+    const index = state.patient.registerToPatient.findIndex((i: IRegisterToPatient) => i.registerId === registerId);
+    if (index > -1) {
+      const idForDelete = state.patient.registerToPatient[index].id;
+      if (idForDelete) state.patient.registerToPatientForDelete.push(idForDelete);
+      state.patient.registerToPatient.splice(index, 1);
+    }
   },
   addRepresentative(state) {
     state.patient.representativeToPatient.push(new RepresentativeToPatient());
@@ -145,12 +161,6 @@ const mutations: MutationTree<State> = {
   resetPatient(state) {
     state.patient = new Patient();
   },
-  setDiagnosis(state, patientDiagnosis: IPatientDiagnosis[]): void {
-    state.patient.patientDiagnosis = patientDiagnosis;
-  },
-  setAnamnesis(state, payload: { anamnesis: IPatientDiagnosisAnamnesis; diagnosisIndex: number; anamnesisIndex: number }): void {
-    state.patient.patientDiagnosis[payload.diagnosisIndex].patientDiagnosisAnamnesis[payload.anamnesisIndex] = payload.anamnesis;
-  },
   setPhoto(state, file: IFileInfo) {
     state.patient.human.photo = file;
     state.patient.human.photoId = file.id;
@@ -165,6 +175,65 @@ const mutations: MutationTree<State> = {
   removePhoto(state) {
     state.patient.human.photo = undefined;
     state.patient.human.photoId = undefined;
+  },
+  addDiagnosis(state, patientDiagnosis?: IPatientDiagnosis) {
+    if (patientDiagnosis) {
+      state.patient.patientDiagnosis.push(patientDiagnosis);
+      return;
+    }
+    const diagnosis = new PatientDiagnosis();
+    diagnosis.id = uuidv4();
+    state.patient.patientDiagnosis.push(diagnosis);
+  },
+  removeDiagnosis(state, id: string) {
+    const index = state.patient.patientDiagnosis.findIndex((i: IPatientDiagnosis) => i.id === id);
+    if (index !== -1) state.patient.patientDiagnosis.splice(index, 1);
+    state.patient.patientDiagnosisForDelete.push(id);
+  },
+  removeDiagnosisByDiagnosisOrSubDiagnosisId(state, id: string) {
+    const checkedDiagnosis = state.patient.patientDiagnosis.filter(
+      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === id || diagnosis.mkbSubDiagnosisId === id
+    );
+    checkedDiagnosis.forEach((d: IPatientDiagnosis) => {
+      const index = state.patient.patientDiagnosis.indexOf(d);
+      if (index !== -1) state.patient.patientDiagnosis.splice(index, 1);
+    });
+    state.patient.patientDiagnosisForDelete.push(id);
+  },
+  clearDiagnosis(state, id: string) {
+    const diagnosis = state.patient.patientDiagnosis.find((d: IPatientDiagnosis) => d.id === id);
+    if (diagnosis) {
+      diagnosis.mkbDiagnosis = new MkbDiagnosis();
+      diagnosis.mkbDiagnosisId = undefined;
+      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosisId = undefined;
+    }
+  },
+  removeAnamnesis(state, id: string) {
+    state.patient.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
+      const index = d.patientDiagnosisAnamnesis.findIndex((a: IPatientDiagnosisAnamnesis) => a.id === id);
+      if (index > -1) {
+        const idForDelete = d.patientDiagnosisAnamnesis[index].id;
+        if (idForDelete) d.patientDiagnosisAnamnesisForDelete.push(idForDelete);
+        d.patientDiagnosisAnamnesis.splice(index, 1);
+      }
+    });
+  },
+  addAnamnesis(state, diagnosisId: string) {
+    const diagnosis = state.patient.patientDiagnosis.find((d: IPatientDiagnosis) => d.id === diagnosisId);
+    if (diagnosis) {
+      const anamnesis = new PatientDiagnosisAnamnesis();
+      anamnesis.isEditMode = true;
+      diagnosis.patientDiagnosisAnamnesis.push(anamnesis);
+    }
+  },
+  addPatientDrugRegimen(state, item: IPatientDrugRegimen) {
+    state.patient.patientDrugRegimen.push(item);
+  },
+  removePatientDrugRegimen(state, id: string) {
+    const i = state.patient.patientDrugRegimen.findIndex((item: IPatientDrugRegimen) => item.id === id);
+    if (i > -1) state.patient.patientDrugRegimen.splice(i, 1);
+    state.patient.patientDrugRegimenForDelete.push(id);
   },
 };
 
