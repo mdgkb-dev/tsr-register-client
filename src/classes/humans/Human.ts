@@ -45,7 +45,7 @@ export default class Human implements IHuman {
     this.contactId = i.contactId;
     this.fileInfos = i.fileInfos ?? [];
     this.photoId = i.photoId;
-    
+
     if (i.insuranceCompanyToHuman) {
       this.insuranceCompanyToHuman = i.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
     }
@@ -82,12 +82,19 @@ export default class Human implements IHuman {
 
   static GetFileInfos(item: IHuman): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
+
     item.documents.forEach((doc: IDocument) => {
       doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
-        if (fileInfoToDoc.fileInfo) fileInfos.push(fileInfoToDoc.fileInfo);
+        if (fileInfoToDoc.fileInfo) {
+          fileInfos.push(fileInfoToDoc.fileInfo);
+        }
       });
     });
-    if (item.photo) fileInfos.push(item.photo);
+
+    if (item.photo) {
+      fileInfos.push(item.photo);
+    }
+
     return fileInfos;
   }
 }

@@ -1,9 +1,5 @@
-export default interface IHeightWeight {
-  id?: string;
-  height: number;
-  weight: number;
-  date: string;
-  patientId?: string;
+import IHeightWeightConstructor from '@/interfaces/anthropometry/IHeightWeightConstructor';
 
+export default interface IHeightWeight extends IHeightWeightConstructor {
   getBmiGroup: (dateBirth: string, isMale: boolean) => string;
 }

@@ -13,8 +13,6 @@ import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsurance
 describe('Class Human', () => {
   let human: IHuman | undefined;
   const emptyString = '';
-  const truthyValue = true;
-  const falsyValue = false;
 
   afterEach(() => {
     human = undefined;
@@ -29,7 +27,7 @@ describe('Class Human', () => {
     expect(human.name).toBe(emptyString);
     expect(human.surname).toBe(emptyString);
     expect(human.patronymic).toBe(emptyString);
-    expect(human.isMale).toBe(truthyValue);
+    expect(human.isMale).toBeTruthy();
     expect(human.dateBirth).toBe(emptyString);
     expect(human.addressRegistration).toBe(emptyString);
     expect(human.addressResidential).toBe(emptyString);
@@ -143,7 +141,7 @@ describe('Class Human', () => {
       name: '',
       surname: '',
       patronymic: '',
-      isMale: truthyValue,
+      isMale: true,
       dateBirth: '',
       addressRegistration: '',
       addressResidential: '',
@@ -157,7 +155,7 @@ describe('Class Human', () => {
 
     // Assert
     expect(human.getGender()).toBe(maleShortForm);
-    expect(human.getGender(truthyValue)).toBe(maleFullForm);
+    expect(human.getGender(true)).toBe(maleFullForm);
   });
 
   test('getGender() возвращает женский пол', () => {
@@ -170,7 +168,7 @@ describe('Class Human', () => {
       name: '',
       surname: '',
       patronymic: '',
-      isMale: falsyValue,
+      isMale: false,
       dateBirth: '',
       addressRegistration: '',
       addressResidential: '',
@@ -184,7 +182,7 @@ describe('Class Human', () => {
 
     // Assert
     expect(human.getGender()).toBe(femaleShortForm);
-    expect(human.getGender(truthyValue)).toBe(femaleFullForm);
+    expect(human.getGender(true)).toBe(femaleFullForm);
   });
 
   test('removeDocumentFieldValuesIds() удаляет ID в массиве documentFieldValues для черновых документов', () => {
@@ -227,7 +225,7 @@ describe('Class Human', () => {
     ];
 
     const document1 = new Document({
-      isDraft: truthyValue,
+      isDraft: true,
       documentFieldValues: documentFieldValues1,
       documentType: new DocumentType(),
       fileInfoToDocument: [],
@@ -235,7 +233,7 @@ describe('Class Human', () => {
     });
 
     const document2 = new Document({
-      isDraft: falsyValue,
+      isDraft: false,
       documentFieldValues: documentFieldValues2,
       documentType: new DocumentType(),
       fileInfoToDocument: [],

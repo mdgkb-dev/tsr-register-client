@@ -75,37 +75,54 @@ export default class Patient implements IPatient {
     return this.disabilities[this.disabilities.length - 1];
   }
 
+  getLastHeightWeight(): IHeightWeight | undefined {
+    if (!this.heightWeight.length) {
+      return;
+    }
+
+    return this.heightWeight.reduce((mostRecent: IHeightWeight, item: IHeightWeight) => {
+      return new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent;
+    });
+  }
+
   getHeightWeightShort(): string {
     const lastHeightWeight = this.getLastHeightWeight();
+
     if (lastHeightWeight?.weight && lastHeightWeight.height) {
       return `${lastHeightWeight.weight} кг ${lastHeightWeight.height} см`;
     }
-    return '';
-  }
 
-  getLastHeightWeight(): IHeightWeight | undefined {
-    if (!this.heightWeight.length) return;
-    return this.heightWeight.reduce((mostRecent: IHeightWeight, item: IHeightWeight) =>
-      new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent
-    );
+    return '';
   }
 
   getBmiGroup(): string {
     const lastHeightWeight = this.getLastHeightWeight();
     const lastWeight = lastHeightWeight?.weight;
     const lastHeight = lastHeightWeight?.height;
-    if (!lastWeight || !lastHeight) return 'Недостаточно данных';
+
+    if (!lastWeight || !lastHeight) {
+      return 'Недостаточно данных';
+    }
+
     const bmi = Bmi.calculate(lastWeight, lastHeight);
     const month = Bmi.birthDateToMonth(this.human.dateBirth);
     const bmiMonth = Bmi.findBmiMonth(month, this.human.isMale);
-    if (!bmiMonth) return 'Данные по данной дате рождения неизвестны';
+
+    if (!bmiMonth) {
+      return 'Данные по данной дате рождения неизвестны';
+    }
+
     const group = Bmi.calculateGroup(bmi, bmiMonth);
-    if (!group) return 'Некорректные данные антропометрии';
+
+    if (!group) {
+      return 'Некорректные данные антропометрии';
+    }
+
     const weightClass = Bmi.getWeightClass(group);
     return `${group}, ${weightClass}`;
   }
 
-  findProperty(propertyId: string): RegisterPropertyToPatient | undefined {
+  findProperty(propertyId: string): IRegisterPropertyToPatient | undefined {
     return this.registerPropertyToPatient?.find((i: IRegisterPropertyToPatient) => i.registerPropertyId === propertyId);
   }
 
@@ -128,14 +145,27 @@ export default class Patient implements IPatient {
       const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === property.id);
       return !!item;
     }
+
     if (property.id) {
       const item = this.findProperty(property.id);
-      if (property.valueType?.isString() && item && item.valueString) return item.valueString;
-      if (property.valueType?.isText() && item && item.valueString) return item.valueString;
-      if (property.valueType?.isNumber() && item && item.valueNumber) return item.valueNumber;
-      if (property.valueType?.isDate() && item && item.valueDate) return item.valueDate;
-      if (property.valueType?.isRadio() && item && item.registerPropertyRadioId) return item.registerPropertyRadioId;
+
+      if (property.valueType?.isString() && item && item.valueString) {
+        return item.valueString;
+      }
+      if (property.valueType?.isText() && item && item.valueString) {
+        return item.valueString;
+      }
+      if (property.valueType?.isNumber() && item && item.valueNumber) {
+        return item.valueNumber;
+      }
+      if (property.valueType?.isDate() && item && item.valueDate) {
+        return item.valueDate;
+      }
+      if (property.valueType?.isRadio() && item && item.registerPropertyRadioId) {
+        return item.registerPropertyRadioId;
+      }
     }
+
     return null;
   }
 
@@ -144,44 +174,79 @@ export default class Patient implements IPatient {
   }
 
   setRegisterPropertyValueOther(value: string, property: IRegisterProperty): void {
-    if (!property.id) return;
+    if (!property.id) {
+      return;
+    }
+
     let item = this.findProperty(property.id);
+
     if (!item) {
       this.pushRegisterProperty(property.id);
       item = this.findProperty(property.id);
     }
-    if (!item) return;
+
+    if (!item) {
+      return;
+    }
+
     item.valueOther = value as string;
   }
 
   setRegisterPropertyValue(value: number | string | Date, property: IRegisterProperty): void {
-    if (!property.id) return;
+    if (!property.id) {
+      return;
+    }
+
     let item = this.findProperty(property.id);
+
     if (!item) {
       this.pushRegisterProperty(property.id);
       item = this.findProperty(property.id);
     }
-    if (!item) return;
-    if (property.valueType?.isString() || property.valueType?.isText()) item.valueString = value as string;
-    if (property.valueType?.isNumber()) item.valueNumber = value as number;
-    if (property.valueType?.isDate()) item.valueDate = value as Date;
-    if (property.valueType?.isRadio()) item.registerPropertyRadioId = value as string;
+
+    if (!item) {
+      return;
+    }
+
+    if (property.valueType?.isString() || property.valueType?.isText()) {
+      item.valueString = value as string;
+    }
+
+    if (property.valueType?.isNumber()) {
+      item.valueNumber = value as number;
+    }
+
+    if (property.valueType?.isDate()) {
+      item.valueDate = value as Date;
+    }
+
+    if (property.valueType?.isRadio()) {
+      item.registerPropertyRadioId = value as string;
+    }
   }
 
-  setRegisterPropertyValueSet(check: boolean, setId: string): void {
-    if (check) {
+  setRegisterPropertyValueSet(isAdd: boolean, setId: string): void {
+    if (isAdd) {
       const registerPropertySetToPatient = new RegisterPropertySetToPatient();
       registerPropertySetToPatient.registerPropertySetId = setId;
       registerPropertySetToPatient.patientId = this.id;
       this.registerPropertySetToPatient.push(registerPropertySetToPatient);
       return;
     }
+
     const index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
-    if (index > -1) {
-      const idForDelete = this.registerPropertySetToPatient[index].id;
-      if (idForDelete) this.registerPropertySetToPatientForDelete.push(idForDelete);
-      this.registerPropertySetToPatient.splice(index, 1);
+
+    if (index <= -1) {
+      return;
     }
+
+    const idForDelete = this.registerPropertySetToPatient[index].id;
+
+    if (idForDelete) {
+      this.registerPropertySetToPatientForDelete.push(idForDelete);
+    }
+
+    this.registerPropertySetToPatient.splice(index, 1);
   }
 
   getFileInfos(): IFileInfo[] {

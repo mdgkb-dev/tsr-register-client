@@ -33,11 +33,15 @@ export default class Disability implements IDisability {
   }
   static GetFileInfos(items: IDisability[]): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
+
     items.forEach((i: IDisability) => {
       i.edvs.forEach((e: IEdv) => {
-        if (e.fileInfo) fileInfos.push(e.fileInfo);
+        if (e.fileInfo) {
+          fileInfos.push(e.fileInfo);
+        }
       });
     });
+
     return fileInfos;
   }
 }
