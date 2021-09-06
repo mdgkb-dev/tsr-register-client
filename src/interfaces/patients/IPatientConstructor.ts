@@ -7,8 +7,9 @@ import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPrope
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import IModelInfo from '@/interfaces/shared/IModelInfo';
 
-export default interface IPatientConstructor {
+export default interface IPatientConstructor extends IModelInfo {
   id?: string;
   human: IHuman;
   patientDiagnosis: IPatientDiagnosis[];

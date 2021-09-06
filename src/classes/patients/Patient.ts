@@ -23,7 +23,8 @@ import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPrope
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-
+import IUser from '@/interfaces/users/IUser';
+import User from '@/classes/user/User';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -43,6 +44,13 @@ export default class Patient implements IPatient {
   registerPropertySetToPatientForDelete: string[] = [];
   patientDrugRegimen: IPatientDrugRegimen[] = [];
   patientDrugRegimenForDelete: string[] = [];
+
+  createdAt?: Date;
+  updatedAt?: Date;
+  createdById?: string;
+  updatedById?: string;
+  createdBy?: IUser;
+  updatedBy?: IUser;
 
   constructor(patient?: IPatientConstructor) {
     if (!patient) {
@@ -81,6 +89,12 @@ export default class Patient implements IPatient {
     if (patient.patientDrugRegimen) {
       this.patientDrugRegimen = patient.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
     }
+    this.createdAt = patient.createdAt;
+    this.updatedAt = patient.updatedAt;
+    this.createdById = patient.createdById;
+    this.updatedById = patient.updatedById;
+    if (patient.createdBy) this.createdBy = new User(patient.createdBy);
+    if (patient.updatedBy) this.updatedBy = new User(patient.updatedBy);
   }
 
   getActuallyDisability(): IDisability {
@@ -268,7 +282,7 @@ export default class Patient implements IPatient {
   getAnamnesis(id: string): IPatientDiagnosisAnamnesis {
     for (const diagnosis of this.patientDiagnosis) {
       const anamnesis = diagnosis.patientDiagnosisAnamnesis.find((i: IPatientDiagnosisAnamnesis) => i.id === id);
-      
+
       if (anamnesis) {
         return anamnesis;
       }

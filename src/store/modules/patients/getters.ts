@@ -14,10 +14,14 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
 
 const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
     return state.patients;
+  },
+  getHuman(state): IHuman {
+    return state.patient.human;
   },
   curPage(state): number {
     return state.curPage;

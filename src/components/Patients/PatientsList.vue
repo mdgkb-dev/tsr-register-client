@@ -179,16 +179,25 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="createdAt"></el-table-column>
-
         <el-table-column width="40" align="center">
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
+              :show-info-button="true"
               :show-remove-button="true"
               @edit="edit(scope.row.id)"
               @remove="remove(scope.row.id)"
             />
+
+            <el-popover placement="top-end" :width="200" trigger="hover">
+              <template #reference>
+                <el-button class="table-button" icon="el-icon-view" />
+              </template>
+              <el-timeline>
+                <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy.login }}</el-timeline-item>
+                <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy.login }}</el-timeline-item>
+              </el-timeline>
+            </el-popover>
           </template>
         </el-table-column>
       </el-table>
