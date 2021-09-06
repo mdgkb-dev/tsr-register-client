@@ -13,7 +13,38 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
-export default function (isEditMode = false) {
+export default function (isEditMode = false): {
+  syncSubmitHandling: (
+    module: string,
+    payload:
+      | IPatient
+      | IDrug
+      | IRepresentativeType
+      | IRepresentative
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
+    path?: string
+  ) => void;
+  title: Ref<string>;
+  submitHandling: (
+    module: string,
+    payload:
+      | IPatient
+      | IDrug
+      | IRepresentativeType
+      | IRepresentative
+      | IRegisterProperty
+      | IDocumentType
+      | IRegister
+      | IRegisterGroup
+      | IInsuranceCompany,
+    next?: NavigationGuardNext,
+    path?: string
+  ) => Promise<void>;
+} {
   const store = useStore();
   const router = useRouter();
   const title: Ref<string> = ref('');

@@ -61,7 +61,7 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
 
-    const rules: ComputedRef<any> = computed(() => {
+    const rules: ComputedRef = computed(() => {
       return { human: HumanRules };
     });
     const user: ComputedRef<IUser | undefined> = computed(() => store.getters['users/user']);

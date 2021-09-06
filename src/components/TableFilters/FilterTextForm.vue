@@ -22,15 +22,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
-
-import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
-import IOption from '@/interfaces/shared/IOption';
+import { defineComponent, PropType, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
+
 import FilterModel from '@/classes/filters/FilterModel';
-import { DataTypes } from '@/interfaces/filters/DataTypes';
 import OperatorsTextOptions from '@/classes/filters/OperatorsTextOptions';
+import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
+import { DataTypes } from '@/interfaces/filters/DataTypes';
 import { Operators } from '@/interfaces/filters/Operators';
+import IOption from '@/interfaces/shared/IOption';
 
 export default defineComponent({
   name: 'FilterTextForm',

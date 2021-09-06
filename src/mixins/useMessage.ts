@@ -1,6 +1,10 @@
 import { ElMessage } from 'element-plus';
 
-export default function () {
+interface IReturn {
+  showMessageError: (error: string) => void;
+}
+
+export default function (): IReturn {
   const showMessageError = (error: string): void => {
     ElMessage.error(error);
   };

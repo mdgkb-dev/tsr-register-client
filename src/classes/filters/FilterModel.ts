@@ -1,7 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { DataTypes } from '@/interfaces/filters/DataTypes';
 import IFilterModel from '@/interfaces/filters/IFilterModel';
 import { Operators } from '@/interfaces/filters/Operators';
-import { v4 as uuidv4 } from 'uuid';
 
 export default class FilterModel implements IFilterModel {
   id?: string;

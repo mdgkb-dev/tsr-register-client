@@ -13,7 +13,7 @@ const app = createApp(App);
 app.use(store);
 app.use(router);
 
-for (const [_, component] of Object.entries(components)) {
+for (const [, component] of Object.entries(components)) {
   app.component(component.name, component);
 }
 

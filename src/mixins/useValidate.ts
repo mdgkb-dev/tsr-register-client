@@ -2,11 +2,17 @@ import { ElMessage } from 'element-plus';
 
 import MessageError from '@/classes/messages/MessageError';
 import MessageSuccess from '@/classes/messages/MessageSuccess';
+import IForm from '@/interfaces/elements/IForm';
 
-export default function () {
-  const validate = (form: any): boolean => {
+interface IReturn {
+  validate: (form: IForm) => boolean;
+  validateWithoutMessageBox: (form: IForm) => boolean;
+}
+
+export default function (): IReturn {
+  const validate = (form: IForm): boolean => {
     let validationResult = true;
-    form.validate((valid: boolean, errorFields: any) => {
+    form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
       if (!valid) {
         ElMessage.error(new MessageError(errorFields));
         validationResult = false;
@@ -18,7 +24,7 @@ export default function () {
     return validationResult;
   };
 
-  const validateWithoutMessageBox = (form: any): boolean => {
+  const validateWithoutMessageBox = (form: IForm): boolean => {
     let validationResult = true;
     form.validate((valid: boolean) => {
       if (!valid) {

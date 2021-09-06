@@ -6,7 +6,7 @@ import { Options, Vue } from 'vue-class-component';
 })
 export default class MessageMixin extends Vue {
   $message!: {
-    error: any;
+    error: string;
   };
 
   showMessageError(error: string): void {

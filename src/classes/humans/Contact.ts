@@ -59,7 +59,7 @@ export default class Contact implements IContact {
     return /^(\s*)?(\+)?([- _():=+]?\d[- _():=+]?){10,14}(\s*)?$/;
   }
 
-  static validatePhone = (rule: any, value: any, callback: any): void => {
+  static validatePhone = (_: unknown, value: string, callback: CallableFunction): void => {
     if (Contact.getPhoneRegExp().test(value) || !value) {
       callback();
     } else {
@@ -67,7 +67,7 @@ export default class Contact implements IContact {
     }
   };
 
-  static validateEmail = (rule: any, value: any, callback: any): void => {
+  static validateEmail = (_: unknown, value: string, callback: CallableFunction): void => {
     if (Contact.getEmailRegExp().test(value) || !value) {
       callback();
     } else {

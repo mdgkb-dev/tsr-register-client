@@ -1,6 +1,6 @@
 import Link from '@/classes/shared/Link';
 
-export default function () {
+export default function (): { links: Link[]; pushToLinks: (linksList: string[], text: string[]) => void } {
   const links: Link[] = [];
 
   const pushToLinks = (linksList: string[], text: string[]): void => {

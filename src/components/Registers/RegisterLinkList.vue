@@ -33,7 +33,7 @@ export default defineComponent({
     const mount: Ref<boolean> = ref(false);
     const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
 
-    const link = (row: any): void => {
+    const link = (row: IRegister): void => {
       router.push(`/registers/patients/${row.id}`);
     };
 

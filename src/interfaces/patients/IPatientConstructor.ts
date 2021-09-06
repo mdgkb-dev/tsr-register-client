@@ -1,5 +1,5 @@
-import IDisability from '@/interfaces/disabilities/IDisability';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IDisability from '@/interfaces/disabilities/IDisability';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';

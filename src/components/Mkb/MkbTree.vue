@@ -163,7 +163,7 @@ export default defineComponent({
       }, 100);
     };
 
-    const load = async (node: any, resolve: any): Promise<void> => {
+    const load = async (node: any, resolve: CallableFunction): Promise<void> => {
       const mkbIdSet = new MkbIdSet();
 
       if (node.level === 0) {

@@ -2,7 +2,16 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
-export default function () {
+interface IReturn {
+  beforeWindowUnload: (e: BeforeUnloadEvent) => void;
+  initialState: Ref<string>;
+  showConfirmModal: (submit: CallableFunction, next: NavigationGuardNext) => void;
+  formUpdated: () => void;
+  confirmLeave: Ref<boolean>;
+  saveButtonClick: Ref<boolean>;
+}
+
+export default function (): IReturn {
   const confirmLeave: Ref<boolean> = ref(false);
   const initialState: Ref<string> = ref('');
   const saveButtonClick: Ref<boolean> = ref(false);
@@ -11,14 +20,14 @@ export default function () {
     confirmLeave.value = true;
   };
 
-  const beforeWindowUnload = (e: any) => {
+  const beforeWindowUnload = (e: BeforeUnloadEvent) => {
     if (confirmLeave.value) {
       e.preventDefault();
       e.returnValue = '';
     }
   };
 
-  const showConfirmModal = (submit: any, next: NavigationGuardNext) => {
+  const showConfirmModal = (submit: CallableFunction, next: NavigationGuardNext) => {
     if (confirmLeave.value && !saveButtonClick.value) {
       ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
         distinguishCancelAndClose: true,
@@ -29,7 +38,7 @@ export default function () {
           // Вызывается при сохранении
           submit(next);
         })
-        .catch((action: any) => {
+        .catch((action: string) => {
           if (action === 'cancel') {
             ElMessage({
               type: 'warning',

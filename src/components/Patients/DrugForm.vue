@@ -9,7 +9,7 @@
     :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
     class="table-shadow"
     header-row-class-name="header-style"
->
+  >
     <el-table-column label="Лекарство" align="start">
       <template #default="scope">
         {{ scope.row.drug?.name ? scope.row.drug?.name : getDrugById(scope.row.drugId).name }}

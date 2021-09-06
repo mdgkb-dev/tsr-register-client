@@ -222,6 +222,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
+import Human from '@/classes/humans/Human';
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
@@ -235,7 +236,6 @@ import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-import Human from '@/classes/humans/Human';
 
 export default defineComponent({
   name: 'RepresentativesList',

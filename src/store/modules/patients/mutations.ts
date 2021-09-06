@@ -24,12 +24,12 @@ import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
+import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 
 const mutations: MutationTree<State> = {
   setAll(state, patientsWithCount: IPatientsWithCount) {

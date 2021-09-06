@@ -241,7 +241,7 @@ export default defineComponent({
       curPage.value = 0;
     };
 
-    const findRepresentatives = async (query: string, resolve: any): Promise<void> => {
+    const findRepresentatives = async (query: string, resolve: CallableFunction): Promise<void> => {
       const items: ISearchRepresentative[] = [];
       if (query.length > 2) {
         await store.dispatch('representatives/search', query);

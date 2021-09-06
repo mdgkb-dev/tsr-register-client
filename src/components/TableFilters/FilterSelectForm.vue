@@ -3,8 +3,8 @@
     <div class="filter-form">
       <el-form label-position="top">
         <el-form-item>
-          <div v-for="select in selectList">
-            <el-select size="mini" v-model="filterModel.value1" :placeholder="select.title" @click="setTrigger('manual')">
+          <div v-for="select in selectList" :key="select">
+            <el-select v-model="filterModel.value1" size="mini" :placeholder="select.title" @click="setTrigger('manual')">
               <el-option
                 v-for="(option, optionIndex) in select.options"
                 :key="optionIndex"
@@ -21,13 +21,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
-
-import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
-import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import { defineComponent, PropType, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
+
 import FilterModel from '@/classes/filters/FilterModel';
+import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
 import { DataTypes } from '@/interfaces/filters/DataTypes';
+import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import { Operators } from '@/interfaces/filters/Operators';
 
 export default defineComponent({

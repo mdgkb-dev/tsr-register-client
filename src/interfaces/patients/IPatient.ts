@@ -1,6 +1,6 @@
+import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
