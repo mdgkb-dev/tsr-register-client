@@ -19,6 +19,12 @@ const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
     return state.patients;
   },
+  curPage(state): number {
+    return state.curPage;
+  },
+  count(state): number {
+    return state.count;
+  },
   filteredPatients(state): IPatient[] | undefined {
     return state.filteredPatients;
   },

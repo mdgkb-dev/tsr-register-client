@@ -18,9 +18,6 @@ const getters: GetterTree<State, RootState> = {
   storeAction(state): string {
     return state.storeAction;
   },
-  lenOfFilterModels(state): number {
-    return state.filterQuery.filterModels.length;
-  },
 };
 
 export default getters;

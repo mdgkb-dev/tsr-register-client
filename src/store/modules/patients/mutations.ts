@@ -29,15 +29,20 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 
 const mutations: MutationTree<State> = {
-  setAll(state, patients: IPatient[]) {
-    state.patients = patients.map((p: IPatient) => new Patient(p));
+  setAll(state, patientsWithCount: IPatientsWithCount) {
+    state.patients = patientsWithCount.patients.map((p: IPatient) => new Patient(p));
+    state.count = patientsWithCount.count;
   },
   set(state, patient: IPatient) {
     state.photoFileList = [];
     state.patient = new Patient(patient);
     if (state.patient.human.photo) state.photoFileList[0] = state.patient.human.photo.getFileListObject();
+  },
+  setCurPage(state, page: number): void {
+    state.curPage = page;
   },
   create(state, patient: IPatient) {
     state.patients.push(new Patient(patient));

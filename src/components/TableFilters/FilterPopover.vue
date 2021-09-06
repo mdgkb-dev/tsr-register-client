@@ -43,7 +43,9 @@ export default defineComponent({
     };
 
     const sendQueryAndClose = async () => {
+      store.commit('filter/setOffset', 0);
       await store.dispatch(`${storeModule}/${storeAction}`, store.getters['filter/filterQuery']);
+      store.commit(`${storeModule}/setCurPage`, 1);
       visible.value = !visible.value;
       isSet.value = !isSet.value;
     };

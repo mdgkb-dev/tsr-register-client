@@ -1,14 +1,16 @@
 import { DataTypes } from '@/interfaces/filters/DataTypes';
 import IFilterModel from '@/interfaces/filters/IFilterModel';
 import { Operators } from '@/interfaces/filters/Operators';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class FilterModel implements IFilterModel {
-  index = 0;
+  id?: string;
   table = '';
   col = '';
   operator: Operators = Operators.Eq;
   date1?: Date;
   date2?: Date;
+  value1?: string = '';
   type: DataTypes = DataTypes.String;
 
   isUnaryFilter(): boolean {
@@ -24,6 +26,7 @@ export default class FilterModel implements IFilterModel {
 
   static CreateFilterModel(table: string, col: string, type: DataTypes): IFilterModel {
     const filterModel = new FilterModel();
+    filterModel.id = uuidv4();
     filterModel.table = table;
     filterModel.col = col;
     filterModel.type = type;

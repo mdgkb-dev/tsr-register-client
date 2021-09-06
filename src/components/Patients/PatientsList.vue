@@ -33,7 +33,7 @@
           <template #header>
             <div class="table-header">
               <span>Фамилия Имя Отчество</span>
-              <FilterTextForm />
+              <FilterTextForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
             </div>
           </template>
           <template #default="scope">
@@ -45,7 +45,7 @@
           <template #header>
             <div class="table-header">
               <span>Пол</span>
-              <FilterSelectForm :select-list="genderFilter" />
+              <FilterSelectForm :select-list="genderFilter" :table="schema.humanSchema.tableName" :col="schema.humanSchema.isMale" />
             </div>
           </template>
           <template #default="scope">
@@ -179,6 +179,8 @@
           </template>
         </el-table-column>
 
+        <el-table-column prop="createdAt"></el-table-column>
+
         <el-table-column width="40" align="center">
           <template #default="scope">
             <TableButtonGroup
@@ -224,6 +226,7 @@ import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
+import Human from '@/classes/humans/Human';
 
 export default defineComponent({
   name: 'RepresentativesList',
@@ -238,10 +241,10 @@ export default defineComponent({
     const router = useRouter();
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
-    const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
+    const count: Ref<IRepresentative[]> = computed(() => store.getters['patients/count']);
     const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
     const { formatDate } = useDateFormat();
-    const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: ['м', 'ж'] })]);
+    const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
 
     const mount: Ref<boolean> = ref(false);
     const queryStringsPatient: Ref<string> = ref('');
@@ -249,7 +252,7 @@ export default defineComponent({
     const searchFullName = ref('');
     const searchAddress = ref('');
     const search = ref('');
-    const curPage = ref(1);
+    const curPage: Ref<number> = computed(() => store.getters['patients/curPage']);
     const loading = ref(false);
 
     onBeforeMount(async () => {
@@ -261,14 +264,13 @@ export default defineComponent({
       store.commit('filter/setStoreModule', 'patients');
       await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
       await store.dispatch('registers/getAll');
-      await store.dispatch('meta/getCount', 'patient');
       mount.value = true;
       loading.close();
     });
 
     const setPage = async (pageNum: number): Promise<void> => {
-      curPage.value = pageNum;
       loading.value = true;
+      store.commit('patients/setCurPage', pageNum);
       store.commit('filter/setOffset', pageNum - 1);
       await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
       loading.value = false;
@@ -278,10 +280,10 @@ export default defineComponent({
       if (value.length === 0) {
         await store.dispatch('patients/getAll', 0);
       }
-      curPage.value = 0;
+      store.commit('patients/setCurPage', 0);
     };
 
-    const findPatients = async (query: string, resolve: any): Promise<void> => {
+    const findPatients = async (query: string, resolve: CallableFunction): Promise<void> => {
       const patients: ISearchPatient[] = [];
       if (query.length > 2) {
         await store.dispatch('patients/searchPatients', query);
@@ -289,7 +291,6 @@ export default defineComponent({
           if (p.id) patients.push({ value: p.human.getFullName(), id: p.id, patient: p });
         });
       }
-
       resolve(patients);
     };
 

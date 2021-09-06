@@ -7,6 +7,7 @@ import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
+import IOption from '@/interfaces/shared/IOption';
 
 export default class Human implements IHuman {
   id?: string;
@@ -78,5 +79,12 @@ export default class Human implements IHuman {
     });
     if (item.photo) fileInfos.push(item.photo);
     return fileInfos;
+  }
+
+  static GetIsMaleOptions(): IOption[] {
+    return [
+      { label: 'М', value: 'true' },
+      { label: 'Ж', value: 'false' },
+    ];
   }
 }

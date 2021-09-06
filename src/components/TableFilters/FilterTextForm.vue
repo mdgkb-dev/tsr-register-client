@@ -1,9 +1,20 @@
 <template>
-  <component :is="'FilterPopover'">
+  <component :is="'FilterPopover'" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
       <el-form label-position="top">
-        <el-form-item v-for="(item, index) in filterList" :key="index" :label="item.label">
-          <el-input size="mini" :placeholder="item.label + '...'" />
+        <el-form-item>
+          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
+            <el-option
+              v-for="(item, index) in filterList"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              @click="setTrigger('click')"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="filterModel.value1" />
         </el-form-item>
       </el-form>
     </div>
@@ -11,25 +22,54 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 
 import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
 import IOption from '@/interfaces/shared/IOption';
+import { useStore } from 'vuex';
+import FilterModel from '@/classes/filters/FilterModel';
+import { DataTypes } from '@/interfaces/filters/DataTypes';
+import OperatorsTextOptions from '@/classes/filters/OperatorsTextOptions';
+import { Operators } from '@/interfaces/filters/Operators';
 
 export default defineComponent({
   name: 'FilterTextForm',
   components: { FilterPopover },
+  props: {
+    table: {
+      type: String as PropType<string>,
+      default: '',
+    },
+    col: {
+      type: String as PropType<string>,
+      default: '',
+    },
+  },
+  setup(props) {
+    const { table, col } = toRefs(props);
+    const store = useStore();
+    const filterList: IOption[] = OperatorsTextOptions;
+    const filterModel = ref(FilterModel.CreateFilterModel(table.value, col.value, DataTypes.String));
+    filterModel.value.operator = Operators.Like;
 
-  setup() {
-    const filterList: Ref<IOption[]> = ref([
-      { label: 'Содержит', value: 'Содержит' },
-      { label: 'Не содержит', value: 'Не содержит' },
-      { label: 'Начинается с', value: 'Начинается с' },
-      { label: 'Оканчивается на', value: 'Оканчивается на' },
-    ]);
+    const setTrigger = (trigger: string) => {
+      store.commit('filter/setTrigger', trigger);
+    };
+    const addFilterModel = () => {
+      store.commit('filter/setFilterModel', filterModel.value);
+    };
+
+    const dropFilterModel = () => {
+      store.commit('filter/spliceFilterModel', filterModel.value.id);
+      filterModel.value = FilterModel.CreateFilterModel(table.value, col.value, DataTypes.String);
+    };
 
     return {
       filterList,
+      dropFilterModel,
+      addFilterModel,
+      filterModel,
+      setTrigger,
     };
   },
 });

@@ -54,18 +54,16 @@ export default defineComponent({
     const filterList: IOption[] = OperatorsOptions;
     const filterModel = ref(FilterModel.CreateFilterModel(table.value, col.value, DataTypes.Date));
     const value: Ref<string> = ref('');
-    const lenOfFilterModels: Ref<number> = computed(() => store.getters['filter/lenOfFilterModels']);
 
     const setTrigger = (trigger: string) => {
       store.commit('filter/setTrigger', trigger);
     };
     const addFilterModel = () => {
-      filterModel.value.index = lenOfFilterModels.value;
       store.commit('filter/setFilterModel', filterModel.value);
     };
 
     const dropFilterModel = () => {
-      store.commit('filter/spliceFilterModel', filterModel.value.index);
+      store.commit('filter/spliceFilterModel', filterModel.value.id);
       filterModel.value = FilterModel.CreateFilterModel(table.value, col.value, DataTypes.Date);
     };
 

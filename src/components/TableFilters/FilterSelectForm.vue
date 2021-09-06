@@ -1,11 +1,19 @@
 <template>
-  <component :is="'FilterPopover'">
+  <component :is="'FilterPopover'" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
       <el-form label-position="top">
-        <el-form-item v-for="(item, index) in selectList" :key="index" :label="item.title">
-          <el-select size="mini" :placeholder="item.title">
-            <el-option v-for="(option, optionIndex) in item.options" :key="optionIndex" :label="option" :value="option"></el-option>
-          </el-select>
+        <el-form-item>
+          <div v-for="select in selectList">
+            <el-select size="mini" v-model="filterModel.value1" :placeholder="select.title" @click="setTrigger('manual')">
+              <el-option
+                v-for="(option, optionIndex) in select.options"
+                :key="optionIndex"
+                :label="option.label"
+                :value="option.value"
+                @click="setTrigger('click')"
+              ></el-option>
+            </el-select>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -13,19 +21,57 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 
 import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import { useStore } from 'vuex';
+import FilterModel from '@/classes/filters/FilterModel';
+import { DataTypes } from '@/interfaces/filters/DataTypes';
+import { Operators } from '@/interfaces/filters/Operators';
 
 export default defineComponent({
   name: 'FilterSelectForm',
   components: { FilterPopover },
   props: {
+    table: {
+      type: String as PropType<string>,
+      default: '',
+    },
+    col: {
+      type: String as PropType<string>,
+      default: '',
+    },
     selectList: {
       type: Array as PropType<ISelectFilter[]>,
       default: () => [],
     },
+  },
+  setup(props) {
+    const { table, col } = toRefs(props);
+    const store = useStore();
+    const filterModel = ref(FilterModel.CreateFilterModel(table.value, col.value, DataTypes.String));
+    filterModel.value.operator = Operators.Eq;
+
+    const setTrigger = (trigger: string) => {
+      store.commit('filter/setTrigger', trigger);
+    };
+    const addFilterModel = () => {
+      store.commit('filter/setFilterModel', filterModel.value);
+    };
+
+    const dropFilterModel = () => {
+      store.commit('filter/spliceFilterModel', filterModel.value.id);
+      filterModel.value = FilterModel.CreateFilterModel(table.value, col.value, DataTypes.String);
+      filterModel.value.operator = Operators.Eq;
+    };
+
+    return {
+      dropFilterModel,
+      addFilterModel,
+      filterModel,
+      setTrigger,
+    };
   },
 });
 </script>

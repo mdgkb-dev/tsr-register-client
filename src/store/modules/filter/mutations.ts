@@ -15,14 +15,16 @@ const mutations: MutationTree<State> = {
     state.filterQuery.offset = offset;
   },
   setFilterModel(state, filterModel: IFilterModel) {
-    if (filterModel.index === 0) {
-      state.filterQuery.filterModels.push(filterModel);
+    let item = state.filterQuery.filterModels.find((i: IFilterModel) => i.id === filterModel.id);
+    if (item) {
+      item = filterModel;
     } else {
-      state.filterQuery.filterModels[filterModel.index] = filterModel;
+      state.filterQuery.filterModels.push(filterModel);
     }
   },
-  spliceFilterModel(state, index: number) {
-    state.filterQuery.filterModels.splice(index, 1);
+  spliceFilterModel(state, id: string) {
+    const index = state.filterQuery.filterModels.findIndex((i: IFilterModel) => i.id === id);
+    if (index > -1) state.filterQuery.filterModels.splice(index, 1);
   },
 };
 

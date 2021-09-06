@@ -4,4 +4,5 @@ export enum Operators {
   Lt = '<',
   Btw = 'between',
   In = 'in',
+  Like = 'like',
 }

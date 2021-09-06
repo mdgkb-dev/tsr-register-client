@@ -23,6 +23,8 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import PatientDrugRegimen from './PatientDrugRegimen';
+import IUser from '@/interfaces/users/IUser';
+import User from '@/classes/user/User';
 
 export default class Patient implements IPatient {
   id?: string;
