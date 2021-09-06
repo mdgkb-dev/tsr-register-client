@@ -8,8 +8,8 @@
       <TableButtonGroup
         :show-move-up-button="drugRegimenBlockIndex !== 0 ? true : false"
         :show-move-down-button="drugRegimenBlockIndex !== drugRegimen.drugRegimenBlocks.length - 1 ? true : false"
-        @moveUp="moveDrugRegimenBlockUp(drugRegimenIndex, drugRegimenBlockIndex)"
-        @moveDown="moveDrugRegimenBlockDown(drugRegimenIndex, drugRegimenBlockIndex)"
+        @moveUp="moveDrugRegimenBlockUp(drugRegimenBlockIndex)"
+        @moveDown="moveDrugRegimenBlockDown(drugRegimenBlockIndex)"
       />
     </div>
 
@@ -23,16 +23,16 @@
         <el-switch v-model="drugRegimenBlock.infinitely"> </el-switch>
       </el-tooltip>
       <el-tooltip v-else effect="light" placement="top-end" content="Повторить период">
-        <el-button icon="el-icon-copy-document" @click="copyDrugRegimenBlock(drugRegimenIndex, drugRegimenBlockIndex)"></el-button>
+        <el-button icon="el-icon-copy-document" @click="copyDrugRegimenBlock(drugRegimenBlockIndex)"></el-button>
       </el-tooltip>
       <el-tooltip v-if="!drugRegimenBlock.isEdit" effect="light" placement="top-end" content="Редактировать интервалы">
-        <el-button icon="el-icon-edit" @click="editDrugRegimenBlock(drugRegimenIndex, drugRegimenBlockIndex)"></el-button>
+        <el-button icon="el-icon-edit" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
       </el-tooltip>
       <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-        <el-button icon="el-icon-folder-checked" @click="editDrugRegimenBlock(drugRegimenIndex, drugRegimenBlockIndex)"></el-button>
+        <el-button icon="el-icon-folder-checked" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
       </el-tooltip>
       <el-tooltip effect="light" placement="top-end" content="Добавить интервал">
-        <el-button icon="el-icon-plus" @click="addDrugRegimenBlockItem(drugRegimenIndex, drugRegimenBlockIndex)"></el-button>
+        <el-button icon="el-icon-plus" @click="addDrugRegimenBlockItem(drugRegimenBlockIndex)"></el-button>
       </el-tooltip>
       <el-popconfirm
         confirm-button-text="Да"
@@ -40,7 +40,7 @@
         icon="el-icon-info"
         icon-color="red"
         title="Вы уверены, что хотите удалить промежуток?"
-        @confirm="removeDrugRegimenBlock(drugRegimenIndex, drugRegimenBlockIndex)"
+        @confirm="removeDrugRegimenBlock(drugRegimenBlockIndex)"
         @cancel="() => {}"
       >
         <template #reference>
@@ -49,11 +49,7 @@
       </el-popconfirm>
     </div>
 
-    <DrugRegimenBlockItemsForm
-      :drug-regimen-block="drugRegimenBlock"
-      :drug-regimen-index="drugRegimenIndex"
-      :drug-regimen-block-index="drugRegimenBlockIndex"
-    />
+    <DrugRegimenBlockItemsForm :drug-regimen-block="drugRegimenBlock" />
   </el-card>
 </template>
 
@@ -61,11 +57,10 @@
 import { computed, defineComponent, PropType, Ref } from 'vue';
 import { useStore } from 'vuex';
 
-import DrugIndexes from '@/classes/drugs/DrugIndexes';
 import DrugRegimenBlockItemsForm from '@/components/Drugs/DrugRegimenBlockItemsForm.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
+import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
 
 export default defineComponent({
   name: 'DrugRegimenBlocksForm',
@@ -75,39 +70,33 @@ export default defineComponent({
       type: Object as PropType<IDrugRegimen>,
       required: true,
     },
-    drugRegimenIndex: {
-      type: Number as PropType<number>,
-      required: true,
-    },
   },
 
-  setup() {
+  setup(prop) {
     const store = useStore();
-
-    const drug: Ref<IDrug> = computed(() => store.getters['drugs/drug']);
     const activeCollapseName: Ref<string> = computed(() => store.getters['drugs/activeCollapseName']);
 
-    const addDrugRegimenBlockItem = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/addDrugRegimenBlockItem', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const addDrugRegimenBlockItem = (drugRegimenBlockIndex: number): void => {
+      prop.drugRegimen.drugRegimenBlocks[drugRegimenBlockIndex].addDrugRegimenBlockItem();
+      prop.drugRegimen.drugRegimenBlocks[drugRegimenBlockIndex].editDrugRegimenBlock(true);
     };
-    const editDrugRegimenBlock = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const editDrugRegimenBlock = (item: IDrugRegimenBlock): void => {
+      item.editDrugRegimenBlock();
     };
-    const removeDrugRegimenBlock = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/removeDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const removeDrugRegimenBlock = (drugRegimenBlockIndex: number): void => {
+      prop.drugRegimen.removeDrugRegimenBlock(drugRegimenBlockIndex);
     };
-    const copyDrugRegimenBlock = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/copyDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const copyDrugRegimenBlock = (drugRegimenBlockIndex: number): void => {
+      prop.drugRegimen.copyDrugRegimenBlock(drugRegimenBlockIndex);
     };
-    const moveDrugRegimenBlockUp = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/moveDrugRegimenBlockUp', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const moveDrugRegimenBlockUp = (drugRegimenBlockIndex: number): void => {
+      prop.drugRegimen.moveDrugRegimenBlockUp(drugRegimenBlockIndex);
     };
-    const moveDrugRegimenBlockDown = (drugRegimenIndex: number, drugRegimenBlockIndex: number): void => {
-      store.commit('drugs/moveDrugRegimenBlockDown', new DrugIndexes({ drugRegimenIndex, drugRegimenBlockIndex }));
+    const moveDrugRegimenBlockDown = (drugRegimenBlockIndex: number): void => {
+      prop.drugRegimen.moveDrugRegimenBlockDown(drugRegimenBlockIndex);
     };
 
     return {
-      drug,
       activeCollapseName,
       editDrugRegimenBlock,
       removeDrugRegimenBlock,

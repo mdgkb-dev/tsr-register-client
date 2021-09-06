@@ -26,7 +26,9 @@ export default class Bmi {
     return weight / h2;
   };
 
-  static birthDateToMonth = (birthDate: string): number => (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
+  static birthDateToMonth = (birthDate: string): number => {
+    return (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
+  };
 
   static birthDateToMeasureToMonth = (birthDate: string, measureDate: string): number =>
     (new Date(measureDate).getFullYear() - new Date(birthDate).getFullYear()) * 12;
@@ -35,21 +37,25 @@ export default class Bmi {
     if (isMale) {
       return BmiBoys[month + 1];
     }
+
     return BmiGirls[month + 1];
   };
 
   static calculateGroup = (bmi: number, bmiMonth: IBmiMonth): string => {
     let groupBmi = 0;
+
     for (const groupProp in bmiMonth) {
       const group: BmiMonths = groupProp as BmiMonths;
 
       if (Object.prototype.hasOwnProperty.call(bmiMonth, group)) {
         groupBmi = bmiMonth[group];
+
         if (bmi < groupBmi) {
           return group;
         }
       }
     }
+
     return '';
   };
 

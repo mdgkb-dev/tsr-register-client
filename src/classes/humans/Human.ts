@@ -6,6 +6,7 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
+import IHumanConstructor from '@/interfaces/humans/IHumanConstructor';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 
@@ -27,8 +28,11 @@ export default class Human implements IHuman {
   fileInfos: IFileInfo[] = [];
   photo?: IFileInfo;
   photoId?: string;
-  constructor(i?: IHuman) {
-    if (!i) return;
+
+  constructor(i?: IHumanConstructor) {
+    if (!i) {
+      return;
+    }
 
     this.id = i.id;
     this.name = i.name ?? '';
@@ -40,13 +44,20 @@ export default class Human implements IHuman {
     this.addressResidential = i.addressResidential ?? '';
     this.contact = new Contact(i.contact);
     this.contactId = i.contactId;
-    if (i.insuranceCompanyToHuman)
-      this.insuranceCompanyToHuman = i.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
-    if (i.documents) this.documents = i.documents.map((i: IDocument) => new Document(i));
-
     this.fileInfos = i.fileInfos ?? [];
-    if (i.photo) this.photo = new FileInfo(i.photo);
     this.photoId = i.photoId;
+
+    if (i.insuranceCompanyToHuman) {
+      this.insuranceCompanyToHuman = i.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
+    }
+
+    if (i.documents) {
+      this.documents = i.documents.map((i: IDocument) => new Document(i));
+    }
+
+    if (i.photo) {
+      this.photo = new FileInfo(i.photo);
+    }
   }
 
   getFullName(): string {
@@ -72,12 +83,19 @@ export default class Human implements IHuman {
 
   static GetFileInfos(item: IHuman): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
+
     item.documents.forEach((doc: IDocument) => {
       doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
-        if (fileInfoToDoc.fileInfo) fileInfos.push(fileInfoToDoc.fileInfo);
+        if (fileInfoToDoc.fileInfo) {
+          fileInfos.push(fileInfoToDoc.fileInfo);
+        }
       });
     });
-    if (item.photo) fileInfos.push(item.photo);
+
+    if (item.photo) {
+      fileInfos.push(item.photo);
+    }
+
     return fileInfos;
   }
 

@@ -1,5 +1,6 @@
 import { Module } from 'vuex';
 
+import User from '@/classes/user/User';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -9,7 +10,7 @@ import { State } from './state';
 
 export const state: State = {
   users: [],
-  user: undefined,
+  user: new User(),
 };
 
 const namespaced = true;

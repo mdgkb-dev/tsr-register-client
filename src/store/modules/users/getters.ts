@@ -1,5 +1,6 @@
 import { GetterTree } from 'vuex';
 
+import IHuman from '@/interfaces/humans/IHuman';
 import IUser from '@/interfaces/users/IUser';
 import RootState from '@/store/types';
 
@@ -14,6 +15,9 @@ const getters: GetterTree<State, RootState> = {
   },
   getById(state, id: string): IUser | undefined {
     return state.users.find((item: IUser) => item.id === id);
+  },
+  getHuman(state: State): IHuman {
+    return state.user.human;
   },
 };
 

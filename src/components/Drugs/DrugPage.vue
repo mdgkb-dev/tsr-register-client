@@ -66,9 +66,11 @@ export default defineComponent({
     const { validate, validateWithoutMessageBox } = useValidate();
 
     const addDrugRegimen = (): void => {
-      if (!validateWithoutMessageBox(newDrugRegimenForm.value)) return;
-      store.commit('drugs/addDrugRegimen', newDrugRegimen.value);
-      store.commit('drugs/editDrugRegimenBlock');
+      if (!validateWithoutMessageBox(newDrugRegimenForm.value)) {
+        return;
+      }
+      drug.value.addDrugRegimen(newDrugRegimen.value);
+      newDrugRegimen.value.drugRegimenBlocks[0].editDrugRegimenBlock(true);
       newDrugRegimen.value = new DrugRegimen();
       store.commit('drugs/setActiveCollapseName', String(drug.value.drugRegimens.length - 1));
     };
@@ -97,7 +99,9 @@ export default defineComponent({
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
-      if (!validate(form.value)) return;
+      if (!validate(form.value)) {
+        return;
+      }
       store.commit('drugs/updateOrder');
       await submitHandling('drugs', drug.value, next, 'drugs');
     };

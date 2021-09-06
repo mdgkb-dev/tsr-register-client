@@ -1,5 +1,6 @@
 import Bmi from '@/classes/bmi/Bmi';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
+import IHeightWeightConstructor from '@/interfaces/anthropometry/IHeightWeightConstructor';
 
 export default class HeightWeight implements IHeightWeight {
   id?: string;
@@ -8,8 +9,11 @@ export default class HeightWeight implements IHeightWeight {
   date = '';
   patientId?: string;
 
-  constructor(i?: IHeightWeight) {
-    if (!i) return;
+  constructor(i?: IHeightWeightConstructor) {
+    if (!i) {
+      return;
+    }
+
     this.id = i.id;
     this.height = i.height;
     this.weight = i.weight;

@@ -6,7 +6,7 @@
           <div>
             <el-collapse-item>
               <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
-              <HumanForm :readonly="true" :human="patient.human" />
+              <HumanForm :readonly="true" store-name="patients" />
             </el-collapse-item>
             <div v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister">
               <el-collapse-item>

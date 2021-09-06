@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash/cloneDeep';
+
 import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
@@ -31,6 +33,36 @@ export default class DrugRegimen implements IDrugRegimen {
     if (drugRegimen.drugRegimenBlocks) {
       this.drugRegimenBlocks = drugRegimen.drugRegimenBlocks.map((item: IDrugRegimenBlock) => new DrugRegimenBlock(item));
     }
+  }
+
+  addDrugRegimenBlock(): void {
+    this.drugRegimenBlocks.push(new DrugRegimenBlock());
+  }
+  removeDrugRegimenBlock(index: number): void {
+    const itemId = this.drugRegimenBlocks[index].id;
+    if (itemId) {
+      this.drugRegimenBlocksForDelete.push(itemId);
+    }
+    this.drugRegimenBlocks.splice(index, 1);
+  }
+  copyDrugRegimenBlock(index: number): void {
+    this.drugRegimenBlocks.splice(index + 1, 0, cloneDeep(this.drugRegimenBlocks[index]));
+  }
+  moveDrugRegimenBlockUp(index: number): void {
+    const elementToMove = this.drugRegimenBlocks[index];
+    if (elementToMove.infinitely) {
+      elementToMove.infinitely = false;
+    }
+    this.drugRegimenBlocks[index] = this.drugRegimenBlocks[index - 1];
+    this.drugRegimenBlocks[index - 1] = elementToMove;
+  }
+  moveDrugRegimenBlockDown(index: number): void {
+    const elementToMove = this.drugRegimenBlocks[index];
+    this.drugRegimenBlocks[index] = this.drugRegimenBlocks[index + 1];
+    this.drugRegimenBlocks[index + 1] = elementToMove;
+  }
+  editDrugRegimen(isEdit?: boolean): void {
+    this.isEdit = isEdit ?? !this.isEdit;
   }
 
   getShortInfo(): string {

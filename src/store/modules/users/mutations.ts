@@ -1,6 +1,8 @@
+import cloneDeep from 'lodash/cloneDeep';
 import { MutationTree } from 'vuex';
 
 import User from '@/classes/user/User';
+import IHuman from '@/interfaces/humans/IHuman';
 import IUser from '@/interfaces/users/IUser';
 
 import { State } from './state';
@@ -24,6 +26,9 @@ const mutations: MutationTree<State> = {
   delete(state, id: string) {
     const i = state.users.findIndex((item: IUser) => item.id === id);
     state.users.splice(i, 1);
+  },
+  setHuman(state, human: IHuman): void {
+    state.user.human = cloneDeep(human);
   },
 };
 

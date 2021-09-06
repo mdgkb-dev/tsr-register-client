@@ -25,6 +25,9 @@ const getters: GetterTree<State, RootState> = {
   registerGroupToRegister(state): IRegisterGroupToRegister[] {
     return state.register.registerGroupToRegister;
   },
+  getDiagnosis(state): IRegisterDiagnosis[] {
+    return state.register.registerDiagnosis;
+  },
 };
 
 export default getters;

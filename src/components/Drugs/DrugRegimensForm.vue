@@ -10,13 +10,13 @@
           </el-form-item>
           <div class="card-button-group">
             <el-tooltip v-if="!drugRegimen.isEdit" effect="light" placement="top-end" content="Редактировать схему">
-              <el-button icon="el-icon-edit" @click.stop="editDrugRegimen(drugRegimenIndex)"></el-button>
+              <el-button icon="el-icon-edit" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-              <el-button icon="el-icon-folder-checked" @click.stop="editDrugRegimen(drugRegimenIndex)"></el-button>
+              <el-button icon="el-icon-folder-checked" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-tooltip effect="light" placement="top-end" content="Добавить период">
-              <el-button icon="el-icon-plus" @click.stop="addDrugRegimenBlock(drugRegimenIndex)"></el-button>
+              <el-button icon="el-icon-plus" @click.stop="addDrugRegimenBlock(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-popconfirm
               confirm-button-text="Да"
@@ -35,7 +35,7 @@
         </div>
       </template>
 
-      <DrugRegimenBlocksForm :drug-regimen="drugRegimen" :drug-regimen-index="drugRegimenIndex" />
+      <DrugRegimenBlocksForm :drug-regimen="drugRegimen" />
     </el-collapse-item>
   </el-collapse>
 </template>
@@ -44,9 +44,9 @@
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
-import DrugIndexes from '@/classes/drugs/DrugIndexes';
 import DrugRegimenBlocksForm from '@/components/Drugs/DrugRegimenBlocksForm.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
+import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 
 export default defineComponent({
   name: 'DrugRegimensForm',
@@ -58,23 +58,22 @@ export default defineComponent({
     const drug: Ref<IDrug> = computed(() => store.getters['drugs/drug']);
     const activeCollapseName: Ref<string> = computed(() => store.getters['drugs/activeCollapseName']);
 
-    const editDrugRegimen = (drugRegimenIndex: number): void => {
-      if (drug.value.drugRegimens[drugRegimenIndex].name) {
-        store.commit('drugs/editDrugRegimen', drugRegimenIndex);
-      }
+    const editDrugRegimen = (drugRegimen: IDrugRegimen, drugRegimenIndex: number): void => {
+      drugRegimen.editDrugRegimen();
       store.commit('drugs/setActiveCollapseName', String(drugRegimenIndex));
     };
     const removeDrugRegimen = (drugRegimenIndex: number): void => {
-      store.commit('drugs/removeDrugRegimen', drugRegimenIndex);
+      drug.value.removeDrugRegimen(drugRegimenIndex);
       if (Number(activeCollapseName.value) !== drugRegimenIndex && Number(activeCollapseName.value) > drugRegimenIndex) {
         store.commit('drugs/setActiveCollapseName', String(Number(activeCollapseName.value) - 1));
       }
       if (Number(activeCollapseName.value) === drugRegimenIndex) activeCollapseName.value = '';
     };
-    const addDrugRegimenBlock = (drugRegimenIndex: number): void => {
-      store.commit('drugs/addDrugRegimenBlock', drugRegimenIndex);
+    const addDrugRegimenBlock = (drugRegimen: IDrugRegimen, drugRegimenIndex: number): void => {
+      drugRegimen.addDrugRegimenBlock();
+      const lastDrugRegimenBlockIndex = drugRegimen.drugRegimenBlocks.length - 1;
+      drugRegimen.drugRegimenBlocks[lastDrugRegimenBlockIndex].editDrugRegimenBlock(true);
       store.commit('drugs/setActiveCollapseName', String(drugRegimenIndex));
-      store.commit('drugs/editDrugRegimenBlock', new DrugIndexes({ drugRegimenIndex }));
     };
 
     return {
