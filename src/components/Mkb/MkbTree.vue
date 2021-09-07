@@ -56,6 +56,7 @@
 
 <script lang="ts">
 import { ElTree } from 'element-plus';
+import Node from 'element-plus/lib/el-tree/src/model/node';
 import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
@@ -72,6 +73,7 @@ import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
+import IMkbNode from '@/interfaces/mkb/mkbTree/IMkbNode';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
@@ -102,22 +104,17 @@ export default defineComponent({
       await store.dispatch('mkb/getAllMkbClasses');
     });
 
-    const setDiagnosis = (checkedNode: any): void => {
+    const setDiagnosis = (checkedNode: IMkbNode): void => {
       if (!tree?.value) {
         return;
       }
-
       const curNode = tree.value.getNode(checkedNode.id);
-
-      if (!curNode) {
-        return;
-      }
 
       if (!curNode.checked) {
         tree.value.setChecked(checkedNode.id, false, false);
         let notChildrenChecked = true;
 
-        curNode.parent.childNodes.forEach((child: any) => {
+        curNode.parent.childNodes.forEach((child: Node) => {
           if (child.checked) notChildrenChecked = false;
         });
 
@@ -127,7 +124,9 @@ export default defineComponent({
 
         if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
 
-        curNode.childNodes.forEach((child: any) => tree?.value?.setChecked(child.data.id, false, false));
+        curNode.childNodes.forEach((child: Node) => {
+          tree?.value?.setChecked(child.data.id, false, false);
+        });
         if (checkedNode.code || checkedNode.subCode > -1) emit('removeDiagnosis', checkedNode);
         return;
       }
@@ -147,7 +146,7 @@ export default defineComponent({
       }
     };
 
-    const handleNodeExpand = async (first: any): Promise<void> => {
+    const handleNodeExpand = async (first: IMkbNode): Promise<void> => {
       if (!selectable.value) {
         return;
       }
@@ -157,13 +156,13 @@ export default defineComponent({
           checkDiagnosis(first.mkbDiagnosis);
         }
 
-        if (first.mkbSubDiagnosis > -1 && first.mkbSubDiagnosis.length > 0) {
+        if (first.mkbSubDiagnosis && first.mkbSubDiagnosis.length > 0) {
           checkSubDiagnosis(first.mkbSubDiagnosis);
         }
       }, 100);
     };
 
-    const load = async (node: any, resolve: CallableFunction): Promise<void> => {
+    const load = async (node: IMkbNode, resolve: CallableFunction): Promise<void> => {
       const mkbIdSet = new MkbIdSet();
 
       if (node.level === 0) {
@@ -172,14 +171,14 @@ export default defineComponent({
 
       if (node.level === 1) {
         mkbIdSet.classId = node.data.id;
-        return resolve(await getNodeOne(node, mkbIdSet));
+        return resolve(await getNodeOne(mkbIdSet));
       }
 
       if (node.level === 2) {
         mkbIdSet.classId = node.parent.data.id;
         mkbIdSet.groupId = node.data.id;
         mkbIdSet.diagnosisId = node.data.id;
-        return resolve(await getNodeTwo(node, mkbIdSet));
+        return resolve(await getNodeTwo(mkbIdSet));
       }
 
       if (node.level === 3) {
@@ -194,36 +193,37 @@ export default defineComponent({
         mkbIdSet.classId = node.parent.parent.parent.data.id;
         mkbIdSet.groupId = node.parent.parent.data.id;
         mkbIdSet.subGroupId = node.parent.data.id;
-        mkbIdSet.diagnosisId = node.data.id;
-        return resolve(await getNodeFour(node, mkbIdSet));
+        mkbIdSet.diagnosisId = mkbIdSet.diagnosisId = node.data.id;
+        return resolve(await getNodeFour(mkbIdSet));
       }
 
       return resolve([]);
     };
 
     const checkDiagnosis = (diagnosisArr: IMkbDiagnosis[]): void => {
-      diagnosisArr.forEach((diagnosis: any) => {
+      diagnosisArr.forEach((diagnosis: IMkbDiagnosis) => {
         checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-          if (diagnosis.id === d.mkbDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
+          if (diagnosis.id && diagnosis.id === d.mkbDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
         });
       });
     };
 
     const checkSubDiagnosis = (diagnosisArr: IMkbSubDiagnosis[]): void => {
-      diagnosisArr.forEach((diagnosis: any) => {
+      diagnosisArr.forEach((diagnosis: IMkbSubDiagnosis) => {
         checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
-          if (diagnosis.id === d.mkbSubDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
+          const diagnosisId = diagnosis.id;
+          if (diagnosisId && diagnosisId === d.mkbSubDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosisId), true, false);
         });
       });
     };
 
-    const getNodeOne = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbGroup | IMkbDiagnosis)[]> => {
+    const getNodeOne = async (mkbIdSet: MkbIdSet): Promise<(IMkbGroup | IMkbDiagnosis)[]> => {
       await store.dispatch('mkb/getGroupById', mkbIdSet);
       const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
       return classN ? classN.getChildren(onlyRelevant.value) : [];
     };
 
-    const getNodeTwo = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubGroup | IMkbDiagnosis)[]> => {
+    const getNodeTwo = async (mkbIdSet: MkbIdSet): Promise<(IMkbSubGroup | IMkbDiagnosis)[]> => {
       await store.dispatch('mkb/getSubGroupById', mkbIdSet);
       const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
 
@@ -235,7 +235,7 @@ export default defineComponent({
       return [];
     };
 
-    const getNodeThree = async (node: any, mkbIdSet: MkbIdSet): Promise<(IMkbSubSubGroup | IMkbDiagnosis | IMkbSubDiagnosis)[]> => {
+    const getNodeThree = async (node: IMkbNode, mkbIdSet: MkbIdSet): Promise<(IMkbSubSubGroup | IMkbDiagnosis | IMkbSubDiagnosis)[]> => {
       if (!node.data.code) {
         await store.dispatch('mkb/getSubSubGroupById', mkbIdSet);
         const classN = mkbClasses.value.find((m: IMkbClass) => m.id === mkbIdSet.classId);
@@ -250,7 +250,7 @@ export default defineComponent({
       return findSubDiagnosisFromTree(mkbIdSet);
     };
 
-    const getNodeFour = async (node: any, mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> => {
+    const getNodeFour = async (mkbIdSet: MkbIdSet): Promise<IMkbSubDiagnosis[] | undefined> => {
       await store.dispatch('mkb/getSubDiagnosisByDiagnosisId', mkbIdSet);
       return onlyRelevant.value ? findSubDiagnosisFromTree(mkbIdSet)?.filter((item) => item.relevant) : findSubDiagnosisFromTree(mkbIdSet);
     };

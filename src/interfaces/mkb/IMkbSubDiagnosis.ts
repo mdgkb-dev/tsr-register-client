@@ -1,5 +1,5 @@
 export default interface IMkbSubDiagnosis {
-  id?: string;
+  id: string;
   name?: string;
   subCode?: number;
   comment?: string;

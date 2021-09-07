@@ -6,7 +6,7 @@ import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 
 export default class MkbClass implements IMkbClass {
-  id?: string;
+  id = '';
   number?: string;
   name?: string;
   rangeStart?: string;

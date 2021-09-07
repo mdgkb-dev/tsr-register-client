@@ -1,7 +1,7 @@
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
-  id?: string;
+  id = '';
   name?: string;
   subCode?: number;
   comment?: string;
@@ -26,5 +26,5 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.isEditMode = mkbSubDiagnosis.isEditMode;
   }
 
-  getFullName = () => `${this.subCode} ${this.name}`;
+  getFullName = (): string => `${this.subCode} ${this.name}`;
 }

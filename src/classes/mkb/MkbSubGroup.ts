@@ -3,7 +3,7 @@ import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 export default class MkbSubGroup implements IMkbSubGroup {
-  id?: string;
+  id = '';
   name?: string;
   rangeStart?: string;
   rangeEnd?: string;

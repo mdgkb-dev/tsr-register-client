@@ -3,7 +3,7 @@ import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 export default class MkbSubSubGroup implements IMkbSubSubGroup {
-  id?: string;
+  id = '';
   name?: string;
   rangeStart?: string;
   rangeEnd?: string;

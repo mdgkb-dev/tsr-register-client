@@ -2,7 +2,7 @@ import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 
 export default interface IMkbGroup {
-  id?: string;
+  id: string;
   name?: string;
   rangeStart?: string;
   rangeEnd?: string;

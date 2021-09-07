@@ -11,7 +11,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
-  id?: string;
+  id = '';
   name = '';
   code = '';
   comment?: string;
@@ -54,7 +54,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
     this.setQueryStrings();
   }
 
-  getFullName = () => `${this.code} ${this.name}`;
+  getFullName = (): string => `${this.code} ${this.name}`;
 
   setQueryStrings(): void {
     this.queryStringDiagnosis = this.getFullName();
