@@ -5,6 +5,7 @@ import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 
 const httpClient = new HttpClient('registers');
 
@@ -12,8 +13,8 @@ const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get<IRegister[]>());
   },
-  get: async ({ commit }, registerId: string) => {
-    commit('set', await httpClient.get<IRegister>({ query: registerId }));
+  get: async ({ commit }, filterQuery: IFilterQuery) => {
+    commit('set', await httpClient.get<IRegister>({ query: filterQuery.toUrl() }));
   },
   create: async ({ commit }, payload: IRegister): Promise<void> => {
     commit('create', await httpClient.post<IRegister, IRegister>({ payload }));

@@ -17,6 +17,30 @@
       </el-row>
     </div>
 
+    <el-collapse>
+      <el-collapse-item>
+        <template #title>
+          <h2 class="collapseHeader">Скрыть столбцы</h2>
+        </template>
+        <div v-if="register.registerGroupToRegister.length > 0">
+          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
+            <el-col
+              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
+              :key="registerPropertyToRegisterGroup.id"
+            >
+              <el-checkbox
+                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
+                :value="registerPropertyToRegisterGroup.registerProperty.id"
+                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                >{{ registerPropertyToRegisterGroup.registerProperty.name }}
+              </el-checkbox>
+            </el-col>
+          </el-row>
+        </div>
+        <div v-else style="margin-left: 20px">Нет данных</div>
+      </el-collapse-item>
+    </el-collapse>
+
     <div class="table-background" style="height: auto">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -31,43 +55,6 @@
         <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable>
           <template #default="scope">
             {{ scope.row.patient.human.getFullName() }}
-          </template>
-        </el-table-column>
-        <el-table-column width="40" fixed="right" align="center">
-          <template #header>
-            <el-popover placement="left-start" :width="600" trigger="click">
-              <template #reference>
-                <el-button class="table-button" icon="el-icon-more"></el-button>
-              </template>
-
-              <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
-                <h2 style="margin-left: 20px">Скрыть столбцы</h2>
-                <div v-if="register.registerGroupToRegister.lenght">
-                  <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-                    <el-col
-                      v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-                      :key="registerPropertyToRegisterGroup.id"
-                    >
-                      <el-checkbox
-                        :model-value="
-                          !!user.registerPropertyToUser.find(
-                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
-                          )
-                        "
-                        :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
-                        :value="registerPropertyToRegisterGroup.registerProperty.id"
-                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
-                        >{{ registerPropertyToRegisterGroup.registerProperty.name }}
-                      </el-checkbox>
-                    </el-col>
-                  </el-row>
-                </div>
-                <div v-else style="margin-left: 20px">Нет данных</div>
-              </el-space>
-            </el-popover>
-          </template>
-          <template #default="scope">
-            <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
@@ -105,7 +92,24 @@
             </template>
           </el-table-column>
         </template>
+
+        <el-table-column width="40" align="center">
+          <template #default="scope">
+            <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
+          </template>
+        </el-table-column>
       </el-table>
+
+      <div style="text-align: center; width: 100%">
+        <el-pagination
+          style="margin-top: 20px; margin-bottom: 20px"
+          :current-page="curPage"
+          layout="prev, pager, next"
+          :page-count="Math.round(register.registerToPatientCount / 25)"
+          @current-change="setPage"
+        >
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -123,6 +127,7 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
+import { ElLoading } from 'element-plus';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
@@ -139,17 +144,38 @@ export default defineComponent({
     const cols: Ref<IRegisterProperty[]> = ref([]);
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { formatDate } = useDateFormat();
+    const curPage: Ref<number> = computed(() => store.getters['pagination/curPage']);
+    const loading = ref(false);
+
     const edit = async (patientId: string): Promise<void> => {
       await router.push(`/registers/patients/${route.params.registerId}/${patientId}`);
     };
 
     onBeforeMount(async () => {
-      await store.dispatch('registers/get', route.params.registerId);
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Загрузка',
+      });
+      const query = store.getters['filter/filterQuery'];
+      query.id = route.params.registerId;
+      await store.dispatch('registers/get', query);
+      await store.dispatch('auth/getMe');
       pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
       mount.value = true;
       await setCols();
+      loading.close();
     });
+
+    const setPage = async (pageNum: number): Promise<void> => {
+      loading.value = true;
+      store.commit('pagination/setCurPage', pageNum);
+      store.commit('filter/setOffset', pageNum - 1);
+      const query = store.getters['filter/filterQuery'];
+      query.id = register.value.id;
+      await store.dispatch('registers/get', query);
+      loading.value = false;
+    };
 
     const setCols = async (value?: boolean, propertyId?: string): Promise<void> => {
       if (value !== undefined && propertyId) {
@@ -170,6 +196,8 @@ export default defineComponent({
     };
 
     return {
+      setPage,
+      curPage,
       formatDate,
       setCols,
       links,

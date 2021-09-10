@@ -97,6 +97,16 @@
             </template>
           </el-table-column>
         </el-table-column>
+        <el-table-column width="40" align="center">
+          <template #default="scope">
+            <TableButtonGroup
+              :show-edit-button="true"
+              :show-remove-button="true"
+              @edit="edit(scope.row.id)"
+              @remove="remove(scope.row.id)"
+            />
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -110,9 +120,14 @@ import { useStore } from 'vuex';
 import MainHeader from '@/classes/shared/MainHeader';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
+import router from '@/router';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 
 export default defineComponent({
   name: 'PatientsList',
+  components: {
+    TableButtonGroup,
+  },
   setup() {
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
@@ -129,7 +144,7 @@ export default defineComponent({
         ElMessage.error(e.toString());
         return;
       }
-
+      console.log(patients.value);
       mount.value = true;
     });
 
@@ -153,7 +168,17 @@ export default defineComponent({
       return filteredPatients;
     };
 
+    const edit = async (id: string): Promise<void> => {
+      await router.push(`/patients/${id}`);
+    };
+
+    const remove = async (id: number): Promise<void> => {
+      await store.dispatch('patients/delete', id);
+    };
+
     return {
+      remove,
+      edit,
       mount,
       patients,
       search,

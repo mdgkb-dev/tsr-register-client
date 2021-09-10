@@ -8,10 +8,14 @@ import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentati
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IHuman from '@/interfaces/humans/IHuman';
 
 const getters: GetterTree<State, RootState> = {
   representatives(state): IRepresentative[] {
     return state.representatives;
+  },
+  getHuman(state): IHuman {
+    return state.representative.human;
   },
   representative(state): IRepresentative | undefined {
     return state.representative;

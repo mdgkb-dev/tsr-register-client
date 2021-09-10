@@ -12,6 +12,7 @@ export default interface IRegister {
   registerGroupToRegister: IRegisterGroupToRegister[];
   registerGroupToRegisterForDelete: string[];
   registerToPatient: IRegisterToPatient[];
+  registerToPatientCount: number;
 
   getProps: () => IRegisterProperty[];
   patientIncludableByDiagnosis: (patientDiagnosis: IPatientDiagnosis[]) => boolean;

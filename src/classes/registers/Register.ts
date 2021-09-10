@@ -16,21 +16,26 @@ export default class Register implements IRegister {
   registerGroupToRegister: IRegisterGroupToRegister[] = [];
   registerToPatient: IRegisterToPatient[] = [];
   registerGroupToRegisterForDelete: string[] = [];
+  registerToPatientCount = 0;
+  constructor(register?: IRegister) {
+    if (!register) return;
 
-  constructor(i?: IRegister) {
-    if (!i) return;
-
-    this.id = i.id;
-    this.name = i.name;
-    if (i.registerGroupToRegister) {
-      this.registerGroupToRegister = i.registerGroupToRegister.map((group: IRegisterGroupToRegister) => new RegisterGroupToRegister(group));
+    this.id = register.id;
+    this.name = register.name;
+    if (register.registerGroupToRegister) {
+      this.registerGroupToRegister = register.registerGroupToRegister.map(
+        (group: IRegisterGroupToRegister) => new RegisterGroupToRegister(group)
+      );
     }
-    if (i.registerDiagnosis) {
-      this.registerDiagnosis = i.registerDiagnosis.map((registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis));
+    if (register.registerDiagnosis) {
+      this.registerDiagnosis = register.registerDiagnosis.map(
+        (registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis)
+      );
     }
-    if (i.registerToPatient) {
-      this.registerToPatient = i.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
+    if (register.registerToPatient) {
+      this.registerToPatient = register.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
     }
+    this.registerToPatientCount = register.registerToPatientCount;
   }
 
   getProps(): IRegisterProperty[] {

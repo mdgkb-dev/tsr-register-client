@@ -1,7 +1,7 @@
-import IUser from '@/interfaces/users/IUser';
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 export default interface State {
-  user?: IUser;
+  user?: IUserAuthorized;
   token: string;
   isAuth: boolean;
 }

@@ -11,7 +11,7 @@ const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }, filterQuery: IFilterQuery): Promise<void> => {
-    commit('setAll', await httpClient.get<IPatient[]>({ query: `?${filterQuery.toUrl()}` }));
+    commit('setAll', await httpClient.get<IPatient[]>({ query: filterQuery.toUrl() }));
   },
   getAllById: async ({ commit }, id: string): Promise<void> => {
     const res = await httpClient.get<IPatient[]>({ query: id });

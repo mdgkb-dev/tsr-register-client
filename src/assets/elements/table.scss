@@ -28,9 +28,17 @@ tr.header-style > th {
 }
 
 .table-shadow {
+  width: 100%;
+  flex: 1;
+  //overflow-x: scroll !important;
   box-shadow: 2px 2px 5px grey; /* Параметры тени */
   border: 1px solid lightgrey;
   // border-radius: 10px;
+}
+
+.el-table--scrollable-x .el-table__body-wrapper {
+  height: calc(100vh - 420px);
+  overflow: scroll;
 }
 
 .table-shadow th {

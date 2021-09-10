@@ -10,8 +10,13 @@ export default interface IFilterModel {
   date1?: Date;
   date2?: Date;
   value1?: string;
+  set: string[];
 
   isUnaryFilter: () => boolean;
   isBetweenFilter: () => boolean;
   isSetFilter: () => boolean;
+
+  joinTable: string;
+  joinTableFk: string;
+  joinTablePk: string;
 }

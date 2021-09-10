@@ -6,6 +6,7 @@ import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import State from './state';
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 const httpClient = new HttpClient('auth');
 
@@ -18,6 +19,9 @@ const actions: ActionTree<State, RootState> = {
     commit('setToken', token);
     commit('setUser', newUser);
     commit('setIsAuth', true);
+  },
+  getMe: async ({ commit }): Promise<void> => {
+    commit('setUser', await httpClient.get<IUserAuthorized>({ query: 'me' }));
   },
   register: async ({ commit }, user: IUser): Promise<void> => {
     const { user: newUser, token } = await httpClient.post<IUser, IUserResponse>({ query: 'register', payload: user });

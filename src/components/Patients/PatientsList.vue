@@ -89,6 +89,18 @@
         </el-table-column>
 
         <el-table-column width="95" label="ДИАГНОЗЫ" align="center">
+          <template #header>
+            <div class="table-header">
+              <span>Диагнозы</span>
+              <FilterSet
+                :table="schema.patientDiagnosisSchema.tableName"
+                :col="schema.patientDiagnosisSchema.mkbDiagnosisId"
+                :join-table="schema.patientDiagnosisSchema.joinTable"
+                :join-table-fk="schema.patientDiagnosisSchema.joinTableFk"
+                :join-table-pk="schema.patientDiagnosisSchema.joinTablePk"
+              />
+            </div>
+          </template>
           <template #default="scope">
             <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
               <div v-if="diagnosis.mkbSubDiagnosis">
@@ -227,6 +239,7 @@ import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
+import FilterSet from '@/components/TableFilters/FilterSet.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -244,6 +257,7 @@ export default defineComponent({
     FilterTextForm,
     FilterSelectForm,
     FilterDateForm,
+    FilterSet,
   },
   setup() {
     const store = useStore();

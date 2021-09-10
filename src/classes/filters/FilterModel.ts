@@ -13,6 +13,11 @@ export default class FilterModel implements IFilterModel {
   date2?: Date;
   value1?: string = '';
   type: DataTypes = DataTypes.String;
+  set: string[] = [];
+
+  joinTable = '';
+  joinTableFk = '';
+  joinTablePk = '';
 
   isUnaryFilter(): boolean {
     return this.operator === Operators.Eq || this.operator === Operators.Gt || this.operator === Operators.Lt;
@@ -29,6 +34,25 @@ export default class FilterModel implements IFilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
     filterModel.table = table;
+    filterModel.col = col;
+    filterModel.type = type;
+    return filterModel;
+  }
+
+  static CreateFilterModelWithJoin(
+    table: string,
+    col: string,
+    joinTable: string,
+    joinTablePk: string,
+    joinTableFk: string,
+    type: DataTypes
+  ): IFilterModel {
+    const filterModel = new FilterModel();
+    filterModel.id = uuidv4();
+    filterModel.table = table;
+    filterModel.joinTable = joinTable;
+    filterModel.joinTablePk = joinTablePk;
+    filterModel.joinTableFk = joinTableFk;
     filterModel.col = col;
     filterModel.type = type;
     return filterModel;
