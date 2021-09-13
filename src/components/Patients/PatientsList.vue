@@ -279,6 +279,7 @@ export default defineComponent({
     const loading = ref(false);
 
     onBeforeMount(async () => {
+      store.commit('filter/resetId');
       const loading = ElLoading.service({
         lock: true,
         text: 'Загрузка',
