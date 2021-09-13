@@ -17,29 +17,29 @@
       </el-row>
     </div>
 
-    <el-collapse>
-      <el-collapse-item>
-        <template #title>
-          <h2 class="collapseHeader">Скрыть столбцы</h2>
-        </template>
-        <div v-if="register.registerGroupToRegister.length > 0">
-          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-            <el-col
-              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-              :key="registerPropertyToRegisterGroup.id"
-            >
-              <el-checkbox
-                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
-                :value="registerPropertyToRegisterGroup.registerProperty.id"
-                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
-                >{{ registerPropertyToRegisterGroup.registerProperty.name }}
-              </el-checkbox>
-            </el-col>
-          </el-row>
-        </div>
-        <div v-else style="margin-left: 20px">Нет данных</div>
-      </el-collapse-item>
-    </el-collapse>
+    <!--    <el-collapse>-->
+    <!--      <el-collapse-item>-->
+    <!--        <template #title>-->
+    <!--          <h2 class="collapseHeader">Скрыть столбцы</h2>-->
+    <!--        </template>-->
+    <!--        <div v-if="register.registerGroupToRegister.length > 0">-->
+    <!--          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">-->
+    <!--            <el-col-->
+    <!--              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"-->
+    <!--              :key="registerPropertyToRegisterGroup.id"-->
+    <!--            >-->
+    <!--              <el-checkbox-->
+    <!--                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"-->
+    <!--                :value="registerPropertyToRegisterGroup.registerProperty.id"-->
+    <!--                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"-->
+    <!--                >{{ registerPropertyToRegisterGroup.registerProperty.name }}-->
+    <!--              </el-checkbox>-->
+    <!--            </el-col>-->
+    <!--          </el-row>-->
+    <!--        </div>-->
+    <!--        <div v-else style="margin-left: 20px">Нет данных</div>-->
+    <!--      </el-collapse-item>-->
+    <!--    </el-collapse>-->
 
     <div class="table-background" style="height: auto">
       <el-table
@@ -57,41 +57,41 @@
             {{ scope.row.patient.human.getFullName() }}
           </template>
         </el-table-column>
-        <template v-for="(registerProperty, i) in cols" :key="i">
-          <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">
-            <template #default="scope">
-              <div v-if="registerProperty.valueType.isDate()">
-                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}
-              </div>
-              <div v-if="registerProperty.valueType.isString()">
-                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}
-              </div>
-              <div v-if="registerProperty.valueType.isNumber()">
-                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}
-              </div>
-              <div v-if="registerProperty.valueType.isRadio()">
-                <el-radio
-                  v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"
-                  :key="registerPropertyRadio.id"
-                  :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"
-                  :label="registerPropertyRadio.id"
-                  >{{ registerPropertyRadio.name }}</el-radio
-                >
-                {{ registerProperty.registerPropertySet }}
-              </div>
-              <div v-if="registerProperty.valueType.isSet()">
-                <el-checkbox
-                  v-for="registerPropertySet in registerProperty.registerPropertySet"
-                  :key="registerPropertySet.id"
-                  :label="registerPropertySet.name"
-                  :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"
-                >
-                  {{ registerPropertySet.name }}</el-checkbox
-                >
-              </div>
-            </template>
-          </el-table-column>
-        </template>
+        <!--        <template v-for="(registerProperty, i) in cols" :key="i">-->
+        <!--          <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">-->
+        <!--            <template #default="scope">-->
+        <!--              <div v-if="registerProperty.valueType.isDate()">-->
+        <!--                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}-->
+        <!--              </div>-->
+        <!--              <div v-if="registerProperty.valueType.isString()">-->
+        <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
+        <!--              </div>-->
+        <!--              <div v-if="registerProperty.valueType.isNumber()">-->
+        <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
+        <!--              </div>-->
+        <!--              <div v-if="registerProperty.valueType.isRadio()">-->
+        <!--                <el-radio-->
+        <!--                  v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"-->
+        <!--                  :key="registerPropertyRadio.id"-->
+        <!--                  :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"-->
+        <!--                  :label="registerPropertyRadio.id"-->
+        <!--                  >{{ registerPropertyRadio.name }}</el-radio-->
+        <!--                >-->
+        <!--                {{ registerProperty.registerPropertySet }}-->
+        <!--              </div>-->
+        <!--              <div v-if="registerProperty.valueType.isSet()">-->
+        <!--                <el-checkbox-->
+        <!--                  v-for="registerPropertySet in registerProperty.registerPropertySet"-->
+        <!--                  :key="registerPropertySet.id"-->
+        <!--                  :label="registerPropertySet.name"-->
+        <!--                  :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"-->
+        <!--                >-->
+        <!--                  {{ registerPropertySet.name }}</el-checkbox-->
+        <!--                >-->
+        <!--              </div>-->
+        <!--            </template>-->
+        <!--          </el-table-column>-->
+        <!--        </template>-->
 
         <el-table-column width="40" align="center">
           <template #default="scope">
