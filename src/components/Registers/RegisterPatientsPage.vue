@@ -60,35 +60,36 @@
         <template v-for="(registerProperty, i) in cols" :key="i">
           <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">
             <template #default="scope">
-              <div v-if="registerProperty.valueType.isDate()">
-                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}
-              </div>
-              <div v-if="registerProperty.valueType.isString()">
-                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}
-              </div>
-              <div v-if="registerProperty.valueType.isNumber()">
-                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}
-              </div>
-              <div v-if="registerProperty.valueType.isRadio()">
-                <el-radio
-                  v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"
-                  :key="registerPropertyRadio.id"
-                  :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"
-                  :label="registerPropertyRadio.id"
-                  >{{ registerPropertyRadio.name }}</el-radio
-                >
-                {{ registerProperty.registerPropertySet }}
-              </div>
-              <div v-if="registerProperty.valueType.isSet()">
-                <el-checkbox
-                  v-for="registerPropertySet in registerProperty.registerPropertySet"
-                  :key="registerPropertySet.id"
-                  :label="registerPropertySet.name"
-                  :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"
-                >
-                  {{ registerPropertySet.name }}</el-checkbox
-                >
-              </div>
+              <div v-html="getField(registerProperty, scope.row)"></div>
+              <!--              <div v-if="registerProperty.valueType.isDate()">-->
+              <!--                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}-->
+              <!--              </div>-->
+              <!--              <div v-if="registerProperty.valueType.isString()">-->
+              <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
+              <!--              </div>-->
+              <!--              <div v-if="registerProperty.valueType.isNumber()">-->
+              <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
+              <!--              </div>-->
+              <!--              <div v-if="registerProperty.valueType.isRadio()">-->
+              <!--                <el-radio-->
+              <!--                  v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"-->
+              <!--                  :key="registerPropertyRadio.id"-->
+              <!--                  :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"-->
+              <!--                  :label="registerPropertyRadio.id"-->
+              <!--                  >{{ registerPropertyRadio.name }}</el-radio-->
+              <!--                >-->
+              <!--                {{ registerProperty.registerPropertySet }}-->
+              <!--              </div>-->
+              <!--              <div v-if="registerProperty.valueType.isSet()">-->
+              <!--                <el-checkbox-->
+              <!--                  v-for="registerPropertySet in registerProperty.registerPropertySet"-->
+              <!--                  :key="registerPropertySet.id"-->
+              <!--                  :label="registerPropertySet.name"-->
+              <!--                  :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"-->
+              <!--                >-->
+              <!--                  {{ registerPropertySet.name }}</el-checkbox-->
+              <!--                >-->
+              <!--              </div>-->
             </template>
           </el-table-column>
         </template>
@@ -128,6 +129,8 @@ import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 import { ElLoading } from 'element-plus';
+import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
@@ -162,9 +165,9 @@ export default defineComponent({
       await store.dispatch('auth/getMe');
       pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
-      mount.value = true;
       await setCols();
       loading.close();
+      mount.value = true;
     });
 
     const setPage = async (pageNum: number): Promise<void> => {
@@ -195,7 +198,23 @@ export default defineComponent({
       cols.value = user.value.filterActualProperties(register.value.getProps());
     };
 
+    const getField = (prop: IRegisterProperty, regToPatient: IRegisterToPatient) => {
+      console.log(regToPatient.patient?.getRegisterPropertyValue(prop));
+
+      const p = regToPatient.patient!.getRegisterPropertyValue(prop);
+      if (!p) {
+        return '';
+      }
+      if (prop.valueType?.isDate) {
+        return `<div>${p}  </div>`;
+      }
+      if (prop.valueType?.isString() || prop.valueType?.isNumber()) {
+        return `<div>{ p }</div>`;
+      }
+    };
+
     return {
+      getField,
       setPage,
       curPage,
       formatDate,
