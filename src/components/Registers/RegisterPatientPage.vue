@@ -135,7 +135,9 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
-      await store.dispatch('registers/get', route.params.registerId);
+      const query = store.getters['filter/filterQuery'];
+      query.id = route.params.registerId;
+      await store.dispatch('registers/get', query);
       await store.dispatch('patients/get', route.params.patientId);
 
       pushToLinks(['/register-link-list/', `/registers/patients/${route.params.registerId}`], ['Регистры пациентов', register.value.name]);

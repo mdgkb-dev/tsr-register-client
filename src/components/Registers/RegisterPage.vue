@@ -76,7 +76,9 @@ export default defineComponent({
         title = 'Создать регистр';
       } else {
         title = 'Редактировать регистр';
-        await store.dispatch('registers/get', route.params.registerId);
+        const query = store.getters['filter/filterQuery'];
+        query.id = route.params.registerId;
+        await store.dispatch('registers/get', query);
       }
 
       pushToLinks(['/registers'], ['Регистры пациентов']);

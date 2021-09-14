@@ -8,6 +8,9 @@ const mutations: MutationTree<State> = {
   setTrigger(state, trigger: string) {
     state.trigger = trigger;
   },
+  resetId(state) {
+    state.filterQuery.id = undefined;
+  },
   setStoreModule(state, storeModule: string) {
     state.storeModule = storeModule;
   },

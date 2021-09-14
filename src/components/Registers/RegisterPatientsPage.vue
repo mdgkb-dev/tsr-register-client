@@ -17,29 +17,29 @@
       </el-row>
     </div>
 
-    <el-collapse>
-      <el-collapse-item>
-        <template #title>
-          <h2 class="collapseHeader">Скрыть столбцы</h2>
-        </template>
-        <div v-if="register.registerGroupToRegister.length > 0">
-          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-            <el-col
-              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-              :key="registerPropertyToRegisterGroup.id"
-            >
-              <el-checkbox
-                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"
-                :value="registerPropertyToRegisterGroup.registerProperty.id"
-                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
-                >{{ registerPropertyToRegisterGroup.registerProperty.name }}
-              </el-checkbox>
-            </el-col>
-          </el-row>
-        </div>
-        <div v-else style="margin-left: 20px">Нет данных</div>
-      </el-collapse-item>
-    </el-collapse>
+    <!--    <el-collapse>-->
+    <!--      <el-collapse-item>-->
+    <!--        <template #title>-->
+    <!--          <h2 class="collapseHeader">Скрыть столбцы</h2>-->
+    <!--        </template>-->
+    <!--        <div v-if="register.registerGroupToRegister.length > 0">-->
+    <!--          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">-->
+    <!--            <el-col-->
+    <!--              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"-->
+    <!--              :key="registerPropertyToRegisterGroup.id"-->
+    <!--            >-->
+    <!--              <el-checkbox-->
+    <!--                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"-->
+    <!--                :value="registerPropertyToRegisterGroup.registerProperty.id"-->
+    <!--                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"-->
+    <!--                >{{ registerPropertyToRegisterGroup.registerProperty.name }}-->
+    <!--              </el-checkbox>-->
+    <!--            </el-col>-->
+    <!--          </el-row>-->
+    <!--        </div>-->
+    <!--        <div v-else style="margin-left: 20px">Нет данных</div>-->
+    <!--      </el-collapse-item>-->
+    <!--    </el-collapse>-->
 
     <div class="table-background" style="height: auto">
       <el-table
