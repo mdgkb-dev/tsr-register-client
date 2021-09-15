@@ -8,13 +8,12 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  count: 0,
-  curPage: 1,
+  registerProperties: [],
 };
 
 const namespaced = true;
 
-export const pagination: Module<State, RootState> = {
+export const registerPropertiesToUser: Module<State, RootState> = {
   namespaced,
   state,
   getters,

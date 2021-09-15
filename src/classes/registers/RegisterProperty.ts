@@ -9,24 +9,44 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
 export default class RegisterProperty implements IRegisterProperty {
   id?: string;
   name?: string;
+  shortName?: string;
+  colWidth = '150px';
   valueTypeId?: string;
   registerPropertyRadio: IRegisterPropertyRadio[] = [];
   registerPropertySet: IRegisterPropertySet[] = [];
   valueType?: IValueType;
   withOther = false;
 
-  constructor(item?: IRegisterProperty) {
-    if (!item) {
+  constructor(registerProperty?: IRegisterProperty) {
+    if (!registerProperty) {
       return;
     }
-    this.id = item.id;
-    this.name = item.name;
-    this.valueTypeId = item.valueTypeId;
-    this.withOther = item.withOther;
-    if (item.registerPropertySet)
-      this.registerPropertySet = item.registerPropertySet.map((i: IRegisterPropertySet) => new RegisterPropertySet(i));
-    if (item.registerPropertyRadio)
-      this.registerPropertyRadio = item.registerPropertyRadio.map((i: IRegisterPropertyRadio) => new RegisterPropertyRadio(i));
-    if (item.valueType) this.valueType = new ValueType(item.valueType);
+    this.id = registerProperty.id;
+    this.name = registerProperty.name;
+    this.shortName = registerProperty.shortName;
+    this.colWidth = registerProperty.colWidth;
+    this.valueTypeId = registerProperty.valueTypeId;
+    this.withOther = registerProperty.withOther;
+    if (registerProperty.registerPropertySet)
+      this.registerPropertySet = registerProperty.registerPropertySet.map((i: IRegisterPropertySet) => new RegisterPropertySet(i));
+    if (registerProperty.registerPropertyRadio)
+      this.registerPropertyRadio = registerProperty.registerPropertyRadio.map((i: IRegisterPropertyRadio) => new RegisterPropertyRadio(i));
+    if (registerProperty.valueType) this.valueType = new ValueType(registerProperty.valueType);
+  }
+
+  getRegisterPropertyRadioOriginalValue(id: string): string {
+    const radio = this.registerPropertyRadio.find((propertyRadio: IRegisterPropertyRadio) => propertyRadio.id === id);
+    if (radio) {
+      return radio.name;
+    }
+    return '';
+  }
+
+  getRegisterPropertySetOriginalValue(id: string): string {
+    const radio = this.registerPropertySet.find((propertyRadio: IRegisterPropertySet) => propertyRadio.id === id);
+    if (radio) {
+      return radio.name;
+    }
+    return '';
   }
 }

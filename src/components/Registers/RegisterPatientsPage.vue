@@ -10,36 +10,12 @@
           </el-row>
           <el-divider></el-divider>
           <el-row>
-            <el-col :span="12" class="light-title upper"><i class="el-icon-user"></i> Количество пользователей</el-col>
+            <el-col :span="12" class="light-title upper"><i class="el-icon-user"></i> Количество пациентов</el-col>
             <el-col :span="12"> {{ register.registerToPatient.length }}</el-col>
           </el-row>
         </el-col>
       </el-row>
     </div>
-
-    <!--    <el-collapse>-->
-    <!--      <el-collapse-item>-->
-    <!--        <template #title>-->
-    <!--          <h2 class="collapseHeader">Скрыть столбцы</h2>-->
-    <!--        </template>-->
-    <!--        <div v-if="register.registerGroupToRegister.length > 0">-->
-    <!--          <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">-->
-    <!--            <el-col-->
-    <!--              v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"-->
-    <!--              :key="registerPropertyToRegisterGroup.id"-->
-    <!--            >-->
-    <!--              <el-checkbox-->
-    <!--                :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name"-->
-    <!--                :value="registerPropertyToRegisterGroup.registerProperty.id"-->
-    <!--                @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"-->
-    <!--                >{{ registerPropertyToRegisterGroup.registerProperty.name }}-->
-    <!--              </el-checkbox>-->
-    <!--            </el-col>-->
-    <!--          </el-row>-->
-    <!--        </div>-->
-    <!--        <div v-else style="margin-left: 20px">Нет данных</div>-->
-    <!--      </el-collapse-item>-->
-    <!--    </el-collapse>-->
 
     <div class="table-background" style="height: auto">
       <el-table
@@ -52,49 +28,52 @@
       >
         <el-table-column type="index" width="70" align="center" />
 
-        <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable>
+        <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
           <template #default="scope">
             {{ scope.row.patient.human.getFullName() }}
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
-          <el-table-column :label="registerProperty.name" :show-overflow-tooltip="true" :prop="registerProperty.name" :width="100">
+          <el-table-column :label="registerProperty.shortName" :prop="registerProperty.name" :width="registerProperty.colWidth">
             <template #default="scope">
-              <div v-html="getField(registerProperty, scope.row)"></div>
-              <!--              <div v-if="registerProperty.valueType.isDate()">-->
-              <!--                {{ formatDate(scope.row.patient.getRegisterPropertyValue(registerProperty)) }}-->
-              <!--              </div>-->
-              <!--              <div v-if="registerProperty.valueType.isString()">-->
-              <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
-              <!--              </div>-->
-              <!--              <div v-if="registerProperty.valueType.isNumber()">-->
-              <!--                {{ scope.row.patient.getRegisterPropertyValue(registerProperty) }}-->
-              <!--              </div>-->
-              <!--              <div v-if="registerProperty.valueType.isRadio()">-->
-              <!--                <el-radio-->
-              <!--                  v-for="registerPropertyRadio in registerProperty.registerPropertyRadio"-->
-              <!--                  :key="registerPropertyRadio.id"-->
-              <!--                  :model-value="scope.row.patient.getRegisterPropertyValue(registerProperty)"-->
-              <!--                  :label="registerPropertyRadio.id"-->
-              <!--                  >{{ registerPropertyRadio.name }}</el-radio-->
-              <!--                >-->
-              <!--                {{ registerProperty.registerPropertySet }}-->
-              <!--              </div>-->
-              <!--              <div v-if="registerProperty.valueType.isSet()">-->
-              <!--                <el-checkbox-->
-              <!--                  v-for="registerPropertySet in registerProperty.registerPropertySet"-->
-              <!--                  :key="registerPropertySet.id"-->
-              <!--                  :label="registerPropertySet.name"-->
-              <!--                  :model-value="scope.row.patient.getRegisterPropertyValueSet(registerPropertySet.id)"-->
-              <!--                >-->
-              <!--                  {{ registerPropertySet.name }}</el-checkbox-->
-              <!--                >-->
-              <!--              </div>-->
+              {{ getField(registerProperty, scope.row) }}
             </template>
           </el-table-column>
         </template>
 
         <el-table-column width="40" align="center">
+          <template #header>
+            <el-popover placement="left-start" :width="600" trigger="click">
+              <template #reference>
+                <el-button class="table-button" icon="el-icon-more"></el-button>
+              </template>
+
+              <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
+                <h2 style="margin-left: 20px">Скрыть столбцы</h2>
+                <div v-if="register.registerGroupToRegister.length">
+                  <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
+                    <el-col
+                      v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
+                      :key="registerPropertyToRegisterGroup.id"
+                    >
+                      <el-checkbox
+                        :model-value="
+                          !!user.registerPropertyToUser.find(
+                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
+                          )
+                        "
+                        :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName"
+                        :value="registerPropertyToRegisterGroup.registerProperty.id"
+                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                        >{{ registerPropertyToRegisterGroup.registerProperty.shortName }}
+                      </el-checkbox>
+                    </el-col>
+                  </el-row>
+                </div>
+                <div v-else style="margin-left: 20px">Нет данных</div>
+              </el-space>
+            </el-popover>
+          </template>
           <template #default="scope">
             <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
           </template>
@@ -116,6 +95,7 @@
 </template>
 
 <script lang="ts">
+import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -125,12 +105,10 @@ import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
-import { ElLoading } from 'element-plus';
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
@@ -187,30 +165,27 @@ export default defineComponent({
           prop.registerPropertyId = propertyId;
           prop.userId = user.value.id;
           user.value.registerPropertyToUser.push(prop);
+          await store.dispatch('registerPropertiesToUser/create', prop);
         } else {
+          await store.dispatch('registerPropertiesToUser/delete', propertyId);
           const index = user.value.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
           if (index > -1) {
             user.value.registerPropertyToUser.splice(index, 1);
           }
         }
-        await store.dispatch('auth/editAuthUser', user.value);
       }
       cols.value = user.value.filterActualProperties(register.value.getProps());
     };
 
     const getField = (prop: IRegisterProperty, regToPatient: IRegisterToPatient) => {
-      console.log(regToPatient.patient?.getRegisterPropertyValue(prop));
-
-      const p = regToPatient.patient!.getRegisterPropertyValue(prop);
+      const p = regToPatient.patient!.getRegisterPropertyValue(prop, true);
       if (!p) {
         return '';
       }
-      if (prop.valueType?.isDate) {
-        return `<div>${p}  </div>`;
+      if (prop.valueType?.isDate()) {
+        return formatDate(p as Date);
       }
-      if (prop.valueType?.isString() || prop.valueType?.isNumber()) {
-        return `<div>{ p }</div>`;
-      }
+      return p;
     };
 
     return {
@@ -233,4 +208,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/elements/pageInfo.scss';
+
+.el-table .cell {
+  word-break: break-word;
+}
 </style>

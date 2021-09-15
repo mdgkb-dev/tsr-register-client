@@ -1,11 +1,11 @@
 import { ActionTree } from 'vuex';
 
+import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IRegister from '@/interfaces/registers/IRegister';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import { State } from './state';
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 
 const httpClient = new HttpClient('registers');
 

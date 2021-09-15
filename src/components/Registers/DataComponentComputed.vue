@@ -25,7 +25,7 @@ export default defineComponent({
 
     const dataModel: WritableComputedRef<boolean | string | number | Date | null> = computed({
       get(): boolean | string | number | Date | null {
-        return patient.value.getRegisterPropertyValue(property.value);
+        return patient.value.getRegisterPropertyValue(property.value, false);
       },
       set(value: boolean | string | number | Date | null): void {
         let newValue: number | string | Date;

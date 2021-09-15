@@ -1,12 +1,12 @@
 import { ActionTree } from 'vuex';
 
 import IUser from '@/interfaces/users/IUser';
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import IUserResponse from '@/interfaces/users/IUserResponse';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import State from './state';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 const httpClient = new HttpClient('auth');
 
@@ -35,6 +35,10 @@ const actions: ActionTree<State, RootState> = {
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     commit('setIsAuth', false);
+  },
+  editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
+    const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });
+    commit('setUser', newUser);
   },
 };
 

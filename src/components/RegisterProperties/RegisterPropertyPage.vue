@@ -15,6 +15,12 @@
           <el-form-item label="Название свойства" prop="name">
             <el-input v-model="registerProperty.name"></el-input>
           </el-form-item>
+          <el-form-item label="Короткое название свойства" prop="shortName">
+            <el-input v-model="registerProperty.shortName"></el-input>
+          </el-form-item>
+          <el-form-item label="Стандартная ширина столбца" prop="colWidth">
+            <el-input v-model="registerProperty.colWidth"></el-input>
+          </el-form-item>
           <el-form-item label="Тип данных" prop="valueTypeId">
             <el-select v-model="registerProperty.valueTypeId" @change="changeRelation">
               <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>

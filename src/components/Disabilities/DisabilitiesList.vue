@@ -118,10 +118,10 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import { useStore } from 'vuex';
 
 import MainHeader from '@/classes/shared/MainHeader';
+import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
 import router from '@/router';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 
 export default defineComponent({
   name: 'PatientsList',

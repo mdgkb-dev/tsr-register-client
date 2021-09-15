@@ -15,7 +15,7 @@ export default interface IPatient extends IPatientConstructor {
   getHeightWeightShort: () => string;
   getLastHeightWeight: () => IHeightWeight | undefined;
   getOtherPropertyValue: (property: IRegisterProperty) => string | undefined;
-  getRegisterPropertyValue: (property: IRegisterProperty) => boolean | string | number | Date | null;
+  getRegisterPropertyValue: (property: IRegisterProperty, originalValue: boolean) => boolean | string | number | Date | null;
   getRegisterPropertyValueSet: (setId: string) => boolean;
   pushRegisterProperty: (propertyId: string) => void;
   setRegisterPropertyValue: (value: number | string | Date, property: IRegisterProperty) => void;
