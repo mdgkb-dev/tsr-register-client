@@ -20,105 +20,89 @@
         style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
-        <el-table-column width="150" align="left">
+        <el-table-column align="left" min-width="110" resizable>
           <template #header>
-            <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
+            <span class="table-header">
+              <span>Фамилия Имя Отчество</span>
+              <FilterTextForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
+            </span>
           </template>
-          <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable align="left" min-width="150" resizable>
-            <template #default="scope">
-              {{ scope.row.human.getFullName() }}
-            </template>
-          </el-table-column>
+          <template #default="scope">
+            {{ scope.row.human.getFullName() }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <template #header> </template>
-          <el-table-column width="75" label="ПОЛ" sortable prop="human.isMale" align="center">
-            <template #default="scope">
-              {{ scope.row.human.getGender() }}
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
-          <el-table-column prop="human.dateBirth" label="ДАТА РОЖДЕНИЯ" width="120" align="center" sortable>
-            <template #default="scope">
-              {{ formatDate(scope.row.human.dateBirth) }}
-            </template>
-          </el-table-column>
-        </el-table-column>
-
-        <el-table-column>
+        <el-table-column width="130" prop="human.isMale" align="center">
           <template #header>
-            <el-input v-model="searchAddress" size="mini" placeholder="Поиск по адресу..." />
+            <span class="table-header">
+              <span>Пол</span>
+              <FilterSelectForm :select-list="genderFilter" :table="schema.humanSchema.tableName" :col="schema.humanSchema.isMale" />
+            </span>
           </template>
-          <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
+          <template #default="scope">
+            {{ scope.row.human.getGender() }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
-            <template #default="scope">
-              <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
-                  placement="top-end"
-                >
-                  <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
-                    {{ rep.getRepresentativeChildType() }}
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
+        <el-table-column prop="human.dateBirth" width="150" align="center">
+          <template #header>
+            <span class="table-header">
+              <span>Дата рождения</span>
+              <FilterDateForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.dateBirth" />
+            </span>
+          </template>
+          <template #default="scope">
+            {{ formatDate(scope.row.human.dateBirth) }}
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <el-table-column prop="human.contact.phone" label="ТЕЛЕФОН" width="150" align="center" />
+        <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
+
+        <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
+          <template #default="scope">
+            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
+                placement="top-end"
+              >
+                <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
+                  {{ rep.getRepresentativeChildType() }}
+                </el-tag>
+              </el-tooltip>
+            </div>
+          </template>
         </el-table-column>
 
-        <el-table-column>
-          <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
-        </el-table-column>
+        <el-table-column prop="human.contact.phone" label="ТЕЛЕФОН" width="150" align="center" />
 
-        <el-table-column>
-          <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-            <template #default="scope">
-              <div v-for="document in scope.row.human.documents" :key="document">
-                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                  <el-tag size="small">
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
-                    <span>{{ document.documentType.getTagName() }}</span>
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table-column>
+        <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
 
+        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-for="document in scope.row.human.documents" :key="document">
+              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                <el-tag size="small">
+                  <i class="el-icon-document" style="margin-right: 3px"></i>
+                  <span>{{ document.documentType.getTagName() }}</span>
+                </el-tag>
+              </el-tooltip>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column width="40" align="center">
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
               :show-remove-button="true"
-              @edit="edit(scope.row.id)"
-              @remove="remove(scope.row.id)"
+              @edit="crud.edit(scope.row.id)"
+              @remove="crud.remove(scope.row.id)"
             />
           </template>
         </el-table-column>
       </el-table>
-      <div style="text-align: center; width: 100%">
-        <el-pagination
-          style="margin-top: 20px; margin-bottom: 20px"
-          :current-page="curPage"
-          background
-          layout="prev, pager, next"
-          :page-count="Math.round(count / 25)"
-          @current-change="setPage"
-        >
-        </el-pagination>
-      </div>
+      <Pagination />
     </div>
   </div>
 </template>
@@ -138,27 +122,39 @@ import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToP
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchRepresentative from '@/interfaces/shared/ISearchRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
+import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
+import ISchema from '@/interfaces/schema/ISchema';
+import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
+import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
+import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import SelectFilter from '@/classes/filters/SelectFilter';
+import Human from '@/classes/humans/Human';
+import Pagination from '@/components/Pagination.vue';
+import Crud from '@/classes/shared/Crud';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
+    Pagination,
     TableButtonGroup,
+    FilterTextForm,
+    FilterSelectForm,
+    FilterDateForm,
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
     const filteredRepresentatives: Ref<IPatient[]> = computed(() => store.getters['representatives/filteredRepresentatives']);
+    const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
+    const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
+
+    const crud = new Crud('representatives');
 
     const queryStringsRepresentative: Ref<string> = ref('');
 
     const { formatDate } = useDateFormat();
 
-    const count: Ref<IRepresentative[]> = computed(() => store.getters['meta/count']);
-    const curPage = ref(1);
     const mount: Ref<boolean> = ref(false);
 
-    const filterName: Ref<IFilter[]> = ref([]);
-    const filterDate: Ref<IFilter[]> = ref([]);
     const searchFullName = ref('');
     const searchAddress = ref('');
     const search = ref('');
@@ -169,36 +165,12 @@ export default defineComponent({
         lock: true,
         text: 'Загрузка',
       });
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create }));
-      await store.dispatch('representatives/getAll', 0);
-      await store.dispatch('meta/getCount', 'representative');
-      filterName.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.getFullName(), value: r.human.getFullName() }));
-      filterDate.value = representatives.value.map((r: IRepresentative) => ({ text: r.human.dateBirth, value: r.human.dateBirth }));
+      store.commit('filter/setStoreModule', 'representatives');
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create: crud.create }));
+      await store.dispatch('representatives/getAll', store.getters['filter/filterQuery']);
       mount.value = true;
       loading.close();
     });
-
-    const setPage = async (pageNum: number): Promise<void> => {
-      curPage.value = pageNum;
-      const loading = ElLoading.service({
-        lock: true,
-        text: 'Загрузка',
-      });
-      await store.dispatch('representatives/getAll', pageNum - 1);
-      loading.close();
-    };
-
-    const edit = async (id: string): Promise<void> => {
-      await router.push(`/representatives/${id}`);
-    };
-
-    const create = async (): Promise<void> => {
-      await router.push('/representatives/new');
-    };
-
-    const remove = async (id: number): Promise<void> => {
-      await store.dispatch('representatives/delete', id);
-    };
 
     const children = (representative: IRepresetnationType) => {
       if (representative.patient) {
@@ -239,7 +211,7 @@ export default defineComponent({
       if (value.length === 0) {
         await store.dispatch('representatives/getAll', 0);
       }
-      curPage.value = 0;
+      store.commit('pagination/setCurPage', 0);
     };
 
     const findRepresentatives = async (query: string, resolve: CallableFunction): Promise<void> => {
@@ -250,7 +222,6 @@ export default defineComponent({
           if (i.id) items.push({ value: i.human.getFullName(), id: i.id, representative: i });
         });
       }
-
       resolve(items);
     };
 
@@ -259,18 +230,15 @@ export default defineComponent({
     };
 
     return {
+      crud,
+      genderFilter,
+      schema,
       findRepresentatives,
       handleRepresentativeSelect,
       handleSearchInput,
       formatDate,
       queryStringsRepresentative,
-      count,
-      curPage,
-      setPage,
       children,
-      create,
-      remove,
-      edit,
       filterTable,
       representatives,
       mount,

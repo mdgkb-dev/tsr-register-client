@@ -51,8 +51,6 @@ export default defineComponent({
     };
 
     const handleSelectionChange = (_: IRegister[], register: IRegister): void => {
-      console.log(register.id);
-      console.log(register.patientInRegister(registerToPatient.value));
       if (register.patientInRegister(registerToPatient.value)) store.commit('patients/removeRegister', register.id);
       else store.commit('patients/addRegister', register.id);
     };

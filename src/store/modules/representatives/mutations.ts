@@ -10,10 +10,12 @@ import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
+import IRepresentativesCount from '@/interfaces/representatives/IRepresentativesCount';
 
 const mutations: MutationTree<State> = {
-  setAll(state, representatives: IRepresentative[]) {
-    state.representatives = representatives.map((r: IRepresentative) => new Representative(r));
+  setAll(state, representativesWithCount: IRepresentativesCount) {
+    state.representatives = representativesWithCount.representatives.map((r: IRepresentative) => new Representative(r));
+    state.count = representativesWithCount.count;
   },
   set(state, representative: IRepresentative) {
     state.photoFileList = [];

@@ -14,7 +14,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="filterModel.value1" />
+          <el-input v-model="filterModel.value1" size="mini" />
         </el-form-item>
       </el-form>
     </div>

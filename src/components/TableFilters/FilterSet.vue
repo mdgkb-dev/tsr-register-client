@@ -8,8 +8,8 @@
             multiple
             filterable
             remote
-            reserve-keyword
             placeholder="Выберите диагноз"
+            size="mini"
             :remote-method="find"
             :loading="loading"
             @click="setTrigger('manual')"
@@ -95,7 +95,6 @@ export default defineComponent({
       if (query.length > 2) {
         diagnosis.value = [];
         await store.dispatch('mkb/searchDiagnosis', query);
-        console.log(mkbDiagnosis.value);
         mkbDiagnosis.value.forEach((d: IMkbDiagnosis) => {
           if (d.id) diagnosis.value.push({ value: d.id, label: d.getFullName() });
         });

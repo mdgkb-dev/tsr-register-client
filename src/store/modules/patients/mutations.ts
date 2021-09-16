@@ -41,9 +41,6 @@ const mutations: MutationTree<State> = {
     state.patient = new Patient(patient);
     if (state.patient.human.photo) state.photoFileList[0] = state.patient.human.photo.getFileListObject();
   },
-  setCurPage(state, page: number): void {
-    state.curPage = page;
-  },
   create(state, patient: IPatient) {
     state.patients.push(new Patient(patient));
   },

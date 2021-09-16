@@ -14,7 +14,6 @@ export const state: State = {
   filteredPatients: [],
   photoFileList: [],
   count: 0,
-  curPage: 1,
 };
 
 const namespaced = true;

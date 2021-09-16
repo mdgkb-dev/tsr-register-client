@@ -144,7 +144,6 @@ export default defineComponent({
         ElMessage.error(e.toString());
         return;
       }
-      console.log(patients.value);
       mount.value = true;
     });
 

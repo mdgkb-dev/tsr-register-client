@@ -11,9 +11,9 @@ import { State } from './state';
 export const state: State = {
   representatives: [],
   representative: new Representative(),
-  count: 0,
   filteredRepresentatives: [],
   photoFileList: [],
+  count: 0,
 };
 
 const namespaced = true;

@@ -6,16 +6,18 @@ import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import { State } from './state';
+import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 
 const httpClient = new HttpClient('patients');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, filterQuery: IFilterQuery): Promise<void> => {
-    commit('setAll', await httpClient.get<IPatient[]>({ query: filterQuery.toUrl() }));
+  getAll: async ({ commit }, filterQuery?: IFilterQuery): Promise<void> => {
+    const res = await httpClient.get<IPatientsWithCount>({ query: filterQuery ? filterQuery.toUrl() : '' });
+    commit('setAll', res);
   },
   getAllById: async ({ commit }, id: string): Promise<void> => {
-    const res = await httpClient.get<IPatient[]>({ query: id });
-    commit('setAll', [res]);
+    const res = await httpClient.get<IPatient>({ query: id });
+    commit('setAll', { patients: [res], count: 1 });
   },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get<IPatient[]>({ query: '?withDisabilities=true' }));
