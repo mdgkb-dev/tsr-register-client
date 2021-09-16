@@ -225,7 +225,9 @@ import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
 import Human from '@/classes/humans/Human';
+import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
+import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
@@ -238,8 +240,6 @@ import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-import Pagination from '@/components/Pagination.vue';
-import Crud from '@/classes/shared/Crud';
 
 export default defineComponent({
   name: 'RepresentativesList',

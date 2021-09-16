@@ -110,27 +110,25 @@
 <script lang="ts">
 import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import SelectFilter from '@/classes/filters/SelectFilter';
+import Human from '@/classes/humans/Human';
+import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
+import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IFilter from '@/interfaces/filters/IFilter';
+import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
+import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
+import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
+import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchRepresentative from '@/interfaces/shared/ISearchRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
-import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
-import ISchema from '@/interfaces/schema/ISchema';
-import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
-import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
-import ISelectFilter from '@/interfaces/filters/ISelectFilter';
-import SelectFilter from '@/classes/filters/SelectFilter';
-import Human from '@/classes/humans/Human';
-import Pagination from '@/components/Pagination.vue';
-import Crud from '@/classes/shared/Crud';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {

@@ -2,11 +2,11 @@ import { ActionTree } from 'vuex';
 
 import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IPatient from '@/interfaces/patients/IPatient';
+import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import { State } from './state';
-import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 
 const httpClient = new HttpClient('patients');
 

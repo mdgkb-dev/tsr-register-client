@@ -7,10 +7,10 @@ import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativesCount from '@/interfaces/representatives/IRepresentativesCount';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
-import IRepresentativesCount from '@/interfaces/representatives/IRepresentativesCount';
 
 const mutations: MutationTree<State> = {
   setAll(state, representativesWithCount: IRepresentativesCount) {

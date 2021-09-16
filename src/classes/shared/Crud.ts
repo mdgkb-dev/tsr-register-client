@@ -1,6 +1,7 @@
-import ICrud from '@/interfaces/shared/ICrud';
-import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+import ICrud from '@/interfaces/shared/ICrud';
 
 export default class Crud implements ICrud {
   storeModule = '';
