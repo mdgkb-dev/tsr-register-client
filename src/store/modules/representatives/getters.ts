@@ -32,9 +32,6 @@ const getters: GetterTree<State, RootState> = {
   fileInfos(state): IFileInfo[] {
     return state.representative.human.fileInfos;
   },
-  count(state): number {
-    return state.count;
-  },
   filteredRepresentatives(state): IRepresentative[] {
     return state.filteredRepresentatives;
   },
@@ -43,6 +40,9 @@ const getters: GetterTree<State, RootState> = {
   },
   fileInfo(state): IFileInfo | undefined {
     return state.representative.human.photo;
+  },
+  count(state): number {
+    return state.count;
   },
 };
 

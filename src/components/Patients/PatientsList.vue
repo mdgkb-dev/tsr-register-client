@@ -31,29 +31,29 @@
 
         <el-table-column sortable prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
-            <div class="table-header">
+            <span class="table-header">
               <span>Фамилия Имя Отчество</span>
               <FilterTextForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
-            </div>
+            </span>
           </template>
           <template #default="scope">
             {{ scope.row.human.getFullName() }}
           </template>
         </el-table-column>
 
-        <el-table-column width="75" sortable prop="human.isMale" align="center">
+        <el-table-column width="110" sortable prop="human.isMale" align="center">
           <template #header>
-            <div class="table-header">
+            <span class="table-header">
               <span>Пол</span>
               <FilterSelectForm :select-list="genderFilter" :table="schema.humanSchema.tableName" :col="schema.humanSchema.isMale" />
-            </div>
+            </span>
           </template>
           <template #default="scope">
             {{ scope.row.human.getGender() }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="human.dateBirth" width="120" align="center">
+        <el-table-column prop="human.dateBirth" width="150" align="center">
           <template #header>
             <div class="table-header">
               <span>Дата рождения</span>
@@ -88,9 +88,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="95" label="ДИАГНОЗЫ" align="center">
+        <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
           <template #header>
-            <div class="table-header">
+            <span class="table-header">
               <span>Диагнозы</span>
               <FilterSet
                 :table="schema.patientDiagnosisSchema.tableName"
@@ -99,7 +99,7 @@
                 :join-table-fk="schema.patientDiagnosisSchema.joinTableFk"
                 :join-table-pk="schema.patientDiagnosisSchema.joinTablePk"
               />
-            </div>
+            </span>
           </template>
           <template #default="scope">
             <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
@@ -197,8 +197,8 @@
               :show-edit-button="true"
               :show-info-button="true"
               :show-remove-button="true"
-              @edit="edit(scope.row.id)"
-              @remove="remove(scope.row.id)"
+              @edit="crud.edit(scope.row.id)"
+              @remove="crud.remove(scope.row.id)"
             />
 
             <el-popover placement="top-end" :width="200" trigger="hover">
@@ -213,16 +213,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="text-align: center; width: 100%">
-        <el-pagination
-          style="margin-top: 20px; margin-bottom: 20px"
-          :current-page="curPage"
-          layout="prev, pager, next"
-          :page-count="Math.round(count / 25)"
-          @current-change="setPage"
-        >
-        </el-pagination>
-      </div>
+      <Pagination />
     </div>
   </div>
 </template>
@@ -230,12 +221,13 @@
 <script lang="ts">
 import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
 import Human from '@/classes/humans/Human';
+import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
+import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
@@ -243,7 +235,6 @@ import FilterSet from '@/components/TableFilters/FilterSet.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
@@ -253,6 +244,7 @@ import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
+    Pagination,
     TableButtonGroup,
     FilterTextForm,
     FilterSelectForm,
@@ -261,13 +253,13 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
     const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => store.getters['patients/filteredPatients']);
-    const count: Ref<IRepresentative[]> = computed(() => store.getters['patients/count']);
     const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
     const { formatDate } = useDateFormat();
     const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
+
+    const crud = new Crud('patients');
 
     const mount: Ref<boolean> = ref(false);
     const queryStringsPatient: Ref<string> = ref('');
@@ -275,8 +267,6 @@ export default defineComponent({
     const searchFullName = ref('');
     const searchAddress = ref('');
     const search = ref('');
-    const curPage: Ref<number> = computed(() => store.getters['patients/curPage']);
-    const loading = ref(false);
 
     onBeforeMount(async () => {
       store.commit('filter/resetId');
@@ -284,7 +274,8 @@ export default defineComponent({
         lock: true,
         text: 'Загрузка',
       });
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create }));
+      store.commit('pagination/setCurPage', 1);
+      store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create: crud.create }));
       store.commit('filter/setStoreModule', 'patients');
       await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
       await store.dispatch('registers/getAll');
@@ -292,19 +283,11 @@ export default defineComponent({
       loading.close();
     });
 
-    const setPage = async (pageNum: number): Promise<void> => {
-      loading.value = true;
-      store.commit('patients/setCurPage', pageNum);
-      store.commit('filter/setOffset', pageNum - 1);
-      await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
-      loading.value = false;
-    };
-
     const handleSearchInput = async (value: string): Promise<void> => {
       if (value.length === 0) {
         await store.dispatch('patients/getAll', 0);
       }
-      store.commit('patients/setCurPage', 0);
+      store.commit('pagination/setCurPage', 0);
     };
 
     const findPatients = async (query: string, resolve: CallableFunction): Promise<void> => {
@@ -320,18 +303,6 @@ export default defineComponent({
 
     const handlePatientSelect = async (item: ISearch): Promise<void> => {
       await store.dispatch('patients/getAllById', item.id);
-    };
-
-    const edit = async (id: string): Promise<void> => {
-      await router.push(`/patients/${id}`);
-    };
-
-    const create = async (): Promise<void> => {
-      await router.push('/patients/new');
-    };
-
-    const remove = async (id: number): Promise<void> => {
-      await store.dispatch('patients/delete', id);
     };
 
     const children = (representative: IRepresetnationType) => {
@@ -370,14 +341,11 @@ export default defineComponent({
     };
 
     return {
+      crud,
       schema,
       queryStringsPatient,
-      count,
       formatDate,
       children,
-      create,
-      curPage,
-      edit,
       filteredPatients,
       filterTable,
       findPatients,
@@ -385,11 +353,9 @@ export default defineComponent({
       handleSearchInput,
       mount,
       patients,
-      remove,
       search,
       searchAddress,
       searchFullName,
-      setPage,
       genderFilter,
     };
   },

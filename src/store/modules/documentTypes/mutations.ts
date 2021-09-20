@@ -18,9 +18,12 @@ const mutations: MutationTree<State> = {
   },
   removeField(state: State, field: IDocumentTypeField): void {
     const index = state.documentType.documentTypeFields.indexOf(field);
-    if (index !== -1) state.documentType.documentTypeFields.splice(index, 1);
-    console.log(state.documentType);
-    if (field.id) state.documentType.documentTypeFieldsForDelete.push(field.id);
+    if (index !== -1) {
+      state.documentType.documentTypeFields.splice(index, 1);
+    }
+    if (field.id) {
+      state.documentType.documentTypeFieldsForDelete.push(field.id);
+    }
   },
 };
 

@@ -8,7 +8,6 @@ import State from './state';
 const mutations: MutationTree<State> = {
   setUser(state, user: IUserAuthorized) {
     state.user = new UserAuthorized(user);
-    console.log(state.user);
   },
   setToken(state, token: string) {
     state.token = token;

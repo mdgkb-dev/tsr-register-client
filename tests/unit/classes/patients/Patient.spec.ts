@@ -540,7 +540,7 @@ describe('Class Patient', () => {
     const registerProperty = new RegisterProperty();
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBeNull();
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeNull();
   });
 
   test('getRegisterPropertyValue() возвращает null когда в переданном IRegisterProperty значение поля "valueType" не соответствует ни одному их списка: string, number, date, radio, set, text, boolean', () => {
@@ -561,7 +561,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBeNull();
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeNull();
   });
 
   test('getRegisterPropertyValue() возвращает false когда в registerPropertySetToPatient[] отсутствует запись, у которой registerPropertySetId равен ID переданного IRegisterProperty и name переданного IRegisterProperty - "set"', () => {
@@ -578,7 +578,7 @@ describe('Class Patient', () => {
     patient = new Patient();
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBeFalsy();
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeFalsy();
   });
 
   test('getRegisterPropertyValue() возвращает true когда в registerPropertySetToPatient[] присутстует запись, у которой registerPropertySetId равен ID переданного IRegisterProperty и name переданного IRegisterProperty - "set"', () => {
@@ -598,7 +598,7 @@ describe('Class Patient', () => {
     patient.registerPropertySetToPatient = [registerPropertySetToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBeTruthy();
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeTruthy();
   });
 
   test('getRegisterPropertyValue() возвращает свойство valueString из записи registerPropertyToPatient[] в которой registerPropertyId соответствует ID переданного IRegisterProperty и name переданного IRegisterProperty - "string"', () => {
@@ -621,7 +621,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBe(valueString);
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBe(valueString);
   });
 
   test('getRegisterPropertyValue() возвращает свойство valueString из записи registerPropertyToPatient[] в которой registerPropertyId соответствует ID переданного IRegisterProperty и name переданного IRegisterProperty - "text"', () => {
@@ -644,7 +644,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBe(valueString);
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBe(valueString);
   });
 
   test('getRegisterPropertyValue() возвращает свойство valueNumber из записи registerPropertyToPatient[] в которой registerPropertyId соответствует ID переданного IRegisterProperty и name переданного IRegisterProperty - "number"', () => {
@@ -667,7 +667,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBe(valueNumber);
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBe(valueNumber);
   });
 
   test('getRegisterPropertyValue() возвращает свойство valueDate из записи registerPropertyToPatient[] в которой registerPropertyId соответствует ID переданного IRegisterProperty и name переданного IRegisterProperty - "date"', () => {
@@ -690,7 +690,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBe(valueDate);
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBe(valueDate);
   });
 
   test('getRegisterPropertyValue() возвращает свойство registerPropertyRadioId из записи registerPropertyToPatient[] в которой registerPropertyId соответствует ID переданного IRegisterProperty и name переданного IRegisterProperty - "radio"', () => {
@@ -713,7 +713,7 @@ describe('Class Patient', () => {
     patient.registerPropertyToPatient = [registerPropertyToPatient];
 
     // Assert
-    expect(patient.getRegisterPropertyValue(registerProperty)).toBe(registerPropertyRadioId);
+    expect(patient.getRegisterPropertyValue(registerProperty, false)).toBe(registerPropertyRadioId);
   });
 
   test('getRegisterPropertyValueSet() возвращает false когда в registerPropertySetToPatient[] нет элемента с переданным registerPropertySetId', () => {

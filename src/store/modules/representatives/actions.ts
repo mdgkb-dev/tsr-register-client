@@ -1,5 +1,6 @@
 import { ActionTree } from 'vuex';
 
+import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
@@ -9,9 +10,8 @@ import { State } from './state';
 const httpClient = new HttpClient('representatives');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, offset: number): Promise<void> => {
-    if (offset || offset === 0) commit('setAll', await httpClient.get<IRepresentative>({ query: `?offset=${offset}` }));
-    else commit('setAll', await httpClient.get<IRepresentative>());
+  getAll: async ({ commit }, filterQuery: IFilterQuery): Promise<void> => {
+    commit('setAll', await httpClient.get<IRepresentative[]>({ query: filterQuery ? filterQuery.toUrl() : '' }));
   },
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get<IRepresentative>({ query: id }));
@@ -46,8 +46,8 @@ const actions: ActionTree<State, RootState> = {
     commit('setFilteredItems', await httpClient.get<IRepresentative[]>({ query: `?query=${query}` }));
   },
   getAllById: async ({ commit }, id: string): Promise<void> => {
-    const res = await httpClient.get<IRepresentative[]>({ query: id });
-    commit('setAll', [res]);
+    const res = await httpClient.get<IRepresentative>({ query: id });
+    commit('setAll', { patients: [res], count: 1 });
   },
 };
 

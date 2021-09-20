@@ -7,13 +7,15 @@ import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import IRepresentativesCount from '@/interfaces/representatives/IRepresentativesCount';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
 
 const mutations: MutationTree<State> = {
-  setAll(state, representatives: IRepresentative[]) {
-    state.representatives = representatives.map((r: IRepresentative) => new Representative(r));
+  setAll(state, representativesWithCount: IRepresentativesCount) {
+    state.representatives = representativesWithCount.representatives.map((r: IRepresentative) => new Representative(r));
+    state.count = representativesWithCount.count;
   },
   set(state, representative: IRepresentative) {
     state.photoFileList = [];

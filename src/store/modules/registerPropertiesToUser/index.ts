@@ -1,6 +1,5 @@
 import { Module } from 'vuex';
 
-import Patient from '@/classes/patients/Patient';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -9,16 +8,12 @@ import mutations from './mutations';
 import { State } from './state';
 
 export const state: State = {
-  patients: [],
-  patient: new Patient(),
-  filteredPatients: [],
-  photoFileList: [],
-  count: 0,
+  registerProperties: [],
 };
 
 const namespaced = true;
 
-export const patients: Module<State, RootState> = {
+export const registerPropertiesToUser: Module<State, RootState> = {
   namespaced,
   state,
   getters,

@@ -20,6 +20,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -166,8 +167,19 @@ export default class Patient implements IPatient {
     return undefined;
   }
 
-  getRegisterPropertyValue(property: IRegisterProperty): boolean | string | number | Date | null {
+  getRegisterPropertyValue(property: IRegisterProperty, originalValue: boolean): boolean | string | number | Date | null {
     if (property.valueType?.isSet()) {
+      if (originalValue) {
+        let res = '';
+        property.registerPropertySet.forEach((propertySet: IRegisterPropertySet) => {
+          this.registerPropertySetToPatient.forEach((prop: IRegisterPropertySetToPatient) => {
+            if (propertySet.id === prop.registerPropertySetId) {
+              res = `${res}\n${propertySet.name}`;
+            }
+          });
+        });
+        return res;
+      }
       const item = this.registerPropertySetToPatient?.find((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === property.id);
       return !!item;
     }
@@ -188,6 +200,9 @@ export default class Patient implements IPatient {
         return item.valueDate;
       }
       if (property.valueType?.isRadio() && item && item.registerPropertyRadioId) {
+        if (originalValue) {
+          return property.getRegisterPropertyRadioOriginalValue(item.registerPropertyRadioId);
+        }
         return item.registerPropertyRadioId;
       }
     }

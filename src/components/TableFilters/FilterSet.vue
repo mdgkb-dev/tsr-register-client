@@ -4,14 +4,16 @@
       <el-form label-position="top">
         <el-form-item>
           <el-select
+            ref="filter"
             v-model="filterModel.set"
             multiple
             filterable
             remote
-            reserve-keyword
             placeholder="Выберите диагноз"
+            size="mini"
             :remote-method="find"
             :loading="loading"
+            @change="blurSelect()"
             @click="setTrigger('manual')"
           >
             <el-option v-for="item in diagnosis" :key="item.value" :label="item.label" :value="item.value" @click="setTrigger('click')" />
@@ -62,6 +64,7 @@ export default defineComponent({
     const { table, col, joinTable, joinTablePk, joinTableFk } = toRefs(props);
     const store = useStore();
     const loading = ref(false);
+    const filter = ref();
     const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
     const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
     let diagnosis: Ref<IOption[]> = ref([]);
@@ -95,7 +98,6 @@ export default defineComponent({
       if (query.length > 2) {
         diagnosis.value = [];
         await store.dispatch('mkb/searchDiagnosis', query);
-        console.log(mkbDiagnosis.value);
         mkbDiagnosis.value.forEach((d: IMkbDiagnosis) => {
           if (d.id) diagnosis.value.push({ value: d.id, label: d.getFullName() });
         });
@@ -103,7 +105,14 @@ export default defineComponent({
       loading.value = false;
     };
 
+    const blurSelect = (): void => {
+      filter.value.softFocus = true;
+      filter.value.blur();
+    };
+
     return {
+      blurSelect,
+      filter,
       diagnosis,
       loading,
       filteredDiagnosis,

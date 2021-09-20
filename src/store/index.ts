@@ -15,6 +15,7 @@ import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
 import { registerProperties } from '@/store/modules/registerProperties';
+import { registerPropertiesToUser } from '@/store/modules/registerPropertiesToUser';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
@@ -56,6 +57,7 @@ const store: StoreOptions<RootState> = {
     users,
     filter,
     pagination,
+    registerPropertiesToUser,
   },
 };
 

@@ -232,7 +232,6 @@ export default defineComponent({
       calculate();
       store.commit('patients/addPatientDrugRegimen', newPatientDrugRegimen.value);
       dialogVisible.value = false;
-      console.log(form);
     };
 
     return {

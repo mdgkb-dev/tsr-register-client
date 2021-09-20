@@ -1,5 +1,5 @@
 <template>
-  <div class="filter-popover">
+  <span class="filter-popover">
     <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger" :popover-append-to-body="false">
       <template #reference>
         <FilterFilled :class="{ set: isSet }" />
@@ -10,7 +10,7 @@
         <el-button size="mini" @click="dropFilter">Сбросить</el-button>
       </el-button-group>
     </el-popover>
-  </div>
+  </span>
 </template>
 
 <script lang="ts">
@@ -39,13 +39,14 @@ export default defineComponent({
 
     const dropFilter = async () => {
       emit('dropFilterModel');
+      isSet.value = true;
       await sendQueryAndClose();
     };
 
     const sendQueryAndClose = async () => {
       store.commit('filter/setOffset', 0);
       await store.dispatch(`${storeModule}/${storeAction}`, store.getters['filter/filterQuery']);
-      store.commit(`${storeModule}/setCurPage`, 1);
+      store.commit(`pagination/setCurPage`, 1);
       visible.value = !visible.value;
       isSet.value = !isSet.value;
     };
@@ -63,8 +64,8 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .anticon {
-  margin: 4px 2px 2px 2px;
-
+  margin: 4px 4px 2px 4px;
+  font-size: 13px;
   &:hover {
     color: #5cb6ff;
   }

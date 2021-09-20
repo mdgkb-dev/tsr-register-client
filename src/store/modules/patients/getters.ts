@@ -23,9 +23,6 @@ const getters: GetterTree<State, RootState> = {
   getHuman(state): IHuman {
     return state.patient.human;
   },
-  curPage(state): number {
-    return state.curPage;
-  },
   count(state): number {
     return state.count;
   },

@@ -25,24 +25,19 @@ export default class Contact implements IContact {
       switch (true) {
         case phoneNumberLength === 0:
           this.phone = '';
-          console.log(1);
           break;
         case phoneNumberLength === 1 && value.length === 1 && phoneNumber === '7':
         case phoneNumberLength === 1 && value.length === 1 && phoneNumber === '8':
           this.phone = '+7 (';
-          console.log(2);
           break;
         case phoneNumberLength < 4:
           this.phone = `+7 (${phoneNumber}`;
-          console.log(3);
           break;
         case phoneNumberLength < 7:
           this.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-          console.log(4);
           break;
         case phoneNumberLength < 9:
           this.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 8)}`;
-          console.log(5);
           break;
         default:
           this.phone = `+7 (${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 8)}-${phoneNumber.slice(8, 10)}`;

@@ -36,6 +36,10 @@ const actions: ActionTree<State, RootState> = {
     localStorage.removeItem('userId');
     commit('setIsAuth', false);
   },
+  editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
+    const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });
+    commit('setUser', newUser);
+  },
 };
 
 export default actions;
