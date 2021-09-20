@@ -11,6 +11,7 @@ import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
 import { mkb } from '@/store/modules/mkb';
+import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
 import { registerProperties } from '@/store/modules/registerProperties';
@@ -18,7 +19,6 @@ import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { users } from '@/store/modules/users';
-import { pagination } from '@/store/modules/pagination';
 
 import RootState from './types';
 

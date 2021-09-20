@@ -1,9 +1,9 @@
 import { GetterTree } from 'vuex';
 
+import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import RootState from '@/store/types';
 
 import State from './state';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 const getters: GetterTree<State, RootState> = {
   building(state): string {

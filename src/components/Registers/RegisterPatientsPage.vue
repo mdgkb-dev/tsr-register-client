@@ -115,6 +115,7 @@
 </template>
 
 <script lang="ts">
+import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -127,7 +128,6 @@ import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
-import { ElLoading } from 'element-plus';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
