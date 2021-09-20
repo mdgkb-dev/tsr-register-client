@@ -212,6 +212,7 @@ const mutations: MutationTree<State> = {
     }
   },
   removeAnamnesis(state, id: string) {
+    console.log(id);
     state.patient.patientDiagnosis.forEach((d: IPatientDiagnosis) => {
       const index = d.patientDiagnosisAnamnesis.findIndex((a: IPatientDiagnosisAnamnesis) => a.id === id);
       if (index > -1) {

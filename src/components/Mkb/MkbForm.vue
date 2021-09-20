@@ -125,6 +125,7 @@ import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
@@ -162,7 +163,7 @@ export default defineComponent({
     const addDiagnosis = (): void => store.commit(`${storeModule.value}/addDiagnosis`);
     const removeDiagnosis = (id: string): void => store.commit(`${storeModule.value}/removeDiagnosis`, id);
 
-    const addAnamnesis = (diagnosis: IPatientDiagnosis): void => store.commit(`patients/addDiagnosis`, diagnosis.id);
+    const addAnamnesis = (diagnosis: IPatientDiagnosisAnamnesis): void => store.commit(`patients/addAnamnesis`, diagnosis.id);
 
     const handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis): void => {
       expandRowKeys = row.id === expandRowKeys[0] ? reactive([]) : reactive([row.id]);

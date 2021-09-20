@@ -1,5 +1,6 @@
 <template>
   <div class="card-wrapper">
+    {{ anamnesisId }}
     <el-card class="box-card" style="position: relative">
       <el-form-item
         v-if="anamnesis.isEditMode"
@@ -66,7 +67,7 @@ export default defineComponent({
     );
 
     const edit = () => (anamnesis.value.isEditMode = !anamnesis.value.isEditMode);
-    const remove = () => store.commit('patients/removeAnamnesis', anamnesisId);
+    const remove = () => store.commit('patients/removeAnamnesis', anamnesisId.value);
 
     return {
       anamnesis,
