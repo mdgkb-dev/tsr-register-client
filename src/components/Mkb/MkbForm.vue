@@ -121,11 +121,11 @@ import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
-import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
