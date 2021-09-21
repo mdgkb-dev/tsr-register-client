@@ -191,7 +191,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="40" align="center">
+        <el-table-column width="50" align="center">
+          <template #header>
+            <FilterResetButton />
+          </template>
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
@@ -230,6 +233,7 @@ import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
+import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterSet from '@/components/TableFilters/FilterSet.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
@@ -240,7 +244,6 @@ import ISchema from '@/interfaces/schema/ISchema';
 import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
-
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
@@ -250,6 +253,7 @@ export default defineComponent({
     FilterSelectForm,
     FilterDateForm,
     FilterSet,
+    FilterResetButton,
   },
   setup() {
     const store = useStore();
@@ -341,6 +345,7 @@ export default defineComponent({
     };
 
     return {
+      // resetAllFilters,
       crud,
       schema,
       queryStringsPatient,

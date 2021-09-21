@@ -12,6 +12,8 @@ export default interface IFilterModel {
   value1?: string;
   set: string[];
 
+  isSet: boolean;
+
   isUnaryFilter: () => boolean;
   isBetweenFilter: () => boolean;
   isSetFilter: () => boolean;

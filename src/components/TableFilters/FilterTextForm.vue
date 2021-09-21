@@ -1,5 +1,5 @@
 <template>
-  <component :is="'FilterPopover'" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
+  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
       <el-form label-position="top">
         <el-form-item>
@@ -62,6 +62,7 @@ export default defineComponent({
     const dropFilterModel = () => {
       store.commit('filter/spliceFilterModel', filterModel.value.id);
       filterModel.value = FilterModel.CreateFilterModel(table.value, col.value, DataTypes.String);
+      filterModel.value.operator = Operators.Like;
     };
 
     return {

@@ -92,6 +92,9 @@
           </template>
         </el-table-column>
         <el-table-column width="40" align="center">
+          <template #header>
+            <FilterResetButton />
+          </template>
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
@@ -119,6 +122,7 @@ import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
+import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
@@ -137,6 +141,7 @@ export default defineComponent({
     FilterTextForm,
     FilterSelectForm,
     FilterDateForm,
+    FilterResetButton,
   },
   setup() {
     const store = useStore();

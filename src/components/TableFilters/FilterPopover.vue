@@ -2,7 +2,7 @@
   <span class="filter-popover">
     <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger" :popover-append-to-body="false">
       <template #reference>
-        <FilterFilled :class="{ set: isSet }" />
+        <FilterFilled :class="{ set: filterModel.isSet }" />
       </template>
       <slot></slot>
       <el-button-group>
@@ -15,18 +15,24 @@
 
 <script lang="ts">
 import { FilterFilled } from '@ant-design/icons-vue';
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
+
+import IFilterModel from '@/interfaces/filters/IFilterModel';
 export default defineComponent({
   name: 'FilterPopover',
   components: {
     FilterFilled,
   },
-  props: {},
+  props: {
+    filterModel: {
+      type: Object as PropType<IFilterModel>,
+      required: true,
+    },
+  },
   emits: ['addFilterModel', 'dropFilterModel'],
   setup(props, { emit }) {
     const visible: Ref<boolean> = ref(false);
-    const isSet: Ref<boolean> = ref(false);
     const store = useStore();
     const trigger: Ref<string> = computed(() => store.getters['filter/trigger']);
     const storeModule: string = store.getters['filter/storeModule'];
@@ -37,9 +43,12 @@ export default defineComponent({
       await sendQueryAndClose();
     };
 
+    const setTrigger = (trigger: string) => {
+      store.commit('filter/setTrigger', trigger);
+    };
+
     const dropFilter = async () => {
       emit('dropFilterModel');
-      isSet.value = true;
       await sendQueryAndClose();
     };
 
@@ -48,12 +57,12 @@ export default defineComponent({
       await store.dispatch(`${storeModule}/${storeAction}`, store.getters['filter/filterQuery']);
       store.commit(`pagination/setCurPage`, 1);
       visible.value = !visible.value;
-      isSet.value = !isSet.value;
+      store.commit('filter/setTrigger', 'click');
     };
 
     return {
+      setTrigger,
       dropFilter,
-      isSet,
       setFilter,
       trigger,
       visible,

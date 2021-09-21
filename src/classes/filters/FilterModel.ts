@@ -15,6 +15,8 @@ export default class FilterModel implements IFilterModel {
   type: DataTypes = DataTypes.String;
   set: string[] = [];
 
+  isSet = false;
+
   joinTable = '';
   joinTableFk = '';
   joinTablePk = '';

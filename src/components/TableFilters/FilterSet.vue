@@ -1,5 +1,5 @@
 <template>
-  <component :is="'FilterPopover'" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
+  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
       <el-form label-position="top">
         <el-form-item>
