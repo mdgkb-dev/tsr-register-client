@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex';
 
 import IFilterModel from '@/interfaces/filters/IFilterModel';
+import ISortModel from '@/interfaces/filters/ISortModel';
 
 import { State } from './state';
 
@@ -28,7 +29,11 @@ const mutations: MutationTree<State> = {
       filterModel.date2 = undefined;
       filterModel.set = [];
     });
+    state.filterQuery.sortModels.forEach((sortModel: ISortModel) => {
+      sortModel.order = undefined;
+    });
     state.filterQuery.filterModels = [];
+    state.filterQuery.sortModels = [];
   },
   setFilterModel(state, filterModel: IFilterModel) {
     filterModel.isSet = true;
@@ -38,6 +43,18 @@ const mutations: MutationTree<State> = {
     } else {
       state.filterQuery.filterModels.push(filterModel);
     }
+  },
+  setSortModel(state, sortModel: ISortModel) {
+    let item = state.filterQuery.sortModels.find((i: ISortModel) => i.id === sortModel.id);
+    if (item) {
+      item = sortModel;
+    } else {
+      state.filterQuery.sortModels.push(sortModel);
+    }
+  },
+  spliceSortModel(state, id: string) {
+    const index = state.filterQuery.sortModels.findIndex((i: ISortModel) => i.id === id);
+    if (index > -1) state.filterQuery.sortModels.splice(index, 1);
   },
   spliceFilterModel(state, id: string) {
     const index = state.filterQuery.filterModels.findIndex((i: IFilterModel) => i.id === id);

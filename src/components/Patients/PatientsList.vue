@@ -29,11 +29,12 @@
       >
         <el-table-column width="60" align="center" />
 
-        <el-table-column sortable prop="human.surname" align="left" min-width="130" resizable>
+        <el-table-column prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
             <span class="table-header">
               <span>Фамилия Имя Отчество</span>
               <FilterTextForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
+              <SortButton :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
             </span>
           </template>
           <template #default="scope">
@@ -41,7 +42,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="110" sortable prop="human.isMale" align="center">
+        <el-table-column width="110" prop="human.isMale" align="center">
           <template #header>
             <span class="table-header">
               <span>Пол</span>
@@ -237,6 +238,7 @@ import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterSet from '@/components/TableFilters/FilterSet.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
+import SortButton from '@/components/TableFilters/SortButton.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -247,6 +249,7 @@ import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
+    SortButton,
     Pagination,
     TableButtonGroup,
     FilterTextForm,
