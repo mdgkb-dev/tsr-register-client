@@ -122,7 +122,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus/lib/components';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 

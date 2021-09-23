@@ -1,4 +1,4 @@
-import { MessageType } from 'element-plus/lib/el-message/src/types';
+import { MessageType } from 'element-plus/lib/components/message/src/types';
 
 import IMessage from '@/interfaces/shared/IMessage';
 

@@ -55,8 +55,8 @@
 </template>
 
 <script lang="ts">
-import { ElTree } from 'element-plus';
-import Node from 'element-plus/lib/el-tree/src/model/node';
+import { ElTree } from 'element-plus/lib/components';
+import Node from 'element-plus/lib/components/tree/src/model/node';
 import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 

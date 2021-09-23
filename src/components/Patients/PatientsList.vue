@@ -210,8 +210,8 @@
                 <el-button class="table-button" icon="el-icon-view" />
               </template>
               <el-timeline>
-                <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy.login }}</el-timeline-item>
-                <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy.login }}</el-timeline-item>
+                <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy?.login }}</el-timeline-item>
+                <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy?.login }}</el-timeline-item>
               </el-timeline>
             </el-popover>
           </template>
@@ -223,7 +223,7 @@
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus';
+import { ElLoading } from 'element-plus/lib/components';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 

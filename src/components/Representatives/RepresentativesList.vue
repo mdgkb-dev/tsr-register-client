@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus';
+import { ElLoading } from 'element-plus/lib/components';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
