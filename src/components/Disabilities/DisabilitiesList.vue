@@ -141,7 +141,10 @@ export default defineComponent({
       try {
         await store.dispatch('patients/getAllWithDisabilities');
       } catch (e) {
-        ElMessage.error(e.toString());
+        if (!ElMessage.error) {
+          return;
+        }
+        ElMessage.error(String(e));
         return;
       }
       mount.value = true;

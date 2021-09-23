@@ -42,9 +42,10 @@
 
 <script lang="ts">
 import cloneDeep from 'lodash/cloneDeep';
-import { computed, ComputedRef, defineComponent, PropType, reactive } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
+import Human from '@/classes/humans/Human';
 import IHuman from '@/interfaces/humans/IHuman';
 
 export default defineComponent({
@@ -62,7 +63,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters[`${props.storeName}/getHuman`]);
-    const human: IHuman = reactive<IHuman>(cloneDeep(humanComputed.value));
+    const human: UnwrapRef<IHuman> = reactive<IHuman>(cloneDeep(humanComputed.value));
 
     const updateHuman = () => {
       store.commit(`${props.storeName}/setHuman`, human);

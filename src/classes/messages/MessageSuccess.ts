@@ -1,11 +1,9 @@
-import { MessageType } from 'element-plus/lib/components/message/src/types';
-
 import IMessage from '@/interfaces/shared/IMessage';
 
 export default class MessageSuccess implements IMessage {
   dangerouslyUseHTMLString: boolean;
   message: string;
-  type: MessageType;
+  type: 'info' | 'error' | 'success' | 'warning' | undefined;
 
   constructor() {
     this.dangerouslyUseHTMLString = false;

@@ -103,7 +103,10 @@ export default defineComponent({
           await store.dispatch('users/create', user.value);
         }
       } catch (e) {
-        ElMessage.error(e.toString());
+        if (!ElMessage.error) {
+          return;
+        }
+        ElMessage.error(String(e));
         return;
       }
 

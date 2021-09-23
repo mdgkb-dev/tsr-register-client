@@ -14,6 +14,9 @@ export default function (): IReturn {
     let validationResult = true;
     form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
       if (!valid) {
+        if (!ElMessage.error) {
+          return;
+        }
         ElMessage.error(new MessageError(errorFields));
         validationResult = false;
         return false;
