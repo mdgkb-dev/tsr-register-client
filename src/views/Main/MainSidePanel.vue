@@ -30,7 +30,7 @@
             <el-menu-item-group :router="true">
               <el-menu :router="true" :default-openeds="[0]" @select="closeDrawer">
                 <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-                  <el-submenu v-if="menu.links" :index="i.toString()">
+                  <el-sub-menu v-if="menu.links" :index="i.toString()">
                     <template #title>
                       <i :class="menu.class"></i>
                       <span>{{ menu.title }} </span>
@@ -40,7 +40,7 @@
                         <span>{{ item.title }} </span>
                       </el-menu-item>
                     </div>
-                  </el-submenu>
+                  </el-sub-menu>
                   <el-menu-item v-else :index="i.toString()" :route="{ name: menu.name }" class="side-menu-elements-font">
                     <i :class="menu.class"></i>
                     <span>{{ menu.title }}</span>
@@ -213,15 +213,6 @@ export default defineComponent({
   color: #333;
   text-align: center;
   line-height: 160px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  /* line-height: 260px; */
-}
-
-.el-container:nth-child(7) .el-aside {
-  /* line-height: 320px; */
 }
 
 .el-menu-item.is-active,

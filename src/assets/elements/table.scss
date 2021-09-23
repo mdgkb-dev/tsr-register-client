@@ -1,7 +1,7 @@
 tr.header-style > th {
   color: #a1a7bd;
   font-size: 12px;
-  background: #eff1f7;
+  background-color: #eff1f7 !important;
   font-family: 'Roboto', sans-serif;
   text-transform: uppercase;
 }
@@ -120,10 +120,4 @@ tr.header-style > th {
   margin: 0;
   min-height: unset;
   border: none;
-}
-
-
-.table-header {
-  //display: flex;
-  //align-items: flex-start;
 }

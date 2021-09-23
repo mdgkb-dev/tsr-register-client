@@ -45,7 +45,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
-import Human from '@/classes/humans/Human';
 import IHuman from '@/interfaces/humans/IHuman';
 
 export default defineComponent({

@@ -1,4 +1,4 @@
-import { ElMessage, ElMessageBox } from 'element-plus/lib/components';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 

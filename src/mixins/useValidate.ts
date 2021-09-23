@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus/lib/components';
+import { ElMessage } from 'element-plus';
 
 import MessageError from '@/classes/messages/MessageError';
 import MessageSuccess from '@/classes/messages/MessageSuccess';

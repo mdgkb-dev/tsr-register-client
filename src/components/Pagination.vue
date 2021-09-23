@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus/lib/components';
+import { ElLoading } from 'element-plus';
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 

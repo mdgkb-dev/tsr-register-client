@@ -55,9 +55,9 @@
 </template>
 
 <script lang="ts">
-import { ElTree } from 'element-plus/lib/components';
+import { ElTree } from 'element-plus';
 import Node from 'element-plus/lib/components/tree/src/model/node';
-import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
@@ -119,7 +119,7 @@ export default defineComponent({
         });
 
         const curDiagnosis = checkedDiagnosis.value.find(
-          (d: IPatientDiagnosis | IRegisterDiagnosis) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
+          (d: UnwrapRef<IPatientDiagnosis | IRegisterDiagnosis>) => checkedNode.mkbDiagnosisId === d.mkbDiagnosisId && !d.mkbSubDiagnosisId
         );
 
         if (notChildrenChecked && !curDiagnosis) curNode.parent.checked = false;
@@ -202,7 +202,7 @@ export default defineComponent({
 
     const checkDiagnosis = (diagnosisArr: IMkbDiagnosis[]): void => {
       diagnosisArr.forEach((diagnosis: IMkbDiagnosis) => {
-        checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
+        checkedDiagnosis.value.forEach((d: UnwrapRef<IPatientDiagnosis | IRegisterDiagnosis>) => {
           if (diagnosis.id && diagnosis.id === d.mkbDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosis.id), true, false);
         });
       });
@@ -210,7 +210,7 @@ export default defineComponent({
 
     const checkSubDiagnosis = (diagnosisArr: IMkbSubDiagnosis[]): void => {
       diagnosisArr.forEach((diagnosis: IMkbSubDiagnosis) => {
-        checkedDiagnosis.value.forEach((d: IPatientDiagnosis | IRegisterDiagnosis) => {
+        checkedDiagnosis.value.forEach((d: UnwrapRef<IPatientDiagnosis | IRegisterDiagnosis>) => {
           const diagnosisId = diagnosis.id;
           if (diagnosisId && diagnosisId === d.mkbSubDiagnosisId) tree?.value?.setChecked(tree.value.getNode(diagnosisId), true, false);
         });

@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus/lib/components';
+import { ElLoading } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
