@@ -12,6 +12,9 @@ export default class Contact implements IContact {
     this.id = i.id;
     this.phone = i.phone;
     this.email = i.email;
+    if (i.phone) {
+      this.formatPhoneNumber();
+    }
   }
 
   formatPhoneNumber = (): void => {

@@ -76,7 +76,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="human.contact.phone" label="ТЕЛЕФОН" width="150" align="center" />
+        <el-table-column label="ТЕЛЕФОН" width="150" align="center">
+          <template #default="scope">
+            {{ scope.row.human.contact.phone }}
+          </template>
+        </el-table-column>
 
         <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
 

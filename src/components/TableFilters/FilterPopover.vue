@@ -1,6 +1,6 @@
 <template>
   <span class="filter-popover">
-    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger" :popover-append-to-body="false">
+    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger">
       <template #reference>
         <FilterFilled :class="{ set: filterModel.isSet }" />
       </template>
