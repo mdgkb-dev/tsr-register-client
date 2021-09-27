@@ -17,7 +17,8 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
+        height="calc(100vh - 310px)"
+        style="width: 100%; margin-bottom: 20px; overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column align="left" min-width="110" resizable>

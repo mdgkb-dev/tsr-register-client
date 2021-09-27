@@ -17,4 +17,5 @@ export default interface IRegister {
   getProps: () => IRegisterProperty[];
   patientIncludableByDiagnosis: (patientDiagnosis: IPatientDiagnosis[]) => boolean;
   patientInRegister: (registerToPatient: IRegisterToPatient[]) => boolean;
+  getTagName: () => string;
 }

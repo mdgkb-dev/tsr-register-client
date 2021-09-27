@@ -1,6 +1,6 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
-    <div class="table-background" style="height: auto; margin-bottom: 20px">
+    <div class="table-background" style="height: 170px; margin-bottom: 20px">
       <el-row>
         <el-col :span="15">
           <h2 style="margin: 0 0 40px 0">Общая информация</h2>
@@ -24,9 +24,46 @@
         class="table-shadow"
         header-row-class-name="header-style"
         border
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
-        <el-table-column type="index" width="70" align="center" />
+        <el-table-column type="index" width="70" align="center">
+          <template #header>
+            <el-popover placement="right-start" :width="600" trigger="click">
+              <template #reference>
+                <el-button class="table-button" icon="el-icon-more"></el-button>
+              </template>
+
+              <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
+                <h3 style="margin-left: 20px">Скрыть столбцы</h3>
+                <div v-if="register.registerGroupToRegister.length">
+                  <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
+                    <el-col
+                      v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
+                      :key="registerPropertyToRegisterGroup.id"
+                    >
+                      <el-checkbox
+                        :model-value="
+                          !!user.registerPropertyToUser.find(
+                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
+                          )
+                        "
+                        :label="
+                          registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName
+                            ? registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName
+                            : registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name
+                        "
+                        :value="registerPropertyToRegisterGroup.registerProperty.id"
+                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                      >
+                      </el-checkbox>
+                    </el-col>
+                  </el-row>
+                </div>
+                <div v-else style="margin-left: 20px">Нет данных</div>
+              </el-space>
+            </el-popover>
+          </template>
+        </el-table-column>
 
         <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
           <template #default="scope">
@@ -42,38 +79,6 @@
         </template>
 
         <el-table-column width="40" align="center">
-          <template #header>
-            <el-popover placement="left-start" :width="600" trigger="click">
-              <template #reference>
-                <el-button class="table-button" icon="el-icon-more"></el-button>
-              </template>
-
-              <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
-                <h2 style="margin-left: 20px">Скрыть столбцы</h2>
-                <div v-if="register.registerGroupToRegister.length">
-                  <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-                    <el-col
-                      v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-                      :key="registerPropertyToRegisterGroup.id"
-                    >
-                      <el-checkbox
-                        :model-value="
-                          !!user.registerPropertyToUser.find(
-                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
-                          )
-                        "
-                        :label="registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName"
-                        :value="registerPropertyToRegisterGroup.registerProperty.id"
-                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
-                        >{{ registerPropertyToRegisterGroup.registerProperty.shortName }}
-                      </el-checkbox>
-                    </el-col>
-                  </el-row>
-                </div>
-                <div v-else style="margin-left: 20px">Нет данных</div>
-              </el-space>
-            </el-popover>
-          </template>
           <template #default="scope">
             <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
           </template>
@@ -100,6 +105,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Register from '@/classes/registers/Register';
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -211,5 +217,8 @@ export default defineComponent({
 
 .el-table .cell {
   word-break: break-word;
+}
+h3 {
+  margin: 0;
 }
 </style>

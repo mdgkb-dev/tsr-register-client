@@ -25,7 +25,8 @@
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
+        style="width: 100%; margin-bottom: 20px; overflow: auto"
+        height="calc(100vh - 310px)"
       >
         <el-table-column width="60" align="center" />
 
@@ -169,10 +170,14 @@
 
         <el-table-column label="РЕГИСТРЫ" width="115" align="center">
           <template #default="scope">
-            <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length > 1">
-              <el-tag v-for="register in scope.row.registerToPatient" :key="register.id" size="small">
-                <span>{{ register.name }}</span>
-              </el-tag>
+            <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length">
+              <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
+                <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
+                  <el-tag class="tag-link" size="small" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">
+                    <span>{{ registerToPatient.register.getTagName() }}</span>
+                  </el-tag>
+                </el-tooltip>
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -210,8 +215,8 @@
                 <el-button class="table-button" icon="el-icon-view" />
               </template>
               <el-timeline>
-                <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy.login }}</el-timeline-item>
-                <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy.login }}</el-timeline-item>
+                <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy?.login }}</el-timeline-item>
+                <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy?.login }}</el-timeline-item>
               </el-timeline>
             </el-popover>
           </template>
@@ -224,7 +229,7 @@
 
 <script lang="ts">
 import { ElLoading } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, onMounted, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';

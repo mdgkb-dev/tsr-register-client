@@ -55,7 +55,13 @@ export default class Register implements IRegister {
     });
     return !!diagnosis;
   }
+
   patientInRegister(registerToPatient: IRegisterToPatient[]): boolean {
     return !!registerToPatient.find((i: IRegisterToPatient) => i.registerId === this.id);
+  }
+
+  getTagName(): string {
+    if (this.name.length > 10) return this.name.replace(/(?<=.{9}).+/g, '...');
+    return this.name;
   }
 }
