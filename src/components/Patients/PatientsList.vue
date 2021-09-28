@@ -197,6 +197,30 @@
           </template>
         </el-table-column>
 
+        <el-table-column prop="createdAt" width="150" align="center">
+          <template #header>
+            <div class="table-header">
+              <span>Дата создания</span>
+              <SortButton :table="schema.patientSchema.tableName" :col="schema.patientSchema.createdAt" />
+            </div>
+          </template>
+          <template #default="scope">
+            {{ formatDate(scope.row.createdAt) }}
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="updatedAt" width="150" align="center">
+          <template #header>
+            <div class="table-header">
+              <span>Дата последнего обновления</span>
+              <SortButton :table="schema.patientSchema.tableName" :col="schema.patientSchema.updatedAt" />
+            </div>
+          </template>
+          <template #default="scope">
+            {{ formatDate(scope.row.updatedAt) }}
+          </template>
+        </el-table-column>
+
         <el-table-column width="50" align="center">
           <template #header>
             <FilterResetButton />
@@ -229,7 +253,7 @@
 
 <script lang="ts">
 import { ElLoading } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, onMounted, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import SelectFilter from '@/classes/filters/SelectFilter';

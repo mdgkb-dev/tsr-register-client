@@ -28,20 +28,20 @@
         <el-scrollbar>
           <el-menu style="text-align: start">
             <el-menu-item-group :router="true">
-              <el-menu :router="true" :default-openeds="[0]" @select="closeDrawer">
+              <el-menu :router="true" :default-openeds="[0]" :default-active="activeRoute" @select="closeDrawer">
                 <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
                   <el-submenu v-if="menu.links" :index="i.toString()">
                     <template #title>
                       <i :class="menu.class"></i>
                       <span>{{ menu.title }} </span>
                     </template>
-                    <div v-for="(item, j) in menu.links" :key="item.title">
-                      <el-menu-item :index="i + '-' + j" :route="{ name: item.name }" class="side-menu-elements-font">
+                    <div v-for="item in menu.links" :key="item.title">
+                      <el-menu-item :index="item.name" :route="{ name: item.name }" class="side-menu-elements-font">
                         <span>{{ item.title }} </span>
                       </el-menu-item>
                     </div>
                   </el-submenu>
-                  <el-menu-item v-else :index="i.toString()" :route="{ name: menu.name }" class="side-menu-elements-font">
+                  <el-menu-item v-else :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
                     <i :class="menu.class"></i>
                     <span>{{ menu.title }}</span>
                   </el-menu-item>
@@ -59,8 +59,8 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, reactive, Ref, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed, ComputedRef, defineComponent, onBeforeMount, reactive, Ref, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import IMenuItemMultipleLinks from '@/interfaces/menu/IMenuItemMultipleLinks';
@@ -71,6 +71,14 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+    const route = useRoute();
+    const activeRoute: Ref<string> = ref('');
+
+    onBeforeMount(() => {
+      if (route.name) {
+        activeRoute.value = route.name.toString();
+      }
+    });
 
     const circleUrl: Ref<string> = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png');
     const menuItems: (IMenuItemSingleLink | IMenuItemMultipleLinks)[] = reactive([
@@ -181,6 +189,7 @@ export default defineComponent({
       userLogin,
       logout,
       closeDrawer,
+      activeRoute,
     };
   },
 });
