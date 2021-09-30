@@ -4,4 +4,5 @@ export default interface State {
   user?: IUserAuthorized;
   token: string;
   isAuth: boolean;
+  doesLoginExist: boolean;
 }

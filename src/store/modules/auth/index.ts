@@ -11,6 +11,7 @@ export const state: State = {
   user: undefined,
   token: '',
   isAuth: false,
+  doesLoginExist: true,
 };
 
 const namespaced = true;

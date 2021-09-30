@@ -1,5 +1,6 @@
 import { ActionTree } from 'vuex';
 
+import ICheckLoginUnicityResponse from '@/interfaces/auth/ICheckLoginUnicityResponse';
 import IUser from '@/interfaces/users/IUser';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import IUserResponse from '@/interfaces/users/IUserResponse';
@@ -39,6 +40,10 @@ const actions: ActionTree<State, RootState> = {
   editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
     const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });
     commit('setUser', newUser);
+  },
+  checkLoginUnicity: async ({ commit }, login): Promise<void> => {
+    const response = await httpClient.get<ICheckLoginUnicityResponse>({ query: `does-login-exist/${login}` });
+    commit('setDoesLoginExist', !!response.DoesLoginExist);
   },
 };
 

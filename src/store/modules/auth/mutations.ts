@@ -15,6 +15,9 @@ const mutations: MutationTree<State> = {
   setIsAuth(state, isAuth: boolean) {
     state.isAuth = isAuth;
   },
+  setDoesLoginExist(state, doesExist: boolean) {
+    state.doesLoginExist = doesExist;
+  },
 };
 
 export default mutations;

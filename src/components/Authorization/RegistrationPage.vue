@@ -1,12 +1,21 @@
 <template>
-  <el-form :status-icon="true" :model="registrationForm" label-width="130px" @submit.prevent="submitForm">
-    <el-form-item label="Логин">
-      <el-input v-model="registrationForm.login"></el-input>
+  <el-form
+    ref="form"
+    :status-icon="true"
+    :inline-message="true"
+    :model="registrationForm"
+    label-width="130px"
+    :rules="rules"
+    :validate-on-rule-change="false"
+    @submit.prevent="submitForm"
+  >
+    <el-form-item label="Логин" prop="login">
+      <el-input v-model="registrationForm.login" />
     </el-form-item>
-    <el-form-item label="Пароль">
-      <el-input v-model="registrationForm.password" type="password"></el-input>
+    <el-form-item label="Пароль" prop="password">
+      <el-input v-model="registrationForm.password" type="password" />
     </el-form-item>
-    <el-form-item label="Регион">
+    <el-form-item label="Регион" prop="region">
       <el-select v-model="registrationForm.region" class="width-full">
         <el-option label="Ленинградская область" value="Ленинградская область" />
         <el-option label="Москва" value="Москва" />
@@ -25,11 +34,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, onBeforeMount, reactive, Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import createRegistrationFormRules from '@/classes/authorization/RegistrationFormRules';
+import IRegistrationFormRules from '@/interfaces/auth/IRegistrationFormRules';
 import useMessage from '@/mixins/useMessage';
+import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RegistrationPage',
@@ -37,6 +49,8 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
 
+    const form = ref();
+    const { validate } = useValidate();
     const { showMessageError } = useMessage();
     const registrationForm: { login: string; password: string; region: string } = reactive({
       login: '',
@@ -44,7 +58,17 @@ export default defineComponent({
       region: '',
     });
 
+    const rules: Ref<IRegistrationFormRules> = ref({ login: [], password: [], region: [] });
+
+    onBeforeMount(async (): Promise<void> => {
+      rules.value = await createRegistrationFormRules(store);
+    });
+
     const submitForm = async (): Promise<void> => {
+      if (!validate(form.value)) {
+        return;
+      }
+
       try {
         await store.dispatch('auth/register', registrationForm);
       } catch (error) {
@@ -60,7 +84,9 @@ export default defineComponent({
     };
 
     return {
+      form,
       registrationForm,
+      rules,
       submitForm,
     };
   },

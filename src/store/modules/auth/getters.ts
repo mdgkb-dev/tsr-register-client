@@ -15,6 +15,9 @@ const getters: GetterTree<State, RootState> = {
   isAuth(state): boolean {
     return state.isAuth;
   },
+  doesLoginExist(state): boolean {
+    return state.doesLoginExist;
+  },
 };
 
 export default getters;

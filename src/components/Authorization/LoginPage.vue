@@ -2,10 +2,10 @@
   <div style="width: 50%; padding-left: 25%">
     <el-form :status-icon="true" :model="loginForm" label-width="130px" @submit.prevent="submitForm">
       <el-form-item label="Логин">
-        <el-input v-model="loginForm.login"></el-input>
+        <el-input v-model="loginForm.login" />
       </el-form-item>
       <el-form-item label="Пароль">
-        <el-input v-model="loginForm.password" type="password"></el-input>
+        <el-input v-model="loginForm.password" type="password" />
       </el-form-item>
       <el-form-item align="right">
         <el-button type="primary" native-type="submit">Войти</el-button>
