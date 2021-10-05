@@ -9,7 +9,7 @@
       border
       @select="handleSelectionChange"
     >
-      <el-table-column :selectable="selectable" type="selection" width="55" />
+      <el-table-column class="disabled-checkbox" :selectable="selectable" type="selection" width="55" />
       <el-table-column prop="name" label="Название регистра" min-width="150" />
     </el-table>
   </div>
@@ -68,3 +68,8 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.disabled-checkbox {
+}
+</style>

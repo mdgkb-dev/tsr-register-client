@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="top-start" :title="title" width="auto" trigger="hover" :content="content">
+  <el-popover placement="top-start" width="auto" trigger="hover" :content="content">
     <template #reference>
       <i style="margin-left: 10px" class="custom-icon el-icon-question"></i>
     </template>
@@ -13,10 +13,6 @@ export default defineComponent({
   name: 'PopoverInfo',
   props: {
     content: {
-      type: String as PropType<string>,
-      required: true,
-    },
-    title: {
       type: String as PropType<string>,
       required: true,
     },

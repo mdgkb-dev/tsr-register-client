@@ -20,6 +20,9 @@ const getters: GetterTree<State, RootState> = {
   patients(state): IPatient[] | undefined {
     return state.patients;
   },
+  patientsHistory(state): IPatient[] {
+    return state.patientsHistory;
+  },
   getHuman(state): IHuman {
     return state.patient.human;
   },
@@ -73,6 +76,9 @@ const getters: GetterTree<State, RootState> = {
   },
   fileInfo(state): IFileInfo | undefined {
     return state.patient.human.photo;
+  },
+  isEditMode(state): boolean {
+    return state.isEditMode;
   },
 };
 

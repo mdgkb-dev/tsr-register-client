@@ -21,6 +21,9 @@ const mutations: MutationTree<State> = {
   setOffset(state, offset: number) {
     state.filterQuery.offset = offset;
   },
+  setWithDeleted(state, withDeleted: boolean) {
+    state.filterQuery.withDeleted = withDeleted;
+  },
   resetQueryFilter(state) {
     state.filterQuery.filterModels.forEach((filterModel: IFilterModel) => {
       filterModel.isSet = false;

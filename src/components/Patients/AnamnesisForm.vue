@@ -1,6 +1,5 @@
 <template>
   <div class="card-wrapper">
-    {{ anamnesisId }}
     <el-card class="box-card" style="position: relative">
       <el-form-item
         v-if="anamnesis.isEditMode"
@@ -19,7 +18,7 @@
         <el-input v-model="anamnesis.value" type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }"> </el-input>
       </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
-      <div class="card-button-group">
+      <div v-if="isEditMode" class="card-button-group">
         <el-button v-if="anamnesis.isEditMode" icon="el-icon-folder-checked" @click="edit"></el-button>
         <el-button v-else icon="el-icon-edit" @click="edit"></el-button>
         <el-popconfirm
@@ -61,6 +60,7 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const { anamnesisId } = toRefs(props);
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     const anamnesis: ComputedRef<IPatientDiagnosisAnamnesis> = computed(() =>
       store.getters['patients/patient'].getAnamnesis(anamnesisId.value)
@@ -73,6 +73,7 @@ export default defineComponent({
       anamnesis,
       edit,
       remove,
+      isEditMode,
     };
   },
 });

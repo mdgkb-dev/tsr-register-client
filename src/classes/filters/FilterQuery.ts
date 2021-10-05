@@ -6,6 +6,7 @@ export default class FilterQuery implements IFilterQuery {
   id?: string;
   filterModels: IFilterModel[] = [];
   sortModels: ISortModel[] = [];
+  withDeleted = false;
   offset = 0;
 
   toUrl(): string {
@@ -16,7 +17,8 @@ export default class FilterQuery implements IFilterQuery {
     const sortModels = this.sortModels.map((sortModels: ISortModel) => {
       return `sortModel=${JSON.stringify(sortModels)}`;
     });
-    let url = `?${[offset, ...filterModels, ...sortModels].join('&')}`;
+    const withDeleted = `withDeleted=${this.withDeleted}`;
+    let url = `?${[offset, ...filterModels, ...sortModels, withDeleted].join('&')}`;
     if (this.id) {
       url = `${this.id}${url}`;
     }

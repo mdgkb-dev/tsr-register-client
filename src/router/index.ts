@@ -5,6 +5,7 @@ import MkbList from '@/components/Mkb/MkbList.vue';
 import AuthRoutes from '@/router/AuthRoutes';
 import DocumentsRoutes from '@/router/DocumentsRoutes';
 import DrugsRoutes from '@/router/DrugsRoutes';
+import HistoryRoutes from '@/router/HistoryRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
@@ -39,6 +40,7 @@ const routes: Array<RouteRecordRaw> = [
   ...RegistersRoutes,
   ...RegisterGroupsRoutes,
   ...RegisterPropertiesRoutes,
+  ...HistoryRoutes,
   {
     path: '/mkb',
     name: 'Mkb',

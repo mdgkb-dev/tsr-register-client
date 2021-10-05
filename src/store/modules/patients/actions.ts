@@ -19,6 +19,12 @@ const actions: ActionTree<State, RootState> = {
     const res = await httpClient.get<IPatient>({ query: id });
     commit('setAll', { patients: [res], count: 1 });
   },
+  getAllHistory: async ({ commit }, id: string): Promise<void> => {
+    commit('setAllHistory', await httpClient.get<IPatient>({ query: `histories/${id}` }));
+  },
+  getHistory: async ({ commit }, id: string): Promise<void> => {
+    commit('set', await httpClient.get<IPatient>({ query: `history/${id}` }));
+  },
   getAllWithDisabilities: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get<IPatient[]>({ query: '?withDisabilities=true' }));
   },

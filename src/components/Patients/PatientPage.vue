@@ -119,7 +119,6 @@ export default defineComponent({
     const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(!!route.params.patientId);
     const mount: Ref<boolean> = ref(false);
     const rules = {
       human: HumanRules,
@@ -128,23 +127,37 @@ export default defineComponent({
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
     const { validate } = useValidate();
-    const { submitHandling } = useForm(isEditMode.value);
+    const { submitHandling } = useForm(!!route.params.patientId);
 
     onBeforeMount(async () => {
       let title: string;
-      if (!route.params.patientId) {
-        await store.commit('patients/resetPatient');
-        title = 'Создать пациента';
+      if (!route.params.patientHistoryId) {
+        if (!route.params.patientId) {
+          await store.commit('patients/resetPatient');
+          title = 'Создать пациента';
+        } else {
+          await store.dispatch('patients/get', route.params.patientId);
+          title = patient.value.human.getFullName();
+        }
+        pushToLinks(['/patients'], ['Список пациентов']);
+        if (route.params.mode) {
+          store.commit('patients/setEditMode', false);
+          store.commit('main/setMainHeader', new MainHeader({ title, links }));
+        } else {
+          store.commit('patients/setEditMode', true);
+          store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+          window.addEventListener('beforeunload', beforeWindowUnload);
+          watch(patient, formUpdated, { deep: true });
+        }
       } else {
-        await store.dispatch('patients/get', route.params.patientId);
+        await store.dispatch('patients/getHistory', route.params.patientHistoryId);
+        pushToLinks([`/patients/history/${route.params.patientId}`], ['История пациента']);
         title = patient.value.human.getFullName();
+        store.commit('main/setMainHeader', new MainHeader({ title, links }));
+        store.commit('patients/setEditMode', false);
       }
-      pushToLinks(['/patients'], ['Список пациентов']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
-      mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(patient, formUpdated, { deep: true });
+      mount.value = true;
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {

@@ -4,6 +4,7 @@ import Edv from '@/classes/disability/Edv';
 import Document from '@/classes/documents/Document';
 import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 import FileInfo from '@/classes/files/FileInfo';
+import History from '@/classes/history/History';
 import Human from '@/classes/humans/Human';
 import Patient from '@/classes/patients/Patient';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
@@ -58,6 +59,7 @@ describe('Class Patient', () => {
     // Arrange
     const id = 'df2bac20-de21-4187-b361-27c432a1f520';
     const human = new Human();
+    const history = new History();
     const patientDiagnosis: IPatientDiagnosis[] = [];
     const patientDiagnosisForDelete: string[] = [];
     const representativeToPatient: IRepresentativeToPatient[] = [];
@@ -78,6 +80,7 @@ describe('Class Patient', () => {
     patient = new Patient({
       id,
       human,
+      history,
       patientDiagnosis,
       patientDiagnosisForDelete,
       representativeToPatient,

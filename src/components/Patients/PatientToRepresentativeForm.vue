@@ -1,11 +1,12 @@
 <template>
-  <el-button style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
+  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
   <el-table v-if="mount" :data="representativeToPatient" style="width: 600px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
-    <el-table-column label="Представитель" width="250" sortable align="center">
+    <el-table-column label="Представитель" sortable align="start">
       <template #default="scope">
         <el-form-item
+          v-if="isEditMode"
           label-width="0"
           style="margin: 0"
           :rules="rules.representativeId"
@@ -15,12 +16,16 @@
             <el-option v-for="item in representativeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
+        <span v-else>
+          {{ scope.row.representative.human.getFullName() }}
+        </span>
       </template>
     </el-table-column>
 
-    <el-table-column label="Роль представителя" width="250" align="center">
+    <el-table-column label="Роль представителя" align="start">
       <template #default="scope">
         <el-form-item
+          v-if="isEditMode"
           label-width="0"
           style="margin: 0"
           :rules="rules.representativeTypeId"
@@ -40,10 +45,11 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <span v-else>{{ getRepresentativeTypeLabel(scope.row.representativeType, scope.$index) }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column width="40" fixed="right" align="center">
+    <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
       <template #default="scope">
         <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
       </template>
@@ -52,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import RepresentativeToPatientRules from '@/classes/representatives/RepresentativeToPatientRules';
@@ -73,9 +79,14 @@ export default defineComponent({
     const mount = ref(false);
     const rules = RepresentativeToPatientRules;
     const representativeOptions: Ref<IOptionHuman[]> = ref([]);
-    const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
-    const representativeTypes: Ref<IRepresentativeType[]> = computed(() => store.getters['representativeTypes/representativeTypes']);
-    const representativeToPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/representativeToPatient']);
+    const representatives: ComputedRef<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
+    const representativeTypes: ComputedRef<IRepresentativeType[]> = computed(
+      () => store.getters['representativeTypes/representativeTypes']
+    );
+    const representativeToPatient: ComputedRef<IRepresentativeToPatient[]> = computed(
+      () => store.getters['patients/representativeToPatient']
+    );
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     onBeforeMount(async () => {
       await store.dispatch('representativeTypes/getAll');
@@ -121,6 +132,7 @@ export default defineComponent({
       remove,
       add,
       getRepresentativeTypeLabel,
+      isEditMode,
     };
   },
 });

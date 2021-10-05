@@ -1,5 +1,5 @@
 export default interface IMenuLink {
-  name: string;
-  title: string;
+  name?: string;
+  title?: string;
   link: string;
 }

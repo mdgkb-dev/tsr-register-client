@@ -50,6 +50,7 @@ export default defineComponent({
   align-items: center;
   justify-content: space-between;
   padding: 20px 0;
+  height: 40px;
 }
 .left-side {
   display: flex;

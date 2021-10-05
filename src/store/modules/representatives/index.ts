@@ -14,6 +14,7 @@ export const state: State = {
   filteredRepresentatives: [],
   photoFileList: [],
   count: 0,
+  isEditMode: true,
 };
 
 const namespaced = true;
