@@ -1,5 +1,5 @@
 <template>
-  <el-button style="margin-bottom: 20px" @click="handleOpenDialog">Выписать лекарство</el-button>
+  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="handleOpenDialog">Выписать лекарство</el-button>
   <el-table
     :data="patientDrugRegimens"
     style="margin-bottom: 20px"
@@ -9,6 +9,7 @@
     :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
     class="table-shadow"
     header-row-class-name="header-style"
+    empty-text="Лекарства не выписаны"
   >
     <el-table-column label="Лекарство" align="start">
       <template #default="scope">
@@ -36,7 +37,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column width="50" align="center">
+    <el-table-column v-if="isEditMode" width="50" align="center">
       <template #default="scope">
         <el-space direction="vertical" class="icons">
           <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row.id)" />
@@ -123,7 +124,7 @@
 
 <script lang="ts">
 import { ElMessageBox } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import DrugRegimen from '@/classes/drugs/DrugRegimen';
@@ -148,10 +149,11 @@ export default defineComponent({
     const store = useStore();
     const { formatDate } = useDateFormat();
 
-    const patientDrugRegimens: Ref<IPatientDrugRegimen[]> = computed(() => store.getters['patients/patientDrugRegimens']);
+    const patientDrugRegimens: ComputedRef<IPatientDrugRegimen[]> = computed(() => store.getters['patients/patientDrugRegimens']);
     const drugs: Ref<IDrug[]> = computed(() => store.getters['drugs/drugs']);
     const newPatientDrugRegimen: Ref<IPatientDrugRegimen> = ref(new PatientDrugRegimen());
     const chosenDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     const { validateWithoutMessageBox } = useValidate();
     const form = ref();
@@ -249,6 +251,7 @@ export default defineComponent({
       getDrugRegimenByDrugId,
       chosenDrugRegimen,
       form,
+      isEditMode,
     };
   },
 });

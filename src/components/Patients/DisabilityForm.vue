@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-button style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
+    <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
     <el-table
       :data="disabilities"
       style="width: 950px; margin-bottom: 20px"
@@ -21,6 +21,7 @@
       <el-table-column prop="period.dateStart" label="Дата начала" sortable width="230" align="center">
         <template #default="scope">
           <el-form-item
+            v-if="isEditMode"
             :prop="getProp(scope, true)"
             :rules="[{ required: true, message: 'Пожалуйста, укажите дату начала', trigger: 'change' }]"
             label-width="0"
@@ -35,12 +36,14 @@
               @change="isEdv(scope.row) ? edvDateStartChangeHandler(scope.row.id) : null"
             ></el-date-picker>
           </el-form-item>
+          <span v-else>{{ formatDate(scope.row.period.dateStart) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="230" align="center">
         <template #default="scope">
           <el-form-item
+            v-if="isEditMode"
             :prop="getProp(scope, false)"
             :rules="[{ required: true, message: 'Пожалуйста, укажите дату конца', trigger: 'change' }]"
             label-width="0"
@@ -55,6 +58,7 @@
               :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"
             ></el-date-picker>
           </el-form-item>
+          <span v-else>{{ formatDate(scope.row.period.dateEnd) }}</span>
         </template>
       </el-table-column>
 
@@ -76,60 +80,63 @@
 
       <el-table-column>
         <template #default="scope">
-          <div v-if="!isEdv(scope.row)" class="card-button-group">
-            <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">
-              <el-button icon="el-icon-document-add" @click="addEdv(scope.row)"></el-button>
-            </el-tooltip>
-            <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">
-              <el-button icon="el-icon-delete" @click.prevent="removeDisability(scope.row)"></el-button>
-            </el-tooltip>
-          </div>
-          <div v-else class="card-button-group">
-            <el-button-group v-if="!scope.row.fileInfo">
-              <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">
-                <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()"></el-button>
+          <div v-if="isEditMode">
+            <div v-if="!isEdv(scope.row)" class="card-button-group">
+              <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">
+                <el-button icon="el-icon-document-add" @click="addEdv(scope.row)"></el-button>
               </el-tooltip>
-              <input
-                :ref="scope.row.id"
-                type="file"
-                hidden
-                @change="
-                  (event) => {
-                    addReplaceFile(event, scope.row.id);
-                  }
-                "
-              />
-            </el-button-group>
+              <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">
+                <el-button icon="el-icon-delete" @click.prevent="removeDisability(scope.row)"></el-button>
+              </el-tooltip>
+            </div>
+            <div v-else class="card-button-group">
+              <el-button-group v-if="!scope.row.fileInfo">
+                <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">
+                  <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()"></el-button>
+                </el-tooltip>
+                <input
+                  :ref="scope.row.id"
+                  type="file"
+                  hidden
+                  @change="
+                    (event) => {
+                      addReplaceFile(event, scope.row.id);
+                    }
+                  "
+                />
+              </el-button-group>
 
-            <el-button-group v-else>
-              <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">
-                <el-button disabled icon="el-icon-document-checked"></el-button>
-              </el-tooltip>
-              <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
-                <el-button :data-file-id="scope.row.fileInfo.id" icon="el-icon-download" @click.prevent="downloadFile"></el-button>
-              </el-tooltip>
-              <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
-                <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()" />
-              </el-tooltip>
-              <input
-                :ref="scope.row.id"
-                type="file"
-                hidden
-                @change="
-                  (event) => {
-                    addReplaceFile(event, scope.row.id);
-                  }
-                "
-              />
-              <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">
-                <el-button icon="el-icon-document-delete" @click.prevent="removeFile(scope.row.id)" />
-              </el-tooltip>
-            </el-button-group>
+              <el-button-group v-else>
+                <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">
+                  <el-button disabled icon="el-icon-document-checked"></el-button>
+                </el-tooltip>
+                <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
+                  <el-button :data-file-id="scope.row.fileInfo.id" icon="el-icon-download" @click.prevent="downloadFile"></el-button>
+                </el-tooltip>
+                <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
+                  <el-button icon="el-icon-paperclip" @click="$refs[scope.row.id].click()" />
+                </el-tooltip>
+                <input
+                  :ref="scope.row.id"
+                  type="file"
+                  hidden
+                  @change="
+                    (event) => {
+                      addReplaceFile(event, scope.row.id);
+                    }
+                  "
+                />
+                <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">
+                  <el-button icon="el-icon-document-delete" @click.prevent="removeFile(scope.row.id)" />
+                </el-tooltip>
+              </el-button-group>
 
-            <el-tooltip effect="light" placement="top-end" content="Удалить справку">
-              <el-button icon="el-icon-delete" @click.prevent="removeEdv(scope.row)"></el-button>
-            </el-tooltip>
+              <el-tooltip effect="light" placement="top-end" content="Удалить справку">
+                <el-button icon="el-icon-delete" @click.prevent="removeEdv(scope.row)"></el-button>
+              </el-tooltip>
+            </div>
           </div>
+          <div v-else></div>
         </template>
       </el-table-column>
     </el-table>
@@ -138,7 +145,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import FileInfo from '@/classes/files/FileInfo';
@@ -146,15 +153,18 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'DisabilityForm',
   setup() {
     const store = useStore();
+    const { formatDate } = useDateFormat();
 
-    const birthDate: Ref<string> = computed(() => store.getters['patients/birthDate']);
-    const disabilities: Ref<IDisability[]> = computed(() => store.getters['patients/disabilities']);
+    const birthDate: ComputedRef<string> = computed(() => store.getters['patients/birthDate']);
+    const disabilities: ComputedRef<IDisability[]> = computed(() => store.getters['patients/disabilities']);
     const fileAnchor = ref();
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     const addDisability = (): void => store.commit('patients/addDisability');
 
@@ -286,6 +296,8 @@ export default defineComponent({
       birthDate,
       addDisability,
       edvDateStartChangeHandler,
+      isEditMode,
+      formatDate,
     };
   },
 });

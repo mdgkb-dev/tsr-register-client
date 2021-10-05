@@ -36,6 +36,9 @@ const mutations: MutationTree<State> = {
     state.patients = patientsWithCount.patients.map((p: IPatient) => new Patient(p));
     state.count = patientsWithCount.count;
   },
+  setAllHistory(state, patients: IPatient[]) {
+    state.patientsHistory = patients.map((p: IPatient) => new Patient(p));
+  },
   set(state, patient: IPatient) {
     state.photoFileList = [];
     state.patient = new Patient(patient);
@@ -237,6 +240,9 @@ const mutations: MutationTree<State> = {
     const i = state.patient.patientDrugRegimen.findIndex((item: IPatientDrugRegimen) => item.id === id);
     if (i > -1) state.patient.patientDrugRegimen.splice(i, 1);
     state.patient.patientDrugRegimenForDelete.push(id);
+  },
+  setEditMode(state, isEditMode: boolean) {
+    state.isEditMode = isEditMode;
   },
 };
 

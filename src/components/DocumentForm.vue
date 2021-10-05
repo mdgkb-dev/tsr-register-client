@@ -1,6 +1,6 @@
 <template>
   <div class="form-under-collapse">
-    <el-row type="flex" justify="start">
+    <el-row v-if="isEditMode" type="flex" justify="start">
       <el-col :span="12">
         <el-button @click="add">Добавить документ</el-button>
       </el-col>
@@ -16,7 +16,7 @@
     <section v-for="(document, documentIndex) in documents" :key="document.id">
       <el-card class="box-card" style="margin-top: 20px; position: relative">
         <h3>{{ document.documentType.name }}</h3>
-        <div class="card-button-group">
+        <div v-if="isEditMode" class="card-button-group">
           <el-tooltip effect="light" placement="top-end" content="Приложить файлы">
             <el-button icon="el-icon-paperclip" @click="$refs[document.id].click()"></el-button>
           </el-tooltip>
@@ -43,7 +43,8 @@
             :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueString`"
             size="mini"
           >
-            <el-input v-model="document.documentFieldValues[valueIndex].valueString" size="mini" />
+            <el-input v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueString" size="mini" />
+            <span v-else>{{ value.valueString }}</span>
           </el-form-item>
 
           <el-form-item
@@ -52,7 +53,8 @@
             :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueNumber`"
             size="mini"
           >
-            <el-input-number v-model="document.documentFieldValues[valueIndex].valueNumber" size="mini" />
+            <el-input-number v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueNumber" size="mini" />
+            <span v-else>{{ value.valueNumber }}</span>
           </el-form-item>
 
           <el-form-item
@@ -61,7 +63,8 @@
             :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueDate`"
             size="mini"
           >
-            <el-date-picker v-model="document.documentFieldValues[valueIndex].valueDate" size="mini" />
+            <el-date-picker v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueDate" size="mini" />
+            <span v-else>{{ formatDate(value.valueDate) }}</span>
           </el-form-item>
         </section>
 
@@ -76,7 +79,7 @@
             }
           "
         />
-        <el-table :data="document.fileInfoToDocument" size="mini" style="width: 100%">
+        <el-table empty-text="Файлов нет" :data="document.fileInfoToDocument" size="mini" style="width: 100%">
           <el-table-column label="Приложенные файлы">
             <template #default="scope">
               {{ scope.row.fileInfo.originalName }}
@@ -85,11 +88,18 @@
           <el-table-column align="right">
             <template #default="scope">
               <TableButtonGroup
+                v-if="isEditMode"
                 :show-remove-button="true"
                 :show-download-button="!scope.row.fileInfo.isDraft"
                 :horizontal="true"
                 @download="downloadFile(scope.row.fileInfo.id)"
                 @remove="removeFile(scope.row.id)"
+              />
+              <TableButtonGroup
+                v-else
+                :show-download-button="!scope.row.fileInfo.isDraft"
+                :horizontal="true"
+                @download="downloadFile(scope.row.fileInfo.id)"
               />
             </template>
           </el-table-column>
@@ -116,6 +126,7 @@ import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'DocumentForm',
@@ -130,6 +141,7 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
+    const { formatDate } = useDateFormat();
 
     const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
     const selectedDocumentTypeId: Ref<string> = ref('');
@@ -137,10 +149,11 @@ export default defineComponent({
     const selectDocType = ref();
     const docTypeError = ref('');
     const { storeModule } = toRefs(props);
-    const documents: Ref<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
-    const fileInfos: Ref<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
-    const documentTypes: Ref<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
+    const documents: ComputedRef<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
+    const fileInfos: ComputedRef<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
+    const documentTypes: ComputedRef<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
     const anchorInfo: ComputedRef<IFileAnchor> = computed(() => store.getters['files/fileAnchor']);
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     onBeforeMount(async (): Promise<void> => {
       await store.dispatch('documentTypes/getAll');
@@ -225,6 +238,8 @@ export default defineComponent({
       downloadFile,
       remove,
       removeFile,
+      isEditMode,
+      formatDate,
     };
   },
 });

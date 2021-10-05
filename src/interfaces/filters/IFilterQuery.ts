@@ -6,6 +6,7 @@ export default interface IFilterQuery {
   offset: number;
   filterModels: IFilterModel[];
   sortModels: ISortModel[];
+  withDeleted: boolean;
 
   toUrl: () => string;
 }

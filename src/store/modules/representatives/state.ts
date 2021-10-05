@@ -7,4 +7,5 @@ export interface State {
   filteredRepresentatives: IRepresentative[];
   photoFileList: IFilesList[];
   count: number;
+  isEditMode: boolean;
 }

@@ -39,7 +39,9 @@
             </span>
           </template>
           <template #default="scope">
-            {{ scope.row.human.getFullName() }}
+            <div class="patient-link" @click="$router.push(`/patients/${scope.row.id}/view`)">
+              {{ scope.row.human.getFullName() }}
+            </div>
           </template>
         </el-table-column>
 
@@ -234,15 +236,15 @@
               @remove="crud.remove(scope.row.id)"
             />
 
-            <el-popover placement="top-end" :width="200" trigger="hover">
+            <!-- <el-popover placement="top-end" :width="200" trigger="hover">
               <template #reference>
-                <el-button class="table-button" icon="el-icon-view" />
-              </template>
+            <el-button class="table-button" icon="el-icon-view" @click="$router.push(`/patients/history/${scope.row.id}`)" />
+            </template>
               <el-timeline>
                 <el-timeline-item :timestamp="formatDate(scope.row.createdAt)">Создано {{ scope.row.createdBy?.login }}</el-timeline-item>
                 <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy?.login }}</el-timeline-item>
               </el-timeline>
-            </el-popover>
+            </el-popover> -->
           </template>
         </el-table-column>
       </el-table>
@@ -276,7 +278,7 @@ import ISearch from '@/interfaces/shared/ISearch';
 import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
-  name: 'RepresentativesList',
+  name: 'PatientsList',
   components: {
     SortButton,
     Pagination,
@@ -402,6 +404,12 @@ export default defineComponent({
 .registers-tooltip {
   &:hover {
     cursor: pointer;
+  }
+}
+.patient-link {
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
   }
 }
 </style>

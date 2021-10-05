@@ -44,6 +44,9 @@ const getters: GetterTree<State, RootState> = {
   count(state): number {
     return state.count;
   },
+  isEditMode(state): boolean {
+    return state.isEditMode;
+  },
 };
 
 export default getters;

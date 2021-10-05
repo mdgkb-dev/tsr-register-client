@@ -10,10 +10,12 @@ import { State } from './state';
 
 export const state: State = {
   patients: [],
+  patientsHistory: [],
   patient: new Patient(),
   filteredPatients: [],
   photoFileList: [],
   count: 0,
+  isEditMode: true,
 };
 
 const namespaced = true;

@@ -1,6 +1,6 @@
 <template>
   <div class="table-under-collapse">
-    <el-space style="margin-bottom: 10px">
+    <el-space v-if="isEditMode" style="margin-bottom: 10px">
       <el-button @click="addDiagnosis">Добавить диагноз</el-button>
       <MkbTreeDialog :store-module="storeModule" />
     </el-space>
@@ -16,7 +16,7 @@
 
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
-          <el-button style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button>
+          <el-button v-if="isEditMode" style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button>
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
               <el-timeline-item
@@ -35,9 +35,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Группа диагноза" align="center" sortable>
+      <el-table-column label="Группа диагноза" align="start" sortable>
         <template #default="scope">
-          <el-form-item label-width="0" style="margin-bottom: 0">
+          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0">
             <el-autocomplete
               v-model="scope.row.mkbDiagnosis.queryStringGroup"
               style="width: 100%"
@@ -49,12 +49,14 @@
             >
             </el-autocomplete>
           </el-form-item>
+          <span v-else>{{ scope.row.mkbDiagnosis.queryStringGroup }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="Основной диагноз" align="center" sortable>
+      <el-table-column label="Основной диагноз" align="start" sortable>
         <template #default="scope">
           <el-form-item
+            v-if="isEditMode"
             label-width="0"
             style="margin-bottom: 0"
             :prop="
@@ -74,34 +76,38 @@
               @input="clearForm($event, scope.row.id, true)"
             />
           </el-form-item>
+          <span v-else>{{ scope.row.mkbDiagnosis.queryStringDiagnosis }}</span>
         </template>
       </el-table-column>
 
       <el-table-column prop="height" label="Уточнённый диагноз" align="center">
         <template #default="scope">
-          <el-select
-            v-if="scope.row.mkbDiagnosisId && scope.row.mkbDiagnosis.mkbSubDiagnosis.length > 0"
-            v-model="scope.row.mkbSubDiagnosisId"
-            style="width: 100%"
-            placeholder="Выберите уточнённый диагноз"
-          >
-            <el-option
-              v-for="i in scope.row.mkbDiagnosis.mkbSubDiagnosis"
-              :key="i.id"
-              :label="`${scope.row.mkbDiagnosis.code}.${i.getFullName()}`"
-              :value="i.id"
-            />
-          </el-select>
-          <el-select v-else v-model="undefined" style="width: 100%" disabled placeholder="Уточнённых диагнозов нет" />
+          <div v-if="isEditMode">
+            <el-select
+              v-if="scope.row.mkbDiagnosisId && scope.row.mkbDiagnosis.mkbSubDiagnosis.length > 0"
+              v-model="scope.row.mkbSubDiagnosisId"
+              style="width: 100%"
+              placeholder="Выберите уточнённый диагноз"
+            >
+              <el-option
+                v-for="i in scope.row.mkbDiagnosis.mkbSubDiagnosis"
+                :key="i.id"
+                :label="`${scope.row.mkbDiagnosis.code}.${i.getFullName()}`"
+                :value="i.id"
+              />
+            </el-select>
+            <el-select v-else v-model="undefined" style="width: 100%" disabled placeholder="Уточнённых диагнозов нет" />
+          </div>
+          <span v-else>{{ scope.row.mkbSubDiagnosis ? scope.row.mkbSubDiagnosis.name : 'Уточнённых диагнозов нет' }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column v-if="patientDiagnosis" prop="weight" label="Первичный" width="110" align="center">
+      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">
         <template #default="scope">
           <el-checkbox v-model="scope.row.primary" />
         </template>
       </el-table-column>
-      <el-table-column width="40" fixed="right" align="center">
+      <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="removeDiagnosis(scope.row.id)" />
         </template>
@@ -149,6 +155,7 @@ export default defineComponent({
     const queryStringsDiagnosis: Record<string, string> = reactive({});
     const queryStringsGroups: Record<string, string> = reactive({});
     const { formatDate } = useDateFormat();
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
 
@@ -255,6 +262,7 @@ export default defineComponent({
       handleGroupSelect,
       removeDiagnosis,
       clearForm,
+      isEditMode,
     };
   },
 });

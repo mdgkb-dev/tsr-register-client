@@ -165,6 +165,11 @@ export default defineComponent({
             title: 'Свойства для регистров',
             link: '/register-properties',
           },
+          {
+            name: 'HistoryList',
+            title: 'Архив',
+            link: '/history',
+          },
         ],
       },
     ]);

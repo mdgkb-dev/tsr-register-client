@@ -1,13 +1,14 @@
 <template>
   <div class="table-under-collapse">
-    <el-button style="margin-bottom: 20px" @click="add">Добавить страховку</el-button>
+    <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить страховку</el-button>
 
     <el-table :data="insuranceCompaniesOfPatient" style="width: 710px" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
-      <el-table-column label="Компания" width="300" align="center" sortable>
+      <el-table-column label="Компания" align="start" sortable>
         <template #default="scope">
           <el-form-item
+            v-if="isEditMode"
             :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.insuranceCompanyId'"
             :rules="[{ required: true, message: 'Пожалуйста, выберите страховую компанию' }]"
             label-width="0"
@@ -17,12 +18,14 @@
               <el-option v-for="item in insuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
+          <span v-else>{{ scope.row.insuranceCompany.name }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="Номер страховки" width="300" align="center">
+      <el-table-column label="Номер страховки" align="start">
         <template #default="scope">
           <el-form-item
+            v-if="isEditMode"
             :prop="'human.insuranceCompanyToHuman.' + scope.$index + '.number'"
             :rules="[{ required: true, message: 'Пожалуйста, заполните номер страховки', trigger: 'blur' }]"
             style="margin-bottom: 0"
@@ -30,10 +33,11 @@
           >
             <el-input v-model.lazy="insuranceCompaniesOfPatient[scope.$index].number" label="Введите номер страховки"></el-input>
           </el-form-item>
+          <span v-else>{{ scope.row.number }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="40" fixed="right" align="center">
+      <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
         </template>
@@ -43,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -59,8 +63,11 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const insuranceCompanies: Ref<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
-    const insuranceCompaniesOfPatient: Ref<IRepresentativeToPatient[]> = computed(() => store.getters['patients/insuranceCompanies']);
+    const insuranceCompanies: ComputedRef<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
+    const insuranceCompaniesOfPatient: ComputedRef<IRepresentativeToPatient[]> = computed(
+      () => store.getters['patients/insuranceCompanies']
+    );
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
     const insuranceCompaniesOptions: Ref<IOption[]> = ref([]);
 
     onBeforeMount(async () => {
@@ -86,6 +93,7 @@ export default defineComponent({
       insuranceCompaniesOptions,
       remove,
       add,
+      isEditMode,
     };
   },
 });

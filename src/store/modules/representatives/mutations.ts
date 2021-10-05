@@ -95,6 +95,9 @@ const mutations: MutationTree<State> = {
     state.representative.human.photo = undefined;
     state.representative.human.photoId = undefined;
   },
+  setEditMode(state, isEditMode: boolean) {
+    state.isEditMode = isEditMode;
+  },
 };
 
 export default mutations;

@@ -1,8 +1,11 @@
+import Representative from '@/classes/representatives/Representative';
 import RepresentativeType from '@/classes/representatives/RepresentativeType';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+
+import Patient from '../patients/Patient';
 
 export default class RepresentativeToPatient implements IRepresentativeToPatient {
   id?: string;
@@ -19,11 +22,17 @@ export default class RepresentativeToPatient implements IRepresentativeToPatient
     }
     this.id = representativeToPatient.id;
     this.representativeTypeId = representativeToPatient.representativeTypeId;
-    this.representativeType = new RepresentativeType(representativeToPatient.representativeType);
+    if (representativeToPatient.representativeType) {
+      this.representativeType = new RepresentativeType(representativeToPatient.representativeType);
+    }
     this.patientId = representativeToPatient.patientId;
-    this.patient = representativeToPatient.patient;
+    if (representativeToPatient.patient) {
+      this.patient = new Patient(representativeToPatient.patient);
+    }
     this.representativeId = representativeToPatient.representativeId;
-    this.representative = representativeToPatient.representative;
+    if (representativeToPatient.representative) {
+      this.representative = new Representative(representativeToPatient.representative);
+    }
   }
 
   getRepresentativeParentType(): string {

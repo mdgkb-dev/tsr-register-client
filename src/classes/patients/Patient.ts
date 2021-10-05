@@ -1,6 +1,7 @@
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
+import History from '@/classes/history/History';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
@@ -13,6 +14,7 @@ import User from '@/classes/user/User';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IHistory from '@/interfaces/history/IHistory';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
@@ -29,7 +31,9 @@ import IUser from '@/interfaces/users/IUser';
 
 export default class Patient implements IPatient {
   id?: string;
+  patientHistoryId?: string;
   human: IHuman = new Human();
+  history?: IHistory = new History();
   representativeToPatient: IRepresentativeToPatient[] = [];
   representativeToPatientForDelete: string[] = [];
   disabilities: IDisability[] = [];
@@ -59,7 +63,11 @@ export default class Patient implements IPatient {
     }
 
     this.id = patient.id;
+    this.patientHistoryId = patient.patientHistoryId;
     this.human = new Human(patient.human);
+    if (patient.history) {
+      this.history = new History(patient.history);
+    }
     if (patient.heightWeight) {
       this.heightWeight = patient.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
     }
