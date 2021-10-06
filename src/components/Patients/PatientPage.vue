@@ -149,14 +149,15 @@ export default defineComponent({
           window.addEventListener('beforeunload', beforeWindowUnload);
           watch(patient, formUpdated, { deep: true });
         }
+        store.commit('main/setActiveMenu', 'Patients');
       } else {
         await store.dispatch('patients/getHistory', route.params.patientHistoryId);
         pushToLinks([`/patients/history/${route.params.patientId}`], ['История пациента']);
         title = patient.value.human.getFullName();
         store.commit('main/setMainHeader', new MainHeader({ title, links }));
         store.commit('patients/setEditMode', false);
+        store.commit('main/setActiveMenu', 'HistoryList');
       }
-
       mount.value = true;
     });
 

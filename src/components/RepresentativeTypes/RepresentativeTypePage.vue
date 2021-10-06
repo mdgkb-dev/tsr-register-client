@@ -76,6 +76,7 @@ export default defineComponent({
 
       pushToLinks(['/representative-types'], ['Типы представителей']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      store.commit('main/setActiveMenu', 'RepresentativeTypes');
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);

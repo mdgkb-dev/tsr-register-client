@@ -83,6 +83,7 @@ export default defineComponent({
 
       pushToLinks(['/registers'], ['Регистры пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      store.commit('main/setActiveMenu', 'Registers');
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);

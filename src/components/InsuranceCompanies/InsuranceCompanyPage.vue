@@ -64,6 +64,7 @@ export default defineComponent({
 
       pushToLinks(['/insurance-companies'], ['Страховые компании']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      store.commit('main/setActiveMenu', 'InsuranceCompanies');
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);

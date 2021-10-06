@@ -12,6 +12,9 @@ const getters: GetterTree<State, RootState> = {
   mainHeader(state): IMainHeader {
     return state.mainHeader;
   },
+  activeMenu(state): string {
+    return state.activeMenu;
+  },
 };
 
 export default getters;

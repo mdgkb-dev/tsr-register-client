@@ -92,6 +92,7 @@ export default defineComponent({
       }
       pushToLinks(['/representatives'], ['Список представителей']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      store.commit('main/setActiveMenu', 'Representatives');
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
