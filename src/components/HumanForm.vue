@@ -24,6 +24,7 @@
           format="DD.MM.YYYY"
           placeholder="Выберите дату"
           @change="updateHuman"
+          @focus="updateHuman"
         />
       </el-form-item>
       <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
@@ -83,11 +84,12 @@ export default defineComponent({
     const human: IHuman = reactive<IHuman>(new Human(humanComputed.value));
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters[`${props.storeName}/isEditMode`]);
 
-    const updateHuman = () => {
-      store.commit(`${props.storeName}/setHuman`, human);
+    const updateHuman = async () => {
+      await store.commit(`${props.storeName}/setHuman`, human);
     };
 
     return {
+      humanComputed,
       human,
       updateHuman,
       isEditMode,
