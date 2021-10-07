@@ -57,6 +57,7 @@ export default defineComponent({
       store.commit('patients/set', patientsHistory.value[patientsHistory.value.length - 1]);
       pushToLinks(['/history/patients'], ['Архив пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title: `${patient.value.human.getFullName()}`, links }));
+      store.commit('main/setActiveMenu', 'HistoryList');
       mount.value = true;
       loading.close();
     });

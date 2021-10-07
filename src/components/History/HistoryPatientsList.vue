@@ -90,8 +90,8 @@ export default defineComponent({
       store.commit('filter/setStoreModule', 'patients');
       store.commit('filter/setWithDeleted', true);
       await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
-
       await store.dispatch('registers/getAll');
+      store.commit('main/setActiveMenu', 'HistoryList');
       mount.value = true;
       loading.close();
     });

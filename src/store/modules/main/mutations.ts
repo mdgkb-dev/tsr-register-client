@@ -15,6 +15,9 @@ const mutations: MutationTree<State> = {
   setMainHeader(state, item: IMainHeader) {
     state.mainHeader = item;
   },
+  setActiveMenu(state, item: string) {
+    state.activeMenu = item;
+  },
   resetState(state) {
     Object.assign(state, getDefaultState());
   },

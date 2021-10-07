@@ -11,6 +11,7 @@ export const getDefaultState = (): State => {
   return {
     isDrawerOpen: false,
     mainHeader: new MainHeader(),
+    activeMenu: '',
   };
 };
 

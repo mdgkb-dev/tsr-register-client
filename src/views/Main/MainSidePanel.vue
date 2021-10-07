@@ -28,7 +28,14 @@
         <el-scrollbar>
           <el-menu style="text-align: start">
             <el-menu-item-group :router="true">
-              <el-menu :router="true" :default-openeds="[0]" :default-active="activeRoute" @select="closeDrawer">
+              <el-menu
+                id="menu"
+                :router="true"
+                :default-openeds="[0]"
+                :default-active="activeMenu ? activeMenu : activeRoute"
+                :unique-opened="true"
+                @select="closeDrawer"
+              >
                 <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
                   <el-submenu v-if="menu.links" :index="i.toString()">
                     <template #title>
@@ -36,12 +43,12 @@
                       <span>{{ menu.title }} </span>
                     </template>
                     <div v-for="item in menu.links" :key="item.title">
-                      <el-menu-item :index="item.name" :route="{ name: item.name }" class="side-menu-elements-font">
+                      <el-menu-item :id="item.name" :index="item.name" :route="{ name: item.name }" class="side-menu-elements-font">
                         <span>{{ item.title }} </span>
                       </el-menu-item>
                     </div>
                   </el-submenu>
-                  <el-menu-item v-else :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
+                  <el-menu-item v-else :id="menu.name" :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
                     <i :class="menu.class"></i>
                     <span>{{ menu.title }}</span>
                   </el-menu-item>
@@ -73,6 +80,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const activeRoute: Ref<string> = ref('');
+    const activeMenu: ComputedRef<string> = computed(() => store.getters['main/activeMenu']);
 
     onBeforeMount(() => {
       if (route.name) {
@@ -195,6 +203,7 @@ export default defineComponent({
       logout,
       closeDrawer,
       activeRoute,
+      activeMenu,
     };
   },
 });

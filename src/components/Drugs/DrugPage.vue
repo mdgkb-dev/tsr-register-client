@@ -87,6 +87,7 @@ export default defineComponent({
 
       pushToLinks(['/drugs'], ['Список лекарств']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      store.commit('main/setActiveMenu', 'DrugsList');
       mount.value = true;
 
       window.addEventListener('beforeunload', beforeWindowUnload);
