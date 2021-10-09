@@ -105,4 +105,8 @@ export default class Human implements IHuman {
       { label: 'Ж', value: 'false' },
     ];
   }
+
+  haveDocument(documentTypeId: string): boolean {
+    return !!this.documents.find((doc: IDocument) => doc.documentTypeId === documentTypeId);
+  }
 }
