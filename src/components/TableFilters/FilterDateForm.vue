@@ -2,7 +2,7 @@
   <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
     <div class="filter-form">
       <el-form label-position="top" :model="filterModel">
-        <el-form-item label="Дата рождения">
+        <el-form-item :label="label">
           <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
             <el-option
               v-for="(item, index) in filterList"
@@ -39,6 +39,10 @@ export default defineComponent({
   name: 'FilterSelectForm',
   components: { FilterPopover },
   props: {
+    label: {
+      type: String as PropType<string>,
+      default: '',
+    },
     table: {
       type: String as PropType<string>,
       default: '',
