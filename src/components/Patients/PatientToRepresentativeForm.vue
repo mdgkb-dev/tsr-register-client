@@ -92,13 +92,15 @@ export default defineComponent({
       await store.dispatch('representativeTypes/getAll');
       await store.dispatch('representatives/getAll');
 
-      for (const item of representatives.value) {
-        if (item.id) {
-          representativeOptions.value.push({
-            label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-            value: item.id,
-            human: item.human,
-          });
+      if (representatives.value) {
+        for (const item of representatives.value) {
+          if (item.id) {
+            representativeOptions.value.push({
+              label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
+              value: item.id,
+              human: item.human,
+            });
+          }
         }
       }
       mount.value = true;

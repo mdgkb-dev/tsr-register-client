@@ -72,11 +72,13 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       await store.dispatch('insuranceCompanies/getAll');
-      for (const item of insuranceCompanies.value) {
-        insuranceCompaniesOptions.value.push({
-          label: `${item.name}`,
-          value: `${item.id}`,
-        });
+      if (insuranceCompanies.value) {
+        for (const item of insuranceCompanies.value) {
+          insuranceCompaniesOptions.value.push({
+            label: `${item.name}`,
+            value: `${item.id}`,
+          });
+        }
       }
     });
 
