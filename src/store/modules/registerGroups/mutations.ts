@@ -9,7 +9,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, registerGroups: IRegisterGroup[]) {
-    state.registerGroups = registerGroups.map((a: IRegisterGroup) => new RegisterGroup(a));
+    state.registerGroups = registerGroups?.map((a: IRegisterGroup) => new RegisterGroup(a));
   },
   set(state, registerGroup: IRegisterGroup) {
     state.registerGroup = new RegisterGroup(registerGroup);

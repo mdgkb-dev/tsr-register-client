@@ -16,7 +16,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, representativesWithCount: IRepresentativesCount) {
-    state.representatives = representativesWithCount.representatives.map((r: IRepresentative) => new Representative(r));
+    state.representatives = representativesWithCount.representatives?.map((r: IRepresentative) => new Representative(r));
     state.count = representativesWithCount.count;
   },
   set(state, representative: IRepresentative) {

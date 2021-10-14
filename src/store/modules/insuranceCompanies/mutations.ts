@@ -7,7 +7,7 @@ import { State } from './state';
 
 const mutations: MutationTree<State> = {
   setAll(state, insuranceCompanies: IInsuranceCompany[]) {
-    state.insuranceCompanies = insuranceCompanies.map((i: IInsuranceCompany) => new InsuranceCompany(i));
+    state.insuranceCompanies = insuranceCompanies?.map((i: IInsuranceCompany) => new InsuranceCompany(i));
   },
   set(state, insuranceCompany: IInsuranceCompany) {
     state.insuranceCompany = new InsuranceCompany(insuranceCompany);
