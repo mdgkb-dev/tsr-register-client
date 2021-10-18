@@ -92,6 +92,18 @@
           </template>
         </el-table-column>
 
+        <el-table-column width="75" label="Окружность головы" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.getLastCircumference(scope.row.headCircumference)?.value }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column width="75" label="Окружность груди" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.getLastCircumference(scope.row.chestCircumference)?.value }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
           <template #header>
             <span class="table-header">

@@ -13,6 +13,7 @@ import RegisterProperty from '@/classes/registers/RegisterProperty';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import ValueType from '@/classes/valueTypes/ValueType';
+import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IPatient from '@/interfaces/patients/IPatient';
@@ -46,6 +47,10 @@ describe('Class Patient', () => {
     expect(patient.disabilitiesForDelete).toHaveLength(0);
     expect(patient.heightWeight).toHaveLength(0);
     expect(patient.heightWeightForDelete).toHaveLength(0);
+    expect(patient.chestCircumference).toHaveLength(0);
+    expect(patient.chestCircumferenceForDelete).toHaveLength(0);
+    expect(patient.headCircumference).toHaveLength(0);
+    expect(patient.headCircumferenceForDelete).toHaveLength(0);
     expect(patient.registerToPatient).toHaveLength(0);
     expect(patient.registerToPatientForDelete).toHaveLength(0);
     expect(patient.registerPropertyToPatient).toHaveLength(0);
@@ -68,6 +73,10 @@ describe('Class Patient', () => {
     const disabilitiesForDelete: string[] = [];
     const heightWeight: IHeightWeight[] = [];
     const heightWeightForDelete: string[] = [];
+    const chestCircumference: ICircumference[] = [];
+    const chestCircumferenceForDelete: string[] = [];
+    const headCircumference: ICircumference[] = [];
+    const headCircumferenceForDelete: string[] = [];
     const registerToPatient: IRegisterToPatient[] = [];
     const registerToPatientForDelete: string[] = [];
     const registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
@@ -89,6 +98,10 @@ describe('Class Patient', () => {
       disabilitiesForDelete,
       heightWeight,
       heightWeightForDelete,
+      chestCircumference,
+      chestCircumferenceForDelete,
+      headCircumference,
+      headCircumferenceForDelete,
       registerToPatient,
       registerToPatientForDelete,
       registerPropertyToPatient,

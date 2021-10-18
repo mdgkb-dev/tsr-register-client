@@ -68,6 +68,28 @@
         </el-row>
         <el-divider></el-divider>
         <el-row>
+          <el-col :span="12" class="light-title upper">Окружность головы</el-col>
+          <el-col :span="12">
+            {{
+              patient.getLastCircumference(patient.headCircumference)
+                ? patient.getLastCircumference(patient.headCircumference).value
+                : 'Нет данных'
+            }}
+          </el-col>
+        </el-row>
+        <el-divider></el-divider>
+        <el-row>
+          <el-col :span="12" class="light-title upper">Окружность груди</el-col>
+          <el-col :span="12">
+            {{
+              patient.getLastCircumference(patient.chestCircumference)
+                ? patient.getLastCircumference(patient.chestCircumference).value
+                : 'Нет данных'
+            }}
+          </el-col>
+        </el-row>
+        <el-divider></el-divider>
+        <el-row>
           <el-col :span="12" class="light-title upper">ИМТ</el-col>
           <el-col :span="12"> {{ patient.getBmiGroup() }}</el-col>
         </el-row>

@@ -1,3 +1,4 @@
+import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IHistory from '@/interfaces/history/IHistory';
@@ -30,4 +31,8 @@ export default interface IPatientConstructor extends IModelInfo {
   registerPropertySetToPatientForDelete: string[];
   patientDrugRegimen: IPatientDrugRegimen[];
   patientDrugRegimenForDelete: string[];
+  chestCircumference: ICircumference[];
+  chestCircumferenceForDelete: string[];
+  headCircumference: ICircumference[];
+  headCircumferenceForDelete: string[];
 }

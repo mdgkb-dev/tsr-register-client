@@ -1,3 +1,4 @@
+import Circumference from '@/classes/anthropometry/Circumference';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
@@ -11,6 +12,7 @@ import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPat
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import User from '@/classes/user/User';
+import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
@@ -42,6 +44,10 @@ export default class Patient implements IPatient {
   patientDiagnosisForDelete: string[] = [];
   heightWeight: IHeightWeight[] = [];
   heightWeightForDelete: string[] = [];
+  chestCircumference: ICircumference[] = [];
+  chestCircumferenceForDelete: string[] = [];
+  headCircumference: ICircumference[] = [];
+  headCircumferenceForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
   registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
@@ -70,6 +76,12 @@ export default class Patient implements IPatient {
     }
     if (patient.heightWeight) {
       this.heightWeight = patient.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
+    }
+    if (patient.chestCircumference) {
+      this.chestCircumference = patient.chestCircumference.map((i: ICircumference) => new Circumference(i));
+    }
+    if (patient.headCircumference) {
+      this.headCircumference = patient.headCircumference.map((i: ICircumference) => new Circumference(i));
     }
     if (patient.patientDiagnosis) {
       this.patientDiagnosis = patient.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
@@ -116,6 +128,16 @@ export default class Patient implements IPatient {
     }
 
     return this.heightWeight.reduce((mostRecent: IHeightWeight, item: IHeightWeight) => {
+      return new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent;
+    });
+  }
+
+  getLastCircumference(circumference: ICircumference[]): ICircumference | undefined {
+    if (!circumference.length) {
+      return;
+    }
+
+    return circumference.reduce((mostRecent: ICircumference, item: ICircumference) => {
       return new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent;
     });
   }

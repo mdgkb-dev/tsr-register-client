@@ -2,6 +2,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import { v4 as uuidv4 } from 'uuid';
 import { MutationTree } from 'vuex';
 
+import Circumference from '@/classes/anthropometry/Circumference';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
@@ -99,6 +100,22 @@ const mutations: MutationTree<State> = {
     const index = state.patient.heightWeight.indexOf(item);
     if (index !== -1) state.patient.heightWeight.splice(index, 1);
     if (item.id) state.patient.heightWeightForDelete.push(item.id);
+  },
+  addChestCircumference(state) {
+    state.patient.chestCircumference.push(new Circumference());
+  },
+  removeChestCircumference(state, item: Circumference) {
+    const index = state.patient.chestCircumference.indexOf(item);
+    if (index !== -1) state.patient.chestCircumference.splice(index, 1);
+    if (item.id) state.patient.chestCircumferenceForDelete.push(item.id);
+  },
+  addHeadCircumference(state) {
+    state.patient.headCircumference.push(new Circumference());
+  },
+  removeHeadCircumference(state, item: Circumference) {
+    const index = state.patient.headCircumference.indexOf(item);
+    if (index !== -1) state.patient.headCircumference.splice(index, 1);
+    if (item.id) state.patient.headCircumferenceForDelete.push(item.id);
   },
   addDisability(state) {
     const disability = new Disability();
