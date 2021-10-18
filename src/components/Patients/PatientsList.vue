@@ -203,6 +203,7 @@
           <template #header>
             <div class="table-header">
               <span>Дата создания</span>
+              <FilterDateForm :table="schema.patientSchema.tableName" :col="schema.patientSchema.createdAt" />
               <SortButton :table="schema.patientSchema.tableName" :col="schema.patientSchema.createdAt" />
             </div>
           </template>
@@ -215,6 +216,7 @@
           <template #header>
             <div class="table-header">
               <span>Дата последнего обновления</span>
+              <FilterDateForm :table="schema.patientSchema.tableName" :col="schema.patientSchema.updatedAt" />
               <SortButton :table="schema.patientSchema.tableName" :col="schema.patientSchema.updatedAt" />
             </div>
           </template>

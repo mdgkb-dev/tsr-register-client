@@ -109,6 +109,11 @@ export default defineComponent({
             title: 'Инвалидность',
             link: '/disabilities',
           },
+          {
+            name: 'PatientsDocumentsList',
+            title: 'Документы пациентов',
+            link: '/patients/documents-list',
+          },
         ],
       },
       {

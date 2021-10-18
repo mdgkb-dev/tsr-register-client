@@ -3,6 +3,7 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import PatientPage from '@/components/Patients/PatientPage.vue';
 import PatientsHistoryList from '@/components/Patients/PatientsHistoryList.vue';
 import PatientsList from '@/components/Patients/PatientsList.vue';
+import PatientsDocumentsList from '@/components/PatientsDocumentsList/PatientsDocumentsList.vue';
 import { isAuthorized } from '@/router/index';
 
 export default [
@@ -10,6 +11,14 @@ export default [
     path: '/patients',
     name: 'Patients',
     component: PatientsList,
+    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
+      isAuthorized(next);
+    },
+  },
+  {
+    path: '/patients/documents-list',
+    name: 'PatientsDocumentsList',
+    component: PatientsDocumentsList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
       isAuthorized(next);
     },

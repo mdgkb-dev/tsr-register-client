@@ -1,5 +1,6 @@
 import { MutationTree } from 'vuex';
 
+import FilterQuery from '@/classes/filters/FilterQuery';
 import IFilterModel from '@/interfaces/filters/IFilterModel';
 import ISortModel from '@/interfaces/filters/ISortModel';
 
@@ -14,6 +15,7 @@ const mutations: MutationTree<State> = {
   },
   resetId(state) {
     state.filterQuery.id = undefined;
+    state.filterQuery = new FilterQuery();
   },
   setStoreModule(state, storeModule: string) {
     state.storeModule = storeModule;
