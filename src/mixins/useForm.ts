@@ -10,6 +10,7 @@ import IPatient from '@/interfaces/patients/IPatient';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
@@ -17,30 +18,31 @@ export default function (isEditMode = false): {
   syncSubmitHandling: (
     module: string,
     payload:
-      | IPatient
-      | IDrug
-      | IRepresentativeType
-      | IRepresentative
-      | IRegisterProperty
       | IDocumentType
+      | IDrug
+      | IInsuranceCompany
+      | IPatient
       | IRegister
       | IRegisterGroup
-      | IInsuranceCompany,
+      | IRegisterProperty
+      | IRepresentative
+      | IRepresentativeType,
     path?: string
   ) => void;
   title: Ref<string>;
   submitHandling: (
     module: string,
     payload:
-      | IPatient
-      | IDrug
-      | IRepresentativeType
-      | IRepresentative
-      | IRegisterProperty
       | IDocumentType
+      | IDrug
+      | IInsuranceCompany
+      | IPatient
       | IRegister
       | IRegisterGroup
-      | IInsuranceCompany,
+      | IRegisterProperty
+      | IRegisterQuery
+      | IRepresentative
+      | IRepresentativeType,
     next?: NavigationGuardNext,
     path?: string
   ) => Promise<void>;
@@ -52,15 +54,16 @@ export default function (isEditMode = false): {
   const submitHandling = async (
     module: string,
     payload:
-      | IPatient
-      | IDrug
-      | IRepresentativeType
-      | IRepresentative
-      | IRegisterProperty
       | IDocumentType
+      | IDrug
+      | IInsuranceCompany
+      | IPatient
       | IRegister
       | IRegisterGroup
-      | IInsuranceCompany,
+      | IRegisterProperty
+      | IRegisterQuery
+      | IRepresentative
+      | IRepresentativeType,
     next?: NavigationGuardNext,
     path?: string
   ): Promise<void> => {
@@ -84,15 +87,15 @@ export default function (isEditMode = false): {
   const syncSubmitHandling = (
     module: string,
     payload:
-      | IPatient
-      | IDrug
-      | IRepresentativeType
-      | IRepresentative
-      | IRegisterProperty
       | IDocumentType
+      | IDrug
+      | IInsuranceCompany
+      | IPatient
       | IRegister
       | IRegisterGroup
-      | IInsuranceCompany,
+      | IRegisterProperty
+      | IRepresentative
+      | IRepresentativeType,
     path?: string
   ): void => {
     try {

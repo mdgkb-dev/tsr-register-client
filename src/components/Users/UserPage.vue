@@ -74,10 +74,10 @@ export default defineComponent({
       if (!route.params.userId) {
         isEditMode.value = false;
         store.commit('users/set', new User());
-        title = 'Создать юзера';
+        title = 'Создать пользователя';
       } else {
         isEditMode.value = true;
-        title = 'Редактировать юзера';
+        title = 'Редактировать пользователя';
         await store.dispatch('users/get', route.params.userId);
       }
 

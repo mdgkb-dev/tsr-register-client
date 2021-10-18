@@ -16,6 +16,7 @@ import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
 import { registerProperties } from '@/store/modules/registerProperties';
 import { registerPropertiesToUser } from '@/store/modules/registerPropertiesToUser';
+import registerQueries from '@/store/modules/registerQueries';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
@@ -39,25 +40,26 @@ const store: StoreOptions<RootState> = {
   },
   modules: {
     auth,
+    cropper,
     disabilities,
     documentTypes,
     drugs,
-    cropper,
     files,
+    filter,
     insuranceCompanies,
     main,
     meta,
     mkb,
+    pagination,
     patients,
     registerGroups,
     registerProperties,
+    registerPropertiesToUser,
+    registerQueries,
     registers,
     representatives,
     representativeTypes,
     users,
-    filter,
-    pagination,
-    registerPropertiesToUser,
   },
 };
 

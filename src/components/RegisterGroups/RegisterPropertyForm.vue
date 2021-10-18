@@ -12,14 +12,14 @@
           :rules="[{ required: true, message: 'Необходимо выбрать группу', trigger: 'change' }]"
         >
           <el-select v-model="registerPropertyToRegisterGroup[scope.$index].registerPropertyId">
-            <el-option v-for="item in registerProperties" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+            <el-option v-for="item in registerProperties" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
       </template>
     </el-table-column>
     <el-table-column label="Порядковый номер свойства" min-width="250">
       <template #default="scope">
-        <el-input-number v-model="scope.row.order"></el-input-number>
+        <el-input-number v-model="scope.row.order" />
       </template>
     </el-table-column>
     <el-table-column fixed="right" width="200">

@@ -8,14 +8,14 @@ import DrugsRoutes from '@/router/DrugsRoutes';
 import HistoryRoutes from '@/router/HistoryRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
+import RegisterExportsRoutes from '@/router/RegisterExportsRoutes';
+import RegisterGroupsRoutes from '@/router/RegisterGroupsRoutes';
+import RegisterPropertiesRoutes from '@/router/RegisterPropertiesRoutes';
+import RegistersRoutes from '@/router/RegistersRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
 import UsersRoutes from '@/router/UsersRoutes';
-
-import store from '../store/index';
-import RegisterGroupsRoutes from './RegisterGroupsRoutes';
-import RegisterPropertiesRoutes from './RegisterPropertiesRoutes';
-import RegistersRoutes from './RegistersRoutes';
+import store from '@/store/index';
 
 export const isAuthorized = (next: NavigationGuardNext): void => {
   const userId = localStorage.getItem('userId');
@@ -29,18 +29,22 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
 };
 
 const routes: Array<RouteRecordRaw> = [
-  ...DrugsRoutes,
-  ...PatientsRoutes,
   ...AuthRoutes,
-  ...RepresentativeRoutes,
-  ...InsuranceCompaniesRoutes,
-  ...RepresentativeTypesRoutes,
   ...DocumentsRoutes,
-  ...UsersRoutes,
-  ...RegistersRoutes,
+  ...DrugsRoutes,
+  ...HistoryRoutes,
+  ...InsuranceCompaniesRoutes,
+  ...PatientsRoutes,
+  ...RegisterExportsRoutes,
+  ...RegisterGroupsRoutes,
   ...RegisterGroupsRoutes,
   ...RegisterPropertiesRoutes,
-  ...HistoryRoutes,
+  ...RegisterPropertiesRoutes,
+  ...RegistersRoutes,
+  ...RegistersRoutes,
+  ...RepresentativeRoutes,
+  ...RepresentativeTypesRoutes,
+  ...UsersRoutes,
   {
     path: '/mkb',
     name: 'Mkb',

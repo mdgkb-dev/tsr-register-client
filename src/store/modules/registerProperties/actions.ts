@@ -29,6 +29,9 @@ const actions: ActionTree<State, RootState> = {
     await httpClient.delete<IRegisterProperty, IRegisterProperty>({ query: id });
     commit('delete', id);
   },
+  getAllForRegisterId: async ({ commit }, registerId: string): Promise<void> => {
+    commit('setAll', await httpClient.get<IRegisterProperty[]>({ query: `?registerId=${registerId}` }));
+  },
 };
 
 export default actions;

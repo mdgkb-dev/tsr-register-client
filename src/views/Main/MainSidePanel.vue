@@ -174,6 +174,11 @@ export default defineComponent({
             link: '/register-properties',
           },
           {
+            name: 'RegisterExports',
+            title: 'Экспорт регистров',
+            link: '/register-exports',
+          },
+          {
             name: 'HistoryList',
             title: 'Архив',
             link: '/history',
