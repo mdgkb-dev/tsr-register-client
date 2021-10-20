@@ -1,6 +1,7 @@
 import Bmi from '@/classes/bmi/Bmi';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IHeightWeightConstructor from '@/interfaces/anthropometry/IHeightWeightConstructor';
+import IColorPercentile from '@/interfaces/shared/IColorPercentile';
 
 export default class HeightWeight implements IHeightWeight {
   id?: string;
@@ -21,15 +22,20 @@ export default class HeightWeight implements IHeightWeight {
     this.patientId = i.patientId;
   }
 
-  getBmiGroup(birthDate: string, isMale: boolean): string {
-    if (!this.weight || !this.height) return 'Недостаточно данных';
+  getBmiGroup(dateBirth: string, isMale: boolean): IColorPercentile | string {
+    if (!this.weight || !this.height) {
+      return 'Недостаточно данных';
+    }
     const bmi = Bmi.calculate(this.weight, this.height);
-    const monthFromBirth = Bmi.birthDateToMeasureToMonth(birthDate, this.date);
+    const monthFromBirth = Bmi.birthDateToMeasureToMonth(dateBirth, this.date);
     const bmiMonth = Bmi.findBmiMonth(monthFromBirth, isMale);
-    if (!bmiMonth) return 'Данные по данной дате рождения неизвестны';
+    if (!bmiMonth) {
+      return 'Некорректные данные по дате рождения или дате изменения';
+    }
     const group = Bmi.calculateGroup(bmi, bmiMonth);
-    if (!group) return 'Некорректные данные антропометрии';
-    const weightClass = Bmi.getWeightClass(group);
-    return `${group}, ${weightClass}`;
+    if (!group) {
+      return 'Некорректные данные антропометрии';
+    }
+    return Bmi.getGroup(group);
   }
 }

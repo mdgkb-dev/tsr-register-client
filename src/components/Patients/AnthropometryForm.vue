@@ -53,7 +53,11 @@
 
       <el-table-column label="ИМТ">
         <template #default="scope">
-          {{ scope.row.getBmiGroup(birthDate, isMale) }}
+          {{
+            scope.row.getBmiGroup(birthDate, isMale).color
+              ? `${scope.row.getBmiGroup(birthDate, isMale).percentiles}, ${scope.row.getBmiGroup(birthDate, isMale).recomendation}`
+              : scope.row.getBmiGroup(birthDate, isMale)
+          }}
         </template>
       </el-table-column>
 
@@ -84,7 +88,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="value" label="Окружность груди" width="200" align="center">
+      <el-table-column prop="value" label="Окружность груди" width="250" align="center">
         <template #default="scope">
           <el-form-item
             v-if="isEditMode"
@@ -96,6 +100,18 @@
             <el-input-number v-model="scope.row.value" size="medium" :min="0" style="width: 120px"></el-input-number>
           </el-form-item>
           <span v-else>{{ scope.row.value }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Группа">
+        <template #default="scope">
+          {{
+            scope.row.getChestCircumferenceGroup(birthDate, isMale).color
+              ? `${scope.row.getChestCircumferenceGroup(birthDate, isMale).percentiles}, ${
+                  scope.row.getChestCircumferenceGroup(birthDate, isMale).recomendation
+                }`
+              : scope.row.getChestCircumferenceGroup(birthDate, isMale)
+          }}
         </template>
       </el-table-column>
 
@@ -126,7 +142,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="value" label="Окружность головы" width="200" align="center">
+      <el-table-column prop="value" label="Окружность головы" width="250" align="center">
         <template #default="scope">
           <el-form-item
             v-if="isEditMode"
@@ -138,6 +154,18 @@
             <el-input-number v-model="scope.row.value" size="medium" :min="0" style="width: 120px"></el-input-number>
           </el-form-item>
           <span v-else>{{ scope.row.value }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Группа">
+        <template #default="scope">
+          {{
+            scope.row.getHeadCircumferenceGroup(birthDate, isMale).color
+              ? `${scope.row.getHeadCircumferenceGroup(birthDate, isMale).percentiles}, ${
+                  scope.row.getHeadCircumferenceGroup(birthDate, isMale).recomendation
+                }`
+              : scope.row.getHeadCircumferenceGroup(birthDate, isMale)
+          }}
         </template>
       </el-table-column>
 

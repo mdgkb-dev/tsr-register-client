@@ -1,3 +1,4 @@
+import ColorPercentile from '@/classes//shared/ColorPercentile';
 import BmiBoys from '@/classes/bmi/BmiBoys';
 import BmiGirls from '@/classes/bmi/BmiGirls';
 
@@ -30,8 +31,11 @@ export default class Bmi {
     return (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
   };
 
-  static birthDateToMeasureToMonth = (birthDate: string, measureDate: string): number =>
-    (new Date(measureDate).getFullYear() - new Date(birthDate).getFullYear()) * 12;
+  static birthDateToMeasureToMonth = (birthDate: string, measureDate: string): number => {
+    const dateFrom = new Date(measureDate);
+    const dateTo = new Date(birthDate);
+    return dateTo.getMonth() - dateFrom.getMonth() + (dateFrom.getFullYear() - dateTo.getFullYear()) * 12;
+  };
 
   static findBmiMonth = (month: number, isMale: boolean): IBmiMonth => {
     if (isMale) {
@@ -50,7 +54,7 @@ export default class Bmi {
       if (Object.prototype.hasOwnProperty.call(bmiMonth, group)) {
         groupBmi = bmiMonth[group];
 
-        if (bmi < groupBmi) {
+        if (bmi < groupBmi && bmi >= bmiMonth['1st']) {
           return group;
         }
       }
@@ -59,24 +63,40 @@ export default class Bmi {
     return '';
   };
 
-  static getWeightClass = (group: string): string => {
+  static getGroup = (group: string): ColorPercentile | string => {
+    const red = 'Eсть вероятность патологии развития';
+    const orange = 'Возможно потребуются дополнительные обследования и консультации специалистов';
+    const yellow = 'Требуются дополнительные обследования и консультации специалистов';
+    const lightGreen = 'Нормальный вес';
+    const green = 'Эталон';
     switch (group) {
       case '1st':
+        return new ColorPercentile({ color: 'red', recomendation: red, percentiles: '1st' });
       case '99th':
-        return 'есть вероятность патологии развития';
+        return new ColorPercentile({ color: 'red', recomendation: red, percentiles: '99th' });
+
       case '3rd':
+        return new ColorPercentile({ color: 'orange', recomendation: orange, percentiles: '3rd' });
       case '5th':
+        return new ColorPercentile({ color: 'orange', recomendation: orange, percentiles: '5th' });
       case '95th':
+        return new ColorPercentile({ color: 'orange', recomendation: orange, percentiles: '95th' });
       case '97th':
-        return 'возможно потребуются дополнительные обследования и консультации специалистов';
+        return new ColorPercentile({ color: 'orange', recomendation: orange, percentiles: '97th' });
+
       case '15th':
+        return new ColorPercentile({ color: 'yellow', recomendation: yellow, percentiles: '15th' });
       case '85th':
-        return 'требуются дополнительные обследования и консультации специалистов';
+        return new ColorPercentile({ color: 'yellow', recomendation: yellow, percentiles: '85th' });
+
       case '25th':
+        return new ColorPercentile({ color: 'lightGreen', recomendation: lightGreen, percentiles: '25th' });
       case '75th':
-        return 'нормальный вес';
+        return new ColorPercentile({ color: 'lightGreen', recomendation: lightGreen, percentiles: '75th' });
+
       case '50th':
-        return 'эталон';
+        return new ColorPercentile({ color: 'green', recomendation: green, percentiles: '50th' });
+
       default:
         return '';
     }

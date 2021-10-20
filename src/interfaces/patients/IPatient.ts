@@ -11,7 +11,7 @@ export default interface IPatient extends IPatientConstructor {
   findProperty: (propertyId: string) => IRegisterPropertyToPatient | undefined;
   getActuallyDisability: () => IDisability;
   getAnamnesis: (id: string) => IPatientDiagnosisAnamnesis;
-  getBmiGroup: () => string;
+  // getBmiGroup: () => string;
   getFileInfos: () => IFileInfo[];
   getHeightWeightShort: () => string;
   getLastHeightWeight: () => IHeightWeight | undefined;

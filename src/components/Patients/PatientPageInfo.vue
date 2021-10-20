@@ -64,36 +64,47 @@
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" class="light-title upper">Вес - Рост</el-col>
-          <el-col :span="12"> {{ patient.getHeightWeightShort() ? patient.getHeightWeightShort() : 'Нет данных' }}</el-col>
+          <el-col :span="12">
+            <span>{{ patient.getHeightWeightShort() ? patient.getHeightWeightShort() : 'Нет данных' }}</span>
+            <ColoredGroupTag :parameter="lastHeightWeightBmiGroup?.color ? lastHeightWeightBmiGroup : null" />
+          </el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" class="light-title upper">Окружность головы</el-col>
           <el-col :span="12">
-            {{
-              patient.getLastCircumference(patient.headCircumference)
-                ? patient.getLastCircumference(patient.headCircumference).value
-                : 'Нет данных'
-            }}
+            <span>
+              {{
+                patient.getLastCircumference(patient.headCircumference)
+                  ? patient.getLastCircumference(patient.headCircumference).value
+                  : 'Нет данных'
+              }}
+            </span>
+            <ColoredGroupTag :parameter="lastHeadCircumferenceGroup?.color ? lastHeadCircumferenceGroup : null" />
           </el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>
           <el-col :span="12" class="light-title upper">Окружность груди</el-col>
           <el-col :span="12">
-            {{
-              patient.getLastCircumference(patient.chestCircumference)
-                ? patient.getLastCircumference(patient.chestCircumference).value
-                : 'Нет данных'
-            }}
+            <span>
+              {{
+                patient.getLastCircumference(patient.chestCircumference)
+                  ? patient.getLastCircumference(patient.chestCircumference).value
+                  : 'Нет данных'
+              }}
+            </span>
+            <ColoredGroupTag :parameter="lastChestCircumferenceGroup?.color ? lastChestCircumferenceGroup : null" />
           </el-col>
         </el-row>
         <el-divider></el-divider>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12" class="light-title upper">ИМТ</el-col>
-          <el-col :span="12"> {{ patient.getBmiGroup() }}</el-col>
+          <el-col :span="12">
+            {{ patient.getLastHeightWeight().getBmiGroup(patient.human.dateBirth, patient.human.isMale) }}
+          </el-col>
         </el-row>
-        <el-divider></el-divider>
+        <el-divider></el-divider> -->
         <el-row>
           <el-col :span="12" class="light-title upper">Адрес</el-col>
           <el-col :span="12"> {{ patient.human.addressRegistration ? patient.human.addressRegistration : 'Не указан' }} </el-col>
@@ -135,23 +146,39 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import ColoredGroupTag from '@/components/Patients/ColoredGroupTag.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import Uploader from '@/components/Uploader.vue';
 import IPatient from '@/interfaces/patients/IPatient';
+import IColorPercentile from '@/interfaces/shared/IColorPercentile';
 import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'PatientPageInfo',
   components: {
     Uploader,
     PopoverInfo,
+    ColoredGroupTag,
   },
   setup() {
     const { formatDate } = useDateFormat();
     const store = useStore();
-    const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
+    const patient: ComputedRef<IPatient> = computed(() => store.getters['patients/patient']);
+    const lastHeightWeightBmiGroup: ComputedRef<IColorPercentile | string | undefined> = computed(() => {
+      return patient.value.getLastHeightWeight()?.getBmiGroup(patient.value.human.dateBirth, patient.value.human.isMale);
+    });
+    const lastChestCircumferenceGroup: ComputedRef<IColorPercentile | string | undefined> = computed(() => {
+      return patient.value
+        .getLastCircumference(patient.value.chestCircumference)
+        ?.getChestCircumferenceGroup(patient.value.human.dateBirth, patient.value.human.isMale);
+    });
+    const lastHeadCircumferenceGroup: ComputedRef<IColorPercentile | string | undefined> = computed(() => {
+      return patient.value
+        .getLastCircumference(patient.value.headCircumference)
+        ?.getHeadCircumferenceGroup(patient.value.human.dateBirth, patient.value.human.isMale);
+    });
 
     // Local state.
     const checked = ref(true);
@@ -162,6 +189,9 @@ export default defineComponent({
       notChecked,
       patient,
       formatDate,
+      lastHeightWeightBmiGroup,
+      lastChestCircumferenceGroup,
+      lastHeadCircumferenceGroup,
     };
   },
 });
