@@ -1,5 +1,5 @@
+import Circumference from '@/classes/anthropometry/Circumference';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
-import Bmi from '@/classes/bmi/Bmi';
 import Disability from '@/classes/disability/Disability';
 import History from '@/classes/history/History';
 import Human from '@/classes/humans/Human';
@@ -11,6 +11,7 @@ import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPat
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
 import User from '@/classes/user/User';
+import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
@@ -42,6 +43,10 @@ export default class Patient implements IPatient {
   patientDiagnosisForDelete: string[] = [];
   heightWeight: IHeightWeight[] = [];
   heightWeightForDelete: string[] = [];
+  chestCircumference: ICircumference[] = [];
+  chestCircumferenceForDelete: string[] = [];
+  headCircumference: ICircumference[] = [];
+  headCircumferenceForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
   registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
@@ -70,6 +75,12 @@ export default class Patient implements IPatient {
     }
     if (patient.heightWeight) {
       this.heightWeight = patient.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
+    }
+    if (patient.chestCircumference) {
+      this.chestCircumference = patient.chestCircumference.map((i: ICircumference) => new Circumference(i));
+    }
+    if (patient.headCircumference) {
+      this.headCircumference = patient.headCircumference.map((i: ICircumference) => new Circumference(i));
     }
     if (patient.patientDiagnosis) {
       this.patientDiagnosis = patient.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
@@ -120,6 +131,16 @@ export default class Patient implements IPatient {
     });
   }
 
+  getLastCircumference(circumference: ICircumference[]): ICircumference | undefined {
+    if (!circumference.length) {
+      return;
+    }
+
+    return circumference.reduce((mostRecent: ICircumference, item: ICircumference) => {
+      return new Date(item.date) > new Date(mostRecent.date) ? item : mostRecent;
+    });
+  }
+
   getHeightWeightShort(): string {
     const lastHeightWeight = this.getLastHeightWeight();
 
@@ -130,32 +151,50 @@ export default class Patient implements IPatient {
     return '';
   }
 
-  getBmiGroup(): string {
-    const lastHeightWeight = this.getLastHeightWeight();
-    const lastWeight = lastHeightWeight?.weight;
-    const lastHeight = lastHeightWeight?.height;
+  // getBmiGroup(): string {
+  //   const lastHeightWeight = this.getLastHeightWeight();
+  //   const lastWeight = lastHeightWeight?.weight;
+  //   const lastHeight = lastHeightWeight?.height;
 
-    if (!lastWeight || !lastHeight) {
-      return 'Недостаточно данных';
-    }
+  //   if (!lastWeight || !lastHeight) {
+  //     return 'Недостаточно данных';
+  //   }
 
-    const bmi = Bmi.calculate(lastWeight, lastHeight);
-    const month = Bmi.birthDateToMonth(this.human.dateBirth);
-    const bmiMonth = Bmi.findBmiMonth(month, this.human.isMale);
+  //   const bmi = Bmi.calculate(lastWeight, lastHeight);
+  //   const month = Bmi.birthDateToMonth(this.human.dateBirth);
+  //   const bmiMonth = Bmi.findBmiMonth(month, this.human.isMale);
 
-    if (!bmiMonth) {
-      return 'Данные по данной дате рождения неизвестны';
-    }
+  //   if (!bmiMonth) {
+  //     return 'Данные по данной дате рождения неизвестны';
+  //   }
 
-    const group = Bmi.calculateGroup(bmi, bmiMonth);
+  //   const group = Bmi.calculateGroup(bmi, bmiMonth);
 
-    if (!group) {
-      return 'Некорректные данные антропометрии';
-    }
+  //   if (!group) {
+  //     return 'Некорректные данные антропометрии';
+  //   }
 
-    const weightClass = Bmi.getWeightClass(group);
-    return `${group}, ${weightClass}`;
-  }
+  //   const weightClass = Bmi.getWeightClass(group);
+  //   return `${group}, ${weightClass}`;
+  // }
+
+  // getChestCircumferenceGroup(): string {
+  //   const lastChestCircumference = this.getLastCircumference(this.chestCircumference);
+  //   if (!lastChestCircumference?.value) {
+  //     return 'Недостаточно данных';
+  //   }
+  //   const month = Bmi.birthDateToMonth(this.human.dateBirth);
+  //   const monthGroups = Circumference.findChestCircumferenceGroup(month, this.human.isMale);
+  //   if (!monthGroups) {
+  //     return 'Данные по данной дате рождения неизвестны';
+  //   }
+  //   const group = Circumference.calculateChestCircumferenceGroup(lastChestCircumference.value, monthGroups);
+  //   if (!group) {
+  //     return 'Некорректные данные окружности груди';
+  //   }
+  //   const groupRecomendation = Circumference.getCircumferenceGroupRecomendation(group);
+  //   return `${group}, ${groupRecomendation}`;
+  // }
 
   findProperty(propertyId: string): IRegisterPropertyToPatient | undefined {
     return this.registerPropertyToPatient?.find((i: IRegisterPropertyToPatient) => i.registerPropertyId === propertyId);
