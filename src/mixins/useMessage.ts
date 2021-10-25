@@ -6,10 +6,10 @@ interface IReturn {
 
 export default function (): IReturn {
   const showMessageError = (error: string): void => {
-    if(!ElMessage.error){
+    if (!ElMessage.error) {
       return;
     }
-      ElMessage.error(error);
+    ElMessage.error(error);
   };
 
   return {
