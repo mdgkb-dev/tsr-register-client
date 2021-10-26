@@ -68,13 +68,13 @@ export default defineComponent({
     const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis[]> = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
     const setDiagnosis = (diagnosis: IMkbDiagnosis): void =>
-      store.commit(`${storeModule}/addDiagnosis`, MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis));
+      store.commit(`${storeModule.value}/addDiagnosis`, MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis));
 
     const setSubDiagnosis = (subDiagnosis: IMkbSubDiagnosis, diagnosis: IMkbDiagnosis): void =>
-      store.commit(`${storeModule}/addDiagnosis`, MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis, subDiagnosis));
+      store.commit(`${storeModule.value}/addDiagnosis`, MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis, subDiagnosis));
 
     const removeCheckedDiagnosis = (i: IMkbDiagnosis | IMkbSubDiagnosis): void =>
-      store.commit(`${storeModule}/removeDiagnosisByDiagnosisOrSubDiagnosisId`, i.id);
+      store.commit(`${storeModule.value}/removeDiagnosisByDiagnosisOrSubDiagnosisId`, i.id);
 
     return {
       patientDiagnosis,
