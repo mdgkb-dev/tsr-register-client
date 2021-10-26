@@ -167,7 +167,9 @@ export default defineComponent({
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
-      if (!validate(form.value)) return;
+      if (!validate(form.value)) {
+        return;
+      }
 
       for (const item of patient.value.representativeToPatient) {
         item.patient = undefined;

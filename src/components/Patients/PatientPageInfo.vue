@@ -113,10 +113,12 @@
         <el-row>
           <el-col :span="12" class="light-title upper flex-center">Значится в регистрах</el-col>
           <el-col :span="12">
-            <el-space v-if="patient.registerToPatient.lenght" :wrap="true">
+            <el-space v-if="patient.registerToPatient.length" :wrap="true">
               <div v-for="registerToPatient in patient.registerToPatient" :key="registerToPatient.id">
                 <el-tooltip class="item" effect="light" :content="registerToPatient.register.name" placement="top-end">
-                  <el-tag>{{ registerToPatient.register.name }}</el-tag>
+                  <el-tag class="tag-link" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">{{
+                    registerToPatient.register.name
+                  }}</el-tag>
                 </el-tooltip>
               </div>
             </el-space>
@@ -199,4 +201,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/pageInfo.scss';
+.register-tag {
+  &:hover {
+    cursor: pointer;
+    border-width: 2px;
+  }
+}
 </style>

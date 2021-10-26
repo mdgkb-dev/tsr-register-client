@@ -14,7 +14,9 @@ export default class MessageError implements IMessage {
   static FormMessage(errorFields: any): string {
     let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
     for (const item of Object.keys(errorFields)) {
-      errorMessage += `<li>${errorFields[item][0].message}</li>`;
+      if (errorFields[item][0] && errorFields[item][0].message) {
+        errorMessage += `<li>${errorFields[item][0].message}</li>`;
+      }
     }
     errorMessage += '</ul>';
     return errorMessage;
