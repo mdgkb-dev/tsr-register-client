@@ -74,7 +74,10 @@ export default function (isEditMode = false): {
         await store.dispatch(`${module}/create`, payload);
       }
     } catch (e) {
-      ElMessage.error(e.toString());
+      if (!ElMessage.error) {
+        return;
+      }
+      ElMessage.error(String(e));
       return;
     }
     if (next) {
@@ -105,7 +108,10 @@ export default function (isEditMode = false): {
         store.dispatch(`${module}/create`, payload);
       }
     } catch (e) {
-      ElMessage.error(e.toString());
+      if (!ElMessage.error) {
+        return;
+      }
+      ElMessage.error(String(e));
       return;
     }
 

@@ -124,7 +124,7 @@
 
 <script lang="ts">
 import { ElMessageBox } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
 import DrugRegimen from '@/classes/drugs/DrugRegimen';
@@ -151,7 +151,7 @@ export default defineComponent({
 
     const patientDrugRegimens: ComputedRef<IPatientDrugRegimen[]> = computed(() => store.getters['patients/patientDrugRegimens']);
     const drugs: Ref<IDrug[]> = computed(() => store.getters['drugs/drugs']);
-    const newPatientDrugRegimen: Ref<IPatientDrugRegimen> = ref(new PatientDrugRegimen());
+    const newPatientDrugRegimen: Ref<UnwrapRef<IPatientDrugRegimen>> = ref(new PatientDrugRegimen());
     const chosenDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 

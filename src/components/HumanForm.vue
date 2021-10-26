@@ -57,10 +57,9 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, reactive } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
-import Human from '@/classes/humans/Human';
 import IHuman from '@/interfaces/humans/IHuman';
 import useDateFormat from '@/mixins/useDateFormat';
 
@@ -81,11 +80,11 @@ export default defineComponent({
     const { formatDate } = useDateFormat();
 
     const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters[`${props.storeName}/getHuman`]);
-    const human: IHuman = reactive<IHuman>(new Human(humanComputed.value));
+    const human: UnwrapRef<IHuman> = reactive<IHuman>(humanComputed.value);
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters[`${props.storeName}/isEditMode`]);
 
-    const updateHuman = async () => {
-      await store.commit(`${props.storeName}/setHuman`, human);
+    const updateHuman = () => {
+      store.commit(`${props.storeName}/setHuman`, human);
     };
 
     return {
