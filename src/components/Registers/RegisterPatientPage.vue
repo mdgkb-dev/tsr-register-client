@@ -50,17 +50,15 @@
                 <DataComponentComputed :property="prop.registerProperty" :patient="patient" />
               </el-form-item>
               <el-form-item v-if="prop.registerProperty.valueType.isSet()" :label="prop.registerProperty.name">
-                <el-checkbox-group>
-                  <el-checkbox
-                    v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
-                    :key="registerPropertySet.id"
-                    :label="registerPropertySet.name"
-                    :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
-                    @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
-                  >
-                    {{ registerPropertySet.name }}</el-checkbox
-                  >
-                </el-checkbox-group>
+                <el-checkbox
+                  v-for="registerPropertySet in prop.registerProperty.registerPropertySet"
+                  :key="registerPropertySet.id"
+                  :label="registerPropertySet.name"
+                  :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
+                  @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
+                >
+                  {{ registerPropertySet.name }}</el-checkbox
+                >
               </el-form-item>
               <el-form-item v-if="prop.registerProperty.valueType.isRadio()" :label="prop.registerProperty.name">
                 <el-radio

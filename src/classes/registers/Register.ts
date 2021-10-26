@@ -49,6 +49,7 @@ export default class Register implements IRegister {
   }
 
   patientIncludableByDiagnosis(patientDiagnosis: IPatientDiagnosis[]): boolean {
+    console.log(this.registerDiagnosis.length);
     if (this.registerDiagnosis.length === 0) return true;
     const diagnosis = patientDiagnosis.find((d: IPatientDiagnosis) => {
       return !!this.registerDiagnosis.find((i) => i.mkbDiagnosisId === d.mkbDiagnosisId);

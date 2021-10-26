@@ -258,7 +258,8 @@ export default class Patient implements IPatient {
   }
 
   getRegisterPropertyValueSet(setId: string): boolean {
-    return this.registerPropertySetToPatient?.some((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+    const res = this.registerPropertySetToPatient?.some((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+    return res;
   }
 
   setRegisterPropertyValueOther(value: string, property: IRegisterProperty): void {
@@ -321,19 +322,15 @@ export default class Patient implements IPatient {
       this.registerPropertySetToPatient.push(registerPropertySetToPatient);
       return;
     }
-
     const index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
 
     if (index <= -1) {
       return;
     }
-
     const idForDelete = this.registerPropertySetToPatient[index].id;
-
     if (idForDelete) {
       this.registerPropertySetToPatientForDelete.push(idForDelete);
     }
-
     this.registerPropertySetToPatient.splice(index, 1);
   }
 
