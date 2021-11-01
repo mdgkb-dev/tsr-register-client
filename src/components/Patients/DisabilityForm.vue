@@ -5,7 +5,6 @@
       :data="disabilities"
       style="width: 950px; margin-bottom: 20px"
       row-key="id"
-      border
       :default-expand-all="true"
       :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
       class="table-shadow"
@@ -18,7 +17,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="230" align="center">
+      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250" align="center">
         <template #default="scope">
           <el-form-item
             v-if="isEditMode"
@@ -40,7 +39,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="230" align="center">
+      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250" align="center">
         <template #default="scope">
           <el-form-item
             v-if="isEditMode"

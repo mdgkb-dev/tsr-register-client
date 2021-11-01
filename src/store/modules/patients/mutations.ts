@@ -26,6 +26,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
+import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -72,9 +73,8 @@ const mutations: MutationTree<State> = {
     if (index > -1) state.patient.human.insuranceCompanyToHuman.splice(index, 1);
     if (item.id) state.patient.human.insuranceCompanyToHumanForDelete.push(item.id);
   },
-  addRegister(state, registerId: string) {
-    const registerToPatient = new RegisterToPatient();
-    registerToPatient.registerId = registerId;
+  addRegister(state, register: IRegister) {
+    const registerToPatient = new RegisterToPatient({ register: register, registerId: register.id });
     state.patient.registerToPatient.push(registerToPatient);
   },
   removeRegister(state, registerId: string) {

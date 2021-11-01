@@ -52,7 +52,7 @@ export default defineComponent({
 
     const handleSelectionChange = (_: IRegister[], register: IRegister): void => {
       if (register.patientInRegister(registerToPatient.value)) store.commit('patients/removeRegister', register.id);
-      else store.commit('patients/addRegister', register.id);
+      else store.commit('patients/addRegister', register);
     };
 
     return {

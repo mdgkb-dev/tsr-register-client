@@ -10,7 +10,7 @@
         header-row-class-name="header-style"
         row-class-name="no-hover"
         style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 250px); overflow: auto"
-      >
+        >p
         <el-table-column type="index" width="60" align="center" />
 
         <el-table-column>
@@ -192,4 +192,9 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+:deep(.el-table td.el-table__cell) {
+  border-right: none;
+  border-left: none;
+}
+</style>
