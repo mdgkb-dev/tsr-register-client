@@ -9,8 +9,6 @@ import HistoryRoutes from '@/router/HistoryRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
 import RegisterExportsRoutes from '@/router/RegisterExportsRoutes';
-import RegisterGroupsRoutes from '@/router/RegisterGroupsRoutes';
-import RegisterPropertiesRoutes from '@/router/RegisterPropertiesRoutes';
 import RegistersRoutes from '@/router/RegistersRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
@@ -36,10 +34,6 @@ const routes: Array<RouteRecordRaw> = [
   ...InsuranceCompaniesRoutes,
   ...PatientsRoutes,
   ...RegisterExportsRoutes,
-  ...RegisterGroupsRoutes,
-  ...RegisterGroupsRoutes,
-  ...RegisterPropertiesRoutes,
-  ...RegisterPropertiesRoutes,
   ...RegistersRoutes,
   ...RegistersRoutes,
   ...RepresentativeRoutes,

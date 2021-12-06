@@ -5,6 +5,7 @@ import IHistory from '@/interfaces/history/IHistory';
 import IHuman from '@/interfaces/humans/IHuman';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
+import IRegisterPropertyOtherToPatient from '@/interfaces/registers/IRegisterPropertyOtherToPatient';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -27,6 +28,7 @@ export default interface IPatientConstructor extends IModelInfo {
   registerToPatient: IRegisterToPatient[];
   registerToPatientForDelete: string[];
   registerPropertyToPatient: IRegisterPropertyToPatient[];
+  registerPropertyOthersToPatient: IRegisterPropertyOtherToPatient[];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[];
   registerPropertySetToPatientForDelete: string[];
   patientDrugRegimen: IPatientDrugRegimen[];

@@ -1,10 +1,10 @@
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
-import RegisterGroupToRegister from '@/classes/registers/RegisterGroupToRegister';
+import RegisterGroup from '@/classes/registers/RegisterGroup';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import IRegisterGroupToRegister from '@/interfaces/registers/IRegisterGroupToRegister';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 
@@ -13,36 +13,34 @@ export default class Register implements IRegister {
   name = '';
   registerDiagnosis: IRegisterDiagnosis[] = [];
   registerDiagnosisForDelete: string[] = [];
-  registerGroupToRegister: IRegisterGroupToRegister[] = [];
+  registerGroups: IRegisterGroup[] = [];
+  registerGroupsForDelete: string[] = [];
   registerToPatient: IRegisterToPatient[] = [];
   registerGroupToRegisterForDelete: string[] = [];
   registerToPatientCount = 0;
-  constructor(register?: IRegister) {
-    if (!register) return;
 
-    this.id = register.id;
-    this.name = register.name;
-    if (register.registerGroupToRegister) {
-      this.registerGroupToRegister = register.registerGroupToRegister.map(
-        (group: IRegisterGroupToRegister) => new RegisterGroupToRegister(group)
-      );
+  constructor(i?: IRegister) {
+    if (!i) return;
+
+    this.id = i.id;
+    this.name = i.name;
+    if (i.registerGroups) {
+      this.registerGroups = i.registerGroups.map((item: IRegisterGroup) => new RegisterGroup(item));
     }
-    if (register.registerDiagnosis) {
-      this.registerDiagnosis = register.registerDiagnosis.map(
-        (registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis)
-      );
+    if (i.registerDiagnosis) {
+      this.registerDiagnosis = i.registerDiagnosis.map((registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis));
     }
-    if (register.registerToPatient) {
-      this.registerToPatient = register.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
+    if (i.registerToPatient) {
+      this.registerToPatient = i.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
     }
-    this.registerToPatientCount = register.registerToPatientCount;
+    this.registerToPatientCount = i.registerToPatientCount;
   }
 
   getProps(): IRegisterProperty[] {
     const props: IRegisterProperty[] = [];
-    this.registerGroupToRegister.forEach((groupToRegister) =>
-      groupToRegister.registerGroup?.registerPropertyToRegisterGroup.forEach((propToRegister) => {
-        if (propToRegister.registerProperty) props.push(propToRegister.registerProperty);
+    this.registerGroups.forEach((group: IRegisterGroup) =>
+      group.registerProperties.forEach((property: IRegisterProperty) => {
+        props.push(property);
       })
     );
     return props as IRegisterProperty[];
@@ -63,5 +61,17 @@ export default class Register implements IRegister {
   getTagName(): string {
     if (this.name.length > 10) return this.name.replace(/(?<=.{9}).+/g, '...');
     return this.name;
+  }
+
+  addRegisterGroup(): void {
+    this.registerGroups.push(new RegisterGroup());
+  }
+
+  removeRegisterGroup(index: number): void {
+    const idForDelete = this.registerGroups[index].id;
+    if (idForDelete) {
+      this.registerGroupsForDelete.push(idForDelete);
+    }
+    this.registerGroups.splice(index, 1);
   }
 }

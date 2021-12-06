@@ -38,7 +38,6 @@ import { useStore } from 'vuex';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
 import IRegisterQueryToRegisterProperty from '@/interfaces/registers/IRegisterQueryToRegisterProperty';
 export default defineComponent({
   name: 'RegisterExportPropertyFormPlain',
@@ -58,8 +57,8 @@ export default defineComponent({
       store.commit('registerQueries/addQueryToProperty');
     };
 
-    const remove = (queryToProperty: IRegisterPropertyToRegisterGroup): void => {
-      store.commit('registerQueries/removeQueryToProperty', queryToProperty);
+    const remove = (queryToProperty: any): void => {
+      // store.commit('registerQueries/removeQueryToProperty', queryToProperty);
     };
 
     return {

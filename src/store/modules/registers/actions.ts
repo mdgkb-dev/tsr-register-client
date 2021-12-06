@@ -2,6 +2,7 @@ import { ActionTree } from 'vuex';
 
 import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IRegister from '@/interfaces/registers/IRegister';
+import IValueType from '@/interfaces/valueTypes/IValueType';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
@@ -25,6 +26,9 @@ const actions: ActionTree<State, RootState> = {
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete<IRegister, IRegister>({ query: id });
     commit('delete', id);
+  },
+  getValueTypes: async ({ commit }): Promise<void> => {
+    commit('setValueTypes', await httpClient.get<IValueType>({ query: 'value-types' }));
   },
 };
 

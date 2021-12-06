@@ -35,25 +35,18 @@
 
               <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
                 <h3 style="margin-left: 20px">Скрыть столбцы</h3>
-                <div v-if="register.registerGroupToRegister.length">
-                  <el-row v-for="registerGroupToRegister in register.registerGroupToRegister" :key="registerGroupToRegister.id">
-                    <el-col
-                      v-for="(registerPropertyToRegisterGroup, i) in registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup"
-                      :key="registerPropertyToRegisterGroup.id"
-                    >
+                <div v-if="register.registerGroups.length">
+                  <el-row v-for="registerGroup in register.registerGroups" :key="registerGroup.id">
+                    <el-col v-for="(registerProperty, i) in registerGroup.registerProperties" :key="registerProperty.id">
                       <el-checkbox
-                        :model-value="
-                          !!user.registerPropertyToUser.find(
-                            (prop) => prop.registerPropertyId === registerPropertyToRegisterGroup.registerPropertyId
-                          )
-                        "
+                        :model-value="!!user.registerPropertyToUser.find((prop) => prop.registerPropertyId === registerProperty.id)"
                         :label="
-                          registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName
-                            ? registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.shortName
-                            : registerGroupToRegister.registerGroup.registerPropertyToRegisterGroup[i].registerProperty.name
+                          registerGroup.registerProperties[i].shortName
+                            ? registerGroup.registerProperties[i].shortName
+                            : registerGroup.registerProperties[i].name
                         "
-                        :value="registerPropertyToRegisterGroup.registerProperty.id"
-                        @change="setCols($event, registerPropertyToRegisterGroup.registerProperty.id)"
+                        :value="registerProperty.id"
+                        @change="setCols($event, registerProperty.id)"
                       >
                       </el-checkbox>
                     </el-col>
@@ -105,7 +98,6 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import Register from '@/classes/registers/Register';
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -126,7 +118,7 @@ export default defineComponent({
     const route = useRoute();
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
-    const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
+    const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
     const user: Ref<IUserAuthorized> = computed(() => store.getters['auth/user']);
     const cols: Ref<IRegisterProperty[]> = ref([]);
     const { links, pushToLinks } = useBreadCrumbsLinks();

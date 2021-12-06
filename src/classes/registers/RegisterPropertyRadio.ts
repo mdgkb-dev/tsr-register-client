@@ -1,4 +1,6 @@
+import RegisterPropertyOther from '@/classes/registers/RegisterPropertyOther';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterPropertyOther from '@/interfaces/registers/IRegisterPropertyOther';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 
 export default class RegisterPropertyRadio implements IRegisterPropertyRadio {
@@ -6,13 +8,29 @@ export default class RegisterPropertyRadio implements IRegisterPropertyRadio {
   name = '';
   registerPropertyId?: string;
   registerProperty?: IRegisterProperty;
-
-  constructor(item?: IRegisterPropertyRadio) {
-    if (!item) {
+  registerPropertyOthers: IRegisterPropertyOther[] = [];
+  registerPropertyOthersForDelete: string[] = [];
+  constructor(i?: IRegisterPropertyRadio) {
+    if (!i) {
       return;
     }
-    this.id = item.id;
-    this.name = item.name;
-    this.registerPropertyId = item.registerPropertyId;
+    this.id = i.id;
+    this.name = i.name;
+    this.registerPropertyId = i.registerPropertyId;
+    if (i.registerPropertyOthers) {
+      this.registerPropertyOthers = i.registerPropertyOthers.map((item: IRegisterPropertyOther) => new RegisterPropertyOther(item));
+    }
+  }
+
+  addRegisterPropertyOther(): void {
+    this.registerPropertyOthers.push(new RegisterPropertyOther());
+  }
+
+  removeRegisterPropertyOther(index: number): void {
+    const idForDelete = this.registerPropertyOthers[index].id;
+    if (idForDelete) {
+      this.registerPropertyOthersForDelete.push(idForDelete);
+    }
+    this.registerPropertyOthers.splice(index, 1);
   }
 }

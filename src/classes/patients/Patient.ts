@@ -6,6 +6,7 @@ import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import PatientDrugRegimen from '@/classes/patients/PatientDrugRegimen';
+import RegisterPropertyOtherToPatient from '@/classes/registers/RegisterPropertyOtherToPatient';
 import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
 import RegisterToPatient from '@/classes/registers/RegisterToPatient';
@@ -23,6 +24,7 @@ import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterPropertyOtherToPatient from '@/interfaces/registers/IRegisterPropertyOtherToPatient';
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
@@ -50,6 +52,7 @@ export default class Patient implements IPatient {
   registerToPatient: IRegisterToPatient[] = [];
   registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
+  registerPropertyOthersToPatient: IRegisterPropertyOtherToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];
   patientDrugRegimen: IPatientDrugRegimen[] = [];
@@ -62,59 +65,62 @@ export default class Patient implements IPatient {
   createdBy?: IUser;
   updatedBy?: IUser;
 
-  constructor(patient?: IPatientConstructor) {
-    if (!patient) {
+  constructor(i?: IPatientConstructor) {
+    if (!i) {
       return;
     }
 
-    this.id = patient.id;
-    this.patientHistoryId = patient.patientHistoryId;
-    this.human = new Human(patient.human);
-    if (patient.history) {
-      this.history = new History(patient.history);
+    this.id = i.id;
+    this.patientHistoryId = i.patientHistoryId;
+    this.human = new Human(i.human);
+    if (i.history) {
+      this.history = new History(i.history);
     }
-    if (patient.heightWeight) {
-      this.heightWeight = patient.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
+    if (i.heightWeight) {
+      this.heightWeight = i.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
     }
-    if (patient.chestCircumference) {
-      this.chestCircumference = patient.chestCircumference.map((i: ICircumference) => new Circumference(i));
+    if (i.chestCircumference) {
+      this.chestCircumference = i.chestCircumference.map((i: ICircumference) => new Circumference(i));
     }
-    if (patient.headCircumference) {
-      this.headCircumference = patient.headCircumference.map((i: ICircumference) => new Circumference(i));
+    if (i.headCircumference) {
+      this.headCircumference = i.headCircumference.map((i: ICircumference) => new Circumference(i));
     }
-    if (patient.patientDiagnosis) {
-      this.patientDiagnosis = patient.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
+    if (i.patientDiagnosis) {
+      this.patientDiagnosis = i.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
     }
-    if (patient.representativeToPatient) {
-      this.representativeToPatient = patient.representativeToPatient.map(
+    if (i.representativeToPatient) {
+      this.representativeToPatient = i.representativeToPatient.map(
         (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient)
       );
     }
-    if (patient.disabilities) {
-      this.disabilities = patient.disabilities.map((disability: IDisability) => new Disability(disability));
+    if (i.disabilities) {
+      this.disabilities = i.disabilities.map((disability: IDisability) => new Disability(disability));
     }
-    if (patient.registerToPatient) {
-      this.registerToPatient = patient.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
+    if (i.registerToPatient) {
+      this.registerToPatient = i.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
     }
-    if (patient.registerPropertyToPatient) {
-      this.registerPropertyToPatient = patient.registerPropertyToPatient.map(
-        (i: IRegisterPropertyToPatient) => new RegisterPropertyToPatient(i)
-      );
+    if (i.registerPropertyToPatient) {
+      this.registerPropertyToPatient = i.registerPropertyToPatient.map((i: IRegisterPropertyToPatient) => new RegisterPropertyToPatient(i));
     }
-    if (patient.registerPropertySetToPatient) {
-      this.registerPropertySetToPatient = patient.registerPropertySetToPatient.map(
+    if (i.registerPropertySetToPatient) {
+      this.registerPropertySetToPatient = i.registerPropertySetToPatient.map(
         (i: IRegisterPropertySetToPatient) => new RegisterPropertySetToPatient(i)
       );
     }
-    if (patient.patientDrugRegimen) {
-      this.patientDrugRegimen = patient.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
+    if (i.registerPropertyOthersToPatient) {
+      this.registerPropertyOthersToPatient = i.registerPropertyOthersToPatient.map(
+        (item: IRegisterPropertyOtherToPatient) => new RegisterPropertyOtherToPatient(item)
+      );
     }
-    this.createdAt = patient.createdAt;
-    this.updatedAt = patient.updatedAt;
-    this.createdById = patient.createdById;
-    this.updatedById = patient.updatedById;
-    if (patient.createdBy) this.createdBy = new User(patient.createdBy);
-    if (patient.updatedBy) this.updatedBy = new User(patient.updatedBy);
+    if (i.patientDrugRegimen) {
+      this.patientDrugRegimen = i.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
+    }
+    this.createdAt = i.createdAt;
+    this.updatedAt = i.updatedAt;
+    this.createdById = i.createdById;
+    this.updatedById = i.updatedById;
+    if (i.createdBy) this.createdBy = new User(i.createdBy);
+    if (i.updatedBy) this.updatedBy = new User(i.updatedBy);
   }
 
   getActuallyDisability(): IDisability {
@@ -218,7 +224,7 @@ export default class Patient implements IPatient {
     if (property.valueType?.isSet()) {
       if (originalValue) {
         let res = '';
-        property.registerPropertySet.forEach((propertySet: IRegisterPropertySet) => {
+        property.registerPropertySets.forEach((propertySet: IRegisterPropertySet) => {
           this.registerPropertySetToPatient.forEach((prop: IRegisterPropertySetToPatient) => {
             if (propertySet.id === prop.registerPropertySetId) {
               res = `${res}\n${propertySet.name}`;
@@ -348,5 +354,41 @@ export default class Patient implements IPatient {
     }
 
     return new PatientDiagnosisAnamnesis();
+  }
+
+  getRegisterPropertyValueOthers(propertyOtherId: string): string {
+    const prop = this.registerPropertyOthersToPatient.find(
+      (propertyOther: IRegisterPropertyOtherToPatient) => propertyOther.id === propertyOtherId
+    );
+    if (prop) {
+      return prop.value;
+    }
+    const registerPropertyOtherToPatient = new RegisterPropertyOtherToPatient();
+    registerPropertyOtherToPatient.registerPropertyOtherId = propertyOtherId;
+    this.registerPropertyOthersToPatient.push(registerPropertyOtherToPatient);
+    return registerPropertyOtherToPatient.value;
+  }
+
+  findRegisterPropertyOthers(propertyOtherId: string): IRegisterPropertyOtherToPatient {
+    const prop = this.registerPropertyOthersToPatient.find(
+      (propertyOther: IRegisterPropertyOtherToPatient) => propertyOther.registerPropertyOtherId === propertyOtherId
+    );
+    if (prop) {
+      return prop;
+    }
+
+    const registerPropertyOtherToPatient = new RegisterPropertyOtherToPatient();
+    registerPropertyOtherToPatient.registerPropertyOtherId = propertyOtherId;
+    this.registerPropertyOthersToPatient.push(registerPropertyOtherToPatient);
+    return this.registerPropertyOthersToPatient[0];
+  }
+
+  setRegisterPropertyOthers(value: string, propertyOtherId: string): void {
+    const prop = this.findRegisterPropertyOthers(propertyOtherId);
+    prop.value = value;
+  }
+
+  getRegisterPropertyOthers(propertyOtherId: string): string {
+    return this.findRegisterPropertyOthers(propertyOtherId).value;
   }
 }

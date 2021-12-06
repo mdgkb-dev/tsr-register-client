@@ -23,4 +23,7 @@ export default interface IPatient extends IPatientConstructor {
   setRegisterPropertyValue: (value: number | string | Date, property: IRegisterProperty) => void;
   setRegisterPropertyValueOther: (value: string, property: IRegisterProperty) => void;
   setRegisterPropertyValueSet: (isAdd: boolean, setId: string) => void;
+  getRegisterPropertyOthers: (propertyOtherId: string) => string;
+  setRegisterPropertyOthers: (value: string, propertyOtherId: string) => void;
+  getRegisterPropertyValueOthers: (propertyOtherId: string) => string;
 }

@@ -1,22 +1,38 @@
-import RegisterPropertyToRegisterGroup from '@/classes/registers/RegisterPropertyToRegisterGroup';
+import RegisterProperty from '@/classes/registers/RegisterProperty';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegisterPropertyToRegisterGroup from '@/interfaces/registers/IRegisterPropertyToRegisterGroup';
+import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 
 export default class RegisterGroup implements IRegisterGroup {
   id?: string;
-  name?: string;
-  registerPropertyToRegisterGroup: IRegisterPropertyToRegisterGroup[] = [];
-  registerPropertyToRegisterGroupForDelete: string[] = [];
-  constructor(registerGroup?: IRegisterGroup) {
-    if (!registerGroup) {
+  name = '';
+  order = 0;
+  registerProperties: IRegisterProperty[] = [];
+  registerPropertiesForDelete: string[] = [];
+  constructor(i?: IRegisterGroup) {
+    if (!i) {
       return;
     }
-    this.id = registerGroup.id;
-    this.name = registerGroup.name;
-    if (registerGroup.registerPropertyToRegisterGroup) {
-      this.registerPropertyToRegisterGroup = registerGroup.registerPropertyToRegisterGroup.map(
-        (registerProperty: IRegisterPropertyToRegisterGroup) => new RegisterPropertyToRegisterGroup(registerProperty)
-      );
+    this.id = i.id;
+    this.name = i.name;
+    this.order = i.order;
+    if (i.registerProperties) {
+      this.registerProperties = i.registerProperties.map((item: IRegisterProperty) => new RegisterProperty(item));
     }
+  }
+
+  addRegisterProperty(): void {
+    this.registerProperties.push(new RegisterProperty());
+  }
+
+  removeRegisterProperty(index: number): void {
+    const idForDelete = this.registerProperties[index].id;
+    if (idForDelete) {
+      this.registerPropertiesForDelete.push(idForDelete);
+    }
+    this.registerProperties.splice(index, 1);
+  }
+
+  sortProperties(): void {
+    this.registerProperties.forEach((item: IRegisterProperty, index: number) => (item.order = index));
   }
 }

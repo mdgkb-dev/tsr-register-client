@@ -169,16 +169,6 @@ export default defineComponent({
             link: '/registers',
           },
           {
-            name: 'RegisterGroups',
-            title: 'Группы для регистров',
-            link: '/register-groups',
-          },
-          {
-            name: 'RegisterProperties',
-            title: 'Свойства для регистров',
-            link: '/register-properties',
-          },
-          {
             name: 'RegisterExports',
             title: 'Экспорт регистров',
             link: '/register-exports',

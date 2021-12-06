@@ -10,7 +10,8 @@ import { State } from './state';
 
 export const state: State = {
   registers: [],
-  register: new Register(),
+  item: new Register(),
+  valueTypes: [],
 };
 
 const namespaced = true;

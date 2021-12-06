@@ -1,34 +1,28 @@
 <template>
   <div v-if="mount" class="wrapper">
-    <el-row>
-      <el-form
-        ref="form"
-        :status-icon="true"
-        :inline-message="true"
-        :rules="rules"
-        :model="register"
-        label-width="20%"
-        label-position="left"
-        style="width: 100%"
-      >
-        <div class="table-background" style="margin-bottom: 20px; height: unset">
-          <el-form-item label="Название регистра" prop="name">
-            <el-input v-model="register.name"></el-input>
-          </el-form-item>
-        </div>
-
-        <el-collapse>
-          <el-collapse-item>
-            <template #title><h2 class="collapseHeader">Группы</h2></template>
-            <RegisterGroupForm />
-          </el-collapse-item>
-          <el-collapse-item>
-            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-            <MkbForm :store-module="'registers'" />
-          </el-collapse-item>
-        </el-collapse>
-      </el-form>
-    </el-row>
+    <el-form
+      ref="form"
+      :status-icon="true"
+      :inline-message="true"
+      :rules="rules"
+      :model="register"
+      label-width="20%"
+      label-position="left"
+      style="width: 100%"
+    >
+      <div class="table-background" style="margin-bottom: 20px; height: unset">
+        <el-form-item label="Название регистра" prop="name">
+          <el-input v-model="register.name"></el-input>
+        </el-form-item>
+      </div>
+      <el-collapse>
+        <RegisterGroupForm />
+        <el-collapse-item>
+          <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+          <MkbForm :store-module="'registers'" />
+        </el-collapse-item>
+      </el-collapse>
+    </el-form>
   </div>
 </template>
 
@@ -57,7 +51,7 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const register: Ref<IRegister> = computed(() => store.getters['registers/register']);
+    const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
 
     const form = ref();
     const isEditMode: Ref<boolean> = ref(!!route.params.registerId);
@@ -70,6 +64,7 @@ export default defineComponent({
     const { validate } = useValidate();
 
     onBeforeMount(async () => {
+      await store.dispatch('registers/getValueTypes');
       let title: string;
       if (!route.params.registerId) {
         store.commit('registers/set', new Register());
