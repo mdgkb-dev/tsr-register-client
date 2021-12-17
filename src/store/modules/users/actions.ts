@@ -16,10 +16,10 @@ const actions: ActionTree<State, RootState> = {
     commit('set', await httpClient.get<IUser>({ query: id }));
   },
   create: async ({ commit }, payload: IUser): Promise<void> => {
-    commit('create', await httpClient.post<IUser, IUser>({ payload }));
+    commit('create', await httpClient.post<IUser, IUser>({ isFormData: true, payload: payload }));
   },
   edit: async ({ commit }, payload: IUser): Promise<void> => {
-    commit('update', await httpClient.put<IUser, IUser>({ payload, query: payload.id }));
+    commit('update', await httpClient.put<IUser, IUser>({ isFormData: true, payload: payload, query: payload.id }));
   },
   delete: async ({ commit }, id: string): Promise<void> => {
     await httpClient.delete<IUser, IUser>({ query: id });

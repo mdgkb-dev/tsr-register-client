@@ -7,29 +7,13 @@
       <el-button type="success" round native-type="submit" @click="submitForm">Сохранить изменения</el-button>
     </el-col>
   </el-row>
-  <el-row v-if="mount"><PageInfo :human="user.human" /></el-row>
-  <el-row>
-    <div class="table-background" style="width: 100%; height: 100%">
-      <el-collapse>
-        <el-form
-          ref="form"
-          :status-icon="true"
-          :model="user"
-          :rules="rules"
-          label-width="20%"
-          label-position="left"
-          @submit.prevent="submitForm"
-        >
-          <div v-if="mount">
-            <el-collapse-item>
-              <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
-              <HumanForm store-name="users" />
-            </el-collapse-item>
-          </div>
-        </el-form>
-      </el-collapse>
-    </div>
-  </el-row>
+  <!--  <el-row v-if="mount">-->
+  <!--    <PageInfo :human="user.human" />-->
+  <!--  </el-row>-->
+  {{ user.registersUsers }}
+  <el-checkbox v-for="register in registers" :key="register.id" :label="register.id" @change="user.addRegister($event, register.id)">{{
+    register.name
+  }}</el-checkbox>
 </template>
 
 <script lang="ts">
@@ -41,18 +25,14 @@ import { useStore } from 'vuex';
 import HumanRules from '@/classes/humans/HumanRules';
 import MainHeader from '@/classes/shared/MainHeader';
 import User from '@/classes/user/User';
-import HumanForm from '@/components/HumanForm.vue';
-import PageInfo from '@/components/Users/PageInfo.vue';
+import IRegister from '@/interfaces/registers/IRegister';
 import IUser from '@/interfaces/users/IUser';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
 export default defineComponent({
   name: 'UserPage',
-  components: {
-    HumanForm,
-    PageInfo,
-  },
+  components: {},
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -61,10 +41,12 @@ export default defineComponent({
     const isEditMode: Ref<boolean> = ref(false);
     const mount: Ref<boolean> = ref(false);
 
+    const registers: Ref<IRegister[]> = computed(() => store.getters['registers/registers']);
+
     const rules: ComputedRef = computed(() => {
       return { human: HumanRules };
     });
-    const user: ComputedRef<IUser | undefined> = computed(() => store.getters['users/user']);
+    const user: ComputedRef<IUser> = computed(() => store.getters['users/user']);
 
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
     const { links, pushToLinks } = useBreadCrumbsLinks();
@@ -84,6 +66,8 @@ export default defineComponent({
       pushToLinks(['/users'], ['Список пользователей']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
+
+      await store.dispatch('registers/getAll');
 
       window.addEventListener('beforeunload', beforeWindowUnload);
       watch(user, formUpdated, { deep: true });
@@ -114,6 +98,7 @@ export default defineComponent({
     };
 
     return {
+      registers,
       mount,
       rules,
       user,

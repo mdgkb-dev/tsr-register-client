@@ -186,14 +186,12 @@ export default defineComponent({
     const closeDrawer = () => store.commit('main/closeDrawer');
 
     const logout = async (): Promise<void> => {
+      await router.push('/login');
       await store.dispatch('auth/logout');
-      await store.dispatch('auth/setAuthorization');
 
-      if (!store.getters['auth/isAuthorized']) {
+      if (!store.getters['auth/isAuth']) {
         store.commit('setLayout', 'login-layout');
       }
-
-      await router.push('/login');
     };
 
     return {
