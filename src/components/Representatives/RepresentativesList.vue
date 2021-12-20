@@ -10,7 +10,6 @@
         @select="handleRepresentativeSelect"
         @input="handleSearchInput"
       />
-
       <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
         :data="filterTable(representatives)"

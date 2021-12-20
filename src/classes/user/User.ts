@@ -1,6 +1,8 @@
 import Human from '@/classes/humans/Human';
+import RegionUser from '@/classes/user/RegionUser';
 import RegisterUser from '@/classes/user/RegisterUser';
 import IHuman from '@/interfaces/humans/IHuman';
+import IRegionUser from '@/interfaces/IRegionUser';
 import IRegisterUser from '@/interfaces/users/IRegisterUser';
 import IUser from '@/interfaces/users/IUser';
 
@@ -11,6 +13,8 @@ export default class User implements IUser {
   email = '';
   registersUsers: IRegisterUser[] = [];
   registersUsersForDelete: string[] = [];
+  regionsUsers: IRegionUser[] = [];
+  regionsUsersForDelete: string[] = [];
 
   constructor(i?: IUser) {
     if (!i) return;
@@ -20,6 +24,9 @@ export default class User implements IUser {
     this.email = i.email;
     if (i.registersUsers) {
       this.registersUsers = i.registersUsers.map((r: IRegisterUser) => new RegisterUser(r));
+    }
+    if (i.regionsUsers) {
+      this.regionsUsers = i.regionsUsers.map((r: IRegionUser) => new RegionUser(r));
     }
   }
 

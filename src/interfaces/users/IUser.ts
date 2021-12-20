@@ -1,4 +1,5 @@
 import IHuman from '@/interfaces/humans/IHuman';
+import IRegionUser from '@/interfaces/IRegionUser';
 import IRegisterUser from '@/interfaces/users/IRegisterUser';
 
 export default interface IUser {
@@ -8,6 +9,9 @@ export default interface IUser {
   email: string;
   registersUsers: IRegisterUser[];
   registersUsersForDelete: string[];
+
+  regionsUsers: IRegionUser[];
+  regionsUsersForDelete: string[];
 
   addRegister: (isAdd: boolean, registerId: string) => void;
 }

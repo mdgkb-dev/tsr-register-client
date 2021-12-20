@@ -154,6 +154,11 @@ export default defineComponent({
             link: 'users',
           },
           {
+            name: 'Regions',
+            title: 'Регионы',
+            link: 'regions',
+          },
+          {
             name: 'DocumentTypes',
             title: 'Типы документов',
             link: '/document-types',

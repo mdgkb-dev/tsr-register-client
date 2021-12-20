@@ -15,6 +15,7 @@ import IModelInfo from '@/interfaces/shared/IModelInfo';
 export default interface IPatientConstructor extends IModelInfo {
   id?: string;
   patientHistoryId?: string;
+  regionId?: string;
   human: IHuman;
   history?: IHistory;
   patientDiagnosis: IPatientDiagnosis[];

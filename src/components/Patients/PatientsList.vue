@@ -337,7 +337,7 @@ export default defineComponent({
 
     const handleSearchInput = async (value: string): Promise<void> => {
       if (value.length === 0) {
-        await store.dispatch('patients/getAll', 0);
+        await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
       }
       store.commit('pagination/setCurPage', 0);
     };

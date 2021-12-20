@@ -36,6 +36,7 @@ export default class Patient implements IPatient {
   id?: string;
   patientHistoryId?: string;
   human: IHuman = new Human();
+  regionId?: string;
   history?: IHistory = new History();
   representativeToPatient: IRepresentativeToPatient[] = [];
   representativeToPatientForDelete: string[] = [];
@@ -72,6 +73,7 @@ export default class Patient implements IPatient {
 
     this.id = i.id;
     this.patientHistoryId = i.patientHistoryId;
+    this.regionId = i.regionId;
     this.human = new Human(i.human);
     if (i.history) {
       this.history = new History(i.history);
