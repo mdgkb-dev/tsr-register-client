@@ -426,4 +426,9 @@ export default defineComponent({
     text-decoration: underline;
   }
 }
+
+.tag-link:hover {
+  background-color: darken(white, 10%);
+  cursor: pointer;
+}
 </style>

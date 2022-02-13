@@ -1,8 +1,7 @@
-import axios from 'axios';
-
 import IFileInfo from '@/interfaces/files/IFileInfo';
 // import moment from 'moment';
 import { IBodilessParams, IBodyfulParams, IHttpClient } from '@/interfaces/httpClient/IHTTPTypes';
+import axiosInstance from '@/services/Axios';
 // import IToUtcDateMethods from '@/interfaces/httpClient/IToUtcDateMethods';
 
 export default class HttpClient implements IHttpClient {
@@ -18,7 +17,7 @@ export default class HttpClient implements IHttpClient {
     const isBlob = params?.isBlob;
     const headers = params?.headers;
 
-    const { data, headers: resHeaders } = await axios({
+    const { data, headers: resHeaders } = await axiosInstance({
       url: this.buildUrl(params?.query),
       method: 'get',
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
@@ -29,7 +28,7 @@ export default class HttpClient implements IHttpClient {
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
     const { payload, fileInfos, query, headers, isFormData } = params;
-    const { data } = await axios({
+    const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'post',
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
@@ -42,7 +41,7 @@ export default class HttpClient implements IHttpClient {
   async put<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
     const { payload, fileInfos, query, headers, isFormData } = params;
 
-    const { data } = await axios({
+    const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'put',
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
@@ -55,7 +54,7 @@ export default class HttpClient implements IHttpClient {
   async delete<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
     const { payload, fileInfos, query, headers, isFormData } = params;
 
-    const { data } = await axios({
+    const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'delete',
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
