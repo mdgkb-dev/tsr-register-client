@@ -70,7 +70,7 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
-    storeName: {
+  storeName: {
       type: String as PropType<string>,
       required: true,
     },

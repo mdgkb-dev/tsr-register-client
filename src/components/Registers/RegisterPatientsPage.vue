@@ -1,9 +1,9 @@
 <template>
   <div v-if="mount" class="wrapper" style="height: 100%">
-    <div class="table-background" style="height: 170px; margin-bottom: 20px">
+    <div class="table-background" style="height: auto; margin-bottom: 20px">
       <el-row>
         <el-col :span="15">
-          <h2 style="margin: 0 0 40px 0">Общая информация</h2>
+          <!-- <h2 style="margin: 0 0 40px 0">Общая информация</h2> -->
           <el-row>
             <el-col :span="12" class="light-title upper">Название регистра</el-col>
             <el-col :span="12"> {{ register.name }}</el-col>
@@ -24,16 +24,23 @@
         class="table-shadow"
         header-row-class-name="header-style"
         border
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
+        row-class-name="table-row"
+        cell-class-name="table-row"
+        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 380px); overflow: auto"
       >
         <el-table-column type="index" width="70" align="center">
           <template #header>
-            <el-popover placement="right-start" :width="600" trigger="click">
+            <el-popover
+              placement="right-start"
+              popper-class="table-popover"
+              :width="600"
+              trigger="click"
+              style="max-height: 600px !important; overflow: auto"
+            >
               <template #reference>
                 <el-button class="table-button" icon="el-icon-more"></el-button>
               </template>
-
-              <el-space direction="vertical" alignment="start" style="width: 100%; overflow: auto">
+              <el-space direction="vertical" alignment="start" style="width: 100%; max-height: 600px; overflow: auto">
                 <h3 style="margin-left: 20px">Скрыть столбцы</h3>
                 <div v-if="register.registerGroups.length">
                   <el-row v-for="registerGroup in register.registerGroups" :key="registerGroup.id">
@@ -60,22 +67,24 @@
 
         <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
           <template #default="scope">
-            {{ scope.row.patient.human.getFullName() }}
+            <span class="patient-name-link" @click="edit(scope.row.patient.id)">{{ scope.row.patient.human.getFullName() }}</span>
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
           <el-table-column :label="registerProperty.shortName" :prop="registerProperty.name" :width="registerProperty.colWidth">
             <template #default="scope">
-              {{ getField(registerProperty, scope.row) }}
+              <div style="max-height: 250px">
+                {{ getField(registerProperty, scope.row) }}
+              </div>
             </template>
           </el-table-column>
         </template>
 
-        <el-table-column width="40" align="center">
+        <!-- <el-table-column width="50" align="center" fixed="right">
           <template #default="scope">
             <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
 
       <div style="text-align: center; width: 100%">
@@ -100,7 +109,6 @@ import { useStore } from 'vuex';
 
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
@@ -110,9 +118,7 @@ import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
-  components: {
-    TableButtonGroup,
-  },
+
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -212,5 +218,14 @@ export default defineComponent({
 }
 h3 {
   margin: 0;
+}
+.patient-name-link {
+  cursor: pointer;
+  color: #2754eb;
+  text-decoration: underline;
+}
+:deep(.table-popover) {
+  max-height: 600px !important;
+  overflow: auto;
 }
 </style>
