@@ -50,6 +50,18 @@
                 >
                   {{ registerPropertySet.name }}</el-checkbox
                 >
+                <div v-if="prop.getOthers(patient.getRegisterPropertyValue(prop))">
+                  <el-form-item
+                    v-for="registerPropertyOther in prop.getOthers(patient.getRegisterPropertyValue(prop))"
+                    :key="registerPropertyOther.id"
+                    :label="registerPropertyOther.name"
+                  >
+                    <el-input
+                      :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
+                      @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
+                    />
+                  </el-form-item>
+                </div>
               </el-form-item>
               <el-form-item v-if="prop.valueType.isRadio()" :label="prop.name">
                 <el-radio

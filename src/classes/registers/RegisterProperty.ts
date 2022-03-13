@@ -111,9 +111,14 @@ export default class RegisterProperty implements IRegisterProperty {
 
   getOthers(propResult: boolean | string | number | Date | null): IRegisterPropertyOther[] {
     const radioProperty = this.registerPropertyRadios.find((radio: IRegisterPropertyRadio) => radio.id === propResult);
-    if (!radioProperty) {
-      return [];
+    if (radioProperty) {
+      return radioProperty.registerPropertyOthers;
     }
-    return radioProperty.registerPropertyOthers;
+    const setProperty = this.registerPropertySets.find((set: IRegisterPropertySet) => set.id === propResult);
+    console.log(setProperty, propResult);
+    if (setProperty) {
+      return setProperty.registerPropertyOthers;
+    }
+    return [];
   }
 }

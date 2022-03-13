@@ -9,7 +9,7 @@ export default interface IRegisterPropertySet {
 
   registerPropertyOthers: IRegisterPropertyOther[];
   registerPropertyOthersForDelete: string[];
-
+  order: number;
   addRegisterPropertyOther: () => void;
   removeRegisterPropertyOther: (index: number) => void;
 }

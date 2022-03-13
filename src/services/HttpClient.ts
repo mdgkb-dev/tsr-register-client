@@ -13,17 +13,48 @@ export default class HttpClient implements IHttpClient {
     this.headers = { 'Content-Type': 'application/json' };
   }
 
+  private static download(url: string, name: string) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', name);
+    link.setAttribute('target', '_blank');
+    document.body.appendChild(link);
+    link.click();
+  }
+
+  private static getDownloadFileName(clientFileName: string | undefined, serverFileName: string | undefined): string {
+    if (clientFileName) {
+      return clientFileName;
+    }
+    if (serverFileName) {
+      return serverFileName;
+    }
+    return 'file.xlsx';
+  }
+
   async get<ReturnType>(params?: IBodilessParams): Promise<ReturnType> {
     const isBlob = params?.isBlob;
     const headers = params?.headers;
 
-    const { data, headers: resHeaders } = await axiosInstance({
+    const res = await axiosInstance({
       url: this.buildUrl(params?.query),
       method: 'get',
       headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
       responseType: !isBlob ? 'json' : 'blob',
     });
-    return !isBlob ? data : { href: URL.createObjectURL(data), download: resHeaders['download-file-name'] };
+    if (!isBlob) {
+      return res.data;
+    }
+
+    const headerLine = res.headers['content-disposition'];
+    const startFileNameIndex = headerLine.indexOf('"') + 1;
+    const endFileNameIndex = headerLine.lastIndexOf('"');
+    const filename = headerLine.substring(startFileNameIndex, endFileNameIndex);
+
+    const url = URL.createObjectURL(res.data);
+    const fileName = HttpClient.getDownloadFileName(undefined, filename);
+    HttpClient.download(url, fileName);
+    return res.data;
   }
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {

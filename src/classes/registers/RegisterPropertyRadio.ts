@@ -10,12 +10,14 @@ export default class RegisterPropertyRadio implements IRegisterPropertyRadio {
   registerProperty?: IRegisterProperty;
   registerPropertyOthers: IRegisterPropertyOther[] = [];
   registerPropertyOthersForDelete: string[] = [];
+  order = 0;
   constructor(i?: IRegisterPropertyRadio) {
     if (!i) {
       return;
     }
     this.id = i.id;
     this.name = i.name;
+    this.order = i.order;
     this.registerPropertyId = i.registerPropertyId;
     if (i.registerPropertyOthers) {
       this.registerPropertyOthers = i.registerPropertyOthers.map((item: IRegisterPropertyOther) => new RegisterPropertyOther(item));

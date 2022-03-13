@@ -31,6 +31,11 @@ const actions: ActionTree<State, RootState> = {
     await httpClient.delete<IRegisterQuery, IRegisterQuery>({ query: id });
     commit('delete', id);
   },
+  execute: async ({ commit }, id: string): Promise<void> => {
+    const res = await httpClient.get<IRegisterQuery>({ query: `execute/${id}`, isBlob: true });
+    console.log(res);
+    // commit('delete', id);
+  },
 };
 
 export default actions;

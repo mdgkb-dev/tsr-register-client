@@ -3,4 +3,5 @@ export default interface IRegisterPropertyOther {
   name: string;
   registerPropertyRadioId?: string;
   registerPropertyId?: string;
+  order: number;
 }

@@ -8,7 +8,7 @@ export default interface IRegisterPropertyRadio {
   registerProperty?: IRegisterProperty;
   registerPropertyOthers: IRegisterPropertyOther[];
   registerPropertyOthersForDelete: string[];
-
+  order: number;
   addRegisterPropertyOther: () => void;
   removeRegisterPropertyOther: (index: number) => void;
 }

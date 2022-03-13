@@ -14,6 +14,11 @@
             <el-col :span="12"> {{ register.registerToPatient.length }}</el-col>
           </el-row>
         </el-col>
+        <el-col :span="9">
+          <div v-for="registerQuery in registerQueries" :key="registerQuery.id">
+            <el-button @click="executeQuery(registerQuery.id)">{{ registerQuery.name }} </el-button>
+          </div>
+        </el-col>
       </el-row>
     </div>
 
@@ -111,6 +116,7 @@ import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
@@ -125,6 +131,7 @@ export default defineComponent({
     const store = useStore();
     const mount: Ref<boolean> = ref(false);
     const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
+    const registerQueries: Ref<IRegisterQuery[]> = computed(() => store.getters['registerQueries/registerQueries']);
     const user: Ref<IUserAuthorized> = computed(() => store.getters['auth/user']);
     const cols: Ref<IRegisterProperty[]> = ref([]);
     const { links, pushToLinks } = useBreadCrumbsLinks();
@@ -144,6 +151,7 @@ export default defineComponent({
       const query = store.getters['filter/filterQuery'];
       query.id = route.params.registerId;
       await store.dispatch('registers/get', query);
+      await store.dispatch('registerQueries/getAll');
       await store.dispatch('auth/getMe');
       pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
       store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
@@ -192,7 +200,13 @@ export default defineComponent({
       return p;
     };
 
+    const executeQuery = async (queryId: string): Promise<void> => {
+      await store.dispatch('registerQueries/execute', queryId);
+    };
+
     return {
+      executeQuery,
+      registerQueries,
       getField,
       setPage,
       curPage,

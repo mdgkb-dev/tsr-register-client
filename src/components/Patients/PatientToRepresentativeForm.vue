@@ -1,6 +1,6 @@
 <template>
   <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
-  <el-table v-if="mount" :data="representativeToPatient" style="width: 600px" class="table-shadow" header-row-class-name="header-style">
+  <el-table v-if="mount" :data="representativeToPatient" style="width: 800px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
     <el-table-column label="Представитель" sortable align="start">
@@ -12,7 +12,12 @@
           :rules="rules.representativeId"
           :prop="`representativeToPatient.${scope.$index}.representativeId`"
         >
-          <el-select v-model="representativeToPatient[scope.$index].representativeId" filterable placeholder="Представитель">
+          <el-select
+            v-model="representativeToPatient[scope.$index].representativeId"
+            filterable
+            placeholder="Представитель"
+            @change="selectRepresentative($event, scope.$index)"
+          >
             <el-option v-for="item in representativeOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
         </el-form-item>
@@ -49,9 +54,32 @@
       </template>
     </el-table-column>
 
+    <el-table-column label="Телефон" align="start">
+      <template v-if="representativeToPatient" #default="scope">
+        <div v-if="representativeToPatient[scope.$index].representative">
+          {{ representativeToPatient[scope.$index].representative.human.contact.phone }}
+        </div>
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Email" align="start">
+      <template v-if="representativeToPatient" #default="scope">
+        <div v-if="representativeToPatient[scope.$index].representative">
+          {{ representativeToPatient[scope.$index].representative.human.contact.email }}
+        </div>
+      </template>
+    </el-table-column>
+
     <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
       <template #default="scope">
-        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
+        <TableButtonGroup
+          :show-edit-button="
+            !!representativeToPatient[scope.$index].representative && !!representativeToPatient[scope.$index].representative
+          "
+          :show-remove-button="true"
+          @remove="remove(scope.row)"
+          @edit="$router.push(`/representatives/${representativeToPatient[scope.$index].representativeId}`)"
+        />
       </template>
     </el-table-column>
   </el-table>
@@ -80,6 +108,7 @@ export default defineComponent({
     const rules = RepresentativeToPatientRules;
     const representativeOptions: Ref<IOptionHuman[]> = ref([]);
     const representatives: ComputedRef<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
+    const representative: ComputedRef<IRepresentative> = computed(() => store.getters['representatives/representative']);
     const representativeTypes: ComputedRef<IRepresentativeType[]> = computed(
       () => store.getters['representativeTypes/representativeTypes']
     );
@@ -125,7 +154,13 @@ export default defineComponent({
       }
     };
 
+    const selectRepresentative = async (representativeId: string, indexOfRepresentative: number) => {
+      await store.dispatch('representatives/get', representativeId);
+      representativeToPatient.value[indexOfRepresentative].representative = representative.value;
+    };
+
     return {
+      selectRepresentative,
       mount,
       rules,
       representativeTypes,
