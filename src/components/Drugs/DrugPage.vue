@@ -23,6 +23,12 @@
             <el-button type="primary" @click="addDrugRegimen">Добавить</el-button>
           </el-form-item>
         </el-form>
+        <el-collapse>
+          <el-collapse-item>
+            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
+            <MkbForm :store-module="'drugs'" />
+          </el-collapse-item>
+        </el-collapse>
         <DrugRegimensForm />
       </el-row>
     </el-form>
@@ -38,6 +44,7 @@ import Drug from '@/classes/drugs/Drug';
 import DrugRegimen from '@/classes/drugs/DrugRegimen';
 import MainHeader from '@/classes/shared/MainHeader';
 import DrugRegimensForm from '@/components/Drugs/DrugRegimensForm.vue';
+import MkbForm from '@/components/Mkb/MkbForm.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
@@ -47,7 +54,7 @@ import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'DrugPage',
-  components: { DrugRegimensForm },
+  components: { DrugRegimensForm, MkbForm },
 
   setup() {
     const store = useStore();

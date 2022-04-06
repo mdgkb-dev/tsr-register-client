@@ -59,11 +59,7 @@
             v-if="isEditMode"
             label-width="0"
             style="margin-bottom: 0"
-            :prop="
-              patientDiagnosis
-                ? 'patientDiagnosis.' + scope.$index + '.mkbDiagnosisId'
-                : 'registerDiagnosis.' + scope.$index + '.mkbDiagnosisId'
-            "
+            :prop="getProp(scope.$index)"
             :rules="[{ required: true, message: 'Необходимо указать основной диагноз', trigger: 'change' }]"
           >
             <el-autocomplete
@@ -241,8 +237,20 @@ export default defineComponent({
       store.commit('mkb/setFilteredDiagnosis', []);
       store.commit(`${storeModule.value}/clearDiagnosis`, id);
     };
-
+    const getProp = (index: number): string => {
+      let mod = '';
+      if (patientDiagnosis) {
+        mod = 'patientDiagnosis.';
+      } else {
+        mod = 'registerDiagnosis.';
+      }
+      if (props.storeModule === 'drugs') {
+        mod = 'drugsDiagnosis.';
+      }
+      return mod + index + '.mkbDiagnosisId';
+    };
     return {
+      getProp,
       diagnosisData,
       patientDiagnosis,
       formatDate,

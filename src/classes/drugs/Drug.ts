@@ -2,6 +2,8 @@ import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 
 import DrugRegimen from './DrugRegimen';
+import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
+import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
 
 export default class Drug implements IDrug {
   id?: string;
@@ -9,6 +11,9 @@ export default class Drug implements IDrug {
 
   drugRegimens: IDrugRegimen[] = [];
   drugRegimensForDelete: string[] = [];
+
+  drugsDiagnosis: IDrugDiagnosis[] = [];
+  drugsDiagnosisForDelete: string[] = [];
 
   constructor(drug?: IDrug) {
     if (!drug) {
@@ -18,6 +23,9 @@ export default class Drug implements IDrug {
     this.name = drug.name;
     if (drug.drugRegimens) {
       this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
+    }
+    if (drug.drugsDiagnosis) {
+      this.drugsDiagnosis = drug.drugsDiagnosis.map((item: IDrugDiagnosis) => new DrugDiagnosis(item));
     }
   }
 

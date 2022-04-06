@@ -1,7 +1,10 @@
 import { MutationTree } from 'vuex';
 
 import Drug from '@/classes/drugs/Drug';
+import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import IDrug from '@/interfaces/drugs/IDrug';
+import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
 import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
@@ -48,6 +51,26 @@ const mutations: MutationTree<State> = {
       );
       return drugRegimen;
     });
+  },
+  addDiagnosis(state, id: string) {
+    const diagnosis = new DrugDiagnosis();
+    diagnosis.id = id;
+    state.drug.drugsDiagnosis.push(diagnosis);
+    console.log(state.drug);
+  },
+  removeDiagnosis(state, id: string) {
+    const index = state.drug.drugsDiagnosis.findIndex((i: IDrugDiagnosis) => i.id === id);
+    if (index !== -1) state.drug.drugsDiagnosis.splice(index, 1);
+    state.drug.drugsDiagnosisForDelete.push(id);
+  },
+  clearDiagnosis(state, id: string) {
+    const diagnosis = state.drug.drugsDiagnosis.find((d: IDrugDiagnosis) => d.id === id);
+    if (diagnosis) {
+      diagnosis.mkbDiagnosis = new MkbDiagnosis();
+      diagnosis.mkbDiagnosisId = undefined;
+      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosisId = undefined;
+    }
   },
 };
 

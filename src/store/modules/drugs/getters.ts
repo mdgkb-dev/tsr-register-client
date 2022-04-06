@@ -1,6 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IDrug from '@/interfaces/drugs/IDrug';
+import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import RootState from '@/store/types';
 
@@ -12,6 +13,9 @@ const getters: GetterTree<State, RootState> = {
   },
   drug(state): IDrug {
     return state.drug;
+  },
+  diagnosis(state): IDrugDiagnosis[] {
+    return state.drug.drugsDiagnosis;
   },
   getDrugRegimensByDrugId(state): (id: string) => IDrugRegimen[] | undefined {
     return (id: string): IDrugRegimen[] | undefined => state.drugs.find((item: IDrug) => item.id === id)?.drugRegimens;

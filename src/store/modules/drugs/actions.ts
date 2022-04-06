@@ -9,8 +9,13 @@ import { State } from './state';
 const httpClient = new HttpClient('drugs');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }): Promise<void> => {
-    commit('setAll', await httpClient.get<IDrug[]>());
+  getAll: async ({ commit }, diagnosisIds: string[]): Promise<void> => {
+    let query = '';
+    if (diagnosisIds && diagnosisIds.length > 0) {
+      // diagnosisIds.forEach((d: s))
+      query = `?diagnosis=${diagnosisIds.join(',')}`;
+    }
+    commit('setAll', await httpClient.get<IDrug[]>({ query: query }));
   },
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get<IDrug>({ query: id }));

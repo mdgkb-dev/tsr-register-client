@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
@@ -135,6 +135,7 @@ import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
 import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
+import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import useDateFormat from '@/mixins/useDateFormat';
 import useValidate from '@/mixins/useValidate';
@@ -150,6 +151,7 @@ export default defineComponent({
     const { formatDate } = useDateFormat();
 
     const patientDrugRegimens: ComputedRef<IPatientDrugRegimen[]> = computed(() => store.getters['patients/patientDrugRegimens']);
+    const patientDiagnosis: ComputedRef<IPatientDiagnosis[]> = computed(() => store.getters['patients/diagnosis']);
     const drugs: Ref<IDrug[]> = computed(() => store.getters['drugs/drugs']);
     const newPatientDrugRegimen: Ref<UnwrapRef<IPatientDrugRegimen>> = ref(new PatientDrugRegimen());
     const chosenDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
@@ -167,7 +169,24 @@ export default defineComponent({
         done();
       });
     };
-    const handleOpenDialog = (): void => {
+    const handleOpenDialog = async (): Promise<void> => {
+      const diagnosisIds = patientDiagnosis.value.map((d: IPatientDiagnosis) => d.mkbDiagnosisId);
+      const canAddDrug = diagnosisIds.length > 0 && diagnosisIds.every((d: string | undefined) => d && d != '');
+      if (!canAddDrug) {
+        ElMessage({
+          type: 'warning',
+          message: 'У пациента нет диагнозов для добавления лекарств',
+        });
+        return;
+      }
+      await loadDrugs();
+      if (drugs.value.length === 0) {
+        ElMessage({
+          type: 'warning',
+          message: 'Нет доступных лекарств для выбора',
+        });
+        return;
+      }
       newPatientDrugRegimen.value = new PatientDrugRegimen();
       dialogVisible.value = true;
     };
@@ -224,9 +243,12 @@ export default defineComponent({
     };
 
     onBeforeMount(async () => {
-      await store.dispatch('drugs/getAll');
+      // await loadDrugs();
     });
-
+    const loadDrugs = async () => {
+      const diagnosisIds = patientDiagnosis.value.map((d: IPatientDiagnosis) => d.mkbDiagnosisId);
+      await store.dispatch('drugs/getAll', diagnosisIds);
+    };
     const submit = (): void => {
       if (!validateWithoutMessageBox(form.value)) {
         return;
