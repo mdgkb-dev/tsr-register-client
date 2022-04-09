@@ -8,7 +8,7 @@ export default class RegisterPropertySetToPatient implements IRegisterPropertySe
   id?: string;
   registerPropertySetId?: string;
   patientId?: string;
-
+  propWithDateId?: string;
   registerPropertySet?: IRegisterPropertySet;
   patient?: IPatient;
 
@@ -19,6 +19,7 @@ export default class RegisterPropertySetToPatient implements IRegisterPropertySe
     this.id = item.id;
     this.registerPropertySetId = item.registerPropertySetId;
     this.patientId = item.patientId;
+    this.propWithDateId = item.propWithDateId;
     if (item.registerPropertySet) this.registerPropertySet = new RegisterPropertySet(item.registerPropertySet);
     if (item.patient) this.patient = new Patient(item.patient);
   }

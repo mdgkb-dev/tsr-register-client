@@ -13,17 +13,21 @@ export default interface IPatient extends IPatientConstructor {
   getAnamnesis: (id: string) => IPatientDiagnosisAnamnesis;
   // getBmiGroup: () => string;
   getFileInfos: () => IFileInfo[];
+  registerPropertyToPatientForDelete: string[];
   getHeightWeightShort: () => string;
   getLastHeightWeight: () => IHeightWeight | undefined;
   getLastCircumference: (circumference: ICircumference[]) => ICircumference | undefined;
   getOtherPropertyValue: (property: IRegisterProperty) => string | undefined;
   getRegisterPropertyValue: (property: IRegisterProperty, originalValue: boolean) => boolean | string | number | Date | null;
-  getRegisterPropertyValueSet: (setId: string) => boolean;
+  getRegisterPropertyValueSet: (setId: string, propWithDateId?: string) => boolean;
   pushRegisterProperty: (propertyId: string) => void;
   setRegisterPropertyValue: (value: number | string | Date, property: IRegisterProperty) => void;
   setRegisterPropertyValueOther: (value: string, property: IRegisterProperty) => void;
-  setRegisterPropertyValueSet: (isAdd: boolean, setId: string) => void;
+  setRegisterPropertyValueSet: (isAdd: boolean, setId: string, propWithDateId?: string) => void;
   getRegisterPropertyOthers: (propertyOtherId: string) => string;
   setRegisterPropertyOthers: (value: string, propertyOtherId: string) => void;
   getRegisterPropertyValueOthers: (propertyOtherId: string) => string;
+  addRegisterValueWithDate: (property: IRegisterProperty) => void;
+  getRegisterValuesWithDate: (propertyId: string) => IRegisterPropertyToPatient[];
+  removeRegisterValueWithDate: (propId: string) => void;
 }

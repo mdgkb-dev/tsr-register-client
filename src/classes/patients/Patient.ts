@@ -31,6 +31,7 @@ import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterProperty
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IUser from '@/interfaces/users/IUser';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -53,6 +54,7 @@ export default class Patient implements IPatient {
   registerToPatient: IRegisterToPatient[] = [];
   registerToPatientForDelete: string[] = [];
   registerPropertyToPatient: IRegisterPropertyToPatient[] = [];
+  registerPropertyToPatientForDelete: string[] = [];
   registerPropertyOthersToPatient: IRegisterPropertyOtherToPatient[] = [];
   registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [];
   registerPropertySetToPatientForDelete: string[] = [];
@@ -265,9 +267,13 @@ export default class Patient implements IPatient {
     return null;
   }
 
-  getRegisterPropertyValueSet(setId: string): boolean {
-    const res = this.registerPropertySetToPatient?.some((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
-    return res;
+  getRegisterPropertyValueSet(setId: string, registerPropWithDateId?: string): boolean {
+    if (registerPropWithDateId) {
+      return this.registerPropertySetToPatient?.some(
+        (i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId && i.propWithDateId === registerPropWithDateId
+      );
+    }
+    return this.registerPropertySetToPatient?.some((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
   }
 
   setRegisterPropertyValueOther(value: string, property: IRegisterProperty): void {
@@ -322,16 +328,25 @@ export default class Patient implements IPatient {
     }
   }
 
-  setRegisterPropertyValueSet(isAdd: boolean, setId: string): void {
+  setRegisterPropertyValueSet(isAdd: boolean, setId: string, registerPropWithDateId?: string): void {
     if (isAdd) {
       const registerPropertySetToPatient = new RegisterPropertySetToPatient();
       registerPropertySetToPatient.registerPropertySetId = setId;
       registerPropertySetToPatient.patientId = this.id;
+      if (registerPropWithDateId) {
+        registerPropertySetToPatient.propWithDateId = registerPropWithDateId;
+      }
       this.registerPropertySetToPatient.push(registerPropertySetToPatient);
       return;
     }
-    const index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
-
+    let index = -1;
+    if (registerPropWithDateId) {
+      index = this.registerPropertySetToPatient?.findIndex(
+        (i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId && i.propWithDateId === registerPropWithDateId
+      );
+    } else {
+      index = this.registerPropertySetToPatient?.findIndex((i: IRegisterPropertySetToPatient) => i.registerPropertySetId === setId);
+    }
     if (index <= -1) {
       return;
     }
@@ -392,5 +407,29 @@ export default class Patient implements IPatient {
 
   getRegisterPropertyOthers(propertyOtherId: string): string {
     return this.findRegisterPropertyOthers(propertyOtherId).value;
+  }
+
+  addRegisterValueWithDate(property: IRegisterProperty): void {
+    const prop = new RegisterPropertyToPatient();
+    prop.valueDate = new Date();
+    prop.id = uuidv4();
+    prop.registerPropertyId = property.id;
+    this.registerPropertyToPatient.push(prop);
+  }
+
+  getRegisterValuesWithDate(propertyId: string): IRegisterPropertyToPatient[] {
+    return this.registerPropertyToPatient.filter((r: IRegisterPropertyToPatient) => r.registerPropertyId === propertyId);
+  }
+
+  removeRegisterValueWithDate(propertyId: string): void {
+    const i = this.registerPropertyToPatient.findIndex((r: IRegisterPropertyToPatient) => r.id === propertyId);
+    if (i < 0) {
+      return;
+    }
+    const idForDelete = this.registerPropertyToPatient[i].id;
+    if (idForDelete) {
+      this.registerPropertyToPatientForDelete.push(idForDelete);
+    }
+    this.registerPropertyToPatient.splice(i, 1);
   }
 }

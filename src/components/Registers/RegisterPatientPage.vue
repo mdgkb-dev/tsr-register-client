@@ -12,89 +12,165 @@
               <h2 class="collapseHeader">{{ registerGroup.name }}</h2>
             </template>
             <span v-for="(prop, j) in registerGroup.registerProperties" :key="j" style="margin-bottom: 10px">
-              <!--              <el-tag v-if="prop.tag" effect="dark" type="info" size="mini" style="margin-bottom: -5px">-->
-              <!--                {{ prop.tag }}-->
-              <!--              </el-tag>-->
-              <el-form-item v-if="prop.valueType.isString()" :label="prop.name">
-                <el-input
-                  :label="prop.name"
-                  :model-value="patient.getRegisterPropertyValue(registerGroup.registerProperties[j])"
-                  @input="patient.setRegisterPropertyValue($event, prop)"
-                />
-              </el-form-item>
-              <el-form-item v-if="prop.valueType.isText()" :label="prop.name">
-                <el-input
-                  type="textarea"
-                  :rows="3"
-                  :label="prop.name"
-                  :model-value="patient.getRegisterPropertyValue(registerGroup.registerProperties[j])"
-                  @input="patient.setRegisterPropertyValue($event, prop)"
-                />
-              </el-form-item>
-              <el-form-item v-if="prop.valueType.isNumber()" :label="prop.name">
-                <el-input-number
-                  :model-value="patient.getRegisterPropertyValue(prop)"
-                  @change="patient.setRegisterPropertyValue($event, prop)"
-                />
-              </el-form-item>
-              <el-form-item v-if="prop.valueType.isDate()" :label="prop.name">
-                <DataComponentComputed :property="prop" :patient="patient" />
-              </el-form-item>
-              <el-form-item v-if="prop.valueType.isSet()" :label="prop.name">
-                <el-checkbox
-                  v-for="registerPropertySet in prop.registerPropertySets"
-                  :key="registerPropertySet.id"
-                  :label="registerPropertySet.name"
-                  :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
-                  @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
-                >
-                  {{ registerPropertySet.name }}</el-checkbox
-                >
-                <div v-if="prop.getOthers(patient.getRegisterPropertyValue(prop))">
-                  <el-form-item
-                    v-for="registerPropertyOther in prop.getOthers(patient.getRegisterPropertyValue(prop))"
-                    :key="registerPropertyOther.id"
-                    :label="registerPropertyOther.name"
-                  >
-                    <el-input
-                      :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
-                      @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
-                    />
+              <el-divider />
+              <div>
+                <h3>{{ prop.name }}</h3>
+              </div>
+              <ul>
+                <li v-for="example in prop.registerPropertyExamples" :key="example.id">
+                  {{ example.name }}
+                </li>
+              </ul>
+              <template v-if="prop.withDates">
+                <el-button @click="patient.addRegisterValueWithDate(prop)"> Добавить значение </el-button>
+                <div v-for="propWithDate in patient.getRegisterValuesWithDate(prop.id)" :key="propWithDate">
+                  <el-form-item>
+                    <el-date-picker v-model="propWithDate.valueDate"> </el-date-picker>
                   </el-form-item>
+                  <div style="display: flex; justify-content: space-between">
+                    <el-form-item v-if="prop.valueType.isString()">
+                      <el-input v-model="propWithDate.valueString" />
+                    </el-form-item>
+                    <el-form-item v-if="prop.valueType.isNumber()">
+                      <el-input-number v-model="propWithDate.valueNumber" />
+                    </el-form-item>
+                    <el-form-item v-if="prop.valueType.isSet()">
+                      <el-checkbox
+                        v-for="registerPropertySet in prop.registerPropertySets"
+                        :key="registerPropertySet.id"
+                        :label="registerPropertySet.name"
+                        :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id, propWithDate.id)"
+                        @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id, propWithDate.id)"
+                      >
+                        {{ registerPropertySet.name }}</el-checkbox
+                      >
+                      <div v-for="registerPropertySet in prop.registerPropertySets" :key="registerPropertySet.id">
+                        <template v-if="patient.getRegisterPropertyValueSet(registerPropertySet.id)">
+                          <el-form-item
+                            v-for="registerPropertyOther in registerPropertySet.registerPropertyOthers"
+                            :key="registerPropertyOther.id"
+                            :label="registerPropertyOther.name"
+                          >
+                            <el-input
+                              :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id, propWithDate.id)"
+                              @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id, propWithDate.id)"
+                            />
+                          </el-form-item>
+                        </template>
+                      </div>
+                    </el-form-item>
+
+                    <el-form-item v-if="prop.valueType.isRadio()">
+                      <el-radio
+                        v-for="registerPropertyRadio in prop.registerPropertyRadios"
+                        :key="registerPropertyRadio.id"
+                        v-model="propWithDate.registerPropertyRadioId"
+                        :label="registerPropertyRadio.id"
+                      >
+                        {{ registerPropertyRadio.name }}
+                      </el-radio>
+                      <div v-if="prop.getOthers(patient.getRegisterPropertyValue(prop))">
+                        <el-form-item
+                          v-for="registerPropertyOther in prop.getOthers(patient.getRegisterPropertyValue(prop))"
+                          :key="registerPropertyOther.id"
+                          :label="registerPropertyOther.name"
+                        >
+                          <el-input
+                            :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
+                            @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
+                          />
+                        </el-form-item>
+                      </div>
+                    </el-form-item>
+
+                    <el-button @click="patient.removeRegisterValueWithDate(propWithDate.id)"> Удалить значение </el-button>
+                  </div>
                 </div>
-              </el-form-item>
-              <el-form-item v-if="prop.valueType.isRadio()" :label="prop.name">
-                <el-radio
-                  v-for="registerPropertyRadio in prop.registerPropertyRadios"
-                  :key="registerPropertyRadio.id"
-                  :model-value="patient.getRegisterPropertyValue(prop)"
-                  :label="registerPropertyRadio.id"
-                  @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop)"
-                >
-                  {{ registerPropertyRadio.name }}
-                </el-radio>
-                <div v-if="prop.getOthers(patient.getRegisterPropertyValue(prop))">
-                  <el-form-item
-                    v-for="registerPropertyOther in prop.getOthers(patient.getRegisterPropertyValue(prop))"
-                    :key="registerPropertyOther.id"
-                    :label="registerPropertyOther.name"
+              </template>
+              <template v-else>
+                <el-form-item v-if="prop.valueType.isString()">
+                  <el-input
+                    :model-value="patient.getRegisterPropertyValue(registerGroup.registerProperties[j])"
+                    @input="patient.setRegisterPropertyValue($event, prop)"
+                  />
+                </el-form-item>
+                <el-form-item v-if="prop.valueType.isText()">
+                  <el-input
+                    type="textarea"
+                    :rows="3"
+                    :model-value="patient.getRegisterPropertyValue(registerGroup.registerProperties[j])"
+                    @input="patient.setRegisterPropertyValue($event, prop)"
+                  />
+                </el-form-item>
+                <el-form-item v-if="prop.valueType.isNumber()">
+                  <el-input-number
+                    :model-value="patient.getRegisterPropertyValue(prop)"
+                    @change="patient.setRegisterPropertyValue($event, prop)"
+                  />
+                </el-form-item>
+                <el-form-item v-if="prop.valueType.isDate()">
+                  <DataComponentComputed :property="prop" :patient="patient" />
+                </el-form-item>
+                <el-form-item v-if="prop.valueType.isSet()">
+                  <el-checkbox
+                    v-for="registerPropertySet in prop.registerPropertySets"
+                    :key="registerPropertySet.id"
+                    :label="registerPropertySet.name"
+                    :model-value="patient.getRegisterPropertyValueSet(registerPropertySet.id)"
+                    @change="patient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
                   >
-                    <el-input
-                      :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
-                      @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
-                    />
-                  </el-form-item>
-                </div>
-                <el-input
-                  v-if="prop.withOther"
-                  style="margin-top: 10px"
-                  placeholder="Другое, указать"
-                  type="textarea"
-                  :rows="3"
-                  :model-value="patient.getOtherPropertyValue(registerGroup.registerProperties[j])"
-                  @input="patient.setRegisterPropertyValueOther($event, prop)"
-                />
-              </el-form-item>
+                    <div>
+                      {{ registerPropertySet.name }}
+                    </div>
+                  </el-checkbox>
+                  <div v-for="registerPropertySet in prop.registerPropertySets" :key="registerPropertySet.id">
+                    <template v-if="patient.getRegisterPropertyValueSet(registerPropertySet.id)">
+                      <el-form-item
+                        v-for="registerPropertyOther in registerPropertySet.registerPropertyOthers"
+                        :key="registerPropertyOther.id"
+                        :label="registerPropertyOther.name"
+                      >
+                        <el-input
+                          :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
+                          @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
+                        />
+                      </el-form-item>
+                    </template>
+                  </div>
+                </el-form-item>
+                <el-form-item v-if="prop.valueType.isRadio()">
+                  <el-radio
+                    v-for="registerPropertyRadio in prop.registerPropertyRadios"
+                    :key="registerPropertyRadio.id"
+                    :label="registerPropertyRadio.id"
+                    :model-value="patient.getRegisterPropertyValue(prop)"
+                    @change="patient.setRegisterPropertyValue(registerPropertyRadio.id, prop)"
+                  >
+                    {{ registerPropertyRadio.name }}
+                  </el-radio>
+                  <div v-if="prop.getOthers(patient.getRegisterPropertyValue(prop))">
+                    <el-form-item
+                      v-for="registerPropertyOther in prop.getOthers(patient.getRegisterPropertyValue(prop))"
+                      :key="registerPropertyOther.id"
+                      :label="registerPropertyOther.name"
+                    >
+                      <el-input
+                        :model-value="patient.getRegisterPropertyOthers(registerPropertyOther.id)"
+                        @input="patient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
+                      />
+                    </el-form-item>
+                  </div>
+                  <el-input
+                    v-if="prop.withOther"
+                    style="margin-top: 10px"
+                    placeholder="Другое, указать"
+                    type="textarea"
+                    :rows="3"
+                    :model-value="patient.getOtherPropertyValue(registerGroup.registerProperties[j])"
+                    @input="patient.setRegisterPropertyValueOther($event, prop)"
+                  />
+                </el-form-item>
+              </template>
             </span>
           </el-collapse-item>
         </el-form>

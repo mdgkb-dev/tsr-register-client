@@ -1,3 +1,4 @@
+import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyExample';
 import IRegisterPropertyOther from '@/interfaces/registers/IRegisterPropertyOther';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
@@ -15,8 +16,11 @@ export default interface IRegisterProperty {
   registerPropertyOthers: IRegisterPropertyOther[];
   registerPropertyRadios: IRegisterPropertyRadio[];
   registerPropertyRadiosForDelete: string[];
+  registerPropertyExamples: IRegisterPropertyExample[];
+  registerPropertyExamplesForDelete: string[];
   valueType: IValueType;
   withOther: boolean;
+  withDates: boolean;
   tag: string;
 
   getRegisterPropertyRadioOriginalValue: (id: string) => string;
@@ -26,7 +30,8 @@ export default interface IRegisterProperty {
   removeSetItem: (index: number) => void;
   addRadioItem: () => void;
   removeRadioItem: (index: number) => void;
-
+  addRegisterPropertyExample: () => void;
+  removeRegisterPropertyExample: (index: number) => void;
   showSet: boolean;
   showRadio: boolean;
 

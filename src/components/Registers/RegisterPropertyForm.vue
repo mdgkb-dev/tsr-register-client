@@ -27,8 +27,17 @@
             <el-form-item label-width="170px" label='Добавить поле "Другое"'>
               <el-checkbox v-model="element.withOther" />
             </el-form-item>
+            <el-form-item label-width="170px" label='Добавить "'>
+              <el-checkbox v-model="element.withDates" />
+            </el-form-item>
             <el-form-item label-width="170px" label="Тэг">
               <el-input v-model="element.tag"></el-input>
+            </el-form-item>
+            <el-button @click="element.addRegisterPropertyExample()">Добавить пример</el-button>
+            <el-form-item label-width="170px" label="Тип свойства">
+              <el-input v-for="(example, i) in element.registerPropertyExamples" :key="example" v-model="example.name">
+                <el-button @click="element.removeRegisterPropertyExample(i)">Удалить пример</el-button>
+              </el-input>
             </el-form-item>
           </div>
           <el-divider direction="vertical" style="height: 100%" />
