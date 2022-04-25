@@ -1,7 +1,7 @@
 <template>
   <draggable tag="el-collapse" :list="registerGroup.registerProperties" item-key="id" @end="onEndFunc">
     <template #item="{ element, index }">
-      <el-collapse-item :name="element.name" :title="element.shortName">
+      <el-collapse-item :title="element.shortName">
         <template #title>
           <!--          <div class="collapse-header">-->
           <span class="collapseHeader">{{ element.shortName }}</span>
