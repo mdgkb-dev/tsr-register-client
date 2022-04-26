@@ -63,8 +63,8 @@ export default class Register implements IRegister {
     return this.name;
   }
 
-  addRegisterGroup(): void {
-    this.registerGroups.push(new RegisterGroup());
+  addRegisterGroup(item?: IRegisterGroup): void {
+    this.registerGroups.push(new RegisterGroup(item));
   }
 
   removeRegisterGroup(index: number): void {

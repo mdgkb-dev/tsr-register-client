@@ -6,8 +6,7 @@
       :inline-message="true"
       :rules="rules"
       :model="register"
-      label-width="20%"
-      label-position="left"
+      label-position="top"
       style="width: 100%"
     >
       <div class="table-background" style="margin-bottom: 20px; height: unset">
@@ -15,7 +14,19 @@
           <el-input v-model="register.name"></el-input>
         </el-form-item>
       </div>
-      <el-collapse>
+      <el-form ref="newRegisterGroupForm" class="new-register-group-container" :model="newRegisterGroup">
+        <el-form-item
+          style="width: 100%; margin-right: 10px"
+          prop="name"
+          :rules="{ required: true, message: 'Пожалуйста укажите название группы', trigger: 'blur' }"
+        >
+          <el-input v-model="newRegisterGroup.name" placeholder="Название группы"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addRegisterGroup">Добавить группу</el-button>
+        </el-form-item>
+      </el-form>
+      <el-collapse v-model="activeCollapseName" accordion @change="changeCollapseHadler">
         <RegisterGroupForm />
         <el-collapse-item>
           <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
@@ -27,15 +38,17 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import Register from '@/classes/registers/Register';
+import RegisterGroup from '@/classes/registers/RegisterGroup';
 import MainHeader from '@/classes/shared/MainHeader';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
 import IRegister from '@/interfaces/registers/IRegister';
+import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
@@ -52,6 +65,9 @@ export default defineComponent({
     const route = useRoute();
 
     const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
+    const newRegisterGroup: Ref<IRegisterGroup> = ref(new RegisterGroup());
+    const newRegisterGroupForm = ref();
+    const activeCollapseName: ComputedRef<string> = computed(() => store.getters['registers/activeCollapseName']);
 
     const form = ref();
     const isEditMode: Ref<boolean> = ref(!!route.params.registerId);
@@ -61,7 +77,7 @@ export default defineComponent({
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
     const { submitHandling } = useForm(isEditMode.value);
-    const { validate } = useValidate();
+    const { validate, validateWithoutMessageBox } = useValidate();
 
     onBeforeMount(async () => {
       await store.dispatch('registers/getValueTypes');
@@ -96,6 +112,24 @@ export default defineComponent({
       await submitHandling('registers', register.value, next);
     };
 
+    const addRegisterGroup = () => {
+      if (!validateWithoutMessageBox(newRegisterGroupForm.value)) {
+        return;
+      }
+      register.value.addRegisterGroup(newRegisterGroup.value);
+      newRegisterGroup.value = new RegisterGroup();
+      store.commit('registers/setActiveCollapseName', String(register.value.registerGroups.length - 1));
+    };
+
+    const changeCollapseHadler = (name: string) => {
+      // const activeCollapse = document.getElementById(`collapse-${name}`);
+      // const pageContainer = document.querySelector('.page-container');
+      // if (!activeCollapse || !pageContainer) return;
+      // activeCollapse.scrollIntoView()
+      // console.log('pageContainer', pageContainer);
+      // pageContainer.scrollTo(0, activeCollapse.offsetTop);
+    };
+
     return {
       form,
       register,
@@ -103,6 +137,11 @@ export default defineComponent({
       mount,
       rules,
       submitForm,
+      newRegisterGroup,
+      newRegisterGroupForm,
+      addRegisterGroup,
+      activeCollapseName,
+      changeCollapseHadler,
     };
   },
 });
@@ -110,4 +149,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
+.new-register-group-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
 </style>

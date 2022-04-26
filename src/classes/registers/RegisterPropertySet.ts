@@ -11,6 +11,7 @@ export default class RegisterPropertySet implements IRegisterPropertySet {
   registerPropertyOthers: IRegisterPropertyOther[] = [];
   registerPropertyOthersForDelete: string[] = [];
   order = 0;
+  isEdit = false;
 
   constructor(i?: IRegisterPropertySet) {
     if (!i) {
@@ -35,5 +36,9 @@ export default class RegisterPropertySet implements IRegisterPropertySet {
       this.registerPropertyOthersForDelete.push(idForDelete);
     }
     this.registerPropertyOthers.splice(index, 1);
+  }
+
+  editRegisterPropertySet(isEdit?: boolean): void {
+    this.isEdit = isEdit ?? !this.isEdit;
   }
 }

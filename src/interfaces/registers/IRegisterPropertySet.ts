@@ -6,10 +6,12 @@ export default interface IRegisterPropertySet {
   name: string;
   registerPropertyId?: string;
   registerProperty?: IRegisterProperty;
+  isEdit: boolean;
 
   registerPropertyOthers: IRegisterPropertyOther[];
   registerPropertyOthersForDelete: string[];
   order: number;
   addRegisterPropertyOther: () => void;
   removeRegisterPropertyOther: (index: number) => void;
+  editRegisterPropertySet: (isEdit?: boolean) => void;
 }

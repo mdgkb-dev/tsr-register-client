@@ -12,6 +12,7 @@ export const state: State = {
   registers: [],
   item: new Register(),
   valueTypes: [],
+  activeCollapseName: '',
 };
 
 const namespaced = true;

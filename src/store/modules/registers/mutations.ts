@@ -52,6 +52,9 @@ const mutations: MutationTree<State> = {
   setValueTypes(state, valueTypes: IValueType[]) {
     state.valueTypes = valueTypes.map((a: IValueType) => new ValueType(a));
   },
+  setActiveCollapseName(state, index: string) {
+    state.activeCollapseName = index;
+  },
 };
 
 export default mutations;

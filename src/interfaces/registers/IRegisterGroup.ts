@@ -6,8 +6,10 @@ export default interface IRegisterGroup {
   order: number;
   registerProperties: IRegisterProperty[];
   registerPropertiesForDelete: string[];
+  isEdit: boolean;
 
-  addRegisterProperty: () => void;
+  editRegisterGroup: (isEdit?: boolean) => void;
+  addRegisterProperty: (item?: IRegisterProperty) => void;
   removeRegisterProperty: (index: number) => void;
   sortProperties: () => void;
 }

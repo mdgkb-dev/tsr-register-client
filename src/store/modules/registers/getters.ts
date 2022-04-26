@@ -29,6 +29,9 @@ const getters: GetterTree<State, RootState> = {
     const { valueTypes } = state;
     return valueTypes;
   },
+  activeCollapseName(state): string {
+    return state.activeCollapseName;
+  },
 };
 
 export default getters;

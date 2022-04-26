@@ -12,8 +12,8 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
 
 export default class RegisterProperty implements IRegisterProperty {
   id?: string;
-  name = 'Свойство';
-  shortName = 'Свойство';
+  name = '';
+  shortName = '';
   colWidth = '150px';
   valueTypeId?: string;
   order = 0;
@@ -30,6 +30,7 @@ export default class RegisterProperty implements IRegisterProperty {
   tag = '';
   showSet = false;
   showRadio = false;
+  isEdit = false;
 
   constructor(i?: IRegisterProperty) {
     if (!i) {
@@ -44,6 +45,7 @@ export default class RegisterProperty implements IRegisterProperty {
     this.order = i.order;
     this.tag = i.tag;
     this.withDates = i.withDates;
+    this.isEdit = i.isEdit;
     if (i.registerPropertySets) {
       this.registerPropertySets = i.registerPropertySets.map((i: IRegisterPropertySet) => new RegisterPropertySet(i));
     }
@@ -78,8 +80,8 @@ export default class RegisterProperty implements IRegisterProperty {
     return '';
   }
 
-  addRegisterPropertyExample(): void {
-    this.registerPropertyExamples.push(new RegisterPropertyExample());
+  addRegisterPropertyExample(item?: IRegisterPropertyExample): void {
+    this.registerPropertyExamples.push(new RegisterPropertyExample(item));
   }
 
   removeRegisterPropertyExample(i: number): void {
@@ -90,11 +92,11 @@ export default class RegisterProperty implements IRegisterProperty {
     this.registerPropertyExamples.splice(i, 1);
   }
 
-  addSetItem(): void {
-    this.registerPropertySets.push(new RegisterPropertySet());
+  addSetItem(item?: IRegisterPropertySet): void {
+    this.registerPropertySets.push(new RegisterPropertySet(item));
   }
-  addRadioItem(): void {
-    this.registerPropertyRadios.push(new RegisterPropertyRadio());
+  addRadioItem(item?: IRegisterPropertyRadio): void {
+    this.registerPropertyRadios.push(new RegisterPropertyRadio(item));
   }
   removeSetItem(i: number): void {
     const idForDelete = this.registerPropertySets[i].id;
@@ -136,10 +138,14 @@ export default class RegisterProperty implements IRegisterProperty {
       return radioProperty.registerPropertyOthers;
     }
     const setProperty = this.registerPropertySets.find((set: IRegisterPropertySet) => set.id === propResult);
-    console.log(setProperty, propResult);
+    // console.log(setProperty, propResult);
     if (setProperty) {
       return setProperty.registerPropertyOthers;
     }
     return [];
+  }
+
+  editRegisterProperty(isEdit?: boolean): void {
+    this.isEdit = isEdit ?? !this.isEdit;
   }
 }

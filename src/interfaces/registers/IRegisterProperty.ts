@@ -21,16 +21,18 @@ export default interface IRegisterProperty {
   valueType: IValueType;
   withOther: boolean;
   withDates: boolean;
+  isEdit: boolean;
   tag: string;
 
   getRegisterPropertyRadioOriginalValue: (id: string) => string;
   getRegisterPropertySetOriginalValue: (id: string) => string;
 
-  addSetItem: () => void;
+  editRegisterProperty: (isEdit?: boolean) => void;
+  addSetItem: (item?: IRegisterPropertySet) => void;
   removeSetItem: (index: number) => void;
-  addRadioItem: () => void;
+  addRadioItem: (item?: IRegisterPropertyRadio) => void;
   removeRadioItem: (index: number) => void;
-  addRegisterPropertyExample: () => void;
+  addRegisterPropertyExample: (item?: IRegisterPropertyExample) => void;
   removeRegisterPropertyExample: (index: number) => void;
   showSet: boolean;
   showRadio: boolean;

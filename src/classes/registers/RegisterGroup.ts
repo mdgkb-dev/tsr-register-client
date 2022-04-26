@@ -8,6 +8,8 @@ export default class RegisterGroup implements IRegisterGroup {
   order = 0;
   registerProperties: IRegisterProperty[] = [];
   registerPropertiesForDelete: string[] = [];
+  isEdit = false;
+
   constructor(i?: IRegisterGroup) {
     if (!i) {
       return;
@@ -15,13 +17,18 @@ export default class RegisterGroup implements IRegisterGroup {
     this.id = i.id;
     this.name = i.name;
     this.order = i.order;
+    this.isEdit = i.isEdit;
     if (i.registerProperties) {
       this.registerProperties = i.registerProperties.map((item: IRegisterProperty) => new RegisterProperty(item));
     }
   }
 
-  addRegisterProperty(): void {
-    this.registerProperties.push(new RegisterProperty());
+  editRegisterGroup(isEdit?: boolean): void {
+    this.isEdit = isEdit ?? !this.isEdit;
+  }
+
+  addRegisterProperty(item?: IRegisterProperty): void {
+    this.registerProperties.push(new RegisterProperty(item));
   }
 
   removeRegisterProperty(index: number): void {

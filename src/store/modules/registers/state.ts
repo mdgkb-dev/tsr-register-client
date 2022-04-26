@@ -5,4 +5,5 @@ export interface State {
   registers: IRegister[];
   item: IRegister;
   valueTypes: IValueType[];
+  activeCollapseName: string;
 }

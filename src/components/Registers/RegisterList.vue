@@ -11,7 +11,7 @@
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название регистра" min-width="150" sortable />
-        <el-table-column width="40" align="center">
+        <el-table-column width="50" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
               <TableButtonGroup

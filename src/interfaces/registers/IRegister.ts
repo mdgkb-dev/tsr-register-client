@@ -14,7 +14,7 @@ export default interface IRegister {
   registerToPatient: IRegisterToPatient[];
   registerToPatientCount: number;
 
-  addRegisterGroup: () => void;
+  addRegisterGroup: (item?: IRegisterGroup) => void;
   removeRegisterGroup: (index: number) => void;
 
   getProps: () => IRegisterProperty[];
