@@ -1,5 +1,5 @@
 <template>
-  <component :is="layout" style="height: 100%; margin: 0">
+  <component :is="layout">
     <router-view />
   </component>
 </template>

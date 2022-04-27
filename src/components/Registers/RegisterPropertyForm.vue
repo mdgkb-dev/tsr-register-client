@@ -2,7 +2,7 @@
   <draggable tag="el-collapse" :list="registerGroup.registerProperties" item-key="id" @end="onEndFunc">
     <template #item="{ element, index }">
       <el-collapse v-model="activeCollapseName" accordion>
-        <el-collapse-item :name="String(index)">
+        <el-collapse-item class="register-property-collapse" :name="String(index)">
           <template #title>
             <div class="collapse-header-container">
               <h2 v-if="!element.isEdit" class="collapse-header">{{ element.shortName }}</h2>
@@ -202,6 +202,9 @@ export default defineComponent({
 :deep(.el-collapse-item__wrap) {
   border: none;
   background-color: #eef1f6;
+}
+:deep(.register-property-collapse) {
+  background-color: #eef1f6 !important;
 }
 :deep(.el-collapse-item__wrap) {
   padding: 0 10px;

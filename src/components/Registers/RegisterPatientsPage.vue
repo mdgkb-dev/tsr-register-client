@@ -1,37 +1,31 @@
 <template>
-  <div v-if="mount" class="wrapper" style="height: 100%">
-    <div class="table-background" style="height: auto; margin-bottom: 20px">
-      <el-row>
-        <el-col :span="15">
-          <!-- <h2 style="margin: 0 0 40px 0">Общая информация</h2> -->
-          <el-row>
-            <el-col :span="12" class="light-title upper">Название регистра</el-col>
-            <el-col :span="12"> {{ register.name }}</el-col>
-          </el-row>
-          <el-divider></el-divider>
-          <el-row>
-            <el-col :span="12" class="light-title upper"><i class="el-icon-user"></i> Количество пациентов</el-col>
-            <el-col :span="12"> {{ register.registerToPatient.length }}</el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="9">
-          <div v-for="registerQuery in registerQueries" :key="registerQuery.id">
-            <el-button @click="executeQuery(registerQuery.id)">{{ registerQuery.name }} </el-button>
-          </div>
-        </el-col>
-      </el-row>
+  <div v-if="mount" style="height: 100%; display: flex; flex-direction: column">
+    <div class="table-background main-info-container">
+      <div class="main-info-container-item">
+        <span class="light-title upper">Название регистра:</span>
+        <span>{{ register.name }}</span>
+      </div>
+      <div class="main-info-container-item">
+        <span class="light-title upper"><i class="el-icon-user"></i>:</span>
+        <span>{{ register.registerToPatient.length }}</span>
+      </div>
+      <div>
+        <div v-for="registerQuery in registerQueries" :key="registerQuery.id">
+          <el-button type="primary" size="small" @click="executeQuery(registerQuery.id)">{{ registerQuery.name }} </el-button>
+        </div>
+      </div>
     </div>
-
-    <div class="table-background" style="height: auto">
+    <div class="table-background" style="flex-shrink: 1; overflow: hidden; margin-bottom: 0">
       <el-table
+        ref="table"
         :default-sort="{ prop: 'id', order: 'ascending' }"
         :data="register.registerToPatient"
         class="table-shadow"
         header-row-class-name="header-style"
-        border
         row-class-name="table-row"
         cell-class-name="table-row"
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 380px); overflow: auto"
+        style="width: 100%; margin-bottom: 20px; overflow: auto"
+        height="calc(100vh - 270px)"
       >
         <el-table-column type="index" width="70" align="center">
           <template #header>
@@ -84,24 +78,17 @@
             </template>
           </el-table-column>
         </template>
-
-        <!-- <el-table-column width="50" align="center" fixed="right">
-          <template #default="scope">
-            <TableButtonGroup :show-edit-button="true" @edit="edit(scope.row.patient.id)" />
-          </template>
-        </el-table-column> -->
       </el-table>
-
-      <div style="text-align: center; width: 100%">
-        <el-pagination
-          style="margin-top: 20px; margin-bottom: 20px"
-          :current-page="curPage"
-          layout="prev, pager, next"
-          :page-count="Math.round(register.registerToPatientCount / 25)"
-          @current-change="setPage"
-        >
-        </el-pagination>
-      </div>
+    </div>
+    <div style="text-align: center; width: 100%">
+      <el-pagination
+        style="margin: 20px 0"
+        :current-page="curPage"
+        layout="prev, pager, next"
+        :page-count="Math.round(register.registerToPatientCount / 25)"
+        @current-change="setPage"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -227,6 +214,9 @@ export default defineComponent({
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/elements/pageInfo.scss';
 
+:deep(.el-table--scrollable-x .el-table__body-wrapper) {
+  // height: calc(100vh - 270px) !important;
+}
 .el-table .cell {
   word-break: break-word;
 }
@@ -241,5 +231,28 @@ h3 {
 :deep(.table-popover) {
   max-height: 600px !important;
   overflow: auto;
+}
+.main-info-container {
+  margin-bottom: 20px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  &-item {
+    display: flex;
+    align-items: center;
+    .light-title {
+      margin-right: 10px;
+    }
+  }
+}
+
+table {
+  height: 100%;
+  overflow: scroll;
+  td {
+    padding: 30px 0;
+  }
 }
 </style>

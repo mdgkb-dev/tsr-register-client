@@ -1,20 +1,26 @@
 <template>
   <div v-if="mount" class="patient-page-container">
     <el-row>
-      <el-collapse class="collapse">
+      <el-collapse v-model="activeCollapseName" class="collapse" accordion @change="collapseChangeHandler">
         <el-form ref="form" label-position="top" :status-icon="true" :model="patient">
-          <el-collapse-item>
+          <el-collapse-item name="info">
             <template #title><h2 class="collapseHeader">Паспортные данные</h2></template>
+            <el-divider></el-divider>
             <HumanForm :readonly="true" store-name="patients" />
           </el-collapse-item>
-          <el-collapse-item v-for="registerGroup in register.registerGroups" :key="registerGroup">
+          <el-collapse-item
+            v-for="(registerGroup, i) in register.registerGroups"
+            :id="`collapse-${i}`"
+            :key="registerGroup"
+            :name="String(i)"
+          >
             <template #title>
               <h2 class="collapseHeader">{{ registerGroup.name }}</h2>
             </template>
-            <span v-for="(prop, j) in registerGroup.registerProperties" :key="j" style="margin-bottom: 10px">
-              <el-divider />
+            <el-divider></el-divider>
+            <div v-for="(prop, j) in registerGroup.registerProperties" :key="j" class="register-property-block">
               <div>
-                <h3>{{ prop.name }}</h3>
+                <h3>{{ j + 1 }}. {{ prop.name }}</h3>
               </div>
               <ul>
                 <li v-for="example in prop.registerPropertyExamples" :key="example.id">
@@ -171,7 +177,7 @@
                   />
                 </el-form-item>
               </template>
-            </span>
+            </div>
           </el-collapse-item>
         </el-form>
       </el-collapse>
@@ -206,6 +212,7 @@ export default defineComponent({
 
     const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
     const patient: Ref<IPatient> = computed(() => store.getters['patients/patient']);
+    const activeCollapseName: Ref<string> = ref('');
 
     const form = ref();
     const isEditMode: Ref<boolean> = ref(true);
@@ -243,7 +250,16 @@ export default defineComponent({
       await submitHandling('patients', patient.value, next, `registers/patients/${route.params.registerId}`);
     };
 
+    const collapseChangeHandler = (name: string) => {
+      const obj = document.getElementById(`collapse-${name}`);
+      if (!obj) return;
+      setTimeout(() => {
+        obj.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      }, 500);
+    };
+
     return {
+      collapseChangeHandler,
       form,
       patient,
       register,
@@ -251,6 +267,7 @@ export default defineComponent({
       links,
       mount,
       submitForm,
+      activeCollapseName,
     };
   },
 });
@@ -258,4 +275,19 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
+.register-property-block {
+  background-color: #eef1f6;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  h3 {
+    margin-top: 0;
+  }
+}
+.el-form-item {
+  margin: 0;
+}
+.el-divider {
+  margin: 10px 0;
+}
 </style>

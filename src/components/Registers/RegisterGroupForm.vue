@@ -91,7 +91,7 @@ export default defineComponent({
       }
       newRegisterProperty.value.name = newRegisterProperty.value.shortName;
       registerGroup.addRegisterProperty(newRegisterProperty.value);
-      // newRegisterProperty.value = new RegisterProperty();
+      newRegisterProperty.value = new RegisterProperty();
       // store.commit('registers/setActiveCollapseName', String(index));
     };
 

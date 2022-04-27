@@ -1,67 +1,53 @@
 <template>
-  <div class="wrapper">
-    <el-aside width="250px" style="background-color: white">
-      <div
-        style="
-          background-color: white;
-          position: fixed;
-          width: 250px;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        "
-      >
-        <div>
-          <el-row style="line-height: 100px; margin-top: 50px">
-            <el-col>
-              <el-avatar size="large" :src="circleUrl"></el-avatar>
-            </el-col>
-          </el-row>
-          <el-row style="line-height: 10px">
-            <el-col>
-              <el-tag class="menu-badge">Пользователь</el-tag>
-            </el-col>
-          </el-row>
-          <h1 class="main-side-menu-user-name">{{ userLogin }}</h1>
-        </div>
-        <el-scrollbar>
-          <el-menu style="text-align: start">
-            <el-menu-item-group :router="true">
-              <el-menu
-                id="menu"
-                :router="true"
-                :default-openeds="[0]"
-                :default-active="activeMenu ? activeMenu : activeRoute"
-                :unique-opened="true"
-                @select="closeDrawer"
-              >
-                <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
-                  <el-sub-menu v-if="menu.links" :index="i.toString()">
-                    <template #title>
-                      <i :class="menu.class"></i>
-                      <span>{{ menu.title }} </span>
-                    </template>
-                    <div v-for="item in menu.links" :key="item.title">
-                      <el-menu-item :id="item.name" :index="item.name" :route="{ name: item.name }" class="side-menu-elements-font">
-                        <span>{{ item.title }} </span>
-                      </el-menu-item>
-                    </div>
-                  </el-sub-menu>
-                  <el-menu-item v-else :id="menu.name" :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
-                    <i :class="menu.class"></i>
-                    <span>{{ menu.title }}</span>
+  <div class="aside-container">
+    <div>
+      <el-row style="line-height: 100px; margin-top: 50px">
+        <el-col>
+          <el-avatar size="large" :src="circleUrl"></el-avatar>
+        </el-col>
+      </el-row>
+      <el-row style="line-height: 10px">
+        <el-col>
+          <el-tag class="menu-badge">Пользователь</el-tag>
+        </el-col>
+      </el-row>
+      <h1 class="main-side-menu-user-name">{{ userLogin }}</h1>
+    </div>
+    <el-scrollbar>
+      <el-menu style="text-align: start">
+        <el-menu-item-group :router="true">
+          <el-menu
+            id="menu"
+            :router="true"
+            :default-openeds="[0]"
+            :default-active="activeMenu ? activeMenu : activeRoute"
+            :unique-opened="true"
+            @select="closeDrawer"
+          >
+            <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
+              <el-sub-menu v-if="menu.links" :index="i.toString()">
+                <template #title>
+                  <i :class="menu.class"></i>
+                  <span>{{ menu.title }} </span>
+                </template>
+                <div v-for="item in menu.links" :key="item.title">
+                  <el-menu-item :id="item.name" :index="item.name" :route="{ name: item.name }" class="side-menu-elements-font">
+                    <span>{{ item.title }} </span>
                   </el-menu-item>
                 </div>
-              </el-menu>
-            </el-menu-item-group>
+              </el-sub-menu>
+              <el-menu-item v-else :id="menu.name" :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
+                <i :class="menu.class"></i>
+                <span>{{ menu.title }}</span>
+              </el-menu-item>
+            </div>
           </el-menu>
-        </el-scrollbar>
-        <div class="logout-button-container">
-          <el-button @click="logout()">Выйти из аккаунта</el-button>
-        </div>
-      </div>
-    </el-aside>
+        </el-menu-item-group>
+      </el-menu>
+    </el-scrollbar>
+    <div class="logout-button-container">
+      <el-button @click="logout()">Выйти из аккаунта</el-button>
+    </div>
   </div>
 </template>
 
@@ -227,27 +213,17 @@ export default defineComponent({
   line-height: 60px;
 }
 
-.el-aside {
+.aside-container {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
   line-height: 200px;
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  /* line-height: 260px; */
-}
-
-.el-container:nth-child(7) .el-aside {
-  /* line-height: 320px; */
+  width: 250px;
+  background-color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .el-menu-item.is-active,

@@ -32,11 +32,11 @@ $header-background-color: whitesmoke;
 :deep(.admin-drawer) {
   background-color: $header-background-color;
 }
-
 .drawer-container {
   height: 100%;
 }
 :deep(.el-drawer__body) {
   padding: 0;
+  height: 100%;
 }
 </style>
