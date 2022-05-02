@@ -47,6 +47,9 @@ const getters: GetterTree<State, RootState> = {
   isEditMode(state): boolean {
     return state.isEditMode;
   },
+  lastInsertedId(state): string | undefined {
+    return state.lastInsertedId;
+  },
 };
 
 export default getters;

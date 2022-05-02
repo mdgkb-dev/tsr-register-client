@@ -28,10 +28,22 @@
         />
       </el-form-item>
       <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
-        <el-input v-model="human.addressRegistration" :readonly="readonly" @change="updateHuman" />
+        <el-autocomplete
+          v-model="human.addressRegistration"
+          :readonly="readonly"
+          :fetch-suggestions="getAddresses"
+          autocomplete="random"
+          @change="updateHuman"
+        />
       </el-form-item>
       <el-form-item label="Адрес проживания" prop="human.addressResidential">
-        <el-input v-model="human.addressResidential" :readonly="readonly" @change="updateHuman" />
+        <el-autocomplete
+          v-model="human.addressResidential"
+          :readonly="readonly"
+          :fetch-suggestions="getAddresses"
+          autocomplete="random"
+          @change="updateHuman"
+        />
       </el-form-item>
       <el-form-item label="Телефон" prop="human.contact.phone">
         <el-input v-model="human.contact.phone" :readonly="readonly" @input="human.contact.formatPhoneNumber()" @change="updateHuman" />
@@ -61,6 +73,7 @@ import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef }
 import { useStore } from 'vuex';
 
 import IHuman from '@/interfaces/humans/IHuman';
+import IOption from '@/interfaces/shared/IOption';
 import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
@@ -70,9 +83,13 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
-  storeName: {
+    storeName: {
       type: String as PropType<string>,
       required: true,
+    },
+    addresses: {
+      type: Array as PropType<Array<string>>,
+      required: false,
     },
   },
   setup(props) {
@@ -87,7 +104,20 @@ export default defineComponent({
       store.commit(`${props.storeName}/setHuman`, human);
     };
 
+    const getAddresses = (queryString: string, cb: CallableFunction) => {
+      if (!props.addresses) {
+        cb([]);
+        return;
+      }
+      const opt: IOption[] = [];
+      props.addresses.forEach((a) => {
+        opt.push({ value: a, label: a });
+      });
+      cb(opt);
+    };
+
     return {
+      getAddresses,
       humanComputed,
       human,
       updateHuman,
@@ -97,3 +127,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-autocomplete) {
+  display: block;
+}
+.el-icon-copy-document {
+  &:hover {
+    cursor: pointer;
+    color: darken(white, 10%);
+  }
+}
+</style>

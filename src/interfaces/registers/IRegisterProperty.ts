@@ -8,7 +8,7 @@ export default interface IRegisterProperty {
   id?: string;
   name: string;
   shortName: string;
-  colWidth: string;
+  colWidth: number;
   valueTypeId?: string;
   order: number;
   registerPropertySets: IRegisterPropertySet[];
@@ -36,7 +36,7 @@ export default interface IRegisterProperty {
   removeRegisterPropertyExample: (index: number) => void;
   showSet: boolean;
   showRadio: boolean;
-
+  sortExamples: () => void;
   changeRelation: (valueTypes: IValueType[]) => void;
 
   getOthers: (propResult: boolean | string | number | Date | null) => IRegisterPropertyOther[];

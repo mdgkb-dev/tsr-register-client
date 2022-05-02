@@ -45,7 +45,12 @@
 
     <el-table-column width="40" fixed="right" align="center">
       <template #default="scope">
-        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
+        <TableButtonGroup
+          :show-remove-button="true"
+          :show-edit-button="true"
+          @remove="remove(scope.row)"
+          @edit="$router.push(`/patients/${representativeToPatient[scope.$index].patientId}`)"
+        />
       </template>
     </el-table-column>
   </el-table>

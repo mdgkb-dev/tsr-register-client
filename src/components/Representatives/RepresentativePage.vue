@@ -19,7 +19,7 @@
               <template #title>
                 <h2 class="collapseHeader">Паспортные данные</h2>
               </template>
-              <HumanForm :store-name="'representatives'" />
+              <HumanForm store-name="representatives" :addresses="representative.getChildrenAddresses()" />
             </el-collapse-item>
             <el-collapse-item>
               <template #title>
@@ -58,7 +58,7 @@ import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
-  name: 'RepresentativeTypePage',
+  name: 'RepresentativePage',
   components: {
     HumanForm,
     DocumentForm,

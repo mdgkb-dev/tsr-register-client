@@ -30,4 +30,5 @@ export default interface IPatient extends IPatientConstructor {
   addRegisterValueWithDate: (property: IRegisterProperty) => void;
   getRegisterValuesWithDate: (propertyId: string) => IRegisterPropertyToPatient[];
   removeRegisterValueWithDate: (propId: string) => void;
+  getParentsAddresses: () => string[];
 }

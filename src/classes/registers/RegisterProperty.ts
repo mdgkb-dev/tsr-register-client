@@ -14,7 +14,7 @@ export default class RegisterProperty implements IRegisterProperty {
   id?: string;
   name = '';
   shortName = '';
-  colWidth = '150px';
+  colWidth = 150;
   valueTypeId?: string;
   order = 0;
   registerPropertyRadios: IRegisterPropertyRadio[] = [];
@@ -147,5 +147,9 @@ export default class RegisterProperty implements IRegisterProperty {
 
   editRegisterProperty(isEdit?: boolean): void {
     this.isEdit = isEdit ?? !this.isEdit;
+  }
+
+  sortExamples(): void {
+    this.registerPropertyExamples.forEach((item: IRegisterPropertyExample, index: number) => (item.order = index));
   }
 }

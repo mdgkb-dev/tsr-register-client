@@ -130,7 +130,6 @@ import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
 import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
-import IPatient from '@/interfaces/patients/IPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import ISchema from '@/interfaces/schema/ISchema';
@@ -150,7 +149,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
-    const filteredRepresentatives: Ref<IPatient[]> = computed(() => store.getters['representatives/filteredRepresentatives']);
+    const filteredRepresentatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/filteredRepresentatives']);
     const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
     const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
 

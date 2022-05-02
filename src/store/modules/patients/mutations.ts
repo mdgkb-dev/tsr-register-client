@@ -29,6 +29,7 @@ import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
+import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 import { State } from './state';
@@ -85,8 +86,13 @@ const mutations: MutationTree<State> = {
       state.patient.registerToPatient.splice(index, 1);
     }
   },
-  addRepresentative(state) {
-    state.patient.representativeToPatient.push(new RepresentativeToPatient());
+  addRepresentative(state, item?: IRepresentative) {
+    const rtp = new RepresentativeToPatient();
+    if (item) {
+      rtp.representative = item;
+    }
+    state.patient.representativeToPatient.push(rtp);
+    console.log(state.patient.representativeToPatient);
   },
   removeRepresentative(state, item: IRepresentativeToPatient): void {
     const index = state.patient.representativeToPatient.indexOf(item);

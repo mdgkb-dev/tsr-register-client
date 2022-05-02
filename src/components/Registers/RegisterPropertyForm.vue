@@ -1,14 +1,17 @@
 <template>
-  <draggable tag="el-collapse" :list="registerGroup.registerProperties" item-key="id" @end="onEndFunc">
+  <draggable handle=".el-icon-s-grid" tag="el-collapse" :list="registerGroup.registerProperties" item-key="id" @end="onEndFunc">
     <template #item="{ element, index }">
       <el-collapse v-model="activeCollapseName" accordion>
         <el-collapse-item class="register-property-collapse" :name="String(index)">
           <template #title>
             <div class="collapse-header-container">
-              <h2 v-if="!element.isEdit" class="collapse-header">{{ element.shortName }}</h2>
+              <div v-if="!element.isEdit" style="display: flex">
+                <i class="el-icon-s-grid drug-icon" />
+                <h3 class="collapse-header">{{ element.shortName }}</h3>
+              </div>
               <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
                 <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
-                <el-input v-model="element.name" placeholder="Название свойства" @click.stop></el-input>
+                <el-input v-model="element.name" placeholder="Название свойства" @keyup.stop="key" @click.stop></el-input>
               </el-form-item>
               <div class="card-button-group">
                 <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать свойство">
@@ -24,7 +27,7 @@
                   icon-color="red"
                   title="Вы уверены, что хотите удалить свойство?"
                   @confirm="removeRegisterProperty(index)"
-                  @cancel="() => {}"
+                  @cancel="() => null"
                 >
                   <template #reference>
                     <el-button icon="el-icon-delete"></el-button>
@@ -43,7 +46,7 @@
             </el-form-item>
             <div class="flex-row">
               <el-form-item label-width="170px" label="Ширина столбца">
-                <el-input v-model="element.colWidth"></el-input>
+                <el-input-number v-model="element.colWidth"></el-input-number>
               </el-form-item>
               <el-form-item label-width="170px" label="Тип свойства">
                 <el-select v-model="element.valueTypeId" placeholder="Тип свойства" @change="element.changeRelation(valueTypes)">
@@ -62,38 +65,7 @@
             </el-form-item> -->
             <RegisterPropertyRadioForm v-if="element.showRadio" :register-property="element" />
             <RegisterPropertySetForm v-if="element.showSet" :register-property="element" />
-            <el-form ref="newRegisterPropertyExampleForm" class="new-register-example-container" :model="newRegisterPropertyExample">
-              <el-form-item
-                style="width: 100%; margin-right: 10px"
-                prop="name"
-                :rules="{ required: true, message: 'Пожалуйста укажите название примера', trigger: 'blur' }"
-              >
-                <el-input v-model="newRegisterPropertyExample.name" placeholder="Название примера"></el-input>
-              </el-form-item>
-              <el-button type="primary" @click="addRegisterPropertyExample(element)">Добавить пример</el-button>
-            </el-form>
-
-            <!-- <el-button type="primary" @click="element.addRegisterPropertyExample()">Добавить пример</el-button> -->
-            <div v-if="element.registerPropertyExamples.length" class="property-row">
-              <el-form-item v-for="(example, i) in element.registerPropertyExamples" :key="i" label-width="170px" label="Пример">
-                <el-input v-model="example.name"> </el-input>
-                <div class="card-button-group">
-                  <el-popconfirm
-                    confirm-button-text="Да"
-                    cancel-button-text="Отмена"
-                    icon="el-icon-info"
-                    icon-color="red"
-                    title="Вы уверены, что хотите удалить пример?"
-                    @confirm="element.removeRegisterPropertyExample(i)"
-                    @cancel="() => {}"
-                  >
-                    <template #reference>
-                      <el-button icon="el-icon-delete"></el-button>
-                    </template>
-                  </el-popconfirm>
-                </div>
-              </el-form-item>
-            </div>
+            <RegisterPropertyExamplesForm :register-property="element" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -107,12 +79,11 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useStore } from 'vuex';
 
-import RegisterPropertyExample from '@/classes/registers/RegisterPropertyExample';
+import RegisterPropertyExamplesForm from '@/components/Registers/RegisterPropertyExamplesForm.vue';
 import RegisterPropertyRadioForm from '@/components/Registers/RegisterPropertyRadioForm.vue';
 import RegisterPropertySetForm from '@/components/Registers/RegisterPropertySetForm.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyExample';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import useValidate from '@/mixins/useValidate';
 
@@ -121,6 +92,7 @@ export default defineComponent({
   components: {
     RegisterPropertyRadioForm,
     RegisterPropertySetForm,
+    RegisterPropertyExamplesForm,
     draggable,
   },
   props: {
@@ -137,8 +109,6 @@ export default defineComponent({
     const form = ref();
     const mount: Ref<boolean> = ref(false);
     const activeTab = ref(0);
-    const newRegisterPropertyExample: Ref<IRegisterPropertyExample> = ref(new RegisterPropertyExample());
-    const newRegisterPropertyExampleForm = ref();
     const { validateWithoutMessageBox } = useValidate();
 
     const onEndFunc = (evt: Sortable.SortableEvent): void => {
@@ -158,16 +128,12 @@ export default defineComponent({
       props.registerGroup.removeRegisterProperty(index);
     };
 
-    const addRegisterPropertyExample = (registerProperty: IRegisterProperty): void => {
-      if (!validateWithoutMessageBox(newRegisterPropertyExampleForm.value)) {
-        return;
-      }
-      registerProperty.addRegisterPropertyExample(newRegisterPropertyExample.value);
-      newRegisterPropertyExample.value = new RegisterPropertyExample();
+    const key = (k: InputEvent) => {
+      k.stopPropagation();
     };
 
     return {
-      addRegisterPropertyExample,
+      key,
       onEndFunc,
       activeTab,
       removeRegisterProperty,
@@ -177,14 +143,20 @@ export default defineComponent({
       mount,
       editRegisterProperty,
       activeCollapseName,
-      newRegisterPropertyExample,
-      newRegisterPropertyExampleForm,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.drug-icon {
+  margin-right: 5px;
+  margin-top: 3px;
+  &:hover {
+    color: #409eff;
+  }
+}
+
 .el-collapse {
   width: 100%;
   margin-bottom: 10px;
@@ -295,3 +267,4 @@ h3 {
   }
 }
 </style>
+79377

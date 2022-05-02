@@ -8,4 +8,5 @@ export interface State {
   photoFileList: IFilesList[];
   count: number;
   isEditMode: boolean;
+  lastInsertedId?: string;
 }

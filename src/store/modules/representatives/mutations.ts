@@ -26,6 +26,7 @@ const mutations: MutationTree<State> = {
   },
   create(state, payload: IRepresentative) {
     state.representatives.push(new Representative(payload));
+    state.lastInsertedId = payload.id;
   },
   update(state, payload: IRepresentative) {
     const item = state.representatives.find((i: IRepresentative) => i.id === payload.id);

@@ -1,9 +1,9 @@
+import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
 import IDrug from '@/interfaces/drugs/IDrug';
+import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 
 import DrugRegimen from './DrugRegimen';
-import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
-import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
 
 export default class Drug implements IDrug {
   id?: string;

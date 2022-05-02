@@ -15,6 +15,7 @@ export const state: State = {
   photoFileList: [],
   count: 0,
   isEditMode: true,
+  lastInsertedId: undefined,
 };
 
 const namespaced = true;

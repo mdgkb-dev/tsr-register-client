@@ -11,4 +11,5 @@ export default interface IRepresentative extends IModelInfo {
   representativeToPatientForDelete: string[];
 
   getFileInfos: () => IFileInfo[];
+  getChildrenAddresses: () => string[];
 }

@@ -19,7 +19,7 @@
       icon-color="red"
       title="Вы уверен, что хотите удалить это?"
       @confirm="$emit('remove')"
-      @cancel="() => {}"
+      @cancel="() => null"
     >
       <template #reference>
         <el-button class="table-button" icon="el-icon-delete" data-test="tableButtonGroupDeleteButton" />

@@ -1,6 +1,3 @@
-import Human from '@/classes/humans/Human';
-import IHuman from '@/interfaces/humans/IHuman';
-import IUser from '@/interfaces/users/IUser';
 import IRegisterUser from '@/interfaces/users/IRegisterUser';
 
 export default class RegisterUser implements IRegisterUser {

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import Circumference from '@/classes/anthropometry/Circumference';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
@@ -31,7 +33,6 @@ import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterProperty
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IUser from '@/interfaces/users/IUser';
-import { v4 as uuidv4 } from 'uuid';
 
 export default class Patient implements IPatient {
   id?: string;
@@ -431,5 +432,21 @@ export default class Patient implements IPatient {
       this.registerPropertyToPatientForDelete.push(idForDelete);
     }
     this.registerPropertyToPatient.splice(i, 1);
+  }
+
+  getParentsAddresses(): string[] {
+    const addresses: string[] = [];
+    this.representativeToPatient.forEach((rtp: IRepresentativeToPatient) => {
+      if (rtp.representative?.human.addressResidential != '' && rtp.representative?.human.addressResidential) {
+        addresses.push(rtp.representative?.human.addressResidential);
+      }
+      if (
+        rtp.representative?.human.addressResidential !== rtp.representative?.human.addressRegistration &&
+        rtp.representative?.human.addressRegistration
+      ) {
+        addresses.push(rtp.representative?.human.addressRegistration);
+      }
+    });
+    return [...new Set(Array.from(new Set(addresses)))];
   }
 }

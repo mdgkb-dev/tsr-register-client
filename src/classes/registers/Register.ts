@@ -74,4 +74,8 @@ export default class Register implements IRegister {
     }
     this.registerGroups.splice(index, 1);
   }
+
+  sortGroups(): void {
+    this.registerGroups.forEach((item: IRegisterGroup, index: number) => (item.order = index));
+  }
 }

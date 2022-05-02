@@ -25,7 +25,7 @@
               icon-color="red"
               title="Вы уверены, что хотите удалить схему?"
               @confirm="removeDrugRegimen(drugRegimenIndex)"
-              @cancel="() => {}"
+              @cancel="() => null"
             >
               <template #reference>
                 <el-button icon="el-icon-delete"></el-button>

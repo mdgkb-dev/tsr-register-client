@@ -27,7 +27,7 @@
             icon-color="red"
             title="Вы уверен, что хотите удалить документ?"
             @confirm="() => remove(document.id)"
-            @cancel="() => {}"
+            @cancel="() => null"
           >
             <template #reference>
               <el-button class="table-button" icon="el-icon-delete" />

@@ -5,6 +5,7 @@ import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyEx
 export default class RegisterPropertyExample implements IRegisterPropertyExample {
   id?: string;
   name = '';
+  order = 0;
   registerPropertyId?: string;
   registerProperty: IRegisterProperty = new RegisterProperty();
 
@@ -15,6 +16,7 @@ export default class RegisterPropertyExample implements IRegisterPropertyExample
 
     this.id = i.id;
     this.name = i.name;
+    this.order = i.order;
     this.registerPropertyId = i.registerPropertyId;
   }
 }

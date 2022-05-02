@@ -18,14 +18,14 @@ const actions: ActionTree<State, RootState> = {
   },
   create: async ({ commit }, representative: IRepresentative): Promise<void> => {
     representative.human.removeDocumentFieldValuesIds();
-    commit(
-      'create',
-      await httpClient.post<IRepresentative, IRepresentative>({
-        payload: representative,
-        fileInfos: representative.getFileInfos(),
-        isFormData: true,
-      })
-    );
+    const resp = await httpClient.post<IRepresentative, IRepresentative>({
+      payload: representative,
+      fileInfos: representative.getFileInfos(),
+      isFormData: true,
+    });
+    representative = resp;
+    commit('create', resp);
+    console.log(representative);
   },
   edit: async ({ commit }, representative: IRepresentative): Promise<void> => {
     commit(

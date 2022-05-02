@@ -5,6 +5,7 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/humans/IHuman';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
+import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IUser from '@/interfaces/users/IUser';
 
 export default class Representative implements IRepresentative {
@@ -41,5 +42,18 @@ export default class Representative implements IRepresentative {
 
   getFileInfos(): IFileInfo[] {
     return [...Human.GetFileInfos(this.human)];
+  }
+
+  getChildrenAddresses(): string[] {
+    const addresses: string[] = [];
+    this.representativeToPatient.forEach((rtp: IRepresentativeToPatient) => {
+      if (rtp.patient?.human.addressResidential != '' && rtp.patient?.human.addressResidential) {
+        addresses.push(rtp.patient?.human.addressResidential);
+      }
+      if (rtp.patient?.human.addressResidential !== rtp.patient?.human.addressRegistration && rtp.patient?.human.addressRegistration) {
+        addresses.push(rtp.patient?.human.addressRegistration);
+      }
+    });
+    return [...new Set(Array.from(new Set(addresses)))];
   }
 }

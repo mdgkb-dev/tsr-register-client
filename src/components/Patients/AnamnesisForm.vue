@@ -28,7 +28,11 @@
           icon-color="red"
           title="Вы уверен, что хотите удалить это?"
           @confirm="remove"
-          @cancel="() => {}"
+          @cancel="
+            () => {
+              return null;
+            }
+          "
         >
           <template #reference>
             <el-button icon="el-icon-delete"></el-button>

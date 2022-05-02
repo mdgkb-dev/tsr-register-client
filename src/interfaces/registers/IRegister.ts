@@ -21,4 +21,5 @@ export default interface IRegister {
   patientIncludableByDiagnosis: (patientDiagnosis: IPatientDiagnosis[]) => boolean;
   patientInRegister: (registerToPatient: IRegisterToPatient[]) => boolean;
   getTagName: () => string;
+  sortGroups: () => void;
 }

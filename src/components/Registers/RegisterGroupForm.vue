@@ -1,57 +1,66 @@
 <template>
-  <el-collapse-item v-for="(registerGroup, i) in register.registerGroups" :id="`collapse-${i}`" :key="i" :name="String(i)">
-    <template #title>
-      <div class="collapse-header-container">
-        <h2 v-if="!registerGroup.isEdit" class="collapse-header">{{ registerGroup.name }}</h2>
-        <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
-          <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
-          <el-input v-model="registerGroup.name" placeholder="Название группы" @click.stop></el-input>
-        </el-form-item>
-        <div class="card-button-group">
-          <el-tooltip v-if="!registerGroup.isEdit" effect="light" placement="top-end" content="Редактировать группу">
-            <el-button icon="el-icon-edit" @click.stop="editRegisterGroup(registerGroup, i)"></el-button>
-          </el-tooltip>
-          <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-            <el-button icon="el-icon-folder-checked" @click.stop="editRegisterGroup(registerGroup, i)"></el-button>
-          </el-tooltip>
-          <el-tooltip effect="light" placement="top-end" content="Добавить свойство">
-            <el-button icon="el-icon-plus" @click.stop="addRegisterProperty(registerGroup, i)"></el-button>
-          </el-tooltip>
-          <el-popconfirm
-            confirm-button-text="Да"
-            cancel-button-text="Отмена"
-            icon="el-icon-info"
-            icon-color="red"
-            title="Вы уверены, что хотите удалить группу?"
-            @confirm="removeRegisterGroup(i)"
-            @cancel="() => {}"
+  <draggable handle=".el-icon-s-grid" tag="el-collapse" :list="register.registerGroups" item-key="id" @end="onEndFunc">
+    <template #item="{ element, index }">
+      <el-collapse-item :id="`collapse-${index}`" :key="index" :name="String(index)">
+        <template #title>
+          <div class="collapse-header-container">
+            <div v-if="!element.isEdit" style="display: flex">
+              <i class="el-icon-s-grid drug-icon" />
+              <h2 class="collapse-header">{{ element.name }}</h2>
+            </div>
+
+            <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
+              <el-input v-model="element.name" placeholder="Название группы" @keyup.stop="key" @click.stop></el-input>
+            </el-form-item>
+            <div class="card-button-group">
+              <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать группу">
+                <el-button icon="el-icon-edit" @click.stop="editRegisterGroup(element, index)"></el-button>
+              </el-tooltip>
+              <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
+                <el-button icon="el-icon-folder-checked" @click.stop="editRegisterGroup(element, index)"></el-button>
+              </el-tooltip>
+              <el-tooltip effect="light" placement="top-end" content="Добавить свойство">
+                <el-button icon="el-icon-plus" @click.stop="addRegisterProperty(element, index)"></el-button>
+              </el-tooltip>
+              <el-popconfirm
+                confirm-button-text="Да"
+                cancel-button-text="Отмена"
+                icon="el-icon-info"
+                icon-color="red"
+                title="Вы уверены, что хотите удалить группу?"
+                @confirm="removeRegisterGroup(index)"
+                @cancel="() => null"
+              >
+                <template #reference>
+                  <el-button icon="el-icon-delete"></el-button>
+                </template>
+              </el-popconfirm>
+            </div>
+          </div>
+        </template>
+        <el-divider></el-divider>
+        <el-form ref="newRegisterPropertyForm" class="new-register-property-container" :model="newRegisterProperty">
+          <el-form-item
+            style="width: 100%; margin-right: 10px"
+            prop="shortName"
+            :rules="{ required: true, message: 'Пожалуйста укажите сокращенное название свойства', trigger: 'blur' }"
           >
-            <template #reference>
-              <el-button icon="el-icon-delete"></el-button>
-            </template>
-          </el-popconfirm>
-        </div>
-      </div>
+            <el-input v-model="newRegisterProperty.shortName" placeholder="Сокращенное название свойства"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addRegisterProperty(element, index)">Добавить свойство</el-button>
+          </el-form-item>
+        </el-form>
+        <RegisterPropertyForm :register-group="element" />
+      </el-collapse-item>
     </template>
-    <el-divider></el-divider>
-    <el-form ref="newRegisterPropertyForm" class="new-register-property-container" :model="newRegisterProperty">
-      <el-form-item
-        style="width: 100%; margin-right: 10px"
-        prop="shortName"
-        :rules="{ required: true, message: 'Пожалуйста укажите сокращенное название свойства', trigger: 'blur' }"
-      >
-        <el-input v-model="newRegisterProperty.shortName" placeholder="Сокращенное название свойства"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="addRegisterProperty(registerGroup, i)">Добавить свойство</el-button>
-      </el-form-item>
-    </el-form>
-    <RegisterPropertyForm :register-group="registerGroup" />
-  </el-collapse-item>
+  </draggable>
 </template>
 
 <script lang="ts">
+import Sortable from 'sortablejs';
 import { computed, defineComponent, Ref, ref } from 'vue';
+import draggable from 'vuedraggable';
 import { useStore } from 'vuex';
 
 import RegisterProperty from '@/classes/registers/RegisterProperty';
@@ -59,12 +68,14 @@ import RegisterPropertyForm from '@/components/Registers/RegisterPropertyForm.vu
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IValueType from '@/interfaces/valueTypes/IValueType';
 import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RegisterGroupForm',
   components: {
     RegisterPropertyForm,
+    draggable,
   },
   setup() {
     const store = useStore();
@@ -73,7 +84,7 @@ export default defineComponent({
     const newRegisterProperty: Ref<IRegisterProperty> = ref(new RegisterProperty());
     const newRegisterPropertyForm = ref();
     const { validateWithoutMessageBox } = useValidate();
-
+    const valueTypes: Ref<IValueType[]> = computed(() => store.getters['registers/valueTypes']);
     const editRegisterGroup = (registerGroup: IRegisterGroup, index: number): void => {
       registerGroup.editRegisterGroup();
       store.commit('registers/setActiveCollapseName', String(index));
@@ -90,12 +101,28 @@ export default defineComponent({
         return;
       }
       newRegisterProperty.value.name = newRegisterProperty.value.shortName;
+      if (valueTypes.value[0]) {
+        newRegisterProperty.value.valueTypeId = valueTypes.value[0].id;
+      }
       registerGroup.addRegisterProperty(newRegisterProperty.value);
       newRegisterProperty.value = new RegisterProperty();
       // store.commit('registers/setActiveCollapseName', String(index));
     };
+    const key = (k: InputEvent) => {
+      k.stopPropagation();
+    };
+
+    const onEndFunc = (evt: Sortable.SortableEvent): void => {
+      if (evt.oldIndex === undefined || evt.newIndex === undefined) {
+        return;
+      }
+      register.value.sortGroups();
+      // activeTab.value = evt.newIndex;
+    };
 
     return {
+      onEndFunc,
+      key,
       register,
       editRegisterGroup,
       removeRegisterGroup,
@@ -108,6 +135,16 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.drug-icon {
+  line-height: 1.1;
+  height: 20px;
+  margin-right: 5px;
+  margin-top: 4px;
+
+  &:hover {
+    color: #409eff;
+  }
+}
 @import '@/assets/elements/collapse.scss';
 :deep(.el-collapse-item__content) {
   padding-bottom: 0;

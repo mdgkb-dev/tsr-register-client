@@ -41,7 +41,11 @@
         icon-color="red"
         title="Вы уверены, что хотите удалить промежуток?"
         @confirm="removeDrugRegimenBlock(drugRegimenBlockIndex)"
-        @cancel="() => {}"
+        @cancel="
+          () => {
+            return null;
+          }
+        "
       >
         <template #reference>
           <el-button icon="el-icon-delete"></el-button>
