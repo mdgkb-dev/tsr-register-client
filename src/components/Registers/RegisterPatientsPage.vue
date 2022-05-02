@@ -24,8 +24,7 @@
         header-row-class-name="header-style"
         row-class-name="table-row"
         cell-class-name="table-row"
-        style="width: 100%; margin-bottom: 20px; overflow: auto"
-        height="calc(100vh - 270px)"
+        style="width: 100%; margin-bottom: 20px; overflow: auto; height: 100%"
       >
         <el-table-column type="index" width="70" align="center">
           <template #header>
@@ -66,11 +65,25 @@
 
         <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
           <template #default="scope">
-            <span class="patient-name-link" @click="edit(scope.row.patient.id)">{{ scope.row.patient.human.getFullName() }}</span>
+            <span style="position: sticky !important" class="patient-name-link" @click="edit(scope.row.patient.id)">{{
+              scope.row.patient.human.getFullName()
+            }}</span>
           </template>
         </el-table-column>
         <template v-for="(registerProperty, i) in cols" :key="i">
-          <el-table-column :label="registerProperty.shortName" :prop="registerProperty.name" :width="registerProperty.colWidth">
+          <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">
+            <template #header>
+              <el-popover placement="top-start" :width="200" trigger="hover">
+                <template #reference>
+                  <div style="max-height: 100px">
+                    {{ registerProperty.shortName }}
+                  </div>
+                </template>
+                <div>
+                  {{ registerProperty.shortName }}
+                </div>
+              </el-popover>
+            </template>
             <template #default="scope">
               <div style="max-height: 250px">
                 {{ getField(registerProperty, scope.row) }}
@@ -227,6 +240,7 @@ h3 {
   cursor: pointer;
   color: #2754eb;
   text-decoration: underline;
+  position: sticky !important;
 }
 :deep(.table-popover) {
   max-height: 600px !important;
@@ -253,6 +267,27 @@ table {
   overflow: scroll;
   td {
     padding: 30px 0;
+  }
+}
+:deep(.el-table) {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+:deep(.el-table__header-wrapper) {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+:deep(.el-table__body-wrapper) {
+  height: 100% !important;
+  overflow: auto;
+}
+:deep(.el-table__header) {
+  th {
+    padding-top: 0;
+    // vertical-align: baseline !important;
   }
 }
 </style>
