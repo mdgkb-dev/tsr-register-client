@@ -8,24 +8,33 @@ import DrugRegimen from './DrugRegimen';
 export default class Drug implements IDrug {
   id?: string;
   name = '';
-
+  nameMNN = '';
+  form = '';
+  doze = '';
+  registered = false;
+  // dateRegistration?: Date;
   drugRegimens: IDrugRegimen[] = [];
   drugRegimensForDelete: string[] = [];
 
   drugsDiagnosis: IDrugDiagnosis[] = [];
   drugsDiagnosisForDelete: string[] = [];
 
-  constructor(drug?: IDrug) {
-    if (!drug) {
+  constructor(i?: IDrug) {
+    if (!i) {
       return;
     }
-    this.id = drug.id;
-    this.name = drug.name;
-    if (drug.drugRegimens) {
-      this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
+    this.id = i.id;
+    this.name = i.name;
+    this.nameMNN = i.nameMNN;
+    this.form = i.form;
+    this.doze = i.doze;
+    this.registered = i.registered;
+    // this.dateRegistration = i.dateRegistration;
+    if (i.drugRegimens) {
+      this.drugRegimens = i.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
     }
-    if (drug.drugsDiagnosis) {
-      this.drugsDiagnosis = drug.drugsDiagnosis.map((item: IDrugDiagnosis) => new DrugDiagnosis(item));
+    if (i.drugsDiagnosis) {
+      this.drugsDiagnosis = i.drugsDiagnosis.map((item: IDrugDiagnosis) => new DrugDiagnosis(item));
     }
   }
 

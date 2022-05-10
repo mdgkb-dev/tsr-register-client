@@ -154,7 +154,7 @@ export default defineComponent({
     const patientDiagnosis: ComputedRef<IPatientDiagnosis[]> = computed(() => store.getters['patients/diagnosis']);
     const drugs: Ref<IDrug[]> = computed(() => store.getters['drugs/drugs']);
     const newPatientDrugRegimen: Ref<UnwrapRef<IPatientDrugRegimen>> = ref(new PatientDrugRegimen());
-    const chosenDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
+    const chosenDrugRegimen = ref(new DrugRegimen());
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     const { validateWithoutMessageBox } = useValidate();

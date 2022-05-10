@@ -10,7 +10,15 @@
         style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
       >
         <el-table-column type="index" width="60" align="center" />
-        <el-table-column prop="name" label="Наименование" min-width="150" />
+        <el-table-column prop="name" label="Наименование ТМ" min-width="150" />
+        <el-table-column prop="nameMNN" label="Наименование МНН" min-width="150" />
+        <el-table-column prop="form" label="Форма выпуска" min-width="150" />
+        <el-table-column prop="doze" label="Дозировка" min-width="150" />
+        <el-table-column prop="registered" label="Наименование МНН" min-width="150">
+          <template #default="scope">
+            {{ scope.row.registered ? 'Да' : 'Нет' }}
+          </template>
+        </el-table-column>
         <el-table-column width="50" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">

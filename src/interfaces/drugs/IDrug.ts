@@ -6,6 +6,12 @@ export default interface IDrug {
   id?: string;
   name: string;
 
+  nameMNN: string;
+  form: string;
+  doze: string;
+  registered: boolean;
+  // dateRegistration?: Date;
+
   drugRegimens: IDrugRegimen[];
   drugRegimensForDelete: string[];
 
