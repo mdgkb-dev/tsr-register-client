@@ -11,18 +11,10 @@
     >
       <el-row>
         <div class="table-background" style="width: 100%; margin-bottom: 20px">
-          <el-form-item
-            label="Наименование ТМ"
-            prop="name"
-            :rules="{ required: true, message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }"
-          >
+          <el-form-item label="Наименование ТМ" prop="name" :rules="{ message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }">
             <el-input v-model="drug.name"></el-input>
           </el-form-item>
-          <el-form-item
-            label="Наименование МНН"
-            prop="name"
-            :rules="{ required: true, message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }"
-          >
+          <el-form-item label="Наименование МНН" prop="name" :rules="{ message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }">
             <el-input v-model="drug.nameMNN"></el-input>
           </el-form-item>
           <el-form-item label="Форма выпуска" prop="name">
