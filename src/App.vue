@@ -33,6 +33,7 @@ export default defineComponent({
 
     onBeforeMount(async (): Promise<void> => {
       await store.dispatch('meta/getSchema');
+      await store.dispatch('search/searchGroups');
     });
 
     return {

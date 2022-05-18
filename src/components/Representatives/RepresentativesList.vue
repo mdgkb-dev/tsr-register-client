@@ -1,18 +1,9 @@
 <template>
-  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
+  <div v-if="mounted" class="wrapper" style="height: 100%; overflow: hidden">
     <div class="table-background">
-      <el-autocomplete
-        v-model="queryStringsRepresentative"
-        style="width: 100%; margin-bottom: 20px"
-        popper-class="wide-dropdown"
-        :fetch-suggestions="findRepresentatives"
-        placeholder="Найти представителя"
-        @select="handleRepresentativeSelect"
-        @input="handleSearchInput"
-      />
-      <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
+      <RemoteSearch :key-value="schema.representative.key" @select="selectSearch" />
       <el-table
-        :data="filterTable(representatives)"
+        :data="representatives"
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
@@ -24,7 +15,6 @@
           <template #header>
             <span class="table-header">
               <span>Фамилия Имя Отчество</span>
-              <FilterTextForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.fullName" />
             </span>
           </template>
           <template #default="scope">
@@ -36,7 +26,6 @@
           <template #header>
             <span class="table-header">
               <span>Пол</span>
-              <FilterSelectForm :select-list="genderFilter" :table="schema.humanSchema.tableName" :col="schema.humanSchema.isMale" />
             </span>
           </template>
           <template #default="scope">
@@ -48,7 +37,6 @@
           <template #header>
             <span class="table-header">
               <span>Дата рождения</span>
-              <FilterDateForm :table="schema.humanSchema.tableName" :col="schema.humanSchema.dateBirth" />
             </span>
           </template>
           <template #default="scope">
@@ -96,9 +84,6 @@
           </template>
         </el-table-column>
         <el-table-column width="40" align="center">
-          <template #header>
-            <FilterResetButton />
-          </template>
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
@@ -115,42 +100,32 @@
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useStore } from 'vuex';
+import { computed, defineComponent, Ref, ref } from 'vue';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
 import Human from '@/classes/humans/Human';
 import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
+import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
-import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
-import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
-import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import ISearchObject from '@/interfaces/ISearchObject';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
-import ISchema from '@/interfaces/schema/ISchema';
-import ISearch from '@/interfaces/shared/ISearch';
-import ISearchRepresentative from '@/interfaces/shared/ISearchRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
+import Hooks from '@/services/Hooks/Hooks';
+import Provider from '@/services/Provider';
+import RepresentativesSortsLib from '@/services/Provider/libs/sorts/RepresentativesSortsLib';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
+    RemoteSearch,
     Pagination,
     TableButtonGroup,
-    FilterTextForm,
-    FilterSelectForm,
-    FilterDateForm,
-    FilterResetButton,
   },
   setup() {
-    const store = useStore();
-    const representatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/representatives']);
-    const filteredRepresentatives: Ref<IRepresentative[]> = computed(() => store.getters['representatives/filteredRepresentatives']);
-    const schema: Ref<ISchema> = computed(() => store.getters['meta/schema']);
+    const representatives: Ref<IRepresentative[]> = computed(() => Provider.store.getters['representatives/representatives']);
     const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
 
     const crud = new Crud('representatives');
@@ -158,24 +133,16 @@ export default defineComponent({
     const queryStringsRepresentative: Ref<string> = ref('');
 
     const { formatDate } = useDateFormat();
+    const load = async () => {
+      Provider.store.commit('filter/setStoreModule', 'representatives');
+      Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create: crud.create }));
+      Provider.setSortModels(RepresentativesSortsLib.byFullName());
+      await Provider.store.dispatch('representatives/getAll', Provider.filterQuery.value);
+    };
 
-    const mount: Ref<boolean> = ref(false);
-
-    const searchFullName = ref('');
-    const searchAddress = ref('');
-    const search = ref('');
-
-    onBeforeMount(async () => {
-      store.commit('filter/resetId');
-      const loading = ElLoading.service({
-        lock: true,
-        text: 'Загрузка',
-      });
-      store.commit('filter/setStoreModule', 'representatives');
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create: crud.create }));
-      await store.dispatch('representatives/getAll', store.getters['filter/filterQuery']);
-      mount.value = true;
-      loading.close();
+    Hooks.onBeforeMount(load, {
+      pagination: { storeModule: 'representatives', action: 'getAll' },
+      sortModels: [],
     });
 
     const children = (representative: IRepresetnationType) => {
@@ -187,70 +154,21 @@ export default defineComponent({
       return '';
     };
 
-    const filterTable = (representatives: IRepresentative[]) => {
-      let filteredRepresentatives = representatives;
-
-      const searchLocal = search.value.toLowerCase();
-      searchFullName.value = searchFullName.value.toLowerCase();
-      searchAddress.value = searchAddress.value.toLowerCase();
-
-      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-        const address = representative.human.addressRegistration.toLowerCase();
-        return !searchAddress.value || address.includes(searchAddress.value);
-      });
-
-      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-        const name = representative.human.getFullName().toLowerCase();
-        return !searchFullName.value || name.includes(searchFullName.value);
-      });
-
-      filteredRepresentatives = filteredRepresentatives.filter((representative: IRepresentative) => {
-        const name = representative.human.getFullName().toLowerCase();
-        const date = representative.human.dateBirth;
-        return !search.value || name.includes(searchLocal) || date.includes(searchLocal);
-      });
-
-      return filteredRepresentatives;
-    };
-
-    const handleSearchInput = async (value: string): Promise<void> => {
-      if (value.length === 0) {
-        await store.dispatch('representatives/getAll', 0);
-      }
-      store.commit('pagination/setCurPage', 0);
-    };
-
-    const findRepresentatives = async (query: string, resolve: CallableFunction): Promise<void> => {
-      const items: ISearchRepresentative[] = [];
-      if (query.length > 2) {
-        await store.dispatch('representatives/search', query);
-        filteredRepresentatives.value.forEach((i: IRepresentative) => {
-          if (i.id) items.push({ value: i.human.getFullName(), id: i.id, representative: i });
-        });
-      }
-      resolve(items);
-    };
-
-    const handleRepresentativeSelect = async (item: ISearch): Promise<void> => {
-      await store.dispatch('representatives/getAllById', item.id);
+    const selectSearch = async (event: ISearchObject): Promise<void> => {
+      await Provider.router.push(`/representatives/${event.id}`);
     };
 
     return {
+      selectSearch,
       crud,
       genderFilter,
-      schema,
-      findRepresentatives,
-      handleRepresentativeSelect,
-      handleSearchInput,
       formatDate,
       queryStringsRepresentative,
       children,
-      filterTable,
       representatives,
-      mount,
-      search,
-      searchFullName,
-      searchAddress,
+      mounted: Provider.mounted,
+      schema: Provider.schema,
+      sortList: Provider.sortList,
     };
   },
 });

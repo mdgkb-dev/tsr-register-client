@@ -1,5 +1,6 @@
 import Vuex, { StoreOptions } from 'vuex';
 
+import { admin } from '@/store/modules/admin';
 import auth from '@/store/modules/auth';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
@@ -20,6 +21,7 @@ import registerQueries from '@/store/modules/registerQueries';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
+import search from '@/store/modules/search';
 import { users } from '@/store/modules/users';
 
 import RootState from './types';
@@ -60,6 +62,8 @@ const store: StoreOptions<RootState> = {
     representatives,
     representativeTypes,
     users,
+    search,
+    admin,
   },
 };
 
