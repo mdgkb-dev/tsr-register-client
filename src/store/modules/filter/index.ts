@@ -10,8 +10,10 @@ import { State } from './state';
 export const state: State = {
   trigger: 'click',
   storeModule: '',
-  storeAction: 'getAll',
+  action: 'getAll',
   filterQuery: new FilterQuery(),
+  sortModels: [],
+  setDefaultSortModel: false,
 };
 
 const namespaced = true;

@@ -1,12 +1,14 @@
 import { MutationTree } from 'vuex';
 
 import MkbComposition from '@/classes/mkb/MkbComposition';
+import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
 import MkbClass from '@/classes/mkb/MkbСlass';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -21,8 +23,47 @@ const mutations: MutationTree<State> = {
   setDiagnosis(state, mkbDiagnosis: IMkbDiagnosis[]) {
     state.mkbDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
   },
+  setConcreteDiagnosis(state, items: IMkbConcreteDiagnosis[]) {
+    state.mkbConcreteDiagnosis = items.map((i: IMkbConcreteDiagnosis) => new MkbConcreteDiagnosis(i));
+  },
+  setSubDiagnosisBySearch(state, mkbSubDiagnosis: IMkbSubDiagnosis[]) {
+    state.mkbSubDiagnosis = [];
+    state.mkbFilteredConcreteDiagnosis = [];
+    mkbSubDiagnosis.forEach((d: IMkbSubDiagnosis) => {
+      state.mkbSubDiagnosis.push(new MkbSubDiagnosis(d));
+      if (!d.mkbConcreteDiagnosis) {
+        return;
+      }
+      d.mkbConcreteDiagnosis.forEach((sd: IMkbConcreteDiagnosis) => {
+        state.mkbFilteredConcreteDiagnosis.push(new MkbConcreteDiagnosis(sd));
+      });
+    });
+  },
+  setFilteredSubDiagnosis(state, items: IMkbSubDiagnosis[]) {
+    state.mkbFilteredSubDiagnosis = items;
+  },
+  setFilteredConcreteDiagnosis(state, items: IMkbConcreteDiagnosis[]) {
+    state.mkbFilteredConcreteDiagnosis = items;
+  },
   setFilteredDiagnosis(state, mkbDiagnosis: IMkbDiagnosis[]) {
-    state.mkbFilteredDiagnosis = mkbDiagnosis.map((d: IMkbDiagnosis) => new MkbDiagnosis(d));
+    // state.mkbFilteredDiagnosis = [];
+    // state.mkbFilteredSubDiagnosis = [];
+    // state.mkbFilteredConcreteDiagnosis = [];
+    mkbDiagnosis.forEach((d: IMkbDiagnosis) => {
+      state.mkbFilteredDiagnosis.push(new MkbDiagnosis(d));
+      if (!d.mkbSubDiagnosis) {
+        return;
+      }
+      d.mkbSubDiagnosis.forEach((sd: IMkbSubDiagnosis) => {
+        state.mkbFilteredSubDiagnosis.push(new MkbSubDiagnosis(sd));
+        if (!sd.mkbConcreteDiagnosis) {
+          return;
+        }
+        sd.mkbConcreteDiagnosis.forEach((cd: IMkbConcreteDiagnosis) => {
+          state.mkbFilteredConcreteDiagnosis.push(new MkbConcreteDiagnosis(cd));
+        });
+      });
+    });
   },
   setGroups(state, mkbDiagnosis: IMkbGroup[]) {
     state.mkbGroups = mkbDiagnosis.map((i: IMkbGroup) => new MkbGroup(i));

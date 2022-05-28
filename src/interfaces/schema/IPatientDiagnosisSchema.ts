@@ -1,5 +1,6 @@
-export default interface IPatientDiagnosisSchema {
-  tableName: string;
+import IBaseSchema from '@/interfaces/schema/IBaseSchema';
+
+export default interface IPatientDiagnosisSchema extends IBaseSchema {
   mkbDiagnosisId: string;
   mkbSubDiagnosisId: string;
 

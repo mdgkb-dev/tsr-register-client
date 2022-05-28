@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mount" style="height: 100%; display: flex; flex-direction: column">
+  <div v-if="mounted" style="height: 100%; display: flex; flex-direction: column">
     <div class="table-background main-info-container">
       <div class="main-info-container-item">
         <span class="light-title upper">Название регистра:</span>
@@ -93,24 +93,13 @@
         </template>
       </el-table>
     </div>
-    <div style="text-align: center; width: 100%">
-      <el-pagination
-        style="margin: 20px 0"
-        :current-page="curPage"
-        layout="prev, pager, next"
-        :page-count="Math.round(register.registerToPatientCount / 25)"
-        @current-change="setPage"
-      >
-      </el-pagination>
-    </div>
+    <!--    <Pagination />-->
   </div>
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, defineComponent, Ref, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
@@ -121,53 +110,48 @@ import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
+import Hooks from '@/services/Hooks/Hooks';
+import Provider from '@/services/Provider';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
-
   setup() {
-    const router = useRouter();
     const route = useRoute();
-    const store = useStore();
-    const mount: Ref<boolean> = ref(false);
-    const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
-    const registerQueries: Ref<IRegisterQuery[]> = computed(() => store.getters['registerQueries/registerQueries']);
-    const user: Ref<IUserAuthorized> = computed(() => store.getters['auth/user']);
+
+    const register: Ref<IRegister> = computed(() => Provider.store.getters['registers/item']);
+    const registerQueries: Ref<IRegisterQuery[]> = computed(() => Provider.store.getters['registerQueries/registerQueries']);
+    const user: Ref<IUserAuthorized> = computed(() => Provider.store.getters['auth/user']);
     const cols: Ref<IRegisterProperty[]> = ref([]);
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { formatDate } = useDateFormat();
-    const curPage: Ref<number> = computed(() => store.getters['pagination/curPage']);
-    const loading = ref(false);
+    const curPage: Ref<number> = computed(() => Provider.store.getters['pagination/curPage']);
 
     const edit = async (patientId: string): Promise<void> => {
-      await router.push(`/registers/patients/${route.params.registerId}/${patientId}`);
+      await Provider.router.push(`/registers/patients/${route.params.registerId}/${patientId}`);
     };
 
-    onBeforeMount(async () => {
-      const loading = ElLoading.service({
-        lock: true,
-        text: 'Загрузка',
-      });
-      const query = store.getters['filter/filterQuery'];
+    const load = async () => {
+      const query = Provider.store.getters['filter/filterQuery'];
       query.id = route.params.registerId;
-      await store.dispatch('registers/get', query);
-      await store.dispatch('registerQueries/getAll');
-      await store.dispatch('auth/getMe');
+      await Provider.store.dispatch('registers/get', Provider.filterQuery.value);
+      await Provider.store.dispatch('registerQueries/getAll');
+      await Provider.store.dispatch('auth/getMe');
       pushToLinks(['/register-link-list/'], ['Регистры пациентов']);
-      store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
+      Provider.store.commit('main/setMainHeader', new MainHeader({ title: register.value.name, links }));
       await setCols();
-      loading.close();
-      mount.value = true;
+    };
+
+    Hooks.onBeforeMount(load, {
+      pagination: { storeModule: 'patients', action: 'getAll' },
+      sortModels: [],
     });
 
     const setPage = async (pageNum: number): Promise<void> => {
-      loading.value = true;
-      store.commit('pagination/setCurPage', pageNum);
-      store.commit('filter/setOffset', pageNum - 1);
-      const query = store.getters['filter/filterQuery'];
+      Provider.store.commit('pagination/setCurPage', pageNum);
+      Provider.store.commit('filter/setOffset', pageNum - 1);
+      const query = Provider.store.getters['filter/filterQuery'];
       query.id = register.value.id;
-      await store.dispatch('registers/get', query);
-      loading.value = false;
+      await Provider.store.dispatch('registers/get', query);
     };
 
     const setCols = async (value?: boolean, propertyId?: string): Promise<void> => {
@@ -177,9 +161,9 @@ export default defineComponent({
           prop.registerPropertyId = propertyId;
           prop.userId = user.value.id;
           user.value.registerPropertyToUser.push(prop);
-          await store.dispatch('registerPropertiesToUser/create', prop);
+          await Provider.store.dispatch('registerPropertiesToUser/create', prop);
         } else {
-          await store.dispatch('registerPropertiesToUser/delete', propertyId);
+          await Provider.store.dispatch('registerPropertiesToUser/delete', propertyId);
           const index = user.value.registerPropertyToUser.findIndex((prop) => prop.registerPropertyId === propertyId);
           if (index > -1) {
             user.value.registerPropertyToUser.splice(index, 1);
@@ -201,7 +185,7 @@ export default defineComponent({
     };
 
     const executeQuery = async (queryId: string): Promise<void> => {
-      await store.dispatch('registerQueries/execute', queryId);
+      await Provider.store.dispatch('registerQueries/execute', queryId);
     };
 
     return {
@@ -216,8 +200,10 @@ export default defineComponent({
       cols,
       register,
       user,
-      mount,
       edit,
+      mounted: Provider.mounted,
+      schema: Provider.schema,
+      sortList: Provider.sortList,
     };
   },
 });

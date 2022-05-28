@@ -12,6 +12,8 @@ export default class FilterModel implements IFilterModel {
   date1?: Date;
   date2?: Date;
   value1?: string = '';
+  boolean = false;
+  number = 0;
   type: DataTypes = DataTypes.String;
   set: string[] = [];
 
@@ -20,7 +22,8 @@ export default class FilterModel implements IFilterModel {
   joinTable = '';
   joinTableFk = '';
   joinTablePk = '';
-
+  joinTableId = '';
+  joinTableIdCol = '';
   isUnaryFilter(): boolean {
     return this.operator === Operators.Eq || this.operator === Operators.Gt || this.operator === Operators.Lt;
   }
@@ -38,6 +41,15 @@ export default class FilterModel implements IFilterModel {
     filterModel.table = table;
     filterModel.col = col;
     filterModel.type = type;
+    if (filterModel.type === DataTypes.Number) {
+      filterModel.value1 = '0';
+    }
+    if (filterModel.type === DataTypes.String) {
+      filterModel.value1 = '';
+    }
+    if (filterModel.type === DataTypes.Boolean) {
+      filterModel.value1 = 'false';
+    }
     return filterModel;
   }
 
@@ -47,7 +59,9 @@ export default class FilterModel implements IFilterModel {
     joinTable: string,
     joinTablePk: string,
     joinTableFk: string,
-    type: DataTypes
+    type: DataTypes,
+    joinTableId?: string,
+    joinTableIdCol?: string
   ): IFilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
@@ -57,6 +71,21 @@ export default class FilterModel implements IFilterModel {
     filterModel.joinTableFk = joinTableFk;
     filterModel.col = col;
     filterModel.type = type;
+    if (joinTableId) {
+      filterModel.joinTableId = joinTableId;
+    }
+    if (joinTableIdCol) {
+      filterModel.joinTableIdCol = joinTableIdCol;
+    }
     return filterModel;
+  }
+
+  addToSet(setElement: string): void {
+    if (this.set.indexOf(setElement) === -1) {
+      this.set.push(setElement);
+      return;
+    }
+
+    this.set = this.set.filter((s: string) => s !== setElement);
   }
 }

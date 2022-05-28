@@ -9,7 +9,9 @@ export default interface IFilterModel {
   type: DataTypes;
   date1?: Date;
   date2?: Date;
+  number: number;
   value1?: string;
+  boolean: boolean;
   set: string[];
 
   isSet: boolean;
@@ -17,8 +19,11 @@ export default interface IFilterModel {
   isUnaryFilter: () => boolean;
   isBetweenFilter: () => boolean;
   isSetFilter: () => boolean;
+  addToSet: (setElement: string) => void;
 
   joinTable: string;
   joinTableFk: string;
   joinTablePk: string;
+  joinTableId: string;
+  joinTableIdCol: string;
 }

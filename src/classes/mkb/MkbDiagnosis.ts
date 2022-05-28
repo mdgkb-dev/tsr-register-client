@@ -29,6 +29,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   mkbGroup?: IMkbGroup;
 
   queryStringDiagnosis = '';
+  queryStringConcreteDiagnosis = '';
   queryStringGroup = '';
 
   constructor(i?: IMkbDiagnosis) {

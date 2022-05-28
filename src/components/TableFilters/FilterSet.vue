@@ -66,7 +66,7 @@ export default defineComponent({
     const loading = ref(false);
     const filter = ref();
     const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
-    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
+    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnoses']);
     let diagnosis: Ref<IOption[]> = ref([]);
     const filterModel = ref(
       FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set)

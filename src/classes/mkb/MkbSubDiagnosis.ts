@@ -1,29 +1,47 @@
+import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
+import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
   id = '';
-  name?: string;
+  name = '';
   subCode?: number;
   comment?: string;
   mkbDiagnosisId?: string;
+  mkbDiagnosis?: IMkbDiagnosis;
   relevant?: boolean;
   leaf = true;
   disabled = false;
   isEditMode = false;
+  mkbConcreteDiagnosis: IMkbConcreteDiagnosis[] = [];
+  queryString = '';
 
-  constructor(mkbSubDiagnosis?: IMkbSubDiagnosis) {
-    if (!mkbSubDiagnosis) {
+  constructor(i?: IMkbSubDiagnosis) {
+    if (!i) {
       return;
     }
-    this.id = mkbSubDiagnosis.id;
-    this.name = mkbSubDiagnosis.name;
-    this.subCode = mkbSubDiagnosis.subCode;
-    this.leaf = mkbSubDiagnosis.leaf;
-    this.comment = mkbSubDiagnosis.comment;
-    this.mkbDiagnosisId = mkbSubDiagnosis.mkbDiagnosisId;
+    this.id = i.id;
+    this.name = i.name;
+    this.subCode = i.subCode;
+    this.leaf = i.leaf;
+    this.comment = i.comment;
+    this.mkbDiagnosisId = i.mkbDiagnosisId;
+    if (i.mkbDiagnosis) {
+      this.mkbDiagnosis = new MkbDiagnosis(i.mkbDiagnosis);
+    }
     this.disabled = false;
-    this.relevant = mkbSubDiagnosis.relevant;
-    this.isEditMode = mkbSubDiagnosis.isEditMode;
+    this.relevant = i.relevant;
+    this.isEditMode = i.isEditMode;
+    if (i.mkbConcreteDiagnosis) {
+      this.mkbConcreteDiagnosis = i.mkbConcreteDiagnosis.map((d: IMkbConcreteDiagnosis) => new MkbConcreteDiagnosis(d));
+    }
+    this.setQueryStrings();
+  }
+
+  setQueryStrings(): void {
+    this.queryString = this.getFullName();
   }
 
   getFullName = (): string => `${this.subCode} ${this.name}`;

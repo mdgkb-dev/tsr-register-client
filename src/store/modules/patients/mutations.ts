@@ -7,7 +7,9 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
 import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
+import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import Patient from '@/classes/patients/Patient';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
@@ -233,8 +235,10 @@ const mutations: MutationTree<State> = {
     if (diagnosis) {
       diagnosis.mkbDiagnosis = new MkbDiagnosis();
       diagnosis.mkbDiagnosisId = undefined;
-      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosis = new MkbSubDiagnosis();
       diagnosis.mkbSubDiagnosisId = undefined;
+      diagnosis.mkbConcreteDiagnosis = new MkbConcreteDiagnosis();
+      diagnosis.mkbConcreteDiagnosisId = undefined;
     }
   },
   removeAnamnesis(state, id: string) {

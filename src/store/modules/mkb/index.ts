@@ -11,8 +11,11 @@ export const state: State = {
   mkbClasses: [],
   mkbGroups: [],
   mkbFilteredDiagnosis: [],
+  mkbFilteredSubDiagnosis: [],
+  mkbFilteredConcreteDiagnosis: [],
   mkbDiagnosis: [],
   mkbSubDiagnosis: [],
+  mkbConcreteDiagnosis: [],
 };
 
 const namespaced = true;

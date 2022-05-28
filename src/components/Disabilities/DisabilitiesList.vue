@@ -1,11 +1,10 @@
 <template>
-  <div v-if="mount" style="height: 100%; overflow: hidden">
+  <div v-if="mounted" style="height: 100%; overflow: hidden">
     <div class="table-background">
-      <el-input v-model="search" prefix-icon="el-icon-search" style="border-radius: 90%" placeholder="Поиск" class="table-search" />
       <el-table
         :cell-style="{ height: '70px' }"
         :default-sort="{ prop: 'id', order: 'ascending' }"
-        :data="filterTable(patients)"
+        :data="patients"
         class="table-shadow"
         header-row-class-name="header-style"
         row-class-name="no-hover"
@@ -14,9 +13,6 @@
         <el-table-column type="index" width="60" align="center" />
 
         <el-table-column>
-          <template #header>
-            <el-input v-model="searchFullName" size="mini" placeholder="Поиск по имени..." />
-          </template>
           <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="human.surname" align="left" resizable min-width="170">
             <template #default="scope">
               {{ scope.row.human.getFullName() }}
@@ -108,38 +104,40 @@
           </template>
         </el-table-column>
       </el-table>
+      <Pagination />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineComponent } from 'vue';
 
 import MainHeader from '@/classes/shared/MainHeader';
+import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IPatient from '@/interfaces/patients/IPatient';
 import useDateFormat from '@/mixins/useDateFormat';
 import router from '@/router';
+import Hooks from '@/services/Hooks/Hooks';
+import Provider from '@/services/Provider';
+import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
 
 export default defineComponent({
   name: 'PatientsList',
   components: {
     TableButtonGroup,
+    Pagination,
   },
   setup() {
-    const store = useStore();
-    const mount: Ref<boolean> = ref(false);
-    const search: Ref<string> = ref('');
-    const searchFullName: Ref<string> = ref('');
-    const patients: ComputedRef<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const patients: ComputedRef<IPatient[]> = computed(() => Provider.store.getters['patients/patients']);
     const { formatDate } = useDateFormat();
 
-    onBeforeMount(async () => {
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Инвалидность' }));
+    const load = async () => {
+      Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Инвалидность' }));
       try {
-        await store.dispatch('patients/getAllWithDisabilities');
+        Provider.setFilterModels(PatientsFiltersLib.withDisabilities());
+        await Provider.store.dispatch('patients/getAll', Provider.filterQuery.value);
       } catch (e) {
         if (!ElMessage.error) {
           return;
@@ -147,46 +145,29 @@ export default defineComponent({
         ElMessage.error(String(e));
         return;
       }
-      mount.value = true;
-    });
-
-    const filterTable = (patients: IPatient[]): IPatient[] => {
-      let filteredPatients = patients;
-
-      const localSearch = search.value.toLowerCase();
-      const localSearchFullName = searchFullName.value.toLowerCase();
-
-      filteredPatients = filteredPatients.filter((patient: IPatient) => {
-        const name = patient.human.getFullName().toLowerCase();
-        return !searchFullName.value || name.includes(localSearchFullName);
-      });
-
-      filteredPatients = filteredPatients.filter((patient: IPatient) => {
-        const name = patient.human.getFullName().toLowerCase();
-        const date = patient.human.dateBirth;
-        return !search.value || name.includes(localSearch) || date.includes(localSearch);
-      });
-
-      return filteredPatients;
     };
+
+    Hooks.onBeforeMount(load, {
+      pagination: { storeModule: 'patients', action: 'getAll' },
+      sortModels: [],
+    });
 
     const edit = async (id: string): Promise<void> => {
       await router.push(`/patients/${id}`);
     };
 
     const remove = async (id: number): Promise<void> => {
-      await store.dispatch('patients/delete', id);
+      await Provider.store.dispatch('patients/delete', id);
     };
 
     return {
       remove,
       edit,
-      mount,
       patients,
-      search,
-      searchFullName,
-      filterTable,
       formatDate,
+      mounted: Provider.mounted,
+      schema: Provider.schema,
+      sortList: Provider.sortList,
     };
   },
 });

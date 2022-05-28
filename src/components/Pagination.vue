@@ -5,7 +5,7 @@
       :current-page="curPage"
       background
       layout="prev, pager, next"
-      :page-count="Math.round(count / 25) > 0 ? Math.round(count / 25) : 1"
+      :page-count="pageCount"
       @current-change="setPage"
     >
     </el-pagination>
@@ -14,39 +14,46 @@
 
 <script lang="ts">
 import { ElLoading } from 'element-plus';
-import { computed, defineComponent, onBeforeUnmount, Ref } from 'vue';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineComponent, onBeforeUnmount } from 'vue';
+
+import Provider from '@/services/Provider';
 
 export default defineComponent({
   name: 'Pagination',
   setup() {
-    const store = useStore();
-    const storeModule: string = store.getters['filter/storeModule'];
-
-    const count: Ref<number> = computed(() => store.getters[`${storeModule}/count`]);
-    const curPage: Ref<number> = computed(() => store.getters['pagination/curPage']);
+    const storeModule: string = Provider.store.getters['filter/storeModule'];
+    const action: string = Provider.store.getters['filter/action'];
+    const count: ComputedRef<number> = computed(() => Provider.store.getters[`${storeModule}/count`]);
+    const pageCount: ComputedRef<number> = computed(() =>
+      Math.round(count.value / Provider.filterQuery.value.pagination.limit) > 0
+        ? Math.round(count.value / Provider.filterQuery.value.pagination.limit)
+        : 1
+    );
+    const curPage: ComputedRef<number> = computed(() => Provider.store.getters['pagination/curPage']);
 
     const setPage = async (pageNum: number): Promise<void> => {
       const loading = ElLoading.service({
         lock: true,
         text: 'Загрузка',
       });
-      store.commit('pagination/setCurPage', pageNum);
-      store.commit('filter/setOffset', pageNum - 1);
-      await store.dispatch(`${storeModule}/getAll`, store.getters['filter/filterQuery']);
+      Provider.store.commit('pagination/setCurPage', pageNum);
+      Provider.store.commit('filter/setOffset', pageNum - 1);
+      await Provider.store.dispatch(`${storeModule}/${action}`, Provider.filterQuery.value);
       const div = document.getElementsByClassName('el-table__body-wrapper');
       div[0].scrollTop = 0;
       loading.close();
     };
 
-    onBeforeUnmount(() => {
-      store.commit('pagination/setCurPage', 1);
-      store.commit('filter/setOffset', 0);
+    onBeforeUnmount(async () => {
+      Provider.store.commit('pagination/setCurPage', 1);
+      Provider.store.commit('filter/setOffset', 0);
     });
 
     return {
-      curPage,
       count,
+      storeModule,
+      curPage,
+      pageCount,
       setPage,
     };
   },
