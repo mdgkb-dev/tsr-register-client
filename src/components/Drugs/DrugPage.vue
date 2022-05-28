@@ -5,11 +5,27 @@
         <div class="table-background" style="width: 100%; margin-bottom: 20px">
           <el-form-item
             label="Наименование лекарства"
+            :label-width="200"
             prop="name"
             :rules="{ required: true, message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }"
           >
             <el-input v-model="drug.name"></el-input>
           </el-form-item>
+          <el-form-item label="Наименование лекарства МНН" prop="name">
+            <el-input v-model="drug.nameMNN"></el-input>
+          </el-form-item>
+          <el-form-item label="Форма выпуска" prop="name">
+            <el-input v-model="drug.form"></el-input>
+          </el-form-item>
+          <el-form-item label="Дозировка" prop="name">
+            <el-input v-model="drug.doze"></el-input>
+          </el-form-item>
+          <el-form label="Наличие регистрации" prop="name">
+            <el-checkbox v-model="drug.registered"></el-checkbox>
+          </el-form>
+          <el-checkbox label="Дата регистрации" prop="name">
+            <el-date-picker v-model="drug.dateRegistration" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
+          </el-checkbox>
         </div>
         <el-form ref="newDrugRegimenForm" class="new-regimen-container" :model="newDrugRegimen">
           <el-form-item

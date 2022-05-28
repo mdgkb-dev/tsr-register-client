@@ -1,6 +1,7 @@
 import { MutationTree } from 'vuex';
 
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import Register from '@/classes/registers/Register';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
 import ValueType from '@/classes/valueTypes/ValueType';
@@ -45,7 +46,7 @@ const mutations: MutationTree<State> = {
     if (diagnosis) {
       diagnosis.mkbDiagnosis = new MkbDiagnosis();
       diagnosis.mkbDiagnosisId = undefined;
-      diagnosis.mkbSubDiagnosis = undefined;
+      diagnosis.mkbSubDiagnosis = new MkbSubDiagnosis();
       diagnosis.mkbSubDiagnosisId = undefined;
     }
   },

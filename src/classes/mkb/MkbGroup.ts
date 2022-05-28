@@ -6,7 +6,7 @@ import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 
 export default class MkbGroup implements IMkbGroup {
   id = '';
-  name?: string;
+  name = '';
   rangeStart?: string;
   rangeEnd?: string;
   comment?: string;

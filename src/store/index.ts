@@ -12,6 +12,10 @@ import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
 import { mkb } from '@/store/modules/mkb';
+import { mkbConcreteDiagnoses } from '@/store/modules/mkbConcreteDiagnoses';
+import { mkbDiagnoses } from '@/store/modules/mkbDiagnoses';
+import { mkbGroups } from '@/store/modules/mkbGroups';
+import { mkbSubDiagnoses } from '@/store/modules/mkbSubDiagnoses';
 import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
 import { registerGroups } from '@/store/modules/registerGroups';
@@ -64,6 +68,10 @@ const store: StoreOptions<RootState> = {
     users,
     search,
     admin,
+    mkbGroups,
+    mkbDiagnoses,
+    mkbSubDiagnoses,
+    mkbConcreteDiagnoses,
   },
 };
 

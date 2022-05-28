@@ -56,7 +56,6 @@ const mutations: MutationTree<State> = {
     const diagnosis = new DrugDiagnosis();
     diagnosis.id = id;
     state.drug.drugsDiagnosis.push(diagnosis);
-    console.log(state.drug);
   },
   removeDiagnosis(state, id: string) {
     const index = state.drug.drugsDiagnosis.findIndex((i: IDrugDiagnosis) => i.id === id);
@@ -68,8 +67,8 @@ const mutations: MutationTree<State> = {
     if (diagnosis) {
       diagnosis.mkbDiagnosis = new MkbDiagnosis();
       diagnosis.mkbDiagnosisId = undefined;
-      diagnosis.mkbSubDiagnosis = undefined;
       diagnosis.mkbSubDiagnosisId = undefined;
+      diagnosis.mkbConcreteDiagnosisId = undefined;
     }
   },
 };

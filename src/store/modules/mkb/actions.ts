@@ -5,6 +5,7 @@ import MkbGroupAnswer from '@/classes/mkb/MkbGroupAnswer';
 import MkbSubGroupAnswer from '@/classes/mkb/MkbSubGroupAnswer';
 import MkbSubSubGroupAnswer from '@/classes/mkb/MkbSubSubGroupAnswer';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
@@ -58,7 +59,13 @@ const actions: ActionTree<State, RootState> = {
   searchDiagnosis: async ({ commit }, query: string): Promise<void> => {
     commit('setDiagnosis', await httpClient.get<IMkbDiagnosis>({ query: `diagnosis?query=${query}` }));
   },
-  searchSubDiagnosis: async ({ commit }, diagnosisId: string): Promise<void> => {
+  searchSubDiagnosis: async ({ commit }, query: string): Promise<void> => {
+    commit('setSubDiagnosisBySearch', await httpClient.get<IMkbSubDiagnosis>({ query: `sub-diagnosis?query=${query}` }));
+  },
+  searchConcreteDiagnosis: async ({ commit }, query: string): Promise<void> => {
+    commit('setConcreteDiagnosis', await httpClient.get<IMkbConcreteDiagnosis>({ query: `concrete-diagnosis?query=${query}` }));
+  },
+  searchSubDiagnosisByDiagnosisId: async ({ commit }, diagnosisId: string): Promise<void> => {
     commit('setSubDiagnosisByDiagnosisId', await httpClient.get<IMkbSubDiagnosis[]>({ query: `diagnosis/${diagnosisId}` }));
   },
   updateRelevant: async (_, mkb: IMkbSuperSet): Promise<void> => {

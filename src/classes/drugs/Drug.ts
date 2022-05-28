@@ -8,7 +8,11 @@ import DrugRegimen from './DrugRegimen';
 export default class Drug implements IDrug {
   id?: string;
   name = '';
-
+  nameMNN = '';
+  form = '';
+  doze = '';
+  dateRegistration = '';
+  registered = false;
   drugRegimens: IDrugRegimen[] = [];
   drugRegimensForDelete: string[] = [];
 
@@ -21,6 +25,10 @@ export default class Drug implements IDrug {
     }
     this.id = drug.id;
     this.name = drug.name;
+    this.nameMNN = drug.nameMNN;
+    this.doze = drug.doze;
+    this.dateRegistration = drug.dateRegistration ?? '';
+    this.registered = drug.registered;
     if (drug.drugRegimens) {
       this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
     }

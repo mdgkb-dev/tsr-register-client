@@ -38,38 +38,23 @@
       <el-table-column label="Группа диагноза" align="start" sortable>
         <template #default="scope">
           <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0">
-            <el-autocomplete
-              v-model="scope.row.mkbDiagnosis.queryStringGroup"
-              style="width: 100%"
-              popper-class="wide-dropdown"
-              :fetch-suggestions="findGroups"
-              placeholder="Выберите группу"
-              @select="handleGroupSelect($event, scope.row.id)"
-              @input="clearForm($event, scope.row.id, false)"
-            >
-            </el-autocomplete>
+            <RemoteSearch
+              v-model:model-value="scope.row.mkbDiagnosis.queryStringGroup"
+              :key-value="schema.mkbGroup.key"
+              @select="selectGroup($event, scope.row)"
+            />
           </el-form-item>
-          <span v-else>{{ scope.row.mkbDiagnosis.queryStringGroup }}</span>
+          <!--          <span v-else>{{ scope.row.mkbDiagnoses.queryStringGroup }}</span>-->
         </template>
       </el-table-column>
 
       <el-table-column label="Основной диагноз" align="start" sortable>
         <template #default="scope">
-          <el-form-item
-            v-if="isEditMode"
-            label-width="0"
-            style="margin-bottom: 0"
-            :prop="getProp(scope.$index)"
-            :rules="[{ required: true, message: 'Необходимо указать основной диагноз', trigger: 'change' }]"
-          >
-            <el-autocomplete
-              v-model="scope.row.mkbDiagnosis.queryStringDiagnosis"
-              style="width: 100%"
-              popper-class="wide-dropdown"
-              :fetch-suggestions="findDiagnosis"
-              placeholder="Выберите диагноз"
-              @select="handleDiagnosisSelect($event, scope.row.id)"
-              @input="clearForm($event, scope.row.id, true)"
+          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0" :prop="getProp(scope.$index)">
+            <RemoteSearch
+              v-model:model-value="scope.row.mkbDiagnosis.queryStringDiagnosis"
+              :key-value="schema.mkbDiagnosis.key"
+              @select="selectDiagnosis($event, scope.row)"
             />
           </el-form-item>
           <span v-else>{{ scope.row.mkbDiagnosis.queryStringDiagnosis }}</span>
@@ -78,23 +63,24 @@
 
       <el-table-column prop="height" label="Уточнённый диагноз" align="center">
         <template #default="scope">
-          <div v-if="isEditMode">
-            <el-select
-              v-if="scope.row.mkbDiagnosisId && scope.row.mkbDiagnosis.mkbSubDiagnosis.length > 0"
-              v-model="scope.row.mkbSubDiagnosisId"
-              style="width: 100%"
-              placeholder="Выберите уточнённый диагноз"
-            >
-              <el-option
-                v-for="i in scope.row.mkbDiagnosis.mkbSubDiagnosis"
-                :key="i.id"
-                :label="`${scope.row.mkbDiagnosis.code}.${i.getFullName()}`"
-                :value="i.id"
-              />
-            </el-select>
-            <el-select v-else v-model="undefined" style="width: 100%" disabled placeholder="Уточнённых диагнозов нет" />
-          </div>
-          <span v-else>{{ scope.row.mkbSubDiagnosis ? scope.row.mkbSubDiagnosis.name : 'Уточнённых диагнозов нет' }}</span>
+          <RemoteSearch
+            v-model:model-value="scope.row.mkbSubDiagnosis.queryString"
+            :key-value="schema.mkbSubDiagnosis.key"
+            @select="selectSubDiagnosis($event, scope.row)"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Диагноз" align="start" sortable>
+        <template #default="scope">
+          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0" :prop="getProp(scope.$index)">
+            <RemoteSearch
+              v-model:model-value="scope.row.mkbConcreteDiagnosis.queryString"
+              :key-value="schema.mkbConcreteDiagnosis.key"
+              @select="selectConcreteDiagnosis($event, scope.row)"
+            />
+          </el-form-item>
+          <span v-else>{{ scope.row.mkbDiagnoses.queryStringConcreteDiagnosis }}</span>
         </template>
       </el-table-column>
 
@@ -113,27 +99,32 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, reactive, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, reactive, Ref } from 'vue';
 
-import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
+import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
+import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import ISearchObject from '@/interfaces/ISearchObject';
+import IWithDiagnosis from '@/interfaces/IWithDiagnosis';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import ISearch from '@/interfaces/shared/ISearch';
-import ISearchDiagnosis from '@/interfaces/shared/ISearchDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
+import Provider from '@/services/Provider';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
 export default defineComponent({
   name: 'MkbForm',
   components: {
+    RemoteSearch,
     AnamnesisForm,
     MkbTreeDialog,
     TableButtonGroup,
@@ -145,98 +136,34 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const store = useStore();
-    const { storeModule } = toRefs(props);
     let expandRowKeys: (string | undefined)[] = reactive([]);
-    const queryStringsDiagnosis: Record<string, string> = reactive({});
-    const queryStringsGroups: Record<string, string> = reactive({});
+
     const { formatDate } = useDateFormat();
-    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
+    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
 
-    const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
+    const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredDiagnosis']);
+    const filteredSubDiagnosis: Ref<IMkbSubDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredSubDiagnosis']);
+    const filteredConcreteDiagnosis: Ref<IMkbConcreteDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredConcreteDiagnosis']);
 
-    const patientDiagnosis: boolean = storeModule.value === 'patients';
+    const patientDiagnosis: boolean = props.storeModule === 'patients';
     const diagnosisData: ComputedRef<(IPatientDiagnosis | IRegisterDiagnosis)[]> = computed(
-      () => store.getters[`${storeModule.value}/diagnosis`]
+      () => Provider.store.getters[`${props.storeModule}/diagnosis`]
     );
-    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnosis']);
-    const mkbGroups: ComputedRef<IMkbGroup[]> = computed(() => store.getters['mkb/mkbGroups']);
-    const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis[]> = computed(() => store.getters['mkb/mkbSubDiagnosis']);
 
-    const addDiagnosis = (): void => store.commit(`${storeModule.value}/addDiagnosis`);
-    const removeDiagnosis = (id: string): void => store.commit(`${storeModule.value}/removeDiagnosis`, id);
-
-    const addAnamnesis = (diagnosis: IPatientDiagnosisAnamnesis): void => store.commit(`patients/addAnamnesis`, diagnosis.id);
+    const addDiagnosis = (): void => Provider.store.commit(`${props.storeModule}/addDiagnosis`);
+    const removeDiagnosis = (id: string): void => Provider.store.commit(`${props.storeModule}/removeDiagnosis`, id);
+    const addAnamnesis = (diagnosis: IPatientDiagnosisAnamnesis): void => Provider.store.commit(`patients/addAnamnesis`, diagnosis.id);
 
     const handleExpandChange = (row: IPatientDiagnosis | IRegisterDiagnosis): void => {
       expandRowKeys = row.id === expandRowKeys[0] ? reactive([]) : reactive([row.id]);
     };
 
-    const findDiagnosis = async (query: string, resolve: CallableFunction): Promise<void> => {
-      let diagnosis: ISearchDiagnosis[] = [];
-      if (filteredDiagnosis.value.length > 0 && query.length === 0) {
-        filteredDiagnosis.value.forEach((d: IMkbDiagnosis) => {
-          if (d.id) diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
-        });
-      }
-
-      if (query.length > 2) {
-        diagnosis = [];
-        await store.dispatch('mkb/searchDiagnosis', query);
-        mkbDiagnosis.value.forEach((d: IMkbDiagnosis) => {
-          if (d.id) diagnosis.push({ value: d.getFullName(), id: d.id, diagnosis: d });
-        });
-      }
-
-      resolve(diagnosis);
-    };
-
-    const findGroups = async (query: string, resolve: CallableFunction) => {
-      const groups: ISearch[] = [];
-
-      if (query.length === 0) {
-        await store.dispatch('mkb/searchGroups', query);
-        resolve(groups);
-        return;
-      }
-
-      if (query.length > 0) {
-        await store.dispatch('mkb/searchGroups', query);
-        mkbGroups.value.forEach((d: IMkbGroup) => {
-          if (d.id && d.name) groups.push({ value: d.getFullName(), id: d.id });
-        });
-      }
-
-      resolve(groups);
-    };
-
-    const findSubDiagnosis = async (diagnosisId: string) => {
-      await store.dispatch('mkb/searchSubDiagnosis', diagnosisId);
-      diagnosisData.value.forEach((d: IPatientDiagnosis | RegisterDiagnosis) => {
-        if (d.mkbDiagnosis && d.mkbDiagnosisId === diagnosisId) d.mkbDiagnosis.mkbSubDiagnosis.push(...mkbSubDiagnosis.value);
-      });
-    };
-
-    const handleGroupSelect = async (item: ISearch, id: string): Promise<void> => {
-      await store.dispatch('mkb/getDiagnosisByGroupId', item.id);
-      clearForm('', id);
-    };
-
-    const handleDiagnosisSelect = async (item: ISearchDiagnosis, id: string): Promise<void> => {
-      const diagnosis = diagnosisData.value.find((d) => d.id === id);
-      if (diagnosis) {
-        diagnosis.mkbDiagnosisId = item.id;
-        diagnosis.mkbDiagnosis = item.diagnosis;
-      }
-      if (item.diagnosis.mkbGroup) queryStringsGroups[id] = item.diagnosis.mkbGroup.getFullName();
-      await findSubDiagnosis(item.id);
-    };
-
     const clearForm = (query: string, id: string): void => {
       if (query.length === 0) return;
-      store.commit('mkb/setFilteredDiagnosis', []);
-      store.commit(`${storeModule.value}/clearDiagnosis`, id);
+      // Provider.store.commit('mkb/setFilteredDiagnosis', []);
+      Provider.store.commit(`${props.storeModule}/clearDiagnosis`, id);
     };
+
     const getProp = (index: number): string => {
       let mod = '';
       if (patientDiagnosis) {
@@ -249,28 +176,122 @@ export default defineComponent({
       }
       return mod + index + '.mkbDiagnosisId';
     };
+
+    const mkbGroup: ComputedRef<IMkbGroup> = computed(() => Provider.store.getters['mkbGroups/item']);
+    const mkbDiagnosis: ComputedRef<IMkbDiagnosis> = computed(() => Provider.store.getters['mkbDiagnoses/item']);
+    const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis> = computed(() => Provider.store.getters['mkbSubDiagnoses/item']);
+    const mkbConcreteDiagnosis: ComputedRef<IMkbConcreteDiagnosis> = computed(() => Provider.store.getters['mkbConcreteDiagnoses/item']);
+
+    const clearDiagnosisData = (
+      withDiagnosis: IWithDiagnosis,
+      group: boolean,
+      diagnosis: boolean,
+      subDiagnosis: boolean,
+      concreteDiagnosis: boolean
+    ): void => {
+      if (group) {
+        withDiagnosis.mkbDiagnosis.queryStringGroup = '';
+        withDiagnosis.mkbDiagnosisId = undefined;
+      }
+      if (diagnosis) {
+        withDiagnosis.mkbDiagnosis.queryStringDiagnosis = '';
+        withDiagnosis.mkbDiagnosisId = undefined;
+      }
+      if (subDiagnosis) {
+        withDiagnosis.mkbSubDiagnosis.queryString = '';
+        withDiagnosis.mkbSubDiagnosisId = undefined;
+      }
+      if (concreteDiagnosis) {
+        withDiagnosis.mkbConcreteDiagnosis.queryString = '';
+        withDiagnosis.mkbConcreteDiagnosisId = undefined;
+      }
+    };
+
+    const setGroup = (withDiagnosis: IWithDiagnosis, item: IMkbGroup): void => {
+      withDiagnosis.mkbDiagnosis.queryStringGroup = item.name;
+      withDiagnosis.mkbDiagnosis.mkbGroupId = item.id;
+    };
+
+    const setDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbDiagnosis): void => {
+      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.name;
+      withDiagnosis.mkbDiagnosisId = item.id;
+      withDiagnosis.mkbDiagnosis = new MkbDiagnosis(item);
+    };
+
+    const setSubDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbSubDiagnosis): void => {
+      withDiagnosis.mkbSubDiagnosisId = item.id;
+      withDiagnosis.mkbSubDiagnosis = new MkbSubDiagnosis(item);
+      withDiagnosis.mkbSubDiagnosis.queryString = item.name;
+    };
+
+    const selectGroup = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
+      await Provider.store.dispatch('mkbGroups/get', event.id);
+      setGroup(withDiagnosis, mkbGroup.value);
+      clearDiagnosisData(withDiagnosis, false, true, true, true);
+    };
+
+    const selectDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
+      await Provider.store.dispatch('mkbDiagnoses/get', event.id);
+      setDiagnosis(withDiagnosis, mkbDiagnosis.value);
+      clearDiagnosisData(withDiagnosis, false, false, true, true);
+      if (mkbDiagnosis.value.mkbGroup) {
+        setGroup(withDiagnosis, mkbDiagnosis.value.mkbGroup);
+      }
+    };
+
+    const selectSubDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
+      await Provider.store.dispatch('mkbSubDiagnoses/get', event.id);
+      setSubDiagnosis(withDiagnosis, mkbSubDiagnosis.value);
+      clearDiagnosisData(withDiagnosis, false, false, false, true);
+      if (mkbSubDiagnosis.value.mkbDiagnosis) {
+        setDiagnosis(withDiagnosis, mkbSubDiagnosis.value.mkbDiagnosis);
+        if (mkbSubDiagnosis.value.mkbDiagnosis.mkbGroup) {
+          setGroup(withDiagnosis, mkbSubDiagnosis.value.mkbDiagnosis.mkbGroup);
+        }
+      }
+    };
+
+    const selectConcreteDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
+      await Provider.store.dispatch('mkbConcreteDiagnoses/get', event.id);
+
+      withDiagnosis.mkbConcreteDiagnosisId = mkbConcreteDiagnosis.value.id;
+      withDiagnosis.mkbConcreteDiagnosis = new MkbConcreteDiagnosis(mkbConcreteDiagnosis.value);
+      withDiagnosis.mkbConcreteDiagnosis.queryString = mkbConcreteDiagnosis.value.name;
+
+      if (mkbConcreteDiagnosis.value.mkbSubDiagnosis) {
+        setSubDiagnosis(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis);
+        if (mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis) {
+          setDiagnosis(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis);
+          if (mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis.mkbGroup) {
+            setGroup(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis.mkbGroup);
+          }
+        }
+      }
+    };
+
     return {
+      filteredConcreteDiagnosis,
       getProp,
       diagnosisData,
       patientDiagnosis,
       formatDate,
       expandRowKeys,
       filteredDiagnosis,
-      mkbDiagnosis,
-      mkbGroups,
       mkbSubDiagnosis,
-      queryStringsDiagnosis,
-      queryStringsGroups,
       addAnamnesis,
       addDiagnosis,
-      findDiagnosis,
-      findGroups,
-      handleDiagnosisSelect,
       handleExpandChange,
-      handleGroupSelect,
       removeDiagnosis,
       clearForm,
       isEditMode,
+      filteredSubDiagnosis,
+      schema: Provider.schema,
+
+      //
+      selectGroup,
+      selectDiagnosis,
+      selectSubDiagnosis,
+      selectConcreteDiagnosis,
     };
   },
 });

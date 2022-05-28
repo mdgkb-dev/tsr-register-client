@@ -1,6 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -18,8 +19,17 @@ const getters: GetterTree<State, RootState> = {
   filteredDiagnosis(state): IMkbDiagnosis[] | undefined {
     return state.mkbFilteredDiagnosis;
   },
+  filteredSubDiagnosis(state): IMkbSubDiagnosis[] | undefined {
+    return state.mkbFilteredSubDiagnosis;
+  },
+  filteredConcreteDiagnosis(state): IMkbConcreteDiagnosis[] | undefined {
+    return state.mkbFilteredConcreteDiagnosis;
+  },
   mkbDiagnosis(state): IMkbDiagnosis[] | undefined {
     return state.mkbDiagnosis;
+  },
+  mkbConcreteDiagnosis(state): IMkbConcreteDiagnosis[] | undefined {
+    return state.mkbConcreteDiagnosis;
   },
   mkbSubDiagnosis(state): IMkbSubDiagnosis[] | undefined {
     return state.mkbSubDiagnosis;

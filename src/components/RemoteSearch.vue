@@ -2,6 +2,19 @@
   <el-form @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
       <el-autocomplete
+        v-if="modelValue"
+        ref="searchForm"
+        :model-value="modelValue"
+        style="width: 100%; margin-right: 10px"
+        popper-class="wide-dropdown"
+        :placeholder="placeHolder"
+        :fetch-suggestions="find"
+        :trigger-on-focus="showSuggestions"
+        @select="handleSelect"
+        @input="handleInput"
+      />
+      <el-autocomplete
+        v-else
         ref="searchForm"
         v-model="queryString"
         style="width: 100%; margin-right: 10px"
@@ -64,10 +77,10 @@ export default defineComponent({
       default: true,
     },
   },
-  emits: ['select', 'load', 'input'],
+  emits: ['select', 'load', 'input', 'update:modelValue'],
   setup(props, { emit }) {
     const store = useStore();
-    const queryString: Ref<string> = ref(props.modelValue);
+    const queryString: Ref<string> = ref('');
     const searchForm = ref();
     const searchModel: Ref<ISearchModel> = computed<ISearchModel>(() => store.getters['search/searchModel']);
 
@@ -102,7 +115,7 @@ export default defineComponent({
         return;
       }
       emit('select', item);
-      queryString.value = '';
+      // queryString.value = '';
     };
 
     const createModel = (): IFilterModel => {
@@ -124,6 +137,8 @@ export default defineComponent({
       if (i.length === 0) {
         emit('input', []);
       }
+      emit('update:modelValue', i);
+      queryString.value = queryString.value + i;
     };
 
     return { searchForm, onEnter, queryString, handleSelect, find, handleSearchInput, handleInput };

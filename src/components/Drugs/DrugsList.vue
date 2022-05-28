@@ -1,5 +1,6 @@
 <template>
-  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
+  <div v-if="mounted" class="wrapper" style="height: 100%; overflow: hidden">
+    <RemoteSearch :key-value="schema.drug.key" @select="selectDrug($event)" />
     <div class="table-background">
       <el-table
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -11,6 +12,42 @@
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Наименование" min-width="150" />
+        <el-table-column prop="nameMNN" label="Форма выпуска" min-width="150" />
+        <el-table-column prop="doze" label="Дозировка" min-width="150" />
+        <el-table-column prop="registered" label="Зарегистрирован" min-width="150" />
+        <el-table-column prop="dateRegistration" label="Дата регистрации" min-width="150" />
+        <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
+          <template #default="scope">
+            <div v-for="diagnosis in scope.row.drugsDiagnosis" :key="diagnosis">
+              <div v-if="diagnosis.mkbSubDiagnosis">
+                <span v-if="diagnosis.mkbSubDiagnosis" class="underline-label"
+                  >{{ diagnosis.mkbDiagnosis.code }}.{{ diagnosis.mkbSubDiagnosis.subCode }}</span
+                >
+                <el-tooltip
+                  v-if="diagnosis.mkbSubDiagnosis"
+                  class="item"
+                  effect="dark"
+                  :content="diagnosis.mkbSubDiagnosis.name"
+                  placement="top-end"
+                >
+                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
+                </el-tooltip>
+              </div>
+              <div v-else>
+                <span v-if="diagnosis.mkbDiagnosis" class="underline-label">{{ diagnosis.mkbDiagnosis.code }}</span>
+                <el-tooltip
+                  v-if="diagnosis.mkbDiagnosis"
+                  class="item"
+                  effect="dark"
+                  :content="diagnosis.mkbDiagnosis.name"
+                  placement="top-end"
+                >
+                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
+                </el-tooltip>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column width="50" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
@@ -29,50 +66,59 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { computed, defineComponent, Ref } from 'vue';
 
 import MainHeader from '@/classes/shared/MainHeader';
+import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
+import ISearchObject from '@/interfaces/ISearchObject';
+import Hooks from '@/services/Hooks/Hooks';
+import Provider from '@/services/Provider';
 
 export default defineComponent({
   name: 'DrugsList',
   components: {
+    RemoteSearch,
     TableButtonGroup,
   },
   setup() {
-    const router = useRouter();
-    const store = useStore();
-    const mount: Ref<boolean> = ref(false);
-
-    const drugs: Ref<IDrug[]> = computed(() => store.getters['drugs/drugs']);
+    const drugs: Ref<IDrug[]> = computed(() => Provider.store.getters['drugs/drugs']);
 
     const edit = async (id: string): Promise<void> => {
-      await router.push(`/drugs/${id}`);
+      await Provider.router.push(`/drugs/${id}`);
     };
 
     const create = async (): Promise<void> => {
-      await router.push('/drugs/new');
+      await Provider.router.push('/drugs/new');
     };
 
     const remove = async (id: number): Promise<void> => {
-      await store.dispatch('drugs/delete', id);
+      await Provider.store.dispatch('drugs/delete', id);
     };
 
-    onBeforeMount(async () => {
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Список лекарств', create }));
-      await store.dispatch('drugs/getAll');
-      mount.value = true;
+    const load = async () => {
+      Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список лекарств', create }));
+      await Provider.store.dispatch('drugs/getAll');
+    };
+
+    Hooks.onBeforeMount(load, {
+      pagination: { storeModule: 'drugs', action: 'getAll' },
+      sortModels: [],
     });
 
+    const selectDrug = async (event: ISearchObject): Promise<void> => {
+      await Provider.router.push(`/drugs/${event.id}`);
+    };
+
     return {
+      selectDrug,
       drugs,
-      mount,
       create,
       edit,
       remove,
+      mounted: Provider.mounted,
+      schema: Provider.schema,
     };
   },
 });

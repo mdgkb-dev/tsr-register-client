@@ -5,7 +5,11 @@ import IDrugRegimen from './IDrugRegimen';
 export default interface IDrug {
   id?: string;
   name: string;
-
+  nameMNN: string;
+  form: string;
+  doze: string;
+  registered: boolean;
+  dateRegistration: string;
   drugRegimens: IDrugRegimen[];
   drugRegimensForDelete: string[];
 

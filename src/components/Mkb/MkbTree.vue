@@ -150,6 +150,7 @@ export default defineComponent({
       if (!selectable.value) {
         return;
       }
+      console.log(first);
 
       setTimeout(() => {
         if (first.mkbDiagnosis && first.mkbDiagnosis.length > 0) {
