@@ -2,7 +2,7 @@
   <el-form @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
       <el-autocomplete
-        v-if="modelValue"
+        v-if="modelValue !== undefined"
         ref="searchForm"
         :model-value="modelValue"
         style="width: 100%; margin-right: 10px"

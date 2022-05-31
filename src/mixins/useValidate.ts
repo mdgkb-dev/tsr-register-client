@@ -1,7 +1,6 @@
 import { ElMessage } from 'element-plus';
 
 import MessageError from '@/classes/messages/MessageError';
-import MessageSuccess from '@/classes/messages/MessageSuccess';
 import IForm from '@/interfaces/elements/IForm';
 
 interface IReturn {
@@ -21,7 +20,6 @@ export default function (): IReturn {
         validationResult = false;
         return false;
       }
-      ElMessage(new MessageSuccess());
       return true;
     });
     return validationResult;

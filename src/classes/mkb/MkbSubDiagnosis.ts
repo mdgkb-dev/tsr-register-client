@@ -5,7 +5,7 @@ import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
-  id = '';
+  id?: string;
   name = '';
   subCode?: number;
   comment?: string;
