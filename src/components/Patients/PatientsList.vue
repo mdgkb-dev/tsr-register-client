@@ -275,6 +275,7 @@ import Provider from '@/services/Provider';
 import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
 import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
 import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+import RepresentativesFiltersLib from '@/services/Provider/libs/filters/RepresentativesFiltersLib';
 
 export default defineComponent({
   name: 'PatientsList',

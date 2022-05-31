@@ -14,9 +14,17 @@ const RepresentativesSortsLib = (() => {
     );
   }
 
-  return {
-    byFullName,
-  };
+  function byDateBirth(order?: Orders): ISortModel {
+    return SortModel.CreateSortModel(
+      Provider.schema.value.representative.tableName,
+      Provider.schema.value.representative.dateBirth,
+      order ? order : Orders.Asc,
+      'По дате рождения',
+      false
+    );
+  }
+
+  return { byDateBirth, byFullName };
 })();
 
 export default RepresentativesSortsLib;

@@ -149,6 +149,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $margin: 20px 0;
 
+.el-form {
+  padding: 0 10px;
+  width: 100%;
+}
+
 .flex-column {
   width: 100%;
   display: flex;
