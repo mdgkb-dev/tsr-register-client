@@ -10,6 +10,7 @@ export default interface IFilterModel {
   date1?: Date;
   date2?: Date;
   number: number;
+  label: string;
   value1?: string;
   boolean: boolean;
   set: string[];

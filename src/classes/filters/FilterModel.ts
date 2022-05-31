@@ -13,6 +13,7 @@ export default class FilterModel implements IFilterModel {
   date2?: Date;
   value1?: string = '';
   boolean = false;
+  label = '';
   number = 0;
   type: DataTypes = DataTypes.String;
   set: string[] = [];

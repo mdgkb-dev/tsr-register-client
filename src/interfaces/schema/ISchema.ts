@@ -7,6 +7,7 @@ import IMkbGroupSchema from '@/interfaces/schema/IMkbGroupSchema';
 import IMkbSubDiagnosisSchema from '@/interfaces/schema/IMkbSubDiagnosisSchema';
 import IPatientDiagnosisSchema from '@/interfaces/schema/IPatientDiagnosisSchema';
 import IPatientSchema from '@/interfaces/schema/IPatientSchema';
+import IRegisterToPatientSchema from '@/interfaces/schema/IRegisterToPatientSchema';
 import IRepresentativeSchema from '@/interfaces/schema/IRepresentativeSchema';
 
 export default interface ISchema {
@@ -20,4 +21,5 @@ export default interface ISchema {
   mkbSubDiagnosis: IMkbSubDiagnosisSchema;
   mkbConcreteDiagnosis: IMkbConcreteDiagnosisSchema;
   drug: IDrugSchema;
+  registerToPatient: IRegisterToPatientSchema;
 }

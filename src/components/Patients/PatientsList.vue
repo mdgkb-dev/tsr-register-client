@@ -1,7 +1,11 @@
 <template>
-  <div v-if="mounted" style="height: 100%; overflow: hidden">
-    <div class="table-background">
+  <component :is="'AdminListWrapper'" v-if="mounted">
+    <template #header>
       <RemoteSearch :key-value="schema.patient.key" @select="selectSearch" />
+      <FiltersList default-label="Выберите пол" :models="createSexFilters()" @load="loadPatients" />
+      <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadPatients" />
+    </template>
+    <div class="table-background">
       <el-table
         ref="table"
         :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -17,9 +21,7 @@
         <el-table-column prop="human.surname" align="left" min-width="130" resizable>
           <template #header>
             <span class="table-header">
-              <span>Фамилия Имя Отчество</span>
-              <FilterTextForm :table="schema.human.tableName" :col="schema.human.fullName" />
-              <SortButton :table="schema.human.tableName" :col="schema.human.fullName" />
+              <span>ФИО</span>
             </span>
           </template>
           <template #default="scope">
@@ -33,7 +35,6 @@
           <template #header>
             <span class="table-header">
               <span>Пол</span>
-              <FilterSelectForm :select-list="genderFilter" :table="schema.human.tableName" :col="schema.human.isMale" />
             </span>
           </template>
           <template #default="scope">
@@ -45,7 +46,6 @@
           <template #header>
             <div class="table-header">
               <span>Дата рождения</span>
-              <FilterDateForm :table="schema.human.tableName" :col="schema.human.dateBirth" />
             </div>
           </template>
           <template #default="scope">
@@ -198,13 +198,6 @@
         </el-table-column>
 
         <el-table-column prop="createdAt" width="150" align="center">
-          <template #header>
-            <div class="table-header">
-              <span>Дата создания</span>
-              <FilterDateForm :table="schema.patient.tableName" :col="schema.patient.createdAt" />
-              <SortButton :table="schema.patient.tableName" :col="schema.patient.createdAt" />
-            </div>
-          </template>
           <template #default="scope">
             {{ formatDate(scope.row.createdAt) }}
           </template>
@@ -248,28 +241,29 @@
           </template>
         </el-table-column>
       </el-table>
-      <Pagination />
     </div>
-  </div>
+    <template #footer>
+      <Pagination />
+    </template>
+  </component>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, Ref } from 'vue';
 
-import SelectFilter from '@/classes/filters/SelectFilter';
-import Human from '@/classes/humans/Human';
 import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
+import SortList from '@/components/SortList.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
-import FilterSelectForm from '@/components/TableFilters/FilterSelectForm.vue';
 import FilterSet from '@/components/TableFilters/FilterSet.vue';
-import FilterTextForm from '@/components/TableFilters/FilterTextForm.vue';
+import FiltersList from '@/components/TableFilters/FiltersList.vue';
 import SortButton from '@/components/TableFilters/SortButton.vue';
-import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import IFilterModel from '@/interfaces/filters/IFilterModel';
+import ISortModel from '@/interfaces/filters/ISortModel';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IPatient from '@/interfaces/patients/IPatient';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
@@ -278,7 +272,10 @@ import ISearchPatient from '@/interfaces/shared/ISearchPatient';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider';
+import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
 import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
+import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+
 export default defineComponent({
   name: 'PatientsList',
   components: {
@@ -286,17 +283,17 @@ export default defineComponent({
     SortButton,
     Pagination,
     TableButtonGroup,
-    FilterTextForm,
-    FilterSelectForm,
+    SortList,
     FilterDateForm,
     FilterSet,
     FilterResetButton,
+    AdminListWrapper,
+    FiltersList,
   },
   setup() {
     const patients: Ref<IPatient[]> = computed(() => Provider.store.getters['patients/patients']);
     const filteredPatients: Ref<IPatient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
     const { formatDate } = useDateFormat();
-    const genderFilter: Ref<ISelectFilter[]> = ref([new SelectFilter({ title: 'Пол', options: Human.GetIsMaleOptions() })]);
 
     const crud = new Crud('patients');
 
@@ -304,7 +301,7 @@ export default defineComponent({
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create: crud.create }));
       Provider.store.commit('filter/setStoreModule', 'patients');
       Provider.setSortModels(PatientsSortsLib.byFullName());
-      await Provider.store.dispatch('patients/getAll', Provider.filterQuery.value);
+      await loadPatients();
       await Provider.store.dispatch('registers/getAll');
     };
 
@@ -348,7 +345,21 @@ export default defineComponent({
       await Provider.router.push(`/patients/${event.id}`);
     };
 
+    const loadPatients = async (): Promise<void> => {
+      await Provider.store.dispatch('patients/getAll', Provider.filterQuery.value);
+    };
+
+    const createSexFilters = (): IFilterModel[] => {
+      return [PatientsFiltersLib.onlyMan(), PatientsFiltersLib.onlyWoman()];
+    };
+
+    const createSortList = (): ISortModel[] => {
+      return [PatientsSortsLib.byFullName(), PatientsSortsLib.byDateBirth()];
+    };
+
     return {
+      createSortList,
+      loadPatients,
       selectSearch,
       crud,
       formatDate,
@@ -358,7 +369,7 @@ export default defineComponent({
       handlePatientSelect,
       handleSearchInput,
       patients,
-      genderFilter,
+      createSexFilters,
       mounted: Provider.mounted,
       schema: Provider.schema,
       sortList: Provider.sortList,
