@@ -1,4 +1,5 @@
 <template>
+  <DatePicker :date="human.dateBirth" />
   <div class="form-under-collapse">
     <div v-if="isEditMode">
       <el-form-item label="Фамилия" prop="human.surname">
@@ -69,15 +70,17 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
+import DatePicker from '@/components/DatePicker.vue';
 import IHuman from '@/interfaces/humans/IHuman';
 import IOption from '@/interfaces/shared/IOption';
 import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'HumanForm',
+  components: { DatePicker },
   props: {
     readonly: {
       type: Boolean as PropType<boolean>,
@@ -103,7 +106,9 @@ export default defineComponent({
     const updateHuman = () => {
       store.commit(`${props.storeName}/setHuman`, human);
     };
-
+    watch(human, () => {
+      console.log(human);
+    });
     const getAddresses = (queryString: string, cb: CallableFunction) => {
       if (!props.addresses) {
         cb([]);
