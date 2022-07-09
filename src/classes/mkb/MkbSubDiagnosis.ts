@@ -8,6 +8,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
   id?: string;
   name = '';
   subCode?: number;
+  fullName = '';
   comment?: string;
   mkbDiagnosisId?: string;
   mkbDiagnosis?: IMkbDiagnosis;
@@ -25,6 +26,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.id = i.id;
     this.name = i.name;
     this.subCode = i.subCode;
+    this.fullName = i.fullName;
     this.leaf = i.leaf;
     this.comment = i.comment;
     this.mkbDiagnosisId = i.mkbDiagnosisId;
@@ -41,7 +43,7 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
   }
 
   setQueryStrings(): void {
-    this.queryString = this.getFullName();
+    this.queryString = this.fullName;
   }
 
   getFullName = (): string => `${this.subCode} ${this.name}`;

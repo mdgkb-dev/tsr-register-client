@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus';
+import { ElNotification } from 'element-plus';
 
 import MessageError from '@/classes/messages/MessageError';
 import IForm from '@/interfaces/elements/IForm';
@@ -9,14 +9,18 @@ interface IReturn {
 }
 
 export default function (): IReturn {
-  const validate = (form: IForm): boolean => {
+  const validate = (form: IForm, hideErrorList?: boolean, fieldsList?: string[]): boolean => {
     let validationResult = true;
     form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
       if (!valid) {
-        if (!ElMessage.error) {
+        if (!ElNotification.error) {
           return;
         }
-        ElMessage.error(new MessageError(errorFields));
+        if (hideErrorList) {
+          ElNotification.error('Пожалуйста, проверьте правильность введенных данных');
+        } else {
+          ElNotification.error(new MessageError(errorFields));
+        }
         validationResult = false;
         return false;
       }

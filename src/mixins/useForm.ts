@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -86,7 +86,7 @@ export default function (isEditMode = false): {
     } else {
       await router.push(`/${path ?? module}`);
     }
-    ElMessage(new MessageSuccess());
+    ElNotification(new MessageSuccess());
   };
 
   const syncSubmitHandling = (

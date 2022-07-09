@@ -53,7 +53,7 @@ const getters: GetterTree<State, RootState> = {
   representativeToPatient(state): IRepresentativeToPatient[] {
     return state.patient.representativeToPatient;
   },
-  birthDate(state): string {
+  birthDate(state): Date {
     return state.patient.human.dateBirth;
   },
   isMale(state): boolean {

@@ -14,6 +14,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   id = '';
   name = '';
   code = '';
+  fullName = '';
   comment?: string;
   mkbClassId?: string;
   mkbGroupId?: string;
@@ -39,6 +40,7 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
     this.name = i.name;
     this.code = i.code;
     this.comment = i.comment;
+    this.fullName = i.fullName;
     this.mkbClassId = i.mkbClassId;
     this.mkbGroupId = i.mkbGroupId;
     this.mkbSubGroupId = i.mkbSubGroupId;
@@ -58,8 +60,8 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   getFullName = (): string => `${this.code} ${this.name}`;
 
   setQueryStrings(): void {
-    this.queryStringDiagnosis = this.getFullName();
-    if (this.mkbGroup) this.queryStringGroup = this.mkbGroup.getFullName();
+    this.queryStringDiagnosis = this.fullName;
+    if (this.mkbGroup) this.queryStringGroup = this.mkbGroup.fullName;
   }
 
   static CreateRelationDiagnosis(

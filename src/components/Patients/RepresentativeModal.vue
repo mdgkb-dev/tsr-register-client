@@ -56,11 +56,12 @@
 </template>
 
 <script lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 import { useStore } from 'vuex';
 
+import MessageSuccess from '@/classes/messages/MessageSuccess';
 import Representative from '@/classes/representatives/Representative';
 import RepresentativeRules from '@/classes/representatives/RepresentativeRules';
 import DocumentForm from '@/components/DocumentForm.vue';
@@ -107,10 +108,7 @@ export default defineComponent({
       await store.dispatch(`representatives/create`, representative.value);
       emit('save');
       representative.value = new Representative();
-      ElMessage({
-        type: 'success',
-        message: 'Представитель успешно добавлен',
-      });
+      ElNotification.error(new MessageSuccess());
     };
 
     const beforeClose = (done: () => void) => {

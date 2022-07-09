@@ -80,15 +80,15 @@
               @select="selectConcreteDiagnosis($event, scope.row)"
             />
           </el-form-item>
-          <span v-else>{{ scope.row.mkbDiagnoses.queryStringConcreteDiagnosis }}</span>
+          <span v-else>{{ scope.row.mkbConcreteDiagnosis.queryString }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">
-        <template #default="scope">
-          <el-checkbox v-model="scope.row.primary" />
-        </template>
-      </el-table-column>
+      <!--      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">-->
+      <!--        <template #default="scope">-->
+      <!--          <el-checkbox v-model="scope.row.primary" />-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
       <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="removeDiagnosis(scope.row.id)" />
@@ -208,12 +208,12 @@ export default defineComponent({
     };
 
     const setGroup = (withDiagnosis: IWithDiagnosis, item: IMkbGroup): void => {
-      withDiagnosis.mkbDiagnosis.queryStringGroup = item.name;
+      withDiagnosis.mkbDiagnosis.queryStringGroup = item.fullName;
       withDiagnosis.mkbDiagnosis.mkbGroupId = item.id;
     };
 
     const setDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbDiagnosis): void => {
-      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.name;
+      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.fullName;
       withDiagnosis.mkbDiagnosisId = item.id;
       withDiagnosis.mkbDiagnosis = new MkbDiagnosis(item);
     };
@@ -221,7 +221,7 @@ export default defineComponent({
     const setSubDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbSubDiagnosis): void => {
       withDiagnosis.mkbSubDiagnosisId = item.id;
       withDiagnosis.mkbSubDiagnosis = new MkbSubDiagnosis(item);
-      withDiagnosis.mkbSubDiagnosis.queryString = item.name;
+      withDiagnosis.mkbSubDiagnosis.queryString = item.fullName;
     };
 
     const selectGroup = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {

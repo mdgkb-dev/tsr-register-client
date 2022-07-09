@@ -16,6 +16,9 @@ app.use(store);
 app.use(router);
 app.use(ElementPlus);
 
+import Maska from 'maska';
+app.use(Maska);
+
 Provider.router = router;
 Provider.store = store;
 

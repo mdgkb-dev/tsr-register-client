@@ -16,7 +16,7 @@ export default class Human implements IHuman {
   surname = '';
   patronymic = '';
   isMale = true;
-  dateBirth = '';
+  dateBirth = new Date();
   addressRegistration = '';
   addressResidential = '';
   contact = new Contact();
@@ -39,7 +39,10 @@ export default class Human implements IHuman {
     this.surname = i.surname ?? '';
     this.patronymic = i.patronymic ?? '';
     this.isMale = i.isMale ?? true;
-    this.dateBirth = i.dateBirth ?? '';
+    if (i.dateBirth) {
+      this.dateBirth = new Date(i.dateBirth);
+    }
+
     this.addressRegistration = i.addressRegistration ?? '';
     this.addressResidential = i.addressResidential ?? '';
     this.contact = new Contact(i.contact);

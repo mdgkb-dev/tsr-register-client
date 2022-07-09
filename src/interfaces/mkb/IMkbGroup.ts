@@ -4,6 +4,7 @@ import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 export default interface IMkbGroup {
   id: string;
   name: string;
+  fullName: string;
   rangeStart?: string;
   rangeEnd?: string;
   comment?: string;

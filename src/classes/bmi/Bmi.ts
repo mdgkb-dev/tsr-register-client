@@ -31,7 +31,7 @@ export default class Bmi {
     return (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
   };
 
-  static birthDateToMeasureToMonth = (birthDate: string, measureDate: string): number => {
+  static birthDateToMeasureToMonth = (birthDate: Date, measureDate: string): number => {
     const dateFrom = new Date(measureDate);
     const dateTo = new Date(birthDate);
     return dateTo.getMonth() - dateFrom.getMonth() + (dateFrom.getFullYear() - dateTo.getFullYear()) * 12;

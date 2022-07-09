@@ -4,6 +4,7 @@ import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 export default interface IMkbSubDiagnosis {
   id?: string;
   name: string;
+  fullName: string;
   subCode?: number;
   comment?: string;
   mkbDiagnosisId?: string;

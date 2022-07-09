@@ -43,6 +43,7 @@ const mutations: MutationTree<State> = {
     state.filterQuery.filterModels = [];
     state.filterQuery.allLoaded = false;
     state.filterQuery.sortModels = [];
+    state.filterQuery.id = undefined;
   },
   setFilterModel(state, filterModel: IFilterModel) {
     filterModel.isSet = true;

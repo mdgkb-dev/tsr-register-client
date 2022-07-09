@@ -7,6 +7,7 @@ import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
 export default class MkbGroup implements IMkbGroup {
   id = '';
   name = '';
+  fullName = '';
   rangeStart?: string;
   rangeEnd?: string;
   comment?: string;
@@ -23,6 +24,7 @@ export default class MkbGroup implements IMkbGroup {
     }
     this.id = mkbGroup.id;
     this.name = mkbGroup.name;
+    this.fullName = mkbGroup.fullName;
     this.rangeStart = mkbGroup.rangeStart;
     this.rangeEnd = mkbGroup.rangeEnd;
     this.comment = mkbGroup.comment;

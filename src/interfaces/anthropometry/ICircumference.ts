@@ -11,6 +11,6 @@ export default interface ICircumference {
   findHeadCircumferenceGroup: (month: number, isMale: boolean) => IHeadCircumferenceGroup;
   calculateChestCircumferenceGroup: (chestCircumference: number, monthGroups: IChestCircumferenceGroup) => string;
   getCircumferenceGroupRecomendation: (group: string) => IColorPercentile | string;
-  getChestCircumferenceGroup: (dateBirth: string, isMale: boolean) => IColorPercentile | string;
-  getHeadCircumferenceGroup: (dateBirth: string, isMale: boolean) => IColorPercentile | string;
+  getChestCircumferenceGroup: (dateBirth: Date, isMale: boolean) => IColorPercentile | string;
+  getHeadCircumferenceGroup: (dateBirth: Date, isMale: boolean) => IColorPercentile | string;
 }

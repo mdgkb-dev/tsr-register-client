@@ -1,6 +1,8 @@
 <template>
   <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
-  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="openRepresentativeModal">Создать представителя</el-button>
+  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="openRepresentativeModal(representativeToPatient.length)"
+    >Создать представителя</el-button
+  >
 
   <el-table v-if="mount" :data="representativeToPatient" style="width: 800px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
@@ -151,6 +153,7 @@ export default defineComponent({
     });
 
     const add = (): void => {
+      console.log('addRep');
       store.commit('patients/addRepresentative');
     };
 
@@ -183,6 +186,7 @@ export default defineComponent({
     };
 
     const openRepresentativeModal = (index: number) => {
+      console.log('openModel', index);
       creatingIndex.value = index;
       representativeModal.value = true;
       store.commit('representatives/resetRepresentative');
@@ -194,6 +198,7 @@ export default defineComponent({
       }
       updateOptions();
       const i = creatingIndex.value ? creatingIndex.value : representativeToPatient.value.length - 1;
+      console.log(i);
       selectRepresentative(lastInsertedId.value, i);
       representativeModal.value = false;
     };
