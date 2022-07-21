@@ -2,7 +2,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import HistoryList from '@/components/History/HistoryList.vue';
 import HistoryPatientsList from '@/components/History/HistoryPatientsList.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
     name: 'HistoryList',
     component: HistoryList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -18,7 +17,7 @@ export default [
     name: 'HistoryPatientsList',
     component: HistoryPatientsList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

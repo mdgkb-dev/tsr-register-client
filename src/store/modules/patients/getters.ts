@@ -5,7 +5,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IFIlesList from '@/interfaces/files/IFIlesList';
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';

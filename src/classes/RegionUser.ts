@@ -1,8 +1,8 @@
-import Region from '@/classes/user/Region';
-import User from '@/classes/user/User';
+import Region from '@/classes/Region';
+import User from '@/classes/User';
 import IRegion from '@/interfaces/IRegion';
 import IRegionUser from '@/interfaces/IRegionUser';
-import IUser from '@/interfaces/users/IUser';
+import IUser from '@/interfaces/IUser';
 
 export default class RegionUser implements IRegionUser {
   id?: string;

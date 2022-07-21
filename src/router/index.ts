@@ -26,6 +26,18 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
   next('/login');
 };
 
+export const adminGuard = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> => {
+  if (to.path != '/main') {
+    try {
+      await store.dispatch('auth/checkPathPermissions', to.matched[0].path);
+    } catch (e) {
+      await router.push('/');
+    }
+  }
+  console.log('next', to);
+  next();
+};
+
 const routes: Array<RouteRecordRaw> = [
   ...AuthRoutes,
   ...DocumentsRoutes,
@@ -43,17 +55,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/mkb',
     name: 'Mkb',
     component: MkbList,
-    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
-    },
   },
   {
     path: '/disabilities',
     name: 'Disabilities',
     component: DisabilitiesList,
-    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
-    },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -65,5 +71,7 @@ const router = createRouter({
   history: createWebHistory(''),
   routes,
 });
+
+router.beforeEach(adminGuard);
 
 export default router;

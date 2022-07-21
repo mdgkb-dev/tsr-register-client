@@ -17,8 +17,8 @@ import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Region from '@/classes/Region';
 import MainHeader from '@/classes/shared/MainHeader';
-import Region from '@/classes/user/Region';
 import IRegion from '@/interfaces/IRegion';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';

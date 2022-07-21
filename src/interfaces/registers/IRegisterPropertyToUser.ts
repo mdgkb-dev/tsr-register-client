@@ -1,5 +1,5 @@
+import IUserAuthorized from '@/interfaces/IUserAuthorized';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 
 export default interface IRegisterPropertyToUser {
   id?: string;

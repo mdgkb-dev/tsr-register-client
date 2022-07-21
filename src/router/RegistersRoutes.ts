@@ -3,9 +3,8 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import RegisterLinkList from '@/components/Registers/RegisterLinkList.vue';
 import RegisterList from '@/components/Registers/RegisterList.vue';
 import RegisterPage from '@/components/Registers/RegisterPage.vue';
-import RegisterPatientPage from '@/components/Registers/RegisterPatientPage.vue';
+import RegisterPatientPage from '@/components/Registers/RegisterPatientPage/RegisterPatientPage.vue';
 import RegisterPatientsPage from '@/components/Registers/RegisterPatientsPage.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -13,7 +12,7 @@ export default [
     name: 'Registers',
     component: RegisterList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -21,7 +20,7 @@ export default [
     name: 'CreateRegister',
     component: RegisterPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -29,7 +28,7 @@ export default [
     name: 'EditRegister',
     component: RegisterPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -37,7 +36,7 @@ export default [
     name: 'RegisterPatient',
     component: RegisterPatientPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -45,7 +44,7 @@ export default [
     name: 'RegisterPatients',
     component: RegisterPatientsPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -53,7 +52,7 @@ export default [
     name: 'RegisterLinkList',
     component: RegisterLinkList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

@@ -24,9 +24,9 @@ import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import MainHeader from '@/classes/shared/MainHeader';
-import User from '@/classes/user/User';
+import User from '@/classes/User';
+import IUser from '@/interfaces/IUser';
 import IRegister from '@/interfaces/registers/IRegister';
-import IUser from '@/interfaces/users/IUser';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 

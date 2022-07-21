@@ -1,3 +1,4 @@
+import IUser from '@/interfaces/IUser';
 import IPatient from '@/interfaces/patients/IPatient';
 import ISmaDiagnosis from '@/interfaces/sma/ISmaDiagnosis';
 import ISmaIntrathecal from '@/interfaces/sma/ISmaIntrathecal';
@@ -6,7 +7,6 @@ import ISmaNutritionSupport from '@/interfaces/sma/ISmaNutritionSupport';
 import ISmaPathogenTherapy from '@/interfaces/sma/ISmaPathogenTherapy';
 import ISmaPatientStatus from '@/interfaces/sma/ISmaPatientStatus';
 import ISmaRehabilitationActivity from '@/interfaces/sma/ISmaRehabilitationActivity';
-import IUser from '@/interfaces/users/IUser';
 
 export default interface ISma {
   id: string;

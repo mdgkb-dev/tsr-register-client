@@ -103,11 +103,11 @@ import { useRoute } from 'vue-router';
 
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
+import IUserAuthorized from '@/interfaces/IUserAuthorized';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';
@@ -174,14 +174,14 @@ export default defineComponent({
     };
 
     const getField = (prop: IRegisterProperty, regToPatient: IRegisterToPatient) => {
-      const p = regToPatient.patient!.getRegisterPropertyValue(prop, true);
-      if (!p) {
-        return '';
-      }
-      if (prop.valueType?.isDate()) {
-        return formatDate(p as Date);
-      }
-      return p;
+      // const p = regToPatient.patient!.getRegisterPropertyValue(prop, true);
+      // if (!p) {
+      //   return '';
+      // }
+      // if (prop.valueType?.isDate()) {
+      //   return formatDate(p as Date);
+      // }
+      return;
     };
 
     const executeQuery = async (queryId: string): Promise<void> => {

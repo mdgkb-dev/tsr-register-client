@@ -21,7 +21,7 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';

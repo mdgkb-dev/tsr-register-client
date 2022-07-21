@@ -2,7 +2,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import RepresentativeTypePage from '@/components/RepresentativeTypes/RepresentativeTypePage.vue';
 import RepresentativeTypesList from '@/components/RepresentativeTypes/RepresentativeTypesList.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
     name: 'RepresentativeTypes',
     component: RepresentativeTypesList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -18,7 +17,7 @@ export default [
     name: 'CreateRepresentativeType',
     component: RepresentativeTypePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -26,7 +25,7 @@ export default [
     name: 'EditRepresentativeType',
     component: RepresentativeTypePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

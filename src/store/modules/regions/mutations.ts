@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 
-import Region from '@/classes/user/Region';
+import Region from '@/classes/Region';
 import IRegion from '@/interfaces/IRegion';
 
 import { State } from './state';

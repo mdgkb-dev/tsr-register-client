@@ -2,7 +2,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import UserPage from '@/components/Users/UserPage.vue';
 import UsersList from '@/components/Users/UsersList.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
     name: 'Users',
     component: UsersList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -18,7 +17,7 @@ export default [
     name: 'CreateUser',
     component: UserPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -26,7 +25,7 @@ export default [
     name: 'EditUser',
     component: UserPage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

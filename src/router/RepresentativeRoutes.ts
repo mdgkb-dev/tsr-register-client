@@ -2,7 +2,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import RepresentativePage from '@/components/Representatives/RepresentativePage.vue';
 import RepresentativesList from '@/components/Representatives/RepresentativesList.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
     name: 'Representatives',
     component: RepresentativesList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -18,7 +17,7 @@ export default [
     name: 'CreateRepresentative',
     component: RepresentativePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -26,7 +25,7 @@ export default [
     name: 'EditRepresentative',
     component: RepresentativePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

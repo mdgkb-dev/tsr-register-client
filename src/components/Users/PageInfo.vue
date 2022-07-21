@@ -40,7 +40,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 
 export default defineComponent({
   name: 'PageInfo',

@@ -1,10 +1,9 @@
 import IFileInfo from '@/interfaces/files/IFileInfo';
-// import moment from 'moment';
-import { IBodilessParams, IBodyfulParams, IHttpClient } from '@/interfaces/httpClient/IHTTPTypes';
+import { IBodilessParams, IBodyfulParams } from '@/interfaces/IHTTPTypes';
 import axiosInstance from '@/services/Axios';
-// import IToUtcDateMethods from '@/interfaces/httpClient/IToUtcDateMethods';
+import TokenService from '@/services/Token';
 
-export default class HttpClient implements IHttpClient {
+export default class HttpClient {
   endpoint: string;
   headers: Record<string, string>;
 
@@ -29,19 +28,21 @@ export default class HttpClient implements IHttpClient {
     if (serverFileName) {
       return serverFileName;
     }
-    return 'file.xlsx';
+    return 'file';
   }
 
-  async get<ReturnType>(params?: IBodilessParams): Promise<ReturnType> {
+  async get<ReturnType>(params?: IBodilessParams): Promise<ReturnType | void> {
     const isBlob = params?.isBlob;
     const headers = params?.headers;
-
     const res = await axiosInstance({
       url: this.buildUrl(params?.query),
       method: 'get',
-      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
       responseType: !isBlob ? 'json' : 'blob',
     });
+    if (!res) {
+      return;
+    }
     if (!isBlob) {
       return res.data;
     }
@@ -50,23 +51,28 @@ export default class HttpClient implements IHttpClient {
     const startFileNameIndex = headerLine.indexOf('"') + 1;
     const endFileNameIndex = headerLine.lastIndexOf('"');
     const filename = headerLine.substring(startFileNameIndex, endFileNameIndex);
-
     const url = URL.createObjectURL(res.data);
-    const fileName = HttpClient.getDownloadFileName(undefined, filename);
-    HttpClient.download(url, fileName);
-    return res.data;
+    const fileName = HttpClient.getDownloadFileName(params?.downloadFileName, filename);
+
+    return HttpClient.download(url, fileName);
   }
 
-  async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
-    const { payload, fileInfos, query, headers, isFormData } = params;
+  async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType | void> {
+    const { payload, fileInfos, query, headers, isFormData, isBlob, downloadFileName } = params;
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'post',
-      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
       data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
+      responseType: isBlob ? 'blob' : undefined,
     });
-
-    return data;
+    if (!isBlob) {
+      return data;
+    }
+    const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const url = URL.createObjectURL(blob);
+    const fileName = HttpClient.getDownloadFileName(downloadFileName, '');
+    return HttpClient.download(url, fileName);
   }
 
   async put<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType> {
@@ -75,7 +81,7 @@ export default class HttpClient implements IHttpClient {
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'put',
-      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
       data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 
@@ -88,11 +94,19 @@ export default class HttpClient implements IHttpClient {
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'delete',
-      headers: { ...(headers ?? this.headers), token: localStorage.getItem('token') },
+      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
       data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 
     return data;
+  }
+
+  async subscribe<PayloadType>(params: IBodyfulParams<PayloadType>): Promise<EventSource> {
+    const { query } = params;
+
+    const source = new EventSource(this.buildUrl(query));
+
+    return source;
   }
 
   private buildUrl(query?: string): string {
@@ -122,27 +136,4 @@ export default class HttpClient implements IHttpClient {
 
     return data;
   }
-
-  // private toUtc<PayloadType>(payload: PayloadType): void {
-  //   if (!payload || typeof payload !== 'object') {
-  //     return;
-  //   }
-
-  //   for (const key in payload) {
-  //     if (Object.prototype.hasOwnProperty.call(payload, key)) {
-  //       this.convertToUtc<PayloadType[Extract<keyof PayloadType, string>]>(payload[key]);
-  //     }
-  //   }
-  // }
-
-  // private convertToUtc<PropertyType extends IToUtcDateMethods>(property: PropertyType): void {
-  //   if (property && typeof property === 'object' && typeof property.getMonth !== 'function') {
-  //     this.toUtc(property);
-  //   }
-
-  //   if (property && typeof property.getMonth === 'function') {
-  //     property = moment(property).add(+moment().utcOffset(), 'm');
-  //     property = property.parseZone().utc().format();
-  //   }
-  // }
 }

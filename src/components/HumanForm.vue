@@ -37,6 +37,10 @@
           autocomplete="random"
           @change="updateHuman"
         />
+        <span>
+          <el-switch :model-value="human.addressesEqual()" @change="(v) => human.setResidentialAddress(v)" />
+          Адрес регистрации и адрес проживания совпадают
+        </span>
       </el-form-item>
       <el-form-item label="Адрес проживания" prop="human.addressResidential">
         <el-autocomplete
@@ -71,10 +75,11 @@
 </template>
 
 <script lang="ts">
+import { Check } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, reactive, ref, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IOption from '@/interfaces/shared/IOption';
 import useDateFormat from '@/mixins/useDateFormat';
 import dateFormat from '@/services/DateMask';
@@ -128,6 +133,7 @@ export default defineComponent({
       updateHuman,
       isEditMode,
       formatDate,
+      Check,
     };
   },
 });

@@ -1,6 +1,6 @@
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IRegionUser from '@/interfaces/IRegionUser';
-import IRegisterUser from '@/interfaces/users/IRegisterUser';
+import IRegisterUser from '@/interfaces/IRegisterUser';
 
 export default interface IUser {
   id?: string;

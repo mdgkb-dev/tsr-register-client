@@ -1,10 +1,10 @@
 import Human from '@/classes/humans/Human';
-import RegionUser from '@/classes/user/RegionUser';
-import RegisterUser from '@/classes/user/RegisterUser';
-import IHuman from '@/interfaces/humans/IHuman';
+import RegionUser from '@/classes/RegionUser';
+import RegisterUser from '@/classes/RegisterUser';
+import IHuman from '@/interfaces/IHuman';
 import IRegionUser from '@/interfaces/IRegionUser';
-import IRegisterUser from '@/interfaces/users/IRegisterUser';
-import IUser from '@/interfaces/users/IUser';
+import IRegisterUser from '@/interfaces/IRegisterUser';
+import IUser from '@/interfaces/IUser';
 
 export default class User implements IUser {
   id?: string;

@@ -2,7 +2,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
 import DocumentTypeList from '@/components/Documents/DocumentTypeList.vue';
 import DocumentTypePage from '@/components/Documents/DocumentTypePage.vue';
-import { isAuthorized } from '@/router/index';
 
 export default [
   {
@@ -10,7 +9,7 @@ export default [
     name: 'DocumentTypes',
     component: DocumentTypeList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -18,7 +17,7 @@ export default [
     name: 'CreateDocumentType',
     component: DocumentTypePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
   {
@@ -26,7 +25,7 @@ export default [
     name: 'EditDocumentType',
     component: DocumentTypePage,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
+      // isAuthorized(next);
     },
   },
 ];

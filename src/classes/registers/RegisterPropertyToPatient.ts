@@ -1,3 +1,4 @@
+import RegisterPropertyMeasure from '@/classes/registers/RegisterPropertyMeasure';
 import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
@@ -13,6 +14,9 @@ export default class RegisterPropertyToPatient implements IRegisterPropertyToPat
   registerPropertyId?: string;
   patientId?: string;
 
+  registerPropertyMeasure = new RegisterPropertyMeasure();
+  registerPropertyMeasureId?: string;
+
   constructor(item?: IRegisterPropertyToPatient) {
     if (!item) {
       return;
@@ -26,6 +30,10 @@ export default class RegisterPropertyToPatient implements IRegisterPropertyToPat
     if (item.registerPropertyRadio) {
       this.registerPropertyRadio = new RegisterPropertyRadio(item.registerPropertyRadio);
     }
+    if (item.registerPropertyMeasure) {
+      this.registerPropertyMeasure = new RegisterPropertyMeasure(item.registerPropertyMeasure);
+    }
+    this.registerPropertyMeasureId = item.registerPropertyMeasureId;
     this.patientId = item.patientId;
     this.registerPropertyId = item.registerPropertyId;
   }

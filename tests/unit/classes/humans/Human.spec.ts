@@ -7,7 +7,7 @@ import Contact from '@/classes/humans/Contact';
 import Human from '@/classes/humans/Human';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 
 describe('Class Human', () => {

@@ -24,25 +24,41 @@ const actions: ActionTree<State, RootState> = {
   },
   getGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbGroupAnswer = await httpClient.get<MkbGroupAnswer>({ query: `groups/${idSet.classId}` });
+    const mkbAns = await httpClient.get<MkbGroupAnswer>({ query: `groups/${idSet.classId}` });
+    if (!mkbAns) {
+      return;
+    }
+    res.mkbGroupAnswer = mkbAns;
     res.mkbIdSet = idSet;
     commit('setGroupByClassId', res);
   },
   getSubGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubGroupAnswer = await httpClient.get<MkbSubGroupAnswer>({ query: `sub-groups/${idSet.groupId}` });
+    const mkbAns = await httpClient.get<MkbSubGroupAnswer>({ query: `sub-groups/${idSet.groupId}` });
+    if (!mkbAns) {
+      return;
+    }
+    res.mkbSubGroupAnswer = mkbAns;
+
     res.mkbIdSet = idSet;
     commit('setGroupChildren', res);
   },
   getSubSubGroupById: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubSubGroupAnswer = await httpClient.get<MkbSubSubGroupAnswer>({ query: `sub-sub-groups/${idSet.subGroupId}` });
+    const ans = await httpClient.get<MkbSubSubGroupAnswer>({ query: `sub-sub-groups/${idSet.subGroupId}` });
+    if (ans) {
+      res.mkbSubSubGroupAnswer = ans;
+    }
+
     res.mkbIdSet = idSet;
     commit('setSubGroupChildren', res);
   },
   getSubDiagnosisByDiagnosisId: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
     const res: MkbComposition = new MkbComposition();
-    res.mkbSubDiagnosisAnswer.mkbSubDiagnosis = await httpClient.get<IMkbSubDiagnosis[]>({ query: `diagnosis/${idSet.diagnosisId}` });
+    const ans = await httpClient.get<IMkbSubDiagnosis[]>({ query: `diagnosis/${idSet.diagnosisId}` });
+    if (ans) {
+      res.mkbSubDiagnosisAnswer.mkbSubDiagnosis = ans;
+    }
     res.mkbIdSet = idSet;
     commit('setSubDiagnosis', res);
   },

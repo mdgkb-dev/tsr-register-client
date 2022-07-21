@@ -10,7 +10,7 @@ const httpClient = new HttpClient('files-info');
 
 const actions: ActionTree<State, RootState> = {
   generateLink: async ({ commit }, fileId: string): Promise<void> => {
-    const fileAnchor: IFileAnchor = await httpClient.get<IFileAnchor>({ query: fileId, isBlob: true });
+    const fileAnchor: IFileAnchor | void = await httpClient.get<IFileAnchor>({ query: fileId, isBlob: true });
     commit('writeFileAnchor', fileAnchor);
   },
 };

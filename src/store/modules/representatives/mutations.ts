@@ -7,7 +7,7 @@ import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFile from '@/interfaces/files/IFile';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativesCount from '@/interfaces/representatives/IRepresentativesCount';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';

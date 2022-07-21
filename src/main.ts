@@ -22,6 +22,14 @@ app.use(Maska);
 Provider.router = router;
 Provider.store = store;
 
+import DateTimeFormatter from '@/services/DateFormat';
+app.config.globalProperties.$dateTimeFormatter = new DateTimeFormatter('ru-RU');
+
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component);
+}
+
 router.isReady().then(() => {
   app.mount('#app');
 });

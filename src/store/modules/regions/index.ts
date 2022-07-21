@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import Region from '@/classes/user/Region';
+import Region from '@/classes/Region';
 import RootState from '@/store/types';
 
 import actions from './actions';

@@ -1,12 +1,12 @@
 import Human from '@/classes/humans/Human';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import User from '@/classes/user/User';
+import User from '@/classes/User';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
+import IUser from '@/interfaces/IUser';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
-import IUser from '@/interfaces/users/IUser';
 
 export default class Representative implements IRepresentative {
   id?: string;

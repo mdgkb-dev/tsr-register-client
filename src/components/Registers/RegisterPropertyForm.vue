@@ -66,6 +66,7 @@
             <RegisterPropertyRadioForm v-if="element.showRadio" :register-property="element" />
             <RegisterPropertySetForm v-if="element.showSet" :register-property="element" />
             <RegisterPropertyExamplesForm :register-property="element" />
+            <RegisterPropertyMeasuresForm v-if="element.valueType.isNumber()" :register-property="element" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -80,6 +81,7 @@ import draggable from 'vuedraggable';
 import { useStore } from 'vuex';
 
 import RegisterPropertyExamplesForm from '@/components/Registers/RegisterPropertyExamplesForm.vue';
+import RegisterPropertyMeasuresForm from '@/components/Registers/RegisterPropertyMeasuresForm.vue';
 import RegisterPropertyRadioForm from '@/components/Registers/RegisterPropertyRadioForm.vue';
 import RegisterPropertySetForm from '@/components/Registers/RegisterPropertySetForm.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
@@ -93,6 +95,7 @@ export default defineComponent({
     RegisterPropertyRadioForm,
     RegisterPropertySetForm,
     RegisterPropertyExamplesForm,
+    RegisterPropertyMeasuresForm,
     draggable,
   },
   props: {

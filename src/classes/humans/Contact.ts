@@ -1,4 +1,4 @@
-import IContact from '@/interfaces/humans/IContact';
+import IContact from '@/interfaces/IContact';
 
 export default class Contact implements IContact {
   id?: string;

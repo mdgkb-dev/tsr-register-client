@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
 
-import IUser from '@/interfaces/users/IUser';
+import IUser from '@/interfaces/IUser';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 

@@ -5,8 +5,8 @@ import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompa
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
-import IHumanConstructor from '@/interfaces/humans/IHumanConstructor';
+import IHuman from '@/interfaces/IHuman';
+import IHumanConstructor from '@/interfaces/IHumanConstructor';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 
@@ -111,5 +111,12 @@ export default class Human implements IHuman {
 
   haveDocument(documentTypeId: string): boolean {
     return !!this.documents.find((doc: IDocument) => doc.documentTypeId === documentTypeId);
+  }
+
+  addressesEqual(): boolean {
+    return this.addressRegistration === this.addressResidential;
+  }
+  setResidentialAddress(addressesEqual: boolean): void {
+    addressesEqual ? (this.addressResidential = this.addressRegistration) : (this.addressResidential = '');
   }
 }

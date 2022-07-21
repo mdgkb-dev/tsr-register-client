@@ -37,7 +37,7 @@ import { useStore } from 'vuex';
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 
-import IUser from '../../interfaces/users/IUser';
+import IUser from '../../interfaces/IUser';
 
 export default defineComponent({
   name: 'UsersList',

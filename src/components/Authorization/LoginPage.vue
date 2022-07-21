@@ -37,18 +37,21 @@ export default defineComponent({
       try {
         await store.dispatch('auth/login', loginForm);
       } catch (error) {
+        console.log(error);
         return;
       }
 
+      console.log('login');
       if (authError.value) {
         showMessageError(authError.value);
       }
 
       if (!store.getters['auth/isAuth']) {
+        console.log('login2');
         await router.push('/login');
         return;
       }
-
+      console.log('login3');
       await router.push('/patients');
     };
 
