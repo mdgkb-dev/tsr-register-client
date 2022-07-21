@@ -19,15 +19,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const isAuth = computed(() => store.getters['auth/isAuth']);
+
     const layout = computed(() => {
-      // const userId = localStorage.getItem('userId');
-      // if (userId) {
-      //   store.commit('auth/setIsAuth', true);
-      // store.commit('setLayout', 'main-layout');
-      // } else {
-      //   store.commit('auth/setIsAuth', false);
-      store.commit('setLayout', 'login-layout');
-      // }
+      if (isAuth.value) {
+        store.commit('setLayout', 'main-layout');
+      } else {
+        store.commit('setLayout', 'login-layout');
+      }
       return store.getters.layout;
     });
 

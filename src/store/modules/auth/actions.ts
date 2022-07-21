@@ -26,10 +26,10 @@ const actions: ActionTree<State, RootState> = {
   getMe: async ({ commit }): Promise<void> => {
     commit('setUser', await httpClient.get<IUserAuthorized>({ query: 'me' }));
   },
-  logout: async ({ commit }): Promise<void> => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+  logout: async ({ commit, state }): Promise<void> => {
     commit('setIsAuth', false);
+    commit('clearUser');
+    commit('clearTokens');
   },
   editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
     const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });

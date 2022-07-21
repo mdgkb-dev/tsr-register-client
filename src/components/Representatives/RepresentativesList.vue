@@ -156,6 +156,7 @@ export default defineComponent({
     };
 
     const load = async () => {
+      console.log('load');
       Provider.store.commit('filter/setStoreModule', 'representatives');
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create: crud.create }));
       Provider.setSortModels(RepresentativesSortsLib.byFullName());

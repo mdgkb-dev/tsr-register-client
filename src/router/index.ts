@@ -27,10 +27,11 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
 };
 
 export const adminGuard = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> => {
-  if (to.path != '/main') {
+  if (to.path != '/') {
     try {
       await store.dispatch('auth/checkPathPermissions', to.matched[0].path);
     } catch (e) {
+      console.log(e);
       await router.push('/');
     }
   }
