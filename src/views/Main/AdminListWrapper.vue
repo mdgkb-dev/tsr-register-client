@@ -3,10 +3,10 @@
     <div class="card-item filters">
       <slot name="header" />
     </div>
-    <div class="admin-list-wrapper-main">
+    <div class="table-background admin-list-wrapper-main">
       <slot />
     </div>
-    <div>
+    <div class="admin-list-wrapper-footer">
       <slot name="footer" />
     </div>
   </div>
@@ -20,7 +20,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-table) {
+:deep(.el-table),
+:deep(.el-table__inner-wrapper) {
   width: 100%;
   height: 100%;
   border-radius: 5px;
@@ -43,6 +44,7 @@ export default defineComponent({
   height: 100% !important;
   overflow: auto;
   overflow-y: overlay;
+  flex: 1;
 }
 
 .admin-list-wrapper {
@@ -54,9 +56,12 @@ export default defineComponent({
   &-main {
     flex-shrink: 1;
     margin: 10px 5px;
-    padding: 0 5px;
+    // padding: 0 5px;
     overflow: hidden;
     height: 100%;
+  }
+  &-footer {
+    margin: 0 auto;
   }
   .filters {
     margin: 10px 10px 0 10px;
@@ -90,6 +95,17 @@ export default defineComponent({
   }
 }
 
+:deep(thead) {
+  .cell {
+    padding: 10px;
+  }
+}
+:deep(tbody) {
+  .cell {
+    background-color: white;
+  }
+}
+
 :deep(.filters-block) {
   margin-right: 10px;
 }
@@ -97,6 +113,7 @@ export default defineComponent({
 :deep(.sticky-left) {
   position: sticky !important;
   background: white;
+  z-index: 99 !important;
 }
 :deep(.sticky-right) {
   right: 0;

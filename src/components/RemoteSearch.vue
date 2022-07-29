@@ -174,9 +174,9 @@ $margin: 20px 0;
   margin: $margin;
 }
 
-:deep(.el-input__inner) {
+:deep(.el-input__wrapper) {
   border-radius: 20px;
-  padding-left: 25px;
+  padding-left: 15px;
   height: 34px;
   width: 100%;
   display: flex;

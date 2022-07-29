@@ -27,7 +27,9 @@
             <div v-for="(menu, i) in menuItems" :key="menu.title" class="side-menu-elements-font">
               <el-sub-menu v-if="menu.links" :index="i.toString()">
                 <template #title>
-                  <i :class="menu.class"></i>
+                  <el-icon>
+                    <component :is="menu.class" />
+                  </el-icon>
                   <span>{{ menu.title }} </span>
                 </template>
                 <div v-for="item in menu.links" :key="item.title">
@@ -37,7 +39,9 @@
                 </div>
               </el-sub-menu>
               <el-menu-item v-else :id="menu.name" :index="menu.name" :route="{ name: menu.name }" class="side-menu-elements-font">
-                <i :class="menu.class"></i>
+                <el-icon>
+                  <component :is="menu.class" />
+                </el-icon>
                 <span>{{ menu.title }}</span>
               </el-menu-item>
             </div>
@@ -78,7 +82,7 @@ export default defineComponent({
     const menuItems: (IMenuItemSingleLink | IMenuItemMultipleLinks)[] = reactive([
       {
         title: 'Персоналии',
-        class: 'el-icon-user-solid',
+        class: 'UserFilled',
         links: [
           {
             name: 'Patients',
@@ -104,7 +108,7 @@ export default defineComponent({
       },
       {
         title: 'Справочники',
-        class: 'el-icon-notebook-2',
+        class: 'Notebook',
         links: [
           {
             name: 'Mkb',
@@ -120,19 +124,19 @@ export default defineComponent({
       },
       {
         title: 'Регистры',
-        class: 'el-icon-s-order',
+        class: 'Notebook',
         name: 'RegisterLinkList',
         link: '/register-link-list',
       },
       {
         title: 'Лекарства',
-        class: 'el-icon-first-aid-kit',
+        class: 'FirstAidKit',
         name: 'DrugsList',
         link: '/grugs',
       },
       {
         title: 'Администрирование',
-        class: 'el-icon-setting',
+        class: 'Setting',
         links: [
           {
             name: 'Users',
@@ -204,6 +208,7 @@ export default defineComponent({
   background-color: rgba(238, 55, 116, 255);
   border-radius: 25px;
   color: white;
+  height: 30px;
 }
 .el-header,
 .el-footer {

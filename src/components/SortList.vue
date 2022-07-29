@@ -130,6 +130,10 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
+  padding-left: 5px;
+}
+
+:deep(.el-input__wrapper) {
   border-radius: 20px;
   padding-left: 25px;
   height: 34px;

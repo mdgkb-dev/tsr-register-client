@@ -20,23 +20,25 @@
       <div class="property-row">
         <el-form-item style="width: 100%; margin: 0 10px 0 0" label="Название свойства">
           <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
-          <i class="el-icon-s-grid drug-icon" />
+          <el-icon size="20" class="el-icon-s-grid drug-icon">
+            <Grid />
+          </el-icon>
           <el-input v-model="element.name" placeholder="Название свойства" @click.stop @input="inputHandler(e)"></el-input>
           <div class="card-button-group">
             <el-tooltip effect="light" placement="top-end" content="Добавить доп.значение">
-              <el-button icon="el-icon-plus" @click.stop="addRegisterPropertyOther(element, index)"></el-button>
+              <el-button :icon="Plus" @click.stop="addRegisterPropertyOther(element, index)"></el-button>
             </el-tooltip>
             <el-popconfirm
               confirm-button-text="Да"
               cancel-button-text="Отмена"
-              icon="el-icon-info"
+              :icon="InfoFilled"
               icon-color="red"
               title="Вы уверены, что хотите удалить свойство?"
               @confirm="registerProperty.removeSetItem(index)"
               @cancel="() => null"
             >
               <template #reference>
-                <el-button icon="el-icon-delete"></el-button>
+                <el-button :icon="Delete"></el-button>
               </template>
             </el-popconfirm>
           </div>
@@ -48,6 +50,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Grid, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -59,15 +62,16 @@ import sortByDrug from '@/mixins/sortByDrug';
 import useValidate from '@/mixins/useValidate';
 export default defineComponent({
   name: 'RegisterPropertySetForm',
+  components: {
+    draggable,
+    RegisterPropertyOthersForm,
+    Grid,
+  },
   props: {
     registerProperty: {
       type: Object as PropType<IRegisterProperty>,
       required: true,
     },
-  },
-  components: {
-    draggable,
-    RegisterPropertyOthersForm,
   },
   setup(props) {
     const activeCollapseName: Ref<string> = ref('');
@@ -100,6 +104,9 @@ export default defineComponent({
       newRegisterPropertySetForm,
       addRegisterPropertyOther,
       inputHandler,
+      Delete,
+      InfoFilled,
+      Plus,
     };
   },
 });

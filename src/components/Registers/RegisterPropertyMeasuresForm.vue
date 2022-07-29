@@ -20,13 +20,15 @@
     <template #item="{ element, index }">
       <div v-if="registerProperty.registerPropertyMeasures.length" class="property-row">
         <el-form-item label-width="170px" label="Единица измерения">
-          <i class="el-icon-s-grid drug-icon" />
+          <el-icon size="20" class="el-icon-s-grid drug-icon">
+            <Grid />
+          </el-icon>
           <el-input v-model="element.name"> </el-input>
           <div class="card-button-group">
             <el-popconfirm
               confirm-button-text="Да"
               cancel-button-text="Отмена"
-              icon="el-icon-info"
+              :icon="InfoFilled"
               icon-color="red"
               title="Вы уверены, что хотите удалить пример?"
               @confirm="
@@ -35,7 +37,7 @@
               @cancel="() => null"
             >
               <template #reference>
-                <el-button icon="el-icon-delete"></el-button>
+                <el-button :icon="Delete"></el-button>
               </template>
             </el-popconfirm>
           </div>
@@ -46,6 +48,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Grid, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -60,6 +63,7 @@ export default defineComponent({
   name: 'RegisterPropertyMeasuresForm',
   components: {
     draggable,
+    Grid,
   },
   props: {
     registerProperty: {
@@ -100,6 +104,8 @@ export default defineComponent({
       activeCollapseName,
       newRegisterPropertyMeasure: newMeasure,
       newRegisterPropertyMeasureForm,
+      Delete,
+      InfoFilled,
     };
   },
 });

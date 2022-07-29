@@ -13,7 +13,9 @@
     accept="image/jpeg,image/png,image/jng"
   >
     <template #default>
-      <i class="el-icon-plus custom-plus"></i>
+      <el-icon>
+        <Plus />
+      </el-icon>
     </template>
     <template #file="{ file }">
       <div>
@@ -21,10 +23,14 @@
       </div>
       <span class="el-upload-list__item-actions">
         <span class="el-upload-list__item-preview" @click="openCropper(file)">
-          <i class="el-icon-zoom-in"></i>
+          <el-icon>
+            <ZoomIn />
+          </el-icon>
         </span>
         <span class="el-upload-list__item-delete" @click="handleRemove()">
-          <i class="el-icon-delete"></i>
+          <el-icon>
+            <Delete />
+          </el-icon>
         </span>
       </span>
     </template>
@@ -34,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Plus, ZoomIn } from '@element-plus/icons-vue';
 import { computed, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
@@ -47,6 +54,9 @@ export default defineComponent({
   name: 'Uploader',
   components: {
     ImageCropper,
+    Plus,
+    ZoomIn,
+    Delete,
   },
   props: {
     storeModule: {

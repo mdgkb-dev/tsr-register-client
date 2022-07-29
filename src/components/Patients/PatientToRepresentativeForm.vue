@@ -75,7 +75,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
+    <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
       <template #default="scope">
         <TableButtonGroup
           :show-edit-button="

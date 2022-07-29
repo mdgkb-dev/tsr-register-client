@@ -8,11 +8,11 @@
         <h1 class="semi-bold-header">Контакты</h1>
         <el-space direction="vertical" class="light-title" :size="15" alignment="start">
           <el-space alignment="center">
-            <i class="el-icon-message contact-icon"></i>
+            <el-icon size="25" style="margin-right: 5px"><Message /></el-icon>
             <span>{{ representative.human.contact.email ? representative.human.contact.email : 'Не указан' }}</span>
           </el-space>
           <el-space alignment="center">
-            <i class="el-icon-phone contact-icon"></i>
+            <el-icon size="25" style="margin-right: 5px"><Phone /></el-icon>
             <span>{{ representative.human.contact.phone ? representative.human.contact.phone : 'Не указан' }}</span>
           </el-space>
         </el-space>
@@ -49,7 +49,7 @@
               <div v-for="document in representative.human.documents" :key="document">
                 <el-tooltip class="item" effect="light" :content="document.documentType.name" placement="top-end">
                   <el-tag>
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <el-icon style="margin-right: 3px"><Document /></el-icon>
                     <span>{{ document.documentType.getTagName() }}</span>
                   </el-tag>
                 </el-tooltip>
@@ -64,6 +64,7 @@
 </template>
 
 <script lang="ts">
+import { Document, Message, Phone } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -72,7 +73,7 @@ import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import useDateFormat from '@/mixins/useDateFormat';
 export default defineComponent({
   name: 'RepresentativePageInfo',
-  components: { Uploader },
+  components: { Uploader, Message, Phone, Document },
   setup() {
     const { formatDate } = useDateFormat();
     const store = useStore();

@@ -9,21 +9,23 @@
     <template #item="{ element, index }">
       <div class="property-row-main property-row-others">
         <el-form-item label="Название доп.значения">
-          <i class="el-icon-s-grid drug-icon" />
+          <el-icon size="20" class="el-icon-s-grid drug-icon">
+            <Grid />
+          </el-icon>
           <el-input v-model="element.name" placeholder="Название доп.значения"></el-input>
 
           <div class="card-button-group">
             <el-popconfirm
               confirm-button-text="Да"
               cancel-button-text="Отмена"
-              icon="el-icon-info"
+              :icon="InfoFilled"
               icon-color="red"
               title="Вы уверены, что хотите удалить доп.значение свойства?"
               @confirm="registerProperty.removeRegisterPropertyOther(index)"
               @cancel="() => null"
             >
               <template #reference>
-                <el-button icon="el-icon-delete"></el-button>
+                <el-button :icon="Delete"></el-button>
               </template>
             </el-popconfirm>
           </div>
@@ -34,6 +36,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Grid, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
@@ -42,15 +45,16 @@ import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadi
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
 import sortByDrug from '@/mixins/sortByDrug';
 export default defineComponent({
-  name: 'RegisterPropertyRadioForm',
+  name: 'RegisterPropertyOthersForm',
+  components: {
+    draggable,
+    Grid,
+  },
   props: {
     registerProperty: {
       type: Object as PropType<IRegisterPropertyRadio | IRegisterPropertySet>,
       required: true,
     },
-  },
-  components: {
-    draggable,
   },
   setup(props) {
     const activeCollapseName: Ref<string> = ref('');
@@ -62,6 +66,8 @@ export default defineComponent({
       activeCollapseName,
       newRegisterPropertyRadio,
       newRegisterPropertyRadioForm,
+      Delete,
+      InfoFilled,
     };
   },
 });

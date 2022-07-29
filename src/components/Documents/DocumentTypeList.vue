@@ -11,7 +11,7 @@
       >
         <el-table-column type="index" width="60" align="center" />
         <el-table-column prop="name" label="Название документа" sortable="" />
-        <el-table-column width="40" fixed="right" align="center">
+        <el-table-column width="50" fixed="right" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
               <TableButtonGroup
