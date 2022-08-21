@@ -1,11 +1,11 @@
-import RegionList from '@/components/Regions/RegionList.vue';
 import RegionPage from '@/components/Regions/RegionPage.vue';
+import RegionsList from '@/components/Regions/RegionsList.vue';
 
 export default [
   {
     path: '/regions',
     name: 'Regions',
-    component: RegionList,
+    component: RegionsList,
   },
   {
     path: '/regions/new',

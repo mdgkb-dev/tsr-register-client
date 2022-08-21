@@ -45,16 +45,17 @@
 
 <script lang="ts">
 import { Delete, Edit, FolderChecked } from '@element-plus/icons-vue';
-import { computed, ComputedRef, defineComponent, PropType, toRefs } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 
 export default defineComponent({
   name: 'AnamnesisForm',
   props: {
-    anamnesisId: {
-      type: String as PropType<string>,
+    anamnesisProp: {
+      type: Object as PropType<IPatientDiagnosisAnamnesis>,
       required: true,
     },
     propName: {
@@ -62,17 +63,22 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['remove'],
+  setup(props, { emit }) {
     const store = useStore();
-    const { anamnesisId } = toRefs(props);
+    // const { anamnesisId } = toRefs(props);
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
-    const anamnesis: ComputedRef<IPatientDiagnosisAnamnesis> = computed(() =>
-      store.getters['patients/patient'].getAnamnesis(anamnesisId.value)
-    );
+    // const anamnesis: ComputedRef<IPatientDiagnosisAnamnesis> = computed(() =>
+    //   store.getters['patients/patient'].getAnamnesis(anamnesisId.value)
+    // );
+    const anamnesis: Ref<IPatientDiagnosisAnamnesis> = ref(new PatientDiagnosisAnamnesis());
 
     const edit = () => (anamnesis.value.isEditMode = !anamnesis.value.isEditMode);
-    const remove = () => store.commit('patients/removeAnamnesis', anamnesisId.value);
+    const remove = () => emit('remove');
+    onBeforeMount(() => {
+      anamnesis.value = props.anamnesisProp;
+    });
 
     return {
       anamnesis,

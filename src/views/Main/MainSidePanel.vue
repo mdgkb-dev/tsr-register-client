@@ -146,7 +146,7 @@ export default defineComponent({
           {
             name: 'Regions',
             title: 'Регионы',
-            link: 'regions',
+            link: '/regions',
           },
           {
             name: 'DocumentTypes',

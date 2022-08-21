@@ -174,6 +174,10 @@ export default defineComponent({
           }
         }
       }
+      console.log(
+        'user.value.filterActualProperties(register.value.getProps())',
+        user.value.filterActualProperties(register.value.getProps())
+      );
       cols.value = user.value.filterActualProperties(register.value.getProps());
     };
 

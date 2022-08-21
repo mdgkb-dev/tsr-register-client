@@ -8,6 +8,7 @@ import DrugsRoutes from '@/router/DrugsRoutes';
 import HistoryRoutes from '@/router/HistoryRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
+import RegionsRoutes from '@/router/RegionsRoutes';
 import RegisterExportsRoutes from '@/router/RegisterExportsRoutes';
 import RegistersRoutes from '@/router/RegistersRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
@@ -52,6 +53,7 @@ const routes: Array<RouteRecordRaw> = [
   ...RepresentativeRoutes,
   ...RepresentativeTypesRoutes,
   ...UsersRoutes,
+  ...RegionsRoutes,
   {
     path: '/mkb',
     name: 'Mkb',

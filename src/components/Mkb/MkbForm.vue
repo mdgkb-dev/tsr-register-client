@@ -25,9 +25,11 @@
                 :timestamp="formatDate(anamnesis.date)"
                 placement="top"
               >
+                <!-- :anamnesis-id="anamnesis.id" -->
                 <AnamnesisForm
-                  :anamnesis-id="anamnesis.id"
+                  :anamnesis-prop="anamnesis"
                   :prop-name="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
+                  @remove="RemoveFromClass(props.$index, props.row.patientDiagnosisAnamnesis, props.row.patientDiagnosisAnamnesisForDelete)"
                 />
               </el-timeline-item>
             </el-timeline>
@@ -118,6 +120,7 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
 import Provider from '@/services/Provider';
+import RemoveFromClass from '@/services/RemoveFromClass';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
@@ -286,6 +289,7 @@ export default defineComponent({
       isEditMode,
       filteredSubDiagnosis,
       schema: Provider.schema,
+      RemoveFromClass,
 
       //
       selectGroup,
@@ -296,3 +300,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-timeline) {
+  margin-right: 20px;
+}
+</style>
