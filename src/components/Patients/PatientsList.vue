@@ -2,234 +2,237 @@
   <component :is="'AdminListWrapper'" v-if="mounted">
     <template #header>
       <RemoteSearch :key-value="schema.patient.key" @select="selectSearch" />
-      <FiltersList default-label="Выберите пол" :models="createSexFilters()" @load="loadPatients" />
+      <FiltersList default-label="Пол" :models="createSexFilters()" @load="loadPatients" />
       <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadPatients" />
     </template>
-    <div class="table-background">
-      <el-table
-        ref="table"
-        :default-sort="{ prop: 'id', order: 'ascending' }"
-        :data="patients"
-        class="table-shadow"
-        header-row-class-name="header-style"
-        row-class-name="no-hover"
-        style="width: 100%; margin-bottom: 20px; overflow: auto"
-        height="calc(100vh - 310px)"
-      >
-        <el-table-column width="60" align="center" />
+    <el-table
+      ref="table"
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="patients"
+      class="table-shadow"
+      header-row-class-name="header-style"
+      row-class-name="no-hover"
+    >
+      <el-table-column width="60" align="center" />
 
-        <el-table-column prop="human.surname" align="left" min-width="130" resizable>
-          <template #header>
-            <span class="table-header">
-              <span>ФИО</span>
-            </span>
-          </template>
-          <template #default="scope">
-            <div class="patient-link" @click="$router.push(`/patients/${scope.row.id}/view`)">
-              {{ scope.row.human.getFullName() }}
+      <el-table-column prop="human.surname" align="left" min-width="130" class-name="sticky-left" resizable>
+        <template #header>
+          <span class="table-header">
+            <span>ФИО</span>
+          </span>
+        </template>
+        <template #default="scope">
+          <div class="patient-link" @click="$router.push(`/patients/${scope.row.id}/view`)">
+            {{ scope.row.human.getFullName() }}
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="110" prop="human.isMale" align="center">
+        <template #header>
+          <span class="table-header">
+            <span>Пол</span>
+          </span>
+        </template>
+        <template #default="scope">
+          {{ scope.row.human.getGender() }}
+        </template>
+      </el-table-column>
+
+      <el-table-column prop="human.dateBirth" width="150" align="center">
+        <template #header>
+          <div class="table-header">
+            <span>Дата рождения</span>
+          </div>
+        </template>
+        <template #default="scope">
+          {{ formatDate(scope.row.human.dateBirth) }}
+        </template>
+      </el-table-column>
+
+      <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
+        <template #default="scope">
+          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+            <el-tooltip class="item" effect="dark" placement="top-end">
+              <template #content>
+                <div>
+                  {{ rep.representative.human.getFullName() }}
+                </div>
+                <div v-if="rep.representative.human.contact.phone">Телефон: {{ rep.representative.human.contact.phone }}</div>
+                <div v-if="rep.representative.human.contact.email">Email: {{ rep.representative.human.contact.email }}</div>
+              </template>
+              <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">
+                {{ rep.getRepresentativeParentType() }}
+              </el-tag>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="75" label="ВЕС РОСТ" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.getHeightWeightShort() }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="75" label="Окружность головы" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.getLastCircumference(scope.row.headCircumference)?.value }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="75" label="Окружность груди" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.getLastCircumference(scope.row.chestCircumference)?.value }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
+        <template #header>
+          <span class="table-header">
+            <span>Диагнозы</span>
+            <FilterSet
+              :table="schema.patientDiagnosis.tableName"
+              :col="schema.patientDiagnosis.mkbDiagnosisId"
+              :join-table="schema.patientDiagnosis.joinTable"
+              :join-table-fk="schema.patientDiagnosis.joinTableFk"
+              :join-table-pk="schema.patientDiagnosis.joinTablePk"
+            />
+          </span>
+        </template>
+        <template #default="scope">
+          <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
+            <div v-if="diagnosis.mkbSubDiagnosis">
+              <span v-if="diagnosis.mkbSubDiagnosis" class="underline-label"
+                >{{ diagnosis.mkbDiagnosis.code }}.{{ diagnosis.mkbSubDiagnosis.subCode }}</span
+              >
+              <el-tooltip
+                v-if="diagnosis.mkbSubDiagnosis"
+                class="item"
+                effect="dark"
+                :content="diagnosis.mkbSubDiagnosis.name"
+                placement="top-end"
+              >
+                <el-icon size="17" style="margin-left: 5px">
+                  <QuestionFilled />
+                </el-icon>
+              </el-tooltip>
             </div>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="110" prop="human.isMale" align="center">
-          <template #header>
-            <span class="table-header">
-              <span>Пол</span>
-            </span>
-          </template>
-          <template #default="scope">
-            {{ scope.row.human.getGender() }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="human.dateBirth" width="150" align="center">
-          <template #header>
-            <div class="table-header">
-              <span>Дата рождения</span>
+            <div v-else>
+              <span v-if="diagnosis.mkbDiagnosis" class="underline-label">{{ diagnosis.mkbDiagnosis.code }}</span>
+              <el-tooltip
+                v-if="diagnosis.mkbDiagnosis"
+                class="item"
+                effect="dark"
+                :content="diagnosis.mkbDiagnosis.name"
+                placement="top-end"
+              >
+                <el-icon size="17" style="margin-left: 5px">
+                  <QuestionFilled />
+                </el-icon>
+              </el-tooltip>
             </div>
-          </template>
-          <template #default="scope">
-            {{ formatDate(scope.row.human.dateBirth) }}
-          </template>
-        </el-table-column>
+          </div>
+        </template>
+      </el-table-column>
 
-        <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
-          <template #default="scope">
-            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-              <el-tooltip class="item" effect="dark" placement="top-end">
-                <template #content>
-                  <div>
-                    {{ rep.representative.human.getFullName() }}
-                  </div>
-                  <div v-if="rep.representative.human.contact.phone">Телефон: {{ rep.representative.human.contact.phone }}</div>
-                  <div v-if="rep.representative.human.contact.email">Email: {{ rep.representative.human.contact.email }}</div>
-                </template>
-                <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">
-                  {{ rep.getRepresentativeParentType() }}
+      <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
+        <template #default="scope">
+          <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
+            <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
+            <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
+              <el-button
+                size="mini"
+                disabled
+                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
+                circle
+              >
+                A
+              </el-button>
+              <el-button
+                size="mini"
+                disabled
+                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
+                circle
+                >B</el-button
+              >
+              <el-button
+                size="mini"
+                disabled
+                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
+                circle
+                >C</el-button
+              >
+            </div>
+            <div v-else>Нет справок ЕДВ</div>
+          </el-space>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="РЕГИСТРЫ" width="115" align="center">
+        <template #default="scope">
+          <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length">
+            <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
+              <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
+                <el-tag class="tag-link" size="small" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">
+                  <span>{{ registerToPatient.register.getTagName() }}</span>
                 </el-tag>
               </el-tooltip>
             </div>
-          </template>
-        </el-table-column>
+          </div>
+        </template>
+      </el-table-column>
 
-        <el-table-column width="75" label="ВЕС РОСТ" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.getHeightWeightShort() }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="75" label="Окружность головы" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.getLastCircumference(scope.row.headCircumference)?.value }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="75" label="Окружность груди" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.getLastCircumference(scope.row.chestCircumference)?.value }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
-          <template #header>
-            <span class="table-header">
-              <span>Диагнозы</span>
-              <FilterSet
-                :table="schema.patientDiagnosis.tableName"
-                :col="schema.patientDiagnosis.mkbDiagnosisId"
-                :join-table="schema.patientDiagnosis.joinTable"
-                :join-table-fk="schema.patientDiagnosis.joinTableFk"
-                :join-table-pk="schema.patientDiagnosis.joinTablePk"
-              />
-            </span>
-          </template>
-          <template #default="scope">
-            <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
-              <div v-if="diagnosis.mkbSubDiagnosis">
-                <span v-if="diagnosis.mkbSubDiagnosis" class="underline-label"
-                  >{{ diagnosis.mkbDiagnosis.code }}.{{ diagnosis.mkbSubDiagnosis.subCode }}</span
-                >
-                <el-tooltip
-                  v-if="diagnosis.mkbSubDiagnosis"
-                  class="item"
-                  effect="dark"
-                  :content="diagnosis.mkbSubDiagnosis.name"
-                  placement="top-end"
-                >
-                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
-                </el-tooltip>
-              </div>
-              <div v-else>
-                <span v-if="diagnosis.mkbDiagnosis" class="underline-label">{{ diagnosis.mkbDiagnosis.code }}</span>
-                <el-tooltip
-                  v-if="diagnosis.mkbDiagnosis"
-                  class="item"
-                  effect="dark"
-                  :content="diagnosis.mkbDiagnosis.name"
-                  placement="top-end"
-                >
-                  <i class="el-icon-question" style="font-size: 17px; margin-left: 5px"></i>
-                </el-tooltip>
-              </div>
+      <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+        <template #default="scope">
+          <div v-if="scope.row.human.documents">
+            <div v-for="document in scope.row.human.documents" :key="document">
+              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                <el-tag size="small">
+                  <el-icon style="margin-right: 3px">
+                    <Document />
+                  </el-icon>
+                  <span>{{ document.documentType.getTagName() }}</span>
+                </el-tag>
+              </el-tooltip>
             </div>
-          </template>
-        </el-table-column>
+          </div>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
-          <template #default="scope">
-            <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
-              <span>До {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}</span>
-              <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
-                <el-button
-                  size="mini"
-                  disabled
-                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
-                  circle
-                >
-                  A
-                </el-button>
-                <el-button
-                  size="mini"
-                  disabled
-                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
-                  circle
-                  >B</el-button
-                >
-                <el-button
-                  size="mini"
-                  disabled
-                  :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
-                  circle
-                  >C</el-button
-                >
-              </div>
-              <div v-else>Нет справок ЕДВ</div>
-            </el-space>
-          </template>
-        </el-table-column>
+      <el-table-column prop="createdAt" width="150" align="center">
+        <template #default="scope">
+          {{ formatDate(scope.row.createdAt) }}
+        </template>
+      </el-table-column>
 
-        <el-table-column label="РЕГИСТРЫ" width="115" align="center">
-          <template #default="scope">
-            <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length">
-              <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
-                <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
-                  <el-tag class="tag-link" size="small" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">
-                    <span>{{ registerToPatient.register.getTagName() }}</span>
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
+      <el-table-column prop="updatedAt" width="150" align="center">
+        <template #header>
+          <div class="table-header">
+            <span>Дата последнего обновления</span>
+            <FilterDateForm :table="schema.patient.tableName" :col="schema.patient.updatedAt" />
+            <SortButton :table="schema.patient.tableName" :col="schema.patient.updatedAt" />
+          </div>
+        </template>
+        <template #default="scope">
+          {{ formatDate(scope.row.updatedAt) }}
+        </template>
+      </el-table-column>
 
-        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-          <template #default="scope">
-            <div v-if="scope.row.human.documents">
-              <div v-for="document in scope.row.human.documents" :key="document">
-                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                  <el-tag size="small">
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
-                    <span>{{ document.documentType.getTagName() }}</span>
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
+      <el-table-column width="50" align="center" class-name="sticky-right">
+        <template #header>
+          <FilterResetButton />
+        </template>
+        <template #default="scope">
+          <TableButtonGroup
+            :show-edit-button="true"
+            :show-info-button="true"
+            :show-remove-button="true"
+            @edit="crud.edit(scope.row.id)"
+            @remove="crud.remove(scope.row.id)"
+          />
 
-        <el-table-column prop="createdAt" width="150" align="center">
-          <template #default="scope">
-            {{ formatDate(scope.row.createdAt) }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="updatedAt" width="150" align="center">
-          <template #header>
-            <div class="table-header">
-              <span>Дата последнего обновления</span>
-              <FilterDateForm :table="schema.patient.tableName" :col="schema.patient.updatedAt" />
-              <SortButton :table="schema.patient.tableName" :col="schema.patient.updatedAt" />
-            </div>
-          </template>
-          <template #default="scope">
-            {{ formatDate(scope.row.updatedAt) }}
-          </template>
-        </el-table-column>
-
-        <el-table-column width="50" align="center" fixed="right">
-          <template #header>
-            <FilterResetButton />
-          </template>
-          <template #default="scope">
-            <TableButtonGroup
-              :show-edit-button="true"
-              :show-info-button="true"
-              :show-remove-button="true"
-              @edit="crud.edit(scope.row.id)"
-              @remove="crud.remove(scope.row.id)"
-            />
-
-            <!-- <el-popover placement="top-end" :width="200" trigger="hover">
+          <!-- <el-popover placement="top-end" :width="200" trigger="hover">
               <template #reference>
             <el-button class="table-button" icon="el-icon-view" @click="$router.push(`/patients/history/${scope.row.id}`)" />
             </template>
@@ -238,10 +241,9 @@
                 <el-timeline-item :timestamp="formatDate(scope.row.updatedAt)">Обновлено {{ scope.row.updatedBy?.login }}</el-timeline-item>
               </el-timeline>
             </el-popover> -->
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+        </template>
+      </el-table-column>
+    </el-table>
     <template #footer>
       <Pagination />
     </template>
@@ -249,6 +251,7 @@
 </template>
 
 <script lang="ts">
+import { Document, QuestionFilled } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref } from 'vue';
 
 import Crud from '@/classes/shared/Crud';
@@ -275,7 +278,6 @@ import Provider from '@/services/Provider';
 import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
 import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
 import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
-import RepresentativesFiltersLib from '@/services/Provider/libs/filters/RepresentativesFiltersLib';
 
 export default defineComponent({
   name: 'PatientsList',
@@ -290,6 +292,8 @@ export default defineComponent({
     FilterResetButton,
     AdminListWrapper,
     FiltersList,
+    QuestionFilled,
+    Document,
   },
   setup() {
     const patients: Ref<IPatient[]> = computed(() => Provider.store.getters['patients/patients']);

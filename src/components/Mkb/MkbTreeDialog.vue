@@ -1,6 +1,6 @@
 <template>
   <el-button @click="diagnosisModalVisible = true">Добавить диагноз из списка</el-button>
-  <el-dialog v-if="diagnosisModalVisible" v-model="diagnosisModalVisible" width="90%">
+  <el-dialog v-if="diagnosisModalVisible" v-model="diagnosisModalVisible" fullscreen>
     <el-row>
       <el-col :span="12">
         <h3>Список диагнозов</h3>

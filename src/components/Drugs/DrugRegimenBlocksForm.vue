@@ -23,21 +23,21 @@
         <el-switch v-model="drugRegimenBlock.infinitely"> </el-switch>
       </el-tooltip>
       <el-tooltip v-else effect="light" placement="top-end" content="Повторить период">
-        <el-button icon="el-icon-copy-document" @click="copyDrugRegimenBlock(drugRegimenBlockIndex)"></el-button>
+        <el-button :icon="Document" @click="copyDrugRegimenBlock(drugRegimenBlockIndex)"></el-button>
       </el-tooltip>
       <el-tooltip v-if="!drugRegimenBlock.isEdit" effect="light" placement="top-end" content="Редактировать интервалы">
-        <el-button icon="el-icon-edit" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
+        <el-button :icon="Edit" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
       </el-tooltip>
       <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-        <el-button icon="el-icon-folder-checked" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
+        <el-button :icon="FolderChecked" @click="editDrugRegimenBlock(drugRegimenBlock)"></el-button>
       </el-tooltip>
       <el-tooltip effect="light" placement="top-end" content="Добавить интервал">
-        <el-button icon="el-icon-plus" @click="addDrugRegimenBlockItem(drugRegimenBlockIndex)"></el-button>
+        <el-button :icon="Plus" @click="addDrugRegimenBlockItem(drugRegimenBlockIndex)"></el-button>
       </el-tooltip>
       <el-popconfirm
         confirm-button-text="Да"
         cancel-button-text="Отмена"
-        icon="el-icon-info"
+        :icon="InfoFilled"
         icon-color="red"
         title="Вы уверены, что хотите удалить промежуток?"
         @confirm="removeDrugRegimenBlock(drugRegimenBlockIndex)"
@@ -48,7 +48,7 @@
         "
       >
         <template #reference>
-          <el-button icon="el-icon-delete"></el-button>
+          <el-button icon="delete"></el-button>
         </template>
       </el-popconfirm>
     </div>
@@ -58,6 +58,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Document, Edit, FolderChecked, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { computed, defineComponent, PropType, Ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -108,6 +109,12 @@ export default defineComponent({
       moveDrugRegimenBlockUp,
       moveDrugRegimenBlockDown,
       addDrugRegimenBlockItem,
+      Document,
+      Edit,
+      FolderChecked,
+      Plus,
+      InfoFilled,
+      Delete,
     };
   },
 });

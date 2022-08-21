@@ -19,12 +19,12 @@
       </el-form-item>
       <article v-else style="white-space: pre-line">{{ anamnesis.value }}</article>
       <div v-if="isEditMode" class="card-button-group">
-        <el-button v-if="anamnesis.isEditMode" icon="el-icon-folder-checked" @click="edit"></el-button>
-        <el-button v-else icon="el-icon-edit" @click="edit"></el-button>
+        <el-button v-if="anamnesis.isEditMode" :icon="FolderChecked" @click="edit"></el-button>
+        <el-button v-else :icon="Edit" @click="edit"></el-button>
         <el-popconfirm
           confirm-button-text="Да"
           cancel-button-text="Отмена"
-          icon="el-icon-info"
+          icon="Info"
           icon-color="red"
           title="Вы уверен, что хотите удалить это?"
           @confirm="remove"
@@ -35,7 +35,7 @@
           "
         >
           <template #reference>
-            <el-button icon="el-icon-delete"></el-button>
+            <el-button :icon="Delete"></el-button>
           </template>
         </el-popconfirm>
       </div>
@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Edit, FolderChecked } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
@@ -78,6 +79,9 @@ export default defineComponent({
       edit,
       remove,
       isEditMode,
+      Edit,
+      FolderChecked,
+      Delete,
     };
   },
 });

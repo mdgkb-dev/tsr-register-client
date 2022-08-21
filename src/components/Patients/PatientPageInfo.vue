@@ -133,7 +133,9 @@
               <div v-for="document in patient.human.documents" :key="document">
                 <el-tooltip class="item" effect="light" :content="document.documentType.name" placement="top-end">
                   <el-tag>
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
+                    <el-icon style="margin-right: 3px">
+                      <Plus />
+                    </el-icon>
                     <span>{{ document.documentType.getTagName() }}</span>
                   </el-tag>
                 </el-tooltip>
@@ -148,6 +150,7 @@
 </template>
 
 <script lang="ts">
+import { Plus } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -163,6 +166,7 @@ export default defineComponent({
     Uploader,
     PopoverInfo,
     ColoredGroupTag,
+    Plus,
   },
   setup() {
     const { formatDate } = useDateFormat();

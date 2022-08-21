@@ -6,100 +6,91 @@
       <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadRepresentatives" />
     </template>
     <div class="wrapper" style="height: 100%; overflow: hidden">
-      <div class="table-background">
-        <el-table
-          :data="representatives"
-          class="table-shadow"
-          header-row-class-name="header-style"
-          row-class-name="no-hover"
-          height="calc(100vh - 310px)"
-          style="width: 100%; margin-bottom: 20px; overflow: auto"
-        >
-          <el-table-column type="index" width="60" align="center" />
-          <el-table-column align="left" min-width="110" resizable>
-            <template #header>
-              <span class="table-header">
-                <span>Фамилия Имя Отчество</span>
-              </span>
-            </template>
-            <template #default="scope">
-              {{ scope.row.human.getFullName() }}
-            </template>
-          </el-table-column>
+      <el-table :data="representatives" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
+        <el-table-column type="index" width="60" align="center" />
+        <el-table-column align="left" min-width="110" resizable>
+          <template #header>
+            <span class="table-header">
+              <span>Фамилия Имя Отчество</span>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.human.getFullName() }}
+          </template>
+        </el-table-column>
 
-          <el-table-column width="130" prop="human.isMale" align="center">
-            <template #header>
-              <span class="table-header">
-                <span>Пол</span>
-              </span>
-            </template>
-            <template #default="scope">
-              {{ scope.row.human.getGender() }}
-            </template>
-          </el-table-column>
+        <el-table-column width="130" prop="human.isMale" align="center">
+          <template #header>
+            <span class="table-header">
+              <span>Пол</span>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ scope.row.human.getGender() }}
+          </template>
+        </el-table-column>
 
-          <el-table-column prop="human.dateBirth" width="150" align="center">
-            <template #header>
-              <span class="table-header">
-                <span>Дата рождения</span>
-              </span>
-            </template>
-            <template #default="scope">
-              {{ formatDate(scope.row.human.dateBirth) }}
-            </template>
-          </el-table-column>
+        <el-table-column prop="human.dateBirth" width="150" align="center">
+          <template #header>
+            <span class="table-header">
+              <span>Дата рождения</span>
+            </span>
+          </template>
+          <template #default="scope">
+            {{ formatDate(scope.row.human.dateBirth) }}
+          </template>
+        </el-table-column>
 
-          <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
+        <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
 
-          <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
-            <template #default="scope">
-              <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
-                  placement="top-end"
-                >
-                  <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
-                    {{ rep.getRepresentativeChildType() }}
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
+        <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
+          <template #default="scope">
+            <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
+                placement="top-end"
+              >
+                <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
+                  {{ rep.getRepresentativeChildType() }}
+                </el-tag>
+              </el-tooltip>
+            </div>
+          </template>
+        </el-table-column>
 
-          <el-table-column label="ТЕЛЕФОН" width="150" align="center">
-            <template #default="scope">
-              {{ scope.row.human.contact.phone }}
-            </template>
-          </el-table-column>
+        <el-table-column label="ТЕЛЕФОН" width="150" align="center">
+          <template #default="scope">
+            {{ scope.row.human.contact.phone }}
+          </template>
+        </el-table-column>
 
-          <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
+        <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
 
-          <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-            <template #default="scope">
-              <div v-for="document in scope.row.human.documents" :key="document">
-                <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                  <el-tag size="small">
-                    <i class="el-icon-document" style="margin-right: 3px"></i>
-                    <span>{{ document.documentType.getTagName() }}</span>
-                  </el-tag>
-                </el-tooltip>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column width="40" align="center">
-            <template #default="scope">
-              <TableButtonGroup
-                :show-edit-button="true"
-                :show-remove-button="true"
-                @edit="crud.edit(scope.row.id)"
-                @remove="crud.remove(scope.row.id)"
-              />
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+        <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
+          <template #default="scope">
+            <div v-for="document in scope.row.human.documents" :key="document">
+              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
+                <el-tag size="small">
+                  <el-icon style="margin-right: 3px"><Document /></el-icon>
+                  <span>{{ document.documentType.getTagName() }}</span>
+                </el-tag>
+              </el-tooltip>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column width="50" align="center" class-name="sticky-right">
+          <template #default="scope">
+            <TableButtonGroup
+              :show-edit-button="true"
+              :show-remove-button="true"
+              @edit="crud.edit(scope.row.id)"
+              @remove="crud.remove(scope.row.id)"
+            />
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <template #footer>
       <Pagination />
@@ -108,6 +99,7 @@
 </template>
 
 <script lang="ts">
+import { Document } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
@@ -140,6 +132,7 @@ export default defineComponent({
     AdminListWrapper,
     FiltersList,
     SortList,
+    Document,
   },
   setup() {
     const representatives: Ref<IRepresentative[]> = computed(() => Provider.store.getters['representatives/representatives']);

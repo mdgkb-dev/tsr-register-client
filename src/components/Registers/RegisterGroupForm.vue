@@ -5,7 +5,9 @@
         <template #title>
           <div class="collapse-header-container">
             <div v-if="!element.isEdit" style="display: flex">
-              <i class="el-icon-s-grid drug-icon" />
+              <el-icon size="20" class="el-icon-s-grid drug-icon">
+                <Grid />
+              </el-icon>
               <h2 class="collapse-header">{{ element.name }}</h2>
             </div>
             <template v-else>
@@ -29,14 +31,14 @@
               <el-popconfirm
                 confirm-button-text="Да"
                 cancel-button-text="Отмена"
-                icon="el-icon-info"
+                :icon="InfoFilled"
                 icon-color="red"
                 title="Вы уверены, что хотите удалить группу?"
                 @confirm="removeRegisterGroup(index)"
                 @cancel="() => null"
               >
                 <template #reference>
-                  <el-button icon="el-icon-delete"></el-button>
+                  <el-button :icon="Delete"></el-button>
                 </template>
               </el-popconfirm>
             </div>
@@ -62,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { Edit, FolderChecked, Plus } from '@element-plus/icons-vue';
+import { Delete, Edit, FolderChecked, Grid, InfoFilled, Plus } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
 import { computed, defineComponent, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
@@ -80,6 +82,7 @@ export default defineComponent({
   components: {
     RegisterPropertyForm,
     draggable,
+    Grid,
   },
   setup() {
     const store = useStore();
@@ -128,6 +131,8 @@ export default defineComponent({
       Edit,
       FolderChecked,
       Plus,
+      InfoFilled,
+      Delete,
       onEndFunc,
       key,
       register,

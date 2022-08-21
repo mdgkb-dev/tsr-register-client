@@ -2,21 +2,25 @@
   <div class="head-container">
     <div class="left-side">
       <el-button size="mini" class="hidden-lg-and-up" @click="openDrawer"><MenuOutlined /></el-button>
-      <el-breadcrumb separator-class="el-icon-arrow-right custom">
+      <el-breadcrumb :separator-icon="ArrowRight">
         <el-breadcrumb-item v-for="link in mainHeader.links" :key="link" :to="{ path: link.link }">{{ link.text }}</el-breadcrumb-item>
         <el-breadcrumb-item>{{ mainHeader.title }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <el-button v-if="mainHeader.save" type="success" round native-type="submit" @click="mainHeader.save()">Сохранить изменения</el-button>
-    <el-button v-if="mainHeader.create" data-test="MainHeadAddButton" type="success" round @click="mainHeader.create()">
+    <el-button v-if="mainHeader.create" size="large" data-test="MainHeadAddButton" type="success" round @click="mainHeader.create()">
       <span>Добавить</span>
-      <i class="el-icon-plus" style="margin-left: 10px"></i>
+      <el-icon style="margin-left: 5px">
+        <Plus />
+      </el-icon>
     </el-button>
   </div>
 </template>
 
 <script lang="ts">
 import { MenuOutlined } from '@ant-design/icons-vue';
+import { ArrowRight } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -24,7 +28,7 @@ import IMainHeader from '@/interfaces/shared/IMainHeader';
 
 export default defineComponent({
   name: 'MainHeader',
-  components: { MenuOutlined },
+  components: { MenuOutlined, Plus },
   setup() {
     const store = useStore();
     const openDrawer = (): void => store.commit('main/openDrawer');
@@ -33,6 +37,7 @@ export default defineComponent({
     return {
       openDrawer,
       mainHeader,
+      ArrowRight,
     };
   },
 });

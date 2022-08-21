@@ -1,7 +1,9 @@
 <template>
   <el-row>
     <el-col :span="8">
-      <h2 class="header-top-table">Пользователи <i class="el-icon-arrow-right"> </i> Профиль</h2>
+      <h2 class="header-top-table">
+        Пользователи <el-icon><ArrowRight /></el-icon> Профиль
+      </h2>
     </el-col>
     <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
       <el-button type="success" round native-type="submit" @click="submitForm">Сохранить изменения</el-button>
@@ -17,6 +19,7 @@
 </template>
 
 <script lang="ts">
+import { ArrowRight } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
@@ -32,7 +35,7 @@ import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
 export default defineComponent({
   name: 'UserPage',
-  components: {},
+  components: { ArrowRight },
   setup() {
     const store = useStore();
     const route = useRoute();

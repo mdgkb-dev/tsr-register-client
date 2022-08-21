@@ -25,6 +25,7 @@
 <script lang="ts">
 import { ArrowDown, ArrowUp, Delete, Download, Edit, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
+
 export default defineComponent({
   name: 'TableButtonGroup',
   props: {

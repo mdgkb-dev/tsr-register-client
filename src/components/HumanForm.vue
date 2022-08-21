@@ -145,6 +145,9 @@ export default defineComponent({
   left: 10px;
   top: 3px;
 }
+:deep(.el-autocomplete) {
+  width: 100%;
+}
 
 .date-selector {
   position: relative;
@@ -156,11 +159,5 @@ export default defineComponent({
 
 :deep(.el-autocomplete) {
   display: block;
-}
-.el-icon-copy-document {
-  &:hover {
-    cursor: pointer;
-    color: darken(white, 10%);
-  }
 }
 </style>

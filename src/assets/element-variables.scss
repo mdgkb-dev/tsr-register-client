@@ -115,3 +115,9 @@ body {
 .el-checkbox__inner {
   border-radius: 0 !important;
 }
+
+.el-form-item__label {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
