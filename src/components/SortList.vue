@@ -9,6 +9,7 @@
 </template>
 
 <script lang="ts">
+import { ElLoading } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, watch, WritableComputedRef } from 'vue';
 
 import IFilterQuery from '@/interfaces/filters/IFilterQuery';
@@ -91,7 +92,7 @@ export default defineComponent({
       emit('load');
     });
 
-    const setSort = () => {
+    const setSort = async () => {
       // selectedModel.value = sortModel.label;
       // if (sortModel.value) {
       //   Provider.store.commit('filter/replaceSortModel', sortModel);
@@ -99,7 +100,13 @@ export default defineComponent({
       // } else {
       //   setDefaultSort();
       // }
-      emit('load');
+      const loading = ElLoading.service({
+        lock: true,
+        text: 'Сортировка',
+        background: 'rgba(0, 0, 0, 0.7)',
+      });
+      await emit('load');
+      loading.close();
     };
 
     return {

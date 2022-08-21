@@ -303,6 +303,7 @@ export default defineComponent({
     const crud = new Crud('patients');
 
     const load = async () => {
+      console.log('loading');
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список пациентов', create: crud.create }));
       Provider.store.commit('filter/setStoreModule', 'patients');
       Provider.setSortModels(PatientsSortsLib.byFullName());
@@ -359,7 +360,7 @@ export default defineComponent({
     };
 
     const createSortList = (): ISortModel[] => {
-      return [PatientsSortsLib.byFullName(), PatientsSortsLib.byDateBirth()];
+      return [PatientsSortsLib.byFullName(), PatientsSortsLib.byDateBirth(), PatientsSortsLib.byUpdatedAt()];
     };
 
     return {

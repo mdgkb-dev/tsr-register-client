@@ -3,7 +3,7 @@
     <el-row>
       <div class="table-background" style="width: 100%; margin-bottom: 20px">
         <el-form ref="form" :status-icon="true" :model="region" label-width="30%" label-position="left" style="max-width: 800px">
-          <el-form-item label="Представитель мужского пола" prop="parentMaleType">
+          <el-form-item label="Название региона" prop="name">
             <el-input v-model="region.name"></el-input>
           </el-form-item>
         </el-form>
@@ -31,7 +31,7 @@ export default defineComponent({
     const route = useRoute();
 
     const region: Ref<IRegion> = ref(new Region());
-    const isEditMode: Ref<boolean> = ref(!!route.params.RegionId);
+    const isEditMode: Ref<boolean> = ref(!!route.params.regionId);
     const mount: Ref<boolean> = ref(false);
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
@@ -40,12 +40,12 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       let title: string;
-      if (!route.params.regionsId) {
+      if (!route.params.regionId) {
         store.commit('regions/set', new Region());
         title = 'Создать регион';
       } else {
         title = 'Редактировать регион';
-        await store.dispatch('regions/get', route.params.RegionId);
+        await store.dispatch('regions/get', route.params.regionId);
         region.value = store.getters['regions/item'];
       }
 
@@ -65,7 +65,7 @@ export default defineComponent({
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
 
-      await submitHandling('Regions', region.value, next, 'regions');
+      await submitHandling('regions', region.value, next, 'regions');
     };
 
     return {

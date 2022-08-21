@@ -24,9 +24,20 @@ const PatientsSortsLib = (() => {
     );
   }
 
+  function byUpdatedAt(order?: Orders): ISortModel {
+    return SortModel.CreateSortModel(
+      Provider.schema.value.patient.tableName,
+      Provider.schema.value.patient.updatedAt,
+      order ? order : Orders.Asc,
+      'По дате обновления',
+      false
+    );
+  }
+
   return {
     byFullName,
     byDateBirth,
+    byUpdatedAt,
   };
 })();
 

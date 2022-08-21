@@ -3,7 +3,6 @@
   <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="openRepresentativeModal(representativeToPatient.length)"
     >Создать представителя</el-button
   >
-
   <el-table v-if="mount" :data="representativeToPatient" style="width: 800px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
@@ -162,6 +161,9 @@ export default defineComponent({
     };
 
     const getRepresentativeTypeLabel = (item: IRepresentativeType, index: number): string => {
+      // if (!representatives.value) {
+      //   return '';
+      // }
       const representative = representatives.value.find((i: IRepresentative) => {
         return i.id === representativeToPatient.value[index].representativeId;
       });

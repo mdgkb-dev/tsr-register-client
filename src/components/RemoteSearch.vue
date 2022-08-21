@@ -1,20 +1,19 @@
 <template>
   <el-form @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
+      <!--      <el-autocomplete-->
+      <!--        v-if="modelValue !== undefined"-->
+      <!--        ref="searchForm"-->
+      <!--        :model-value="modelValue"-->
+      <!--        style="width: 100%; margin-right: 10px"-->
+      <!--        popper-class="wide-dropdown"-->
+      <!--        :placeholder="placeHolder"-->
+      <!--        :fetch-suggestions="find"-->
+      <!--        :trigger-on-focus="showSuggestions"-->
+      <!--        @select="handleSelect"-->
+      <!--        @input="handleInput"-->
+      <!--      />-->
       <el-autocomplete
-        v-if="modelValue !== undefined"
-        ref="searchForm"
-        :model-value="modelValue"
-        style="width: 100%; margin-right: 10px"
-        popper-class="wide-dropdown"
-        :placeholder="placeHolder"
-        :fetch-suggestions="find"
-        :trigger-on-focus="showSuggestions"
-        @select="handleSelect"
-        @input="handleInput"
-      />
-      <el-autocomplete
-        v-else
         ref="searchForm"
         v-model="queryString"
         style="width: 100%; margin-right: 10px"

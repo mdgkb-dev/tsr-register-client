@@ -4,14 +4,15 @@ import MessageError from '@/classes/messages/MessageError';
 import IForm from '@/interfaces/elements/IForm';
 
 interface IReturn {
-  validate: (form: IForm) => boolean;
+  validate: (form: IForm) => Promise<boolean>;
   validateWithoutMessageBox: (form: IForm) => boolean;
 }
 
 export default function (): IReturn {
-  const validate = (form: IForm, hideErrorList?: boolean, fieldsList?: string[]): boolean => {
+  const validate = async (form: IForm, hideErrorList?: boolean, fieldsList?: string[]): Promise<boolean> => {
     let validationResult = true;
-    form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
+    await form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
+      console.log(valid);
       if (!valid) {
         if (!ElNotification.error) {
           return;
@@ -24,8 +25,8 @@ export default function (): IReturn {
         validationResult = false;
         return false;
       }
-      return true;
     });
+    console.log(validationResult);
     return validationResult;
   };
 

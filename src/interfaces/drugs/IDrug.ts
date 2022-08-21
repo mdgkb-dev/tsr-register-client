@@ -9,7 +9,7 @@ export default interface IDrug {
   form: string;
   doze: string;
   registered: boolean;
-  dateRegistration: string;
+  // dateRegistration: Date | undefined;
   drugRegimens: IDrugRegimen[];
   drugRegimensForDelete: string[];
 

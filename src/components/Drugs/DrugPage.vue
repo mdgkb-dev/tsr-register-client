@@ -30,9 +30,9 @@
           <el-form-item label="Наличие регистрации" prop="name">
             <el-checkbox v-model="drug.registered"></el-checkbox>
           </el-form-item>
-          <el-form-item label="Дата регистрации" prop="name">
-            <el-date-picker v-model="drug.dateRegistration" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
-          </el-form-item>
+          <!--          <el-form-item label="Дата регистрации" prop="name">-->
+          <!--            <el-date-picker v-model="drug.dateRegistration" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>-->
+          <!--          </el-form-item>-->
         </div>
         <el-form ref="newDrugRegimenForm" class="new-regimen-container" :model="newDrugRegimen">
           <el-form-item
@@ -130,7 +130,7 @@ export default defineComponent({
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
-      if (!validate(form.value)) {
+      if (!(await validate(form.value))) {
         return;
       }
       store.commit('drugs/updateOrder');

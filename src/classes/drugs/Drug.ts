@@ -11,7 +11,7 @@ export default class Drug implements IDrug {
   nameMNN = '';
   form = '';
   doze = '';
-  dateRegistration = '';
+  // dateRegistration: Date | undefined = undefined;
   registered = false;
   drugRegimens: IDrugRegimen[] = [];
   drugRegimensForDelete: string[] = [];
@@ -27,7 +27,7 @@ export default class Drug implements IDrug {
     this.name = drug.name;
     this.nameMNN = drug.nameMNN;
     this.doze = drug.doze;
-    this.dateRegistration = drug.dateRegistration ?? '';
+    // this.dateRegistration = drug.dateRegistration ? new Date(drug.dateRegistration) : undefined;
     this.registered = drug.registered;
     if (drug.drugRegimens) {
       this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));

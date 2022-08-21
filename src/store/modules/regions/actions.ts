@@ -1,6 +1,5 @@
 import { ActionTree } from 'vuex';
 
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
 import IRegion from '@/interfaces/IRegion';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import HttpClient from '@/services/HttpClient';
@@ -14,8 +13,8 @@ const actions: ActionTree<State, RootState> = {
   getAll: async ({ commit }): Promise<void> => {
     commit('setAll', await httpClient.get<IRegion[]>());
   },
-  get: async ({ commit }, filterQuery: IFilterQuery) => {
-    commit('set', await httpClient.get<IRegion>({ query: filterQuery.toUrl() }));
+  get: async ({ commit }, regionId: string) => {
+    commit('set', await httpClient.get<IRegion>({ query: regionId }));
   },
   create: async ({ commit }, payload: IRegion): Promise<void> => {
     commit('create', await httpClient.post<IRegion, IRegion>({ payload }));
