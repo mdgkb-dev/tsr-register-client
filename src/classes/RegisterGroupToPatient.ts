@@ -151,6 +151,7 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
   }
 
   setRegisterPropertyValue(value: number | string | Date, property: IRegisterProperty): void {
+    console.log(value, property);
     if (!property.id) {
       return;
     }
@@ -270,5 +271,22 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
       this.registerPropertyToPatientForDelete.push(idForDelete);
     }
     this.registerPropertyToPatient.splice(i, 1);
+  }
+
+  getMeasureId(propertyId: string): string {
+    const prop = this.registerPropertyToPatient.find((p: IRegisterPropertyToPatient) => p.registerPropertyId === propertyId);
+    if (!prop) {
+      return '';
+    }
+    console.log(prop.registerPropertyMeasureId);
+    return prop.registerPropertyMeasureId ?? '';
+  }
+
+  setMeasureId(measureId: string, propertyId: string): void {
+    const prop = this.registerPropertyToPatient.find((p: IRegisterPropertyToPatient) => p.registerPropertyId === propertyId);
+    if (!prop) {
+      return;
+    }
+    prop.registerPropertyMeasureId = measureId;
   }
 }

@@ -1,4 +1,4 @@
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox, ElNotification } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
@@ -40,9 +40,10 @@ export default function (): IReturn {
         })
         .catch((action: string) => {
           if (action === 'cancel') {
-            ElMessage({
-              type: 'warning',
+            ElNotification.warning({
+              title: 'Предупреждение',
               message: 'Изменения не были сохранены',
+              duration: 10,
             });
             next();
           }
