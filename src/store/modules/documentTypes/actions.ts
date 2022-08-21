@@ -13,7 +13,7 @@ const actions: ActionTree<State, RootState> = {
     await httpClient.post<IDocumentType, IDocumentType>({ payload: documentType });
   },
   get: async ({ commit }: ActionContext<State, RootState>, id: string): Promise<void> => {
-    const documentType: IDocumentType = await httpClient.get<IDocumentType>({ query: id });
+    const documentType: IDocumentType | void = await httpClient.get<IDocumentType>({ query: id });
 
     if (!documentType) {
       return;
@@ -22,7 +22,7 @@ const actions: ActionTree<State, RootState> = {
     commit('set', documentType);
   },
   getAll: async ({ commit }: ActionContext<State, RootState>): Promise<void> => {
-    const documentTypes: IDocumentType[] = await httpClient.get<IDocumentType[]>();
+    const documentTypes: IDocumentType[] | void = await httpClient.get<IDocumentType[]>();
 
     if (!documentTypes) {
       return;

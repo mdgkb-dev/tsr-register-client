@@ -16,7 +16,10 @@ const actions: ActionTree<State, RootState> = {
   get: async ({ commit }, id: string) => {
     commit('set', await httpClient.get<IRepresentative>({ query: id }));
   },
-  create: async ({ commit }, representative: IRepresentative): Promise<void> => {
+  create: async ({ commit }, representative: IRepresentative | void): Promise<void> => {
+    if (!representative) {
+      return;
+    }
     representative.human.removeDocumentFieldValuesIds();
     const resp = await httpClient.post<IRepresentative, IRepresentative>({
       payload: representative,

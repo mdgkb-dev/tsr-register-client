@@ -1,3 +1,4 @@
+import IRegisterPropertyMeasure from '@/interfaces/registers/IRegisterPropertyMeasure';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 
 export default interface IRegisterPropertyToPatient {
@@ -10,4 +11,6 @@ export default interface IRegisterPropertyToPatient {
   registerPropertyRadio?: IRegisterPropertyRadio;
   registerPropertyId?: string;
   patientId?: string;
+  registerPropertyMeasure: IRegisterPropertyMeasure;
+  registerPropertyMeasureId?: string;
 }

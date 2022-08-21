@@ -2,5 +2,5 @@ import IHeightWeightConstructor from '@/interfaces/anthropometry/IHeightWeightCo
 import IColorPercentile from '@/interfaces/shared/IColorPercentile';
 
 export default interface IHeightWeight extends IHeightWeightConstructor {
-  getBmiGroup: (dateBirth: string, isMale: boolean) => IColorPercentile | string;
+  getBmiGroup: (dateBirth: Date, isMale: boolean) => IColorPercentile | string;
 }

@@ -1,15 +1,12 @@
 <template>
-  <div v-if="mounted" class="wrapper" style="height: 100%; overflow: hidden">
-    <div class="table-background">
+  <component :is="'AdminListWrapper'" v-if="mounted">
+    <template #header>
       <RemoteSearch :key-value="schema.representative.key" @select="selectSearch" />
-      <el-table
-        :data="representatives"
-        class="table-shadow"
-        header-row-class-name="header-style"
-        row-class-name="no-hover"
-        height="calc(100vh - 310px)"
-        style="width: 100%; margin-bottom: 20px; overflow: auto"
-      >
+      <FiltersList default-label="Выберите пол" :models="createSexFilters()" @load="loadRepresentatives" />
+      <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadRepresentatives" />
+    </template>
+    <div class="wrapper" style="height: 100%; overflow: hidden">
+      <el-table :data="representatives" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
         <el-table-column type="index" width="60" align="center" />
         <el-table-column align="left" min-width="110" resizable>
           <template #header>
@@ -76,14 +73,14 @@
             <div v-for="document in scope.row.human.documents" :key="document">
               <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
                 <el-tag size="small">
-                  <i class="el-icon-document" style="margin-right: 3px"></i>
+                  <el-icon style="margin-right: 3px"><Document /></el-icon>
                   <span>{{ document.documentType.getTagName() }}</span>
                 </el-tag>
               </el-tooltip>
             </div>
           </template>
         </el-table-column>
-        <el-table-column width="40" align="center">
+        <el-table-column width="50" align="center" class-name="sticky-right">
           <template #default="scope">
             <TableButtonGroup
               :show-edit-button="true"
@@ -94,12 +91,15 @@
           </template>
         </el-table-column>
       </el-table>
-      <Pagination />
     </div>
-  </div>
+    <template #footer>
+      <Pagination />
+    </template>
+  </component>
 </template>
 
 <script lang="ts">
+import { Document } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import SelectFilter from '@/classes/filters/SelectFilter';
@@ -108,21 +108,31 @@ import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
+import SortList from '@/components/SortList.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import FiltersList from '@/components/TableFilters/FiltersList.vue';
+import IFilterModel from '@/interfaces/filters/IFilterModel';
 import ISelectFilter from '@/interfaces/filters/ISelectFilter';
+import ISortModel from '@/interfaces/filters/ISortModel';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresetnationType from '@/interfaces/representatives/IRepresentativeToPatient';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider';
+import RepresentativesFiltersLib from '@/services/Provider/libs/filters/RepresentativesFiltersLib';
 import RepresentativesSortsLib from '@/services/Provider/libs/sorts/RepresentativesSortsLib';
+import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
 export default defineComponent({
   name: 'RepresentativesList',
   components: {
     RemoteSearch,
     Pagination,
     TableButtonGroup,
+    AdminListWrapper,
+    FiltersList,
+    SortList,
+    Document,
   },
   setup() {
     const representatives: Ref<IRepresentative[]> = computed(() => Provider.store.getters['representatives/representatives']);
@@ -133,11 +143,17 @@ export default defineComponent({
     const queryStringsRepresentative: Ref<string> = ref('');
 
     const { formatDate } = useDateFormat();
+
+    const loadRepresentatives = async () => {
+      await Provider.store.dispatch('representatives/getAll', Provider.filterQuery.value);
+    };
+
     const load = async () => {
+      console.log('load');
       Provider.store.commit('filter/setStoreModule', 'representatives');
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Список представителей', create: crud.create }));
       Provider.setSortModels(RepresentativesSortsLib.byFullName());
-      await Provider.store.dispatch('representatives/getAll', Provider.filterQuery.value);
+      await loadRepresentatives();
     };
 
     Hooks.onBeforeMount(load, {
@@ -158,7 +174,18 @@ export default defineComponent({
       await Provider.router.push(`/representatives/${event.id}`);
     };
 
+    const createSexFilters = (): IFilterModel[] => {
+      return [RepresentativesFiltersLib.onlyMan(), RepresentativesFiltersLib.onlyWoman()];
+    };
+
+    const createSortList = (): ISortModel[] => {
+      return [RepresentativesSortsLib.byFullName(), RepresentativesSortsLib.byDateBirth()];
+    };
+
     return {
+      loadRepresentatives,
+      createSortList,
+      createSexFilters,
       selectSearch,
       crud,
       genderFilter,

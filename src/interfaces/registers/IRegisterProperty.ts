@@ -1,4 +1,5 @@
 import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyExample';
+import IRegisterPropertyMeasure from '@/interfaces/registers/IRegisterPropertyMeasure';
 import IRegisterPropertyOther from '@/interfaces/registers/IRegisterPropertyOther';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
@@ -20,9 +21,10 @@ export default interface IRegisterProperty {
   registerPropertyExamplesForDelete: string[];
   valueType: IValueType;
   withOther: boolean;
-  withDates: boolean;
   isEdit: boolean;
   tag: string;
+  registerPropertyMeasures: IRegisterPropertyMeasure[];
+  registerPropertyMeasuresForDelete: string[];
 
   getRegisterPropertyRadioOriginalValue: (id: string) => string;
   getRegisterPropertySetOriginalValue: (id: string) => string;
@@ -38,6 +40,7 @@ export default interface IRegisterProperty {
   showRadio: boolean;
   sortExamples: () => void;
   changeRelation: (valueTypes: IValueType[]) => void;
+  addRegisterPropertyMeasure: (item?: IRegisterPropertyMeasure) => void;
 
   getOthers: (propResult: boolean | string | number | Date | null) => IRegisterPropertyOther[];
 }

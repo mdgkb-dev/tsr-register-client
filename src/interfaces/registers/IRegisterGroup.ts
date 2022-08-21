@@ -7,7 +7,7 @@ export default interface IRegisterGroup {
   registerProperties: IRegisterProperty[];
   registerPropertiesForDelete: string[];
   isEdit: boolean;
-
+  withDates: boolean;
   editRegisterGroup: (isEdit?: boolean) => void;
   addRegisterProperty: (item?: IRegisterProperty) => void;
   removeRegisterProperty: (index: number) => void;

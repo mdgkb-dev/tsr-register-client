@@ -5,34 +5,40 @@
         <template #title>
           <div class="collapse-header-container">
             <div v-if="!element.isEdit" style="display: flex">
-              <i class="el-icon-s-grid drug-icon" />
+              <el-icon size="20" class="el-icon-s-grid drug-icon">
+                <Grid />
+              </el-icon>
               <h2 class="collapse-header">{{ element.name }}</h2>
             </div>
-
-            <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
-              <el-input v-model="element.name" placeholder="Название группы" @keyup.stop="key" @click.stop></el-input>
-            </el-form-item>
+            <template v-else>
+              <el-form-item style="width: 80%; margin: 0 10px 0 0" prop="name">
+                <el-input v-model="element.name" placeholder="Название группы" @keyup.stop="key" @click.stop></el-input>
+              </el-form-item>
+              <el-form-item style="width: 20%; margin: 0 10px 0 0" prop="withDates">
+                <el-checkbox v-model="element.withDates" @keyup.stop="key" @click.stop>C несколькими значениями</el-checkbox>
+              </el-form-item>
+            </template>
             <div class="card-button-group">
               <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать группу">
-                <el-button icon="el-icon-edit" @click.stop="editRegisterGroup(element, index)"></el-button>
+                <el-button :icon="Edit" @click.stop="editRegisterGroup(element, index)"></el-button>
               </el-tooltip>
               <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-                <el-button icon="el-icon-folder-checked" @click.stop="editRegisterGroup(element, index)"></el-button>
+                <el-button :icon="FolderChecked" @click.stop="editRegisterGroup(element, index)"></el-button>
               </el-tooltip>
               <el-tooltip effect="light" placement="top-end" content="Добавить свойство">
-                <el-button icon="el-icon-plus" @click.stop="addRegisterProperty(element, index)"></el-button>
+                <el-button :icon="Plus" @click.stop="addRegisterProperty(element, index)"></el-button>
               </el-tooltip>
               <el-popconfirm
                 confirm-button-text="Да"
                 cancel-button-text="Отмена"
-                icon="el-icon-info"
+                :icon="InfoFilled"
                 icon-color="red"
                 title="Вы уверены, что хотите удалить группу?"
                 @confirm="removeRegisterGroup(index)"
                 @cancel="() => null"
               >
                 <template #reference>
-                  <el-button icon="el-icon-delete"></el-button>
+                  <el-button :icon="Delete"></el-button>
                 </template>
               </el-popconfirm>
             </div>
@@ -58,6 +64,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Edit, FolderChecked, Grid, InfoFilled, Plus } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
 import { computed, defineComponent, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
@@ -70,12 +77,12 @@ import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import useValidate from '@/mixins/useValidate';
-
 export default defineComponent({
   name: 'RegisterGroupForm',
   components: {
     RegisterPropertyForm,
     draggable,
+    Grid,
   },
   setup() {
     const store = useStore();
@@ -121,6 +128,11 @@ export default defineComponent({
     };
 
     return {
+      Edit,
+      FolderChecked,
+      Plus,
+      InfoFilled,
+      Delete,
       onEndFunc,
       key,
       register,

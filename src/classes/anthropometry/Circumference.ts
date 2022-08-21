@@ -122,7 +122,7 @@ export default class Circumference implements ICircumference {
     }
   };
 
-  getChestCircumferenceGroup(dateBirth: string, isMale: boolean): IColorPercentile | string {
+  getChestCircumferenceGroup(dateBirth: Date, isMale: boolean): IColorPercentile | string {
     if (!this.value) {
       return 'Недостаточно данных';
     }
@@ -138,7 +138,7 @@ export default class Circumference implements ICircumference {
     return this.getCircumferenceGroupRecomendation(group);
   }
 
-  getHeadCircumferenceGroup(dateBirth: string, isMale: boolean): IColorPercentile | string {
+  getHeadCircumferenceGroup(dateBirth: Date, isMale: boolean): IColorPercentile | string {
     if (!this.value) {
       return 'Недостаточно данных';
     }

@@ -19,13 +19,12 @@
     >
       <template #default="{ node, data }">
         <el-checkbox v-if="editing" v-model="data.relevant" @change="updateRelevantHandler(data)"></el-checkbox>
-        <i v-if="editing && !data.isEditMode" class="el-icon-edit" style="margin: 0 5px; color: blue" @click="data.isEditMode = true"></i>
-        <i
-          v-else-if="editing && data.isEditMode"
-          class="el-icon-folder-checked"
-          style="margin: 0 5px; color: blue"
-          @click="updateNameHandler(data)"
-        ></i>
+        <el-icon v-if="editing && !data.isEditMode" style="margin: 0 5px; color: blue" @click="data.isEditMode = true">
+          <Edit />
+        </el-icon>
+        <el-icon v-else-if="editing && data.isEditMode" style="margin: 0 5px; color: blue" @click="updateNameHandler(data)">
+          <FolderChecked />
+        </el-icon>
         <el-input v-if="editing && data.isEditMode" v-model="data.name"></el-input>
         <div v-else>
           <span class="custom-tree-node" style="font-size: 16px" :isLeaf="data.leaf">

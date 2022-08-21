@@ -1,22 +1,30 @@
 import { MutationTree } from 'vuex';
 
-import UserAuthorized from '@/classes/user/UserAuthorized';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
+import User from '@/classes/User';
+import ITokens from '@/interfaces/ITokens';
+import IUser from '@/interfaces/IUser';
+import TokenService from '@/services/Token';
 
 import State from './state';
 
 const mutations: MutationTree<State> = {
-  setUser(state, user: IUserAuthorized) {
-    state.user = new UserAuthorized(user);
+  setUser(state, user: IUser) {
+    state.user = new User(user);
+    localStorage.setItem('user', JSON.stringify(user));
   },
-  setToken(state, token: string) {
-    state.token = token;
+
+  clearUser(state) {
+    localStorage.removeItem('user');
+    state.user = new User();
+  },
+  setTokens(state, tokens: ITokens) {
+    TokenService.setTokens(tokens);
+  },
+  clearTokens(state) {
+    TokenService.clearTokens();
   },
   setIsAuth(state, isAuth: boolean) {
     state.isAuth = isAuth;
-  },
-  setDoesLoginExist(state, doesExist: boolean) {
-    state.doesLoginExist = doesExist;
   },
 };
 

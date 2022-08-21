@@ -1,8 +1,10 @@
 <template>
   <span class="filter-popover">
-    <el-popover v-model:visible="visible" placement="bottom-end" width="auto" :trigger="trigger">
+    <el-popover placement="bottom-end" width="auto" :trigger="trigger">
       <template #reference>
-        <FilterFilled :class="{ set: filterModel.isSet }" />
+        <el-icon class="cursor" style="margin-left: 3px">
+          <FilterFilled :class="{ set: filterModel.isSet }" />
+        </el-icon>
       </template>
       <slot></slot>
       <el-button-group>
@@ -72,6 +74,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.cursor {
+  cursor: pointer;
+}
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;

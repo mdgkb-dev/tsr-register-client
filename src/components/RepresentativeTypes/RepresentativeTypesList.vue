@@ -14,7 +14,7 @@
         <el-table-column prop="parentWomanType" label="Представитель женского пола" min-width="150" />
         <el-table-column prop="childMaleType" label="Подопечный мужского пола" min-width="150" />
         <el-table-column prop="childWomanType" label="Подопечный женского пола" min-width="150" />
-        <el-table-column width="40" fixed="right" align="center">
+        <el-table-column width="50" fixed="right" align="center">
           <template #default="scope">
             <el-space direction="vertical" class="icons">
               <TableButtonGroup

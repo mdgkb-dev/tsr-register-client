@@ -1,8 +1,9 @@
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import MessageSuccess from '@/classes/messages/MessageSuccess';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDrug from '@/interfaces/drugs/IDrug';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
@@ -85,6 +86,7 @@ export default function (isEditMode = false): {
     } else {
       await router.push(`/${path ?? module}`);
     }
+    ElNotification(new MessageSuccess());
   };
 
   const syncSubmitHandling = (

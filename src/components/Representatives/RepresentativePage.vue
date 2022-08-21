@@ -105,7 +105,7 @@ export default defineComponent({
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
-      if (!validate(form.value)) {
+      if (!(await validate(form.value))) {
         return;
       }
       await submitHandling('representatives', representative.value, next);

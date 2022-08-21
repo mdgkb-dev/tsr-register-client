@@ -1,8 +1,9 @@
 <template>
-  <el-button icon="el-icon-brush" class="table-button" @click="reset"></el-button>
+  <el-button :icon="Brush" class="table-button" @click="reset"></el-button>
 </template>
 
 <script lang="ts">
+import { Brush } from '@element-plus/icons-vue';
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
@@ -22,6 +23,7 @@ export default defineComponent({
 
     return {
       reset,
+      Brush,
     };
   },
 });

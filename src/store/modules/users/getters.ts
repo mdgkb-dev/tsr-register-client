@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
-import IHuman from '@/interfaces/humans/IHuman';
-import IUser from '@/interfaces/users/IUser';
+import IHuman from '@/interfaces/IHuman';
+import IUser from '@/interfaces/IUser';
 import RootState from '@/store/types';
 
 import { State } from './state';

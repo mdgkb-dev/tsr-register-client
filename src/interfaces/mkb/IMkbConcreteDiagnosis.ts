@@ -1,7 +1,7 @@
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default interface IMkbConcreteDiagnosis {
-  id: string;
+  id?: string;
   name: string;
   comment?: string;
   mkbSubDiagnosisId?: string;

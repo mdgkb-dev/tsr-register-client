@@ -1,5 +1,5 @@
 import IRegion from '@/interfaces/IRegion';
-import IUser from '@/interfaces/users/IUser';
+import IUser from '@/interfaces/IUser';
 
 export default interface IRegionUser {
   id?: string;

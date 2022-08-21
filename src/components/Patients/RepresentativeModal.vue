@@ -14,7 +14,7 @@
           <div>
             <h2>Создать представителя</h2>
           </div>
-          <div>
+          <div style="margin: auto 0">
             <el-button type="success" @click="submitForm">Сохранить</el-button>
             <el-button type="warning" @click="close">Отмена</el-button>
           </div>
@@ -56,11 +56,12 @@
 </template>
 
 <script lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 import { useStore } from 'vuex';
 
+import MessageSuccess from '@/classes/messages/MessageSuccess';
 import Representative from '@/classes/representatives/Representative';
 import RepresentativeRules from '@/classes/representatives/RepresentativeRules';
 import DocumentForm from '@/components/DocumentForm.vue';
@@ -107,16 +108,13 @@ export default defineComponent({
       await store.dispatch(`representatives/create`, representative.value);
       emit('save');
       representative.value = new Representative();
-      ElMessage({
-        type: 'success',
-        message: 'Представитель успешно добавлен',
-      });
+      ElNotification.error(new MessageSuccess());
     };
 
     const beforeClose = (done: () => void) => {
       ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите закрыть окно?', {
         distinguishCancelAndClose: true,
-        confirmButtonText: 'Закрыть (изменения не будут сохранены)',
+        confirmButtonText: 'Закрыть',
         cancelButtonText: 'Не закрывать',
       })
         .then(() => {
@@ -133,8 +131,8 @@ export default defineComponent({
     const close = () => {
       ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите закрыть окно?', {
         distinguishCancelAndClose: true,
-        confirmButtonText: 'Закрыть (изменения не будут сохранены)',
-        cancelButtonText: 'Не закрывать',
+        confirmButtonText: 'Закрыть',
+        cancelButtonText: 'Отмена',
       })
         .then(() => {
           ElMessage({
@@ -180,5 +178,21 @@ export default defineComponent({
 .modal-wrapper {
   width: 100%;
   height: 100%;
+}
+
+:deep(.el-dialog) {
+  background-color: #eef1f6;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+:deep(.el-dialog__body) {
+  padding-top: 0;
+  height: 100%;
+  overflow: auto;
+}
+:deep(.el-dialog__header) {
+  padding-top: 0;
 }
 </style>

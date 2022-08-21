@@ -1,19 +1,37 @@
 <template>
-  <el-row>
-    <el-col :span="8">
-      <h2 class="header-top-table">Пользователи <i class="el-icon-arrow-right"> </i> Профиль</h2>
-    </el-col>
-    <el-col :span="3" :offset="11" style="margin-top: 8px" align="right">
-      <el-button type="success" round native-type="submit" @click="submitForm">Сохранить изменения</el-button>
-    </el-col>
-  </el-row>
-  <!--  <el-row v-if="mount">-->
-  <!--    <PageInfo :human="user.human" />-->
-  <!--  </el-row>-->
-  {{ user.registersUsers }}
-  <el-checkbox v-for="register in registers" :key="register.id" :label="register.id" @change="user.addRegister($event, register.id)">{{
-    register.name
-  }}</el-checkbox>
+  <div v-if="mount">
+    <el-row>
+      <div class="table-background" style="width: 100%">
+        <b>Логин: </b>
+        <span>{{ user.login }}</span>
+      </div>
+    </el-row>
+
+    <el-row>
+      <el-collapse>
+        <el-collapse-item>
+          <template #title><h2 class="collapseHeader">Регистры</h2></template>
+
+          <el-table
+            ref="tableRegisters"
+            :default-sort="{ prop: 'id', order: 'ascending' }"
+            :data="registers"
+            class="table-shadow"
+            header-row-class-name="header-style"
+            border
+          >
+            <el-table-column prop="name" label="Название регистра" min-width="150">
+              <template #default="scope">
+                <el-checkbox :key="scope.row.id" :label="scope.row.id" @change="user.addRegister($event, scope.row.id)">
+                  {{ scope.row.name }}
+                </el-checkbox>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-collapse-item>
+      </el-collapse>
+    </el-row>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,15 +42,14 @@ import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import MainHeader from '@/classes/shared/MainHeader';
-import User from '@/classes/user/User';
+import User from '@/classes/User';
+import IUser from '@/interfaces/IUser';
 import IRegister from '@/interfaces/registers/IRegister';
-import IUser from '@/interfaces/users/IUser';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
 export default defineComponent({
   name: 'UserPage',
-  components: {},
   setup() {
     const store = useStore();
     const route = useRoute();
@@ -107,3 +124,7 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@import '@/assets/elements/collapse.scss';
+</style>

@@ -3,18 +3,22 @@
     <el-form
       ref="form"
       :inline-message="true"
+      :label-width="250"
       :status-icon="true"
       :model="drug"
       label-position="left"
       style="width: 100%"
-      label-width="200px"
     >
       <el-row>
         <div class="table-background" style="width: 100%; margin-bottom: 20px">
-          <el-form-item label="Наименование ТМ" prop="name" :rules="{ message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }">
+          <el-form-item
+            label="Наименование лекарства"
+            prop="name"
+            :rules="{ required: true, message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }"
+          >
             <el-input v-model="drug.name"></el-input>
           </el-form-item>
-          <el-form-item label="Наименование МНН" prop="name" :rules="{ message: 'Пожалуйста укажите название лекартсва', trigger: 'blur' }">
+          <el-form-item label="Наименование лекарства МНН" prop="name">
             <el-input v-model="drug.nameMNN"></el-input>
           </el-form-item>
           <el-form-item label="Форма выпуска" prop="name">
@@ -23,9 +27,12 @@
           <el-form-item label="Дозировка" prop="name">
             <el-input v-model="drug.doze"></el-input>
           </el-form-item>
-          <el-form-item label="Зарегистрирован" prop="name">
+          <el-form-item label="Наличие регистрации" prop="name">
             <el-checkbox v-model="drug.registered"></el-checkbox>
           </el-form-item>
+          <!--          <el-form-item label="Дата регистрации" prop="name">-->
+          <!--            <el-date-picker v-model="drug.dateRegistration" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>-->
+          <!--          </el-form-item>-->
         </div>
         <el-form ref="newDrugRegimenForm" class="new-regimen-container" :model="newDrugRegimen">
           <el-form-item
@@ -62,6 +69,7 @@ import MainHeader from '@/classes/shared/MainHeader';
 import DrugRegimensForm from '@/components/Drugs/DrugRegimensForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
+import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
@@ -80,7 +88,7 @@ export default defineComponent({
     const newDrugRegimenForm = ref();
     const isEditMode: Ref<boolean> = ref(!!route.params.drugId);
     const mount: Ref<boolean> = ref(false);
-    const newDrugRegimen = ref(new DrugRegimen());
+    const newDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
 
     const { links, pushToLinks } = useBreadCrumbsLinks();
     const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
@@ -122,7 +130,7 @@ export default defineComponent({
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
       saveButtonClick.value = true;
-      if (!validate(form.value)) {
+      if (!(await validate(form.value))) {
         return;
       }
       store.commit('drugs/updateOrder');

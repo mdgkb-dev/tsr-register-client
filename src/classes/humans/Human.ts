@@ -5,8 +5,8 @@ import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompa
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/humans/IHuman';
-import IHumanConstructor from '@/interfaces/humans/IHumanConstructor';
+import IHuman from '@/interfaces/IHuman';
+import IHumanConstructor from '@/interfaces/IHumanConstructor';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 
@@ -16,7 +16,7 @@ export default class Human implements IHuman {
   surname = '';
   patronymic = '';
   isMale = true;
-  dateBirth = '';
+  dateBirth = new Date();
   addressRegistration = '';
   addressResidential = '';
   contact = new Contact();
@@ -39,7 +39,10 @@ export default class Human implements IHuman {
     this.surname = i.surname ?? '';
     this.patronymic = i.patronymic ?? '';
     this.isMale = i.isMale ?? true;
-    this.dateBirth = i.dateBirth ?? '';
+    if (i.dateBirth) {
+      this.dateBirth = new Date(i.dateBirth);
+    }
+
     this.addressRegistration = i.addressRegistration ?? '';
     this.addressResidential = i.addressResidential ?? '';
     this.contact = new Contact(i.contact);
@@ -108,5 +111,12 @@ export default class Human implements IHuman {
 
   haveDocument(documentTypeId: string): boolean {
     return !!this.documents.find((doc: IDocument) => doc.documentTypeId === documentTypeId);
+  }
+
+  addressesEqual(): boolean {
+    return this.addressRegistration === this.addressResidential;
+  }
+  setResidentialAddress(addressesEqual: boolean): void {
+    addressesEqual ? (this.addressResidential = this.addressRegistration) : (this.addressResidential = '');
   }
 }

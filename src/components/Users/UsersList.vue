@@ -1,32 +1,29 @@
 <template>
-  <div v-if="mount" class="wrapper" style="height: 100%; overflow: hidden">
-    <div class="table-background">
-      <el-table
-        :default-sort="{ prop: 'id', order: 'ascending' }"
-        :data="users"
-        class="table-shadow"
-        header-row-class-name="header-style"
-        row-class-name="no-hover"
-        style="width: 100%; margin-bottom: 20px; max-height: calc(100vh - 310px); overflow: auto"
-      >
-        <el-table-column type="index" width="60" align="center" />
-        <el-table-column prop="login" label="Логин" min-width="150" sortable />
-        <el-table-column prop="email" label="Email" min-width="150" sortable />
-        <el-table-column width="40" fixed="right" align="center">
-          <template #default="scope">
-            <el-space direction="vertical" class="icons">
-              <TableButtonGroup
-                :show-edit-button="true"
-                :show-remove-button="true"
-                @edit="edit(scope.row.id)"
-                @remove="remove(scope.row.id)"
-              />
-            </el-space>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-  </div>
+  <AdminListWrapper v-if="mount">
+    <el-table
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="users"
+      class="table-shadow"
+      header-row-class-name="header-style"
+      row-class-name="no-hover"
+    >
+      <el-table-column type="index" width="60" align="center" />
+      <el-table-column prop="login" label="Логин" min-width="150" sortable />
+      <el-table-column prop="email" label="Email" min-width="150" sortable />
+      <el-table-column width="50" fixed="right" align="center">
+        <template #default="scope">
+          <el-space direction="vertical" class="icons">
+            <TableButtonGroup
+              :show-edit-button="true"
+              :show-remove-button="true"
+              @edit="edit(scope.row.id)"
+              @remove="remove(scope.row.id)"
+            />
+          </el-space>
+        </template>
+      </el-table-column>
+    </el-table>
+  </AdminListWrapper>
 </template>
 
 <script lang="ts">
@@ -36,13 +33,15 @@ import { useStore } from 'vuex';
 
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
 
-import IUser from '../../interfaces/users/IUser';
+import IUser from '../../interfaces/IUser';
 
 export default defineComponent({
   name: 'UsersList',
   components: {
     TableButtonGroup,
+    AdminListWrapper,
   },
   setup() {
     const store = useStore();

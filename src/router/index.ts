@@ -8,6 +8,7 @@ import DrugsRoutes from '@/router/DrugsRoutes';
 import HistoryRoutes from '@/router/HistoryRoutes';
 import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
 import PatientsRoutes from '@/router/PatientsRoutes';
+import RegionsRoutes from '@/router/RegionsRoutes';
 import RegisterExportsRoutes from '@/router/RegisterExportsRoutes';
 import RegistersRoutes from '@/router/RegistersRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
@@ -26,6 +27,19 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
   next('/login');
 };
 
+export const adminGuard = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> => {
+  if (to.path != '/') {
+    try {
+      await store.dispatch('auth/checkPathPermissions', to.matched[0].path);
+    } catch (e) {
+      console.log(e);
+      await router.push('/');
+    }
+  }
+  console.log('next', to);
+  next();
+};
+
 const routes: Array<RouteRecordRaw> = [
   ...AuthRoutes,
   ...DocumentsRoutes,
@@ -39,21 +53,16 @@ const routes: Array<RouteRecordRaw> = [
   ...RepresentativeRoutes,
   ...RepresentativeTypesRoutes,
   ...UsersRoutes,
+  ...RegionsRoutes,
   {
     path: '/mkb',
     name: 'Mkb',
     component: MkbList,
-    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
-    },
   },
   {
     path: '/disabilities',
     name: 'Disabilities',
     component: DisabilitiesList,
-    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
-    },
   },
   {
     path: '/:pathMatch(.*)*',
@@ -65,5 +74,7 @@ const router = createRouter({
   history: createWebHistory(''),
   routes,
 });
+
+router.beforeEach(adminGuard);
 
 export default router;

@@ -1,20 +1,19 @@
 <template>
   <el-form @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
+      <!--      <el-autocomplete-->
+      <!--        v-if="modelValue !== undefined"-->
+      <!--        ref="searchForm"-->
+      <!--        :model-value="modelValue"-->
+      <!--        style="width: 100%; margin-right: 10px"-->
+      <!--        popper-class="wide-dropdown"-->
+      <!--        :placeholder="placeHolder"-->
+      <!--        :fetch-suggestions="find"-->
+      <!--        :trigger-on-focus="showSuggestions"-->
+      <!--        @select="handleSelect"-->
+      <!--        @input="handleInput"-->
+      <!--      />-->
       <el-autocomplete
-        v-if="modelValue"
-        ref="searchForm"
-        :model-value="modelValue"
-        style="width: 100%; margin-right: 10px"
-        popper-class="wide-dropdown"
-        :placeholder="placeHolder"
-        :fetch-suggestions="find"
-        :trigger-on-focus="showSuggestions"
-        @select="handleSelect"
-        @input="handleInput"
-      />
-      <el-autocomplete
-        v-else
         ref="searchForm"
         v-model="queryString"
         style="width: 100%; margin-right: 10px"
@@ -149,6 +148,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $margin: 20px 0;
 
+.el-form {
+  padding: 0 10px;
+  width: 100%;
+}
+
 .flex-column {
   width: 100%;
   display: flex;
@@ -169,9 +173,9 @@ $margin: 20px 0;
   margin: $margin;
 }
 
-:deep(.el-input__inner) {
+:deep(.el-input__wrapper) {
   border-radius: 20px;
-  padding-left: 25px;
+  padding-left: 15px;
   height: 34px;
   width: 100%;
   display: flex;

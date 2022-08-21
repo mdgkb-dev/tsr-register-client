@@ -18,20 +18,20 @@
         <h3>{{ document.documentType.name }}</h3>
         <div v-if="isEditMode" class="card-button-group">
           <el-tooltip effect="light" placement="top-end" content="Приложить файлы">
-            <el-button icon="el-icon-paperclip" @click="$refs[document.id].click()"></el-button>
+            <el-button :icon="Paperclip" @click="$refs[document.id].click()"></el-button>
           </el-tooltip>
           <el-popconfirm
             confirm-button-text="Да"
             cancel-button-text="Отмена"
-            icon="el-icon-info"
+            :icon="InfoFilled"
             icon-color="red"
             title="Вы уверен, что хотите удалить документ?"
             @confirm="() => remove(document.id)"
             @cancel="() => null"
           >
             <template #reference>
-              <el-button class="table-button" icon="el-icon-delete" />
-              <el-button icon="el-icon-delete"></el-button>
+              <el-button class="table-button" :icon="Delete" />
+              <el-button :icon="Delete"></el-button>
             </template>
           </el-popconfirm>
         </div>
@@ -112,6 +112,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, InfoFilled, Paperclip } from '@element-plus/icons-vue';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
@@ -240,6 +241,9 @@ export default defineComponent({
       removeFile,
       isEditMode,
       formatDate,
+      Paperclip,
+      InfoFilled,
+      Delete,
     };
   },
 });

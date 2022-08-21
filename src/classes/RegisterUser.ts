@@ -1,4 +1,4 @@
-import IRegisterUser from '@/interfaces/users/IRegisterUser';
+import IRegisterUser from '@/interfaces/IRegisterUser';
 
 export default class RegisterUser implements IRegisterUser {
   id?: string;

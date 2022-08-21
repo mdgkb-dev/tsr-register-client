@@ -10,25 +10,25 @@
           </el-form-item>
           <div class="card-button-group">
             <el-tooltip v-if="!drugRegimen.isEdit" effect="light" placement="top-end" content="Редактировать схему">
-              <el-button icon="el-icon-edit" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
+              <el-button :icon="Edit" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-              <el-button icon="el-icon-folder-checked" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
+              <el-button :icon="FolderChecked" @click.stop="editDrugRegimen(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-tooltip effect="light" placement="top-end" content="Добавить период">
-              <el-button icon="el-icon-plus" @click.stop="addDrugRegimenBlock(drugRegimen, drugRegimenIndex)"></el-button>
+              <el-button :icon="Plus" @click.stop="addDrugRegimenBlock(drugRegimen, drugRegimenIndex)"></el-button>
             </el-tooltip>
             <el-popconfirm
               confirm-button-text="Да"
               cancel-button-text="Отмена"
-              icon="el-icon-info"
+              :icon="Info"
               icon-color="red"
               title="Вы уверены, что хотите удалить схему?"
               @confirm="removeDrugRegimen(drugRegimenIndex)"
               @cancel="() => null"
             >
               <template #reference>
-                <el-button icon="el-icon-delete"></el-button>
+                <el-button :icon="Delete"></el-button>
               </template>
             </el-popconfirm>
           </div>
@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import { Delete, Document, Edit, FolderChecked, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
@@ -82,6 +83,12 @@ export default defineComponent({
       editDrugRegimen,
       removeDrugRegimen,
       addDrugRegimenBlock,
+      Document,
+      Edit,
+      FolderChecked,
+      Plus,
+      InfoFilled,
+      Delete,
     };
   },
 });

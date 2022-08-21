@@ -18,6 +18,7 @@ import { mkbGroups } from '@/store/modules/mkbGroups';
 import { mkbSubDiagnoses } from '@/store/modules/mkbSubDiagnoses';
 import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
+import { regions } from '@/store/modules/regions';
 import { registerGroups } from '@/store/modules/registerGroups';
 import { registerProperties } from '@/store/modules/registerProperties';
 import { registerPropertiesToUser } from '@/store/modules/registerPropertiesToUser';
@@ -72,6 +73,7 @@ const store: StoreOptions<RootState> = {
     mkbDiagnoses,
     mkbSubDiagnoses,
     mkbConcreteDiagnoses,
+    regions,
   },
 };
 

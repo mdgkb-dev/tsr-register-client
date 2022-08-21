@@ -13,7 +13,7 @@ const actions: ActionTree<State, RootState> = {
     commit('create', await httpClient.post<IRegisterQuery, IRegisterQuery>({ payload }));
   },
   getAll: async ({ commit }): Promise<void> => {
-    const registerQueries: IRegisterQuery[] = await httpClient.get<IRegisterQuery[]>();
+    const registerQueries: IRegisterQuery[] | void = await httpClient.get<IRegisterQuery[]>();
     if (registerQueries && registerQueries.length > 0) {
       commit('setAll', registerQueries);
       return;

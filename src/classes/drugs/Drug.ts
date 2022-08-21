@@ -11,30 +11,29 @@ export default class Drug implements IDrug {
   nameMNN = '';
   form = '';
   doze = '';
+  // dateRegistration: Date | undefined = undefined;
   registered = false;
-  // dateRegistration?: Date;
   drugRegimens: IDrugRegimen[] = [];
   drugRegimensForDelete: string[] = [];
 
   drugsDiagnosis: IDrugDiagnosis[] = [];
   drugsDiagnosisForDelete: string[] = [];
 
-  constructor(i?: IDrug) {
-    if (!i) {
+  constructor(drug?: IDrug) {
+    if (!drug) {
       return;
     }
-    this.id = i.id;
-    this.name = i.name;
-    this.nameMNN = i.nameMNN;
-    this.form = i.form;
-    this.doze = i.doze;
-    this.registered = i.registered;
-    // this.dateRegistration = i.dateRegistration;
-    if (i.drugRegimens) {
-      this.drugRegimens = i.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
+    this.id = drug.id;
+    this.name = drug.name;
+    this.nameMNN = drug.nameMNN;
+    this.doze = drug.doze;
+    // this.dateRegistration = drug.dateRegistration ? new Date(drug.dateRegistration) : undefined;
+    this.registered = drug.registered;
+    if (drug.drugRegimens) {
+      this.drugRegimens = drug.drugRegimens.map((item: IDrugRegimen) => new DrugRegimen(item));
     }
-    if (i.drugsDiagnosis) {
-      this.drugsDiagnosis = i.drugsDiagnosis.map((item: IDrugDiagnosis) => new DrugDiagnosis(item));
+    if (drug.drugsDiagnosis) {
+      this.drugsDiagnosis = drug.drugsDiagnosis.map((item: IDrugDiagnosis) => new DrugDiagnosis(item));
     }
   }
 

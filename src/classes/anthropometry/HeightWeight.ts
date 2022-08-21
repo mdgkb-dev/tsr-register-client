@@ -22,7 +22,7 @@ export default class HeightWeight implements IHeightWeight {
     this.patientId = i.patientId;
   }
 
-  getBmiGroup(dateBirth: string, isMale: boolean): IColorPercentile | string {
+  getBmiGroup(dateBirth: Date, isMale: boolean): IColorPercentile | string {
     if (!this.weight || !this.height) {
       return 'Недостаточно данных';
     }

@@ -1,10 +1,12 @@
 import RegisterPropertyExample from '@/classes/registers/RegisterPropertyExample';
+import RegisterPropertyMeasure from '@/classes/registers/RegisterPropertyMeasure';
 import RegisterPropertyOther from '@/classes/registers/RegisterPropertyOther';
 import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
 import RegisterPropertySet from '@/classes/registers/RegisterPropertySet';
 import ValueType from '@/classes/valueTypes/ValueType';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyExample';
+import IRegisterPropertyMeasure from '@/interfaces/registers/IRegisterPropertyMeasure';
 import IRegisterPropertyOther from '@/interfaces/registers/IRegisterPropertyOther';
 import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
 import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
@@ -26,7 +28,8 @@ export default class RegisterProperty implements IRegisterProperty {
   registerPropertyExamplesForDelete: string[] = [];
   valueType: IValueType = new ValueType();
   withOther = false;
-  withDates = false;
+  registerPropertyMeasures: IRegisterPropertyMeasure[] = [];
+  registerPropertyMeasuresForDelete: string[] = [];
   tag = '';
   showSet = false;
   showRadio = false;
@@ -44,7 +47,6 @@ export default class RegisterProperty implements IRegisterProperty {
     this.withOther = i.withOther;
     this.order = i.order;
     this.tag = i.tag;
-    this.withDates = i.withDates;
     this.isEdit = i.isEdit;
     if (i.registerPropertySets) {
       this.registerPropertySets = i.registerPropertySets.map((i: IRegisterPropertySet) => new RegisterPropertySet(i));
@@ -60,6 +62,9 @@ export default class RegisterProperty implements IRegisterProperty {
     }
     if (i.registerPropertyExamples) {
       this.registerPropertyExamples = i.registerPropertyExamples.map((item: IRegisterPropertyExample) => new RegisterPropertyExample(item));
+    }
+    if (i.registerPropertyMeasures) {
+      this.registerPropertyMeasures = i.registerPropertyMeasures.map((item: IRegisterPropertyMeasure) => new RegisterPropertyMeasure(item));
     }
     this.changeRelation([this.valueType]);
   }
@@ -130,6 +135,7 @@ export default class RegisterProperty implements IRegisterProperty {
     }
     this.showSet = false;
     this.showRadio = false;
+    this.valueType = valueType;
   }
 
   getOthers(propResult: boolean | string | number | Date | null): IRegisterPropertyOther[] {
@@ -151,5 +157,9 @@ export default class RegisterProperty implements IRegisterProperty {
 
   sortExamples(): void {
     this.registerPropertyExamples.forEach((item: IRegisterPropertyExample, index: number) => (item.order = index));
+  }
+
+  addRegisterPropertyMeasure(item?: IRegisterPropertyMeasure): void {
+    this.registerPropertyMeasures.push(new RegisterPropertyMeasure(item));
   }
 }

@@ -1,7 +1,8 @@
 <template>
   <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить представителя</el-button>
-  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="openRepresentativeModal">Создать представителя</el-button>
-
+  <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="openRepresentativeModal(representativeToPatient.length)"
+    >Создать представителя</el-button
+  >
   <el-table v-if="mount" :data="representativeToPatient" style="width: 800px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
 
@@ -73,7 +74,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
+    <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
       <template #default="scope">
         <TableButtonGroup
           :show-edit-button="
@@ -151,6 +152,7 @@ export default defineComponent({
     });
 
     const add = (): void => {
+      console.log('addRep');
       store.commit('patients/addRepresentative');
     };
 
@@ -159,6 +161,9 @@ export default defineComponent({
     };
 
     const getRepresentativeTypeLabel = (item: IRepresentativeType, index: number): string => {
+      // if (!representatives.value) {
+      //   return '';
+      // }
       const representative = representatives.value.find((i: IRepresentative) => {
         return i.id === representativeToPatient.value[index].representativeId;
       });
@@ -183,6 +188,7 @@ export default defineComponent({
     };
 
     const openRepresentativeModal = (index: number) => {
+      console.log('openModel', index);
       creatingIndex.value = index;
       representativeModal.value = true;
       store.commit('representatives/resetRepresentative');
@@ -194,6 +200,7 @@ export default defineComponent({
       }
       updateOptions();
       const i = creatingIndex.value ? creatingIndex.value : representativeToPatient.value.length - 1;
+      console.log(i);
       selectRepresentative(lastInsertedId.value, i);
       representativeModal.value = false;
     };

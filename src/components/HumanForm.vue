@@ -18,6 +18,7 @@
       </el-form-item>
       <el-form-item label="Дата рождения" prop="human.dateBirth">
         <el-date-picker
+          ref="datePick"
           v-model="human.dateBirth"
           :readonly="readonly"
           type="date"
@@ -25,6 +26,7 @@
           placeholder="Выберите дату"
           @change="updateHuman"
           @focus="updateHuman"
+          @keydown="dateFormat"
         />
       </el-form-item>
       <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
@@ -35,6 +37,10 @@
           autocomplete="random"
           @change="updateHuman"
         />
+        <span>
+          <el-switch :model-value="human.addressesEqual()" @change="(v) => human.setResidentialAddress(v)" />
+          Адрес регистрации и адрес проживания совпадают
+        </span>
       </el-form-item>
       <el-form-item label="Адрес проживания" prop="human.addressResidential">
         <el-autocomplete
@@ -69,13 +75,14 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, reactive, UnwrapRef } from 'vue';
+import { Check } from '@element-plus/icons-vue';
+import { computed, ComputedRef, defineComponent, PropType, reactive, ref, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import IHuman from '@/interfaces/humans/IHuman';
+import IHuman from '@/interfaces/IHuman';
 import IOption from '@/interfaces/shared/IOption';
 import useDateFormat from '@/mixins/useDateFormat';
-
+import dateFormat from '@/services/DateMask';
 export default defineComponent({
   name: 'HumanForm',
   props: {
@@ -95,15 +102,16 @@ export default defineComponent({
   setup(props) {
     const store = useStore();
     const { formatDate } = useDateFormat();
-
+    const datePick = ref();
     const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters[`${props.storeName}/getHuman`]);
     const human: UnwrapRef<IHuman> = reactive<IHuman>(humanComputed.value);
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters[`${props.storeName}/isEditMode`]);
-
     const updateHuman = () => {
       store.commit(`${props.storeName}/setHuman`, human);
     };
-
+    watch(human, () => {
+      console.log(human);
+    });
     const getAddresses = (queryString: string, cb: CallableFunction) => {
       if (!props.addresses) {
         cb([]);
@@ -117,25 +125,39 @@ export default defineComponent({
     };
 
     return {
+      datePick,
+      dateFormat,
       getAddresses,
       humanComputed,
       human,
       updateHuman,
       isEditMode,
       formatDate,
+      Check,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
+.date-picker-custom {
+  position: absolute;
+  left: 10px;
+  top: 3px;
+}
+:deep(.el-autocomplete) {
+  width: 100%;
+}
+
+.date-selector {
+  position: relative;
+}
+
+//.date-selector > input[type='date'] {
+//  text-indent: -5px;
+//}
+
 :deep(.el-autocomplete) {
   display: block;
-}
-.el-icon-copy-document {
-  &:hover {
-    cursor: pointer;
-    color: darken(white, 10%);
-  }
 }
 </style>

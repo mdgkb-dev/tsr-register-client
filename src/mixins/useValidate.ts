@@ -1,29 +1,32 @@
-import { ElMessage } from 'element-plus';
+import { ElNotification } from 'element-plus';
 
 import MessageError from '@/classes/messages/MessageError';
-import MessageSuccess from '@/classes/messages/MessageSuccess';
 import IForm from '@/interfaces/elements/IForm';
 
 interface IReturn {
-  validate: (form: IForm) => boolean;
+  validate: (form: IForm) => Promise<boolean>;
   validateWithoutMessageBox: (form: IForm) => boolean;
 }
 
 export default function (): IReturn {
-  const validate = (form: IForm): boolean => {
+  const validate = async (form: IForm, hideErrorList?: boolean, fieldsList?: string[]): Promise<boolean> => {
     let validationResult = true;
-    form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
+    await form.validate((valid: boolean, errorFields: Record<string, unknown>) => {
+      console.log(valid);
       if (!valid) {
-        if (!ElMessage.error) {
+        if (!ElNotification.error) {
           return;
         }
-        ElMessage.error(new MessageError(errorFields));
+        if (hideErrorList) {
+          ElNotification.error('Пожалуйста, проверьте правильность введенных данных');
+        } else {
+          ElNotification.error(new MessageError(errorFields));
+        }
         validationResult = false;
         return false;
       }
-      ElMessage(new MessageSuccess());
-      return true;
     });
+    console.log(validationResult);
     return validationResult;
   };
 

@@ -3,7 +3,7 @@ import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default class MkbConcreteDiagnosis implements IMkbConcreteDiagnosis {
-  id = '';
+  id?: string;
   name = '';
   subCode?: number;
   comment?: string;

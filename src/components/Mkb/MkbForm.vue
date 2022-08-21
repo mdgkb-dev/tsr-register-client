@@ -25,9 +25,11 @@
                 :timestamp="formatDate(anamnesis.date)"
                 placement="top"
               >
+                <!-- :anamnesis-id="anamnesis.id" -->
                 <AnamnesisForm
-                  :anamnesis-id="anamnesis.id"
+                  :anamnesis-prop="anamnesis"
                   :prop-name="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"
+                  @remove="RemoveFromClass(props.$index, props.row.patientDiagnosisAnamnesis, props.row.patientDiagnosisAnamnesisForDelete)"
                 />
               </el-timeline-item>
             </el-timeline>
@@ -80,16 +82,16 @@
               @select="selectConcreteDiagnosis($event, scope.row)"
             />
           </el-form-item>
-          <span v-else>{{ scope.row.mkbDiagnoses.queryStringConcreteDiagnosis }}</span>
+          <span v-else>{{ scope.row.mkbConcreteDiagnosis.queryString }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">
-        <template #default="scope">
-          <el-checkbox v-model="scope.row.primary" />
-        </template>
-      </el-table-column>
-      <el-table-column v-if="isEditMode" width="40" fixed="right" align="center">
+      <!--      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">-->
+      <!--        <template #default="scope">-->
+      <!--          <el-checkbox v-model="scope.row.primary" />-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
+      <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="removeDiagnosis(scope.row.id)" />
         </template>
@@ -118,6 +120,7 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
 import Provider from '@/services/Provider';
+import RemoveFromClass from '@/services/RemoveFromClass';
 
 const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
@@ -208,12 +211,12 @@ export default defineComponent({
     };
 
     const setGroup = (withDiagnosis: IWithDiagnosis, item: IMkbGroup): void => {
-      withDiagnosis.mkbDiagnosis.queryStringGroup = item.name;
+      withDiagnosis.mkbDiagnosis.queryStringGroup = item.fullName;
       withDiagnosis.mkbDiagnosis.mkbGroupId = item.id;
     };
 
     const setDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbDiagnosis): void => {
-      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.name;
+      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.fullName;
       withDiagnosis.mkbDiagnosisId = item.id;
       withDiagnosis.mkbDiagnosis = new MkbDiagnosis(item);
     };
@@ -221,7 +224,7 @@ export default defineComponent({
     const setSubDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbSubDiagnosis): void => {
       withDiagnosis.mkbSubDiagnosisId = item.id;
       withDiagnosis.mkbSubDiagnosis = new MkbSubDiagnosis(item);
-      withDiagnosis.mkbSubDiagnosis.queryString = item.name;
+      withDiagnosis.mkbSubDiagnosis.queryString = item.fullName;
     };
 
     const selectGroup = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
@@ -286,6 +289,7 @@ export default defineComponent({
       isEditMode,
       filteredSubDiagnosis,
       schema: Provider.schema,
+      RemoveFromClass,
 
       //
       selectGroup,
@@ -296,3 +300,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-timeline) {
+  margin-right: 20px;
+}
+</style>

@@ -1,5 +1,5 @@
 import IToken from '@/interfaces/auth/IToken';
-import IUser from '@/interfaces/users/IUser';
+import IUser from '@/interfaces/IUser';
 
 export default interface IUserResponse {
   user: IUser;

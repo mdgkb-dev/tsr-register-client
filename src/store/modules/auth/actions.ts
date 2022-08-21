@@ -1,10 +1,11 @@
 import { ActionTree } from 'vuex';
 
-import ICheckLoginUnicityResponse from '@/interfaces/auth/ICheckLoginUnicityResponse';
-import IUser from '@/interfaces/users/IUser';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
-import IUserResponse from '@/interfaces/users/IUserResponse';
+import ITokens from '@/interfaces/ITokens';
+import IUser from '@/interfaces/IUser';
+import IUserAuthorized from '@/interfaces/IUserAuthorized';
+import IUserResponse from '@/interfaces/IUserResponse';
 import HttpClient from '@/services/HttpClient';
+import TokenService from '@/services/Token';
 import RootState from '@/store/types';
 
 import State from './state';
@@ -13,37 +14,38 @@ const httpClient = new HttpClient('auth');
 
 const actions: ActionTree<State, RootState> = {
   login: async ({ commit }, user: IUser): Promise<void> => {
-    const { user: newUser, token } = await httpClient.post<IUser, IUserResponse>({ query: 'login', payload: user });
-    localStorage.setItem('token', token.accessToken);
-    if (newUser.id) localStorage.setItem('userId', newUser.id);
-    if (newUser.email) localStorage.setItem('userEmail', newUser.email);
-    commit('setToken', token);
+    const res = await httpClient.post<IUser, { user: IUser; tokens: ITokens }>({ query: 'login', payload: user });
+    if (!res) {
+      return;
+    }
+    const { user: newUser, tokens } = res;
     commit('setUser', newUser);
+    commit('setTokens', tokens);
     commit('setIsAuth', true);
   },
   getMe: async ({ commit }): Promise<void> => {
     commit('setUser', await httpClient.get<IUserAuthorized>({ query: 'me' }));
   },
-  register: async ({ commit }, user: IUser): Promise<void> => {
-    const { user: newUser, token } = await httpClient.post<IUser, IUserResponse>({ query: 'register', payload: user });
-    localStorage.setItem('token', token.accessToken);
-    if (newUser.id) localStorage.setItem('userId', newUser.id);
-    commit('setToken', token.accessToken);
-    commit('setUser', newUser);
-    commit('setIsAuth', true);
-  },
-  logout: async ({ commit }): Promise<void> => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+  logout: async ({ commit, state }): Promise<void> => {
     commit('setIsAuth', false);
+    commit('clearUser');
+    commit('clearTokens');
   },
   editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
     const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });
     commit('setUser', newUser);
   },
-  checkLoginUnicity: async ({ commit }, login): Promise<void> => {
-    const response = await httpClient.get<ICheckLoginUnicityResponse>({ query: `does-login-exist/${login}` });
-    commit('setDoesLoginExist', !!response.DoesLoginExist);
+  checkPathPermissions: async ({ commit }, path: string): Promise<void> => {
+    await httpClient.post<string, string>({ query: `check-path-permissions`, payload: path });
+  },
+  refreshToken: async ({ commit }): Promise<void> => {
+    commit(
+      'setTokens',
+      await httpClient.post<any, { user: IUser; token: ITokens }>({
+        query: 'refresh-token',
+        payload: { refreshToken: TokenService.getRefreshToken() },
+      })
+    );
   },
 };
 

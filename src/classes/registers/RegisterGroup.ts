@@ -9,7 +9,7 @@ export default class RegisterGroup implements IRegisterGroup {
   registerProperties: IRegisterProperty[] = [];
   registerPropertiesForDelete: string[] = [];
   isEdit = false;
-
+  withDates = false;
   constructor(i?: IRegisterGroup) {
     if (!i) {
       return;
@@ -18,6 +18,7 @@ export default class RegisterGroup implements IRegisterGroup {
     this.name = i.name;
     this.order = i.order;
     this.isEdit = i.isEdit;
+    this.withDates = i.withDates;
     if (i.registerProperties) {
       this.registerProperties = i.registerProperties.map((item: IRegisterProperty) => new RegisterProperty(item));
     }

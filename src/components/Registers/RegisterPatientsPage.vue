@@ -6,7 +6,9 @@
         <span>{{ register.name }}</span>
       </div>
       <div class="main-info-container-item">
-        <span class="light-title upper"><i class="el-icon-user"></i>:</span>
+        <span class="light-title upper">
+          <el-icon><User /> </el-icon>:
+        </span>
         <span>{{ register.registerToPatient.length }}</span>
       </div>
       <div>
@@ -36,7 +38,7 @@
               style="max-height: 600px !important; overflow: auto"
             >
               <template #reference>
-                <el-button class="table-button" icon="el-icon-more"></el-button>
+                <el-button class="table-button" :icon="More"></el-button>
               </template>
               <el-space direction="vertical" alignment="start" style="width: 100%; max-height: 600px; overflow: auto">
                 <h3 style="margin-left: 20px">Скрыть столбцы</h3>
@@ -98,16 +100,17 @@
 </template>
 
 <script lang="ts">
+import { More, User } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
+import IUserAuthorized from '@/interfaces/IUserAuthorized';
 import IRegister from '@/interfaces/registers/IRegister';
 import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
 import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
-import IUserAuthorized from '@/interfaces/users/IUserAuthorized';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';
@@ -115,6 +118,7 @@ import Provider from '@/services/Provider';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
+  components: { User },
   setup() {
     const route = useRoute();
 
@@ -170,18 +174,23 @@ export default defineComponent({
           }
         }
       }
+      console.log(
+        'user.value.filterActualProperties(register.value.getProps())',
+        user.value.filterActualProperties(register.value.getProps())
+      );
+      console.log(user.value);
       cols.value = user.value.filterActualProperties(register.value.getProps());
     };
 
     const getField = (prop: IRegisterProperty, regToPatient: IRegisterToPatient) => {
-      const p = regToPatient.patient!.getRegisterPropertyValue(prop, true);
-      if (!p) {
-        return '';
-      }
-      if (prop.valueType?.isDate()) {
-        return formatDate(p as Date);
-      }
-      return p;
+      // const p = regToPatient.patient!.getRegisterPropertyValue(prop, true);
+      // if (!p) {
+      //   return '';
+      // }
+      // if (prop.valueType?.isDate()) {
+      //   return formatDate(p as Date);
+      // }
+      return;
     };
 
     const executeQuery = async (queryId: string): Promise<void> => {
@@ -204,6 +213,7 @@ export default defineComponent({
       mounted: Provider.mounted,
       schema: Provider.schema,
       sortList: Provider.sortList,
+      More,
     };
   },
 });

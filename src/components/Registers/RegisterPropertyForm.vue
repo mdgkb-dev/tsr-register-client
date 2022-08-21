@@ -6,7 +6,9 @@
           <template #title>
             <div class="collapse-header-container">
               <div v-if="!element.isEdit" style="display: flex">
-                <i class="el-icon-s-grid drug-icon" />
+                <el-icon size="20" class="el-icon-s-grid drug-icon">
+                  <Grid />
+                </el-icon>
                 <h3 class="collapse-header">{{ element.shortName }}</h3>
               </div>
               <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
@@ -15,22 +17,22 @@
               </el-form-item>
               <div class="card-button-group">
                 <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать свойство">
-                  <el-button icon="el-icon-edit" @click.stop="editRegisterProperty(element, index)"></el-button>
+                  <el-button :icon="Edit" @click.stop="editRegisterProperty(element, index)"></el-button>
                 </el-tooltip>
                 <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
-                  <el-button icon="el-icon-folder-checked" @click.stop="editRegisterProperty(element, index)"></el-button>
+                  <el-button :icon="FolderChecked" @click.stop="editRegisterProperty(element, index)"></el-button>
                 </el-tooltip>
                 <el-popconfirm
                   confirm-button-text="Да"
                   cancel-button-text="Отмена"
-                  icon="el-icon-info"
+                  :icon="InfoFilled"
                   icon-color="red"
                   title="Вы уверены, что хотите удалить свойство?"
                   @confirm="removeRegisterProperty(index)"
                   @cancel="() => null"
                 >
                   <template #reference>
-                    <el-button icon="el-icon-delete"></el-button>
+                    <el-button :icon="Delete"></el-button>
                   </template>
                 </el-popconfirm>
               </div>
@@ -66,6 +68,7 @@
             <RegisterPropertyRadioForm v-if="element.showRadio" :register-property="element" />
             <RegisterPropertySetForm v-if="element.showSet" :register-property="element" />
             <RegisterPropertyExamplesForm :register-property="element" />
+            <RegisterPropertyMeasuresForm v-if="element.valueType.isNumber()" :register-property="element" />
           </div>
         </el-collapse-item>
       </el-collapse>
@@ -74,12 +77,14 @@
 </template>
 
 <script lang="ts">
+import { Delete, Edit, FolderChecked, InfoFilled, Plus } from '@element-plus/icons-vue';
 import Sortable from 'sortablejs';
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useStore } from 'vuex';
 
 import RegisterPropertyExamplesForm from '@/components/Registers/RegisterPropertyExamplesForm.vue';
+import RegisterPropertyMeasuresForm from '@/components/Registers/RegisterPropertyMeasuresForm.vue';
 import RegisterPropertyRadioForm from '@/components/Registers/RegisterPropertyRadioForm.vue';
 import RegisterPropertySetForm from '@/components/Registers/RegisterPropertySetForm.vue';
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
@@ -93,6 +98,7 @@ export default defineComponent({
     RegisterPropertyRadioForm,
     RegisterPropertySetForm,
     RegisterPropertyExamplesForm,
+    RegisterPropertyMeasuresForm,
     draggable,
   },
   props: {
@@ -143,6 +149,11 @@ export default defineComponent({
       mount,
       editRegisterProperty,
       activeCollapseName,
+      Edit,
+      FolderChecked,
+      Plus,
+      InfoFilled,
+      Delete,
     };
   },
 });

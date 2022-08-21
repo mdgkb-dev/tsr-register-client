@@ -19,7 +19,7 @@
     <el-table-column label="Раз в день">
       <template #default="scope">
         <div style="display: flex">
-          <el-button v-if="!scope.row.timesPerDay" class="table-button" icon="el-icon-plus" @click="addTimesPerDay(scope.row)" />
+          <el-button v-if="!scope.row.timesPerDay" class="table-button" :icon="Plus" @click="addTimesPerDay(scope.row)" />
           <span v-else-if="scope.row.timesPerDay && !drugRegimenBlock.isEdit">{{ scope.row.timesPerDay }}</span>
           <el-input-number v-else v-model="scope.row.timesPerDay" size="mini" controls-position="right" :min="0"></el-input-number>
         </div>
@@ -34,6 +34,7 @@
 </template>
 
 <script lang="ts">
+import { Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -70,6 +71,7 @@ export default defineComponent({
       moveDrugRegimenBlockItemUp,
       moveDrugRegimenBlockItemDown,
       addTimesPerDay,
+      Plus,
     };
   },
 });
