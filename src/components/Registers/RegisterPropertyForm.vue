@@ -5,23 +5,25 @@
         <el-collapse-item class="register-property-collapse" :name="String(index)">
           <template #title>
             <div class="collapse-header-container">
-              <div v-if="!element.isEdit" style="display: flex">
+              <!-- <div v-if="!element.isEdit" style="display: flex; align-items: center"> -->
+              <div style="display: flex; align-items: center">
                 <el-icon size="20" class="el-icon-s-grid drug-icon">
                   <Grid />
                 </el-icon>
                 <h3 class="collapse-header">{{ element.shortName }}</h3>
               </div>
-              <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name">
-                <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
-                <el-input v-model="element.name" placeholder="Название свойства" @keyup.stop="key" @click.stop></el-input>
-              </el-form-item>
+              <!-- </div> -->
+              <!-- <el-form-item v-else style="width: 100%; margin: 0 10px 0 0" prop="name"> -->
+              <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
+              <!-- <el-input v-model="element.name" placeholder="Название свойства" @keyup.stop="key" @click.stop></el-input> -->
+              <!-- </el-form-item> -->
               <div class="card-button-group">
-                <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать свойство">
+                <!-- <el-tooltip v-if="!element.isEdit" effect="light" placement="top-end" content="Редактировать свойство">
                   <el-button :icon="Edit" @click.stop="editRegisterProperty(element, index)"></el-button>
                 </el-tooltip>
                 <el-tooltip v-else effect="light" placement="top-end" content="Выйти из редактирования">
                   <el-button :icon="FolderChecked" @click.stop="editRegisterProperty(element, index)"></el-button>
-                </el-tooltip>
+                </el-tooltip> -->
                 <el-popconfirm
                   confirm-button-text="Да"
                   cancel-button-text="Отмена"
@@ -47,20 +49,20 @@
               <el-input v-model="element.shortName"></el-input>
             </el-form-item>
             <div class="flex-row">
-              <el-form-item label-width="170px" label="Ширина столбца">
-                <el-input-number v-model="element.colWidth"></el-input-number>
+              <el-form-item label-width="170px" label="Возможно несколько значений">
+                <el-switch v-model="element.withDates" active-text="Да" inactive-text="Нет"></el-switch>
               </el-form-item>
               <el-form-item label-width="170px" label="Тип свойства">
                 <el-select v-model="element.valueTypeId" placeholder="Тип свойства" @change="element.changeRelation(valueTypes)">
                   <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
                 </el-select>
               </el-form-item>
+              <el-form-item label-width="170px" label="Ширина столбца">
+                <el-input-number v-model="element.colWidth"></el-input-number>
+              </el-form-item>
               <!-- <el-form-item label-width="170px" label='Добавить поле "Другое"'>
               <el-checkbox v-model="element.withOther" />
             </el-form-item> -->
-              <el-form-item label-width="170px" label="Возможно несколько значений">
-                <el-switch v-model="element.withDates" active-text="Да" inactive-text="Нет"></el-switch>
-              </el-form-item>
             </div>
             <!-- <el-form-item label-width="170px" label="Тэг">
               <el-input v-model="element.tag"></el-input>
@@ -162,7 +164,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .drug-icon {
   margin-right: 5px;
-  margin-top: 3px;
+  // margin-top: 3px;
   &:hover {
     color: #409eff;
   }

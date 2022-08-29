@@ -7,13 +7,11 @@
     @end="sortByDrug(registerProperty.registerPropertyOthers, $event)"
   >
     <template #item="{ element, index }">
-      <div class="property-row-main property-row-others">
-        <el-form-item label="Название доп.значения">
+      <div class="property-row">
+        <div class="property-row-header">
           <el-icon size="20" class="el-icon-s-grid drug-icon">
             <Grid />
           </el-icon>
-          <el-input v-model="element.name" placeholder="Название доп.значения"></el-input>
-
           <div class="card-button-group">
             <el-popconfirm
               confirm-button-text="Да"
@@ -29,6 +27,9 @@
               </template>
             </el-popconfirm>
           </div>
+        </div>
+        <el-form-item label="Название доп.значения">
+          <el-input v-model="element.name" placeholder="Название доп.значения"></el-input>
         </el-form-item>
       </div>
     </template>
@@ -83,7 +84,7 @@ export default defineComponent({
 }
 
 .property-row {
-  background-color: white;
+  background-color: #eef1f6;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -94,6 +95,10 @@ export default defineComponent({
   }
   &-others {
     padding-left: 20px;
+  }
+  &-header {
+    display: flex;
+    justify-content: space-between;
   }
 }
 .el-form-item {

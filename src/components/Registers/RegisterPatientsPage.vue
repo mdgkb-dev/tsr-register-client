@@ -1,102 +1,101 @@
 <template>
-  <div v-if="mounted" style="height: 100%; display: flex; flex-direction: column">
-    <div class="table-background main-info-container">
-      <div class="main-info-container-item">
-        <span class="light-title upper">Название регистра:</span>
-        <span>{{ register.name }}</span>
-      </div>
-      <div class="main-info-container-item">
-        <span class="light-title upper">
-          <el-icon><User /> </el-icon>:
-        </span>
-        <span>{{ register.registerToPatient.length }}</span>
-      </div>
-      <div>
-        <div v-for="registerQuery in registerQueries" :key="registerQuery.id">
-          <el-button type="primary" size="small" @click="executeQuery(registerQuery.id)">{{ registerQuery.name }} </el-button>
+  <component :is="'AdminListWrapper'" v-if="mounted">
+    <template #header>
+      <div class="table-background main-info-container" style="width: 100%">
+        <div class="main-info-container-item">
+          <span class="light-title upper">Название регистра:</span>
+          <span>{{ register.name }}</span>
+        </div>
+        <div class="main-info-container-item">
+          <span class="light-title upper">
+            <el-icon><User /> </el-icon>:
+          </span>
+          <span>{{ register.registerToPatient.length }}</span>
+        </div>
+        <div>
+          <div v-for="registerQuery in registerQueries" :key="registerQuery.id">
+            <el-button type="primary" size="small" @click="executeQuery(registerQuery.id)">{{ registerQuery.name }} </el-button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="table-background" style="flex-shrink: 1; overflow: hidden; margin-bottom: 0">
-      <el-table
-        ref="table"
-        :default-sort="{ prop: 'id', order: 'ascending' }"
-        :data="register.registerToPatient"
-        class="table-shadow"
-        header-row-class-name="header-style"
-        row-class-name="table-row"
-        cell-class-name="table-row"
-        style="width: 100%; margin-bottom: 20px; overflow: auto; height: 100%"
-      >
-        <el-table-column type="index" width="70" align="center">
-          <template #header>
-            <el-popover
-              placement="right-start"
-              popper-class="table-popover"
-              :width="600"
-              trigger="click"
-              style="max-height: 600px !important; overflow: auto"
-            >
-              <template #reference>
-                <el-button class="table-button" :icon="More"></el-button>
-              </template>
-              <el-space direction="vertical" alignment="start" style="width: 100%; max-height: 600px; overflow: auto">
-                <h3 style="margin-left: 20px">Скрыть столбцы</h3>
-                <div v-if="register.registerGroups.length">
-                  <el-row v-for="registerGroup in register.registerGroups" :key="registerGroup.id">
-                    <el-col v-for="(registerProperty, i) in registerGroup.registerProperties" :key="registerProperty.id">
-                      <el-checkbox
-                        :model-value="!!user.registerPropertyToUser.find((prop) => prop.registerPropertyId === registerProperty.id)"
-                        :label="
-                          registerGroup.registerProperties[i].shortName
-                            ? registerGroup.registerProperties[i].shortName
-                            : registerGroup.registerProperties[i].name
-                        "
-                        :value="registerProperty.id"
-                        @change="setCols($event, registerProperty.id)"
-                      >
-                      </el-checkbox>
-                    </el-col>
-                  </el-row>
-                </div>
-                <div v-else style="margin-left: 20px">Нет данных</div>
-              </el-space>
-            </el-popover>
-          </template>
-        </el-table-column>
+    </template>
+    <el-table
+      ref="table"
+      :default-sort="{ prop: 'id', order: 'ascending' }"
+      :data="register.registerToPatient"
+      class="table-shadow"
+      header-row-class-name="header-style"
+      row-class-name="table-row"
+      cell-class-name="table-row"
+      style="width: 100%; margin-bottom: 20px; overflow: auto; height: 100%"
+    >
+      <el-table-column type="index" width="70" align="center">
+        <template #header>
+          <el-popover
+            placement="right-start"
+            popper-class="table-popover"
+            :width="600"
+            trigger="click"
+            style="max-height: 600px !important; overflow: auto"
+          >
+            <template #reference>
+              <el-button class="table-button" :icon="More"></el-button>
+            </template>
+            <el-space direction="vertical" alignment="start" style="width: 100%; max-height: 600px; overflow: auto">
+              <h3 style="margin-left: 20px">Скрыть столбцы</h3>
+              <div v-if="register.registerGroups.length">
+                <el-row v-for="registerGroup in register.registerGroups" :key="registerGroup.id">
+                  <el-col v-for="(registerProperty, i) in registerGroup.registerProperties" :key="registerProperty.id">
+                    <el-checkbox
+                      :model-value="!!user.registerPropertyToUser.find((prop) => prop.registerPropertyId === registerProperty.id)"
+                      :label="
+                        registerGroup.registerProperties[i].shortName
+                          ? registerGroup.registerProperties[i].shortName
+                          : registerGroup.registerProperties[i].name
+                      "
+                      :value="registerProperty.id"
+                      @change="setCols($event, registerProperty.id)"
+                    >
+                    </el-checkbox>
+                  </el-col>
+                </el-row>
+              </div>
+              <div v-else style="margin-left: 20px">Нет данных</div>
+            </el-space>
+          </el-popover>
+        </template>
+      </el-table-column>
 
-        <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
-          <template #default="scope">
-            <span style="position: sticky !important" class="patient-name-link" @click="edit(scope.row.patient.id)">{{
-              scope.row.patient.human.getFullName()
-            }}</span>
-          </template>
-        </el-table-column>
-        <template v-for="(registerProperty, i) in cols" :key="i">
-          <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">
-            <template #header>
-              <el-popover placement="top-start" :width="200" trigger="hover">
-                <template #reference>
-                  <div style="max-height: 100px">
-                    {{ registerProperty.shortName }}
-                  </div>
-                </template>
-                <div>
+      <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
+        <template #default="scope">
+          <span style="position: sticky !important" class="patient-name-link" @click="edit(scope.row.patient.id)">{{
+            scope.row.patient.human.getFullName()
+          }}</span>
+        </template>
+      </el-table-column>
+      <template v-for="(registerProperty, i) in cols" :key="i">
+        <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">
+          <template #header>
+            <el-popover placement="top-start" :width="200" trigger="hover">
+              <template #reference>
+                <div style="max-height: 100px">
                   {{ registerProperty.shortName }}
                 </div>
-              </el-popover>
-            </template>
-            <template #default="scope">
-              <div style="max-height: 250px">
-                {{ getField(registerProperty, scope.row) }}
+              </template>
+              <div>
+                {{ registerProperty.shortName }}
               </div>
-            </template>
-          </el-table-column>
-        </template>
-      </el-table>
-    </div>
-    <!--    <Pagination />-->
-  </div>
+            </el-popover>
+          </template>
+          <template #default="scope">
+            <div style="max-height: 250px">
+              {{ getField(registerProperty, scope.row) }}
+            </div>
+          </template>
+        </el-table-column>
+      </template>
+    </el-table>
+  </component>
 </template>
 
 <script lang="ts">
@@ -115,10 +114,11 @@ import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider';
+import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'RegisterPatientsPage',
-  components: { User },
+  components: { User, AdminListWrapper },
   setup() {
     const route = useRoute();
 
