@@ -5,15 +5,14 @@
       @change="registerGroupToPatient.setRegisterPropertyValue($event, prop)"
     />
   </el-form-item>
-  <el-radio
-    v-for="measure in prop.registerPropertyMeasures"
-    :key="measure.id"
-    :label="measure.name"
-    :model-value="registerGroupToPatient.getRegisterPropertyValue(prop, false)"
-    @change="registerGroupToPatient.setRegisterPropertyValue(measure.id, prop)"
+  <el-radio-group
+    :model-value="registerGroupToPatient.getMeasureId(prop.id)"
+    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"
   >
-    {{ measure.name }}
-  </el-radio>
+    <el-radio v-for="measure in prop.registerPropertyMeasures" :key="measure.id" :label="measure.id">
+      {{ measure.name }}
+    </el-radio>
+  </el-radio-group>
 </template>
 
 <script lang="ts">

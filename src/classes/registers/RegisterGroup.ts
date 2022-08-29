@@ -29,7 +29,9 @@ export default class RegisterGroup implements IRegisterGroup {
   }
 
   addRegisterProperty(item?: IRegisterProperty): void {
-    this.registerProperties.push(new RegisterProperty(item));
+    const newItem = new RegisterProperty(item);
+    newItem.order = this.registerProperties.length;
+    this.registerProperties.push(newItem);
   }
 
   removeRegisterProperty(index: number): void {

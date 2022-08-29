@@ -18,12 +18,10 @@
   >
     <template #item="{ element, index }">
       <div class="property-row">
-        <el-form-item style="width: 100%; margin: 0 10px 0 0" label="Название свойства">
-          <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
+        <div class="property-row-header">
           <el-icon size="20" class="el-icon-s-grid drug-icon">
             <Grid />
           </el-icon>
-          <el-input v-model="element.name" placeholder="Название свойства" @click.stop @input="inputHandler(e)"></el-input>
           <div class="card-button-group">
             <el-tooltip effect="light" placement="top-end" content="Добавить доп.значение">
               <el-button :icon="Plus" @click.stop="addRegisterPropertyOther(element, index)"></el-button>
@@ -42,6 +40,10 @@
               </template>
             </el-popconfirm>
           </div>
+        </div>
+        <el-form-item style="width: 100%; margin-bottom: 10px" label="Название свойства">
+          <!-- :rules="{ required: true, message: 'Пожалуйста укажите название схемы приема лекартсва', trigger: 'blur' }" -->
+          <el-input v-model="element.name" placeholder="Название свойства" @click.stop @input="inputHandler(e)"></el-input>
         </el-form-item>
 
         <RegisterPropertyOthersForm :register-property="element" />
@@ -135,6 +137,10 @@ export default defineComponent({
   &-others {
     padding-left: 20px;
   }
+  &-header {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 .el-form-item {
   margin: 0;
@@ -165,5 +171,8 @@ export default defineComponent({
   justify-content: space-between;
   width: 100%;
   margin: 20px 0;
+}
+.el-collapse {
+  border: none;
 }
 </style>

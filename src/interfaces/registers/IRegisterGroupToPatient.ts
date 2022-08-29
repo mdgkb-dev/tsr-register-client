@@ -32,4 +32,7 @@ export default interface IRegisterGroupToPatient {
   addRegisterValueWithDate: (property: IRegisterProperty) => void;
   getRegisterValuesWithDate: (propertyId: string) => IRegisterPropertyToPatient[];
   removeRegisterValueWithDate: (propId: string) => void;
+
+  setMeasureId: (measureId: string, propertyId: string) => void;
+  getMeasureId: (propertyId: string) => string;
 }
