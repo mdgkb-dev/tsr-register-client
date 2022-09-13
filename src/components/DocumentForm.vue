@@ -63,7 +63,15 @@
             :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueDate`"
             size="mini"
           >
-            <el-date-picker v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueDate" size="mini" />
+            <el-date-picker
+              v-if="isEditMode"
+              v-model="document.documentFieldValues[valueIndex].valueDate"
+              format="DD.MM.YYYY"
+              type="date"
+              placeholder="Выберите дату"
+              size="mini"
+              @keydown="dateFormat"
+            />
             <span v-else>{{ formatDate(value.valueDate) }}</span>
           </el-form-item>
         </section>
@@ -128,7 +136,7 @@ import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import useDateFormat from '@/mixins/useDateFormat';
-
+import dateFormat from '@/services/DateMask';
 export default defineComponent({
   name: 'DocumentForm',
   components: {
@@ -244,6 +252,7 @@ export default defineComponent({
       Paperclip,
       InfoFilled,
       Delete,
+      dateFormat,
     };
   },
 });
