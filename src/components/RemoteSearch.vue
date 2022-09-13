@@ -84,6 +84,9 @@ export default defineComponent({
     const searchModel: Ref<ISearchModel> = computed<ISearchModel>(() => store.getters['search/searchModel']);
 
     const find = async (query: string, resolve: (arg: any) => void): Promise<void> => {
+      if (query.length < 2) {
+        return;
+      }
       searchForm.value.activated = true;
       searchModel.value.searchObjects = [];
       searchModel.value.query = query;
@@ -109,12 +112,13 @@ export default defineComponent({
     };
 
     const handleSelect = async (item: ISearch): Promise<void> => {
+      searchModel.value.query = '';
       if (props.storeModule != '') {
         await store.dispatch(`${props.storeModule}/getAllById`, item.id);
         return;
       }
       emit('select', item);
-      // queryString.value = '';
+      queryString.value = '';
     };
 
     const createModel = (): IFilterModel => {

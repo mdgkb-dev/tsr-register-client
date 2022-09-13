@@ -7,6 +7,7 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 export default interface IWithDiagnosis {
   id?: string;
   primary: boolean;
+  selected: boolean;
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;

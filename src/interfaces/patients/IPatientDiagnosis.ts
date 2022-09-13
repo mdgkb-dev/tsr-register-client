@@ -7,6 +7,8 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 export default interface IPatientDiagnosis {
   id?: string;
   primary: boolean;
+  selected: boolean;
+  editMode: boolean;
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
@@ -17,4 +19,6 @@ export default interface IPatientDiagnosis {
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[];
   patientDiagnosisAnamnesisForDelete: string[];
+  editDiagnosis: () => void;
+  getFullName: () => string;
 }

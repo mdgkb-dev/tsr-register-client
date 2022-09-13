@@ -38,4 +38,15 @@ export default class MkbSubGroup implements IMkbSubGroup {
     if (relevant) return [...this.mkbSubSubGroups.filter((i) => i.relevant), ...this.mkbDiagnosis.filter((i) => i.relevant)];
     return [...this.mkbSubSubGroups, ...this.mkbDiagnosis];
   }
+
+  getAllDiagnosis(): IMkbDiagnosis[] {
+    const diagnosis: IMkbDiagnosis[] = [];
+    diagnosis.push(...this.mkbDiagnosis);
+    this.mkbSubSubGroups.forEach((mssg: IMkbSubSubGroup) => diagnosis.push(...mssg.mkbDiagnosis));
+    return diagnosis;
+  }
+
+  getFullName(): string {
+    return `${this.rangeStart}-${this.rangeEnd} ${this.name}`;
+  }
 }

@@ -14,29 +14,21 @@ import RegistersRoutes from '@/router/RegistersRoutes';
 import RepresentativeRoutes from '@/router/RepresentativeRoutes';
 import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
 import UsersRoutes from '@/router/UsersRoutes';
+import TokenService from '@/services/Token';
 import store from '@/store/index';
 
 export const isAuthorized = (next: NavigationGuardNext): void => {
-  const userId = localStorage.getItem('userId');
-  if (userId) {
+  const user = localStorage.getItem('user');
+  if (user) {
     store.commit('auth/setIsAuth', true);
-    store.commit('setLayout', 'main-layout');
-    next();
   }
-  store.commit('setLayout', 'login-layout');
-  next('/login');
+  next();
 };
 
-export const adminGuard = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> => {
-  if (to.path != '/') {
-    try {
-      await store.dispatch('auth/checkPathPermissions', to.matched[0].path);
-    } catch (e) {
-      console.log(e);
-      await router.push('/');
-    }
+export const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
+  if (to.fullPath !== '/login' && !TokenService.isAuth()) {
+    router.push('/login');
   }
-  console.log('next', to);
   next();
 };
 
@@ -75,6 +67,6 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(adminGuard);
+router.beforeEach(authGuard);
 
 export default router;

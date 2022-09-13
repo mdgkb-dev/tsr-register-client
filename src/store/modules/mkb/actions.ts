@@ -5,6 +5,7 @@ import MkbGroupAnswer from '@/classes/mkb/MkbGroupAnswer';
 import MkbSubGroupAnswer from '@/classes/mkb/MkbSubGroupAnswer';
 import MkbSubSubGroupAnswer from '@/classes/mkb/MkbSubSubGroupAnswer';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbClassWithMkbElement from '@/interfaces/mkb/IMkbClassWithMkbElement';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -89,6 +90,14 @@ const actions: ActionTree<State, RootState> = {
   },
   updateName: async (_, mkb: IMkbSuperSet): Promise<void> => {
     await httpClient.put<IMkbSuperSet, IMkbSuperSet>({ payload: mkb, query: `${mkb.id}?mkbType=${mkb.constructor.name}&update=name` });
+  },
+  selectMkbElement: async ({ commit }, id: string): Promise<void> => {
+    const res = await httpClient.get<IMkbClassWithMkbElement>({ query: `select-mkb-element/${id}` });
+    if (!res) {
+      return;
+    }
+    commit('setMkbClass', res.mkbClass);
+    commit('setMkbElement', res.mkbElement);
   },
 };
 

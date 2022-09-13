@@ -3,6 +3,7 @@ import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import Patient from '@/classes/patients/Patient';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -13,6 +14,8 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 export default class PatientDiagnosis implements IPatientDiagnosis {
   id?: string;
   primary = false;
+  selected = false;
+  editMode = false;
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis: IMkbSubDiagnosis = new MkbSubDiagnosis();
   mkbDiagnosisId?: string;
@@ -38,5 +41,45 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
     if (i.patient) this.patient = new Patient(i.patient);
     if (i.patientDiagnosisAnamnesis)
       this.patientDiagnosisAnamnesis = i.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
+  }
+
+  editDiagnosis(): void {
+    this.editMode = true;
+    this.mkbDiagnosis = new MkbDiagnosis();
+    this.mkbDiagnosisId = undefined;
+    this.mkbSubDiagnosis = new MkbSubDiagnosis();
+    this.mkbSubDiagnosisId = undefined;
+  }
+
+  saveDiagnosis(mkbClass: IMkbClass): void {
+    if (!mkbClass.selectedDiagnosisId) {
+      return;
+    }
+    const allDiagnosis = mkbClass.getAllDiagnosis();
+    const diagnosis = allDiagnosis.find((d: IMkbDiagnosis) => d.id === mkbClass.selectedDiagnosisId);
+    if (diagnosis && diagnosis.id) {
+      this.mkbDiagnosis = new MkbDiagnosis(diagnosis);
+      this.mkbDiagnosisId = diagnosis.id;
+    }
+    if (mkbClass.selectedSubDiagnosisId) {
+      const mkbSubDiagnosis = this.mkbDiagnosis.mkbSubDiagnosis.find((msd: IMkbSubDiagnosis) => msd.id === mkbClass.selectedSubDiagnosisId);
+      if (mkbSubDiagnosis && mkbSubDiagnosis.id) {
+        this.mkbSubDiagnosis = new MkbSubDiagnosis(mkbSubDiagnosis);
+        this.mkbSubDiagnosisId = mkbSubDiagnosis.id;
+        if (this.mkbSubDiagnosis.mkbDiagnosis) {
+          this.mkbSubDiagnosis.mkbDiagnosis.mkbGroup = undefined;
+        }
+      }
+    }
+    this.mkbDiagnosis.mkbSubDiagnosis = [];
+    this.mkbDiagnosis.mkbGroup = undefined;
+    this.editMode = false;
+  }
+
+  getFullName(): string {
+    if (this.mkbSubDiagnosis.id) {
+      return `${this.mkbDiagnosis.code}.${this.mkbSubDiagnosis.subCode} ${this.mkbSubDiagnosis.name}`;
+    }
+    return this.mkbDiagnosis.getFullName();
   }
 }

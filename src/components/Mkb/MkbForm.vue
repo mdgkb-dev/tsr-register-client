@@ -16,6 +16,75 @@
 
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
+          <div v-if="props.row.editMode && selectedClass.id">
+            <div>
+              <el-select
+                v-model="selectedClass.selectedGroupId"
+                :disabled="!!selectedClass.selectedSubGroupId"
+                clearable
+                @clear="selectedClass.resetSelected()"
+              >
+                <el-option v-for="item in selectedClass.mkbGroups" :key="item.id" :value="item.id" :label="item.getFullName()" />
+              </el-select>
+            </div>
+            <div>
+              <el-select
+                v-if="selectedClass.getAllSubGroups().length"
+                :model-value="selectedClass.selectedSubGroupId"
+                :disabled="!!selectedClass.selectedDiagnosisId"
+                clearable
+                @change="($e) => selectedClass.selectSubGroup($e)"
+                @clear="selectedClass.resetSelected()"
+              >
+                <el-option v-for="item in selectedClass.getAllSubGroups()" :key="item.id" :value="item.id" :label="item.getFullName()" />
+              </el-select>
+            </div>
+            <div>
+              <el-select
+                v-if="selectedClass.getAllSubSubGroups().length"
+                :model-value="selectedClass.selectedSubSubGroupId"
+                :disabled="!!selectedClass.selectedSubDiagnosisId"
+                clearable
+                @change="($e) => selectedClass.selectSubGroup($e)"
+                @clear="selectedClass.resetSelected()"
+              >
+                <el-option v-for="item in selectedClass.getAllSubSubGroups()" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </div>
+            <div>
+              <el-select
+                v-if="selectedClass.getAllDiagnosis()"
+                :model-value="selectedClass.selectedDiagnosisId"
+                :disabled="!!selectedClass.selectedSubDiagnosisId"
+                clearable
+                @change="($e) => selectedClass.selectDiagnosis($e)"
+                @clear="selectedClass.resetSelected()"
+              >
+                <el-option v-for="item in selectedClass.getAllDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
+              </el-select>
+            </div>
+            <div>
+              <el-select
+                v-if="selectedClass.getAllSubDiagnosis().length"
+                :model-value="selectedClass.selectedSubDiagnosisId"
+                clearable
+                @change="($e) => selectedClass.selectSubDiagnosis($e)"
+                @clear="selectedClass.resetSelected()"
+              >
+                <el-option v-for="item in selectedClass.getAllSubDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
+              </el-select>
+            </div>
+            <el-button @click="props.row.saveDiagnosis(selectedClass)">Сохранить диагноз</el-button>
+          </div>
+          <div v-else>
+            <div>
+              {{ props.row.mkbDiagnosis?.mkbGroup?.name }}
+            </div>
+            <div>
+              {{ props.row.mkbDiagnosis?.getFullName() }}
+            </div>
+          </div>
+          <el-divider />
           <el-button v-if="isEditMode" style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button>
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
@@ -39,61 +108,20 @@
 
       <el-table-column label="Группа диагноза" align="start" sortable>
         <template #default="scope">
-          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0">
-            <RemoteSearch
-              v-model:model-value="scope.row.mkbDiagnosis.queryStringGroup"
-              :key-value="schema.mkbGroup.key"
-              @select="selectGroup($event, scope.row)"
-            />
+          <el-form-item v-if="scope.row.editMode" label-width="0" style="margin-bottom: 0">
+            <RemoteSearch :must-be-translated="true" :key-value="schema.mkbFlat.key" @select="selectMkbElement($event, scope.row)" />
           </el-form-item>
-          <!--          <span v-else>{{ scope.row.mkbDiagnoses.queryStringGroup }}</span>-->
+          <span v-else>{{ scope.row.getFullName() }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="Основной диагноз" align="start" sortable>
-        <template #default="scope">
-          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0" :prop="getProp(scope.$index)">
-            <RemoteSearch
-              v-model:model-value="scope.row.mkbDiagnosis.queryStringDiagnosis"
-              :key-value="schema.mkbDiagnosis.key"
-              @select="selectDiagnosis($event, scope.row)"
-            />
-          </el-form-item>
-          <span v-else>{{ scope.row.mkbDiagnosis.queryStringDiagnosis }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="height" label="Уточнённый диагноз" align="center">
-        <template #default="scope">
-          <RemoteSearch
-            v-model:model-value="scope.row.mkbSubDiagnosis.queryString"
-            :key-value="schema.mkbSubDiagnosis.key"
-            @select="selectSubDiagnosis($event, scope.row)"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Диагноз" align="start" sortable>
-        <template #default="scope">
-          <el-form-item v-if="isEditMode" label-width="0" style="margin-bottom: 0" :prop="getProp(scope.$index)">
-            <RemoteSearch
-              v-model:model-value="scope.row.mkbConcreteDiagnosis.queryString"
-              :key-value="schema.mkbConcreteDiagnosis.key"
-              @select="selectConcreteDiagnosis($event, scope.row)"
-            />
-          </el-form-item>
-          <span v-else>{{ scope.row.mkbConcreteDiagnosis.queryString }}</span>
-        </template>
-      </el-table-column>
-
-      <!--      <el-table-column v-if="patientDiagnosis && isEditMode" prop="weight" label="Первичный" width="110" align="center">-->
-      <!--        <template #default="scope">-->
-      <!--          <el-checkbox v-model="scope.row.primary" />-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
         <template #default="scope">
-          <TableButtonGroup :show-remove-button="true" @remove="removeDiagnosis(scope.row.id)" />
+          <TableButtonGroup
+            :show-remove-button="true"
+            :show-edit-button="!scope.row.editMode"
+            @remove="removeDiagnosis(scope.row.id)"
+            @edit="scope.row.editDiagnosis()"
+          />
         </template>
       </el-table-column>
     </el-table>
@@ -111,8 +139,10 @@ import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IWithDiagnosis from '@/interfaces/IWithDiagnosis';
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
@@ -143,7 +173,8 @@ export default defineComponent({
 
     const { formatDate } = useDateFormat();
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
-
+    const selectedClass: ComputedRef<IMkbClass> = computed(() => Provider.store.getters['mkb/mkbClass']);
+    const selectedElement: ComputedRef<IMkbElement> = computed(() => Provider.store.getters['mkb/mkbElement']);
     const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredDiagnosis']);
     const filteredSubDiagnosis: Ref<IMkbSubDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredSubDiagnosis']);
     const filteredConcreteDiagnosis: Ref<IMkbConcreteDiagnosis[]> = computed(() => Provider.store.getters['mkb/filteredConcreteDiagnosis']);
@@ -272,6 +303,11 @@ export default defineComponent({
       }
     };
 
+    const selectMkbElement = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
+      await Provider.store.dispatch('mkb/selectMkbElement', event.id);
+      selectedClass.value.selectByElement(selectedElement.value);
+    };
+
     return {
       filteredConcreteDiagnosis,
       getProp,
@@ -289,13 +325,15 @@ export default defineComponent({
       isEditMode,
       filteredSubDiagnosis,
       schema: Provider.schema,
+      selectedElement,
       RemoveFromClass,
-
+      selectMkbElement,
       //
       selectGroup,
       selectDiagnosis,
       selectSubDiagnosis,
       selectConcreteDiagnosis,
+      selectedClass,
     };
   },
 });

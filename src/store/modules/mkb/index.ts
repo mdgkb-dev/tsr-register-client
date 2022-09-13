@@ -1,5 +1,7 @@
 import { Module } from 'vuex';
 
+import MkbElement from '@/classes/mkb/MkbElement';
+import MkbClass from '@/classes/mkb/MkbСlass';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -16,6 +18,8 @@ export const state: State = {
   mkbDiagnosis: [],
   mkbSubDiagnosis: [],
   mkbConcreteDiagnosis: [],
+  mkbClass: new MkbClass(),
+  mkbElement: new MkbElement(),
 };
 
 const namespaced = true;

@@ -46,5 +46,6 @@ export default class MkbSubDiagnosis implements IMkbSubDiagnosis {
     this.queryString = this.fullName;
   }
 
-  getFullName = (): string => `${this.subCode} ${this.name}`;
+  getFullName = (): string =>
+    this.mkbDiagnosis ? `${this.mkbDiagnosis.code}.${this.subCode} ${this.name}` : `${this.subCode} ${this.name}`;
 }

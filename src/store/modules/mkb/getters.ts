@@ -3,6 +3,7 @@ import { GetterTree } from 'vuex';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import RootState from '@/store/types';
@@ -33,6 +34,12 @@ const getters: GetterTree<State, RootState> = {
   },
   mkbSubDiagnosis(state): IMkbSubDiagnosis[] | undefined {
     return state.mkbSubDiagnosis;
+  },
+  mkbClass(state): IMkbClass {
+    return state.mkbClass;
+  },
+  mkbElement(state): IMkbElement {
+    return state.mkbElement;
   },
 };
 

@@ -1,5 +1,7 @@
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
+import IMkbSubSubGroup from '@/interfaces/mkb/IMkbSubSubGroup';
 
 export default interface IMkbGroup {
   id: string;
@@ -16,7 +18,10 @@ export default interface IMkbGroup {
   isEditMode: boolean;
 
   getDiagnosis: (diagnosisId: string) => IMkbDiagnosis | undefined;
+  getSubDiagnosis: (subDiagnosisId: string) => IMkbSubDiagnosis | undefined;
   getFullName: () => string;
   getChildren: (relevant: boolean) => (IMkbSubGroup | IMkbDiagnosis)[];
   getSubGroup: (subGroupId: string) => IMkbSubGroup | undefined;
+  getAllDiagnosis: () => IMkbDiagnosis[];
+  getAllSubSubGroups: () => IMkbSubSubGroup[];
 }

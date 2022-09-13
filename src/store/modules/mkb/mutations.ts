@@ -3,6 +3,7 @@ import { MutationTree } from 'vuex';
 import MkbComposition from '@/classes/mkb/MkbComposition';
 import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import MkbElement from '@/classes/mkb/MkbElement';
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
@@ -10,6 +11,7 @@ import MkbClass from '@/classes/mkb/MkbСlass';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
+import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IMkbSubGroup from '@/interfaces/mkb/IMkbSubGroup';
@@ -137,16 +139,12 @@ const mutations: MutationTree<State> = {
       diagnosis.mkbSubDiagnosis = mkbSubDiagnosis;
     }
   },
-
-  // updateRelevant: (state, payload) => {
-  //   let item;
-  //   Object.values(state).forEach((group: any) => {
-  //     item = group.find((i: any) => i.id === payload.id);
-  //   });
-  //   if (item) {
-  //     Object.assign(item, payload);
-  //   }
-  // },
+  setMkbClass(state, item: IMkbClass) {
+    state.mkbClass = new MkbClass(item);
+  },
+  setMkbElement(state, item: IMkbElement) {
+    state.mkbElement = new MkbElement(item);
+  },
 };
 
 export default mutations;

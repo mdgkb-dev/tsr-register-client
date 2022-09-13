@@ -3,6 +3,7 @@ import IDrugSchema from '@/interfaces/schema/IDrugSchema';
 import IHumanSchema from '@/interfaces/schema/IHumanSchema';
 import IMkbConcreteDiagnosisSchema from '@/interfaces/schema/IMkbConcreteDiagnosisSchema';
 import IMkbDiagnosisSchema from '@/interfaces/schema/IMkbDiagnosisSchema';
+import IMkbFlatSchema from '@/interfaces/schema/IMkbFlatSchema';
 import IMkbGroupSchema from '@/interfaces/schema/IMkbGroupSchema';
 import IMkbSubDiagnosisSchema from '@/interfaces/schema/IMkbSubDiagnosisSchema';
 import IPatientDiagnosisSchema from '@/interfaces/schema/IPatientDiagnosisSchema';
@@ -22,4 +23,5 @@ export default interface ISchema {
   mkbConcreteDiagnosis: IMkbConcreteDiagnosisSchema;
   drug: IDrugSchema;
   registerToPatient: IRegisterToPatientSchema;
+  mkbFlat: IMkbFlatSchema;
 }
