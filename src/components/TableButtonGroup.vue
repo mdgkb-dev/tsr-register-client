@@ -1,5 +1,6 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
+    <el-button v-if="showCheckButton" class="table-button" :icon="Check" @click="$emit('check')" />
     <el-button v-if="showAddButton" class="table-button" :icon="Plus" @click="$emit('add')" />
     <el-button v-if="showMoveUpButton" class="table-button" :icon="ArrowUp" @click="$emit('moveUp')" />
     <el-button v-if="showMoveDownButton" class="table-button" :icon="ArrowDown" @click="$emit('moveDown')" />
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { ArrowDown, ArrowUp, Delete, Download, Edit, InfoFilled, Plus } from '@element-plus/icons-vue';
+import { ArrowDown, ArrowUp, Check, Delete, Download, Edit, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
@@ -53,14 +54,18 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
+    showCheckButton: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
     horizontal: {
       type: Boolean as PropType<boolean>,
       default: false,
     },
   },
-  emits: ['download', 'edit', 'remove', 'moveUp', 'moveDown', 'add'],
+  emits: ['download', 'edit', 'remove', 'moveUp', 'moveDown', 'add', 'check'],
   setup() {
-    return { Edit, Download, Plus, ArrowUp, ArrowDown, Delete, InfoFilled };
+    return { Edit, Download, Plus, ArrowUp, ArrowDown, Delete, InfoFilled, Check };
   },
 });
 </script>

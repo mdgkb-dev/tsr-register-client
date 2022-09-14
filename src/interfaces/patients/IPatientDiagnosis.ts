@@ -19,6 +19,6 @@ export default interface IPatientDiagnosis {
   patient?: IPatient;
   patientDiagnosisAnamnesis: IPatientDiagnosisAnamnesis[];
   patientDiagnosisAnamnesisForDelete: string[];
-  editDiagnosis: () => void;
+  changeEditMode: () => void;
   getFullName: () => string;
 }

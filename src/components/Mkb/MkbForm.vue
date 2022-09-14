@@ -22,7 +22,7 @@
                 v-model="selectedClass.selectedGroupId"
                 :disabled="!!selectedClass.selectedSubGroupId"
                 clearable
-                @clear="selectedClass.resetSelected()"
+                @clear="selectedClass.selectedGroupId = undefined"
               >
                 <el-option v-for="item in selectedClass.mkbGroups" :key="item.id" :value="item.id" :label="item.getFullName()" />
               </el-select>
@@ -34,7 +34,7 @@
                 :disabled="!!selectedClass.selectedDiagnosisId"
                 clearable
                 @change="($e) => selectedClass.selectSubGroup($e)"
-                @clear="selectedClass.resetSelected()"
+                @clear="selectedClass.selectedSubGroupId = undefined"
               >
                 <el-option v-for="item in selectedClass.getAllSubGroups()" :key="item.id" :value="item.id" :label="item.getFullName()" />
               </el-select>
@@ -46,7 +46,7 @@
                 :disabled="!!selectedClass.selectedSubDiagnosisId"
                 clearable
                 @change="($e) => selectedClass.selectSubGroup($e)"
-                @clear="selectedClass.resetSelected()"
+                @clear="selectedClass.selectedSubSubGroupId = undefined"
               >
                 <el-option v-for="item in selectedClass.getAllSubSubGroups()" :key="item.id" :label="item.name" :value="item.id" />
               </el-select>
@@ -58,7 +58,7 @@
                 :disabled="!!selectedClass.selectedSubDiagnosisId"
                 clearable
                 @change="($e) => selectedClass.selectDiagnosis($e)"
-                @clear="selectedClass.resetSelected()"
+                @clear="selectedClass.selectedDiagnosisId = undefined"
               >
                 <el-option v-for="item in selectedClass.getAllDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
               </el-select>
@@ -69,12 +69,11 @@
                 :model-value="selectedClass.selectedSubDiagnosisId"
                 clearable
                 @change="($e) => selectedClass.selectSubDiagnosis($e)"
-                @clear="selectedClass.resetSelected()"
+                @clear="selectedClass.selectedSubDiagnosisId = undefined"
               >
                 <el-option v-for="item in selectedClass.getAllSubDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
               </el-select>
             </div>
-            <el-button @click="props.row.saveDiagnosis(selectedClass)">Сохранить диагноз</el-button>
           </div>
           <div v-else>
             <div>
@@ -108,10 +107,16 @@
 
       <el-table-column label="Группа диагноза" align="start" sortable>
         <template #default="scope">
-          <el-form-item v-if="scope.row.editMode" label-width="0" style="margin-bottom: 0">
-            <RemoteSearch :must-be-translated="true" :key-value="schema.mkbFlat.key" @select="selectMkbElement($event, scope.row)" />
+          <el-form-item v-show="scope.row.editMode" label-width="0" style="margin-bottom: 0">
+            <RemoteSearch
+              ref="searchFormRef"
+              :show-suggestions="false"
+              :must-be-translated="true"
+              :key-value="schema.mkbFlat.key"
+              @select="selectMkbElement($event, scope.row)"
+            />
           </el-form-item>
-          <span v-else>{{ scope.row.getFullName() }}</span>
+          <span v-if="!scope.row.editMode">{{ scope.row.getFullName() }}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
@@ -119,8 +124,10 @@
           <TableButtonGroup
             :show-remove-button="true"
             :show-edit-button="!scope.row.editMode"
+            :show-check-button="scope.row.editMode"
             @remove="removeDiagnosis(scope.row.id)"
-            @edit="scope.row.editDiagnosis()"
+            @edit="changeEditMode(scope.row)"
+            @check="scope.row.saveDiagnosis(selectedClass)"
           />
         </template>
       </el-table-column>
@@ -129,11 +136,8 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, reactive, Ref } from 'vue';
+import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType, reactive, Ref, ref } from 'vue';
 
-import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -143,7 +147,6 @@ import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbElement from '@/interfaces/mkb/IMkbElement';
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
@@ -170,7 +173,7 @@ export default defineComponent({
   },
   setup(props) {
     let expandRowKeys: (string | undefined)[] = reactive([]);
-
+    const searchFormRef = ref();
     const { formatDate } = useDateFormat();
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
     const selectedClass: ComputedRef<IMkbClass> = computed(() => Provider.store.getters['mkb/mkbClass']);
@@ -198,125 +201,25 @@ export default defineComponent({
       Provider.store.commit(`${props.storeModule}/clearDiagnosis`, id);
     };
 
-    const getProp = (index: number): string => {
-      let mod = '';
-      if (patientDiagnosis) {
-        mod = 'patientDiagnosis.';
-      } else {
-        mod = 'registerDiagnosis.';
-      }
-      if (props.storeModule === 'drugs') {
-        mod = 'drugsDiagnosis.';
-      }
-      return mod + index + '.mkbDiagnosisId';
-    };
-
-    const mkbGroup: ComputedRef<IMkbGroup> = computed(() => Provider.store.getters['mkbGroups/item']);
-    const mkbDiagnosis: ComputedRef<IMkbDiagnosis> = computed(() => Provider.store.getters['mkbDiagnoses/item']);
-    const mkbSubDiagnosis: ComputedRef<IMkbSubDiagnosis> = computed(() => Provider.store.getters['mkbSubDiagnoses/item']);
-    const mkbConcreteDiagnosis: ComputedRef<IMkbConcreteDiagnosis> = computed(() => Provider.store.getters['mkbConcreteDiagnoses/item']);
-
-    const clearDiagnosisData = (
-      withDiagnosis: IWithDiagnosis,
-      group: boolean,
-      diagnosis: boolean,
-      subDiagnosis: boolean,
-      concreteDiagnosis: boolean
-    ): void => {
-      if (group) {
-        withDiagnosis.mkbDiagnosis.queryStringGroup = '';
-        withDiagnosis.mkbDiagnosisId = undefined;
-      }
-      if (diagnosis) {
-        withDiagnosis.mkbDiagnosis.queryStringDiagnosis = '';
-        withDiagnosis.mkbDiagnosisId = undefined;
-      }
-      if (subDiagnosis) {
-        withDiagnosis.mkbSubDiagnosis.queryString = '';
-        withDiagnosis.mkbSubDiagnosisId = undefined;
-      }
-      if (concreteDiagnosis) {
-        withDiagnosis.mkbConcreteDiagnosis.queryString = '';
-        withDiagnosis.mkbConcreteDiagnosisId = undefined;
-      }
-    };
-
-    const setGroup = (withDiagnosis: IWithDiagnosis, item: IMkbGroup): void => {
-      withDiagnosis.mkbDiagnosis.queryStringGroup = item.fullName;
-      withDiagnosis.mkbDiagnosis.mkbGroupId = item.id;
-    };
-
-    const setDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbDiagnosis): void => {
-      withDiagnosis.mkbDiagnosis.queryStringDiagnosis = item.fullName;
-      withDiagnosis.mkbDiagnosisId = item.id;
-      withDiagnosis.mkbDiagnosis = new MkbDiagnosis(item);
-    };
-
-    const setSubDiagnosis = (withDiagnosis: IWithDiagnosis, item: IMkbSubDiagnosis): void => {
-      withDiagnosis.mkbSubDiagnosisId = item.id;
-      withDiagnosis.mkbSubDiagnosis = new MkbSubDiagnosis(item);
-      withDiagnosis.mkbSubDiagnosis.queryString = item.fullName;
-    };
-
-    const selectGroup = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
-      await Provider.store.dispatch('mkbGroups/get', event.id);
-      setGroup(withDiagnosis, mkbGroup.value);
-      clearDiagnosisData(withDiagnosis, false, true, true, true);
-    };
-
-    const selectDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
-      await Provider.store.dispatch('mkbDiagnoses/get', event.id);
-      setDiagnosis(withDiagnosis, mkbDiagnosis.value);
-      clearDiagnosisData(withDiagnosis, false, false, true, true);
-      if (mkbDiagnosis.value.mkbGroup) {
-        setGroup(withDiagnosis, mkbDiagnosis.value.mkbGroup);
-      }
-    };
-
-    const selectSubDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
-      await Provider.store.dispatch('mkbSubDiagnoses/get', event.id);
-      setSubDiagnosis(withDiagnosis, mkbSubDiagnosis.value);
-      clearDiagnosisData(withDiagnosis, false, false, false, true);
-      if (mkbSubDiagnosis.value.mkbDiagnosis) {
-        setDiagnosis(withDiagnosis, mkbSubDiagnosis.value.mkbDiagnosis);
-        if (mkbSubDiagnosis.value.mkbDiagnosis.mkbGroup) {
-          setGroup(withDiagnosis, mkbSubDiagnosis.value.mkbDiagnosis.mkbGroup);
-        }
-      }
-    };
-
-    const selectConcreteDiagnosis = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
-      await Provider.store.dispatch('mkbConcreteDiagnoses/get', event.id);
-
-      withDiagnosis.mkbConcreteDiagnosisId = mkbConcreteDiagnosis.value.id;
-      withDiagnosis.mkbConcreteDiagnosis = new MkbConcreteDiagnosis(mkbConcreteDiagnosis.value);
-      withDiagnosis.mkbConcreteDiagnosis.queryString = mkbConcreteDiagnosis.value.name;
-
-      if (mkbConcreteDiagnosis.value.mkbSubDiagnosis) {
-        setSubDiagnosis(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis);
-        if (mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis) {
-          setDiagnosis(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis);
-          if (mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis.mkbGroup) {
-            setGroup(withDiagnosis, mkbConcreteDiagnosis.value.mkbSubDiagnosis.mkbDiagnosis.mkbGroup);
-          }
-        }
-      }
-    };
-
     const selectMkbElement = async (event: ISearchObject, withDiagnosis: IWithDiagnosis): Promise<void> => {
       await Provider.store.dispatch('mkb/selectMkbElement', event.id);
       selectedClass.value.selectByElement(selectedElement.value);
     };
 
+    const changeEditMode = (patientDiagnosis: IPatientDiagnosis) => {
+      patientDiagnosis.changeEditMode();
+      searchFormRef.value.$refs.searchForm.focus();
+    };
+
     return {
+      searchFormRef,
+      changeEditMode,
       filteredConcreteDiagnosis,
-      getProp,
       diagnosisData,
       patientDiagnosis,
       formatDate,
       expandRowKeys,
       filteredDiagnosis,
-      mkbSubDiagnosis,
       addAnamnesis,
       addDiagnosis,
       handleExpandChange,
@@ -329,10 +232,6 @@ export default defineComponent({
       RemoveFromClass,
       selectMkbElement,
       //
-      selectGroup,
-      selectDiagnosis,
-      selectSubDiagnosis,
-      selectConcreteDiagnosis,
       selectedClass,
     };
   },

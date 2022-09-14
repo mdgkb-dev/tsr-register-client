@@ -1,18 +1,6 @@
 <template>
   <el-form @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
-      <!--      <el-autocomplete-->
-      <!--        v-if="modelValue !== undefined"-->
-      <!--        ref="searchForm"-->
-      <!--        :model-value="modelValue"-->
-      <!--        style="width: 100%; margin-right: 10px"-->
-      <!--        popper-class="wide-dropdown"-->
-      <!--        :placeholder="placeHolder"-->
-      <!--        :fetch-suggestions="find"-->
-      <!--        :trigger-on-focus="showSuggestions"-->
-      <!--        @select="handleSelect"-->
-      <!--        @input="handleInput"-->
-      <!--      />-->
       <el-autocomplete
         ref="searchForm"
         v-model="queryString"
@@ -20,7 +8,7 @@
         popper-class="wide-dropdown"
         :placeholder="placeHolder"
         :fetch-suggestions="find"
-        :trigger-on-focus="showSuggestions"
+        :trigger-on-focus="false"
         @select="handleSelect"
         @input="handleInput"
       />
@@ -85,6 +73,7 @@ export default defineComponent({
 
     const find = async (query: string, resolve: (arg: any) => void): Promise<void> => {
       if (query.length < 2) {
+        resolve([]);
         return;
       }
       searchForm.value.activated = true;
@@ -97,11 +86,11 @@ export default defineComponent({
       }
       await store.dispatch(`search/search`, searchModel.value);
       emit('input', searchModel.value.searchObjects);
-      if (props.showSuggestions) {
-        resolve(searchModel.value.searchObjects);
-        return;
-      }
-      resolve([]);
+      // if (props.showSuggestions) {
+      resolve(searchModel.value.searchObjects);
+      // return;
+      // }
+      // resolve([]);
     };
 
     const handleSearchInput = async (value: string): Promise<void> => {
@@ -192,6 +181,6 @@ $margin: 20px 0;
 }
 
 .el-form {
-  width: 100%;
+  width: 100% !important;
 }
 </style>

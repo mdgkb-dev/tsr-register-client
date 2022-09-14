@@ -43,12 +43,8 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
       this.patientDiagnosisAnamnesis = i.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
   }
 
-  editDiagnosis(): void {
-    this.editMode = true;
-    this.mkbDiagnosis = new MkbDiagnosis();
-    this.mkbDiagnosisId = undefined;
-    this.mkbSubDiagnosis = new MkbSubDiagnosis();
-    this.mkbSubDiagnosisId = undefined;
+  changeEditMode(): void {
+    this.editMode = !this.editMode;
   }
 
   saveDiagnosis(mkbClass: IMkbClass): void {
