@@ -1,7 +1,7 @@
 <template>
   <el-space :direction="horizontal ? 'horizontal' : 'vertical'" alignment="center" :size="0">
-    <el-button v-if="showCheckButton" class="table-button" :icon="Check" @click="$emit('check')" />
     <el-button v-if="showAddButton" class="table-button" :icon="Plus" @click="$emit('add')" />
+    <el-button v-if="showCheckButton" class="table-button" :icon="Check" @click="$emit('check')" />
     <el-button v-if="showMoveUpButton" class="table-button" :icon="ArrowUp" @click="$emit('moveUp')" />
     <el-button v-if="showMoveDownButton" class="table-button" :icon="ArrowDown" @click="$emit('moveDown')" />
     <el-button v-if="showDownloadButton" class="table-button" :icon="Download" @click="$emit('download')" />

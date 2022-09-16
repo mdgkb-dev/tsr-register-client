@@ -16,75 +16,8 @@
 
       <el-table-column v-if="patientDiagnosis" type="expand">
         <template #default="props">
-          <div v-if="props.row.editMode && selectedClass.id">
-            <div>
-              <el-select
-                v-model="selectedClass.selectedGroupId"
-                :disabled="!!selectedClass.selectedSubGroupId"
-                clearable
-                @clear="selectedClass.selectedGroupId = undefined"
-              >
-                <el-option v-for="item in selectedClass.mkbGroups" :key="item.id" :value="item.id" :label="item.getFullName()" />
-              </el-select>
-            </div>
-            <div>
-              <el-select
-                v-if="selectedClass.getAllSubGroups().length"
-                :model-value="selectedClass.selectedSubGroupId"
-                :disabled="!!selectedClass.selectedDiagnosisId"
-                clearable
-                @change="($e) => selectedClass.selectSubGroup($e)"
-                @clear="selectedClass.selectedSubGroupId = undefined"
-              >
-                <el-option v-for="item in selectedClass.getAllSubGroups()" :key="item.id" :value="item.id" :label="item.getFullName()" />
-              </el-select>
-            </div>
-            <div>
-              <el-select
-                v-if="selectedClass.getAllSubSubGroups().length"
-                :model-value="selectedClass.selectedSubSubGroupId"
-                :disabled="!!selectedClass.selectedSubDiagnosisId"
-                clearable
-                @change="($e) => selectedClass.selectSubGroup($e)"
-                @clear="selectedClass.selectedSubSubGroupId = undefined"
-              >
-                <el-option v-for="item in selectedClass.getAllSubSubGroups()" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
-            </div>
-            <div>
-              <el-select
-                v-if="selectedClass.getAllDiagnosis()"
-                :model-value="selectedClass.selectedDiagnosisId"
-                :disabled="!!selectedClass.selectedSubDiagnosisId"
-                clearable
-                @change="($e) => selectedClass.selectDiagnosis($e)"
-                @clear="selectedClass.selectedDiagnosisId = undefined"
-              >
-                <el-option v-for="item in selectedClass.getAllDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
-              </el-select>
-            </div>
-            <div>
-              <el-select
-                v-if="selectedClass.getAllSubDiagnosis().length"
-                :model-value="selectedClass.selectedSubDiagnosisId"
-                clearable
-                @change="($e) => selectedClass.selectSubDiagnosis($e)"
-                @clear="selectedClass.selectedSubDiagnosisId = undefined"
-              >
-                <el-option v-for="item in selectedClass.getAllSubDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
-              </el-select>
-            </div>
-          </div>
-          <div v-else>
-            <div>
-              {{ props.row.mkbDiagnosis?.mkbGroup?.name }}
-            </div>
-            <div>
-              {{ props.row.mkbDiagnosis?.getFullName() }}
-            </div>
-          </div>
-          <el-divider />
-          <el-button v-if="isEditMode" style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button>
+          <!-- <el-divider /> -->
+          <!-- <el-button v-if="isEditMode" style="margin: 10px" @click="addAnamnesis(props.row)">Добавить анамнез</el-button> -->
           <div class="block" style="">
             <el-timeline style="margin-top: 20px">
               <el-timeline-item
@@ -107,7 +40,7 @@
 
       <el-table-column label="Группа диагноза" align="start" sortable>
         <template #default="scope">
-          <el-form-item v-show="scope.row.editMode" label-width="0" style="margin-bottom: 0">
+          <div v-show="scope.row.editMode">
             <RemoteSearch
               ref="searchFormRef"
               :show-suggestions="false"
@@ -115,16 +48,95 @@
               :key-value="schema.mkbFlat.key"
               @select="selectMkbElement($event, scope.row)"
             />
-          </el-form-item>
-          <span v-if="!scope.row.editMode">{{ scope.row.getFullName() }}</span>
+            <div v-if="scope.row.editMode && selectedClass.id" class="selects">
+              <div class="selects-item">
+                <el-select
+                  v-model="selectedClass.selectedGroupId"
+                  :disabled="!!selectedClass.selectedSubGroupId"
+                  clearable
+                  fit-input-width
+                  @clear="selectedClass.selectedGroupId = undefined"
+                >
+                  <el-option v-for="item in selectedClass.mkbGroups" :key="item.id" :value="item.id" :label="item.getFullName()" />
+                </el-select>
+              </div>
+              <div class="selects-item">
+                <el-select
+                  v-if="selectedClass.getAllSubGroups().length"
+                  :model-value="selectedClass.selectedSubGroupId"
+                  :disabled="!!selectedClass.selectedDiagnosisId"
+                  clearable
+                  fit-input-width
+                  @change="($e) => selectedClass.selectSubGroup($e)"
+                  @clear="selectedClass.selectedSubGroupId = undefined"
+                >
+                  <el-option v-for="item in selectedClass.getAllSubGroups()" :key="item.id" :value="item.id" :label="item.getFullName()" />
+                </el-select>
+              </div>
+              <div class="selects-item">
+                <el-select
+                  v-if="selectedClass.getAllSubSubGroups().length"
+                  :model-value="selectedClass.selectedSubSubGroupId"
+                  :disabled="!!selectedClass.selectedSubDiagnosisId"
+                  clearable
+                  fit-input-width
+                  @change="($e) => selectedClass.selectSubGroup($e)"
+                  @clear="selectedClass.selectedSubSubGroupId = undefined"
+                >
+                  <el-option v-for="item in selectedClass.getAllSubSubGroups()" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+              </div>
+              <div class="selects-item">
+                <el-select
+                  v-if="selectedClass.getAllDiagnosis()"
+                  :model-value="selectedClass.selectedDiagnosisId"
+                  :disabled="!!selectedClass.selectedSubDiagnosisId"
+                  clearable
+                  fit-input-width
+                  @change="($e) => selectedClass.selectDiagnosis($e)"
+                  @clear="selectedClass.selectedDiagnosisId = undefined"
+                >
+                  <el-option v-for="item in selectedClass.getAllDiagnosis()" :key="item.id" :label="item.getFullName()" :value="item.id" />
+                </el-select>
+              </div>
+              <div class="selects-item">
+                <el-select
+                  v-if="selectedClass.getAllSubDiagnosis().length"
+                  :model-value="selectedClass.selectedSubDiagnosisId"
+                  clearable
+                  fit-input-width
+                  @change="($e) => selectedClass.selectSubDiagnosis($e)"
+                  @clear="selectedClass.selectedSubDiagnosisId = undefined"
+                >
+                  <el-option
+                    v-for="item in selectedClass.getAllSubDiagnosis()"
+                    :key="item.id"
+                    :label="item.getFullName()"
+                    :value="item.id"
+                  />
+                </el-select>
+              </div>
+            </div>
+            <!-- <div v-else>
+              <div>
+                {{ scope.row.mkbDiagnosis?.mkbGroup?.name }}
+              </div>
+              <div>
+                {{ scope.row.mkbDiagnosis?.getFullName() }}
+              </div>
+            </div> -->
+          </div>
+          <div v-if="!scope.row.editMode">{{ scope.row.getFullName() }}</div>
         </template>
       </el-table-column>
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
         <template #default="scope">
           <TableButtonGroup
-            :show-remove-button="true"
+            show-remove-button
             :show-edit-button="!scope.row.editMode"
             :show-check-button="scope.row.editMode"
+            show-add-button
+            @add="addAnamnesis(scope.row)"
             @remove="removeDiagnosis(scope.row.id)"
             @edit="changeEditMode(scope.row)"
             @check="scope.row.saveDiagnosis(selectedClass)"
@@ -241,5 +253,24 @@ export default defineComponent({
 <style lang="scss" scoped>
 :deep(.el-timeline) {
   margin-right: 20px;
+}
+.selects {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  &-item {
+    width: 100%;
+    margin: 10px 10px 0 10px;
+    padding-right: 10px;
+    :deep(.el-input__wrapper) {
+      border-radius: 20px;
+    }
+    :deep(.el-select) {
+      width: 100%;
+    }
+  }
+  &-item:empty {
+    display: none;
+  }
 }
 </style>

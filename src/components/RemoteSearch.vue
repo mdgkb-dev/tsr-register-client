@@ -5,7 +5,6 @@
         ref="searchForm"
         v-model="queryString"
         style="width: 100%; margin-right: 10px"
-        popper-class="wide-dropdown"
         :placeholder="placeHolder"
         :fetch-suggestions="find"
         :trigger-on-focus="false"
