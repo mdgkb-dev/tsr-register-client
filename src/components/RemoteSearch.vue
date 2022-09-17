@@ -66,7 +66,7 @@ export default defineComponent({
   emits: ['select', 'load', 'input', 'update:modelValue'],
   setup(props, { emit }) {
     const store = useStore();
-    const queryString: Ref<string> = ref('');
+    const queryString: Ref<string> = ref(props.modelValue ? props.modelValue : '');
     const searchForm = ref();
     const searchModel: Ref<ISearchModel> = computed<ISearchModel>(() => store.getters['search/searchModel']);
 

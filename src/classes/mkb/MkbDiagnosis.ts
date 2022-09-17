@@ -9,6 +9,7 @@ import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id = '';
@@ -84,5 +85,27 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
       newDiagnosisData.mkbSubDiagnosisId = subDiagnosis.id;
     }
     return newDiagnosisData;
+  }
+
+  getAllConcreteDiagnosis(): IMkbConcreteDiagnosis[] {
+    const items: IMkbConcreteDiagnosis[] = [];
+    this.mkbSubDiagnosis.forEach((msd: IMkbSubDiagnosis) => {
+      if (msd.name === 'Нарушения обмена цикла мочевины') {
+        console.log(msd);
+      }
+      items.push(...msd.mkbConcreteDiagnosis);
+    });
+    return items;
+  }
+
+  getConcreteDiagnosis(id: string): IMkbConcreteDiagnosis | undefined {
+    let concreteDiagnosis: IMkbConcreteDiagnosis | undefined;
+    this.mkbSubDiagnosis.forEach((d: IMkbSubDiagnosis) => {
+      const item = d.getConcreteDiagnosis(id);
+      if (item) {
+        concreteDiagnosis = item;
+      }
+    });
+    return concreteDiagnosis;
   }
 }

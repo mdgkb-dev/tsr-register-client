@@ -1,5 +1,6 @@
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubGroup from '@/classes/mkb/MkbSubGroup';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -48,15 +49,15 @@ export default class MkbGroup implements IMkbGroup {
     return this.mkbDiagnosis.find((d: IMkbDiagnosis) => d.id === diagnosisId);
   }
 
-  getSubDiagnosis(subDiagnosisId: string): IMkbSubDiagnosis | undefined {
-    let subDiagnosis: IMkbSubDiagnosis | undefined;
+  getConcreteDiagnosis(id: string): IMkbConcreteDiagnosis | undefined {
+    let concreteDiagnosis: IMkbConcreteDiagnosis | undefined;
     this.mkbDiagnosis.forEach((d: IMkbDiagnosis) => {
-      const item = d.mkbSubDiagnosis.find((msd: IMkbSubDiagnosis) => msd.id === subDiagnosisId);
+      const item = d.getConcreteDiagnosis(id);
       if (item) {
-        subDiagnosis = item;
+        concreteDiagnosis = item;
       }
     });
-    return subDiagnosis;
+    return concreteDiagnosis;
   }
 
   getFullName(): string {
@@ -83,5 +84,16 @@ export default class MkbGroup implements IMkbGroup {
     const items: IMkbSubSubGroup[] = [];
     this.mkbSubGroups.forEach((msg: IMkbSubGroup) => items.push(...msg.mkbSubSubGroups));
     return items;
+  }
+
+  getSubDiagnosis(subDiagnosisId: string): IMkbSubDiagnosis | undefined {
+    let subDiagnosis: IMkbSubDiagnosis | undefined;
+    this.mkbDiagnosis.forEach((d: IMkbDiagnosis) => {
+      const item = d.mkbSubDiagnosis.find((msd: IMkbSubDiagnosis) => msd.id === subDiagnosisId);
+      if (item) {
+        subDiagnosis = item;
+      }
+    });
+    return subDiagnosis;
   }
 }

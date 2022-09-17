@@ -14,6 +14,7 @@ export default interface IMkbSubDiagnosis {
   disabled: boolean;
   isEditMode: boolean;
   mkbConcreteDiagnosis: IMkbConcreteDiagnosis[];
+  getConcreteDiagnosis: (concreteDiagnosisId: string) => IMkbConcreteDiagnosis | undefined;
   queryString: string;
   getFullName: () => string;
 }

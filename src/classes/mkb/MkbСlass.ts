@@ -1,5 +1,6 @@
 import MkbGroup from '@/classes/mkb/MkbGroup';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -33,6 +34,8 @@ export default class MkbClass implements IMkbClass {
   selectedDiagnosisId?: string;
   selectedSubDiagnosis?: IMkbSubDiagnosis;
   selectedSubDiagnosisId?: string;
+  selectedConcreteDiagnosis?: IMkbConcreteDiagnosis;
+  selectedConcreteDiagnosisId?: string;
 
   constructor(mkbClass?: IMkbClass) {
     if (!mkbClass) {
@@ -106,6 +109,16 @@ export default class MkbClass implements IMkbClass {
     return items;
   }
 
+  getAllConcreteDiagnosis(): IMkbConcreteDiagnosis[] {
+    let items: IMkbConcreteDiagnosis[] = [];
+    this.getAllDiagnosis().forEach((d: IMkbDiagnosis) => items.push(...d.getAllConcreteDiagnosis()));
+    console.log(items);
+    items = items.filter((item: IMkbConcreteDiagnosis) =>
+      this.selectedConcreteDiagnosisId ? item.id === this.selectedConcreteDiagnosisId : true
+    );
+    return items;
+  }
+
   getDiagnosisFromTree(mkbIdSet: IMkbIdSet): IMkbDiagnosis | undefined {
     let diagnosis = this.getDiagnosis(mkbIdSet.diagnosisId);
     if (diagnosis) return diagnosis;
@@ -167,6 +180,31 @@ export default class MkbClass implements IMkbClass {
     });
   }
 
+  selectConcreteDiagnosis(id: string): void {
+    this.selectedConcreteDiagnosisId = id;
+    this.mkbGroups.forEach((m: IMkbGroup) => {
+      const cd = m.getConcreteDiagnosis(id);
+      if (!cd || !cd.mkbSubDiagnosisId) {
+        return;
+      }
+      const sd = m.getSubDiagnosis(cd.mkbSubDiagnosisId);
+      if (!sd || !sd.mkbDiagnosisId) {
+        return;
+      }
+      const d = m.getDiagnosis(sd.mkbDiagnosisId);
+      if (!d) {
+        return;
+      } else {
+        this.selectedSubGroupId = d.mkbSubGroupId;
+        this.selectedGroupId = d.mkbGroupId;
+        this.selectedSubSubGroupId = d.mkbSubSubGroupId;
+        this.selectedSubGroupId = d.mkbSubGroupId;
+        this.selectedDiagnosisId = d.id;
+        this.selectedSubDiagnosisId = sd.id;
+      }
+    });
+  }
+
   resetSelected(): void {
     this.selectedSubGroupId = undefined;
     this.selectedGroupId = undefined;
@@ -193,6 +231,9 @@ export default class MkbClass implements IMkbClass {
     }
     if (mkbElement.level === MkbLevel.MkbSubDiagnosisLevel) {
       this.selectSubDiagnosis(mkbElement.id);
+    }
+    if (mkbElement.level === MkbLevel.MkbConcreteDiagnosisLevel) {
+      this.selectConcreteDiagnosis(mkbElement.id);
     }
   }
 }

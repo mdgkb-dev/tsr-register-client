@@ -1,6 +1,7 @@
 import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
+import MkbClass from '@/classes/mkb/MkbСlass';
 import Patient from '@/classes/patients/Patient';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
@@ -26,7 +27,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
   patientDiagnosisAnamnesisForDelete: string[] = [];
   mkbConcreteDiagnosisId?: string;
   mkbConcreteDiagnosis: IMkbConcreteDiagnosis = new MkbConcreteDiagnosis();
-
+  selectedClass: IMkbClass = new MkbClass();
   constructor(i?: IPatientDiagnosis) {
     if (!i) return;
     this.id = i.id;
@@ -49,6 +50,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
 
   saveDiagnosis(mkbClass: IMkbClass): void {
     if (!mkbClass.selectedDiagnosisId) {
+      this.editMode = false;
       return;
     }
     const allDiagnosis = mkbClass.getAllDiagnosis();
@@ -65,6 +67,13 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
         if (this.mkbSubDiagnosis.mkbDiagnosis) {
           this.mkbSubDiagnosis.mkbDiagnosis.mkbGroup = undefined;
         }
+      }
+    }
+    if (mkbClass.selectedConcreteDiagnosisId) {
+      const mkbConcreteDiagnosis = this.mkbDiagnosis.getConcreteDiagnosis(mkbClass.selectedConcreteDiagnosisId);
+      if (mkbConcreteDiagnosis && mkbConcreteDiagnosis.id) {
+        this.mkbConcreteDiagnosis = new MkbConcreteDiagnosis(mkbConcreteDiagnosis);
+        this.mkbConcreteDiagnosisId = mkbConcreteDiagnosis.id;
       }
     }
     this.mkbDiagnosis.mkbSubDiagnosis = [];

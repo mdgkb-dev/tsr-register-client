@@ -1,3 +1,4 @@
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
@@ -23,6 +24,8 @@ export default interface IMkbDiagnosis {
   mkbSubDiagnosis: IMkbSubDiagnosis[];
   mkbGroup?: IMkbGroup;
 
+  getAllConcreteDiagnosis: () => IMkbConcreteDiagnosis[];
+  getConcreteDiagnosis: (id: string) => IMkbConcreteDiagnosis | undefined;
   getFullName: () => string;
   setQueryStrings: () => void;
 }

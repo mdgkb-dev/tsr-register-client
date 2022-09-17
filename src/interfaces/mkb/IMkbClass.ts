@@ -1,3 +1,4 @@
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
@@ -30,6 +31,7 @@ export default interface IMkbClass {
   getAllSubSubGroups: () => IMkbSubSubGroup[];
   getAllDiagnosis: () => IMkbDiagnosis[];
   getAllSubDiagnosis: () => IMkbSubDiagnosis[];
+  getAllConcreteDiagnosis: () => IMkbConcreteDiagnosis[];
   // SelectedElements
   selectedGroup?: IMkbGroup;
   selectedGroupId?: string;
@@ -41,6 +43,8 @@ export default interface IMkbClass {
   selectedDiagnosisId?: string;
   selectedSubDiagnosis?: IMkbSubDiagnosis;
   selectedSubDiagnosisId?: string;
+  selectedConcreteDiagnosis?: IMkbConcreteDiagnosis;
+  selectedConcreteDiagnosisId?: string;
 
   selectByElement: (mkbElement: IMkbElement) => void;
 }

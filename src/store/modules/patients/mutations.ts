@@ -213,6 +213,7 @@ const mutations: MutationTree<State> = {
     }
     const diagnosis = new PatientDiagnosis();
     diagnosis.id = uuidv4();
+    diagnosis.editMode = true;
     state.patient.patientDiagnosis.push(diagnosis);
   },
   removeDiagnosis(state, id: string) {

@@ -1,3 +1,4 @@
+import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
@@ -21,4 +22,5 @@ export default interface IPatientDiagnosis {
   patientDiagnosisAnamnesisForDelete: string[];
   changeEditMode: () => void;
   getFullName: () => string;
+  selectedClass: IMkbClass;
 }
