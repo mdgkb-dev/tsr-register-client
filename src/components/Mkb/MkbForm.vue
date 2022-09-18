@@ -11,6 +11,7 @@
       header-row-class-name="header-style"
       :expand-row-keys="expandRowKeys"
       @expand-change="handleExpandChange"
+      :row-class-name="getRowClassName"
     >
       <el-table-column type="index" width="60" align="center" />
 
@@ -250,7 +251,15 @@ export default defineComponent({
       searchFormRef.value.$refs.searchForm.focus();
     };
 
+    const getRowClassName = ({ row }: any): string => {
+      if (row.patientDiagnosisAnamnesis.length === 0) {
+        return 'row-expand-cover';
+      }
+      return '';
+    };
+
     return {
+      getRowClassName,
       searchFormRef,
       changeEditMode,
       filteredConcreteDiagnosis,
@@ -299,5 +308,9 @@ export default defineComponent({
   &-item:empty {
     display: none;
   }
+}
+
+:deep(.row-expand-cover .el-table__expand-icon) {
+  visibility: hidden;
 }
 </style>

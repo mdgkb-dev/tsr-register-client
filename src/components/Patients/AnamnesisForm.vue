@@ -7,7 +7,7 @@
         :prop="propName + '.date'"
         :rules="[{ required: true, message: 'Пожалуйста, выберите дату', trigger: 'blur' }]"
       >
-        <el-date-picker v-model="anamnesis.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату"></el-date-picker>
+        <el-date-picker v-model="anamnesis.date" type="date" format="DD.MM.YYYY" placeholder="Выберите дату" @keydown="dateFormat" />
       </el-form-item>
       <el-form-item
         v-if="anamnesis.isEditMode"
@@ -50,6 +50,7 @@ import { useStore } from 'vuex';
 
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
+import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
   name: 'AnamnesisForm',
@@ -81,6 +82,7 @@ export default defineComponent({
     });
 
     return {
+      dateFormat,
       anamnesis,
       edit,
       remove,
