@@ -4,12 +4,12 @@ import MkbGroup from '@/classes/mkb/MkbGroup';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
-import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 
 export default class MkbDiagnosis implements IMkbDiagnosis {
   id = '';
@@ -68,7 +68,8 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
   static CreateRelationDiagnosis(
     patientDiagnosis: boolean,
     diagnosis: IMkbDiagnosis,
-    subDiagnosis?: IMkbSubDiagnosis
+    subDiagnosis?: IMkbSubDiagnosis,
+    concreteDiagnosis?: IMkbConcreteDiagnosis
   ): IPatientDiagnosis | IRegisterDiagnosis {
     let newDiagnosisData: IPatientDiagnosis | IRegisterDiagnosis;
 
@@ -83,6 +84,11 @@ export default class MkbDiagnosis implements IMkbDiagnosis {
     if (subDiagnosis) {
       newDiagnosisData.mkbSubDiagnosis = subDiagnosis;
       newDiagnosisData.mkbSubDiagnosisId = subDiagnosis.id;
+    }
+
+    if (concreteDiagnosis) {
+      newDiagnosisData.mkbConcreteDiagnosis = concreteDiagnosis;
+      newDiagnosisData.mkbConcreteDiagnosisId = concreteDiagnosis.id;
     }
     return newDiagnosisData;
   }

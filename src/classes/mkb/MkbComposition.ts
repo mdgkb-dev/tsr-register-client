@@ -6,6 +6,8 @@ import MkbSubGroupAnswer from '@/classes/mkb/MkbSubGroupAnswer';
 import MkbSubSubGroupAnswer from '@/classes/mkb/MkbSubSubGroupAnswer';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbIdSet from '@/interfaces/mkb/IMkbIdSet';
+import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
+import MkbConcreteDiagnosisAnswer from '@/classes/mkb/MkbConcreteDiagnosisAnswer';
 
 export default class MkbComposition {
   mkbClassAnswer = new MkbClassAnswer();
@@ -14,5 +16,6 @@ export default class MkbComposition {
   mkbSubSubGroupAnswer: MkbSubSubGroupAnswer = new MkbSubSubGroupAnswer();
   mkbDiagnosis?: IMkbDiagnosis[];
   mkbSubDiagnosisAnswer: MkbSubDiagnosisAnswer = new MkbSubDiagnosisAnswer();
+  mkbConcreteDiagnosisAnswer: MkbConcreteDiagnosisAnswer = new MkbConcreteDiagnosisAnswer();
   mkbIdSet: IMkbIdSet = new MkbIdSet();
 }

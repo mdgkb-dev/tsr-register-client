@@ -11,14 +11,28 @@
           @setDiagnosis="setDiagnosis"
           @removeDiagnosis="removeCheckedDiagnosis"
           @setSubDiagnosis="setSubDiagnosis"
+          @setConcreteDiagnosis="setConcreteDiagnosis"
         ></MkbTree>
       </el-col>
       <el-col :span="10" :offset="2">
         <h3>Добавленные диагнозы</h3>
         <el-table :data="diagnosisData" style="width: 100%; margin-bottom: 20px">
           <el-table-column type="index" width="50" />
-          <el-table-column prop="mkbDiagnosis.name" label="Основной диагноз" width="300"> </el-table-column>
-          <el-table-column prop="mkbSubDiagnosis.name" label="Уточнённый диагноз" width="400"> </el-table-column>
+          <el-table-column prop="mkbDiagnosis.name" label="Основной диагноз" width="300">
+            <template #default="scope">
+              {{ scope.row.mkbDiagnosis.getFullName() }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="mkbSubDiagnosis.name" label="Уточнённый диагноз" width="400">
+            <template #default="scope">
+              {{ scope.row.getFullName() }}
+            </template></el-table-column
+          >
+          <el-table-column prop="mkbConcreteDiagnosis.name" label="Болезнь" width="400">
+            <template #default="scope">
+              {{ scope.row.getFullName() }}
+            </template></el-table-column
+          >
         </el-table>
       </el-col>
     </el-row>
@@ -36,6 +50,7 @@ import { computed, ComputedRef, defineAsyncComponent, defineComponent, PropType,
 import { useStore } from 'vuex';
 
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
+import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
 import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
@@ -73,10 +88,23 @@ export default defineComponent({
     const setSubDiagnosis = (subDiagnosis: IMkbSubDiagnosis, diagnosis: IMkbDiagnosis): void =>
       store.commit(`${storeModule.value}/addDiagnosis`, MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis, subDiagnosis));
 
+    const setConcreteDiagnosis = (
+      concreteDiagnosis: IMkbConcreteDiagnosis,
+      subDiagnosis: IMkbSubDiagnosis,
+      diagnosis: IMkbDiagnosis
+    ): void => {
+      console.log(MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis, subDiagnosis));
+      store.commit(
+        `${storeModule.value}/addDiagnosis`,
+        MkbDiagnosis.CreateRelationDiagnosis(patientDiagnosis, diagnosis, subDiagnosis, concreteDiagnosis)
+      );
+    };
+
     const removeCheckedDiagnosis = (i: IMkbDiagnosis | IMkbSubDiagnosis): void =>
       store.commit(`${storeModule.value}/removeDiagnosisByDiagnosisOrSubDiagnosisId`, i.id);
 
     return {
+      setConcreteDiagnosis,
       patientDiagnosis,
       diagnosisData,
       diagnosisModalVisible,

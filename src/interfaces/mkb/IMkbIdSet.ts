@@ -5,4 +5,5 @@ export default interface IMkbIdSet {
   subSubGroupId: string;
   diagnosisId: string;
   subDiagnosisId: string;
+  concreteDiagnosisId: string;
 }

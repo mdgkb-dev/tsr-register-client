@@ -236,4 +236,8 @@ export default class MkbClass implements IMkbClass {
       this.selectConcreteDiagnosis(mkbElement.id);
     }
   }
+
+  getFullName(): string {
+    return `${this.number} ${this.name}`;
+  }
 }

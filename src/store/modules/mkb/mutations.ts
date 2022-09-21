@@ -139,6 +139,26 @@ const mutations: MutationTree<State> = {
       diagnosis.mkbSubDiagnosis = mkbSubDiagnosis;
     }
   },
+  setConcreteDiagnosisFromComposition: (state, mkbComposition: MkbComposition) => {
+    const mkbConcreteDiagnosis = mkbComposition.mkbConcreteDiagnosisAnswer.mkbConcreteDiagnoses.map(
+      (d: IMkbConcreteDiagnosis) => new MkbConcreteDiagnosis(d)
+    );
+    const mkbClass = state.mkbClasses.find((m: IMkbClass) => m.id === mkbComposition.mkbIdSet.classId);
+    if (!mkbClass) {
+      return;
+    }
+    const diagnosis = mkbClass.getAllDiagnosis();
+    const d = diagnosis.find((dd: IMkbDiagnosis) => dd.id === mkbComposition.mkbIdSet.diagnosisId);
+    if (!d) {
+      return;
+    }
+    const subDiagnosis = d.mkbSubDiagnosis.find((g: IMkbSubDiagnosis) => g.id === mkbComposition.mkbIdSet.subDiagnosisId);
+    if (!subDiagnosis) {
+      return;
+    }
+    subDiagnosis.mkbConcreteDiagnosis = mkbConcreteDiagnosis;
+  },
+
   setMkbClass(state, item: IMkbClass) {
     state.mkbClass = new MkbClass(item);
   },

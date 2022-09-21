@@ -63,6 +63,15 @@ const actions: ActionTree<State, RootState> = {
     res.mkbIdSet = idSet;
     commit('setSubDiagnosis', res);
   },
+  getConcreteDiagnosisBySubDiagnosisId: async ({ commit }, idSet: IMkbIdSet): Promise<void> => {
+    const res: MkbComposition = new MkbComposition();
+    const ans = await httpClient.get<IMkbConcreteDiagnosis[]>({ query: `concrete-diagnosis/${idSet.subDiagnosisId}` });
+    if (ans) {
+      res.mkbConcreteDiagnosisAnswer.mkbConcreteDiagnoses = ans;
+    }
+    res.mkbIdSet = idSet;
+    commit('setConcreteDiagnosisFromComposition', res);
+  },
   getDiagnosisByGroupId: async ({ commit }, groupId: string): Promise<void> => {
     commit('setFilteredDiagnosis', await httpClient.get<IMkbDiagnosis[]>({ query: `diagnosis/byGroupId/${groupId}` }));
   },

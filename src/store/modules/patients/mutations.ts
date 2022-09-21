@@ -29,10 +29,10 @@ import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisA
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IPatientsWithCount from '@/interfaces/patients/IPatientsWithCount';
 import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import RemoveFromClass from '@/services/RemoveFromClass';
 
 import { State } from './state';
 
@@ -207,6 +207,7 @@ const mutations: MutationTree<State> = {
     state.patient.human.photoId = undefined;
   },
   addDiagnosis(state, patientDiagnosis?: IPatientDiagnosis) {
+    console.log(patientDiagnosis);
     if (patientDiagnosis) {
       state.patient.patientDiagnosis.push(patientDiagnosis);
       return;
@@ -222,14 +223,19 @@ const mutations: MutationTree<State> = {
     state.patient.patientDiagnosisForDelete.push(id);
   },
   removeDiagnosisByDiagnosisOrSubDiagnosisId(state, id: string) {
-    const checkedDiagnosis = state.patient.patientDiagnosis.filter(
-      (diagnosis: IPatientDiagnosis | IRegisterDiagnosis) => diagnosis.mkbDiagnosisId === id || diagnosis.mkbSubDiagnosisId === id
-    );
-    checkedDiagnosis.forEach((d: IPatientDiagnosis) => {
-      const index = state.patient.patientDiagnosis.indexOf(d);
-      if (index !== -1) state.patient.patientDiagnosis.splice(index, 1);
+    const ids: string[] = [];
+    const patientDiagnosis = state.patient.patientDiagnosis.forEach((d: IPatientDiagnosis, i: number) => {
+      // console.log(id, [d.mkbDiagnosisId, d.mkbSubDiagnosisId, d.mkbConcreteDiagnosisId]);
+      if ([d.mkbDiagnosisId, d.mkbSubDiagnosisId, d.mkbConcreteDiagnosisId].includes(id) && d.id) {
+        ids.push(d.id);
+      }
     });
-    state.patient.patientDiagnosisForDelete.push(id);
+    console.log();
+    ids.forEach((id: string) => {
+      const i = state.patient.patientDiagnosis.findIndex((d: IPatientDiagnosis) => d.id === id);
+      console.log(i);
+      RemoveFromClass(i, state.patient.patientDiagnosis, state.patient.patientDiagnosisForDelete);
+    });
   },
   clearDiagnosis(state, id: string) {
     const diagnosis = state.patient.patientDiagnosis.find((d: IPatientDiagnosis) => d.id === id);
