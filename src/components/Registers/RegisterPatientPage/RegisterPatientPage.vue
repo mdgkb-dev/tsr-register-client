@@ -61,7 +61,12 @@
                   <TextProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                   <NumberProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                   <DataComponentComputed :property="prop" :register-group-to-patient="registerGroupToPatient" />
-                  <SetProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
+                  <SetProp
+                    v-model="prop.setFilterString"
+                    :prop="prop"
+                    :register-group-to-patient="registerGroupToPatient"
+                    :register-group="registerGroup"
+                  />
                   <RadioProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                 </div>
               </el-tab-pane>
