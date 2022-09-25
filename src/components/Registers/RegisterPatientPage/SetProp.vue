@@ -1,7 +1,8 @@
 <template>
   <el-form-item v-if="prop.valueType.isSet()">
+    <el-input v-model="filter" @input="input" />
     <el-checkbox
-      v-for="registerPropertySet in prop.registerPropertySets"
+      v-for="registerPropertySet in prop.getRegisterPropertySets()"
       :key="registerPropertySet.id"
       :label="registerPropertySet.name"
       :model-value="registerGroupToPatient.getRegisterPropertyValueSet(registerPropertySet.id)"
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
 import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
@@ -50,9 +51,22 @@ export default defineComponent({
       type: Object as PropType<IRegisterGroup>,
       required: true,
     },
+    modelValue: {
+      type: String as PropType<string>,
+      required: true,
+    },
   },
-  setup() {
-    return {};
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    const filter: Ref<string> = ref('');
+    onBeforeMount(() => {
+      filter.value = props.modelValue;
+    });
+    const input = (v: any) => {
+      console.log(v);
+      emit('update:modelValue', v);
+    };
+    return { filter, input };
   },
 });
 </script>

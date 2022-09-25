@@ -19,6 +19,7 @@ export default class RegisterProperty implements IRegisterProperty {
   colWidth = 150;
   valueTypeId?: string;
   order = 0;
+  setFilterString = '';
   registerPropertyRadios: IRegisterPropertyRadio[] = [];
   registerPropertyRadiosForDelete: string[] = [];
   registerPropertySets: IRegisterPropertySet[] = [];
@@ -161,5 +162,15 @@ export default class RegisterProperty implements IRegisterProperty {
 
   addRegisterPropertyMeasure(item?: IRegisterPropertyMeasure): void {
     this.registerPropertyMeasures.push(new RegisterPropertyMeasure(item));
+  }
+
+  getRegisterPropertySets(): IRegisterPropertySet[] {
+    if (this.setFilterString === '') {
+      return this.registerPropertySets;
+    }
+
+    return this.registerPropertySets.filter((s: IRegisterPropertySet) => {
+      return s.name.toLowerCase().includes(this.setFilterString.toLowerCase());
+    });
   }
 }

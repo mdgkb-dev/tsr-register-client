@@ -43,4 +43,6 @@ export default interface IRegisterProperty {
   addRegisterPropertyMeasure: (item?: IRegisterPropertyMeasure) => void;
 
   getOthers: (propResult: boolean | string | number | Date | null) => IRegisterPropertyOther[];
+  setFilterString: string;
+  getRegisterPropertySets: () => IRegisterPropertySet[];
 }
