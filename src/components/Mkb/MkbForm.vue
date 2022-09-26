@@ -10,8 +10,8 @@
       class="table-shadow"
       header-row-class-name="header-style"
       :expand-row-keys="expandRowKeys"
-      @expand-change="handleExpandChange"
       :row-class-name="getRowClassName"
+      @expand-change="handleExpandChange"
     >
       <el-table-column type="index" width="60" align="center" />
 
@@ -176,6 +176,7 @@ import MkbClass from '@/classes/mkb/MkbСlass';
 import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
+import IRegisterDiagnosis from '@/interfaces/IRegisterDiagnosis';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
@@ -184,7 +185,6 @@ import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
 import useDateFormat from '@/mixins/useDateFormat';
 import Provider from '@/services/Provider';
 import RemoveFromClass from '@/services/RemoveFromClass';

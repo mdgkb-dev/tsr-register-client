@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
-import IRegisterQueryToRegisterProperty from '@/interfaces/registers/IRegisterQueryToRegisterProperty';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
+import IRegisterQueryToRegisterProperty from '@/interfaces/IRegisterQueryToRegisterProperty';
 import RootState from '@/store/types';
 
 import State from './state';

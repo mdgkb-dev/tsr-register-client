@@ -35,7 +35,7 @@ import { useStore } from 'vuex';
 
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
 
 export default defineComponent({
   name: 'RegisterExportsList',

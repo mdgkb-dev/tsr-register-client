@@ -7,11 +7,11 @@ import MessageSuccess from '@/classes/messages/MessageSuccess';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDrug from '@/interfaces/drugs/IDrug';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
 import IPatient from '@/interfaces/patients/IPatient';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
 import IRepresentative from '@/interfaces/representatives/IRepresentative';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 

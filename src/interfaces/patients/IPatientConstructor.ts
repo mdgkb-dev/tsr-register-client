@@ -3,10 +3,10 @@ import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IHistory from '@/interfaces/history/IHistory';
 import IHuman from '@/interfaces/IHuman';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
+import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 import IModelInfo from '@/interfaces/shared/IModelInfo';
 

@@ -1,8 +1,8 @@
 import IHuman from '@/interfaces/IHuman';
 import IRegionUser from '@/interfaces/IRegionUser';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterPropertyToUser from '@/interfaces/IRegisterPropertyToUser';
 import IRegisterUser from '@/interfaces/IRegisterUser';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyToUser from '@/interfaces/registers/IRegisterPropertyToUser';
 
 export default interface IUser {
   id?: string;

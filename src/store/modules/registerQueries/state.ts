@@ -1,4 +1,4 @@
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
 
 export default interface State {
   registerQuery: IRegisterQuery;

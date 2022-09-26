@@ -1,4 +1,4 @@
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 
 export interface State {
   registerProperties: IRegisterProperty[];

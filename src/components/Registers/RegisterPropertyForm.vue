@@ -52,6 +52,9 @@
               <el-form-item label-width="170px" label="Возможно несколько значений">
                 <el-switch v-model="element.withDates" active-text="Да" inactive-text="Нет"></el-switch>
               </el-form-item>
+              <el-form-item label-width="170px" label="Сравнить с датой рождения">
+                <el-switch v-model="element.ageCompare" active-text="Да" inactive-text="Нет"></el-switch>
+              </el-form-item>
               <el-form-item label-width="170px" label="Тип свойства">
                 <el-select v-model="element.valueTypeId" placeholder="Тип свойства" @change="element.changeRelation(valueTypes)">
                   <el-option v-for="item in valueTypes" :key="item.id" :label="item.name" :value="item.id"> </el-option>
@@ -70,6 +73,7 @@
             <RegisterPropertyRadioForm v-if="element.showRadio" :register-property="element" />
             <RegisterPropertySetForm v-if="element.showSet" :register-property="element" />
             <RegisterPropertyExamplesForm :register-property="element" />
+            <RegisterPropertyVariantsForm :register-property="element" />
             <RegisterPropertyMeasuresForm v-if="element.valueType.isNumber()" :register-property="element" />
           </div>
         </el-collapse-item>
@@ -89,8 +93,9 @@ import RegisterPropertyExamplesForm from '@/components/Registers/RegisterPropert
 import RegisterPropertyMeasuresForm from '@/components/Registers/RegisterPropertyMeasuresForm.vue';
 import RegisterPropertyRadioForm from '@/components/Registers/RegisterPropertyRadioForm.vue';
 import RegisterPropertySetForm from '@/components/Registers/RegisterPropertySetForm.vue';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import RegisterPropertyVariantsForm from '@/components/Registers/RegisterPropertyVariantsForm.vue';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import useValidate from '@/mixins/useValidate';
 
@@ -101,6 +106,7 @@ export default defineComponent({
     RegisterPropertySetForm,
     RegisterPropertyExamplesForm,
     RegisterPropertyMeasuresForm,
+    RegisterPropertyVariantsForm,
     draggable,
   },
   props: {

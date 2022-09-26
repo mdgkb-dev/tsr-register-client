@@ -37,8 +37,8 @@ import { computed, ComputedRef, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterQueryToRegisterProperty from '@/interfaces/registers/IRegisterQueryToRegisterProperty';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterQueryToRegisterProperty from '@/interfaces/IRegisterQueryToRegisterProperty';
 export default defineComponent({
   name: 'RegisterExportPropertyFormPlain',
   components: { TableButtonGroup },

@@ -59,7 +59,12 @@
                   <PropertyHeader :prop="prop" :index="j" />
                   <StringProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                   <TextProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
-                  <NumberProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
+                  <NumberProp
+                    v-if="prop.registerPropertyVariants.length === 0"
+                    :prop="prop"
+                    :register-group-to-patient="registerGroupToPatient"
+                    :register-group="registerGroup"
+                  />
                   <DataComponentComputed :property="prop" :register-group-to-patient="registerGroupToPatient" />
                   <SetProp
                     v-model="prop.setFilterString"
@@ -68,6 +73,34 @@
                     :register-group="registerGroup"
                   />
                   <RadioProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
+                  <div v-if="prop.registerPropertyVariants.length > 0">
+                    <el-button @click="registerGroupToPatient.pushRegisterProperty(prop.id)">Добавить аллерген</el-button>
+                    <div v-for="propToPatient in registerGroupToPatient.getRegisterPropertyToPatient(prop.id)" :key="propToPatient">
+                      <el-select v-model="propToPatient.registerPropertyVariantId" filterable="true" placeholder="Выберите вариант">
+                        <el-option
+                          v-for="variant in prop.registerPropertyVariants"
+                          :key="variant.id"
+                          :label="variant.name"
+                          :value="variant.id"
+                        />
+                      </el-select>
+                      <el-input-number v-model="propToPatient.valueNumber" :step="0.1" :precision="2" />
+                      <el-button
+                        :icon="Delete"
+                        @click="
+                          RemoveFromClassById(
+                            propToPatient.id,
+                            registerGroupToPatient.registerPropertyToPatient,
+                            registerGroupToPatient.registerPropertyToPatientForDelete
+                          )
+                        "
+                      ></el-button>
+                    </div>
+                  </div>
+                  <span v-if="prop.ageCompare && prop.valueType.isDate()">
+                    Возраст пациента на момент взятия анализа:
+                    {{ DateHelper.DateDiff(registerGroupToPatient.getRegisterPropertyValue(prop, false), patient.human.dateBirth) }}
+                  </span>
                 </div>
               </el-tab-pane>
             </el-tabs>
@@ -102,7 +135,7 @@
 </template>
 
 <script lang="ts">
-import { Document, Edit } from '@element-plus/icons-vue';
+import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
@@ -116,13 +149,15 @@ import RadioProp from '@/components/Registers/RegisterPatientPage/RadioProp.vue'
 import SetProp from '@/components/Registers/RegisterPatientPage/SetProp.vue';
 import StringProp from '@/components/Registers/RegisterPatientPage/StringProp.vue';
 import TextProp from '@/components/Registers/RegisterPatientPage/TextProp.vue';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
 import IPatient from '@/interfaces/patients/IPatient';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';
 import useValidate from '@/mixins/useValidate';
+import DateHelper from '@/services/DateHelper';
+import RemoveFromClassById from '@/services/RemoveFromClassById';
 
 export default defineComponent({
   name: 'RegisterPatientPage',
@@ -219,7 +254,6 @@ export default defineComponent({
     };
 
     const removeTab = (name: string) => {
-      console.log(name);
       const group = patient.value.registerGroupsToPatient.find((r: IRegisterGroupToPatient) => r.id === name);
       if (group && group.registerGroupId) {
         const selectedGroup = patient.value.registerGroupsToPatient.filter(
@@ -233,6 +267,9 @@ export default defineComponent({
     };
 
     return {
+      DateHelper,
+      Delete,
+      RemoveFromClassById,
       removeTab,
       addTab,
       selectedTab,

@@ -1,7 +1,7 @@
 import { ActionTree } from 'vuex';
 
 import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import IRegister from '@/interfaces/registers/IRegister';
+import IRegister from '@/interfaces/IRegister';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';

@@ -9,19 +9,19 @@ import Human from '@/classes/humans/Human';
 import Patient from '@/classes/patients/Patient';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
-import RegisterProperty from '@/classes/registers/RegisterProperty';
-import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
-import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
+import RegisterProperty from '@/classes/RegisterProperty';
+import RegisterPropertySetToPatient from '@/classes/RegisterPropertySetToPatient';
+import RegisterPropertyToPatient from '@/classes/RegisterPropertyToPatient';
 import ValueType from '@/classes/valueTypes/ValueType';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
+import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
+import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
+import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
 import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
-import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 describe('Class Patient', () => {

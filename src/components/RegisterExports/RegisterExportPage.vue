@@ -70,13 +70,13 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch 
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import RegisterQuery from '@/classes/registers/RegisterQuery';
-import RegisterQueryTypes from '@/classes/registers/RegisterQueryTypes';
+import RegisterQuery from '@/classes/RegisterQuery';
+import RegisterQueryTypes from '@/classes/RegisterQueryTypes';
 import MainHeader from '@/classes/shared/MainHeader';
 import RegisterExportPropertyFormPlain from '@/components/RegisterExports/RegisterExportPropertyFormPlain.vue';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
-import IRegisterQueryType from '@/interfaces/registers/IRegisterQueryType';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
+import IRegisterQueryType from '@/interfaces/IRegisterQueryType';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';

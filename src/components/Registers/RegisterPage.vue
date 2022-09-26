@@ -42,13 +42,13 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch 
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import Register from '@/classes/registers/Register';
-import RegisterGroup from '@/classes/registers/RegisterGroup';
+import Register from '@/classes/Register';
+import RegisterGroup from '@/classes/RegisterGroup';
 import MainHeader from '@/classes/shared/MainHeader';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import RegisterGroupForm from '@/components/Registers/RegisterGroupForm.vue';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 import useForm from '@/mixins/useForm';

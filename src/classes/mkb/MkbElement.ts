@@ -1,4 +1,3 @@
-import IMkbGroup from '@/interfaces/mkb/IMkbGroup';
 import IMkbElement from '@/interfaces/mkb/IMkbElement';
 import { MkbLevel } from '@/interfaces/mkb/MkbLevel';
 

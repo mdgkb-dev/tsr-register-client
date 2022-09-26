@@ -50,9 +50,9 @@ import { Delete, Grid, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import RegisterPropertyExample from '@/classes/registers/RegisterPropertyExample';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyExample from '@/interfaces/registers/IRegisterPropertyExample';
+import RegisterPropertyExample from '@/classes/RegisterPropertyExample';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterPropertyExample from '@/interfaces/IRegisterPropertyExample';
 import sortByDrug from '@/mixins/sortByDrug';
 import useValidate from '@/mixins/useValidate';
 

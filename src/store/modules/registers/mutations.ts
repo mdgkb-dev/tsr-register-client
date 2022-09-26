@@ -2,11 +2,11 @@ import { MutationTree } from 'vuex';
 
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
-import Register from '@/classes/registers/Register';
-import RegisterDiagnosis from '@/classes/registers/RegisterDiagnosis';
+import Register from '@/classes/Register';
+import RegisterDiagnosis from '@/classes/RegisterDiagnosis';
 import ValueType from '@/classes/valueTypes/ValueType';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterDiagnosis from '@/interfaces/registers/IRegisterDiagnosis';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterDiagnosis from '@/interfaces/IRegisterDiagnosis';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 import { State } from './state';

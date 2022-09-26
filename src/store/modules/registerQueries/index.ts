@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import RegisterQuery from '@/classes/registers/RegisterQuery';
+import RegisterQuery from '@/classes/RegisterQuery';
 import RootState from '@/store/types';
 
 import actions from './actions';

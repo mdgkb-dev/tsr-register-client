@@ -1,7 +1,7 @@
-import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
+import RegisterPropertyToUser from '@/classes/RegisterPropertyToUser';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterPropertyToUser from '@/interfaces/IRegisterPropertyToUser';
 import IUserAuthorized from '@/interfaces/IUserAuthorized';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyToUser from '@/interfaces/registers/IRegisterPropertyToUser';
 
 export default class UserAuthorized implements IUserAuthorized {
   id = '';

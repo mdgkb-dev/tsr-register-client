@@ -103,13 +103,13 @@ import { More, User } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
-import RegisterPropertyToUser from '@/classes/registers/RegisterPropertyToUser';
+import RegisterPropertyToUser from '@/classes/RegisterPropertyToUser';
 import MainHeader from '@/classes/shared/MainHeader';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
+import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
 import IUserAuthorized from '@/interfaces/IUserAuthorized';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useDateFormat from '@/mixins/useDateFormat';
 import Hooks from '@/services/Hooks/Hooks';

@@ -1,4 +1,4 @@
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
 
 export interface State {
   registerGroups: IRegisterGroup[];

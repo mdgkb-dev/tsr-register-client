@@ -41,9 +41,9 @@ import { Delete, Grid, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import RegisterPropertyRadio from '@/classes/registers/RegisterPropertyRadio';
-import IRegisterPropertyRadio from '@/interfaces/registers/IRegisterPropertyRadio';
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
+import RegisterPropertyRadio from '@/classes/RegisterPropertyRadio';
+import IRegisterPropertyRadio from '@/interfaces/IRegisterPropertyRadio';
+import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
 import sortByDrug from '@/mixins/sortByDrug';
 export default defineComponent({
   name: 'RegisterPropertyOthersForm',

@@ -22,7 +22,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import MainHeader from '@/classes/shared/MainHeader';
-import IRegister from '@/interfaces/registers/IRegister';
+import IRegister from '@/interfaces/IRegister';
 
 export default defineComponent({
   name: 'RegisterLinkList',

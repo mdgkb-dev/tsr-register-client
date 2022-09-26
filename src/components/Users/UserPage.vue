@@ -43,8 +43,8 @@ import { useStore } from 'vuex';
 import HumanRules from '@/classes/humans/HumanRules';
 import MainHeader from '@/classes/shared/MainHeader';
 import User from '@/classes/User';
+import IRegister from '@/interfaces/IRegister';
 import IUser from '@/interfaces/IUser';
-import IRegister from '@/interfaces/registers/IRegister';
 import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
 import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 

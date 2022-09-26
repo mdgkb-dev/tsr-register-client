@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
 
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 

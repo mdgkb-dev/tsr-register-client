@@ -36,9 +36,9 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 
 export default defineComponent({
   name: 'RadioProp',

@@ -80,11 +80,11 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 import { useStore } from 'vuex';
 
-import RegisterProperty from '@/classes/registers/RegisterProperty';
+import RegisterProperty from '@/classes/RegisterProperty';
 import RegisterPropertyForm from '@/components/Registers/RegisterPropertyForm.vue';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegister from '@/interfaces/IRegister';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import useValidate from '@/mixins/useValidate';
 export default defineComponent({

@@ -1,8 +1,8 @@
 import { MutationTree } from 'vuex';
 
-import RegisterProperty from '@/classes/registers/RegisterProperty';
+import RegisterProperty from '@/classes/RegisterProperty';
 import ValueType from '@/classes/valueTypes/ValueType';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 import { State } from './state';

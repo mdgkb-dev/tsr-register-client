@@ -1,16 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Patient from '@/classes/patients/Patient';
-import RegisterGroup from '@/classes/registers/RegisterGroup';
-import RegisterPropertyOtherToPatient from '@/classes/registers/RegisterPropertyOtherToPatient';
-import RegisterPropertySetToPatient from '@/classes/registers/RegisterPropertySetToPatient';
-import RegisterPropertyToPatient from '@/classes/registers/RegisterPropertyToPatient';
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
-import IRegisterPropertyOtherToPatient from '@/interfaces/registers/IRegisterPropertyOtherToPatient';
-import IRegisterPropertySet from '@/interfaces/registers/IRegisterPropertySet';
-import IRegisterPropertySetToPatient from '@/interfaces/registers/IRegisterPropertySetToPatient';
-import IRegisterPropertyToPatient from '@/interfaces/registers/IRegisterPropertyToPatient';
+import RegisterGroup from '@/classes/RegisterGroup';
+import RegisterPropertyOtherToPatient from '@/classes/RegisterPropertyOtherToPatient';
+import RegisterPropertySetToPatient from '@/classes/RegisterPropertySetToPatient';
+import RegisterPropertyToPatient from '@/classes/RegisterPropertyToPatient';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterPropertyOtherToPatient from '@/interfaces/IRegisterPropertyOtherToPatient';
+import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
+import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
+import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
 
 export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
   id?: string;
@@ -77,6 +77,10 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
       return item?.valueOther;
     }
     return undefined;
+  }
+
+  getRegisterPropertyToPatient(propertyId: string): IRegisterPropertyToPatient[] {
+    return this.registerPropertyToPatient.filter((r: IRegisterPropertyToPatient) => r.registerPropertyId === propertyId);
   }
 
   getRegisterPropertyValue(property: IRegisterProperty, originalValue: boolean): boolean | string | number | Date | null {

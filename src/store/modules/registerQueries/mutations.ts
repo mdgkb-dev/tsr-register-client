@@ -1,9 +1,9 @@
 import { MutationTree } from 'vuex';
 
-import RegisterQuery from '@/classes/registers/RegisterQuery';
-import RegisterQueryToRegisterProperty from '@/classes/registers/RegisterQueryToRegisterProperty';
-import IRegisterQuery from '@/interfaces/registers/IRegisterQuery';
-import IRegisterQueryToRegisterProperty from '@/interfaces/registers/IRegisterQueryToRegisterProperty';
+import RegisterQuery from '@/classes/RegisterQuery';
+import RegisterQueryToRegisterProperty from '@/classes/RegisterQueryToRegisterProperty';
+import IRegisterQuery from '@/interfaces/IRegisterQuery';
+import IRegisterQueryToRegisterProperty from '@/interfaces/IRegisterQueryToRegisterProperty';
 
 import State from './state';
 

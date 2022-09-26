@@ -2,9 +2,9 @@ import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
 import IFileInfo from '@/interfaces/files/IFileInfo';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
 
 export default interface IPatient extends IPatientConstructor {
   getActuallyDisability: () => IDisability;

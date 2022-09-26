@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import RegisterProperty from '@/classes/registers/RegisterProperty';
+import RegisterProperty from '@/classes/RegisterProperty';
 import RootState from '@/store/types';
 
 import actions from './actions';

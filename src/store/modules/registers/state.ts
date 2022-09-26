@@ -1,4 +1,4 @@
-import IRegister from '@/interfaces/registers/IRegister';
+import IRegister from '@/interfaces/IRegister';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 
 export interface State {

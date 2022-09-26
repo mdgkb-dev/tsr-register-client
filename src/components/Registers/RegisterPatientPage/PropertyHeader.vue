@@ -12,7 +12,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 
 export default defineComponent({
   name: 'PropertyHeader',

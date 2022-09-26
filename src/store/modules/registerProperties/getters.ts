@@ -1,6 +1,6 @@
 import { GetterTree } from 'vuex';
 
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
 import RootState from '@/store/types';
 

@@ -15,8 +15,8 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref, toRefs, WritableComputedRef } from 'vue';
 
-import IRegisterGroupToPatient from '@/interfaces/registers/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/registers/IRegisterProperty';
+import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
+import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import dateFormat from '@/services/DateMask';
 
 export default defineComponent({

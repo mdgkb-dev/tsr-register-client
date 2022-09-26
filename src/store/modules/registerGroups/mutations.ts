@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 
-import RegisterGroup from '@/classes/registers/RegisterGroup';
-import IRegisterGroup from '@/interfaces/registers/IRegisterGroup';
+import RegisterGroup from '@/classes/RegisterGroup';
+import IRegisterGroup from '@/interfaces/IRegisterGroup';
 
 import { State } from './state';
 

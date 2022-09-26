@@ -19,9 +19,9 @@
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import IRegister from '@/interfaces/IRegister';
+import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
-import IRegister from '@/interfaces/registers/IRegister';
-import IRegisterToPatient from '@/interfaces/registers/IRegisterToPatient';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 export default defineComponent({
