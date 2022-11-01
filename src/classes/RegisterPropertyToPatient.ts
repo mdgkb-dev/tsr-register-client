@@ -1,8 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import RegisterPropertyMeasure from '@/classes/RegisterPropertyMeasure';
 import RegisterPropertyRadio from '@/classes/RegisterPropertyRadio';
+import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
 import RegisterPropertyVariant from '@/classes/RegisterPropertyVariant';
 import IRegisterPropertyRadio from '@/interfaces/IRegisterPropertyRadio';
 import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
+import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
 
 export default class RegisterPropertyToPatient implements IRegisterPropertyToPatient {
   id?: string;
@@ -20,6 +24,9 @@ export default class RegisterPropertyToPatient implements IRegisterPropertyToPat
 
   registerPropertyMeasure = new RegisterPropertyMeasure();
   registerPropertyMeasureId?: string;
+
+  registerPropertiesToPatientsToFileInfos: IRegisterPropertyToPatientToFile[] = [];
+  registerPropertiesToPatientsToFileInfosForDelete: string[] = [];
 
   constructor(item?: IRegisterPropertyToPatient) {
     if (!item) {
@@ -44,5 +51,17 @@ export default class RegisterPropertyToPatient implements IRegisterPropertyToPat
     this.registerPropertyVariantId = item.registerPropertyVariantId;
     this.patientId = item.patientId;
     this.registerPropertyId = item.registerPropertyId;
+    if (item.registerPropertiesToPatientsToFileInfos) {
+      this.registerPropertiesToPatientsToFileInfos = item.registerPropertiesToPatientsToFileInfos.map(
+        (i: IRegisterPropertyToPatientToFile) => {
+          return new RegisterPropertyToPatientToFile(i);
+        }
+      );
+    }
+  }
+  addPropertyToFile(): void {
+    const f = new RegisterPropertyToPatientToFile();
+    f.id = uuidv4();
+    this.registerPropertiesToPatientsToFileInfos.push(f);
   }
 }

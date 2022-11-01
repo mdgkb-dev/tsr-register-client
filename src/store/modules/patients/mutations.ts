@@ -207,7 +207,6 @@ const mutations: MutationTree<State> = {
     state.patient.human.photoId = undefined;
   },
   addDiagnosis(state, patientDiagnosis?: IPatientDiagnosis) {
-    console.log(patientDiagnosis);
     if (patientDiagnosis) {
       state.patient.patientDiagnosis.push(patientDiagnosis);
       return;

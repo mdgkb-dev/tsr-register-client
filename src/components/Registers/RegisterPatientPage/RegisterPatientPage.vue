@@ -73,6 +73,7 @@
                     :register-group="registerGroup"
                   />
                   <RadioProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
+                  <FilesProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                   <div v-if="prop.registerPropertyVariants.length > 0">
                     <el-button @click="registerGroupToPatient.pushRegisterProperty(prop.id)">Добавить аллерген</el-button>
                     <div v-for="propToPatient in registerGroupToPatient.getRegisterPropertyToPatient(prop.id)" :key="propToPatient">
@@ -124,6 +125,7 @@
                     :register-group="registerGroup"
                   />
                   <RadioProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
+                  <FilesProp :prop="prop" :register-group-to-patient="registerGroupToPatient" :register-group="registerGroup" />
                 </div>
               </template>
             </template>
@@ -143,6 +145,7 @@ import { useStore } from 'vuex';
 import MainHeader from '@/classes/shared/MainHeader';
 import HumanForm from '@/components/HumanForm.vue';
 import DataComponentComputed from '@/components/Registers/DataComponentComputed.vue';
+import FilesProp from '@/components/Registers/RegisterPatientPage/FilesProp.vue';
 import NumberProp from '@/components/Registers/RegisterPatientPage/NumberProp.vue';
 import PropertyHeader from '@/components/Registers/RegisterPatientPage/PropertyHeader.vue';
 import RadioProp from '@/components/Registers/RegisterPatientPage/RadioProp.vue';
@@ -162,6 +165,7 @@ import RemoveFromClassById from '@/services/RemoveFromClassById';
 export default defineComponent({
   name: 'RegisterPatientPage',
   components: {
+    FilesProp,
     HumanForm,
     DataComponentComputed,
     StringProp,

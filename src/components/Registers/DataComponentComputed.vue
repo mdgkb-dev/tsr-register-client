@@ -17,6 +17,7 @@ import { computed, defineComponent, PropType, ref, toRefs, WritableComputedRef }
 
 import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
 import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
 import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
@@ -34,11 +35,11 @@ export default defineComponent({
   setup(props) {
     const { registerGroupToPatient, property } = toRefs(props);
     const datePick = ref();
-    const dataModel: WritableComputedRef<boolean | string | number | Date | null> = computed({
-      get(): boolean | string | number | Date | null {
+    const dataModel: WritableComputedRef<boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[]> = computed({
+      get(): boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[] {
         return registerGroupToPatient.value.getRegisterPropertyValue(property.value, false);
       },
-      set(value: boolean | string | number | Date | null): void {
+      set(value: boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[]): void {
         let newValue: number | string | Date;
 
         if (typeof value === 'number' || typeof value === 'string' || value instanceof Date) {

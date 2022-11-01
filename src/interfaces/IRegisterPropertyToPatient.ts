@@ -1,5 +1,6 @@
 import IRegisterPropertyMeasure from '@/interfaces/IRegisterPropertyMeasure';
 import IRegisterPropertyRadio from '@/interfaces/IRegisterPropertyRadio';
+import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
 import IRegisterPropertyVariant from '@/interfaces/IRegisterPropertyVariant';
 
 export default interface IRegisterPropertyToPatient {
@@ -17,4 +18,8 @@ export default interface IRegisterPropertyToPatient {
 
   registerPropertyVariant: IRegisterPropertyVariant;
   registerPropertyVariantId?: string;
+
+  registerPropertiesToPatientsToFileInfos: IRegisterPropertyToPatientToFile[];
+  registerPropertiesToPatientsToFileInfosForDelete: string[];
+  addPropertyToFile: () => void;
 }

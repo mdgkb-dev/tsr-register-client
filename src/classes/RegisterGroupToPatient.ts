@@ -11,6 +11,8 @@ import IRegisterPropertyOtherToPatient from '@/interfaces/IRegisterPropertyOther
 import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
 import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
+import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
   id?: string;
@@ -83,7 +85,10 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
     return this.registerPropertyToPatient.filter((r: IRegisterPropertyToPatient) => r.registerPropertyId === propertyId);
   }
 
-  getRegisterPropertyValue(property: IRegisterProperty, originalValue: boolean): boolean | string | number | Date | null {
+  getRegisterPropertyValue(
+    property: IRegisterProperty,
+    originalValue: boolean
+  ): boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[] {
     if (property.valueType?.isSet()) {
       if (originalValue) {
         let res = '';
@@ -101,8 +106,22 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
     }
 
     if (property.id) {
-      const item = this.findProperty(property.id);
+      let item = this.findProperty(property.id);
+      if (property.valueType?.isFiles()) {
+        console.log('files', item);
+        if (originalValue && item) {
+          return item.registerPropertiesToPatientsToFileInfos;
+        } else {
+          item = new RegisterPropertyToPatient();
+          item.id = uuidv4();
+          this.registerPropertyToPatient.push(item);
+          item.registerPropertyId = property.id;
+          return item.registerPropertiesToPatientsToFileInfos;
+        }
+        // const p = this.getRegisterPropertyToPatient(property.id);
 
+        // return ;
+      }
       if (property.valueType?.isString() && item && item.valueString) {
         return item.valueString;
       }
@@ -282,7 +301,6 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
     if (!prop) {
       return '';
     }
-    console.log(prop.registerPropertyMeasureId);
     return prop.registerPropertyMeasureId ?? '';
   }
 
@@ -292,5 +310,15 @@ export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
       return;
     }
     prop.registerPropertyMeasureId = measureId;
+  }
+
+  static GetFileInfos(items: IRegisterGroupToPatient[]): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    items.forEach((i: IRegisterGroupToPatient) => {
+      i.registerPropertyToPatient.forEach((r: IRegisterPropertyToPatient) => {
+        r.registerPropertiesToPatientsToFileInfos.forEach((f: IRegisterPropertyToPatientToFile) => fileInfos.push(f.fileInfo));
+      });
+    });
+    return fileInfos;
   }
 }

@@ -191,7 +191,11 @@ export default class Patient implements IPatient {
   // }
 
   getFileInfos(): IFileInfo[] {
-    return [...Human.GetFileInfos(this.human), ...Disability.GetFileInfos(this.disabilities)];
+    return [
+      ...Human.GetFileInfos(this.human),
+      ...Disability.GetFileInfos(this.disabilities),
+      ...RegisterGroupToPatient.GetFileInfos(this.registerGroupsToPatient),
+    ];
   }
 
   getAnamnesis(id: string): IPatientDiagnosisAnamnesis {
