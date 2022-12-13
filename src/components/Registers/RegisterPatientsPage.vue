@@ -73,27 +73,27 @@
           }}</span>
         </template>
       </el-table-column>
-      <template v-for="(registerProperty, i) in cols" :key="i">
-        <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">
-          <template #header>
-            <el-popover placement="top-start" :width="200" trigger="hover">
-              <template #reference>
-                <div style="max-height: 100px">
-                  {{ registerProperty.shortName }}
-                </div>
-              </template>
-              <div>
-                {{ registerProperty.shortName }}
-              </div>
-            </el-popover>
-          </template>
-          <template #default="scope">
-            <div style="max-height: 250px">
-              {{ getField(registerProperty, scope.row) }}
-            </div>
-          </template>
-        </el-table-column>
-      </template>
+      <!--      <template v-for="(registerProperty, i) in cols" :key="i">-->
+      <!--        <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">-->
+      <!--          <template #header>-->
+      <!--            <el-popover placement="top-start" :width="200" trigger="hover">-->
+      <!--              <template #reference>-->
+      <!--                <div style="max-height: 100px">-->
+      <!--                  {{ registerProperty.shortName }}-->
+      <!--                </div>-->
+      <!--              </template>-->
+      <!--              <div>-->
+      <!--                {{ registerProperty.shortName }}-->
+      <!--              </div>-->
+      <!--            </el-popover>-->
+      <!--          </template>-->
+      <!--          <template #default="scope">-->
+      <!--            <div style="max-height: 250px">-->
+      <!--              {{ getField(registerProperty, scope.row) }}-->
+      <!--            </div>-->
+      <!--          </template>-->
+      <!--        </el-table-column>-->
+      <!--      </template>-->
     </el-table>
   </component>
 </template>
