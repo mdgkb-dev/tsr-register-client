@@ -5,6 +5,7 @@ import RegisterGroup from '@/classes/RegisterGroup';
 import RegisterPropertyOtherToPatient from '@/classes/RegisterPropertyOtherToPatient';
 import RegisterPropertySetToPatient from '@/classes/RegisterPropertySetToPatient';
 import RegisterPropertyToPatient from '@/classes/RegisterPropertyToPatient';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
 import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IRegisterPropertyOtherToPatient from '@/interfaces/IRegisterPropertyOtherToPatient';
@@ -12,7 +13,6 @@ import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
 import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
 import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
-import IFileInfo from '@/interfaces/files/IFileInfo';
 
 export default class RegisterGroupToPatient implements IRegisterGroupToPatient {
   id?: string;
