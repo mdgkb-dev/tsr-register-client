@@ -84,7 +84,7 @@ import MainHeader from '@/classes/shared/MainHeader';
 import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import AnthropometryForm from '@/components/Patients/AnthropometryForm.vue';
+import AnthropometryForm from '@/components/Patients/Anthropometry/AnthropometryForm.vue';
 import DisabilityForm from '@/components/Patients/DisabilityForm.vue';
 import DrugForm from '@/components/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/Patients/InsuranceForm.vue';

@@ -226,4 +226,16 @@ export default class Patient {
   addHmfseScaleTest(): void {
     this.hmfseScaleTests.push(new HmfseScaleTest());
   }
+
+  addHeightWeight() {
+    this.heightWeight.push(new HeightWeight());
+  }
+
+  addChestCircumference() {
+    this.chestCircumference.push(new Circumference());
+  }
+
+  addHeadCircumference() {
+    this.headCircumference.push(new Circumference());
+  }
 }

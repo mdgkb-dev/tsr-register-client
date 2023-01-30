@@ -29,6 +29,7 @@ export default class HeightWeight implements IHeightWeight {
     const bmi = Bmi.calculate(this.weight, this.height);
     const monthFromBirth = Bmi.birthDateToMeasureToMonth(dateBirth, this.date);
     const bmiMonth = Bmi.findBmiMonth(monthFromBirth, isMale);
+    console.log(this.date, bmiMonth, monthFromBirth, isMale);
     if (!bmiMonth) {
       return 'Некорректные данные по дате рождения или дате изменения';
     }
