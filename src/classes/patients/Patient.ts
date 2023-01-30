@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Circumference from '@/classes/anthropometry/Circumference';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
+import ChopScaleTest from '@/classes/ChopScaleTest';
 import Disability from '@/classes/disability/Disability';
 import History from '@/classes/history/History';
 import Human from '@/classes/humans/Human';
@@ -11,7 +12,6 @@ import PatientDrugRegimen from '@/classes/patients/PatientDrugRegimen';
 import RegisterGroupToPatient from '@/classes/RegisterGroupToPatient';
 import RegisterToPatient from '@/classes/RegisterToPatient';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import User from '@/classes/User';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import IDisability from '@/interfaces/disabilities/IDisability';
@@ -20,95 +20,57 @@ import IHistory from '@/interfaces/history/IHistory';
 import IHuman from '@/interfaces/IHuman';
 import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
 import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
-import IUser from '@/interfaces/IUser';
-import IPatient from '@/interfaces/patients/IPatient';
 import IPatientConstructor from '@/interfaces/patients/IPatientConstructor';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDiagnosisAnamnesis from '@/interfaces/patients/IPatientDiagnosisAnamnesis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
+import ClassBuilder from '@/services/ClassBuilder';
 import RemoveFromClass from '@/services/RemoveFromClass';
 
-export default class Patient implements IPatient {
+export default class Patient {
   id?: string;
   patientHistoryId?: string;
   human: IHuman = new Human();
   regionId?: string;
   history?: IHistory = new History();
+  @ClassBuilder.GetClassConstructorForArray(RepresentativeToPatient)
   representativeToPatient: IRepresentativeToPatient[] = [];
   representativeToPatientForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(Disability)
   disabilities: IDisability[] = [];
   disabilitiesForDelete: string[] = [];
-  patientDiagnosis: IPatientDiagnosis[] = [];
+  @ClassBuilder.GetClassConstructorForArray(PatientDiagnosis)
+  patientDiagnosis: PatientDiagnosis[] = [];
   patientDiagnosisForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(HeightWeight)
   heightWeight: IHeightWeight[] = [];
   heightWeightForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(Circumference)
   chestCircumference: ICircumference[] = [];
   chestCircumferenceForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(Circumference)
   headCircumference: ICircumference[] = [];
   headCircumferenceForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(RegisterToPatient)
   registerToPatient: IRegisterToPatient[] = [];
   registerToPatientForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(RegisterGroupToPatient)
   registerGroupsToPatient: IRegisterGroupToPatient[] = [];
   registerGroupsToPatientForDelete: string[] = [];
-
+  @ClassBuilder.GetClassConstructorForArray(PatientDrugRegimen)
   patientDrugRegimen: IPatientDrugRegimen[] = [];
   patientDrugRegimenForDelete: string[] = [];
+  @ClassBuilder.GetClassConstructorForArray(ChopScaleTest)
+  chopScaleTests: ChopScaleTest[] = [];
+  chopScaleTestsForDelete: string[] = [];
 
   createdAt?: Date;
   updatedAt?: Date;
   createdById?: string;
   updatedById?: string;
-  createdBy?: IUser;
-  updatedBy?: IUser;
 
   constructor(i?: IPatientConstructor) {
-    if (!i) {
-      return;
-    }
-
-    this.id = i.id;
-    this.patientHistoryId = i.patientHistoryId;
-    this.regionId = i.regionId;
-    this.human = new Human(i.human);
-    if (i.history) {
-      this.history = new History(i.history);
-    }
-    if (i.heightWeight) {
-      this.heightWeight = i.heightWeight.map((i: IHeightWeight) => new HeightWeight(i));
-    }
-    if (i.chestCircumference) {
-      this.chestCircumference = i.chestCircumference.map((i: ICircumference) => new Circumference(i));
-    }
-    if (i.headCircumference) {
-      this.headCircumference = i.headCircumference.map((i: ICircumference) => new Circumference(i));
-    }
-    if (i.patientDiagnosis) {
-      this.patientDiagnosis = i.patientDiagnosis.map((patientDiagnosis: IPatientDiagnosis) => new PatientDiagnosis(patientDiagnosis));
-    }
-    if (i.representativeToPatient) {
-      this.representativeToPatient = i.representativeToPatient.map(
-        (representativeToPatient: IRepresentativeToPatient) => new RepresentativeToPatient(representativeToPatient)
-      );
-    }
-    if (i.registerGroupsToPatient) {
-      this.registerGroupsToPatient = i.registerGroupsToPatient.map((i: IRegisterGroupToPatient) => new RegisterGroupToPatient(i));
-    }
-    if (i.disabilities) {
-      this.disabilities = i.disabilities.map((disability: IDisability) => new Disability(disability));
-    }
-    if (i.registerToPatient) {
-      this.registerToPatient = i.registerToPatient.map((i: IRegisterToPatient) => new RegisterToPatient(i));
-    }
-    if (i.patientDrugRegimen) {
-      this.patientDrugRegimen = i.patientDrugRegimen.map((i: IPatientDrugRegimen) => new PatientDrugRegimen(i));
-    }
-    this.createdAt = i.createdAt;
-    this.updatedAt = i.updatedAt;
-    this.createdById = i.createdById;
-    this.updatedById = i.updatedById;
-    if (i.createdBy) this.createdBy = new User(i.createdBy);
-    if (i.updatedBy) this.updatedBy = new User(i.updatedBy);
+    ClassBuilder.BuildPrimitives(this, i);
   }
 
   getActuallyDisability(): IDisability {
@@ -250,5 +212,9 @@ export default class Patient implements IPatient {
     const newGroup = new RegisterGroupToPatient();
     newGroup.registerGroupId = registerGroupId;
     this.registerGroupsToPatient.push(newGroup);
+  }
+
+  addChopScaleTest(): void {
+    this.chopScaleTests.push(new ChopScaleTest());
   }
 }

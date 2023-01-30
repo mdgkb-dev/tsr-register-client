@@ -1,6 +1,5 @@
 import Human from '@/classes/humans/Human';
 import RepresentativeToPatient from '@/classes/representatives/RepresentativeToPatient';
-import User from '@/classes/User';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/IHuman';
 import IUser from '@/interfaces/IUser';
@@ -36,8 +35,8 @@ export default class Representative implements IRepresentative {
     this.updatedAt = representative.updatedAt;
     this.createdById = representative.createdById;
     this.updatedById = representative.updatedById;
-    if (representative.createdBy) this.createdBy = new User(representative.createdBy);
-    if (representative.updatedBy) this.updatedBy = new User(representative.updatedBy);
+    // if (representative.createdBy) this.createdBy = new User(representative.createdBy);
+    // if (representative.updatedBy) this.updatedBy = new User(representative.updatedBy);
   }
 
   getFileInfos(): IFileInfo[] {

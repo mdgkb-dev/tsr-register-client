@@ -5,6 +5,6 @@ export default interface IRegisterToPatient {
   id?: string;
   register?: IRegister;
   registerId?: string;
-  patient?: IPatient;
+  patient?: IPatient | undefined;
   patientId?: string;
 }

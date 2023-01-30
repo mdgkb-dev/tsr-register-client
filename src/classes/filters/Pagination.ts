@@ -8,6 +8,7 @@ export default class Pagination implements IPagination {
   cursorMode = true;
   offset = 0;
   limit = 25;
+  append = false;
 
   setLoadMore(lastCursor: string, column: string, table: string): void {
     this.cursor.value = lastCursor;

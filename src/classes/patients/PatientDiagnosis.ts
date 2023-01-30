@@ -2,7 +2,6 @@ import MkbConcreteDiagnosis from '@/classes/mkb/MkbConcreteDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import MkbClass from '@/classes/mkb/MkbСlass';
-import Patient from '@/classes/patients/Patient';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
 import IMkbClass from '@/interfaces/mkb/IMkbClass';
 import IMkbConcreteDiagnosis from '@/interfaces/mkb/IMkbConcreteDiagnosis';
@@ -39,7 +38,7 @@ export default class PatientDiagnosis implements IPatientDiagnosis {
     this.mkbConcreteDiagnosisId = i.mkbConcreteDiagnosisId;
     if (i.mkbConcreteDiagnosis) this.mkbConcreteDiagnosis = new MkbConcreteDiagnosis(i.mkbConcreteDiagnosis);
     this.patientId = i.patientId;
-    if (i.patient) this.patient = new Patient(i.patient);
+    if (i.patient) this.patient = i.patient;
     if (i.patientDiagnosisAnamnesis)
       this.patientDiagnosisAnamnesis = i.patientDiagnosisAnamnesis.map((a: IPatientDiagnosisAnamnesis) => new PatientDiagnosisAnamnesis(a));
   }

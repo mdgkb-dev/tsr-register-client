@@ -1,8 +1,6 @@
 <template>
   <div class="table-under-collapse">
-    <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="add">Добавить измерение</el-button>
-
-    <!-- Рост/вес -->
+    <h3>Рост/вес</h3>
     <el-table :data="heightWeight" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
@@ -62,14 +60,16 @@
       </el-table-column>
 
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
+        <template #header>
+          <el-button type="success" size="small" :icon="Plus" circle @click="add" />
+        </template>
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
 
-    <!-- Окружность груди -->
-    <el-button v-if="isEditMode" style="margin: 20px 0" @click="addChestCircumference">Добавить измерение</el-button>
+    <h3>Окружность груди</h3>
     <el-table :data="chestCircumference" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
@@ -95,7 +95,7 @@
             label-width="0"
             style="margin-bottom: 0"
             :prop="'chestCircumference.' + scope.$index + '.value'"
-            :rules="[{ required: true, message: 'Необходимо указать окружность груди', trigger: 'change' }]"
+            :rules="[{ required: true, message: 'Необходимо указать окружность ууди', trigger: 'change' }]"
           >
             <el-input-number v-model="scope.row.value" size="medium" :min="0" style="width: 120px"></el-input-number>
           </el-form-item>
@@ -116,14 +116,16 @@
       </el-table-column>
 
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
+        <template #header>
+          <el-button type="success" size="small" :icon="Plus" circle @click="addChestCircumference" />
+        </template>
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="removeChestCircumference(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
 
-    <!-- Окружность головы -->
-    <el-button v-if="isEditMode" style="margin: 20px 0" @click="addHeadCircumference">Добавить измерение</el-button>
+    <h3>Окружность головы</h3>
     <el-table :data="headCircumference" style="width: 100%" class="table-shadow" header-row-class-name="header-style">
       <el-table-column type="index" width="60" align="center" />
 
@@ -170,27 +172,34 @@
       </el-table-column>
 
       <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
+        <template #header>
+          <el-button type="success" size="small" :icon="Plus" circle @click="addHeadCircumference" />
+        </template>
         <template #default="scope">
           <TableButtonGroup :show-remove-button="true" @remove="removeHeadCircumference(scope.row)" />
         </template>
       </el-table-column>
     </el-table>
+
+    <ChopScaleTable />
   </div>
 </template>
 
 <script lang="ts">
+import { Plus } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
+import ChopScaleTable from '@/components/Patients/ChopScaleTable.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
 import useDateFormat from '@/mixins/useDateFormat';
-
 export default defineComponent({
   name: 'AnthropometryForm',
   components: {
     TableButtonGroup,
+    ChopScaleTable,
   },
   setup() {
     const store = useStore();
@@ -228,6 +237,7 @@ export default defineComponent({
     };
 
     return {
+      Plus,
       birthDate,
       isMale,
       heightWeight,
