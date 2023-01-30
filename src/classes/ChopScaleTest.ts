@@ -58,7 +58,7 @@ export default class ChopScaleTest {
     if (!questionsQuantity || questionsQuantity === 0) {
       questionsQuantity = 16; // defaultQuantityOfQuestions
     }
-    return (this.chopScaleTestResults.length * 100) / questionsQuantity;
+    return Math.round((this.chopScaleTestResults.length * 100) / questionsQuantity);
   }
 
   getFormattedScoresSum(): string {

@@ -182,6 +182,7 @@
     </el-table>
 
     <ChopScaleTable />
+    <HmfseScaleTable />
   </div>
 </template>
 
@@ -191,6 +192,7 @@ import { computed, ComputedRef, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
 import ChopScaleTable from '@/components/Patients/ChopScaleTable.vue';
+import HmfseScaleTable from '@/components/Patients/HmfseScaleTable.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
@@ -200,6 +202,7 @@ export default defineComponent({
   components: {
     TableButtonGroup,
     ChopScaleTable,
+    HmfseScaleTable,
   },
   setup() {
     const store = useStore();

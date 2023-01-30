@@ -5,6 +5,7 @@ import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import ChopScaleTest from '@/classes/ChopScaleTest';
 import Disability from '@/classes/disability/Disability';
 import History from '@/classes/history/History';
+import HmfseScaleTest from '@/classes/HmfseScaleTest';
 import Human from '@/classes/humans/Human';
 import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
@@ -63,6 +64,10 @@ export default class Patient {
   @ClassBuilder.GetClassConstructorForArray(ChopScaleTest)
   chopScaleTests: ChopScaleTest[] = [];
   chopScaleTestsForDelete: string[] = [];
+
+  @ClassBuilder.GetClassConstructorForArray(HmfseScaleTest)
+  hmfseScaleTests: HmfseScaleTest[] = [];
+  hmfseScaleTestsForDelete: string[] = [];
 
   createdAt?: Date;
   updatedAt?: Date;
@@ -216,5 +221,9 @@ export default class Patient {
 
   addChopScaleTest(): void {
     this.chopScaleTests.push(new ChopScaleTest());
+  }
+
+  addHmfseScaleTest(): void {
+    this.hmfseScaleTests.push(new HmfseScaleTest());
   }
 }

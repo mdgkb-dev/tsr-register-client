@@ -7,7 +7,7 @@ import RootState from '@/store/types';
 import { State } from './state';
 
 const actions: ActionTree<State, RootState> = {
-  ...getBaseActions<HmfseScaleQuestion, State>('hmfse-scale-question'),
+  ...getBaseActions<HmfseScaleQuestion, State>('hmfse-scale-questions'),
 };
 
 export default actions;
