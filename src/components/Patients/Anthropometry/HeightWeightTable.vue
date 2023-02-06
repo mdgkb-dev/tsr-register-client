@@ -51,12 +51,21 @@
     <el-table-column label="ИМТ">
       <template #default="scope">
         {{
-          scope.row.getBmiGroup(patient.birthDate, patient.isMale).color
-            ? `${scope.row.getBmiGroup(patient.birthDate, patient.isMale).percentiles}, ${
-                scope.row.getBmiGroup(patient.birthDate, patient.isMale).recomendation
+          scope.row.getBmiGroup(patient.human.dateBirth, patient.human.isMale).color
+            ? `${scope.row.getBmiGroup(patient.human.dateBirth, patient.human.isMale).percentiles}, ${
+                scope.row.getBmiGroup(patient.human.dateBirth, patient.human.isMale).recomendation
               }`
-            : scope.row.getBmiGroup(patient.birthDate, patient.isMale)
+            : scope.row.getBmiGroup(patient.human.dateBirth, patient.human.isMale)
         }}
+      </template>
+    </el-table-column>
+
+    <el-table-column label="Площадь тела">
+      <template #default="scope">
+        <div>Монтеллер: {{ BodyArea.Mosteller(scope.row.weight, scope.row.height).toFixed(2) }}</div>
+        <div>Хэйкок: {{ BodyArea.DuBois(scope.row.weight, scope.row.height).toFixed(2) }}</div>
+        <div>Дю Буа и Дю Буа: {{ BodyArea.Haycock(scope.row.weight, scope.row.height).toFixed(2) }}</div>
+        <div>Норма: {{ BodyArea.GetNormForAge(patient.human.getAgeInMonths(), patient.human.isMale) }}</div>
       </template>
     </el-table-column>
 
@@ -79,6 +88,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent } from 'vue';
 import { useStore } from 'vuex';
 
+import BodyArea from '@/classes/BodyArea';
 import Patient from '@/classes/patients/Patient';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import useDateFormat from '@/mixins/useDateFormat';
@@ -101,6 +111,7 @@ export default defineComponent({
       Plus,
       isEditMode,
       formatDate,
+      BodyArea,
     };
   },
 });

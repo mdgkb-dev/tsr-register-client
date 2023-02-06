@@ -10,7 +10,7 @@ import IHumanConstructor from '@/interfaces/IHumanConstructor';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 
-export default class Human implements IHuman {
+export default class Human {
   id?: string;
   name = '';
   surname = '';
@@ -118,5 +118,14 @@ export default class Human implements IHuman {
   }
   setResidentialAddress(addressesEqual: boolean): void {
     addressesEqual ? (this.addressResidential = this.addressRegistration) : (this.addressResidential = '');
+  }
+
+  getAgeInMonths(): number {
+    const today = new Date();
+    const birthDate = this.dateBirth;
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    age = age * 12 + m;
+    return age;
   }
 }
