@@ -39,4 +39,11 @@ export default class DateHelper {
 
     return yearDiff + 'г., ' + monthDiff + 'м., ' + dayDiff + 'д.';
   }
+
+  static GetMonthsDiff(date1: Date, date2: Date): number {
+    let age = date2.getFullYear() - date1.getFullYear();
+    const m = date2.getMonth() - date1.getMonth();
+    age = age * 12 + m;
+    return age;
+  }
 }

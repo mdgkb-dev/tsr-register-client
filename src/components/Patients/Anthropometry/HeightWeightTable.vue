@@ -65,7 +65,10 @@
         <div>Монтеллер: {{ BodyArea.Mosteller(scope.row.weight, scope.row.height).toFixed(2) }}</div>
         <div>Хэйкок: {{ BodyArea.DuBois(scope.row.weight, scope.row.height).toFixed(2) }}</div>
         <div>Дю Буа и Дю Буа: {{ BodyArea.Haycock(scope.row.weight, scope.row.height).toFixed(2) }}</div>
-        <div>Норма: {{ BodyArea.GetNormForAge(patient.human.getAgeInMonths(), patient.human.isMale) }}</div>
+        <div>
+          Норма:
+          {{ BodyArea.GetNormForAge(DateHelper.GetMonthsDiff(new Date(scope.row.date), patient.human.dateBirth), patient.human.isMale) }}
+        </div>
       </template>
     </el-table-column>
 
@@ -93,6 +96,7 @@ import Patient from '@/classes/patients/Patient';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import useDateFormat from '@/mixins/useDateFormat';
 import RemoveFromClass from '@/services/RemoveFromClass';
+import DateHelper from '@/services/DateHelper';
 export default defineComponent({
   name: 'HeightWeightTable',
   components: {
@@ -112,6 +116,7 @@ export default defineComponent({
       isEditMode,
       formatDate,
       BodyArea,
+      DateHelper,
     };
   },
 });
