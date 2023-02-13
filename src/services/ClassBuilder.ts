@@ -10,13 +10,21 @@ export default abstract class ClassBuilder {
     Object.keys(arg).forEach((key) => {
       const prop = arg[key];
       if (this.isPrimitive(prop)) {
-        passedClass[key] = prop;
-      } else if (prop && !Array.isArray(prop) && passedClass[key]) {
-        passedClass[key] = new passedClass[key].constructor(prop);
+        if (passedClass[key] instanceof Date) {
+          passedClass[key] = new Date(prop);
+        } else {
+          passedClass[key] = prop;
+        }
+      } else if (prop !== null && !Array.isArray(prop)) {
+        if (passedClass[key] && passedClass[key].constructor) {
+          passedClass[key] = new passedClass[key].constructor(prop);
+        }
       }
       if (Array.isArray(prop)) {
         const constructor = Reflect.getMetadata(key, passedClass);
-        passedClass[key] = prop.map((t) => new constructor[key](t));
+        if (constructor && typeof constructor[key] === 'function') {
+          passedClass[key] = prop.map((t) => new constructor[key](t));
+        }
       }
     });
   }

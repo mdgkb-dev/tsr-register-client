@@ -69,7 +69,7 @@
       <el-table-column label="ФАМИЛИЯ ИМЯ ОТЧЕСТВО" sortable prop="patient.human.surname" align="left" resizable width="300px">
         <template #default="scope">
           <span style="position: sticky !important" class="patient-name-link" @click="edit(scope.row.patient.id)">{{
-            scope.row.patient.human.getFullName()
+            scope.row.patient?.human?.getFullName()
           }}</span>
         </template>
       </el-table-column>

@@ -76,6 +76,9 @@ export default class Patient {
 
   constructor(i?: IPatientConstructor) {
     ClassBuilder.BuildPrimitives(this, i);
+    if (i && i.registerToPatient) {
+      this.registerToPatient = i.registerToPatient.map((r: IRegisterToPatient) => new RegisterToPatient(r));
+    }
   }
 
   getActuallyDisability(): IDisability {
