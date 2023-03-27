@@ -5,12 +5,13 @@ import IMkbSubDiagnosis from '@/interfaces/mkb/IMkbSubDiagnosis';
 
 export default interface IDrugDiagnosis {
   id?: string;
+  drugId?: string;
+  drug?: IDrug;
+
   mkbSubDiagnosisId?: string;
   mkbSubDiagnosis: IMkbSubDiagnosis;
   mkbDiagnosisId?: string;
   mkbDiagnosis: IMkbDiagnosis;
   mkbConcreteDiagnosisId?: string;
   mkbConcreteDiagnosis: IMkbConcreteDiagnosis;
-  drugId?: string;
-  drug?: IDrug;
 }

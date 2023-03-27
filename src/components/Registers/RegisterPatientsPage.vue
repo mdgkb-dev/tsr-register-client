@@ -73,27 +73,15 @@
           }}</span>
         </template>
       </el-table-column>
-      <!--      <template v-for="(registerProperty, i) in cols" :key="i">-->
-      <!--        <el-table-column :prop="registerProperty.name" :width="registerProperty.colWidth">-->
-      <!--          <template #header>-->
-      <!--            <el-popover placement="top-start" :width="200" trigger="hover">-->
-      <!--              <template #reference>-->
-      <!--                <div style="max-height: 100px">-->
-      <!--                  {{ registerProperty.shortName }}-->
-      <!--                </div>-->
-      <!--              </template>-->
-      <!--              <div>-->
-      <!--                {{ registerProperty.shortName }}-->
-      <!--              </div>-->
-      <!--            </el-popover>-->
-      <!--          </template>-->
-      <!--          <template #default="scope">-->
-      <!--            <div style="max-height: 250px">-->
-      <!--              {{ getField(registerProperty, scope.row) }}-->
-      <!--            </div>-->
-      <!--          </template>-->
-      <!--        </el-table-column>-->
-      <!--      </template>-->
+
+      <el-table-column fixed="right" align="center" width="50">
+        <template #header>
+          <el-button type="success" size="small" :icon="Plus" circle @click="patient.addChopScaleTest()" />
+        </template>
+        <template #default="scope">
+          <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row)" />
+        </template>
+      </el-table-column>
     </el-table>
   </component>
 </template>
@@ -198,6 +186,7 @@ export default defineComponent({
     };
 
     return {
+      // remove,
       executeQuery,
       registerQueries,
       getField,

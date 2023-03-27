@@ -140,6 +140,7 @@ export default defineComponent({
   position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 3;
 }
 .fixed-move-block-buttons {
   position: absolute;

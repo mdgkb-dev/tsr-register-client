@@ -47,10 +47,10 @@
           </el-form-item>
         </el-form>
         <el-collapse>
-          <el-collapse-item>
-            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>
-            <MkbForm :store-module="'drugs'" />
-          </el-collapse-item>
+          <!--          <el-collapse-item>-->
+          <!--            <template #title><h2 class="collapseHeader">Диагнозы</h2></template>-->
+          <!--            <MkbForm :store-module="'drugs'" />-->
+          <!--          </el-collapse-item>-->
         </el-collapse>
         <DrugRegimensForm />
       </el-row>
