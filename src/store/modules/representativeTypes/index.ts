@@ -1,17 +1,22 @@
 import { Module } from 'vuex';
 
+import RepresentativeType from '@/classes/RepresentativeType';
+import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
-import { State } from './state';
 
-export const state: State = {
-  representativeTypes: [],
-  representativeType: undefined,
+export type State = IBasicState<RepresentativeType>;
+
+export const getDefaultState = (): State => {
+  return {
+    ...getBaseDefaultState(RepresentativeType),
+  };
 };
-
+const state = getDefaultState();
 const namespaced = true;
 
 export const representativeTypes: Module<State, RootState> = {

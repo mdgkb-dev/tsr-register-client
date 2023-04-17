@@ -1,6 +1,6 @@
 <template>
   <div class="form-under-collapse">
-    <div v-if="isEditMode">
+    <div>
       <el-form-item label="Фамилия" prop="human.surname">
         <el-input v-model="human.surname" :readonly="readonly" @change="updateHuman" />
       </el-form-item>
@@ -58,19 +58,19 @@
         <el-input v-model="human.contact.email" :readonly="readonly" @change="updateHuman" />
       </el-form-item>
     </div>
-    <div v-else class="human-view">
-      <el-space direction="vertical" alignment="start">
-        <div><b>Фамилия:</b> {{ human.surname }}</div>
-        <div><b>Имя:</b> {{ human.name }}</div>
-        <div><b>Отчество:</b> {{ human.patronymic }}</div>
-        <div><b>Пол:</b> {{ human.isMale ? 'Мужской' : 'Женский' }}</div>
-        <div><b>Дата рождения:</b> {{ formatDate(human.dateBirth) }}</div>
-        <div><b>Адрес регистрации:</b> {{ human.addressRegistration ? human.addressRegistration : 'Не указан' }}</div>
-        <div><b>Адрес проживания:</b> {{ human.addressResidential ? human.addressResidential : 'Не указан' }}</div>
-        <div><b>Телефон:</b> {{ human.contact.phone ? human.contact.phone : 'Не указан' }}</div>
-        <div><b>Email:</b> {{ human.contact.email ? human.contact.email : 'Не указан' }}</div>
-      </el-space>
-    </div>
+    <!--    <div v-else class="human-view">-->
+    <!--      <el-space direction="vertical" alignment="start">-->
+    <!--        <div><b>Фамилия:</b> {{ human.surname }}</div>-->
+    <!--        <div><b>Имя:</b> {{ human.name }}</div>-->
+    <!--        <div><b>Отчество:</b> {{ human.patronymic }}</div>-->
+    <!--        <div><b>Пол:</b> {{ human.isMale ? 'Мужской' : 'Женский' }}</div>-->
+    <!--        <div><b>Дата рождения:</b> {{ $dateTimeFormatter.format(human.dateBirth) }}</div>-->
+    <!--        <div><b>Адрес регистрации:</b> {{ human.addressRegistration ? human.addressRegistration : 'Не указан' }}</div>-->
+    <!--        <div><b>Адрес проживания:</b> {{ human.addressResidential ? human.addressResidential : 'Не указан' }}</div>-->
+    <!--        <div><b>Телефон:</b> {{ human.contact.phone ? human.contact.phone : 'Не указан' }}</div>-->
+    <!--        <div><b>Email:</b> {{ human.contact.email ? human.contact.email : 'Не указан' }}</div>-->
+    <!--      </el-space>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -79,9 +79,8 @@ import { Check } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, reactive, ref, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import IHuman from '@/interfaces/IHuman';
+import Human from '@/classes/humans/Human';
 import IOption from '@/interfaces/shared/IOption';
-import useDateFormat from '@/mixins/useDateFormat';
 import dateFormat from '@/services/DateMask';
 export default defineComponent({
   name: 'HumanForm',
@@ -101,11 +100,9 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    const { formatDate } = useDateFormat();
     const datePick = ref();
-    const humanComputed: ComputedRef<IHuman> = computed<IHuman>(() => store.getters[`${props.storeName}/getHuman`]);
-    const human: UnwrapRef<IHuman> = reactive<IHuman>(humanComputed.value);
-    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters[`${props.storeName}/isEditMode`]);
+    const humanComputed: ComputedRef<Human> = computed<Human>(() => store.getters[`${props.storeName}/item`].human);
+    const human: UnwrapRef<Human> = reactive<Human>(humanComputed.value);
     const updateHuman = () => {
       store.commit(`${props.storeName}/setHuman`, human);
     };
@@ -131,8 +128,6 @@ export default defineComponent({
       humanComputed,
       human,
       updateHuman,
-      isEditMode,
-      formatDate,
       Check,
     };
   },

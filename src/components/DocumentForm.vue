@@ -72,7 +72,7 @@
               size="mini"
               @keydown="dateFormat"
             />
-            <span v-else>{{ formatDate(value.valueDate) }}</span>
+            <span v-else>{{ $dateTimeFormatter.format(value.valueDate) }}</span>
           </el-form-item>
         </section>
 
@@ -135,7 +135,6 @@ import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import useDateFormat from '@/mixins/useDateFormat';
 import dateFormat from '@/services/DateMask';
 export default defineComponent({
   name: 'DocumentForm',
@@ -150,7 +149,6 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-    const { formatDate } = useDateFormat();
 
     const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
     const selectedDocumentTypeId: Ref<string> = ref('');
@@ -248,7 +246,6 @@ export default defineComponent({
       remove,
       removeFile,
       isEditMode,
-      formatDate,
       Paperclip,
       InfoFilled,
       Delete,

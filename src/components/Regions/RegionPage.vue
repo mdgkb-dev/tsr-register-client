@@ -13,64 +13,56 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
-import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
-import { useStore } from 'vuex';
+import { defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { NavigationGuardNext } from 'vue-router';
 
 import Region from '@/classes/Region';
 import MainHeader from '@/classes/shared/MainHeader';
-import IRegion from '@/interfaces/IRegion';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'RegionPage',
   setup() {
-    const store = useStore();
-    const route = useRoute();
-
-    const region: Ref<IRegion> = ref(new Region());
-    const isEditMode: Ref<boolean> = ref(!!route.params.regionId);
+    const region: Ref<Region> = ref(new Region());
+    const isEditMode: Ref<boolean> = ref(!!Provider.route().params.regionId);
     const mount: Ref<boolean> = ref(false);
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm(isEditMode.value);
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async () => {
       let title: string;
-      if (!route.params.regionId) {
-        store.commit('regions/set', new Region());
+      if (!Provider.route().params.regionId) {
+        Provider.store.commit('regions/set', new Region());
         title = 'Создать регион';
       } else {
         title = 'Редактировать регион';
-        await store.dispatch('regions/get', route.params.regionId);
-        region.value = store.getters['regions/item'];
+        await Provider.store.dispatch('regions/get', Provider.route().params.regionId);
+        region.value = Provider.store.getters['regions/item'];
       }
 
-      pushToLinks(['/regions'], ['Список представителей']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
-      store.commit('main/setActiveMenu', 'Regions');
+      // pushToLinks(['/regions'], ['Список представителей']);
+      Provider.store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      Provider.store.commit('main/setActiveMenu', 'Regions');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(region, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(region, formUpdated, { deep: true });
     });
 
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      showConfirmModal(submitForm, next);
-    });
-
+    // onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    //   showConfirmModal(submitForm, next);
+    // });
+    //
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      saveButtonClick.value = true;
-
-      await submitHandling('regions', region.value, next, 'regions');
+      // saveButtonClick.value = true;
+      // await submitHandling('regions', region.value, next, 'regions');
     };
 
     return {
       region,
-      links,
+      // links,
       mount,
       submitForm,
     };

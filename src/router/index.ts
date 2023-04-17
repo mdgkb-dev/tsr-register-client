@@ -1,20 +1,10 @@
 import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 
-import DisabilitiesList from '@/components/Disabilities/DisabilitiesList.vue';
-import MkbList from '@/components/Mkb/MkbList.vue';
-import AuthRoutes from '@/router/AuthRoutes';
-import DocumentsRoutes from '@/router/DocumentsRoutes';
-import DrugsRoutes from '@/router/DrugsRoutes';
-import HistoryRoutes from '@/router/HistoryRoutes';
-import InsuranceCompaniesRoutes from '@/router/InsuranceCompaniesRoutes';
-import PatientsRoutes from '@/router/PatientsRoutes';
-import RegionsRoutes from '@/router/RegionsRoutes';
-import RegisterExportsRoutes from '@/router/RegisterExportsRoutes';
-import RegistersRoutes from '@/router/RegistersRoutes';
-import RepresentativeRoutes from '@/router/RepresentativeRoutes';
-import RepresentativeTypesRoutes from '@/router/RepresentativeTypesRoutes';
-import UsersRoutes from '@/router/UsersRoutes';
+import AuthPage from '@/components/Auth/AuthPage.vue';
+import PageNotFound from '@/components/PageNotFound.vue';
+import indexAdminRoutes from '@/router/indexAdminRoutes';
 import TokenService from '@/services/Token';
+import UserService from '@/services/User';
 import store from '@/store/index';
 
 export const isAuthorized = (next: NavigationGuardNext): void => {
@@ -25,40 +15,58 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
   next();
 };
 
-export const authGuard = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
-  if (to.fullPath !== '/login' && !TokenService.isAuth()) {
+export const authGuard = async (next?: NavigationGuardNext): Promise<void> => {
+  if (next) {
+    await store.dispatch('auth/setAuth');
+    const isAuth: boolean = store.getters['auth/isAuth'];
+    store.commit('auth/showWarning', true);
+    store.commit('auth/authOnly', true);
+    if (!isAuth) {
+      store.commit('auth/openModal', 'login');
+    }
+    next();
+    return;
+  }
+
+  if (!TokenService.isAuth()) {
     router.push('/login');
+  }
+};
+
+export const devGuard = (): void => {
+  if (!UserService.isAdmin()) {
+    router.push('/dev');
+  }
+};
+
+export const adminGuard = async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: NavigationGuardNext): Promise<void> => {
+  if (to.path != '/main') {
+    try {
+      await store.dispatch('auth/checkPathPermissions', to.matched[0].path);
+    } catch (e) {
+      await router.push('/');
+    }
   }
   next();
 };
 
 const routes: Array<RouteRecordRaw> = [
-  ...AuthRoutes,
-  ...DocumentsRoutes,
-  ...DrugsRoutes,
-  ...HistoryRoutes,
-  ...InsuranceCompaniesRoutes,
-  ...PatientsRoutes,
-  ...RegisterExportsRoutes,
-  ...RegistersRoutes,
-  ...RegistersRoutes,
-  ...RepresentativeRoutes,
-  ...RepresentativeTypesRoutes,
-  ...UsersRoutes,
-  ...RegionsRoutes,
+  ...indexAdminRoutes,
   {
-    path: '/mkb',
-    name: 'Mkb',
-    component: MkbList,
+    path: '/',
+    redirect: '/admin/patients',
   },
   {
-    path: '/disabilities',
-    name: 'Disabilities',
-    component: DisabilitiesList,
+    path: '/login',
+    component: AuthPage,
+    meta: {
+      layout: 'LoginLayout',
+    },
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/login',
+    name: 'NotFound',
+    component: PageNotFound,
   },
 ];
 
@@ -67,6 +75,6 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(authGuard);
+// router.beforeEach(authGuard);
 
 export default router;

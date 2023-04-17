@@ -38,17 +38,17 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, Ref } from 'vue';
 
+import Patient from '@/classes/Patient';
 import Crud from '@/classes/shared/Crud';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import ISearchObject from '@/interfaces/ISearchObject';
-import IPatient from '@/interfaces/patients/IPatient';
 import Hooks from '@/services/Hooks/Hooks';
-import Provider from '@/services/Provider';
-import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
-import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+import Provider from '@/services/Provider/Provider';
+// import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
+import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'PatientsDocumentsList',
@@ -58,7 +58,7 @@ export default defineComponent({
     AdminListWrapper,
   },
   setup() {
-    const patients: Ref<IPatient[]> = computed(() => Provider.store.getters['patients/patients']);
+    const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/patients']);
     const documentTypes: ComputedRef<IDocumentType[]> = computed(() => Provider.store.getters['documentTypes/documentTypes']);
 
     const crud = new Crud('patients');
@@ -66,7 +66,7 @@ export default defineComponent({
     const load = async () => {
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Документы пациентов' }));
       Provider.store.commit('filter/setStoreModule', 'patients');
-      Provider.setSortModels(PatientsSortsLib.byFullName());
+      // Provider.setSortModels(PatientsSortsLib.byFullName());
       await Provider.store.dispatch('patients/getAll', Provider.store.getters['filter/filterQuery']);
       await Provider.store.dispatch('registers/getAll');
       await Provider.store.dispatch('documentTypes/getAll');
@@ -74,7 +74,7 @@ export default defineComponent({
 
     Hooks.onBeforeMount(load, {
       pagination: { storeModule: 'patients', action: 'getAll' },
-      sortModels: [],
+      // sortModels: [],
     });
 
     const selectSearch = async (event: ISearchObject): Promise<void> => {

@@ -1,21 +1,13 @@
-import IRegisterQueryToRegisterProperty from '@/interfaces/IRegisterQueryToRegisterProperty';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterQueryToRegisterProperty implements IRegisterQueryToRegisterProperty {
+export default class RegisterQueryToRegisterProperty {
   id?: string;
   registerQueryId?: string;
   registerPropertyId?: string;
   order = 0;
   isAggregate = false;
 
-  constructor(queryToProperty?: IRegisterQueryToRegisterProperty) {
-    if (!queryToProperty) {
-      return;
-    }
-
-    this.id = queryToProperty.id;
-    this.registerQueryId = queryToProperty.registerQueryId;
-    this.registerPropertyId = queryToProperty.registerPropertyId;
-    this.order = queryToProperty.order;
-    this.isAggregate = queryToProperty.isAggregate;
+  constructor(i?: RegisterQueryToRegisterProperty) {
+    ClassHelper.BuildClass(this, i);
   }
 }

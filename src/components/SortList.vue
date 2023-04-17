@@ -1,33 +1,30 @@
 <template>
-  <el-form v-if="mounted" :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }">
-    <el-form-item :label="showLabel && labelName">
-      <el-select v-model="sortModel" value-key="label" :clearable="!defaultSortOn" :placeholder="sortModel.label" @change="setSort">
-        <el-option v-for="item in storeMode ? models : sortModels" :key="item.label" :label="item.label" :value="item" />
+  <el-form :style="{ width: '100%', maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }">
+    <el-form-item :label="labelName">
+      <el-select
+        v-model="Provider.filterQuery.value.sortModel"
+        :popper-append-to-body="false"
+        value-key="label"
+        :clearable="!Provider.filterQuery.value.sortModel.default"
+        :placeholder="Provider.filterQuery.value.sortModel.label"
+        @change="setSort"
+      >
+        <el-option v-for="item in sortModels" :key="item.label" :label="item.label" :value="item" />
       </el-select>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts">
-import { ElLoading } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, watch, WritableComputedRef } from 'vue';
+import { computed, defineComponent, PropType, Ref, watch } from 'vue';
 
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import ISortModel from '@/interfaces/filters/ISortModel';
-import Provider from '@/services/Provider';
+import SortModel from '@/services/classes/SortModel';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'SortList',
   components: {},
   props: {
-    models: {
-      type: Array as PropType<ISortModel[]>,
-      default: () => [],
-    },
-    storeMode: {
-      type: Boolean as PropType<boolean>,
-      default: true,
-    },
     showLabel: {
       type: Boolean as PropType<boolean>,
       default: false,
@@ -38,88 +35,38 @@ export default defineComponent({
     },
     maxWidth: {
       type: [Number, String],
-      default: 300,
+      default: 250,
     },
   },
   emits: ['load'],
   setup(props, { emit }) {
-    const storeModule: string = Provider.store.getters['filter/storeModule'];
-    const storeAction: string = Provider.store.getters['filter/storeAction'];
-    const defaultSortOn: Ref<boolean> = ref(false);
-    const selectedModel: Ref<string> = ref('');
-    const sortModel: WritableComputedRef<ISortModel> = computed({
-      get(): ISortModel {
-        return Provider.store.getters['filter/sortModel'];
-      },
-      set(sortModel: ISortModel): void {
-        Provider.store.commit('filter/replaceSortModel', sortModel);
-      },
-    });
-    const filterQuery: ComputedRef<IFilterQuery> = computed(() => Provider.store.getters['filter/filterQuery']);
-    const mounted: Ref<boolean> = ref(false);
-
-    const sortModels: Ref<ISortModel[]> = computed(() => Provider.store.getters['filter/sortModels']);
     const setDefaultSortModel: Ref<boolean> = computed(() => Provider.store.getters['filter/setDefaultSortModel']);
 
-    const sort = async () => {
-      await Provider.store.dispatch(`${storeModule}/${storeAction}`, Provider.store.getters['filter/filterQuery']);
-    };
-
-    const setDefaultSort = () => {
-      // const defaultSort: ISortModel | undefined = props.storeMode
-      //   ? defaultSortModel.value
-      //   : props.models.find((sortModel: ISortModel) => sortModel.default);
-      const defaultSort = props.models.find((sortModel: ISortModel) => sortModel.default);
-      if (defaultSort) {
-        selectedModel.value = defaultSort.label;
-        Provider.store.commit('filter/replaceSortModel', defaultSort);
-      }
-      defaultSortOn.value = true;
-    };
-
-    onBeforeMount((): void => {
-      // if (props.storeMode) {
-      //   Provider.store.commit('filter/setSortModel', props.models);
-      // }
-      setDefaultSort();
-      mounted.value = true;
-    });
+    // onBeforeMount((): void => {
+    //   changeModel(Provider.filterQuery.value.sortModel);
+    // });
 
     watch(setDefaultSortModel, () => {
-      if (filterQuery.value.sortModels.length === 0) {
-        setDefaultSort();
-      }
+      setSort(undefined);
       emit('load');
     });
 
-    const setSort = async () => {
-      // selectedModel.value = sortModel.label;
-      // if (sortModel.value) {
-      //   Provider.store.commit('filter/replaceSortModel', sortModel);
-      //   defaultSortOn.value = sortModel.value.default;
-      // } else {
-      //   setDefaultSort();
-      // }
-      const loading = ElLoading.service({
-        lock: true,
-        text: 'Сортировка',
-        background: 'rgba(0, 0, 0, 0.7)',
-      });
-      await emit('load');
-      loading.close();
+    const changeModel = async (s: SortModel | undefined): Promise<void> => {
+      if (s) {
+        Provider.filterQuery.value.sortModel = s;
+      } else {
+        Provider.setDefaultSortModel();
+      }
+      await Provider.router.replace({ query: { q: Provider.filterQuery.value.toUrlQuery() } });
+      emit('load');
     };
 
-    return {
-      setDefaultSortModel,
-      filterQuery,
-      sortModels,
-      defaultSortOn,
-      setSort,
-      selectedModel,
-      sort,
-      sortModel,
-      mounted,
+    const setSort = async (s: SortModel | undefined) => {
+      Provider.dropPagination();
+      await changeModel(s);
     };
+
+    return { setDefaultSortModel, sortModels: Provider.sortList, setSort, Provider };
   },
 });
 </script>
@@ -137,10 +84,6 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
-  padding-left: 5px;
-}
-
-:deep(.el-input__wrapper) {
   border-radius: 20px;
   padding-left: 25px;
   height: 34px;
@@ -162,10 +105,6 @@ export default defineComponent({
 }
 
 .el-select {
-  width: 100%;
-}
-
-:deep(.el-form) {
   width: 100%;
 }
 

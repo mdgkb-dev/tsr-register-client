@@ -33,7 +33,7 @@ import { useStore } from 'vuex';
 
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 import IUser from '../../interfaces/IUser';
 

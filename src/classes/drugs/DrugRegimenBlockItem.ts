@@ -1,28 +1,16 @@
-import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
-import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
+import DrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
+import ClassHelper from '@/services/ClassHelper';
 
-import DrugRegimenBlock from './DrugRegimenBlock';
-
-export default class DrugRegimenBlockItem implements IDrugRegimenBlockItem {
+export default class DrugRegimenBlockItem {
   id?: string;
   daysCount = 1;
   timesPerDay?: number;
   orderItem = 0;
 
   drugRegimenBlockId?: string;
-  drugRegimenBlock?: IDrugRegimenBlock;
+  drugRegimenBlock?: DrugRegimenBlock;
 
-  constructor(drugRegimenBlockItem?: IDrugRegimenBlockItem) {
-    if (!drugRegimenBlockItem) {
-      return;
-    }
-    this.id = drugRegimenBlockItem.id;
-    this.daysCount = drugRegimenBlockItem.daysCount;
-    this.orderItem = drugRegimenBlockItem.orderItem;
-    this.timesPerDay = drugRegimenBlockItem.timesPerDay;
-    this.drugRegimenBlockId = drugRegimenBlockItem.drugRegimenBlockId;
-    if (drugRegimenBlockItem.drugRegimenBlock) {
-      this.drugRegimenBlock = new DrugRegimenBlock(drugRegimenBlockItem.drugRegimenBlock);
-    }
+  constructor(i?: DrugRegimenBlockItem) {
+    ClassHelper.BuildClass(this, i);
   }
 }

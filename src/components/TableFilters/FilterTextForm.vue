@@ -1,40 +1,40 @@
 <template>
-  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
-    <div class="filter-form">
-      <el-form label-position="top">
-        <el-form-item>
-          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
-            <el-option
-              v-for="(item, index) in filterList"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-              @click="setTrigger('click')"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="filterModel.value1" size="mini" />
-        </el-form-item>
-      </el-form>
-    </div>
-  </component>
+  <!--  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">-->
+  <!--    <div class="filter-form">-->
+  <!--      <el-form label-position="top">-->
+  <!--        <el-form-item>-->
+  <!--          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">-->
+  <!--            <el-option-->
+  <!--              v-for="(item, index) in filterList"-->
+  <!--              :key="index"-->
+  <!--              :label="item.label"-->
+  <!--              :value="item.value"-->
+  <!--              @click="setTrigger('click')"-->
+  <!--            ></el-option>-->
+  <!--          </el-select>-->
+  <!--        </el-form-item>-->
+  <!--        <el-form-item>-->
+  <!--          <el-input v-model="filterModel.value1" size="mini" />-->
+  <!--        </el-form-item>-->
+  <!--      </el-form>-->
+  <!--    </div>-->
+  <!--  </component>-->
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
-import FilterModel from '@/classes/filters/FilterModel';
-import OperatorsTextOptions from '@/classes/filters/OperatorsTextOptions';
-import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
+// import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
 import { DataTypes } from '@/interfaces/filters/DataTypes';
 import { Operators } from '@/interfaces/filters/Operators';
 import IOption from '@/interfaces/shared/IOption';
+import FilterModel from '@/services/classes/filters/FilterModel';
+import OperatorsTextOptions from '@/services/classes/filters/OperatorsTextOptions';
 
 export default defineComponent({
   name: 'FilterTextForm',
-  components: { FilterPopover },
+  // components: { FilterPopover },
   props: {
     table: {
       type: String as PropType<string>,

@@ -75,8 +75,8 @@ import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Hooks from '@/services/Hooks/Hooks';
-import Provider from '@/services/Provider';
-import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+import Provider from '@/services/Provider/Provider';
+import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'DrugsList',

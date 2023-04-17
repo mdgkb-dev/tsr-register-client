@@ -15,7 +15,7 @@
         <h2 style="margin-bottom: 60px">{{ human.getFullName() }}</h2>
         <el-row>
           <el-col :span="12" style="color: #a1a8bd">Дата рождения</el-col>
-          <el-col :span="12"> {{ formatDate(human.dateBirth) }}</el-col>
+          <el-col :span="12"> {{ $dateTimeFormatter.format(human.dateBirth) }}</el-col>
         </el-row>
         <el-divider></el-divider>
         <el-row>

@@ -1,14 +1,21 @@
+import { ElMessage } from 'element-plus';
 import { onBeforeMount } from 'vue';
+import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from 'vue-router';
 
-import IAdminHeaderParams from '@/interfaces/admin/IAdminHeaderParams';
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import ISortModel from '@/interfaces/filters/ISortModel';
-import Provider from '@/services/Provider';
+import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
+import createSortModels from '@/services/CreateSortModels';
+import { SortModelBuildersLib } from '@/services/interfaces/Sort';
+import Provider from '@/services/Provider/Provider';
+import useConfirmLeavePage from '@/services/useConfirmLeavePage';
+import validate from '@/services/validate';
 
 export interface IHooksOptions {
   pagination?: IPaginationOptions;
-  sortModels: ISortModel[];
-  adminHeader?: IAdminHeaderParams;
+  sortsLib?: SortModelBuildersLib;
+  adminHeader?: AdminHeaderParams;
+  getAction?: string;
+  v2?: boolean;
 }
 
 export interface IPaginationOptions {
@@ -16,36 +23,69 @@ export interface IPaginationOptions {
   action: string;
 }
 
-type func = (filterQuery: IFilterQuery) => void;
+type func = (param?: FilterQuery | string) => Promise<void> | void;
 
 const Hooks = (() => {
-  // const filterQuery: ComputedRef<IFilterQuery> = computed(() => Provider.store.getters['filter/filterQuery']);
   const onBeforeMountWithLoading = (f: func, options?: IHooksOptions) => {
     return onBeforeMount(async () => {
       Provider.mounted.value = false;
       Provider.store.commit('admin/showLoading');
-      Provider.store.commit(`filter/resetQueryFilter`);
+      Provider.resetFilterQuery();
       await Provider.store.dispatch('meta/getSchema');
-      if (options?.pagination) {
-        Provider.store.commit('filter/setStoreModule', options.pagination.storeModule);
-        Provider.store.commit('filter/setAction', options.pagination.action);
-        Provider.store.commit('pagination/setCurPage', 1);
+      if (options?.sortsLib) {
+        Provider.setSortList(...createSortModels(options.sortsLib));
       }
-      if (options?.adminHeader) {
+      await Provider.filterQuery.value.fromUrlQuery(Provider.route().query);
+      // Provider.setDefaultSortModel();
+      Provider.setStoreModule(undefined);
+      Provider.setGetAction(options?.getAction);
+      Provider.initPagination(options?.pagination);
+      await f(Provider.filterQuery.value);
+      if ((options?.adminHeader, options?.adminHeader)) {
         Provider.store.commit('admin/setHeaderParams', options.adminHeader);
       }
-      if (Provider.filterQuery.value) {
-        Provider.filterQuery.value.pagination.cursorMode = false;
-      }
-      await f(Provider.filterQuery.value);
-
       Provider.store.commit('admin/closeLoading');
       Provider.mounted.value = true;
     });
   };
 
+  const { saveButtonClick, showConfirmModal } = useConfirmLeavePage();
+
+  const onBeforeRouteLeaveWithSubmit = (submitFunction?: CallableFunction) => {
+    return onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+      const func = submitFunction ? submitFunction : submit;
+      showConfirmModal(func(), next);
+      Provider.resetState();
+    });
+  };
+  const submit = (submitFunction?: CallableFunction) => {
+    return async () => {
+      Provider.saveButtonClicked.value = true;
+      saveButtonClick.value = true;
+      if (!validate(Provider.form)) {
+        saveButtonClick.value = false;
+        return;
+      }
+      try {
+        if (submitFunction) {
+          await submitFunction();
+        } else {
+          await Provider.submit();
+        }
+        ElMessage({ message: 'Сохранено', type: 'success' });
+      } catch (error) {
+        ElMessage({ message: 'Что-то пошло не так', type: 'error' });
+        console.log(error);
+        return;
+      }
+      Provider.saveButtonClicked.value = false;
+    };
+  };
+
   return {
     onBeforeMount: onBeforeMountWithLoading,
+    onBeforeRouteLeave: onBeforeRouteLeaveWithSubmit,
+    submit,
   };
 })();
 

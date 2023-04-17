@@ -19,7 +19,12 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    '@typescript-eslint/no-unused-vars': 'warn',
     'unused-imports/no-unused-imports': 'error',
+    'vue/no-v-html': 0,
+    'vue/valid-v-slot': ['error', {
+      allowModifiers: true,
+    }],
   },
   overrides: [
     {

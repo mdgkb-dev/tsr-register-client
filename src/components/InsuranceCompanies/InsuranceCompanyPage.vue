@@ -21,18 +21,13 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 import InsuranceCompanyRules from '@/classes/insuranceCompanies/InsuranceCompanyRules';
-import MainHeader from '@/classes/shared/MainHeader';
 import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
-import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'InsuranceCompanyPage',
@@ -47,11 +42,11 @@ export default defineComponent({
 
     const insuranceCompany: ComputedRef<IInsuranceCompany> = computed(() => store.getters['insuranceCompanies/insuranceCompany']);
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { validate } = useValidate();
-    const { submitHandling } = useForm(isEditMode.value);
-
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { validate } = useValidate();
+    // const { submitHandling } = useForm(isEditMode.value);
+    //
     onBeforeMount(async (): Promise<void> => {
       let title: string;
       if (!route.params.insuranceCompanyId) {
@@ -62,33 +57,31 @@ export default defineComponent({
         await store.dispatch('insuranceCompanies/get', route.params.insuranceCompanyId);
       }
 
-      pushToLinks(['/insurance-companies'], ['Страховые компании']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      // pushToLinks(['/insurance-companies'], ['Страховые компании']);
+      // store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'InsuranceCompanies');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(insuranceCompany, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(insuranceCompany, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const submitForm = async (next?: NavigationGuardNext) => {
-      saveButtonClick.value = true;
-
-      if (!validate(form.value)) {
-        return;
-      }
-
-      await submitHandling('insuranceCompanies', insuranceCompany.value, next, 'insurance-companies');
+      // saveButtonClick.value = true;
+      // if (!validate(form.value)) {
+      //   return;
+      // }
+      // await submitHandling('insuranceCompanies', insuranceCompany.value, next, 'insurance-companies');
     };
 
     return {
       form,
       insuranceCompany,
-      links,
+      // links,
       mount,
       rules,
       submitForm,

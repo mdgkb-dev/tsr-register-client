@@ -1,16 +1,13 @@
-import Document from '@/classes/documents/Document';
 import FileInfo from '@/classes/files/FileInfo';
 import Contact from '@/classes/humans/Contact';
-import InsuranceCompanyToHuman from '@/classes/insuranceCompanies/InsuranceCompanyToHuman';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/IHuman';
-import IHumanConstructor from '@/interfaces/IHumanConstructor';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class Human implements IHuman {
+export default class Human {
   id?: string;
   name = '';
   surname = '';
@@ -26,41 +23,11 @@ export default class Human implements IHuman {
   documents: IDocument[] = [];
   documentsForDelete: string[] = [];
   fileInfos: IFileInfo[] = [];
-  photo?: IFileInfo;
+  photo: IFileInfo = new FileInfo();
   photoId?: string;
 
-  constructor(i?: IHumanConstructor) {
-    if (!i) {
-      return;
-    }
-
-    this.id = i.id;
-    this.name = i.name ?? '';
-    this.surname = i.surname ?? '';
-    this.patronymic = i.patronymic ?? '';
-    this.isMale = i.isMale ?? true;
-    if (i.dateBirth) {
-      this.dateBirth = new Date(i.dateBirth);
-    }
-
-    this.addressRegistration = i.addressRegistration ?? '';
-    this.addressResidential = i.addressResidential ?? '';
-    this.contact = new Contact(i.contact);
-    this.contactId = i.contactId;
-    this.fileInfos = i.fileInfos ?? [];
-    this.photoId = i.photoId;
-
-    if (i.insuranceCompanyToHuman) {
-      this.insuranceCompanyToHuman = i.insuranceCompanyToHuman.map((i: IInsuranceCompanyToHuman) => new InsuranceCompanyToHuman(i));
-    }
-
-    if (i.documents) {
-      this.documents = i.documents.map((i: IDocument) => new Document(i));
-    }
-
-    if (i.photo) {
-      this.photo = new FileInfo(i.photo);
-    }
+  constructor(i?: Human) {
+    ClassHelper.BuildClass(this, i);
   }
 
   getFullName(): string {
@@ -84,7 +51,7 @@ export default class Human implements IHuman {
     }
   }
 
-  static GetFileInfos(item: IHuman): IFileInfo[] {
+  static GetFileInfos(item: Human): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
 
     item.documents.forEach((doc: IDocument) => {

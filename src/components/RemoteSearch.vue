@@ -1,31 +1,38 @@
 <template>
-  <el-form @submit.prevent="onEnter">
+  <el-form :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }" @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
       <el-autocomplete
         ref="searchForm"
         v-model="queryString"
+        :value-key="'label'"
         style="width: 100%; margin-right: 10px"
-        :placeholder="placeHolder"
+        popper-class="wide-dropdown"
+        :placeholder="placeholder"
         :fetch-suggestions="find"
-        :trigger-on-focus="false"
+        :trigger-on-focus="showSuggestions"
         @select="handleSelect"
         @input="handleInput"
-      />
+      >
+        <template #suffix>
+          <i class="el-icon-search"> </i>
+        </template>
+      </el-autocomplete>
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
-import { useStore } from 'vuex';
 
-import FilterModel from '@/classes/filters/FilterModel';
-import { DataTypes } from '@/interfaces/filters/DataTypes';
-import IFilterModel from '@/interfaces/filters/IFilterModel';
-import { Operators } from '@/interfaces/filters/Operators';
-import ISearchGroup from '@/interfaces/ISearchGroup';
-import ISearchModel from '@/interfaces/ISearchModel';
-import ISearch from '@/interfaces/ISearchObject';
+import SearchGroup from '@/classes/SearchGroup';
+import FilterModel from '@/services/classes/filters/FilterModel';
+import SearchModel from '@/services/classes/SearchModel';
+import { DataTypes } from '@/services/interfaces/DataTypes';
+import IFilterModel from '@/services/interfaces/IFilterModel';
+import ISearch from '@/services/interfaces/ISearchObject';
+import { Operators } from '@/services/interfaces/Operators';
+import Provider from '@/services/Provider/Provider';
+import StringsService from '@/services/Strings';
 
 export default defineComponent({
   name: 'RemoteSearch',
@@ -50,7 +57,7 @@ export default defineComponent({
       type: String as PropType<string>,
       default: '',
     },
-    placeHolder: {
+    placeholder: {
       type: String as PropType<string>,
       default: 'Начните вводить запрос',
     },
@@ -62,13 +69,16 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: true,
     },
+    maxWidth: {
+      type: [Number, String],
+      default: 300,
+    },
   },
-  emits: ['select', 'load', 'input', 'update:modelValue'],
+  emits: ['select', 'load', 'input'],
   setup(props, { emit }) {
-    const store = useStore();
-    const queryString: Ref<string> = ref(props.modelValue ? props.modelValue : '');
+    const queryString: Ref<string> = ref(props.modelValue);
     const searchForm = ref();
-    const searchModel: Ref<ISearchModel> = computed<ISearchModel>(() => store.getters['search/searchModel']);
+    const searchModel: Ref<SearchModel> = computed<SearchModel>(() => Provider.store.getters['search/searchModel']);
 
     const find = async (query: string, resolve: (arg: any) => void): Promise<void> => {
       if (query.length < 2) {
@@ -77,32 +87,31 @@ export default defineComponent({
       }
       searchForm.value.activated = true;
       searchModel.value.searchObjects = [];
-      searchModel.value.query = query;
+      searchModel.value.query = StringsService.translit(query);
       searchModel.value.mustBeTranslated = props.mustBeTranslated;
-      const groupForSearch = searchModel.value.searchGroups.find((group: ISearchGroup) => group.key === props.keyValue);
+      const groupForSearch = searchModel.value.searchGroups.find((group: SearchGroup) => group.key === props.keyValue);
       if (groupForSearch) {
         searchModel.value.searchGroup = groupForSearch;
       }
-      await store.dispatch(`search/search`, searchModel.value);
-      emit('input', searchModel.value.searchObjects);
-      // if (props.showSuggestions) {
-      resolve(searchModel.value.searchObjects);
-      // return;
-      // }
-      // resolve([]);
+      await Provider.store.dispatch(`search/search`, searchModel.value);
+
+      // emit('input', searchModel.value.searchObjects);
+      if (props.showSuggestions) {
+        resolve(searchModel.value.searchObjects);
+        return;
+      }
+      resolve([]);
     };
 
     const handleSearchInput = async (value: string): Promise<void> => {
       if (value.length === 0) {
-        await store.dispatch(`search/search`, store.getters['filter/filterQuery']);
+        await Provider.store.dispatch(`search/search`, Provider.filterQuery.value);
+        Provider.store.commit('pagination/setCurPage', 0);
       }
-      store.commit('pagination/setCurPage', 0);
     };
-
     const handleSelect = async (item: ISearch): Promise<void> => {
-      searchModel.value.query = '';
       if (props.storeModule != '') {
-        await store.dispatch(`${props.storeModule}/getAllById`, item.id);
+        await Provider.store.dispatch(`${props.storeModule}/getAllById`, item.id);
         return;
       }
       emit('select', item);
@@ -119,17 +128,16 @@ export default defineComponent({
 
     const onEnter = async (): Promise<void> => {
       filterModel.value.value1 = queryString.value;
-      store.commit('filter/setFilterModel', filterModel.value);
+      Provider.store.commit('filter/setFilterModel', filterModel.value);
       emit('load');
       searchForm.value.close();
     };
 
-    const handleInput = (i: string) => {
-      if (i.length === 0) {
-        emit('input', []);
+    const handleInput = (value: string) => {
+      emit('input', value);
+      if (value.length === 0) {
+        emit('input', '');
       }
-      emit('update:modelValue', i);
-      queryString.value = queryString.value + i;
     };
 
     return { searchForm, onEnter, queryString, handleSelect, find, handleSearchInput, handleInput };
@@ -139,11 +147,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 $margin: 20px 0;
-
-.el-form {
-  padding: 0 10px;
-  width: 100%;
-}
 
 .flex-column {
   width: 100%;
@@ -165,11 +168,11 @@ $margin: 20px 0;
   margin: $margin;
 }
 
-:deep(.el-input__wrapper) {
+:deep(.el-input__inner) {
   border-radius: 20px;
-  padding-left: 15px;
+  padding-left: 25px;
   height: 34px;
-  width: 100%;
+  // width: 100%;
   display: flex;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;
@@ -179,7 +182,16 @@ $margin: 20px 0;
   top: -2px;
 }
 
+:deep(.el-form-item) {
+  margin: 0;
+}
+
 .el-form {
-  width: 100% !important;
+  padding: 0 10px;
+  width: 100%;
+}
+
+.el-icon-search {
+  margin-right: 5px;
 }
 </style>

@@ -72,21 +72,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, reactive, Ref, ref, watch, WritableComputedRef } from 'vue';
+import { computed, defineComponent, onBeforeMount, reactive, Ref, ref, WritableComputedRef } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import DocumentTypeRules from '@/classes/documents/DocumentTypeRules';
-import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
-import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'DocumentTypePage',
@@ -117,10 +112,10 @@ export default defineComponent({
       },
     });
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { validate } = useValidate();
-    const { submitHandling } = useForm(isEditMode.value);
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { validate } = useValidate();
+    // const { submitHandling } = useForm(isEditMode.value);
 
     onBeforeMount(async (): Promise<void> => {
       let title: string;
@@ -132,17 +127,17 @@ export default defineComponent({
         await store.dispatch('documentTypes/get', String(route.params.documentTypeId));
       }
 
-      pushToLinks(['/document-types'], ['Регистры пациентов']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      // pushToLinks(['/document-types'], ['Регистры пациентов']);
+      // store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'DocumentTypes');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(documentType, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(documentType, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const add = (): void => {
@@ -158,16 +153,16 @@ export default defineComponent({
     };
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      saveButtonClick.value = true;
-      if (!validate(form.value)) return;
-
-      await submitHandling('documentTypes', documentType.value, next, 'document-types');
+      // saveButtonClick.value = true;
+      // if (!validate(form.value)) return;
+      //
+      // await submitHandling('documentTypes', documentType.value, next, 'document-types');
     };
 
     return {
       documentType,
       form,
-      links,
+      // links,
       mount,
       options,
       rules,

@@ -4,6 +4,7 @@ import ITokens from '@/interfaces/ITokens';
 import IUser from '@/interfaces/IUser';
 import IUserAuthorized from '@/interfaces/IUserAuthorized';
 import IUserResponse from '@/interfaces/IUserResponse';
+import Profile from '@/services/classes/auth/Profile';
 import HttpClient from '@/services/HttpClient';
 import TokenService from '@/services/Token';
 import RootState from '@/store/types';
@@ -13,8 +14,18 @@ import State from './state';
 const httpClient = new HttpClient('auth');
 
 const actions: ActionTree<State, RootState> = {
-  login: async ({ commit }, user: IUser): Promise<void> => {
-    const res = await httpClient.post<IUser, { user: IUser; tokens: ITokens }>({ query: 'login', payload: user });
+  register: async ({ commit, state }): Promise<void> => {
+    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({ query: 'register', payload: state.auth.profile });
+    if (!res) {
+      return;
+    }
+    const { user: newUser, tokens } = res;
+    commit('setUser', newUser);
+    commit('setTokens', tokens);
+    commit('setIsAuth', true);
+  },
+  login: async ({ commit, state }): Promise<void> => {
+    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({ query: 'login', payload: state.auth.profile });
     if (!res) {
       return;
     }
@@ -46,6 +57,15 @@ const actions: ActionTree<State, RootState> = {
         payload: { refreshToken: TokenService.getRefreshToken() },
       })
     );
+  },
+  setAuth: async ({ state, commit }): Promise<void> => {
+    const user = TokenService.getUser();
+    const token = TokenService.getAccessToken();
+    if (user && token) {
+      commit('setTokens', token);
+      commit('setUser', user);
+      commit('setIsAuth', true);
+    }
   },
 };
 

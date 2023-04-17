@@ -1,27 +1,21 @@
 import Edv from '@/classes/disability/Edv';
+import Patient from '@/classes/Patient';
 import Period from '@/classes/shared/Period';
-import IDisability from '@/interfaces/disabilities/IDisability';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IPatient from '@/interfaces/patients/IPatient';
-import IPeriod from '@/interfaces/shared/IPeriod';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class Disability implements IDisability {
+export default class Disability {
   id?: string;
-  period?: IPeriod = new Period();
+  period?: Period = new Period();
   periodId?: string;
-  patient?: IPatient;
+  patient?: Patient;
   patientId?: string;
-  edvs: IEdv[] = [];
+  @ClassHelper.GetClassConstructor(Edv)
+  edvs: Edv[] = [];
 
-  constructor(i?: IDisability) {
-    if (!i) return;
-    this.id = i.id;
-    if (i.period) this.period = new Period(i.period);
-    this.periodId = i.periodId;
-    this.patientId = i.patientId;
-    this.patient = i.patient;
-    if (i.edvs) this.edvs = i.edvs.map((e) => new Edv(e));
+  constructor(i?: Disability) {
+    ClassHelper.BuildClass(this, i);
   }
 
   getActuallyEdv(): IEdv {
@@ -31,10 +25,10 @@ export default class Disability implements IDisability {
   dateIsCorrect(): boolean {
     return !(this.period && this.period.dateStart && this.period.dateEnd && this.period.dateStart > this.period.dateEnd);
   }
-  static GetFileInfos(items: IDisability[]): IFileInfo[] {
+  static GetFileInfos(items: Disability[]): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
 
-    items.forEach((i: IDisability) => {
+    items.forEach((i: Disability) => {
       i.edvs.forEach((e: IEdv) => {
         if (e.fileInfo) {
           fileInfos.push(e.fileInfo);

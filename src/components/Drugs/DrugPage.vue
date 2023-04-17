@@ -59,7 +59,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
@@ -70,10 +70,6 @@ import DrugRegimensForm from '@/components/Drugs/DrugRegimensForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
-import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'DrugPage',
@@ -90,15 +86,15 @@ export default defineComponent({
     const mount: Ref<boolean> = ref(false);
     const newDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm(isEditMode.value);
-    const { validate, validateWithoutMessageBox } = useValidate();
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { submitHandling } = useForm(isEditMode.value);
+    // const { validate, validateWithoutMessageBox } = useValidate();
 
     const addDrugRegimen = (): void => {
-      if (!validateWithoutMessageBox(newDrugRegimenForm.value)) {
-        return;
-      }
+      // if (!validateWithoutMessageBox(newDrugRegimenForm.value)) {
+      //   return;
+      // }
       drug.value.addDrugRegimen(newDrugRegimen.value);
       newDrugRegimen.value.drugRegimenBlocks[0].editDrugRegimenBlock(true);
       newDrugRegimen.value = new DrugRegimen();
@@ -115,26 +111,26 @@ export default defineComponent({
         title = drug.value.name;
       }
 
-      pushToLinks(['/drugs'], ['Список лекарств']);
+      // pushToLinks(['/drugs'], ['Список лекарств']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'DrugsList');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(drug, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(drug, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      saveButtonClick.value = true;
-      if (!(await validate(form.value))) {
-        return;
-      }
-      store.commit('drugs/updateOrder');
-      await submitHandling('drugs', drug.value, next, 'drugs');
+      // saveButtonClick.value = true;
+      // if (!(await validate(form.value))) {
+      //   return;
+      // }
+      // store.commit('drugs/updateOrder');
+      // await submitHandling('drugs', drug.value, next, 'drugs');
     };
 
     return {

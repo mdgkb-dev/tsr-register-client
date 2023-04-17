@@ -1,38 +1,24 @@
 import cloneDeep from 'lodash/cloneDeep';
 
-import IDrug from '@/interfaces/drugs/IDrug';
-import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
-import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
-import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
+import DrugRegimenBlockItem from '@/classes/drugs/DrugRegimenBlockItem';
+import ClassHelper from '@/services/ClassHelper';
 
 import Drug from './Drug';
 import DrugRegimenBlock from './DrugRegimenBlock';
 
-export default class DrugRegimen implements IDrugRegimen {
+export default class DrugRegimen {
   id?: string;
   name = '';
   isEdit = false;
 
   drugId?: string;
-  drug?: IDrug;
+  drug?: Drug;
 
-  drugRegimenBlocks: IDrugRegimenBlock[] = [new DrugRegimenBlock()];
+  drugRegimenBlocks: DrugRegimenBlock[] = [new DrugRegimenBlock()];
   drugRegimenBlocksForDelete: string[] = [];
 
-  constructor(drugRegimen?: IDrugRegimen) {
-    if (!drugRegimen) {
-      return;
-    }
-    this.id = drugRegimen.id;
-    this.name = drugRegimen.name;
-    this.isEdit = drugRegimen.isEdit;
-    this.drugId = drugRegimen.drugId;
-    if (drugRegimen.drug) {
-      this.drug = new Drug(drugRegimen.drug);
-    }
-    if (drugRegimen.drugRegimenBlocks) {
-      this.drugRegimenBlocks = drugRegimen.drugRegimenBlocks.map((item: IDrugRegimenBlock) => new DrugRegimenBlock(item));
-    }
+  constructor(i?: DrugRegimen) {
+    ClassHelper.BuildClass(this, i);
   }
 
   addDrugRegimenBlock(): void {
@@ -67,8 +53,8 @@ export default class DrugRegimen implements IDrugRegimen {
 
   getShortInfo(): string {
     let result = '';
-    this.drugRegimenBlocks.forEach((drugRegimenBlock: IDrugRegimenBlock, drugRegimenBlockIndex: number) => {
-      drugRegimenBlock.drugRegimenBlockItems.forEach((drugRegimenBlockItem: IDrugRegimenBlockItem, drugRegimenBlockItemIndex: number) => {
+    this.drugRegimenBlocks.forEach((drugRegimenBlock: DrugRegimenBlock, drugRegimenBlockIndex: number) => {
+      drugRegimenBlock.drugRegimenBlockItems.forEach((drugRegimenBlockItem: DrugRegimenBlockItem, drugRegimenBlockItemIndex: number) => {
         if (drugRegimenBlockItemIndex === 0) {
           result += `${drugRegimenBlockIndex + 1}-й промежуток: `;
         }

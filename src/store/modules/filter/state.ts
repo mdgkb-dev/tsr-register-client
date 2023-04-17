@@ -1,11 +1,11 @@
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import ISortModel from '@/interfaces/filters/ISortModel';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
+import SortModel from '@/services/classes/SortModel';
 
 export interface State {
   trigger: string;
-  filterQuery: IFilterQuery;
+  filterQuery: FilterQuery;
   storeModule: string;
   action: string;
-  sortModels: ISortModel[];
+  sortModels: SortModel[];
   setDefaultSortModel: boolean;
 }

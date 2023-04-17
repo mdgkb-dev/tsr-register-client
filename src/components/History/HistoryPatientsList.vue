@@ -43,7 +43,7 @@
             </div>
           </template>
           <template #default="scope">
-            {{ formatDate(scope.row.human.dateBirth) }}
+            {{ $dateTimeFormatter.format(scope.row.human.dateBirth) }}
           </template>
         </el-table-column>
       </el-table>
@@ -58,11 +58,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
-import IPatient from '@/interfaces/patients/IPatient';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useDateFormat from '@/mixins/useDateFormat';
 
 export default defineComponent({
   name: 'HistoryPatientsList',
@@ -72,11 +68,9 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
-    const { formatDate } = useDateFormat();
-    const { links, pushToLinks } = useBreadCrumbsLinks();
 
     const mount: Ref<boolean> = ref(false);
-    const patients: Ref<IPatient[]> = computed(() => store.getters['patients/patients']);
+    const patients: Ref<Patient[]> = computed(() => store.getters['patients/patients']);
 
     onBeforeMount(async () => {
       store.commit('filter/resetId');
@@ -85,8 +79,8 @@ export default defineComponent({
         text: 'Загрузка',
       });
       store.commit('pagination/setCurPage', 1);
-      pushToLinks(['/history'], ['Архив']);
-      store.commit('main/setMainHeader', new MainHeader({ title: 'Архив пациентов', links }));
+      // pushToLinks(['/history'], ['Архив']);
+      // store.commit('main/setMainHeader', new MainHeader({ title: 'Архив пациентов', links }));
       store.commit('filter/setStoreModule', 'patients');
       store.commit('filter/setWithDeleted', true);
       await store.dispatch('patients/getAll', store.getters['filter/filterQuery']);
@@ -96,7 +90,7 @@ export default defineComponent({
       loading.close();
     });
 
-    const link = (row: IPatient): void => {
+    const link = (row: Patient): void => {
       router.push(`/patients/history/${row.id}`);
     };
 
@@ -106,7 +100,7 @@ export default defineComponent({
 
     return {
       mount,
-      formatDate,
+      // formatDate,
       patients,
       link,
     };

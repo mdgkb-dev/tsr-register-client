@@ -1,18 +1,12 @@
-import IRegisterPropertyOtherToPatient from '@/interfaces/IRegisterPropertyOtherToPatient';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterPropertyOtherToPatient implements IRegisterPropertyOtherToPatient {
+export default class RegisterPropertyOtherToPatient {
   id?: string;
   value = '';
   registerPropertyOtherId?: string;
   patientId?: string;
 
   constructor(i?: RegisterPropertyOtherToPatient) {
-    if (!i) {
-      return;
-    }
-    this.id = i.id;
-    this.value = i.value;
-    this.patientId = i.patientId;
-    this.registerPropertyOtherId = i.registerPropertyOtherId;
+    ClassHelper.BuildClass(this, i);
   }
 }

@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import RegisterProperty from '@/classes/RegisterProperty';
+import Question from '@/classes/Question';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -11,7 +11,7 @@ import { State } from './state';
 export const state: State = {
   registerProperties: [],
   valueTypes: [],
-  registerProperty: new RegisterProperty(),
+  registerProperty: new Question(),
 };
 
 const namespaced = true;

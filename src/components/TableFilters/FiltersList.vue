@@ -1,7 +1,7 @@
 <template>
   <el-form>
     <el-form-item>
-      <el-select v-model="selectedFilterModel" value-key="label" :placeholder="selectedFilterModel.label" @change="setFilter">
+      <el-select v-model="selectedFilterModel" value-key="label" :placeholder="selectedFilterModel?.label" @change="setFilter">
         <el-option :label="defaultLabel" :value="emptyFilterModel" />
         <el-option v-for="item in models" :key="item" :label="item.label" :value="item" />
       </el-select>
@@ -12,16 +12,15 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref, WritableComputedRef } from 'vue';
 
-import FilterModel from '@/classes/filters/FilterModel';
-import IFilterModel from '@/interfaces/filters/IFilterModel';
-import Provider from '@/services/Provider';
+import FilterModel from '@/services/classes/filters/FilterModel';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'FiltersList',
   components: {},
   props: {
     models: {
-      type: Array as PropType<IFilterModel[]>,
+      type: Array as PropType<FilterModel[]>,
       default: () => [],
     },
     defaultLabel: {
@@ -31,25 +30,30 @@ export default defineComponent({
   },
   emits: ['load'],
   setup(props, { emit }) {
-    const emptyFilterModel: WritableComputedRef<IFilterModel> = computed(() => new FilterModel());
-    const selectedFilterModel: Ref<IFilterModel | undefined> = ref(undefined);
+    const emptyFilterModel: WritableComputedRef<FilterModel> = computed(() => new FilterModel());
+    const selectedFilterModel: Ref<FilterModel | undefined> = ref(undefined);
     const selectedId: Ref<string | undefined> = ref(undefined);
-
     const setDefaultFilterModel = (): void => {
       selectedFilterModel.value = emptyFilterModel.value;
     };
-
     onBeforeMount((): void => {
+      const findedModel = props.models?.find((m: FilterModel) => Provider.filterQuery.value.findFilterModel(m));
+      if (findedModel) {
+        selectedFilterModel.value = findedModel;
+        return;
+      }
       setDefaultFilterModel();
     });
 
-    const setFilter = () => {
-      if (selectedFilterModel.value && selectedFilterModel.value.table) {
+    const setFilter = async () => {
+      if (selectedFilterModel.value && (selectedFilterModel.value.table || selectedFilterModel.value.model)) {
         Provider.replaceFilterModel(selectedFilterModel.value, selectedId.value);
         selectedId.value = selectedFilterModel.value.id;
       } else {
         Provider.spliceFilterModel(selectedId.value);
       }
+      Provider.dropPagination();
+      await Provider.router.replace({ query: { q: Provider.filterQuery.value.toUrlQuery() } });
       emit('load');
     };
 
@@ -76,11 +80,8 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
-  padding-left: 5px;
-}
-
-:deep(.el-input__wrapper) {
   border-radius: 20px;
+  padding-left: 25px;
   height: 34px;
   width: 100%;
   display: flex;

@@ -1,24 +1,15 @@
-import RegisterProperty from '@/classes/RegisterProperty';
+import Question from '@/classes/Question';
 import UserAuthorized from '@/classes/UserAuthorized';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterPropertyToUser from '@/interfaces/IRegisterPropertyToUser';
-import IUserAuthorized from '@/interfaces/IUserAuthorized';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterPropertyToUser implements IRegisterPropertyToUser {
+export default class RegisterPropertyToUser {
   id?: string;
   registerPropertyId = '';
-  registerProperty?: IRegisterProperty;
+  registerProperty?: Question;
   userId = '';
-  user?: IUserAuthorized;
+  user?: UserAuthorized;
 
-  constructor(item?: IRegisterPropertyToUser) {
-    if (!item) {
-      return;
-    }
-    this.id = item.id;
-    this.registerPropertyId = item.registerPropertyId;
-    this.userId = item.userId;
-    if (this.registerProperty) this.registerProperty = new RegisterProperty(item.registerProperty);
-    if (this.user) this.user = new UserAuthorized(item.user);
+  constructor(i?: RegisterPropertyToUser) {
+    ClassHelper.BuildClass(this, i);
   }
 }

@@ -1,8 +1,11 @@
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import { IBodilessParams, IBodyfulParams } from '@/interfaces/IHTTPTypes';
 import axiosInstance from '@/services/Axios';
+import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
 import TokenService from '@/services/Token';
 
+const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
+const apiVersion = process.env.VUE_APP_API_V1 ?? '';
+const apiHost = process.env.VUE_APP_API_HOST ?? '';
 export default class HttpClient {
   endpoint: string;
   headers: Record<string, string>;
@@ -10,6 +13,11 @@ export default class HttpClient {
   constructor(endpoint = '') {
     this.endpoint = endpoint;
     this.headers = { 'Content-Type': 'application/json' };
+  }
+
+  newWebSocket(query: string): WebSocket {
+    const url = apiHost.replace('http', 'ws') + '/ws' + '/' + this.endpoint + '/' + query;
+    return new WebSocket(url);
   }
 
   private static download(url: string, name: string) {
@@ -105,20 +113,14 @@ export default class HttpClient {
     const { query } = params;
 
     const source = new EventSource(this.buildUrl(query));
-
     return source;
   }
 
   private buildUrl(query?: string): string {
-    const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
-    const apiVersion = process.env.VUE_APP_API_V1 ?? '';
-
     if (query) {
       const queryString = query ?? '';
-
       return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
     }
-
     return baseUrl + apiVersion + this.endpoint;
   }
 
@@ -133,7 +135,6 @@ export default class HttpClient {
         }
       }
     }
-
     return data;
   }
 }

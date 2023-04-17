@@ -1,11 +1,9 @@
-import IContact from '@/interfaces/IContact';
-
-export default class Contact implements IContact {
+export default class Contact {
   id?: string;
   phone = '';
   email = '';
 
-  constructor(i?: IContact) {
+  constructor(i?: Contact) {
     if (!i) {
       return;
     }

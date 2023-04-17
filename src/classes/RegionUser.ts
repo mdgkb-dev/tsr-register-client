@@ -1,28 +1,15 @@
 import Region from '@/classes/Region';
 import User from '@/classes/User';
-import IRegion from '@/interfaces/IRegion';
-import IRegionUser from '@/interfaces/IRegionUser';
-import IUser from '@/interfaces/IUser';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegionUser implements IRegionUser {
+export default class RegionUser {
   id?: string;
   regionId?: string;
-  region?: IRegion;
+  region?: Region;
   userId?: string;
-  user?: IUser;
+  user?: User;
 
-  constructor(i?: IRegionUser) {
-    if (!i) {
-      return;
-    }
-    this.id = i.id;
-    this.regionId = i.regionId;
-    if (i.region) {
-      this.region = new Region(i.region);
-    }
-    this.userId = i.userId;
-    if (i.user) {
-      this.user = new User(i.user);
-    }
+  constructor(i?: RegionUser) {
+    ClassHelper.BuildClass(this, i);
   }
 }

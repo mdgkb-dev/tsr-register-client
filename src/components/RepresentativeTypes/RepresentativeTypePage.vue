@@ -33,18 +33,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import RepresentativeType from '@/classes/representatives/RepresentativeType';
-import RepresentativeTypeRules from '@/classes/representatives/RepresentativeTypeRules';
+import RepresentativeType from '@/classes/RepresentativeType';
+import RepresentativeTypeRules from '@/classes/RepresentativeTypeRules';
 import MainHeader from '@/classes/shared/MainHeader';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
-import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RepresentativeTypePage',
@@ -58,10 +54,10 @@ export default defineComponent({
     const mount: Ref<boolean> = ref(false);
     const rules = RepresentativeTypeRules;
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm(isEditMode.value);
-    const { validate } = useValidate();
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { submitHandling } = useForm(isEditMode.value);
+    // const { validate } = useValidate();
 
     onBeforeMount(async () => {
       let title: string;
@@ -74,30 +70,30 @@ export default defineComponent({
         representativeType.value = store.getters['representativeTypes/representativeType'];
       }
 
-      pushToLinks(['/representative-types'], ['Типы представителей']);
+      // pushToLinks(['/representative-types'], ['Типы представителей']);
       store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'RepresentativeTypes');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(representativeType, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(representativeType, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      saveButtonClick.value = true;
-      if (!validate(form.value)) return;
-
-      await submitHandling('representativeTypes', representativeType.value, next, 'representative-types');
+      // saveButtonClick.value = true;
+      // if (!validate(form.value)) return;
+      //
+      // await submitHandling('representativeTypes', representativeType.value, next, 'representative-types');
     };
 
     return {
       representativeType,
       form,
-      links,
+      // links,
       mount,
       rules,
       submitForm,

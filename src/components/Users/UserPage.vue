@@ -36,17 +36,14 @@
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import HumanRules from '@/classes/humans/HumanRules';
-import MainHeader from '@/classes/shared/MainHeader';
 import User from '@/classes/User';
 import IRegister from '@/interfaces/IRegister';
 import IUser from '@/interfaces/IUser';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
 
 export default defineComponent({
   name: 'UserPage',
@@ -65,8 +62,8 @@ export default defineComponent({
     });
     const user: ComputedRef<IUser> = computed(() => store.getters['users/user']);
 
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
 
     onBeforeMount(async (): Promise<void> => {
       let title: string;
@@ -80,22 +77,22 @@ export default defineComponent({
         await store.dispatch('users/get', route.params.userId);
       }
 
-      pushToLinks(['/users'], ['Список пользователей']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      // pushToLinks(['/users'], ['Список пользователей']);
+      // store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       mount.value = true;
 
       await store.dispatch('registers/getAll');
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(user, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(user, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const submitForm = async (): Promise<void> => {
-      saveButtonClick.value = true;
+      // saveButtonClick.value = true;
 
       try {
         if (isEditMode.value) {

@@ -1,20 +1,12 @@
-import IRegisterPropertyOther from '@/interfaces/IRegisterPropertyOther';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterPropertyOther implements IRegisterPropertyOther {
+export default class RegisterPropertyOther {
   id?: string;
   name = '';
   registerPropertyRadioId?: string;
   registerPropertyId?: string;
   order = 0;
-  constructor(i?: IRegisterPropertyOther) {
-    if (!i) {
-      return;
-    }
-    this.id = i.id;
-    this.name = i.name;
-    this.order = i.order;
-    this.registerPropertyRadioId = i.registerPropertyRadioId;
-    this.registerPropertyRadioId = i.registerPropertyRadioId;
-    this.registerPropertyId = i.registerPropertyId;
+  constructor(i?: RegisterPropertyOther) {
+    ClassHelper.BuildClass(this, i);
   }
 }

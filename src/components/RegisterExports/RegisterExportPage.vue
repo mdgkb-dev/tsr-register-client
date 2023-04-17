@@ -66,21 +66,16 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import RegisterQuery from '@/classes/RegisterQuery';
 import RegisterQueryTypes from '@/classes/RegisterQueryTypes';
-import MainHeader from '@/classes/shared/MainHeader';
 import RegisterExportPropertyFormPlain from '@/components/RegisterExports/RegisterExportPropertyFormPlain.vue';
 import IRegister from '@/interfaces/IRegister';
 import IRegisterQuery from '@/interfaces/IRegisterQuery';
 import IRegisterQueryType from '@/interfaces/IRegisterQueryType';
-import useBreadCrumbsLinks from '@/mixins/useBreadCrumbsLinks';
-import useConfirmLeavePage from '@/mixins/useConfirmLeavePage';
-import useForm from '@/mixins/useForm';
-import useValidate from '@/mixins/useValidate';
 
 export default defineComponent({
   name: 'RegisterExportPage',
@@ -96,10 +91,10 @@ export default defineComponent({
     const registers: ComputedRef<IRegister[]> = computed<IRegister[]>(() => store.getters['registers/registers']);
     const registerQuery: ComputedRef<IRegisterQuery> = computed<IRegisterQuery>(() => store.getters['registerQueries/registerQuery']);
 
-    const { links, pushToLinks } = useBreadCrumbsLinks();
-    const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    const { submitHandling } = useForm(isEditMode.value);
-    const { validate } = useValidate();
+    // const { links, pushToLinks } = useBreadCrumbsLinks();
+    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
+    // const { submitHandling } = useForm(isEditMode.value);
+    // const { validate } = useValidate();
 
     onBeforeMount(async () => {
       let title: string;
@@ -113,17 +108,17 @@ export default defineComponent({
       }
 
       await store.dispatch('registers/getAll');
-      pushToLinks(['/register-exports'], ['Экспорт регистров']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      // pushToLinks(['/register-exports'], ['Экспорт регистров']);
+      // store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'RegisterExports');
       mount.value = true;
 
-      window.addEventListener('beforeunload', beforeWindowUnload);
-      watch(registerQuery, formUpdated, { deep: true });
+      // window.addEventListener('beforeunload', beforeWindowUnload);
+      // watch(registerQuery, formUpdated, { deep: true });
     });
 
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      showConfirmModal(submitForm, next);
+      // showConfirmModal(submitForm, next);
     });
 
     const setIsAddProperty = async (): Promise<void> => {
@@ -143,9 +138,9 @@ export default defineComponent({
     };
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      saveButtonClick.value = true;
-      if (!validate(form.value)) return;
-      await submitHandling('registerQueries', registerQuery.value, next, 'register-exports');
+      // saveButtonClick.value = true;
+      // if (!validate(form.value)) return;
+      // await submitHandling('registerQueries', registerQuery.value, next, 'register-exports');
     };
 
     return {

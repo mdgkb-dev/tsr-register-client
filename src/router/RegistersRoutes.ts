@@ -1,8 +1,8 @@
-import RegisterLinkList from '@/components/Registers/RegisterLinkList.vue';
-import RegisterList from '@/components/Registers/RegisterList.vue';
-import RegisterPage from '@/components/Registers/RegisterPage.vue';
-import RegisterPatientPage from '@/components/Registers/RegisterPatientPage/RegisterPatientPage.vue';
-import RegisterPatientsPage from '@/components/Registers/RegisterPatientsPage.vue';
+import RegisterLinkList from '@/components/admin/Registers/RegisterLinkList.vue';
+import RegisterList from '@/components/admin/Registers/RegisterList.vue';
+import RegisterPage from '@/components/admin/Registers/RegisterPage.vue';
+import RegisterPatientPage from '@/components/admin/Research/RegisterPatientPage.vue';
+import RegisterPatientsPage from '@/components/admin/Research/RegisterPatientsPage.vue';
 
 export default [
   {

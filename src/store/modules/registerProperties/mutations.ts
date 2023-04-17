@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex';
 
-import RegisterProperty from '@/classes/RegisterProperty';
+import Question from '@/classes/Question';
 import ValueType from '@/classes/valueTypes/ValueType';
 import IRegisterProperty from '@/interfaces/IRegisterProperty';
 import IValueType from '@/interfaces/valueTypes/IValueType';
@@ -8,18 +8,18 @@ import IValueType from '@/interfaces/valueTypes/IValueType';
 import { State } from './state';
 
 const mutations: MutationTree<State> = {
-  setAll(state, registerProperties: RegisterProperty[]) {
-    state.registerProperties = registerProperties.map((a: IRegisterProperty) => new RegisterProperty(a));
+  setAll(state, registerProperties: Question[]) {
+    state.registerProperties = registerProperties.map((a: IRegisterProperty) => new Question(a));
   },
   setValueTypes(state, valueTypes: IValueType[]) {
     state.valueTypes = valueTypes.map((a: IValueType) => new ValueType(a));
   },
   set(state, registerProperty: IRegisterProperty) {
-    state.registerProperty = new RegisterProperty(registerProperty);
+    state.registerProperty = new Question(registerProperty);
   },
   create(state, payload: IRegisterProperty) {
-    state.registerProperties.push(new RegisterProperty(payload));
-    state.registerProperty = new RegisterProperty();
+    state.registerProperties.push(new Question(payload));
+    state.registerProperty = new Question();
   },
   update(state, payload: IRegisterProperty) {
     const item = state.registerProperties.find((i: IRegisterProperty) => i.id === payload.id);

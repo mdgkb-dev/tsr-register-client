@@ -1,5 +1,4 @@
 import IUser from '@/interfaces/IUser';
-import IPatient from '@/interfaces/patients/IPatient';
 import ISmaDiagnosis from '@/interfaces/sma/ISmaDiagnosis';
 import ISmaIntrathecal from '@/interfaces/sma/ISmaIntrathecal';
 import ISmaMolecularGeneticConfirmation from '@/interfaces/sma/ISmaMolecularGeneticConfirmation';
@@ -13,7 +12,7 @@ export default interface ISma {
   fullNameAbbreviation: string;
   fillDate: Date;
   patientId?: string;
-  patient: IPatient;
+  patient: Patient;
   userId: string;
   user: IUser;
   smaFormDiagnosisId: string;

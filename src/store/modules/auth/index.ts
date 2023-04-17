@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 
 import User from '@/classes/User';
+import Auth from '@/services/classes/auth/Auth';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -12,6 +13,11 @@ export const state: State = {
   user: new User(),
   token: '',
   isAuth: false,
+  showWarning: false,
+  authOnly: false,
+  authModalVisible: false,
+  loginStatus: 'login',
+  auth: new Auth(),
 };
 
 const namespaced = true;

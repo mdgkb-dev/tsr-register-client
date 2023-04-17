@@ -3,29 +3,17 @@ import Vuex, { StoreOptions } from 'vuex';
 import { admin } from '@/store/modules/admin';
 import auth from '@/store/modules/auth';
 import { cropper } from '@/store/modules/cropper';
-import { disabilities } from '@/store/modules/disabilities';
-import documentTypes from '@/store/modules/documentTypes';
-import { drugs } from '@/store/modules/drugs';
-import files from '@/store/modules/files';
 import { filter } from '@/store/modules/filter';
-import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
-import { mkb } from '@/store/modules/mkb';
-import { mkbConcreteDiagnoses } from '@/store/modules/mkbConcreteDiagnoses';
-import { mkbDiagnoses } from '@/store/modules/mkbDiagnoses';
-import { mkbGroups } from '@/store/modules/mkbGroups';
-import { mkbSubDiagnoses } from '@/store/modules/mkbSubDiagnoses';
+import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
-import { regions } from '@/store/modules/regions';
-import { registerGroups } from '@/store/modules/registerGroups';
-import { registerProperties } from '@/store/modules/registerProperties';
-import { registerPropertiesToUser } from '@/store/modules/registerPropertiesToUser';
-import registerQueries from '@/store/modules/registerQueries';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
+import { researches } from '@/store/modules/researches';
+import { researchesPools } from '@/store/modules/researchesPools';
 import search from '@/store/modules/search';
 import { users } from '@/store/modules/users';
 
@@ -48,32 +36,29 @@ const store: StoreOptions<RootState> = {
   modules: {
     auth,
     cropper,
-    disabilities,
-    documentTypes,
-    drugs,
-    files,
+    // disabilities,
+    // documentTypes,
+    // drugs,
+    // files,
     filter,
-    insuranceCompanies,
+    // insuranceCompanies,
     main,
     meta,
-    mkb,
+    mkbItems,
     pagination,
     patients,
-    registerGroups,
-    registerProperties,
-    registerPropertiesToUser,
-    registerQueries,
+    researches,
+    researchesPools,
+    // registerProperties,
+    // registerPropertiesToUser,
+    // registerQueries,
     registers,
     representatives,
     representativeTypes,
     users,
     search,
     admin,
-    mkbGroups,
-    mkbDiagnoses,
-    mkbSubDiagnoses,
-    mkbConcreteDiagnoses,
-    regions,
+    // regions,
   },
 };
 

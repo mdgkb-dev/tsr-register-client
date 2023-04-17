@@ -30,10 +30,10 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import InsuranceCompany from '@/classes/insuranceCompanies/InsuranceCompany';
 import MainHeader from '@/classes/shared/MainHeader';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IInsuranceCompany from '@/interfaces/insuranceCompanies/IInsuranceCompany';
-import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'InsuranceCompanies',
@@ -45,7 +45,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const mount: Ref<boolean> = ref(false);
-    const insuranceCompanies: ComputedRef<IInsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
+    const insuranceCompanies: ComputedRef<InsuranceCompany[]> = computed(() => store.getters['insuranceCompanies/insuranceCompanies']);
 
     onBeforeMount(async (): Promise<void> => {
       store.commit('main/setMainHeader', new MainHeader({ title: 'Страховые компании', create }));

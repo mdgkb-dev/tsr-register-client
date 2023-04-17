@@ -1,24 +1,13 @@
 import { GetterTree } from 'vuex';
 
-import IHuman from '@/interfaces/IHuman';
-import IUser from '@/interfaces/IUser';
+import User from '@/classes/User';
+import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
-import { State } from './state';
+import { State } from './index';
 
 const getters: GetterTree<State, RootState> = {
-  users(state): IUser[] | undefined {
-    return state.users;
-  },
-  user(state): IUser | undefined {
-    return state.user;
-  },
-  getById(state, id: string): IUser | undefined {
-    return state.users.find((item: IUser) => item.id === id);
-  },
-  getHuman(state: State): IHuman {
-    return state.user.human;
-  },
+  ...getBaseGetters<User, State>(),
 };
 
 export default getters;

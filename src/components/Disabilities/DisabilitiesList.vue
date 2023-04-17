@@ -21,7 +21,7 @@
       <el-table-column>
         <el-table-column prop="human.dateBirth" label="Дата постановки" min-width="160" align="center" sortable>
           <template #default="scope">
-            {{ formatDate(scope.row.getActuallyDisability().period.dateStart) }}
+            {{ $dateTimeFormatter.format(scope.row.getActuallyDisability().period.dateStart) }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -29,7 +29,7 @@
       <el-table-column>
         <el-table-column prop="human.dateBirth" label="Дата завершения" min-width="160" align="center" sortable>
           <template #default="scope">
-            {{ formatDate(scope.row.getActuallyDisability().period.dateEnd) }}
+            {{ $dateTimeFormatter.format(scope.row.getActuallyDisability().period.dateEnd) }}
           </template>
         </el-table-column>
       </el-table-column>
@@ -38,8 +38,8 @@
         <el-table-column label="Справка ЕДВ" min-width="160" align="center" sortable>
           <template #default="scope">
             <div v-if="scope.row.getActuallyDisability().getActuallyEdv()">
-              {{ formatDate(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
-              {{ formatDate(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
+              {{ $dateTimeFormatter.format(scope.row.getActuallyDisability().getActuallyEdv().period.dateStart) }} -
+              {{ $dateTimeFormatter.format(scope.row.getActuallyDisability().getActuallyEdv().period.dateEnd) }}
             </div>
             <div v-else>Нет справок ЕДВ</div>
           </template>
@@ -111,13 +111,11 @@ import { computed, ComputedRef, defineComponent } from 'vue';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IPatient from '@/interfaces/patients/IPatient';
-import useDateFormat from '@/mixins/useDateFormat';
 import router from '@/router';
 import Hooks from '@/services/Hooks/Hooks';
-import Provider from '@/services/Provider';
-import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
-import AdminListWrapper from '@/views/Main/AdminListWrapper.vue';
+// import PatientsFiltersLib from '@/services/Provider/libs/filters/PatientsFiltersLib';
+import Provider from '@/services/Provider/Provider';
+import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'DisabilitiesList',
@@ -128,13 +126,13 @@ export default defineComponent({
     Document,
   },
   setup() {
-    const patients: ComputedRef<IPatient[]> = computed(() => Provider.store.getters['patients/patients']);
-    const { formatDate } = useDateFormat();
+    const patients: ComputedRef<Patient[]> = computed(() => Provider.store.getters['patients/patients']);
+    // const { formatDate } = useDateFormat();
 
     const load = async () => {
       Provider.store.commit('main/setMainHeader', new MainHeader({ title: 'Инвалидность' }));
       try {
-        Provider.setFilterModels(PatientsFiltersLib.withDisabilities());
+        // Provider.setFilterModels(PatientsFiltersLib.withDisabilities());
         await Provider.store.dispatch('patients/getAll', Provider.filterQuery.value);
       } catch (e) {
         if (!ElMessage.error) {
@@ -147,7 +145,7 @@ export default defineComponent({
 
     Hooks.onBeforeMount(load, {
       pagination: { storeModule: 'patients', action: 'getAll' },
-      sortModels: [],
+      // sortModels: [],
     });
 
     const edit = async (id: string): Promise<void> => {
@@ -162,7 +160,7 @@ export default defineComponent({
       remove,
       edit,
       patients,
-      formatDate,
+      // formatDate,
       mounted: Provider.mounted,
       schema: Provider.schema,
       sortList: Provider.sortList,

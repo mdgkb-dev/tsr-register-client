@@ -1,10 +1,11 @@
-import IHuman from '@/interfaces/IHuman';
-import ITokens from '@/interfaces/ITokens';
+import Human from '@/services/classes/Human';
+import ITokens from '@/services/interfaces/ITokens';
 
 const TokenService = (() => {
   function _isAuth(): boolean {
     const token = _getAccessToken();
-    return !(!token || token === 'undefined');
+    const u = 'undefined';
+    return !(!token || token === u);
   }
 
   function _setToken(tokenObj: ITokens) {
@@ -43,10 +44,14 @@ const TokenService = (() => {
     localStorage.removeItem('refresh_token');
   }
 
-  function _updateHuman(human: IHuman) {
-    if (!_isAuth()) return;
+  function _updateHuman(human: Human) {
+    if (!_isAuth()) {
+      return;
+    }
     const user = TokenService.getUser();
-    if (!user) return;
+    if (!user) {
+      return;
+    }
     user.human = human;
     localStorage.setItem('user', JSON.stringify(user));
   }

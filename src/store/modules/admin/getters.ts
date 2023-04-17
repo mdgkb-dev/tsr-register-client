@@ -1,16 +1,24 @@
 import { GetterTree } from 'vuex';
 
-import IAdminHeaderParams from '@/interfaces/admin/IAdminHeaderParams';
+import IAdminMenu from '@/interfaces/IAdminMenu';
+import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
 import RootState from '@/store/types';
 
 import { State } from './state';
 
 const getters: GetterTree<State, RootState> = {
-  headerParams(state): IAdminHeaderParams {
+  headerParams(state): AdminHeaderParams {
     return state.headerParams;
   },
   isCollapseSideMenu(state): boolean {
     return state.isCollapseSideMenu;
+  },
+  menus(state): IAdminMenu[] {
+    // const user = UserService.getUser();
+    // if (!user) {
+    //   return [];
+    // }
+    return state.menus;
   },
   isDrawerOpen(state): boolean {
     return state.isDrawerOpen;

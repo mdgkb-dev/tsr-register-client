@@ -1,12 +1,11 @@
 import IRegion from '@/interfaces/IRegion';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class Region implements IRegion {
+export default class Region {
   id?: string;
   name = '';
 
   constructor(i?: IRegion) {
-    if (!i) return;
-    this.id = i.id;
-    this.name = i.name;
+    ClassHelper.BuildClass(this, i);
   }
 }

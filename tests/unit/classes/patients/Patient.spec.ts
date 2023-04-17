@@ -1,3 +1,4 @@
+import Answer from '@/classes/Answer';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/disability/Disability';
 import Edv from '@/classes/disability/Edv';
@@ -6,12 +7,11 @@ import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
 import FileInfo from '@/classes/files/FileInfo';
 import History from '@/classes/history/History';
 import Human from '@/classes/humans/Human';
-import Patient from '@/classes/patients/Patient';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
-import RegisterProperty from '@/classes/RegisterProperty';
-import RegisterPropertySetToPatient from '@/classes/RegisterPropertySetToPatient';
-import RegisterPropertyToPatient from '@/classes/RegisterPropertyToPatient';
+import Patient from '@/classes/Patient';
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import PatientDiagnosisAnamnesis from '@/classes/PatientDiagnosisAnamnesis';
+import Question from '@/classes/Question';
+import PatientAnswer from '@/classes/RegisterPropertySetToPatient';
 import ValueType from '@/classes/valueTypes/ValueType';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
@@ -19,13 +19,12 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
-import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 describe('Class Patient', () => {
-  let patient: IPatient | undefined;
+  let patient: Patient | undefined;
   const emptyString = '';
 
   afterEach(() => {
@@ -426,9 +425,9 @@ describe('Class Patient', () => {
     expect(patient.findProperty(notExistedId)).toBeUndefined();
 
     // Arrange
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
 
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
@@ -447,10 +446,10 @@ describe('Class Patient', () => {
     const propertyId2 = '99e25d7b-30d6-4db8-8244-a806e297efba';
     const propertyId3 = '41d2d8ac-7c0e-4a44-9ee1-83678adf17fa';
     const propertyId4 = 'd601b11a-6824-4272-aaeb-d759cc0139c8';
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient4 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
+    const registerPropertyToPatient4 = new Answer();
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
     registerPropertyToPatient3.registerPropertyId = propertyId3;
@@ -489,7 +488,7 @@ describe('Class Patient', () => {
   test('getOtherPropertyValue() возвращает undefined когда в registerPropertyToPatient[] нет записи с переданными ID', () => {
     // Arrange
     const notExistedId = '2a1b06f0-2a61-475a-b7b3-8700cd562816';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = notExistedId;
     patient = new Patient();
 
@@ -507,18 +506,18 @@ describe('Class Patient', () => {
     const valueOther2 = 'B';
     const valueOther3 = 'C';
     const valueOther4 = 'D';
-    const registerProperty1 = new RegisterProperty();
-    const registerProperty2 = new RegisterProperty();
-    const registerProperty3 = new RegisterProperty();
-    const registerProperty4 = new RegisterProperty();
+    const registerProperty1 = new Question();
+    const registerProperty2 = new Question();
+    const registerProperty3 = new Question();
+    const registerProperty4 = new Question();
     registerProperty1.id = propertyId1;
     registerProperty2.id = propertyId2;
     registerProperty3.id = propertyId3;
     registerProperty4.id = propertyId4;
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient4 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
+    const registerPropertyToPatient4 = new Answer();
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
     registerPropertyToPatient3.registerPropertyId = propertyId3;
@@ -546,7 +545,7 @@ describe('Class Patient', () => {
   test('getRegisterPropertyValue() возвращает null когда в переданном IRegisterProperty нет id', () => {
     // Arrange
     patient = new Patient();
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
 
     // Assert
     expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeNull();
@@ -556,13 +555,13 @@ describe('Class Patient', () => {
     // Arrange
     const id = 'a999dd30-a4d4-49c9-b02d-99f187146014';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -580,7 +579,7 @@ describe('Class Patient', () => {
     const valueType = new ValueType();
     valueType.name = 'set';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -593,13 +592,13 @@ describe('Class Patient', () => {
   test('getRegisterPropertyValue() возвращает true когда в registerPropertySetToPatient[] присутстует запись, у которой registerPropertySetId равен ID переданного IRegisterProperty и name переданного IRegisterProperty - "set"', () => {
     // Arrange
     const id = '7039651b-e03e-495d-ae98-7f9f54289782';
-    const registerPropertySetToPatient = new RegisterPropertySetToPatient();
+    const registerPropertySetToPatient = new PatientAnswer();
     registerPropertySetToPatient.registerPropertySetId = id;
 
     const valueType = new ValueType();
     valueType.name = 'set';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -615,14 +614,14 @@ describe('Class Patient', () => {
     const id = 'a3c60090-bfec-4ae5-b1dc-5f3d083521f9';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueString = valueString;
 
     const valueType = new ValueType();
     valueType.name = 'string';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -638,14 +637,14 @@ describe('Class Patient', () => {
     const id = 'b3a7948d-b1c2-47de-b26a-d5a47ebbd55c';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueString = valueString;
 
     const valueType = new ValueType();
     valueType.name = 'text';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -661,14 +660,14 @@ describe('Class Patient', () => {
     const id = '27f961a8-94be-4394-addc-816991b6f384';
     const valueNumber = 42;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueNumber = valueNumber;
 
     const valueType = new ValueType();
     valueType.name = 'number';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -684,14 +683,14 @@ describe('Class Patient', () => {
     const id = '8ad5732a-fc23-463b-820f-775c32af7573';
     const valueDate = new Date();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueDate = valueDate;
 
     const valueType = new ValueType();
     valueType.name = 'date';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -707,14 +706,14 @@ describe('Class Patient', () => {
     const id = '0ea11d28-660c-4589-a72d-284ca1a07fbf';
     const registerPropertyRadioId = '59858649-033c-49f4-8f74-f3654469f393';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
-    registerPropertyToPatient.registerPropertyRadioId = registerPropertyRadioId;
+    registerPropertyToPatient.answerId = registerPropertyRadioId;
 
     const valueType = new ValueType();
     valueType.name = 'radio';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -734,16 +733,16 @@ describe('Class Patient', () => {
     const unusedUuid = 'f912d28b-844f-426e-9f0f-0dc6f196d0d6';
 
     const registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid4,
       }),
     ];
@@ -770,16 +769,16 @@ describe('Class Patient', () => {
     const uuid4 = '80c1f76c-86e9-4f87-b292-bf545ce1cdb5';
 
     const registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid4,
       }),
     ];
@@ -797,7 +796,7 @@ describe('Class Patient', () => {
   test('setRegisterPropertyValueOther() не записывает переданный value в свойство valueOther записи из registerPropertyToPatient[] когда переданный IRegisterProperty не содержит ID', () => {
     // Arrange
     const value = 'A';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     patient = new Patient();
 
     // Act
@@ -812,10 +811,10 @@ describe('Class Patient', () => {
     const id = 'b905dfbf-1895-4bbb-ba11-a30e6d7cd01d';
     const value = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     patient = new Patient();
@@ -839,7 +838,7 @@ describe('Class Patient', () => {
     // Arrange
     const id = 'b905dfbf-1895-4bbb-ba11-a30e6d7cd01d';
     const value = 'A';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     patient = new Patient();
 
@@ -857,9 +856,9 @@ describe('Class Patient', () => {
     const id = 'f56e60fe-5297-40e3-8160-d83159d8d35c';
     const value = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     patient = new Patient();
@@ -881,13 +880,13 @@ describe('Class Patient', () => {
     const id = '078aa78e-17a7-4753-9abf-1ff60ab9d347';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'string';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -913,13 +912,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const valueNumber = 42;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'number';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -945,13 +944,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const valueDate = new Date();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'date';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -977,13 +976,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const registerPropertyRadioId = 'cdf995b7-6726-4e7c-9d9a-b907a14fe7fd';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'radio';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -1032,16 +1031,16 @@ describe('Class Patient', () => {
 
     patient = new Patient();
     patient.registerPropertySetToPatient = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId4,
       }),
     ];
