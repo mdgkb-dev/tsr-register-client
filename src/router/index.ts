@@ -16,21 +16,21 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
 };
 
 export const authGuard = async (next?: NavigationGuardNext): Promise<void> => {
-  if (next) {
-    await store.dispatch('auth/setAuth');
-    const isAuth: boolean = store.getters['auth/isAuth'];
-    store.commit('auth/showWarning', true);
-    store.commit('auth/authOnly', true);
-    if (!isAuth) {
-      store.commit('auth/openModal', 'login');
-    }
-    next();
-    return;
-  }
+  // if (next) {
+  //   await store.dispatch('auth/setAuth');
+  //   const isAuth: boolean = store.getters['auth/isAuth'];
+  //   store.commit('auth/showWarning', true);
+  //   store.commit('auth/authOnly', true);
+  //   if (!isAuth) {
+  //     store.commit('auth/openModal', 'login');
+  //   }
+  //   next();
+  //   return;
+  // }
 
-  if (!TokenService.isAuth()) {
-    router.push('/login');
-  }
+  // if (!TokenService.isAuth()) {
+  //   router.push('/login');
+  // }
 };
 
 export const devGuard = (): void => {
