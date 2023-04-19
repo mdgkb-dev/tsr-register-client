@@ -7,45 +7,45 @@
       @select="addResearchesPool"
     />
 
-    <div v-for="patientResearchesPool in patient.patientsResearchesPools" :key="patientResearchesPool.id">
+    <div v-for="researchesPool in researchesPools" :key="researchesPool.id" @click="addResearchesPool(researchesPool.id)">
       <!--      <button @click.prevent="patientResearch.patientsResearchesPools()">Добавить результат</button>-->
       <!--      {{ patientResearchesPool.researchesPool.name }}-->
 
-      {{ patientResearchesPool.researchesPool.name }}
-      <div
-        v-for="researchesPoolResearches in patientResearchesPool.researchesPool.researchesPoolsResearches"
-        :key="researchesPoolResearches.id"
-      >
-        <div>
-          {{ researchesPoolResearches.research.name }}
-        </div>
-        <!--        <button @click.prevent="createPatientResearch(researchesPoolResearches.research)">Создать исследование</button>-->
-        <div v-for="question in researchesPoolResearches.research.questions" :key="question.id">
-          {{ question.name }}
-          <button
-            @click.prevent="patient.getPatientResearch(researchesPoolResearches.research.id).addResult(researchesPoolResearches.research)"
-          >
-            Добавить результат исследований
-          </button>
-          <div
-            v-for="researchResult in patient.getPatientResearch(researchesPoolResearches.research.id).researchResults"
-            :key="researchResult"
-          >
-            <div v-for="result in patient.getPatientResearch(researchesPoolResearches.research.id).researchResults" :key="result.id">
-              <NumberProp :research-result="result" :question="question" />
-
-              {{ researchesPoolResearches.research.formulas[0].calculate(researchesPoolResearches.research.getAnswers(result)) }}
-              {{ researchesPoolResearches.research.formulas[0].getResult(researchesPoolResearches.research.getAnswers(result)) }}
-            </div>
-          </div>
-        </div>
-
-        <!--        <button @click.prevent="patientResearch.addResult">добавить результат</button>-->
-        <!--        <div v-for="(question, i) in patientResearch.research.questions" :key="question.id">-->
-        <!--          {{ researchResult.answers[i] }}-->
-        <!--        </div>-->
-      </div>
+      {{ researchesPool.name }}
     </div>
+    <!--    <div-->
+    <!--      v-for="researchesPoolResearches in patientResearchesPool.researchesPool.researchesPoolsResearches"-->
+    <!--      :key="researchesPoolResearches.id"-->
+    <!--    >-->
+    <!--      <div>-->
+    <!--        {{ researchesPoolResearches.research.name }}-->
+    <!--      </div>-->
+    <!--      &lt;!&ndash;        <button @click.prevent="createPatientResearch(researchesPoolResearches.research)">Создать исследование</button>&ndash;&gt;-->
+    <!--      <div v-for="question in researchesPoolResearches.research.questions" :key="question.id">-->
+    <!--        {{ question.name }}-->
+    <!--        <button-->
+    <!--          @click.prevent="patient.getPatientResearch(researchesPoolResearches.research.id).addResult(researchesPoolResearches.research)"-->
+    <!--        >-->
+    <!--          Добавить результат исследований-->
+    <!--        </button>-->
+    <!--        <div-->
+    <!--          v-for="researchResult in patient.getPatientResearch(researchesPoolResearches.research.id).researchResults"-->
+    <!--          :key="researchResult"-->
+    <!--        >-->
+    <!--          <div v-for="result in patient.getPatientResearch(researchesPoolResearches.research.id).researchResults" :key="result.id">-->
+    <!--            <NumberProp :research-result="result" :question="question" />-->
+
+    <!--            {{ researchesPoolResearches.research.formulas[0].calculate(researchesPoolResearches.research.getAnswers(result)) }}-->
+    <!--            {{ researchesPoolResearches.research.formulas[0].getResult(researchesPoolResearches.research.getAnswers(result)) }}-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+
+    <!--      &lt;!&ndash;        <button @click.prevent="patientResearch.addResult">добавить результат</button>&ndash;&gt;-->
+    <!--      &lt;!&ndash;        <div v-for="(question, i) in patientResearch.research.questions" :key="question.id">&ndash;&gt;-->
+    <!--      &lt;!&ndash;          {{ researchResult.answers[i] }}&ndash;&gt;-->
+    <!--      &lt;!&ndash;        </div>&ndash;&gt;-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -83,11 +83,12 @@ export default defineComponent({
     const mounted = ref(false);
     const selectedTab = ref('');
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
+    const researchesPools: Ref<ResearchesPool[]> = computed(() => Provider.store.getters['researchesPools/items']);
     // const researches: Ref<Register> = computed(() => Provider.store.getters['researches/items']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     // const activeCollapseName: Ref<string> = ref('');
-    const addResearchesPool = async (e: ISearchObject) => {
-      await Provider.store.dispatch('researchesPools/get', e.value);
+    const addResearchesPool = async (id: string) => {
+      await Provider.store.dispatch('researchesPools/get', id);
       const item = PatientResearchesPool.Create(patient.value.id, researchesPool.value);
       patient.value.patientsResearchesPools.push(item);
       await Provider.store.dispatch('patientsResearchesPools/create', item);
@@ -96,9 +97,9 @@ export default defineComponent({
     const selectSearch = async (event: ISearchObject): Promise<void> => {};
 
     onBeforeMount(async () => {
-      const query = Provider.store.getters['filter/filterQuery'];
+      // const query = Provider.store.getters['researchesPools/getAll'];
       // query.id = Provider.route().params.registerId;
-      // await Provider.store.dispatch('registers/get', query);
+      await Provider.store.dispatch('researchesPools/getAll');
       mounted.value = true;
     });
 
@@ -113,6 +114,7 @@ export default defineComponent({
     };
 
     return {
+      researchesPools,
       createPatientResearch,
       mounted,
       addResearchesPool,

@@ -18,18 +18,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'ContactForm',
-  props: {
-    patient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    },
-  },
+
   setup() {
     const form = ref();
     const isToggle: Ref<boolean> = ref(false);
@@ -38,7 +34,10 @@ export default defineComponent({
       isToggle.value = !isToggle.value;
     };
 
+    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+
     return {
+      patient,
       toggleAddress,
       isToggle,
       form,
@@ -54,13 +53,13 @@ export default defineComponent({
   max-width: 768px;
   margin-left: 10px;
 
-  .item-left{
+  .item-left {
     width: 50%;
     color: #343e5c;
     margin-right: 10px;
   }
 
-  .item-right{
+  .item-right {
     width: 50%;
     color: #343e5c;
     margin-left: 10px;
@@ -139,9 +138,7 @@ export default defineComponent({
     right: 10px;
   }
 
-
   @media screen and (max-width: 730px) {
-
     .line-item {
       display: flex;
       justify-content: center;
@@ -154,12 +151,12 @@ export default defineComponent({
       margin-right: 0;
     }
 
-    .item-left{
+    .item-left {
       width: 100%;
       margin-right: 0px;
     }
 
-    .item-right{
+    .item-right {
       width: 100%;
       margin-left: 0px;
     }
