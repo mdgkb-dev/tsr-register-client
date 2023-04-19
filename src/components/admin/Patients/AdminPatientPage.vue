@@ -1,19 +1,84 @@
 <template>
-  <MenuContainer minMenuItemWidth="200px" height="auto" background="#DFF2F8">
-    <template #menu>
-      <div v-for="(menu, i) in menus" :key="menu.id">
-        <div
-          @click="activeMenuIndex = i"
-          :class="{ 'selected-tab': activeMenuIndex === i, 'tab': activeMenuIndex !== i }"
-        >{{ menu.name }}</div>
-      </div>
-    </template>
-    <template #body>
-      <div v-if="mounted" class="patient-page-container">
-        <component :is="menus[activeMenuIndex].component" :patient="patient" />
-      </div>
-    </template>
-  </MenuContainer>
+  <div v-if="mounted" class="patient-page-container">
+    <span v-for="(menu, i) in menus" :key="menu.id">
+      <button @click="activeMenuIndex = i">{{ menu.name }}</button>
+    </span>
+    <component :is="menus[activeMenuIndex].component" :patient="patient" />
+    <!--    <el-row><PatientPageInfo :patient="patient" /></el-row>-->
+    <!--    <el-row>-->
+    <!--      <el-collapse>-->
+    <!--        <el-form-->
+    <!--          ref="form"-->
+    <!--          :status-icon="true"-->
+    <!--          :inline-message="true"-->
+    <!--          :model="patient"-->
+    <!--          :rules="rules"-->
+    <!--          label-width="25%"-->
+    <!--          label-position="left"-->
+    <!--          @submit.prevent="submitForm"-->
+    <!--        >-->
+    <!--          <div>-->
+    <!--          t  <el-collapse-item>-->
+    <!--              <template #title>-->
+    <!--                <h2 class="collapseHeader">Паспортные данные</h2>-->
+    <!--              </template>-->
+    <!--              <HumanForm store-name="patients" :addresses="patient.getParentsAddresses()" />-->
+    <!--            </el-collapse-item>-->
+
+    <!--            &lt;!&ndash;                        <el-collapse-item>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                          <template #title>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                            <h2 class="collapseHeader">Антропометрия</h2>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                          </template>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                          <AnthropometryForm />&ndash;&gt;-->
+    <!--            &lt;!&ndash;                        </el-collapse-item>&ndash;&gt;-->
+
+    <!--            &lt;!&ndash;            <el-collapse-item>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <template #title>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                <h2 class="collapseHeader">Страховки</h2>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              </template>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <InsuranceForm />&ndash;&gt;-->
+    <!--            &lt;!&ndash;            </el-collapse-item>&ndash;&gt;-->
+
+    <!--            &lt;!&ndash;            <el-collapse-item>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <template #title>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                <h2 class="collapseHeader">Документы</h2>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              </template>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <DocumentForm :store-module="'patients'" />&ndash;&gt;-->
+    <!--            &lt;!&ndash;            </el-collapse-item>&ndash;&gt;-->
+
+    <!--            <el-collapse-item>-->
+    <!--              <template #title><h2 class="collapseHeader">Диагнозы</h2></template>-->
+    <!--              <MkbForm :mkb-linker="patient" />-->
+    <!--              <div v-for="mkb in patient.getMkbItems()" :key="mkb.mkbItem.id">-->
+    <!--                {{ mkb.mkbItem.name }}-->
+    <!--              </div>-->
+    <!--            </el-collapse-item>-->
+
+    <!--            &lt;!&ndash;            <el-collapse-item>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <template #title>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                <h2 class="collapseHeader">Лекарства</h2>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              </template>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <DrugForm />&ndash;&gt;-->
+    <!--            &lt;!&ndash;            </el-collapse-item>&ndash;&gt;-->
+
+    <!--            &lt;!&ndash;            <el-collapse-item>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <template #title><h2 class="collapseHeader">Инвалидность</h2></template>&ndash;&gt;-->
+    <!--            &lt;!&ndash;              <DisabilityForm />&ndash;&gt;-->
+    <!--            &lt;!&ndash;            </el-collapse-item>&ndash;&gt;-->
+
+    <!--            <el-collapse-item>-->
+    <!--              <template #title><h2 class="collapseHeader">Законные представители</h2></template>-->
+    <!--              <PatientToRepresentativeForm :patient="patient" />-->
+    <!--            </el-collapse-item>-->
+    <!--            <el-collapse-item>-->
+    <!--              <template #title><h2 class="collapseHeader">Регистры</h2></template>-->
+    <!--              <PatientRegistersForm :patient="patient" />-->
+    <!--            </el-collapse-item>-->
+    <!--          </div>-->
+    <!--        </el-form>-->
+    <!--      </el-collapse>-->
+    <!--    </el-row>-->
+  </div>
 </template>
 
 <script lang="ts">
@@ -35,8 +100,6 @@ import CustomSection from '@/services/classes/page/CustomSection';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 
-import MenuContainer from '@/components/admin/Patients/MenuContainer.vue'
-
 const PatientRegistersForm = defineAsyncComponent(() => import('@/components/admin/Patients/PatientRegistersForm.vue'));
 
 export default defineComponent({
@@ -52,18 +115,17 @@ export default defineComponent({
     PatientRegistersForm,
     DrugForm,
     PatientResearches,
-    MenuContainer,
   },
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo'),
-      CustomSection.Create('insurances', 'Страховки', 'InsuranceForm'),
-      CustomSection.Create('documents', 'Документы', 'PatientDocuments'),
-      CustomSection.Create('documents', 'Диагнозы', 'PatientDiagnosis'),
-      CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs'),
-      CustomSection.Create('disability', 'Инвалидность', 'Disability'),
-      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives'),
+      // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm'),
+      // CustomSection.Create('documents', 'Документы', 'PatientDocuments'),
+      // CustomSection.Create('documents', 'Диагнозы', 'PatientDiagnosis'),
+      // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs'),
+      // CustomSection.Create('disability', 'Инвалидность', 'Disability'),
+      // CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives'),
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches'),
     ];
 
@@ -123,50 +185,4 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
-@import '@/assets/styles/elements/base-style.scss';
-
-.tab {
-  font-size: 12px;
-  text-transform: uppercase;
-  color: #B0A4C0;
-  border: 1px solid #999999;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-
-  background: $base-background;
-  margin: -0.5px;
-}
-
-.tab:hover {
-  background: $custom-background;
-}
-
-.selected-tab {
-  font-size: 12px;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: $site_dark_gray;
-  position: relative;
-  border: 1px solid #343D5C;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
-
-  background: $custom-background;
-  margin: -0.5px;
-  z-index: 1;
-}
 </style>
