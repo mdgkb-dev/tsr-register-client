@@ -1,0 +1,77 @@
+<template>
+  <div class="mainblock"
+    :style="{
+      height: height,
+    }"  
+  >
+    <div class="top-menu"
+      :style="{
+        gridTemplateColumns: `repeat(auto-fit, minmax(${minMenuItemWidth}, 1fr))`,
+      }"
+    >
+      <slot name="menu" />
+    </div>
+    <div class="body"
+      :style="{
+        background: background,
+      }"  
+    >
+      <slot name="body" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
+  name: 'MenuContainer',
+  props: {
+    height: {
+      type: String as PropType<string>,
+      required: false,
+      default: '',
+    },
+    minMenuItemWidth: {
+      type: String as PropType<string>,
+      required: false,
+      default: '150px',
+    },
+    background: {
+      type: String as PropType<string>,
+      required: false,
+      default: '#ffffff',
+    },
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+@import '@/assets/styles/elements/base-style.scss';
+
+.mainblock {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 2px);
+  border-radius: $big-border-radius;
+  border: $custom-border;
+  overflow: hidden;
+}
+
+.top-menu {
+  margin: -1px;
+  display: grid;
+  grid-gap: 0px;
+  grid-template-rows: repeat(0 0px);
+}
+
+.top-menu > div {
+  object-fit: cover;
+}
+
+.body {
+  margin-top: 1px;
+  border-top: $custom-border;
+  overflow-y: auto;
+}
+</style>

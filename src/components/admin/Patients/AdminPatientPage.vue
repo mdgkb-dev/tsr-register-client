@@ -143,7 +143,7 @@ export default defineComponent({
     // const { submitHandling } = useForm(!!route.params.patientId);
 
     const load = async () => {
-      await Provider.loadItem();
+      // await Provider.loadItem();
     };
 
     Hooks.onBeforeMount(load, {

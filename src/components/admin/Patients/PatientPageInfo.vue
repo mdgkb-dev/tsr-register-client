@@ -167,7 +167,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     // Local state.
     const checked = ref(true);
     const notChecked = ref(false);
