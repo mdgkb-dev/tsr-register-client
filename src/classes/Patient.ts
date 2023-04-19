@@ -9,6 +9,7 @@ import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
 import PatientRegister from '@/classes/PatientRegister';
 import PatientRepresentative from '@/classes/PatientRepresentative';
 import PatientResearch from '@/classes/PatientResearch';
+import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Register from '@/classes/Register';
 import Representative from '@/classes/Representative';
 import Research from '@/classes/Research';
@@ -38,8 +39,13 @@ export default class Patient {
   registerToPatient: PatientRegister[] = [];
   registerToPatientForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(PatientResearch)
-  patientResearches: PatientResearch[] = [];
+  patientsResearches: PatientResearch[] = [];
   registerGroupsToPatientForDelete: string[] = [];
+
+  @ClassHelper.GetClassConstructor(PatientResearchesPool)
+  patientsResearchesPools: PatientResearchesPool[] = [];
+  patientsResearchesPoolsForDelete: string[] = [];
+
   @ClassHelper.GetClassConstructor(PatientDrugRegimen)
   patientDrugRegimen: PatientDrugRegimen[] = [];
   patientDrugRegimenForDelete: string[] = [];
@@ -218,10 +224,14 @@ export default class Patient {
     //   item.answers.push(answer);
     // });
 
-    this.patientResearches.push(item);
+    this.patientsResearches.push(item);
   }
 
   createPatientResearches(researches: Research[]): void {
     researches.forEach((r: Research) => this.createPatientResearch(r));
+  }
+
+  getPatientResearch(researchId: string): PatientResearch | undefined {
+    return this.patientsResearches.find((p: PatientResearch) => p.researchId === researchId);
   }
 }

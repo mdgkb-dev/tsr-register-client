@@ -12,9 +12,8 @@ export default class Answer {
   answerVariantId?: string;
   order = 0;
 
-  registerPropertyId?: string;
   patientId?: string;
-
+  questionId?: string;
   filled = false;
 
   researchResult?: ResearchResult;

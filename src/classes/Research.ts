@@ -1,5 +1,6 @@
 import Formula from '@/classes/Formula';
 import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Research {
@@ -40,5 +41,13 @@ export default class Research {
 
   sortProperties(): void {
     this.questions.forEach((item: Question, index: number) => (item.order = index));
+  }
+
+  getAnswers(result: ResearchResult): { [key: string]: number } {
+    const results: { [key: string]: number } = {};
+    this.questions.forEach((q: Question) => {
+      results[q.code] = result.getValue(q, false) as number;
+    });
+    return results;
   }
 }

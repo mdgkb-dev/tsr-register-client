@@ -9,6 +9,7 @@ import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
+import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
@@ -49,6 +50,7 @@ const store: StoreOptions<RootState> = {
     patients,
     researches,
     researchesPools,
+    patientsResearchesPools,
     // registerProperties,
     // registerPropertiesToUser,
     // registerQueries,

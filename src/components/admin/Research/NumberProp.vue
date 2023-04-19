@@ -1,40 +1,33 @@
 <template>
-  <el-form-item v-if="prop.valueType.isNumber()">
-    <el-input-number
-      :model-value="registerGroupToPatient.getRegisterPropertyValue(prop, false)"
-      @change="registerGroupToPatient.setRegisterPropertyValue($event, prop)"
-    />
+  <el-form-item>
+    <el-input-number :model-value="researchResult.getValue(question, false)" @change="researchResult.setValue($event, question)" />
   </el-form-item>
-  <el-radio-group
-    :model-value="registerGroupToPatient.getMeasureId(prop.id)"
-    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"
-  >
-    <el-radio v-for="measure in prop.registerPropertyMeasures" :key="measure.id" :label="measure.id">
-      {{ measure.name }}
-    </el-radio>
-  </el-radio-group>
+  {{ researchResult.getValue(question, false) }}
+  <!--  <el-radio-group-->
+  <!--    :model-value="registerGroupToPatient.getMeasureId(prop.id)"-->
+  <!--    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"-->
+  <!--  >-->
+  <!--    <el-radio v-for="measure in prop.registerPropertyMeasures" :key="measure.id" :label="measure.id">-->
+  <!--      {{ measure.name }}-->
+  <!--    </el-radio>-->
+  <!--  </el-radio-group>-->
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
-import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 
 export default defineComponent({
   name: 'NumberProp',
   props: {
-    registerGroupToPatient: {
-      type: Object as PropType<IRegisterGroupToPatient>,
+    researchResult: {
+      type: Object as PropType<ResearchResult>,
       required: true,
     },
-    prop: {
-      type: Object as PropType<IRegisterProperty>,
-      required: true,
-    },
-    registerGroup: {
-      type: Object as PropType<IRegisterGroup>,
+    question: {
+      type: Object as PropType<Question>,
       required: true,
     },
   },

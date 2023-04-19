@@ -1,5 +1,4 @@
 import Answer from '@/classes/Answer';
-import Patient from '@/classes/Patient';
 import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
 import Research from '@/classes/Research';
@@ -10,10 +9,12 @@ export default class PatientResearch {
   id?: string;
   date = new Date();
   editMode = false;
-  research = new Research();
+  @ClassHelper.GetClassConstructor(Research)
+  research?: Research;
   researchId?: string;
   order = 0;
-  patient = new Patient();
+  // @ClassHelper.GetClassConstructor(Patient)
+  // patient?: Patient;
   patientId?: string;
   fillingPercentage = 0;
   @ClassHelper.GetClassConstructor(ResearchResult)
@@ -28,6 +29,15 @@ export default class PatientResearch {
   constructor(i?: PatientResearch) {
     ClassHelper.BuildClass(this, i);
   }
+
+  static Create(patientId: string | undefined, research: Research): PatientResearch {
+    const item = new PatientResearch();
+    item.patientId = patientId;
+    item.research = research;
+    item.researchId = research.id;
+    return item;
+  }
+
   //
   // findProperty(propertyId: string): Answer | undefined {
   //   return this.answers?.find((i: Answer) => i.registerPropertyId === propertyId);
@@ -120,15 +130,19 @@ export default class PatientResearch {
   //   return this.registerPropertySetToPatient?.some((i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId);
   // }
 
-  addResult(): void {
+  addResult(research: Research): void {
     const item = new ResearchResult();
-    this.research.questions.forEach((q: Question) => {
+    if (!research) {
+      return;
+    }
+    research.questions.forEach((q: Question) => {
       const answer = new Answer();
+      answer.questionId = q.id;
       answer.order = q.order;
+      answer.valueNumber = 0;
       item.answers.push(answer);
     });
 
-    this.researchResults.push();
-    // this.research
+    this.researchResults.push(item);
   }
 }

@@ -1,10 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Answer from '@/classes/Answer';
-import Patient from '@/classes/Patient';
 import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
-import Research from '@/classes/Research';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class ResearchResult {
@@ -12,8 +10,8 @@ export default class ResearchResult {
   date = new Date();
   editMode = false;
   patientResearchId?: string;
-  patient = new Patient();
-  patientId?: string;
+  // patient = new Patient();
+  // patientId?: string;
   fillingPercentage = 0;
   @ClassHelper.GetClassConstructor(Answer)
   answers: Answer[] = [];
@@ -28,32 +26,29 @@ export default class ResearchResult {
     ClassHelper.BuildClass(this, i);
   }
 
-  findProperty(propertyId: string): Answer | undefined {
-    return this.answers?.find((i: Answer) => i.registerPropertyId === propertyId);
+  getResult(questionId: string): Answer | undefined {
+    return this.answers?.find((i: Answer) => i.questionId === questionId);
   }
 
   pushRegisterProperty(propertyId: string): void {
     const registerPropertyToPatient = new Answer();
-    registerPropertyToPatient.registerPropertyId = propertyId;
+    registerPropertyToPatient.researchResultId = propertyId;
     this.answers.push(registerPropertyToPatient);
   }
 
-  getOtherPropertyValue(property: Question): string | undefined {
-    if (property.id) {
-      const item = this.findProperty(property.id);
-      return item?.valueOther;
-    }
-    return undefined;
-  }
+  // getOtherPropertyValue(property: Question): string | undefined {
+  //   if (property.id) {
+  //     const item = this.getResult(property.id);
+  //     return item?.valueOther;
+  //   }
+  //   return undefined;
+  // }
 
   getRegisterPropertyToPatient(propertyId: string): Answer[] {
-    return this.answers.filter((r: Answer) => r.registerPropertyId === propertyId);
+    return this.answers.filter((r: Answer) => r.researchResultId === propertyId);
   }
 
-  getRegisterPropertyValue(
-    property: Question,
-    originalValue: boolean
-  ): boolean | string | number | Date | null | RegisterPropertyToPatientToFile[] {
+  getValue(question: Question, originalValue: boolean): boolean | string | number | Date | null | RegisterPropertyToPatientToFile[] {
     // if (property.valueType?.isSet()) {
     //   if (originalValue) {
     //     let res = '';
@@ -69,43 +64,43 @@ export default class ResearchResult {
     //   const item = this.registerPropertySetToPatient?.find((i: RegisterPropertySetToPatient) => i.registerPropertySetId === property.id);
     //   return !!item;
     // }
-
-    if (property.id) {
-      // let item = this.findProperty(property.id);
-      // if (property.valueType?.isFiles()) {
-      //   console.log('files', item);
-      //   if (originalValue && item) {
-      //     return item.registerPropertiesToPatientsToFileInfos;
-      //   } else {
-      //     item = new PatientQuestion();
-      //     item.id = uuidv4();
-      //     this.patientQuestions.push(item);
-      //     item.registerPropertyId = property.id;
-      //     return item.registerPropertiesToPatientsToFileInfos;
-      //   }
-      //   // const p = this.getRegisterPropertyToPatient(property.id);
-      //
-      //   // return ;
-      // }
-      // if (property.valueType?.isString() && item && item.valueString) {
-      //   return item.valueString;
-      // }
-      // if (property.valueType?.isText() && item && item.valueString) {
-      //   return item.valueString;
-      // }
-      // if (property.valueType?.isNumber() && item && item.valueNumber) {
-      //   return item.valueNumber;
-      // }
-      // if (property.valueType?.isDate() && item && item.valueDate) {
-      //   return item.valueDate;
-      // }
-      // if (property.valueType?.isRadio() && item && item.answerId) {
-      //   if (originalValue) {
-      //     return property.getRegisterPropertyRadioOriginalValue(item.answerId);
-      //   }
-      //   return item.answerId;
-      // }
+    if (!question.id) {
+      return null;
     }
+    const result = this.getResult(question.id);
+    // if (property.valueType?.isFiles()) {
+    //   console.log('files', item);
+    //   if (originalValue && item) {
+    //     return item.registerPropertiesToPatientsToFileInfos;
+    //   } else {
+    //     item = new PatientQuestion();
+    //     item.id = uuidv4();
+    //     this.patientQuestions.push(item);
+    //     item.registerPropertyId = property.id;
+    //     return item.registerPropertiesToPatientsToFileInfos;
+    //   }
+    //   // const p = this.getRegisterPropertyToPatient(property.id);
+    //
+    //   // return ;
+    // }
+    // if (property.valueType?.isString() && item && item.valueString) {
+    //   return item.valueString;
+    // }
+    // if (property.valueType?.isText() && item && item.valueString) {
+    //   return item.valueString;
+    // }
+    if (question.valueType?.isNumber() && result) {
+      return result.valueNumber as number;
+    }
+    // if (property.valueType?.isDate() && item && item.valueDate) {
+    //   return item.valueDate;
+    // }
+    // if (property.valueType?.isRadio() && item && item.answerId) {
+    //   if (originalValue) {
+    //     return property.getRegisterPropertyRadioOriginalValue(item.answerId);
+    //   }
+    //   return item.answerId;
+    // }
 
     return null;
   }
@@ -124,11 +119,11 @@ export default class ResearchResult {
       return;
     }
 
-    let item = this.findProperty(property.id);
+    let item = this.getResult(property.id);
 
     if (!item) {
       this.pushRegisterProperty(property.id);
-      item = this.findProperty(property.id);
+      item = this.getResult(property.id);
     }
 
     if (!item) {
@@ -138,35 +133,27 @@ export default class ResearchResult {
     item.valueOther = value as string;
   }
 
-  setRegisterPropertyValue(value: number | string | Date, property: Question): void {
-    console.log(value, property);
-    if (!property.id) {
+  setValue(value: number | string | Date, question: Question): void {
+    if (!question.id) {
       return;
     }
-
-    let item = this.findProperty(property.id);
-
+    let item = this.getResult(question.id);
     if (!item) {
-      this.pushRegisterProperty(property.id);
-      item = this.findProperty(property.id);
+      this.pushRegisterProperty(question.id);
+      item = this.getResult(question.id);
     }
-
     if (!item) {
       return;
     }
-
-    if (property.valueType?.isString() || property.valueType?.isText()) {
+    if (question.valueType?.isString() || question.valueType?.isText()) {
       item.valueString = value as string;
     }
-
-    if (property.valueType?.isNumber()) {
+    if (question.valueType?.isNumber()) {
       item.valueNumber = value as number;
     }
-
-    if (property.valueType?.isDate()) {
+    if (question.valueType?.isDate()) {
       item.valueDate = value as Date;
     }
-
     // if (property.valueType?.isRadio()) {
     //   item.answerId = value as string;
     // }
@@ -241,7 +228,7 @@ export default class ResearchResult {
     const prop = new Answer();
     prop.valueDate = new Date();
     prop.id = uuidv4();
-    prop.registerPropertyId = property.id;
+    prop.researchResultId = property.id;
     this.answers.push(prop);
   }
 
