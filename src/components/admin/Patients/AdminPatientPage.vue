@@ -8,7 +8,7 @@
       </div>
     </template>
     <template #body>
-      <div v-if="mounted" class="patient-page-container">
+      <div v-if="mounted" >
         <component :is="menus[activeMenuIndex].component" :patient="patient" />
       </div>
     </template>

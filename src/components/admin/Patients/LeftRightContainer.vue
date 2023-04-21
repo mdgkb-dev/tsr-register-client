@@ -1,8 +1,5 @@
 <template>
   <div class="mainblock">
-    <!-- <div class="mainblock-right-mobile">
-    </div> -->
-
     <div class="mainline">
       <div
         class="mainblock-left"
