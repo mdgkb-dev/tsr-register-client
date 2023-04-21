@@ -71,7 +71,8 @@ export default defineComponent({
 
 .body {
   margin-top: 1px;
-  border-top: $custom-border;
+  border-top: 0.5px solid #343D5C;
   overflow-y: auto;
+  height: 67vh;
 }
 </style>
