@@ -1,72 +1,65 @@
 <template>
-  <el-form-item v-if="prop.valueType.isSet()">
-    <el-input v-model="filter" @input="input" />
-    <el-checkbox
-      v-for="registerPropertySet in prop.getRegisterPropertySets()"
-      :key="registerPropertySet.id"
-      :label="registerPropertySet.name"
-      :model-value="registerGroupToPatient.getRegisterPropertyValueSet(registerPropertySet.id)"
-      @change="registerGroupToPatient.setRegisterPropertyValueSet($event, registerPropertySet.id)"
-    >
-      <div>
-        {{ registerPropertySet.name }}
-      </div>
-    </el-checkbox>
-    <div v-for="registerPropertySet in prop.registerPropertySets" :key="registerPropertySet.id">
-      <template v-if="registerGroupToPatient.getRegisterPropertyValueSet(registerPropertySet.id)">
-        <el-form-item
-          v-for="registerPropertyOther in registerPropertySet.registerPropertyOthers"
-          :key="registerPropertyOther.id"
-          :label="registerPropertyOther.name"
-        >
-          <el-input
-            :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"
-            @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
-          />
-        </el-form-item>
-      </template>
-    </div>
-  </el-form-item>
+  <el-checkbox
+    v-for="variant in question.answerVariants"
+    :key="variant.id"
+    :label="variant.name"
+    :model-value="answer.getSelectedAnswerVariant(variant.id)"
+    @change="(selected) => selectVariant(selected, variant.id)"
+  >
+    {{ variant.name }}
+  </el-checkbox>
+  <!--    <div v-for="registerPropertySet in prop.registerPropertySets" :key="registerPropertySet.id">-->
+  <!--      <template v-if="registerGroupToPatient.getRegisterPropertyValueSet(registerPropertySet.id)">-->
+  <!--        <el-form-item-->
+  <!--          v-for="registerPropertyOther in registerPropertySet.registerPropertyOthers"-->
+  <!--          :key="registerPropertyOther.id"-->
+  <!--          :label="registerPropertyOther.name"-->
+  <!--        >-->
+  <!--          <el-input-->
+  <!--            :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"-->
+  <!--            @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"-->
+  <!--          />-->
+  <!--        </el-form-item>-->
+  <!--      </template>-->
+  <!--    </div>-->
+  <!--  </el-form-item>-->
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
-import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 
 export default defineComponent({
   name: 'SetProp',
   props: {
-    registerGroupToPatient: {
-      type: Object as PropType<IRegisterGroupToPatient>,
+    researchResult: {
+      type: Object as PropType<ResearchResult>,
       required: true,
     },
-    prop: {
-      type: Object as PropType<IRegisterProperty>,
-      required: true,
-    },
-    registerGroup: {
-      type: Object as PropType<IRegisterGroup>,
-      required: true,
-    },
-    modelValue: {
-      type: String as PropType<string>,
+    question: {
+      type: Object as PropType<Question>,
       required: true,
     },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const filter: Ref<string> = ref('');
-    onBeforeMount(() => {
-      filter.value = props.modelValue;
-    });
-    const input = (v: any) => {
-      console.log(v);
-      emit('update:modelValue', v);
+    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const filledCheck = (): void => {
+      answer.filled = answer.selectedAnswerVariants.length > 0;
+      console.log(answer.filled);
+      props.researchResult.calculateFilling();
     };
-    return { filter, input };
+    const selectVariant = (selected: boolean, variantId: string) => {
+      answer.setSelectedAnswerVariant(selected, variantId);
+      filledCheck();
+    };
+    return {
+      selectVariant,
+      filledCheck,
+      answer,
+    };
   },
 });
 </script>

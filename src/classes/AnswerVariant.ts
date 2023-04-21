@@ -1,11 +1,10 @@
-import Question from '@/classes/Question';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class AnswerVariant {
   id?: string;
   name = '';
   questionId?: string;
-  question?: Question;
+  // question?:;
   score = 0;
   // @ClassHelper.GetClassConstructor(RegisterPropertyOther)
   // registerPropertyOthers: RegisterPropertyOther[] = [];

@@ -9,7 +9,6 @@ export default class ValueType {
   constructor(i?: ValueType) {
     ClassHelper.BuildClass(this, i);
   }
-
   isString(): boolean {
     return this.name === 'string';
   }

@@ -1,19 +1,23 @@
 <template>
   <div class="mainblock">
-    <div class="slider-block"
+    <div
+      class="slider-block"
       :style="{
         marginRight: isToggle ? '110px' : '-231px',
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
       }"
     >
-      <div class="slider-icon" @click="toggleSlider" 
+      <div
+        class="slider-icon"
         :style="{
-          border:  isToggle ? '1px solid #379FFF' :  '1px solid #00B5A4',
+          border: isToggle ? '1px solid #379FFF' : '1px solid #00B5A4',
           background: isToggle ? '#ffffff' : '#C7ECEA',
         }"
+        @click="toggleSlider(!isToggle)"
       >
-        <div class="icon-block"
+        <div
+          class="icon-block"
           :style="{
             transform: isToggle ? 'rotate(-225deg)' : 'rotate(0deg)',
             fill: isToggle ? '#379FFF' : '#00B5A4',
@@ -39,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref} from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name: 'RightTabsContainer',
@@ -59,17 +63,20 @@ export default defineComponent({
       required: false,
       default: 'inherit',
     },
+    isToggle: {
+      type: Boolean as PropType<boolean>,
+      required: false,
+      default: false,
+    },
   },
-    setup(_, { emit }) {
-    const isToggle: Ref<boolean> = ref(false);
-
-    const toggleSlider = () => {
-      isToggle.value = !isToggle.value;
+  emits: ['toggle'],
+  setup(props, { emit }) {
+    const toggleSlider = (toggle: boolean) => {
+      emit('toggle', toggle);
     };
 
     return {
       toggleSlider,
-      isToggle,
     };
   },
 });
@@ -79,7 +86,7 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 
 .mainblock {
-  position:relative;
+  position: relative;
   display: flex;
   justify-content: left;
   width: auto;

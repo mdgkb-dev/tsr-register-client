@@ -231,7 +231,16 @@ export default class Patient {
     researches.forEach((r: Research) => this.createPatientResearch(r));
   }
 
-  getPatientResearch(researchId: string): PatientResearch | undefined {
+  getPatientResearch(researchId: string | undefined): PatientResearch | undefined {
     return this.patientsResearches.find((p: PatientResearch) => p.researchId === researchId);
+  }
+
+  hasResearchesPool(poolId: string): boolean {
+    return this.patientsResearchesPools.some((p: PatientResearchesPool) => p.researchesPoolId === poolId);
+  }
+
+  getResearchFillingPercentage(researchId: string): number {
+    const patientResearch = this.getPatientResearch(researchId);
+    return patientResearch ? patientResearch.fillingPercentage : 0;
   }
 }

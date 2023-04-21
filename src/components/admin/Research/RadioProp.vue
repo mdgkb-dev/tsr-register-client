@@ -1,63 +1,64 @@
 <template>
-  <el-form-item v-if="prop.valueType.isRadio()">
-    <el-radio
-      v-for="registerPropertyRadio in prop.registerPropertyRadios"
-      :key="registerPropertyRadio.id"
-      :label="registerPropertyRadio.id"
-      :model-value="registerGroupToPatient.getRegisterPropertyValue(prop, false)"
-      @change="registerGroupToPatient.setRegisterPropertyValue(registerPropertyRadio.id, prop)"
-    >
-      {{ registerPropertyRadio.name }}
-    </el-radio>
-    <div v-if="prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop))">
-      <el-form-item
-        v-for="registerPropertyOther in prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop, false))"
-        :key="registerPropertyOther.id"
-        :label="registerPropertyOther.name"
-      >
-        <el-input
-          :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"
-          @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
-        />
-      </el-form-item>
-    </div>
-    <el-input
-      v-if="prop.withOther"
-      style="margin-top: 10px"
-      placeholder="Другое, указать"
-      type="textarea"
-      :rows="3"
-      :model-value="registerGroupToPatient.getOtherPropertyValue(prop)"
-      @input="registerGroupToPatient.setRegisterPropertyValueOther($event, prop)"
-    />
-  </el-form-item>
+  <el-radio
+    v-for="variant in question.answerVariants"
+    :key="variant.id"
+    v-model="answer.answerVariantId"
+    :label="variant.id"
+    @change="filledCheck(variant.id)"
+  >
+    {{ variant.name }}
+  </el-radio>
+  <!--    <div v-if="prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop))">-->
+  <!--      <el-form-item-->
+  <!--        v-for="registerPropertyOther in prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop, false))"-->
+  <!--        :key="registerPropertyOther.id"-->
+  <!--        :label="registerPropertyOther.name"-->
+  <!--      >-->
+  <!--        <el-input-->
+  <!--          :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"-->
+  <!--          @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"-->
+  <!--        />-->
+  <!--      </el-form-item>-->
+  <!--    </div>-->
+  <!--    <el-input-->
+  <!--      v-if="prop.withOther"-->
+  <!--      style="margin-top: 10px"-->
+  <!--      placeholder="Другое, указать"-->
+  <!--      type="textarea"-->
+  <!--      :rows="3"-->
+  <!--      :model-value="registerGroupToPatient.getOtherPropertyValue(prop)"-->
+  <!--      @input="registerGroupToPatient.setRegisterPropertyValueOther($event, prop)"-->
+  <!--    />-->
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
-import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 
 export default defineComponent({
   name: 'RadioProp',
   props: {
-    registerGroupToPatient: {
-      type: Object as PropType<IRegisterGroupToPatient>,
+    researchResult: {
+      type: Object as PropType<ResearchResult>,
       required: true,
     },
-    prop: {
-      type: Object as PropType<IRegisterProperty>,
-      required: true,
-    },
-    registerGroup: {
-      type: Object as PropType<IRegisterGroup>,
+    question: {
+      type: Object as PropType<Question>,
       required: true,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const filledCheck = (variantId: string): void => {
+      answer.filled = answer.answerVariantId === variantId;
+      props.researchResult.calculateFilling();
+    };
+    return {
+      filledCheck,
+      answer,
+    };
   },
 });
 </script>

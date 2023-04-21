@@ -8,10 +8,10 @@ export default class PatientResearchesPool {
   researchesPool = new ResearchesPool();
   researchesPoolId?: string;
   order = 0;
-  patient?: Patient;
   patientId?: string;
 
   constructor(i?: Patient) {
+    
     ClassHelper.BuildClass(this, i);
   }
 

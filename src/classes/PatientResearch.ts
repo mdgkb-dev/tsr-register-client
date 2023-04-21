@@ -1,4 +1,5 @@
-import Answer from '@/classes/Answer';
+import { v4 as uuidv4 } from 'uuid';
+
 import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
 import Research from '@/classes/Research';
@@ -32,6 +33,7 @@ export default class PatientResearch {
 
   static Create(patientId: string | undefined, research: Research): PatientResearch {
     const item = new PatientResearch();
+    item.id = uuidv4();
     item.patientId = patientId;
     item.research = research;
     item.researchId = research.id;
@@ -130,19 +132,17 @@ export default class PatientResearch {
   //   return this.registerPropertySetToPatient?.some((i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId);
   // }
 
-  addResult(research: Research): void {
-    const item = new ResearchResult();
-    if (!research) {
+  recalculate(newResult: ResearchResult): void {
+    const findedResult = this.getResult(newResult.id as string);
+    if (!findedResult) {
       return;
     }
-    research.questions.forEach((q: Question) => {
-      const answer = new Answer();
-      answer.questionId = q.id;
-      answer.order = q.order;
-      answer.valueNumber = 0;
-      item.answers.push(answer);
-    });
-
-    this.researchResults.push(item);
+    findedResult.fillingPercentage = newResult.fillingPercentage;
+    const filled = this.researchResults.filter((r: ResearchResult) => r.fillingPercentage === 100).length;
+    const all = this.researchResults.length;
+    this.fillingPercentage = Math.round((filled / all) * 100);
+  }
+  getResult(resultId: string): ResearchResult | undefined {
+    return this.researchResults.find((r: ResearchResult) => r.id === resultId);
   }
 }

@@ -26,6 +26,7 @@ Provider.store = store;
 import DateTimeFormatter from '@/services/DateFormat';
 app.config.globalProperties.$dateTimeFormatter = new DateTimeFormatter('ru-RU');
 app.config.globalProperties.$classHelper = ClassHelper;
+app.config.globalProperties.$stringsService = StringsService;
 app.use(setupElementPlusComponents, { locale: ru });
 app.use(setupElementPlusPlugins);
 
@@ -34,6 +35,7 @@ import ru from 'element-plus/es/locale/lang/ru';
 
 import { setupElementPlusComponents, setupElementPlusPlugins } from '@/plugins/ElementPlus';
 import ClassHelper from '@/services/ClassHelper';
+import StringsService from '@/services/Strings';
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }

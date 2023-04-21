@@ -1,66 +1,49 @@
 <template>
-  <el-form-item v-if="property.valueType.isDate()">
-    <el-date-picker
-      ref="datePick"
-      v-model="dataModel"
-      type="date"
-      format="DD.MM.YYYY"
-      placeholder="Выберите дату"
-      @keydown="dateFormat"
-      @visible-change="ignoreVisibility"
-    />
-  </el-form-item>
+  <el-date-picker
+    ref="datePick"
+    v-model="answer.valueDate"
+    type="date"
+    format="DD.MM.YYYY"
+    placeholder="Выберите дату"
+    @keydown="dateFormat"
+    @change="filledCheck"
+    @visible-change="false"
+  />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRefs, WritableComputedRef } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
+import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
   name: 'DataComponentComputed',
   props: {
-    registerGroupToPatient: {
-      type: Object as PropType<IRegisterGroupToPatient>,
+    researchResult: {
+      type: Object as PropType<ResearchResult>,
       required: true,
     },
-    property: {
-      type: Object as PropType<IRegisterProperty>,
+    question: {
+      type: Object as PropType<Question>,
       required: true,
     },
   },
   setup(props) {
-    const { registerGroupToPatient, property } = toRefs(props);
-    const datePick = ref();
-    const dataModel: WritableComputedRef<boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[]> = computed({
-      get(): boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[] {
-        return registerGroupToPatient.value.getRegisterPropertyValue(property.value, false);
-      },
-      set(value: boolean | string | number | Date | null | IRegisterPropertyToPatientToFile[]): void {
-        let newValue: number | string | Date;
+    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const ignoreVisibility = (v: boolean) => (v = true);
 
-        if (typeof value === 'number' || typeof value === 'string' || value instanceof Date) {
-          newValue = value;
-        } else {
-          return;
-        }
-
-        if (property.value.id) {
-          registerGroupToPatient.value.setRegisterPropertyValue(newValue, property.value);
-        }
-      },
-    });
-
-    const ignoreVisibility = (v: boolean) => (v = false);
+    const filledCheck = (): void => {
+      answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
+      props.researchResult.calculateFilling();
+    };
 
     return {
+      filledCheck,
       ignoreVisibility,
-      datePick,
       dateFormat,
-      dataModel,
+      answer,
     };
   },
 });

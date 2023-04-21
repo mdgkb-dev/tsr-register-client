@@ -8,7 +8,7 @@
       </div>
     </template>
     <template #body>
-      <div v-if="mounted" >
+      <div v-if="mounted">
         <component :is="menus[activeMenuIndex].component" :patient="patient" />
       </div>
     </template>
@@ -55,6 +55,7 @@ export default defineComponent({
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
+      CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches'),
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo'),
       CustomSection.Create('insurances', 'Страховки', 'InsuranceForm'),
       CustomSection.Create('documents', 'Документы', 'PatientDocuments'),
@@ -62,7 +63,6 @@ export default defineComponent({
       CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs'),
       CustomSection.Create('disability', 'Инвалидность', 'Disability'),
       CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives'),
-      CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches'),
     ];
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);

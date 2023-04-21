@@ -9,12 +9,14 @@ import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patients } from '@/store/modules/patients';
+import { patientsResearches } from '@/store/modules/patientsResearches';
 import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
 import { researches } from '@/store/modules/researches';
 import { researchesPools } from '@/store/modules/researchesPools';
+import { researchesResults } from '@/store/modules/researchesResults';
 import search from '@/store/modules/search';
 import { users } from '@/store/modules/users';
 
@@ -35,6 +37,7 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
+    researchesResults,
     auth,
     cropper,
     // disabilities,
@@ -60,6 +63,7 @@ const store: StoreOptions<RootState> = {
     users,
     search,
     admin,
+    patientsResearches,
     // regions,
   },
 };

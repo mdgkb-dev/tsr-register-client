@@ -93,6 +93,10 @@ const StringsService = (() => {
     return regex.test(str);
   }
 
+  function formatToPercentage(percent: number): string {
+    return `${percent}%`;
+  }
+
   return {
     removeEmoji,
     translit,
@@ -101,6 +105,7 @@ const StringsService = (() => {
     toKebabCase,
     capitalizeString,
     canBeTranslited,
+    formatToPercentage,
   };
 })();
 

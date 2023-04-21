@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
+import Research from '@/classes/Research';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class ResearchResult {
@@ -24,6 +25,14 @@ export default class ResearchResult {
 
   constructor(i?: ResearchResult) {
     ClassHelper.BuildClass(this, i);
+  }
+
+  static Create(research: Research, patientResearchId?: string): ResearchResult {
+    const item = new ResearchResult();
+    item.id = uuidv4();
+    item.patientResearchId = patientResearchId;
+    item.answers.push(...Answer.CreateMany(research.questions));
+    return item;
   }
 
   getResult(questionId: string): Answer | undefined {
@@ -104,15 +113,6 @@ export default class ResearchResult {
 
     return null;
   }
-  //
-  // getRegisterPropertyValueSet(setId: string, registerPropWithDateId?: string): boolean {
-  //   if (registerPropWithDateId) {
-  //     return this.registerPropertySetToPatient?.some(
-  //       (i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId && i.propWithDateId === registerPropWithDateId
-  //     );
-  //   }
-  //   return this.registerPropertySetToPatient?.some((i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId);
-  // }
 
   setRegisterPropertyValueOther(value: string, property: Question): void {
     if (!property.id) {
@@ -133,18 +133,17 @@ export default class ResearchResult {
     item.valueOther = value as string;
   }
 
+  getAnswer(questionId: string): Answer {
+    let item = this.getResult(questionId);
+    if (!item) {
+      this.pushRegisterProperty(questionId);
+      item = this.getResult(questionId);
+    }
+    return item as Answer;
+  }
+
   setValue(value: number | string | Date, question: Question): void {
-    if (!question.id) {
-      return;
-    }
-    let item = this.getResult(question.id);
-    if (!item) {
-      this.pushRegisterProperty(question.id);
-      item = this.getResult(question.id);
-    }
-    if (!item) {
-      return;
-    }
+    const item = this.getAnswer(question.id as string);
     if (question.valueType?.isString() || question.valueType?.isText()) {
       item.valueString = value as string;
     }
@@ -159,33 +158,9 @@ export default class ResearchResult {
     // }
   }
 
-  setRegisterPropertyValueSet(isAdd: boolean, setId: string, registerPropWithDateId?: string): void {
-    // if (isAdd) {
-    //   const registerPropertySetToPatient = new RegisterPropertySetToPatient();
-    //   registerPropertySetToPatient.registerPropertySetId = setId;
-    //   registerPropertySetToPatient.patientId = this.id;
-    //   if (registerPropWithDateId) {
-    //     registerPropertySetToPatient.propWithDateId = registerPropWithDateId;
-    //   }
-    //   this.registerPropertySetToPatient.push(registerPropertySetToPatient);
-    //   return;
-    // }
-    // let index = -1;
-    // if (registerPropWithDateId) {
-    //   index = this.registerPropertySetToPatient?.findIndex(
-    //     (i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId && i.propWithDateId === registerPropWithDateId
-    //   );
-    // } else {
-    //   index = this.registerPropertySetToPatient?.findIndex((i: RegisterPropertySetToPatient) => i.registerPropertySetId === setId);
-    // }
-    // if (index <= -1) {
-    //   return;
-    // }
-    // const idForDelete = this.registerPropertySetToPatient[index].id;
-    // if (idForDelete) {
-    //   this.registerPropertySetToPatientForDelete.push(idForDelete);
-    // }
-    // this.registerPropertySetToPatient.splice(index, 1);
+  setStringValue(value: string, question: Question): void {
+    const item = this.getAnswer(question.id as string);
+    item.valueString = value;
   }
 
   // getRegisterPropertyValueOthers(propertyOtherId: string): string {
@@ -273,4 +248,10 @@ export default class ResearchResult {
   //   });
   //   return fileInfos;
   // }
+
+  calculateFilling(): void {
+    const filledAnswers = this.answers.filter((a: Answer) => a.filled).length;
+    const allAnswers = this.answers.length;
+    this.fillingPercentage = Math.round((filledAnswers / allAnswers) * 100);
+  }
 }

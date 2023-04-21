@@ -1,8 +1,5 @@
 <template>
-  <el-form-item>
-    <el-input-number :model-value="researchResult.getValue(question, false)" @change="researchResult.setValue($event, question)" />
-  </el-form-item>
-  {{ researchResult.getValue(question, false) }}
+  <el-input-number v-model="answer.valueNumber" @change="filledCheck" />
   <!--  <el-radio-group-->
   <!--    :model-value="registerGroupToPatient.getMeasureId(prop.id)"-->
   <!--    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"-->
@@ -31,8 +28,16 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const filledCheck = (): void => {
+      answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
+      props.researchResult.calculateFilling();
+    };
+    return {
+      filledCheck,
+      answer,
+    };
   },
 });
 </script>

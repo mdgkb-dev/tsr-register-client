@@ -1,37 +1,35 @@
 <template>
-  <el-form-item v-if="prop.valueType.isString()">
-    <el-input
-      :model-value="registerGroupToPatient.getRegisterPropertyValue(prop, false)"
-      @input="registerGroupToPatient.setRegisterPropertyValue($event, prop)"
-    />
-  </el-form-item>
+  <el-input v-model="answer.valueString" @input="filledCheck" />
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
-import IRegisterGroupToPatient from '@/interfaces/IRegisterGroupToPatient';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
+import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 
 export default defineComponent({
   name: 'StringProp',
   props: {
-    registerGroupToPatient: {
-      type: Object as PropType<IRegisterGroupToPatient>,
+    researchResult: {
+      type: Object as PropType<ResearchResult>,
       required: true,
     },
-    prop: {
-      type: Object as PropType<IRegisterProperty>,
-      required: true,
-    },
-    registerGroup: {
-      type: Object as PropType<IRegisterGroup>,
+    question: {
+      type: Object as PropType<Question>,
       required: true,
     },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const filledCheck = (input: string): void => {
+      answer.filled = input.length > 0;
+      props.researchResult.calculateFilling();
+    };
+    return {
+      filledCheck,
+      answer,
+    };
   },
 });
 </script>
