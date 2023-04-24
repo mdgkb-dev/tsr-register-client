@@ -13,13 +13,16 @@
         :style="{
           border: isToggle ? '1px solid #379FFF' : '1px solid #00B5A4',
           background: isToggle ? '#ffffff' : '#C7ECEA',
+
         }"
         @click="toggleSlider(!isToggle)"
+        @mouseenter="hovering = true"
+        @mouseleave="hovering = false"
       >
         <div
           class="icon-block"
           :style="{
-            transform: isToggle ? 'rotate(-225deg)' : 'rotate(0deg)',
+            transform: hovering ? (isToggle ? 'rotate(-225deg) scale(1.2, 1.2)' : 'rotate(0deg) scale(1.2, 1.2)') : (isToggle ? 'rotate(-225deg)' : 'rotate(0deg)'),
             fill: isToggle ? '#379FFF' : '#00B5A4',
           }"
         >
@@ -43,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 
 export default defineComponent({
   name: 'RightTabsContainer',
@@ -74,9 +77,11 @@ export default defineComponent({
     const toggleSlider = (toggle: boolean) => {
       emit('toggle', toggle);
     };
+    const hovering = ref(false);
 
     return {
       toggleSlider,
+      hovering,
     };
   },
 });
@@ -90,7 +95,7 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   width: auto;
-  height: auto;
+  height: 100%;
   padding: 0;
   background: $custom-background;
   overflow: hidden;
@@ -116,20 +121,15 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-}
-
-.slider-icon:hover > .icon-block {
-  opacity: 1;
+  // text-align: center;
 }
 
 .icon-block {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
+  // text-align: center;
   transition: 0.3s;
-  opacity: 0.7;
 }
 
 .slider-body {
@@ -148,7 +148,7 @@ export default defineComponent({
 .body-block {
   position: relative;
   width: calc(100% - 110px);
-  height: 67vh;
+  height: 100%;
   background: $custom-background;
 }
 

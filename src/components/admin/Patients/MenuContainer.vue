@@ -73,6 +73,7 @@ export default defineComponent({
   margin-top: 1px;
   border-top: 0.5px solid #343D5C;
   overflow-y: auto;
-  height: 67vh;
+  height: 74vh;
+  height: 100%;
 }
 </style>

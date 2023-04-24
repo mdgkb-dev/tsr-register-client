@@ -1,0 +1,75 @@
+<template>
+  <div class="mainblock"
+    :style="{
+      background: background,
+    }"
+  >
+    <div class="mainblock-header"
+      :style="{
+        background: background,
+      }"
+    >
+      <slot name="header" />
+    </div>
+
+    <div class="mainblock-body">
+      <slot name="body" />
+    </div>
+
+    <div class="mainblock-footer">
+      <slot name="footer" />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
+  name: 'ResearcheContainer',
+  props: {
+    background: {
+      type: String as PropType<string>,
+      required: false,
+      default: 'inherit',
+    },
+  },
+});
+</script>
+
+<style lang="scss" scoped>
+@import '@/assets/styles/elements/base-style.scss';
+
+.mainblock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: auto;
+  height: calc(100% - 20px);
+  padding: 0px 10px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.mainblock-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+}
+
+.mainblock-body {
+  width: 100%;
+  height: 100%;
+  // overflow: hidden;
+  // overflow-y: auto;
+}
+
+.mainblock-footer {
+  width: 100%;
+  height: auto;
+}
+</style>
