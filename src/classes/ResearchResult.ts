@@ -35,6 +35,10 @@ export default class ResearchResult {
     return item;
   }
 
+  addAnswer(answer: Answer): void {
+    this.answers.push(answer);
+  }
+
   getResult(questionId: string): Answer | undefined {
     return this.answers?.find((i: Answer) => i.questionId === questionId);
   }

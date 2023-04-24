@@ -37,7 +37,6 @@
                   <el-button @click="saveResult(researchResult)">Сохранить</el-button>
                   <div v-for="question in research.questions" :key="question.id">
                     <div>{{ question.name }}, {{ question.valueType.name }}</div>
-                    {{ researchResult.getAnswer(question.id).filled }}
                     <StringProp
                       v-if="question.valueType.isString() || question.valueType.isText()"
                       :research-result="researchResult"
@@ -250,9 +249,8 @@ export default defineComponent({
     };
 
     const cancelResearchResultsFilling = () => {
-      patientResearch.value = undefined;
+      // patientResearch.value = undefined;
       Provider.store.commit('researches/set');
-      // Provider.store.commit('researchesResults/set');
     };
 
     return {
