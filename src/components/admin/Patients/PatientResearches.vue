@@ -1,123 +1,189 @@
 <template>
-  <div v-if="mounted">
-    <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools">
-      <template #icon>
-        <svg class="icon-plus">
-          <use xlink:href="#plus"></use>
-        </svg>
-      </template>
-      <template #slider-body>
-        <div class="slider-body">
-          <div class="slider-item-active">СМА</div>
-          <div v-for="pool in researchesPools" :key="pool.id" class="slider-item" @click="addResearchesPool(pool.id)">{{ pool.name }}</div>
-        </div>
-      </template>
-      <template #tabs>
-        <div
-          v-for="patientResearchesPool in patient.patientsResearchesPools"
-          :key="patientResearchesPool.id"
-          :class="{ 'tabs-item-active': researchesPool.id === patientResearchesPool.researchesPoolId }"
-          class="tabs-item"
-          @click="selectResearchesPool(patientResearchesPool.researchesPoolId)"
-        >
-          {{ patientResearchesPool.researchesPool.name }}
-        </div>
-      </template>
-      <template #body>
-        <div class="body">
-          <template v-if="research.id && patientResearch">
-            <div>
-              <button @click.prevent="cancelResearchResultsFilling">Назад</button>
-              <button @click.prevent="addResult(research, patientResearch.id)">добавить результат</button>
+  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools">
+    <template #icon>
+      <svg class="icon-plus">
+        <use xlink:href="#plus"></use>
+      </svg>
+    </template>
+    <template #slider-body>
+      <div class="slider-body">
+        <div class="slider-item-active">СМА</div>
+        <div v-for="pool in researchesPools" :key="pool.id" class="slider-item" @click="addResearchesPool(pool.id)">{{ pool.name }}</div>
+      </div>
+    </template>
+    <template #tabs>
+      <div
+        v-for="patientResearchesPool in patient.patientsResearchesPools"
+        :key="patientResearchesPool.id"
+        :class="{ 'tabs-item-active': researchesPool.id === patientResearchesPool.researchesPoolId }"
+        class="tabs-item"
+        @click="selectResearchesPool(patientResearchesPool.researchesPoolId)"
+      >
+        {{ patientResearchesPool.researchesPool.name }}
+      </div>
+    </template>
+    <template #body>
+      <div class="body">
+        <ResearcheContainer background="#DFF2F8">
+          <template #header>
+            <template v-if="research.id && patientResearch">
+              <div class="researche-title">
+                <Button
+                  text="Назад"
+                  background="#ffffff"
+                  marginRight="10px"
+                  height="42px"
+                  fontSize="16px"
+                  borderRadius="5px"
+                  color="#343e5c"
+                  @click.prevent="cancelResearchResultsFilling"
+                >
+                  <template #icon>
+                    <svg class="icon-back">
+                      <use xlink:href="#back"></use>
+                    </svg>
+                  </template>
+                </Button>
+                <div class="researche-name">{{ research.name }}</div>
+              </div>
+            </template>
+            <template v-else>
+              <GridContainer
+                maxWidth="600px"
+                gridGap="6px"
+                gridTemplateColumns="repeat(auto-fit, minmax(60px, 1fr))"
+                marginTop="10px"
+              >
+                <template #grid-items>
+                  <Button :border="false" text="А-В" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Г-Ё" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Ж-К" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Л-Н" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="О-Р" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="С-У" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Ф-Ч" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Ш-Щ" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+                  <Button :border="false" text="Э-Я" :colorSwap="true" width="60px" 
+                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
+              </template>
+              </GridContainer>
+            </template>
+          </template>
+
+          <template #body>
+            <template v-if="research.id && patientResearch">
               <div v-for="result in patientResearch.researchResults" :key="result.id">
-                <div @click="selectResult(result.id)">{{ result.date }}, {{ result.fillingPercentage }}%</div>
+                <GeneralItem 
+                  :ready="`${result.fillingPercentage}%`"
+                  @click="selectResult(result.id)" 
+                  margin="10px 0px" 
+                  :scale="false" 
+                >
+                  <template #general-item>
+                    {{ result.date }}
+                  </template>
+                </GeneralItem>
 
                 <template v-if="researchResult.id">
-                  {{ researchResult.fillingPercentage }}%
-                  <el-button @click="saveResult(researchResult)">Сохранить</el-button>
-                  <div v-for="question in research.questions" :key="question.id">
-                    <div>{{ question.name }}, {{ question.valueType.name }}</div>
-                    {{ researchResult.getAnswer(question.id).filled }}
-                    <StringProp
-                      v-if="question.valueType.isString() || question.valueType.isText()"
-                      :research-result="researchResult"
-                      :question="question"
-                    />
-                    <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                    <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
-                    <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                    <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
-                  </div>
+                    <div class="blur"></div>
+                    <div class="research-info">
+                      <div class="tools">
+                        <Button
+                          text="Сохранить"
+                          :colorSwap="true" 
+                          width="100%"
+                          height="60px"
+                          fontSize="22px"
+                          borderRadius="5px"
+                          color="#00B5A4"
+                          background="#C7ECEA"
+                          :withIcon="false"
+                          @click="saveResult(researchResult)" 
+                        ></Button>  
+                      </div>
+                      <div class="scroll-block">
+                        <div class="question-item" v-for="question in research.questions" :key="question.id">
+                          <div class="question-name">{{ question.name }}</div>
+                          <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+                          <StringProp
+                            v-if="question.valueType.isString() || question.valueType.isText()"
+                            :research-result="researchResult"
+                            :question="question"
+                          />
+                          <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
+                          <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
+                          <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
+                          <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+                        </div>
+                      </div>
+                    </div>
                 </template>
-                <hr />
               </div>
-            </div>
+            </template>
+            <template v-else>
+              <GridContainer gridGap="5px" marginTop="5px">
+                <template #grid-items>
+                <GeneralItem 
+                  :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
+                  v-for="researchesPoolResearch in researchesPool.researchesPoolsResearches"
+                  :key="researchesPoolResearch.id"
+                  @click="selectResearch(researchesPoolResearch.research)"
+                >
+                  <template #general-item>
+                    {{ researchesPoolResearch.research.name }}
+                  </template>
+                </GeneralItem>
+                </template>
+              </GridContainer>
+            </template>
           </template>
-          <template v-else>
-            <div class="filters">
-              <div class="filter-item">А-В</div>
-              <div class="filter-item">Г-Ё</div>
-              <div class="filter-item">Ж-К</div>
-              <div class="filter-item">Л-Н</div>
-              <div class="filter-item">О-Р</div>
-              <div class="filter-item">С-У</div>
-              <div class="filter-item">Ф-Ч</div>
-              <div class="filter-item">Ш-Щ</div>
-              <div class="filter-item">Э-Я</div>
-            </div>
-            <div class="researches">
-              <div
-                v-for="researchesPoolResearch in researchesPool.researchesPoolsResearches"
-                :key="researchesPoolResearch.id"
-                class="researches-item"
-                @click="selectResearch(researchesPoolResearch.research)"
+
+          <template #footer>
+            <template v-if="research.id && patientResearch">
+              <Button
+                width="100%"
+                height="60px"
+                fontSize="16px"
+                borderRadius="5px"
+                color="#00B5A4"
+                background="#C7ECEA"
+                @click.prevent="addResult(research, patientResearch.id)"
               >
-                <div
-                  class="green"
-                  :style="{
-                    width: $stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id)),
-                  }"
-                ></div>
-                <div class="researches-item-title">{{ researchesPoolResearch.research.name }}</div>
-              </div>
-            </div>
+                <template #icon>
+                  <svg class="icon-plus">
+                    <use xlink:href="#plus"></use>
+                  </svg>
+                </template>
+              </Button>
+            </template>
+            <template v-else>
+
+            </template>
           </template>
-        </div>
-      </template>
-    </RightTabsContainer>
-  </div>
+        </ResearcheContainer>
+      </div>
+      
+    </template>
+  </RightTabsContainer>
   <svg width="0" height="0" class="hidden">
-    <symbol id="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+    <symbol stroke="none" id="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
     </symbol>
   </svg>
 
-  <!--    <div v-if="research.id && patientResearch">-->
-  <!--      <div v-for="result in patientResearch.researchResults" :key="result.id">-->
-
-  <!--        <div v-for="question in research.questions" :key="question.id">-->
-  <!--          <div>{{ question.name }}, {{ question.valueType.name }}</div>-->
-  <!--          <StringProp v-if="question.valueType.isString()" :research-result="result" :question="question" />-->
-  <!--          <NumberProp v-if="question.valueType.isNumber()" :research-result="result" :question="question" />-->
-  <!--          <DataComponentComputed v-if="question.valueType.isDate()" :research-result="result" :question="question" />-->
-  <!--          <RadioProp v-if="question.valueType.isRadio()" :research-result="result" :question="question" />-->
-  <!--          <SetProp v-if="question.valueType.isSet()" :research-result="result" :question="question" />-->
-  <!--        </div>-->
-  <!--        <hr />-->
-  <!--      </div>-->
-  <!--    </div>-->
-
-  <!--    &lt;!&ndash;&ndash;&gt;-->
-  <!--    &lt;!&ndash;    {{ researchesPoolResearches.research.formulas[0].calculate(researchesPoolResearches.research.getAnswers(result)) }}&ndash;&gt;-->
-  <!--    &lt;!&ndash;    {{ researchesPoolResearches.research.formulas[0].getResult(researchesPoolResearches.research.getAnswers(result)) }}&ndash;&gt;-->
-  <!--    &lt;!&ndash;  </div>&ndash;&gt;-->
-  <!--    &lt;!&ndash;    </div>&ndash;&gt;-->
-
-  <!--    &lt;!&ndash;      &lt;!&ndash;        <div v-for="(question, i) in patientResearch.research.questions" :key="question.id">&ndash;&gt;&ndash;&gt;-->
-  <!--    &lt;!&ndash;      &lt;!&ndash;          {{ researchResult.answers[i] }}&ndash;&gt;&ndash;&gt;-->
-  <!--    &lt;!&ndash;      &lt;!&ndash;        </div>&ndash;&gt;&ndash;&gt;-->
-  <!--    &lt;!&ndash;    </div>&ndash;&gt;-->
-  <!--  </div>-->
+  <svg width="0" height="0" class="hidden">
+    <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" id="back">
+      <path d="M7.33333 7.8C13.901 7.20467 18.1253 9.738 20 15.4C16.4217 11.4227 11.9681 10.6905 7.33333 12.8667V16.6667L1 10.3333L7.33333 4V7.8Z" stroke-linecap="round" stroke-linejoin="round"></path>
+    </symbol>
+  </svg>
 </template>
 
 <script lang="ts">
@@ -140,6 +206,10 @@ import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue'
+import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
+import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -160,6 +230,10 @@ export default defineComponent({
     // SetProp,
     // RadioProp,
     // PropertyHeader,
+    Button,
+    ResearcheContainer,
+    GridContainer,
+    GeneralItem,
   },
   setup() {
     const mounted = ref(false);
@@ -376,6 +450,7 @@ export default defineComponent({
   background: $custom-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
+  font-weight: bold;
   color: #343e5c;
   display: flex;
   justify-content: center;
@@ -389,8 +464,6 @@ export default defineComponent({
   width: 40px;
   height: 40px;
   cursor: pointer;
-  transition: 0.3s;
-  opacity: 1;
 }
 
 .body {
@@ -401,90 +474,112 @@ export default defineComponent({
   z-index: 5;
 }
 
-.filters {
-  padding-top: 10px;
-  max-width: 600px;
-  height: auto;
-  display: grid;
-  grid-gap: 6px;
-  grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.filter-item {
-  font-size: 16px;
-  color: #343e5c;
-  width: 60px;
-  height: 40px;
+.researche-title {
+  width: calc(100% - 2px);
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  transition: 0.3s;
+  height: 60px;
+
 }
 
-.filter-item:hover {
-  background: #343e5c;
-  color: #ffffff;
+.researche-name {
+  min-height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #343e5c;
+  font-size: 14px;
+  text-transform: uppercase;
 }
 
-.researches {
-  // margin-top: 20px;
-  width: auto;
-  height: auto;
-  display: grid;
-  grid-gap: 10px;
-  grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10px;
+.icon-back {
+  width: 24px;
+  height: 24px;
 }
 
-.researches-item {
+.patient-research {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
+  flex-direction: column;
+  width: calc(100% - 32px);
   height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: 0.3s;
-  padding: 10px;
-  background: #ffffff;
   border-radius: $normal-border-radius;
-  border: $custom-border;
-  text-align: center;
+  border: $light-pink-border;
+  background: #ffffff;
+  padding: 0 10px;
+  margin: 10px 10px 10px 0;
+  cursor: pointer;
+}
+
+.blur {
+  position: fixed;
+  top:0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  opacity: 0.3;
+  z-index: 20;
+}
+
+.research-info {
+  position: fixed;
+  top: 52%;
+  left: 50%;
+  width: calc(99% - 22px);
+  height: calc(92% - 102px);
+  transform: translate(-50%, -50%);
+  background: #DFF2F8;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  margin: 10px 10px 0 0;
+  padding: 90px 10px 10px 10px;
   overflow: hidden;
+  overflow-y: auto;
+  z-index: 21;
 }
 
-.researches-item:hover {
-  transform: scale(1.03, 1.03);
-  // border: 1px solid #379FFF;
-  // color: #ffffff;
-}
-
-.researches-item-title {
-  font-size: 12px;
-  color: #343e5c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  z-index: 1;
-}
-
-.green {
+.tools {
   position: absolute;
-  background: #c7ecea;
   top: 0;
   left: 0;
-  width: 80%;
+  z-index: 1;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  height: auto;
+  padding: 10px;
+  width: calc(100% - 22px);
+  background: #DFF2F8;
+}
+
+.scroll-block {
+  width: 100%;
   height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.question-item {
+  background: #DFF2F8;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+.question-name {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 22px;
+  color: #343e5c;
+  margin-bottom: 10px;
 }
 </style>

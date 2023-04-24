@@ -1,5 +1,5 @@
 <template>
-  <MenuContainer min-menu-item-width="200px" height="auto" background="#DFF2F8">
+  <MenuContainer min-menu-item-width="200px" height="calc(100% - 2px)" background="#DFF2F8">
     <template #menu>
       <div v-for="(menu, i) in menus" :key="menu.id">
         <div :class="{ 'selected-tab': activeMenuIndex === i, tab: activeMenuIndex !== i }" @click="activeMenuIndex = i">
@@ -8,9 +8,7 @@
       </div>
     </template>
     <template #body>
-      <div v-if="mounted">
-        <component :is="menus[activeMenuIndex].component" :patient="patient" />
-      </div>
+      <component v-if="mounted" :is="menus[activeMenuIndex].component" :patient="patient" />
     </template>
   </MenuContainer>
 </template>
