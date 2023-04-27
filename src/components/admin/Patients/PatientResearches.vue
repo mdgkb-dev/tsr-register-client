@@ -31,10 +31,10 @@
                 <Button
                   text="Назад"
                   background="#ffffff"
-                  marginRight="10px"
+                  margin-right="10px"
                   height="42px"
-                  fontSize="16px"
-                  borderRadius="5px"
+                  font-size="16px"
+                  border-radius="5px"
                   color="#343e5c"
                   @click.prevent="cancelResearchResultsFilling"
                 >
@@ -48,32 +48,108 @@
               </div>
             </template>
             <template v-else>
-              <GridContainer
-                maxWidth="600px"
-                gridGap="6px"
-                gridTemplateColumns="repeat(auto-fit, minmax(60px, 1fr))"
-                marginTop="10px"
-              >
+              <GridContainer max-width="600px" grid-gap="6px" grid-template-columns="repeat(auto-fit, minmax(60px, 1fr))" margin-top="10px">
                 <template #grid-items>
-                  <Button :border="false" text="А-В" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Г-Ё" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Ж-К" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Л-Н" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="О-Р" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="С-У" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Ф-Ч" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Ш-Щ" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-                  <Button :border="false" text="Э-Я" :colorSwap="true" width="60px" 
-                  height="40px" fontSize="16px" color="#343E5C" background="#DFF2F8" :withIcon="false"></Button>
-              </template>
+                  <Button
+                    :border="false"
+                    text="А-В"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Г-Ё"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Ж-К"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Л-Н"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="О-Р"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="С-У"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Ф-Ч"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Ш-Щ"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                  <Button
+                    :border="false"
+                    text="Э-Я"
+                    :color-swap="true"
+                    width="60px"
+                    height="40px"
+                    font-size="16px"
+                    color="#343E5C"
+                    background="#DFF2F8"
+                    :with-icon="false"
+                  ></Button>
+                </template>
               </GridContainer>
             </template>
           </template>
@@ -81,66 +157,66 @@
           <template #body>
             <template v-if="research.id && patientResearch">
               <div v-for="result in patientResearch.researchResults" :key="result.id">
-                <GeneralItem 
-                  :ready="`${result.fillingPercentage}%`"
-                  @click="selectResult(result.id)" 
-                  margin="10px 0px" 
-                  :scale="false" 
-                >
+                <GeneralItem :ready="`${result.fillingPercentage}%`" margin="10px 0px" :scale="false" @click="selectResult(result.id)">
                   <template #general-item>
                     {{ result.date }}
                   </template>
                 </GeneralItem>
 
                 <template v-if="researchResult.id">
-                    <div class="blur"></div>
-                    <div class="research-info">
-                      <div class="tools">
-                        <Button
-                          text="Сохранить"
-                          :colorSwap="true" 
-                          width="100%"
-                          height="60px"
-                          fontSize="22px"
-                          borderRadius="5px"
-                          color="#00B5A4"
-                          background="#C7ECEA"
-                          :withIcon="false"
-                          @click="saveResult(researchResult)" 
-                        ></Button>  
+                  <div class="blur"></div>
+                  <div class="research-info">
+                    <div class="tools">
+                      <Button
+                        text="Сохранить"
+                        :color-swap="true"
+                        width="100%"
+                        height="60px"
+                        font-size="22px"
+                        border-radius="5px"
+                        color="#00B5A4"
+                        background="#C7ECEA"
+                        :with-icon="false"
+                        @click="saveResult(researchResult)"
+                      ></Button>
+                    </div>
+                    <div class="scroll-block">
+                      <div v-for="question in research.questions" :key="question.id" class="question-item">
+                        <div class="question-name">{{ question.name }}</div>
+                        <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+                        <StringProp
+                          v-if="question.valueType.isString() || question.valueType.isText()"
+                          :research-result="researchResult"
+                          :question="question"
+                        />
+                        <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
+                        <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
+                        <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
+                        <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
                       </div>
-                      <div class="scroll-block">
-                        <div class="question-item" v-for="question in research.questions" :key="question.id">
-                          <div class="question-name">{{ question.name }}</div>
-                          <!-- {{ researchResult.getAnswer(question.id).filled }} -->
-                          <StringProp
-                            v-if="question.valueType.isString() || question.valueType.isText()"
-                            :research-result="researchResult"
-                            :question="question"
-                          />
-                          <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                          <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
-                          <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                          <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
-                        </div>
+                      <div v-for="res in getCalculationsResults(research)" :key="res.name">
+                        <div>{{ res.formulaName }}</div>
+                        <div>{{ res.value }}</div>
+                        <div :style="{ color: res.color }">{{ res.result }}</div>
                       </div>
                     </div>
+                  </div>
                 </template>
               </div>
             </template>
             <template v-else>
-              <GridContainer gridGap="5px" marginTop="5px">
+              <GridContainer grid-gap="5px" margin-top="5px">
                 <template #grid-items>
-                <GeneralItem 
-                  :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
-                  v-for="researchesPoolResearch in researchesPool.researchesPoolsResearches"
-                  :key="researchesPoolResearch.id"
-                  @click="selectResearch(researchesPoolResearch.research)"
-                >
-                  <template #general-item>
-                    {{ researchesPoolResearch.research.name }}
-                  </template>
-                </GeneralItem>
+                  <GeneralItem
+                    v-for="researchesPoolResearch in researchesPool.researchesPoolsResearches"
+                    :key="researchesPoolResearch.id"
+                    :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
+                    @click="selectResearch(researchesPoolResearch.research)"
+                  >
+                    <template #general-item>
+                      {{ researchesPoolResearch.research.name }}
+                    </template>
+                  </GeneralItem>
                 </template>
               </GridContainer>
             </template>
@@ -151,8 +227,8 @@
               <Button
                 width="100%"
                 height="60px"
-                fontSize="16px"
-                borderRadius="5px"
+                font-size="16px"
+                border-radius="5px"
                 color="#00B5A4"
                 background="#C7ECEA"
                 @click.prevent="addResult(research, patientResearch.id)"
@@ -164,24 +240,25 @@
                 </template>
               </Button>
             </template>
-            <template v-else>
-
-            </template>
+            <template v-else> </template>
           </template>
         </ResearcheContainer>
       </div>
-      
     </template>
   </RightTabsContainer>
   <svg width="0" height="0" class="hidden">
-    <symbol stroke="none" id="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
     </symbol>
   </svg>
 
   <svg width="0" height="0" class="hidden">
-    <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" id="back">
-      <path d="M7.33333 7.8C13.901 7.20467 18.1253 9.738 20 15.4C16.4217 11.4227 11.9681 10.6905 7.33333 12.8667V16.6667L1 10.3333L7.33333 4V7.8Z" stroke-linecap="round" stroke-linejoin="round"></path>
+    <symbol id="back" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
+      <path
+        d="M7.33333 7.8C13.901 7.20467 18.1253 9.738 20 15.4C16.4217 11.4227 11.9681 10.6905 7.33333 12.8667V16.6667L1 10.3333L7.33333 4V7.8Z"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></path>
     </symbol>
   </svg>
 </template>
@@ -192,24 +269,27 @@ import { ElMessage } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from 'vue-router';
 
+import Formula from '@/classes/Formula';
+import FormulaResult from '@/classes/FormulaResult';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import PatientResearchesPool from '@/classes/PatientResearchesPool';
+import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
+import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
+import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RadioProp from '@/components/admin/Research/RadioProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
+import Button from '@/components/Base/Button.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue'
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -329,6 +409,30 @@ export default defineComponent({
       // Provider.store.commit('researchesResults/set');
     };
 
+    const birthDateToMonth = (birthDate: string): number => {
+      return (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
+    };
+
+    const getCalculationsResults = (research: Research): FormulaResult[] => {
+      const results: FormulaResult[] = [];
+
+      let item: { [key: string]: number } = {};
+      const monthsToResearch = researchResult.value.date.getMilliseconds() - patient.value.human.dateBirth.getMilliseconds();
+      const months = birthDateToMonth(monthsToResearch.toString());
+
+      research.questions.forEach((q: Question) => {
+        if (q.code) {
+          item[q.code] = researchResult.value.getAnswerByQuestionId(q.id as string)?.valueNumber as number;
+        }
+      });
+      research.formulas.forEach((f: Formula) => {
+        const res = f.getResult(item, patient.value.human.isMale, months);
+        res.formulaName = f.name;
+        results.push(res);
+      });
+      return results;
+    };
+
     return {
       cancelResearchResultsFilling,
       toggleResearchesPools,
@@ -352,6 +456,7 @@ export default defineComponent({
 
       Edit,
       Document,
+      getCalculationsResults,
     };
   },
 });
@@ -480,7 +585,6 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   height: 60px;
-
 }
 
 .researche-name {
@@ -517,7 +621,7 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top:0px;
+  top: 0px;
   left: 0px;
   width: 100%;
   height: 100%;
@@ -533,7 +637,7 @@ export default defineComponent({
   width: calc(99% - 22px);
   height: calc(92% - 102px);
   transform: translate(-50%, -50%);
-  background: #DFF2F8;
+  background: #dff2f8;
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   margin: 10px 10px 0 0;
@@ -554,7 +658,7 @@ export default defineComponent({
   height: auto;
   padding: 10px;
   width: calc(100% - 22px);
-  background: #DFF2F8;
+  background: #dff2f8;
 }
 
 .scroll-block {
@@ -565,7 +669,7 @@ export default defineComponent({
 }
 
 .question-item {
-  background: #DFF2F8;
+  background: #dff2f8;
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   padding: 10px;

@@ -10,6 +10,8 @@ export default class FormulaResult {
   monthFromBirth = 0;
   result = '';
   color = '';
+  value = 0;
+  formulaName = '';
 
   constructor(i?: FormulaResult) {
     ClassHelper.BuildClass(this, i);

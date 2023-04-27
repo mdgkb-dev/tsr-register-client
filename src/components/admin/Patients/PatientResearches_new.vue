@@ -2,7 +2,7 @@
   <div v-if="mounted">
     <RightTabsContainer>
       <template #icon>
-        <svg class="icon-plus" >
+        <svg class="icon-plus">
           <use xlink:href="#plus"></use>
         </svg>
       </template>
@@ -35,75 +35,75 @@
           </div>
           <div class="researches">
             <div class="researches-item">
-              <div class="green" :style="{ width: '100%'}" ></div>
+              <div class="green" :style="{ width: '100%' }"></div>
               <div class="researches-item-title">ДИАГНОЗ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '80%'}" ></div>
+              <div class="green" :style="{ width: '80%' }"></div>
               <div class="researches-item-title">МОЛЕКУЛЯРНО-ГЕНЕТИЧЕСКОЕ ПОДТВЕРЖДЕНИЕ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '50%'}" ></div>
+              <div class="green" :style="{ width: '50%' }"></div>
               <div class="researches-item-title">СОСТОЯНИЕ ПАЦИЕНТА</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '80%'}" ></div>
+              <div class="green" :style="{ width: '80%' }"></div>
               <div class="researches-item-title">РЕАБИЛИТАЦИОННЫЕ МЕРОПРИЯТИЯ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '30%'}" ></div>
+              <div class="green" :style="{ width: '30%' }"></div>
               <div class="researches-item-title">НУТРИЕВАЯ ПОДДЕРЖКА</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '10%'}" ></div>
+              <div class="green" :style="{ width: '10%' }"></div>
               <div class="researches-item-title">ПАТОГЕНЕТИЧЕСКАЯ ТЕРАПИЯ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '80%'}" ></div>
+              <div class="green" :style="{ width: '80%' }"></div>
               <div class="researches-item-title">ИНТРАТЕКАЛЬНАЯ ТЕРАПИЯ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '90%'}" ></div>
+              <div class="green" :style="{ width: '90%' }"></div>
               <div class="researches-item-title">ФУНКЦИЯ ВНЕШНЕГО ДЫХАНИЯ (ФВД)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '100%'}" ></div>
+              <div class="green" :style="{ width: '100%' }"></div>
               <div class="researches-item-title">ЭЛЕКТРОКАРДИОГРАФИЯ (ЭКГ)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">ЭХОЭНЦЕФАЛОГРАММА (ЭхоЭГ)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">ЭЛЕКТРОМИОГРАФИЯ (ЭМГ)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">ИГОЛЬЧАТАЯ ЭЛЕКТРОМИОГРАФИЯ (ЭМГ)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">СТИМУЛЯЦИОННАЯ ЭЛЕКТРОНЕЙРОМИОГРАФИЯ (ЭНМГ)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '100%'}" ></div>
+              <div class="green" :style="{ width: '100%' }"></div>
               <div class="researches-item-title">УЛЬТРАЗВУКОВОЕ ИССЛЕДОВАНИЕ СЕРДЦА</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">МАГНИТНО-РЕЗОНАНСНАЯ ТОМОГРАФИЯ</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '0%'}" ></div>
+              <div class="green" :style="{ width: '0%' }"></div>
               <div class="researches-item-title">РЕНТГЕНОДЕНСИТОМЕТРИЯ (поясничного отдела позвоночника)</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '70%'}" ></div>
+              <div class="green" :style="{ width: '70%' }"></div>
               <div class="researches-item-title">РЕНТГЕНОГРАММА ПОЗВОНОЧНИКА</div>
             </div>
             <div class="researches-item">
-              <div class="green" :style="{ width: '60%'}" ></div>
+              <div class="green" :style="{ width: '60%' }"></div>
               <div class="researches-item-title">РЕНТГЕНОГРАФИЯ ОРГАНОВ ГРУДНОЙ КЛЕТКИ</div>
             </div>
           </div>
@@ -112,8 +112,8 @@
     </RightTabsContainer>
   </div>
   <svg width="0" height="0" class="hidden">
-    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="plus">
-      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z" ></path>
+    <symbol id="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
     </symbol>
   </svg>
 </template>
@@ -128,11 +128,11 @@ import PatientResearch from '@/classes/PatientResearch';
 import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
+import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Provider from '@/services/Provider/Provider';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -150,7 +150,7 @@ export default defineComponent({
     // PropertyHeader,
     RightTabsContainer,
   },
-  setup(_, {emit}) {
+  setup(_, { emit }) {
     const mounted = ref(false);
     const selectedTab = ref('');
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
@@ -177,7 +177,6 @@ export default defineComponent({
     onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
       // showConfirmModal(submitForm, next);
     });
-    
 
     const createPatientResearch = async (research: Research) => {
       const item = PatientResearch.Create(patient.value.id, research);
@@ -218,7 +217,7 @@ export default defineComponent({
 .slider-body {
   width: 442px;
   height: auto;
-  border: 1px solid #379FFF;
+  border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
   border-bottom-left-radius: $normal-border-radius;
   background: #ffffff;
@@ -237,12 +236,12 @@ export default defineComponent({
 .slider-item {
   width: 101px;
   height: 40px;
-  border: 1px solid #B0A4C0;
+  border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
   background: $base-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
-  color: #B0A4C0;
+  color: #b0a4c0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -252,12 +251,12 @@ export default defineComponent({
 .slider-item-active {
   width: 101px;
   height: 40px;
-  border: 1px solid #379FFF;
+  border: 1px solid #379fff;
   border-radius: $normal-border-radius;
   background: $custom-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;  
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
-  color: #343E5C;
+  color: #343e5c;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -267,14 +266,14 @@ export default defineComponent({
 .tabs-item {
   width: 101px;
   height: 51px;
-  border: 1px solid #B0A4C0;
+  border: 1px solid #b0a4c0;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
   border-left: none;
   background: $base-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
-  color: #B0A4C0;
+  color: #b0a4c0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -286,14 +285,14 @@ export default defineComponent({
   position: relative;
   width: 106px;
   height: 56px;
-  border: 1px solid #379FFF;
+  border: 1px solid #379fff;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
   border-left: none;
   background: $custom-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;  
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
-  color: #343E5C;
+  color: #343e5c;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -313,7 +312,7 @@ export default defineComponent({
 .body {
   width: 100%;
   height: 100%;
-  border-right: 1px solid #379FFF;
+  border-right: 1px solid #379fff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
   z-index: 5;
 }
@@ -332,7 +331,7 @@ export default defineComponent({
 
 .filter-item {
   font-size: 16px;
-  color: #343E5C;
+  color: #343e5c;
   width: 60px;
   height: 40px;
   display: flex;
@@ -343,10 +342,9 @@ export default defineComponent({
 }
 
 .filter-item:hover {
-  background: #343E5C;
+  background: #343e5c;
   color: #ffffff;
 }
-
 
 .researches {
   // margin-top: 20px;
@@ -389,7 +387,7 @@ export default defineComponent({
 
 .researches-item-title {
   font-size: 12px;
-  color: #343E5C;
+  color: #343e5c;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -399,11 +397,10 @@ export default defineComponent({
 
 .green {
   position: absolute;
-  background: #C7ECEA;
+  background: #c7ecea;
   top: 0;
   left: 0;
   width: 80%;
   height: 100%;
 }
-
 </style>

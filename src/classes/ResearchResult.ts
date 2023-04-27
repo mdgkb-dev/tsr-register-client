@@ -5,6 +5,7 @@ import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
 import Research from '@/classes/Research';
 import ClassHelper from '@/services/ClassHelper';
+import Formula from '@/classes/Formula';
 
 export default class ResearchResult {
   id?: string;
@@ -257,5 +258,9 @@ export default class ResearchResult {
     const filledAnswers = this.answers.filter((a: Answer) => a.filled).length;
     const allAnswers = this.answers.length;
     this.fillingPercentage = Math.round((filledAnswers / allAnswers) * 100);
+  }
+
+  getAnswerByQuestionId(questionId: string): Answer | undefined {
+    return this.answers.find((a: Answer) => a.questionId === questionId);
   }
 }
