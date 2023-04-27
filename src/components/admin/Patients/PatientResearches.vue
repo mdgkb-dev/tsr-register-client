@@ -164,7 +164,22 @@
                 </GeneralItem>
 
                 <template v-if="researchResult.id">
-                      <!-- </div> -->
+                    <div class="blur"></div>
+                    <div class="research-info">
+                      <div class="tools">
+                        <Button
+                          text="Сохранить"
+                          :colorSwap="true" 
+                          width="100%"
+                          height="60px"
+                          fontSize="22px"
+                          borderRadius="5px"
+                          color="#00B5A4"
+                          background="#C7ECEA"
+                          :withIcon="false"
+                          @click="saveResult(researchResult)" 
+                        ></Button>  
+                      </div>
                       <div class="scroll-block">
                         <CollapseContainer>
                           <div v-for="question in research.questions" :key="question.id">
@@ -195,10 +210,45 @@
                             </CollapseItem>
                             <!-- <div class="question-name">{{ question.name }}</div> -->
                             <!-- {{ researchResult.getAnswer(question.id).filled }} -->
-
                           </div>
                         </CollapseContainer>
                       </div>
+                    </div>
+                      <!-- </div> -->
+                      <!-- <div class="scroll-block">
+                        <CollapseContainer>
+                          <div v-for="question in research.questions" :key="question.id">
+                            <CollapseItem 
+                              :title="question.name"
+                              :isCollaps="researchResult.getAnswer(question.id).filled"
+                              background="#DFF2F8"
+                              backgroundAttention="#EECEAF"
+                            >
+                              <template #inside-content>
+                                <div class="background-container">
+                                  <StringProp
+                                    v-if="question.valueType.isString() || question.valueType.isText()"
+                                    :research-result="researchResult"
+                                    :question="question"
+                                  />
+                                  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
+                                  <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
+                                  <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
+                                  <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+                                  <div v-for="res in getCalculationsResults(research)" :key="res.name">
+                                    <div>{{ res.formulaName }}</div>
+                                    <div>{{ res.value }}</div>
+                                    <div :style="{ color: res.color }">{{ res.result }}</div>
+                                  </div>
+                                </div>
+                              </template>
+                            </CollapseItem> -->
+                            <!-- <div class="question-name">{{ question.name }}</div> -->
+                            <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+
+                          <!-- </div>
+                        </CollapseContainer>
+                      </div> -->
                     <!-- </div> -->
                   <!-- </div> -->
                 </template>
