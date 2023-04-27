@@ -164,7 +164,7 @@
                 </GeneralItem>
 
                 <template v-if="researchResult.id">
-                      </div>
+                      <!-- </div> -->
                       <div class="scroll-block">
                         <CollapseContainer>
                           <div v-for="question in research.questions" :key="question.id">
@@ -199,8 +199,8 @@
                           </div>
                         </CollapseContainer>
                       </div>
-                    </div>
-                  </div>
+                    <!-- </div> -->
+                  <!-- </div> -->
                 </template>
               </div>
             </template>
@@ -290,9 +290,6 @@ import StringProp from '@/components/admin/Research/StringProp.vue';
 import Button from '@/components/Base/Button.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import Provider from '@/services/Provider/Provider';
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue'
 
