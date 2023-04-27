@@ -11,8 +11,11 @@ export default class Formula {
   order = 0;
   researchId?: string;
   research?: Research;
+  ageRelation = false;
+  sexRelation = false;
   @ClassHelper.GetClassConstructor(FormulaResult)
   formulaResults: FormulaResult[] = [];
+  value = 0;
 
   constructor(i?: Formula) {
     ClassHelper.BuildClass(this, i);
@@ -27,10 +30,21 @@ export default class Formula {
     return mexp.eval(parsedFormula, [], {});
   }
 
-  getResult(variables: { [key: string]: number }): string {
-    const formulaResult = this.formulaResults.find((fr: FormulaResult) => {
-      return fr.checkValueInRange(this.calculate(variables));
+  filterResults(isMale?: boolean, monthAge?: number): FormulaResult[] {
+    return this.formulaResults.filter((f: FormulaResult) => {
+      const sexPass = this.sexRelation ? f.isMale === isMale : true;
+      const agePass = this.ageRelation ? f.monthFromBirth === monthAge : true;
+      return sexPass && agePass;
     });
-    return formulaResult ? formulaResult.name : 'Значение не найдено';
+  }
+
+  getResult(variables: { [key: string]: number }, isMale?: boolean, monthAge?: number): FormulaResult {
+    const result = this.calculate(variables);
+    const formulaResult = this.filterResults(isMale, monthAge).find((fr: FormulaResult) => {
+      return fr.checkValueInRange(result);
+    });
+    const formulaResultObj = new FormulaResult(formulaResult);
+    formulaResultObj.value = result;
+    return formulaResultObj;
   }
 }

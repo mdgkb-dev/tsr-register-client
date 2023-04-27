@@ -10,6 +10,7 @@ export default class AnswerVariant {
   // registerPropertyOthers: RegisterPropertyOther[] = [];
   // registerPropertyOthersForDelete: string[] = [];
   order = 0;
+  showMoreQuestions = false;
   constructor(i?: AnswerVariant) {
     ClassHelper.BuildClass(this, i);
   }

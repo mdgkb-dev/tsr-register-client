@@ -6,6 +6,12 @@ export default class FormulaResult {
   lowRange = 0;
   highRange = 0;
   formulaId?: string;
+  isMale = false;
+  monthFromBirth = 0;
+  result = '';
+  color = '';
+  value = 0;
+  formulaName = '';
 
   constructor(i?: FormulaResult) {
     ClassHelper.BuildClass(this, i);

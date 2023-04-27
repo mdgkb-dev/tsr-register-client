@@ -3,8 +3,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
+import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 
@@ -21,11 +22,22 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const answer: Ref<Answer | undefined> = ref(undefined);
     const filledCheck = (input: string): void => {
-      answer.filled = input.length > 0;
+      if (!answer.value) {
+        return;
+      }
+      answer.value.filled = input.length > 0;
       props.researchResult.calculateFilling();
     };
+
+    onBeforeMount(() => {
+      answer.value = props.researchResult.getAnswer(props.question.id as string);
+      if (!answer.value) {
+        answer.value = Answer.Create(props.question);
+        props.researchResult.addAnswer(answer.value);
+      }
+    });
     return {
       filledCheck,
       answer,

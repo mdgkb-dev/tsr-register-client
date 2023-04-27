@@ -36,6 +36,11 @@ export default class Question {
   showSet = false;
   showRadio = false;
   isEdit = false;
+  @ClassHelper.GetClassConstructor(Question)
+  children: Question[] = [];
+  @ClassHelper.GetClassConstructor(Question)
+  parent?: Question;
+  parentId?: string;
 
   constructor(i?: Question) {
     ClassHelper.BuildClass(this, i);

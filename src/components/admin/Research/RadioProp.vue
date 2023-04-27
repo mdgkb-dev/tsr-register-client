@@ -4,10 +4,16 @@
     :key="variant.id"
     v-model="answer.answerVariantId"
     :label="variant.id"
-    @change="filledCheck(variant.id)"
+    @change="filledCheck(variant)"
   >
-    {{ variant.name }}
+    {{ variant.name }}, {{ variant.id }}
   </el-radio>
+
+  <div v-if="selectedVariant && selectedVariant.showMoreQuestions">
+    <div v-for="additionalQuestion in question.children" :key="additionalQuestion.id">
+      <StringProp :question="additionalQuestion" :research-result="researchResult" />
+    </div>
+  </div>
   <!--    <div v-if="prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop))">-->
   <!--      <el-form-item-->
   <!--        v-for="registerPropertyOther in prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop, false))"-->
@@ -32,13 +38,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
+import Answer from '@/classes/Answer';
+import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
+import StringProp from '@/components/admin/Research/StringProp.vue';
 
 export default defineComponent({
   name: 'RadioProp',
+  components: { StringProp },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -50,12 +60,32 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const answer = props.researchResult.getAnswer(props.question.id as string);
-    const filledCheck = (variantId: string): void => {
-      answer.filled = answer.answerVariantId === variantId;
+    const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
+    const answer: Ref<Answer | undefined> = ref(undefined);
+    const filledCheck = (variant: AnswerVariant): void => {
+      if (!answer.value) {
+        return;
+      }
+      selectVariant(variant);
+      answer.value.filled = answer.value.answerVariantId === variant.id;
       props.researchResult.calculateFilling();
     };
+
+    const selectVariant = (variant?: AnswerVariant): void => {
+      selectedVariant.value = variant;
+    };
+
+    onBeforeMount(() => {
+      answer.value = props.researchResult.getAnswer(props.question.id as string);
+      if (!answer.value) {
+        answer.value = Answer.Create(props.question);
+        props.researchResult.addAnswer(answer.value);
+      }
+      selectVariant(props.question.answerVariants.find((a: AnswerVariant) => a.id === answer.value?.answerVariantId));
+    });
+
     return {
+      selectedVariant,
       filledCheck,
       answer,
     };
