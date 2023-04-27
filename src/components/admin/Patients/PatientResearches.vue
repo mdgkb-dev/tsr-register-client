@@ -110,19 +110,33 @@
                         ></Button>  
                       </div>
                       <div class="scroll-block">
-                        <div class="question-item" v-for="question in research.questions" :key="question.id">
-                          <div class="question-name">{{ question.name }}</div>
-                          <!-- {{ researchResult.getAnswer(question.id).filled }} -->
-                          <StringProp
-                            v-if="question.valueType.isString() || question.valueType.isText()"
-                            :research-result="researchResult"
-                            :question="question"
-                          />
-                          <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                          <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
-                          <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                          <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
-                        </div>
+                        <CollapseContainer>
+                          <div v-for="question in research.questions" :key="question.id">
+                            <CollapseItem 
+                              :title="question.name"
+                              :isCollaps="researchResult.getAnswer(question.id).filled"
+                              background="#DFF2F8"
+                              backgroundAttention="#EECEAF"
+                            >
+                              <template #inside-content>
+                                <div class="background-container">
+                                  <StringProp
+                                    v-if="question.valueType.isString() || question.valueType.isText()"
+                                    :research-result="researchResult"
+                                    :question="question"
+                                  />
+                                  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
+                                  <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
+                                  <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
+                                  <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+                                </div>
+                              </template>
+                            </CollapseItem>
+                            <!-- <div class="question-name">{{ question.name }}</div> -->
+                            <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+
+                          </div>
+                        </CollapseContainer>
                       </div>
                     </div>
                 </template>
@@ -210,6 +224,8 @@ import Button from '@/components/Base/Button.vue'
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue'
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -234,6 +250,8 @@ export default defineComponent({
     ResearcheContainer,
     GridContainer,
     GeneralItem,
+    CollapseContainer,
+    CollapseItem,
   },
   setup() {
     const mounted = ref(false);
@@ -581,5 +599,15 @@ export default defineComponent({
   font-size: 22px;
   color: #343e5c;
   margin-bottom: 10px;
+}
+
+.background-container {
+  width: auto;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  background: #dff2f8;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #c3c3c3;
 }
 </style>
