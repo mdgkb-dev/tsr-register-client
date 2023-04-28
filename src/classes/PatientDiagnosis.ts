@@ -20,6 +20,13 @@ export default class PatientDiagnosis {
     ClassHelper.BuildClass(this, i);
   }
 
+  static Create(mkbItem: MkbItem): PatientDiagnosis {
+    const item = new PatientDiagnosis();
+    item.mkbItem = new MkbItem(mkbItem);
+    item.mkbItemId = mkbItem.id;
+    return item;
+  }
+
   // saveDiagnosis(mkbClass: MkbClass): void {
   //   if (!mkbClass.selectedDiagnosisId) {
   //     this.editMode = false;

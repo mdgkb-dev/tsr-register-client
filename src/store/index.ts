@@ -3,11 +3,15 @@ import Vuex, { StoreOptions } from 'vuex';
 import { admin } from '@/store/modules/admin';
 import auth from '@/store/modules/auth';
 import { cropper } from '@/store/modules/cropper';
+import { disabilities } from '@/store/modules/disabilities';
+import { edvs } from '@/store/modules/edvs';
 import { filter } from '@/store/modules/filter';
+import { humans } from '@/store/modules/humans';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
+import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
 import { patients } from '@/store/modules/patients';
 import { patientsResearches } from '@/store/modules/patientsResearches';
 import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
@@ -37,15 +41,13 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
+    patientDiagnosis,
     researchesResults,
     auth,
+    edvs,
+    disabilities,
     cropper,
-    // disabilities,
-    // documentTypes,
-    // drugs,
-    // files,
     filter,
-    // insuranceCompanies,
     main,
     meta,
     mkbItems,
@@ -54,9 +56,6 @@ const store: StoreOptions<RootState> = {
     researches,
     researchesPools,
     patientsResearchesPools,
-    // registerProperties,
-    // registerPropertiesToUser,
-    // registerQueries,
     registers,
     representatives,
     representativeTypes,
@@ -64,7 +63,7 @@ const store: StoreOptions<RootState> = {
     search,
     admin,
     patientsResearches,
-    // regions,
+    humans,
   },
 };
 

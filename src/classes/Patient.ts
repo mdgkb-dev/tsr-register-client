@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import Disability from '@/classes/disability/Disability';
-import Human from '@/classes/humans/Human';
+import Disability from '@/classes/Disability';
+import Human from '@/classes/Human';
 import MkbItem from '@/classes/MkbItem';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDiagnosisAnamnesis from '@/classes/PatientDiagnosisAnamnesis';
@@ -179,6 +179,7 @@ export default class Patient {
     const patientDiagnosis = new PatientDiagnosis();
     patientDiagnosis.mkbItem = new MkbItem(mkbItem);
     patientDiagnosis.mkbItemId = mkbItem.id;
+    patientDiagnosis.patientId = this.id;
     this.patientDiagnosis.push(patientDiagnosis);
   }
 
@@ -242,5 +243,17 @@ export default class Patient {
   getResearchFillingPercentage(researchId: string): number {
     const patientResearch = this.getPatientResearch(researchId);
     return patientResearch ? patientResearch.fillingPercentage : 0;
+  }
+
+  addDisability(): Disability {
+    const item = new Disability();
+    item.id = uuidv4();
+    item.patientId = this.id;
+    this.disabilities.push(item);
+    return item;
+  }
+
+  removeDisability(id: string) {
+    ClassHelper.RemoveFromClassById(id, this.disabilities, this.disabilitiesForDelete);
   }
 }

@@ -45,9 +45,9 @@ import { NavigationGuardNext } from 'vue-router';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
+// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/admin/Representatives/RepresentativeToPatientForm.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -56,7 +56,7 @@ export default defineComponent({
   name: 'AdminRepresentativePage',
   components: {
     HumanForm,
-    DocumentForm,
+    // DocumentForm,
     RepresentativeToPatientForm,
     RepresentativePageInfo,
   },

@@ -1,4 +1,4 @@
-import Human from '@/classes/humans/Human';
+import Human from '@/classes/Human';
 import RegionUser from '@/classes/RegionUser';
 import RegisterUser from '@/classes/RegisterUser';
 import ClassHelper from '@/services/ClassHelper';

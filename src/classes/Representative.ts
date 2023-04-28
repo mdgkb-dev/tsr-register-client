@@ -1,4 +1,4 @@
-import Human from '@/classes/humans/Human';
+import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import PatientRepresentative from '@/classes/PatientRepresentative';
 import User from '@/classes/User';

@@ -79,7 +79,7 @@ import { Check } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, reactive, ref, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
-import Human from '@/classes/humans/Human';
+import Human from '@/classes/Human';
 import IOption from '@/interfaces/shared/IOption';
 import dateFormat from '@/services/DateMask';
 export default defineComponent({

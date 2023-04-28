@@ -2,51 +2,46 @@
   <div class="human-form-container">
     <el-form>
       <el-form-item label="Фамилия">
-        <el-input
-          v-model="patient.human.surname"
-          placeholder="Введите фамилию"
-          formatter="firstLetterUpper"
-          @blur="checkCompleteName"
-        ></el-input>
+        <el-input v-model="patient.human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman"></el-input>
       </el-form-item>
       <el-form-item label="Имя">
-        <el-input v-model="patient.human.name" placeholder="Введите имя" @blur="checkCompleteName"></el-input>
+        <el-input v-model="patient.human.name" placeholder="Введите имя" @blur="updateHuman"></el-input>
       </el-form-item>
       <el-form-item label="Отчество">
-        <el-input v-model="patient.human.patronymic" placeholder="Введите отчество" @blur="checkCompleteName"></el-input>
+        <el-input v-model="patient.human.patronymic" placeholder="Введите отчество" @blur="updateHuman"></el-input>
       </el-form-item>
 
       <div class="line-item">
         <div class="item-left">
           <el-form-item label="Пол">
-            <el-select v-model="patient.human.isMale" placeholder="Выберите пол">
+            <el-select v-model="patient.human.isMale" placeholder="Выберите пол" @change="updateHuman">
               <el-option label="Мужчина" :value="true"></el-option>
               <el-option label="Женщина" :value="false"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="item-right">
-          <el-form-item label="Дата рождения">
-            <DatePicker v-model="patient.human.dateBirth" />
+          <el-form-item label="Дата рождения" >
+            <DatePicker v-model="patient.human.dateBirth" @change="updateHuman"/>
           </el-form-item>
         </div>
       </div>
       <el-form-item label="Адрес регистрации">
-        <el-input v-model="patient.human.address" placeholder="Введите адрес"></el-input>
+        <el-input v-model="patient.human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman"></el-input>
       </el-form-item>
 
       <div class="tab-tools">
-        <svg v-if="isToggle" class="activated-icon active" @click="toggleAddress">
+        <svg v-if="patient.human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
           <use xlink:href="#active" />
         </svg>
-        <svg v-else class="activated-icon non-active" @click="toggleAddress">
+        <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
           <use xlink:href="#non-active" />
         </svg>
         Адрес регистрации и адрес проживания совпадают
       </div>
 
       <el-form-item label="Адрес проживания">
-        <el-input v-model="patient.human.address" placeholder="Введите адрес"></el-input>
+        <el-input v-model="patient.human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -84,15 +79,17 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const form = ref();
-    const isToggle: Ref<boolean> = ref(false);
 
-    const toggleAddress = () => {
-      isToggle.value = !isToggle.value;
+    const toggleAddress = async (addressesEqual: boolean): Promise<void> => {
+      patient.value.human.setResidentialAddress(addressesEqual);
+      await updateHuman();
     };
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     // const human = props.patient.human;
-
+    const updateHuman = async (): Promise<void> => {
+      await Provider.store.dispatch('humans/update', patient.value.human);
+    };
     // const checkCompleteName = (n: string): void => {
     //   if (!!human.value.name && !!human.value.surname && !!human.value.patronymic) {
     //     emit('inputNameComplete', human.value);
@@ -103,11 +100,11 @@ export default defineComponent({
     // watch(human, sanitizeName, { deep: true });
 
     return {
+      updateHuman,
       patient,
       // checkCompleteName,
       // human,
       toggleAddress,
-      isToggle,
       form,
     };
   },

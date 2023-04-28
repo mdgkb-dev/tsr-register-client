@@ -8,7 +8,7 @@
       </div>
     </template>
     <template #body>
-      <component v-if="mounted" :is="menus[activeMenuIndex].component" :patient="patient" />
+      <component v-bind="menusProperties" :is="menus[activeMenuIndex].component" v-if="mounted" :patient="patient" />
     </template>
   </MenuContainer>
 </template>
@@ -20,13 +20,15 @@ import { NavigationGuardNext } from 'vue-router';
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
+// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
 import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
+import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
+import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
 import PatientToRepresentativeForm from '@/components/admin/Patients/PatientToRepresentativeForm.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import CustomSection from '@/services/classes/page/CustomSection';
@@ -41,7 +43,7 @@ export default defineComponent({
     PatientPageInfo,
     HumanForm,
     InsuranceForm,
-    DocumentForm,
+    // DocumentForm,
     MkbForm,
     DisabilityForm,
     PatientToRepresentativeForm,
@@ -49,21 +51,31 @@ export default defineComponent({
     DrugForm,
     PatientResearches,
     MenuContainer,
+    PatientDiagnosis,
+    PatientDocuments,
   },
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
-      CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches'),
-      CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo'),
-      CustomSection.Create('insurances', 'Страховки', 'InsuranceForm'),
-      CustomSection.Create('documents', 'Документы', 'PatientDocuments'),
-      CustomSection.Create('documents', 'Диагнозы', 'PatientDiagnosis'),
-      CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs'),
-      CustomSection.Create('disability', 'Инвалидность', 'Disability'),
-      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives'),
+      CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
+      CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
+      CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
+      CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
+      CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
+      CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
+      CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
+      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
     ];
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+
+    const menusProperties = computed(() => {
+      if (menus[activeMenuIndex.value].component === 'PatientDiagnosis') {
+        return { 'mkb-linker': patient.value };
+      }
+      return {};
+    });
+
     const customSections: Ref<CustomSection[]> = ref([]);
     const form = ref();
     const mount: Ref<boolean> = ref(false);
@@ -105,6 +117,7 @@ export default defineComponent({
     };
 
     return {
+      menusProperties,
       activeMenuIndex,
       patient,
       form,

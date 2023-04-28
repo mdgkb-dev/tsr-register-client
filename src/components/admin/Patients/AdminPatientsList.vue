@@ -30,7 +30,7 @@
           </span>
         </template>
         <template #default="scope">
-          <div class="patient-link" @click="$router.push(`/patients/${scope.row.id}`)">
+          <div class="patient-link" @click="$router.push(`/admin/patients/${scope.row.id}`)">
             {{ scope.row.human.getFullName() }}
           </div>
         </template>

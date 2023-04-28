@@ -4,7 +4,7 @@ import DocumentType from '@/classes/documents/DocumentType';
 import DocumentTypeField from '@/classes/documents/DocumentTypeField';
 import FileInfo from '@/classes/files/FileInfo';
 import Contact from '@/classes/humans/Contact';
-import Human from '@/classes/humans/Human';
+import Human from '@/classes/Human';
 import IDocument from '@/interfaces/documents/IDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IHuman from '@/interfaces/IHuman';

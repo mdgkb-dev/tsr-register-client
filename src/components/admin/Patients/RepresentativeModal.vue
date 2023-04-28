@@ -63,8 +63,8 @@ import { useStore } from 'vuex';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
+// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MessageSuccess from '@/services/classes/messages/MessageSuccess';
 
@@ -72,7 +72,7 @@ export default defineComponent({
   name: 'RepresentativeModal',
   components: {
     HumanForm,
-    DocumentForm,
+    // DocumentForm,
     RepresentativePageInfo,
   },
   props: {
