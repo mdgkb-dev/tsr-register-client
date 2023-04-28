@@ -1,5 +1,9 @@
 <template>
-  <div class="tab">
+  <div class="tab"
+    :style="{
+      marginTop: marginTop
+    }"
+  >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
       <use xlink:href="#arrow-down"></use>
     </svg>
@@ -7,7 +11,7 @@
       <use xlink:href="#arrow-up"></use>
     </svg>
     <label :for="tabId" @click="handleItemClick">
-      <div :style="{ cursor: isCollaps ? 'pointer' : 'default', background: isCollaps ? background : backgroundAttention,}" class="tab-name">
+      <div :style="{ cursor: isCollaps ? 'pointer' : 'default', background: changeColor ? background : backgroundAttention,}" class="tab-name">
         <div class="inside-icon">
           <slot name="icon" />
         </div>
@@ -20,7 +24,7 @@
         </div>
       </div>
     </label>
-    <div :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: isCollaps ? background : backgroundAttention, }" :class="collapsed ? 'tab-content-down' : 'tab-content-up'">
+    <div :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: changeColor ? background : backgroundAttention, }" :class="collapsed ? 'tab-content-down' : 'tab-content-up'">
       <slot name="inside-content" />
     </div>
   </div>
@@ -52,11 +56,13 @@ export default defineComponent({
     showToolsOnHover: { type: Boolean as PropType<boolean>, default: true },
     background: {type: String as PropType<string>, required: false, default: '#ffffff'},
     backgroundAttention: {type: String as PropType<string>, required: false, default: '#ffffff'},
+    changeColor: { type: Boolean as PropType<boolean>, default: false },
+    marginTop: { type: String as PropType<string>, default: '10px' },
   },
   emits: ['changeActiveId'],
 
   setup(props, { emit }) {
-    const collapsed: Ref<boolean> = ref(true);
+    const collapsed: Ref<boolean> = ref(false);
 
     const handleItemClick = () => {
       collapsed.value = !collapsed.value;
