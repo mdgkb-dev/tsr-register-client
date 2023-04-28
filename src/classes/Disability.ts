@@ -1,4 +1,6 @@
-import Edv from '@/classes/disability/Edv';
+import { v4 as uuidv4 } from 'uuid';
+
+import Edv from '@/classes/Edv';
 import Patient from '@/classes/Patient';
 import Period from '@/classes/shared/Period';
 import IEdv from '@/interfaces/disabilities/IEdv';
@@ -37,5 +39,17 @@ export default class Disability {
     });
 
     return fileInfos;
+  }
+
+  addEdv(): Edv {
+    const edv = new Edv();
+    edv.id = uuidv4();
+    edv.disabilityId = this.id;
+    this.edvs.push(edv);
+    return edv;
+  }
+
+  removeEdv(id: string) {
+    ClassHelper.RemoveFromClassById(id, this.edvs, []);
   }
 }

@@ -137,7 +137,7 @@ import IFileAnchor from '@/interfaces/files/IFileAnchor';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import dateFormat from '@/services/DateMask';
 export default defineComponent({
-  name: 'DocumentForm',
+  name: 'PatientDocuments',
   components: {
     TableButtonGroup,
   },
