@@ -73,11 +73,6 @@ const mutations: MutationTree<State> = {
   //   if (index !== -1) state.item.headCircumference.splice(index, 1);
   //   if (item.id) state.item.headCircumferenceForDelete.push(item.id);
   // },
-  // addDisability(state) {
-  //   const disability = new Disability();
-  //   disability.id = uuidv4();
-  //   state.item.disabilities.push(disability);
-  // },
   // setEdvDateEnd(state, id: string) {
   //   state.item.disabilities = state.item.disabilities.map((disability: IDisability) => {
   //     disability.edvs = disability.edvs.map((i: IEdv) => {
@@ -92,26 +87,7 @@ const mutations: MutationTree<State> = {
   //     return disability;
   //   });
   // },
-  // addEdv(state, disabilityId: string) {
-  //   const edv = new Edv();
-  //   edv.id = uuidv4();
-  //   edv.disabilityId = disabilityId;
-  //   const disabilitiy = state.item.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
-  //   if (!disabilitiy) return;
-  //   disabilitiy.edvs.push(edv);
-  // },
-  // removeEdv(state, edv: IEdv) {
-  //   const disabilitiy = state.item.disabilities.find((d: IDisability): boolean => d.id === edv.disabilityId);
-  //   if (!disabilitiy) return;
-  //   const edvIndex = disabilitiy.edvs.findIndex((e: IEdv): boolean => e.id === edv.id);
-  //   if (edvIndex < 0) return;
-  //   disabilitiy.edvs.splice(edvIndex, 1);
-  // },
-  // removeDisability(state, item: IDisability) {
-  //   const index = state.item.disabilities.indexOf(item);
-  //   if (index !== -1) state.item.disabilities.splice(index, 1);
-  //   if (item.id) state.item.disabilitiesForDelete.push(item.id);
-  // },
+
   // addDocument(state, item: IDocument) {
   //   state.item.human.documents.push(item);
   // },

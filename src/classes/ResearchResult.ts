@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Answer from '@/classes/Answer';
+import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import RegisterPropertyToPatientToFile from '@/classes/RegisterPropertyToPatientToFile';
 import Research from '@/classes/Research';
 import ClassHelper from '@/services/ClassHelper';
-import Formula from '@/classes/Formula';
 
 export default class ResearchResult {
   id?: string;
@@ -262,5 +262,16 @@ export default class ResearchResult {
 
   getAnswerByQuestionId(questionId: string): Answer | undefined {
     return this.answers.find((a: Answer) => a.questionId === questionId);
+  }
+
+  calculateScores(answerVariants: AnswerVariant[]): number {
+    let sum = 0;
+    this.answers.forEach((a: Answer) => {
+      const selectedVariant = answerVariants.find((av: AnswerVariant) => av.id === a.answerVariantId);
+      if (selectedVariant) {
+        sum += selectedVariant.score;
+      }
+    });
+    return sum;
   }
 }

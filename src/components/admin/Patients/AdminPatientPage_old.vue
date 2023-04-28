@@ -88,12 +88,12 @@ import { NavigationGuardNext } from 'vue-router';
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
+// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
 import PatientToRepresentativeForm from '@/components/admin/Patients/PatientToRepresentativeForm.vue';
-import DocumentForm from '@/components/DocumentForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import CustomSection from '@/services/classes/page/CustomSection';
@@ -108,7 +108,7 @@ export default defineComponent({
     PatientPageInfo,
     HumanForm,
     InsuranceForm,
-    DocumentForm,
+    // DocumentForm,
     MkbForm,
     DisabilityForm,
     PatientToRepresentativeForm,

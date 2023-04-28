@@ -21,8 +21,8 @@
           </el-form-item>
         </div>
         <div class="item-right">
-          <el-form-item label="Дата рождения" >
-            <DatePicker v-model="patient.human.dateBirth" @change="updateHuman"/>
+          <el-form-item label="Дата рождения" @change="updateHuman">
+            <DatePicker v-model="patient.human.dateBirth" />
           </el-form-item>
         </div>
       </div>

@@ -1,300 +1,334 @@
 <template>
   <div class="wrapper">
-    <el-button v-if="isEditMode" style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
-    <el-table
-      :data="disabilities"
-      style="width: 950px; margin-bottom: 20px"
-      row-key="id"
-      :default-expand-all="true"
-      :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"
-      class="table-shadow"
-      header-row-class-name="header-style"
-    >
-      <el-table-column label="" width="150" align="center">
-        <template #default="scope">
-          <span v-if="isEdv(scope.row)">ЕДВ</span>
-          <span v-else>Инвалидность</span>
-        </template>
-      </el-table-column>
+    <el-button style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
+    <div v-for="disability in patient.disabilities" :key="disability.id">
+      <div>{{ disability.id }} <el-button @click="removeDisability(disability.id)">Удалить инвалидность</el-button></div>
 
-      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250" align="center">
-        <template #default="scope">
-          <el-form-item
-            v-if="isEditMode"
-            :prop="getProp(scope, true)"
-            :rules="[{ required: true, message: 'Пожалуйста, укажите дату начала', trigger: 'change' }]"
-            label-width="0"
-            style="margin-bottom: 0"
-          >
-            <el-date-picker
-              ref="picker"
-              v-model="scope.row.period.dateStart"
-              format="DD.MM.YYYY"
-              placeholder="Выберите дату"
-              type="date"
-              @change="isEdv(scope.row) ? edvDateStartChangeHandler(scope.row.id) : null"
-            ></el-date-picker>
-          </el-form-item>
-          <span v-else>{{ $dateTimeFormatter.format(scope.row.period.dateStart) }}</span>
-        </template>
-      </el-table-column>
+      <el-button style="margin-bottom: 20px" @click="addEdv(disability)">Добавить ЕДВ</el-button>
+      <div v-for="edv in disability.edvs" :key="edv.id">
+        {{ edv.id }} <el-button @click="removeEdv(disability, edv.id)">Удалить едв</el-button>
+        <div
+          v-for="parameter in [
+            { letter: 'A', parameter: edv.parameter1 },
+            { letter: 'B', parameter: edv.parameter2 },
+            { letter: 'C', parameter: edv.parameter3 },
+          ]"
+          :key="parameter.letter"
+          @click="changeParameter(edv, parameter.letter)"
+        >
+          {{ parameter.letter }} {{ parameter.parameter }}
+        </div>
+      </div>
+    </div>
+    <!--    <el-table-->
+    <!--      :data="disabilities"-->
+    <!--      style="width: 950px; margin-bottom: 20px"-->
+    <!--      row-key="id"-->
+    <!--      :default-expand-all="true"-->
+    <!--      :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"-->
+    <!--      class="table-shadow"-->
+    <!--      header-row-class-name="header-style"-->
+    <!--    >-->
+    <!--      <el-table-column label="" width="150" align="center">-->
+    <!--        <template #default="scope">-->
+    <!--          <span v-if="isEdv(scope.row)">ЕДВ</span>-->
+    <!--          <span v-else>Инвалидность</span>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
 
-      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250" align="center">
-        <template #default="scope">
-          <el-form-item
-            v-if="isEditMode"
-            :prop="getProp(scope, false)"
-            :rules="[{ required: true, message: 'Пожалуйста, укажите дату конца', trigger: 'change' }]"
-            label-width="0"
-            style="margin-bottom: 0"
-          >
-            <el-date-picker
-              v-model="scope.row.period.dateEnd"
-              type="date"
-              :disabled-date="(time) => disabledDate(time, scope.row.period.dateStart)"
-              format="DD.MM.YYYY"
-              placeholder="Выберите дату"
-              :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"
-            ></el-date-picker>
-          </el-form-item>
-          <span v-else>{{ $dateTimeFormatter.format(scope.row.period.dateEnd) }}</span>
-        </template>
-      </el-table-column>
+    <!--      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250" align="center">-->
+    <!--        <template #default="scope">-->
+    <!--          <el-form-item-->
+    <!--            :prop="getProp(scope, true)"-->
+    <!--            :rules="[{ required: true, message: 'Пожалуйста, укажите дату начала', trigger: 'change' }]"-->
+    <!--            label-width="0"-->
+    <!--            style="margin-bottom: 0"-->
+    <!--          >-->
+    <!--            <el-date-picker-->
+    <!--              ref="picker"-->
+    <!--              v-model="scope.row.period.dateStart"-->
+    <!--              format="DD.MM.YYYY"-->
+    <!--              placeholder="Выберите дату"-->
+    <!--              type="date"-->
+    <!--              @change="isEdv(scope.row) ? edvDateStartChangeHandler(scope.row.id) : null"-->
+    <!--            ></el-date-picker>-->
+    <!--          </el-form-item>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
 
-      <el-table-column label="Инвалидность" width="180" sortable align="center">
-        <template #default="scope">
-          <div v-if="isEdv(scope.row)">
-            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1"
-              >A</el-button
-            >
-            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2"
-              >B</el-button
-            >
-            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3"
-              >C</el-button
-            >
-          </div>
-        </template>
-      </el-table-column>
+    <!--      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250" align="center">-->
+    <!--        <template #default="scope">-->
+    <!--          <el-form-item-->
+    <!--            :prop="getProp(scope, false)"-->
+    <!--            :rules="[{ required: true, message: 'Пожалуйста, укажите дату конца', trigger: 'change' }]"-->
+    <!--            label-width="0"-->
+    <!--            style="margin-bottom: 0"-->
+    <!--          >-->
+    <!--            <el-date-picker-->
+    <!--              v-model="scope.row.period.dateEnd"-->
+    <!--              type="date"-->
+    <!--              :disabled-date="(time) => disabledDate(time, scope.row.period.dateStart)"-->
+    <!--              format="DD.MM.YYYY"-->
+    <!--              placeholder="Выберите дату"-->
+    <!--              :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"-->
+    <!--            ></el-date-picker>-->
+    <!--          </el-form-item>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
 
-      <el-table-column>
-        <template #default="scope">
-          <div v-if="isEditMode">
-            <div v-if="!isEdv(scope.row)" class="card-button-group">
-              <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">
-                <el-button :icon="DocumentAdd" @click="addEdv(scope.row)"></el-button>
-              </el-tooltip>
-              <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">
-                <el-button :icon="Delete" @click.prevent="removeDisability(scope.row)"></el-button>
-              </el-tooltip>
-            </div>
-            <div v-else class="card-button-group">
-              <el-button-group v-if="!scope.row.fileInfo">
-                <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">
-                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()"></el-button>
-                </el-tooltip>
-                <input
-                  :ref="scope.row.id"
-                  type="file"
-                  hidden
-                  @change="
-                    (event) => {
-                      addReplaceFile(event, scope.row.id);
-                    }
-                  "
-                />
-              </el-button-group>
+    <!--      <el-table-column label="Инвалидность" width="180" sortable align="center">-->
+    <!--        <template #default="scope">-->
+    <!--          <div v-if="isEdv(scope.row)">-->
+    <!--            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1"-->
+    <!--              >A</el-button-->
+    <!--            >-->
+    <!--            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2"-->
+    <!--              >B</el-button-->
+    <!--            >-->
+    <!--            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3"-->
+    <!--              >C</el-button-->
+    <!--            >-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
 
-              <el-button-group v-else>
-                <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">
-                  <el-button disabled :icon="DocumentChecked"></el-button>
-                </el-tooltip>
-                <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">
-                  <el-button :data-file-id="scope.row.fileInfo.id" :icon="Download" @click.prevent="downloadFile"></el-button>
-                </el-tooltip>
-                <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">
-                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()" />
-                </el-tooltip>
-                <input
-                  :ref="scope.row.id"
-                  type="file"
-                  hidden
-                  @change="
-                    (event) => {
-                      addReplaceFile(event, scope.row.id);
-                    }
-                  "
-                />
-                <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">
-                  <el-button :icon="DocumentDelete" @click.prevent="removeFile(scope.row.id)" />
-                </el-tooltip>
-              </el-button-group>
+    <!--      <el-table-column>-->
+    <!--        <template #default="scope">-->
+    <!--          <div>-->
+    <!--            <div v-if="!isEdv(scope.row)" class="card-button-group">-->
+    <!--              <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">-->
+    <!--                <el-button :icon="DocumentAdd" @click="addEdv(scope.row)"></el-button>-->
+    <!--              </el-tooltip>-->
+    <!--              <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">-->
+    <!--                <el-button :icon="Delete" @click.prevent="removeDisability(scope.row)"></el-button>-->
+    <!--              </el-tooltip>-->
+    <!--            </div>-->
+    <!--            <div v-else class="card-button-group">-->
+    <!--              <el-button-group v-if="!scope.row.fileInfo">-->
+    <!--                <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">-->
+    <!--                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()"></el-button>-->
+    <!--                </el-tooltip>-->
+    <!--                <input-->
+    <!--                  :ref="scope.row.id"-->
+    <!--                  type="file"-->
+    <!--                  hidden-->
+    <!--                  @change="-->
+    <!--                    (event) => {-->
+    <!--                      addReplaceFile(event, scope.row.id);-->
+    <!--                    }-->
+    <!--                  "-->
+    <!--                />-->
+    <!--              </el-button-group>-->
 
-              <el-tooltip effect="light" placement="top-end" content="Удалить справку">
-                <el-button :icon="Delete" @click.prevent="removeEdv(scope.row)"></el-button>
-              </el-tooltip>
-            </div>
-          </div>
-          <div v-else></div>
-        </template>
-      </el-table-column>
-    </el-table>
-    <a ref="fileAnchor" style="display: none" />
+    <!--              <el-button-group v-else>-->
+    <!--                <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">-->
+    <!--                  <el-button disabled :icon="DocumentChecked"></el-button>-->
+    <!--                </el-tooltip>-->
+    <!--                <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">-->
+    <!--                  <el-button :data-file-id="scope.row.fileInfo.id" :icon="Download" @click.prevent="downloadFile"></el-button>-->
+    <!--                </el-tooltip>-->
+    <!--                <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">-->
+    <!--                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()" />-->
+    <!--                </el-tooltip>-->
+    <!--                <input-->
+    <!--                  :ref="scope.row.id"-->
+    <!--                  type="file"-->
+    <!--                  hidden-->
+    <!--                  @change="-->
+    <!--                    (event) => {-->
+    <!--                      addReplaceFile(event, scope.row.id);-->
+    <!--                    }-->
+    <!--                  "-->
+    <!--                />-->
+    <!--                <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">-->
+    <!--                  <el-button :icon="DocumentDelete" @click.prevent="removeFile(scope.row.id)" />-->
+    <!--                </el-tooltip>-->
+    <!--              </el-button-group>-->
+
+    <!--              <el-tooltip effect="light" placement="top-end" content="Удалить справку">-->
+    <!--                <el-button :icon="Delete" @click.prevent="removeEdv(scope.row)"></el-button>-->
+    <!--              </el-tooltip>-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--      </el-table-column>-->
+    <!--    </el-table>-->
+    <!--    <a ref="fileAnchor" style="display: none" />-->
   </div>
 </template>
 
 <script lang="ts">
 import { Delete, DocumentAdd, DocumentChecked, DocumentDelete, Download, Paperclip } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, ref } from 'vue';
-import { useStore } from 'vuex';
 
-import FileInfo from '@/classes/files/FileInfo';
-import IDisability from '@/interfaces/disabilities/IDisability';
-import IEdv from '@/interfaces/disabilities/IEdv';
-import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
-import IFileAnchor from '@/interfaces/files/IFileAnchor';
+import Disability from '@/classes/Disability';
+import Patient from '@/classes/Patient';
+import Provider from '@/services/Provider/Provider';
+import Edv from '@/classes/Edv';
 
 export default defineComponent({
   name: 'DisabilityForm',
   setup() {
-    const store = useStore();
-
-    const birthDate: ComputedRef<string> = computed(() => store.getters['patients/birthDate']);
-    const disabilities: ComputedRef<IDisability[]> = computed(() => store.getters['patients/disabilities']);
+    const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const fileAnchor = ref();
-    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
-    const addDisability = (): void => store.commit('patients/addDisability');
-
-    const addEdv = (disability: IDisability): void => {
-      store.commit('patients/addEdv', disability.id);
+    const addDisability = async (): Promise<void> => {
+      const item = patient.value.addDisability();
+      await Provider.store.dispatch('disabilities/create', item);
     };
 
-    const removeEdv = (edv: IEdv): void => {
-      store.commit('patients/removeEdv', edv);
+    const addEdv = async (disability: Disability): Promise<void> => {
+      const item = disability.addEdv();
+      await Provider.store.dispatch('edvs/create', item);
     };
 
-    const getProp = (scope: any, isStartDate: boolean): string | undefined => {
-      if (isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
-        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateStart`;
-      }
-      if (!isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
-        return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateEnd`;
-      }
-      const disabilityIndex = disabilities.value.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
-
-      if (disabilityIndex < 0) {
-        return undefined;
-      }
-
-      let edvIndex = -1;
-      if (disabilities.value[disabilityIndex].edvs) {
-        edvIndex = disabilities.value[disabilityIndex].edvs.indexOf(scope.row);
-      }
-      if (edvIndex >= 0 && isStartDate) {
-        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateStart`;
-      }
-      if (edvIndex >= 0 && !isStartDate) {
-        return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateEnd`;
-      }
-
-      return undefined;
+    const removeDisability = async (id: string): Promise<void> => {
+      patient.value.removeDisability(id);
+      await Provider.store.dispatch('disabilities/remove', id);
     };
 
-    const removeDisability = (item: IDisability): void => {
-      store.commit('patients/removeDisability', item);
+    const removeEdv = async (disability: Disability, id: string): Promise<void> => {
+      disability.removeEdv(id);
+      await Provider.store.dispatch('edvs/remove', id);
     };
 
-    const edvDateStartChangeHandler = (id: string): void => {
-      store.commit('patients/setEdvDateEnd', id);
-    };
-    const disabledDate = (time: Date, dateStart: Date) => {
-      if (dateStart) {
-        return time.getTime() < new Date(dateStart).getTime();
+    const changeParameter = async (edv: Edv, parameterLetter: string): Promise<void> => {
+      if (parameterLetter === 'A') {
+        edv.parameter1 = !edv.parameter1;
       }
-    };
-
-    const validateDisabilityDates = (_: unknown, __: unknown, callback: MyCallbackWithOptParam): void => {
-      disabilities.value.forEach((disability: IDisability) => {
-        if (disability.dateIsCorrect()) callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
-      });
-      callback();
-    };
-
-    const isEdv = (row: { ['parameter1']: boolean | undefined }): boolean => {
-      return typeof row.parameter1 === 'boolean';
-    };
-
-    const addReplaceFile = (event: InputEvent, edvId: string): void => {
-      const target = event.target as HTMLInputElement;
-      if (!target || !target.files) {
-        return;
+      if (parameterLetter === 'B') {
+        edv.parameter2 = !edv.parameter2;
       }
-      const file = Array.from(target.files)[0];
-
-      disabilities.value.forEach((i: IDisability) => {
-        i.edvs.forEach((e: IEdv) => {
-          if (e.id === edvId) {
-            const newInfo = FileInfo.CreateDraft(file, edvId);
-            e.fileInfoId = newInfo.id;
-            e.fileInfo = newInfo;
-          }
-        });
-      });
+      if (parameterLetter === 'C') {
+        edv.parameter3 = !edv.parameter3;
+      }
+      await Provider.store.dispatch('edvs/update', edv);
     };
 
-    const removeFile = (id: string): void => {
-      disabilities.value.forEach((i: IDisability) => {
-        i.edvs.forEach((e: IEdv) => {
-          if (e.id === id) {
-            e.fileInfoId = undefined;
-            e.fileInfo = undefined;
-          }
-        });
-      });
-    };
+    // const getProp = (scope: any, isStartDate: boolean): string | undefined => {
+    //   if (isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
+    //     return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateStart`;
+    //   }
+    //   if (!isStartDate && !isEdv(scope.row) && disabilities.value.indexOf(scope.row) >= 0) {
+    //     return `disabilities.${disabilities.value.indexOf(scope.row)}.period.dateEnd`;
+    //   }
+    //   const disabilityIndex = disabilities.value.findIndex((d: IDisability) => d.id === scope.row.disabilityId);
+    //
+    //   if (disabilityIndex < 0) {
+    //     return undefined;
+    //   }
+    //
+    //   let edvIndex = -1;
+    //   if (disabilities.value[disabilityIndex].edvs) {
+    //     edvIndex = disabilities.value[disabilityIndex].edvs.indexOf(scope.row);
+    //   }
+    //   if (edvIndex >= 0 && isStartDate) {
+    //     return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateStart`;
+    //   }
+    //   if (edvIndex >= 0 && !isStartDate) {
+    //     return `disabilities.${disabilityIndex}.edvs.${edvIndex}.period.dateEnd`;
+    //   }
+    //
+    //   return undefined;
+    // };
 
-    const downloadFile = async (event: MouseEvent): Promise<void> => {
-      if (!event || !event.target) {
-        return;
-      }
-
-      const anchorElement = (event.target as HTMLSpanElement).parentElement as HTMLAnchorElement;
-      const { fileId } = anchorElement.dataset;
-
-      if (!fileId) {
-        return;
-      }
-
-      try {
-        await store.dispatch('files/generateLink', fileId);
-      } catch (error) {
-        return;
-      }
-
-      const anchor: IFileAnchor = store.getters['files/fileAnchor'];
-      fileAnchor.value.href = anchor.href;
-      fileAnchor.value.download = String(anchor.download);
-      fileAnchor.value.click();
-    };
+    // const removeDisability = (item: IDisability): void => {
+    //   store.commit('patients/removeDisability', item);
+    // };
+    //
+    // const edvDateStartChangeHandler = (id: string): void => {
+    //   store.commit('patients/setEdvDateEnd', id);
+    // };
+    // const disabledDate = (time: Date, dateStart: Date) => {
+    //   if (dateStart) {
+    //     return time.getTime() < new Date(dateStart).getTime();
+    //   }
+    // };
+    //
+    // const validateDisabilityDates = (_: unknown, __: unknown, callback: MyCallbackWithOptParam): void => {
+    //   disabilities.value.forEach((disability: IDisability) => {
+    //     if (disability.dateIsCorrect()) callback(new Error('Дата начала инвалидности не может быть больше даты окончания'));
+    //   });
+    //   callback();
+    // };
+    //
+    // const isEdv = (row: { ['parameter1']: boolean | undefined }): boolean => {
+    //   return typeof row.parameter1 === 'boolean';
+    // };
+    //
+    // const addReplaceFile = (event: InputEvent, edvId: string): void => {
+    //   const target = event.target as HTMLInputElement;
+    //   if (!target || !target.files) {
+    //     return;
+    //   }
+    //   const file = Array.from(target.files)[0];
+    //
+    //   disabilities.value.forEach((i: IDisability) => {
+    //     i.edvs.forEach((e: IEdv) => {
+    //       if (e.id === edvId) {
+    //         const newInfo = FileInfo.CreateDraft(file, edvId);
+    //         e.fileInfoId = newInfo.id;
+    //         e.fileInfo = newInfo;
+    //       }
+    //     });
+    //   });
+    // };
+    //
+    // const removeFile = (id: string): void => {
+    //   disabilities.value.forEach((i: IDisability) => {
+    //     i.edvs.forEach((e: IEdv) => {
+    //       if (e.id === id) {
+    //         e.fileInfoId = undefined;
+    //         e.fileInfo = undefined;
+    //       }
+    //     });
+    //   });
+    // };
+    //
+    // const downloadFile = async (event: MouseEvent): Promise<void> => {
+    //   if (!event || !event.target) {
+    //     return;
+    //   }
+    //
+    //   const anchorElement = (event.target as HTMLSpanElement).parentElement as HTMLAnchorElement;
+    //   const { fileId } = anchorElement.dataset;
+    //
+    //   if (!fileId) {
+    //     return;
+    //   }
+    //
+    //   try {
+    //     await store.dispatch('files/generateLink', fileId);
+    //   } catch (error) {
+    //     return;
+    //   }
+    //
+    //   const anchor: IFileAnchor = store.getters['files/fileAnchor'];
+    //   fileAnchor.value.href = anchor.href;
+    //   fileAnchor.value.download = String(anchor.download);
+    //   fileAnchor.value.click();
+    // };
 
     return {
-      disabilities,
-      fileAnchor,
-      downloadFile,
-      removeFile,
-      addReplaceFile,
-      isEdv,
-      getProp,
+      changeParameter,
       removeDisability,
-      disabledDate,
-      validateDisabilityDates,
-      addEdv,
       removeEdv,
-      birthDate,
+      patient,
+      // disabilities,
+      fileAnchor,
+      // downloadFile,
+      // removeFile,
+      // addReplaceFile,
+      // isEdv,
+      // getProp,
+      // removeDisability,
+      // disabledDate,
+      // validateDisabilityDates,
+      addEdv,
+      // removeEdv,
+      // birthDate,
       addDisability,
-      edvDateStartChangeHandler,
-      isEditMode,
+      // edvDateStartChangeHandler,
       DocumentAdd,
       Delete,
       Paperclip,
