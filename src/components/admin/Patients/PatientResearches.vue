@@ -185,9 +185,11 @@
                           <div v-for="question in research.questions" :key="question.id">
                             <CollapseItem 
                               :title="question.name"
-                              :isCollaps="researchResult.getAnswer(question.id).filled"
+                              :isCollaps="true"
+                              :changeColor="researchResult.getAnswer(question.id).filled"
                               background="#DFF2F8"
                               backgroundAttention="#EECEAF"
+                              marginTop="20px"
                             >
                               <template #inside-content>
                                 <div class="background-container">
