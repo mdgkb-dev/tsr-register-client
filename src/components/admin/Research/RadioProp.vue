@@ -14,27 +14,44 @@
       <StringProp :question="additionalQuestion" :research-result="researchResult" />
     </div>
   </div>
-  <!--    <div v-if="prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop))">-->
-  <!--      <el-form-item-->
-  <!--        v-for="registerPropertyOther in prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop, false))"-->
-  <!--        :key="registerPropertyOther.id"-->
-  <!--        :label="registerPropertyOther.name"-->
-  <!--      >-->
-  <!--        <el-input-->
-  <!--          :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"-->
-  <!--          @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"-->
-  <!--        />-->
-  <!--      </el-form-item>-->
-  <!--    </div>-->
-  <!--    <el-input-->
-  <!--      v-if="prop.withOther"-->
-  <!--      style="margin-top: 10px"-->
-  <!--      placeholder="Другое, указать"-->
-  <!--      type="textarea"-->
-  <!--      :rows="3"-->
-  <!--      :model-value="registerGroupToPatient.getOtherPropertyValue(prop)"-->
-  <!--      @input="registerGroupToPatient.setRegisterPropertyValueOther($event, prop)"-->
-  <!--    />-->
+  <el-form class="option-field">
+    <el-form-item label="Указать год постановки диагноза">
+      <!-- <el-input  placeholder="Введите нужную информацию"></el-input> -->
+      <div class="line"><DatePicker  /></div>
+    </el-form-item>
+    <el-form-item label="Причины обострений">
+      <el-input placeholder="Введите нужную информацию"></el-input>
+      <!-- <DatePicker  /> -->
+    </el-form-item>
+    <el-form-item label="Добавить комментарий">
+      <el-input placeholder="Введите нужную информацию" type="textarea"></el-input>
+      <!-- <DatePicker  /> -->
+    </el-form-item>    
+    <!-- <el-input-item label="Причины обострений">
+      <el-input  placeholder="Введите нужную информацию"></el-input>
+    </el-input-item> -->
+  </el-form>
+     <!-- <div v-if="prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop))">
+       <el-form-item
+         v-for="registerPropertyOther in prop.getOthers(registerGroupToPatient.getRegisterPropertyValue(prop, false))"
+         :key="registerPropertyOther.id"
+         :label="registerPropertyOther.name"
+       >
+         <el-input
+           :model-value="registerGroupToPatient.getRegisterPropertyOthers(registerPropertyOther.id)"
+           @input="registerGroupToPatient.setRegisterPropertyOthers($event, registerPropertyOther.id)"
+         />
+       </el-form-item>
+     </div>
+     <el-input
+       v-if="prop.withOther"
+       style="margin-top: 10px"
+       placeholder="Другое, указать"
+       type="textarea"
+       :rows="3"
+       :model-value="registerGroupToPatient.getOtherPropertyValue(prop)"
+       @input="registerGroupToPatient.setRegisterPropertyValueOther($event, prop)"
+     /> -->
 </template>
 
 <script lang="ts">
@@ -45,10 +62,11 @@ import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import StringProp from '@/components/admin/Research/StringProp.vue';
+import DatePicker from '@/services/components/DatePicker.vue';
 
 export default defineComponent({
   name: 'RadioProp',
-  components: { StringProp },
+  components: { StringProp, DatePicker },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -95,19 +113,104 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
-.register-property-block {
-  background-color: #eef1f6;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  h3 {
-    margin-top: 0;
+@import '@/assets/styles/elements/base-style.scss';
+  .register-property-block {
+    background-color: #eef1f6;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    h3 {
+      margin-top: 0;
+    }
   }
-}
-.el-form-item {
-  margin: 0;
-}
-.el-divider {
-  margin: 10px 0;
-}
+  .el-form-item {
+    margin: 0;
+  }
+  .el-divider {
+    margin: 10px 0;
+  }
+
+  :deep(.el-form-item) {
+    display: block;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  :deep(.el-form-item__content) {
+    width: 100%;
+  }
+
+  :deep(.el-input__inner) {
+    border-radius: 40px;
+    padding-left: 25px;
+    height: 32px;
+    width: 100%;
+    display: flex;
+    font-family: Comfortaa, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-input__inner::placeholder) {
+    color: $site_light_pink;
+  }
+
+  :deep(.el-select .el-input .el-select__caret) {
+    color: #343e5c;
+    font-size: 15px;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
+  .el-select {
+    width: 100%;
+  }
+
+  :deep(.el-input__prefix) {
+    left: 230px;
+    top: -3px;
+  }
+
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
+  :deep(.el-input__icon) {
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-input__suffix) {
+    top: -3px;
+  }
+
+  :deep(.el-form-item__label) {
+    color: $site_light_pink;
+    padding: 0 !important;
+    text-transform: uppercase;
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  :deep(.el-input__prefix) {
+    left: auto;
+    right: 10px;
+  }
+
+  :deep(.el-textarea__inner) {
+    color: $site_dark_gray;
+    padding-left: 25px;
+  }
+
+  :deep(.el-textarea__inner::placeholder) {
+    color: $site_light_pink;
+  }
+
+  .option-field {
+    margin-top: 20px;
+  }
+
+  .line {
+    max-width: 300px;
+  }
 </style>
