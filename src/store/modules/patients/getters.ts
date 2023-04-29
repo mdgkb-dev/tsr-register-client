@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { GetterTree } from 'vuex';
 
-import Human from '@/classes/humans/Human';
+import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';

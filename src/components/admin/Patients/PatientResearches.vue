@@ -164,60 +164,64 @@
                 </GeneralItem>
 
                 <template v-if="researchResult.id">
-                    <div class="blur"></div>
-                    <div class="research-info">
-                      <div class="tools">
-                        <Button
-                          text="Сохранить"
-                          :colorSwap="true" 
-                          width="100%"
-                          height="60px"
-                          fontSize="22px"
-                          borderRadius="5px"
-                          color="#00B5A4"
-                          background="#C7ECEA"
-                          :withIcon="false"
-                          @click="saveResult(researchResult)" 
-                        ></Button>  
-                      </div>
-                      <div class="scroll-block">
-                        <CollapseContainer>
-                          <div v-for="question in research.questions" :key="question.id">
-                            <CollapseItem 
-                              :title="question.name"
-                              :isCollaps="true"
-                              :changeColor="researchResult.getAnswer(question.id).filled"
-                              background="#DFF2F8"
-                              backgroundAttention="#EECEAF"
-                              marginTop="20px"
-                            >
-                              <template #inside-content>
-                                <div class="background-container">
-                                  <StringProp
-                                    v-if="question.valueType.isString() || question.valueType.isText()"
-                                    :research-result="researchResult"
-                                    :question="question"
-                                  />
-                                  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                                  <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
-                                  <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                                  <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
-                                  <div v-for="res in getCalculationsResults(research)" :key="res.name">
-                                    <div>{{ res.formulaName }}</div>
-                                    <div>{{ res.value }}</div>
-                                    <div :style="{ color: res.color }">{{ res.result }}</div>
-                                  </div>
-                                </div>
-                              </template>
-                            </CollapseItem>
-                            <!-- <div class="question-name">{{ question.name }}</div> -->
-                            <!-- {{ researchResult.getAnswer(question.id).filled }} -->
-                          </div>
-                        </CollapseContainer>
-                      </div>
+                  <div class="blur"></div>
+                  <div class="research-info">
+                    <div class="tools">
+                      <Button
+                        text="Сохранить"
+                        :color-swap="true"
+                        width="100%"
+                        height="60px"
+                        font-size="22px"
+                        border-radius="5px"
+                        color="#00B5A4"
+                        background="#C7ECEA"
+                        :with-icon="false"
+                        @click="saveResult(researchResult)"
+                      ></Button>
                     </div>
-                      <!-- </div> -->
-                      <!-- <div class="scroll-block">
+                    <div class="scroll-block">
+                      <CollapseContainer>
+                        <div v-for="question in research.questions" :key="question.id">
+                          <CollapseItem
+                            :title="question.name"
+                            :is-collaps="true"
+                            :change-color="researchResult.getAnswer(question.id).filled"
+                            background="#DFF2F8"
+                            background-attention="#EECEAF"
+                            margin-top="20px"
+                          >
+                            <template #inside-content>
+                              <div class="background-container">
+                                <StringProp
+                                  v-if="question.valueType.isString() || question.valueType.isText()"
+                                  :research-result="researchResult"
+                                  :question="question"
+                                />
+                                <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
+                                <DataComponentComputed
+                                  v-if="question.valueType.isDate()"
+                                  :research-result="researchResult"
+                                  :question="question"
+                                />
+                                <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
+                                <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+                                <div v-for="res in getCalculationsResults(research)" :key="res.name">
+                                  <div>{{ res.formulaName }}</div>
+                                  <div>{{ res.value }}</div>
+                                  <div :style="{ color: res.color }">{{ res.result }}</div>
+                                </div>
+                              </div>
+                            </template>
+                          </CollapseItem>
+                          <!-- <div class="question-name">{{ question.name }}</div> -->
+                          <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+                        </div>
+                      </CollapseContainer>
+                    </div>
+                  </div>
+                  <!-- </div> -->
+                  <!-- <div class="scroll-block">
                         <CollapseContainer>
                           <div v-for="question in research.questions" :key="question.id">
                             <CollapseItem 
@@ -245,13 +249,13 @@
                                 </div>
                               </template>
                             </CollapseItem> -->
-                            <!-- <div class="question-name">{{ question.name }}</div> -->
-                            <!-- {{ researchResult.getAnswer(question.id).filled }} -->
+                  <!-- <div class="question-name">{{ question.name }}</div> -->
+                  <!-- {{ researchResult.getAnswer(question.id).filled }} -->
 
-                          <!-- </div>
+                  <!-- </div>
                         </CollapseContainer>
                       </div> -->
-                    <!-- </div> -->
+                  <!-- </div> -->
                   <!-- </div> -->
                 </template>
               </div>
@@ -340,10 +344,9 @@ import RadioProp from '@/components/admin/Research/RadioProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
 import Button from '@/components/Base/Button.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import Provider from '@/services/Provider/Provider';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue'
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -351,7 +354,7 @@ export default defineComponent({
     RightTabsContainer,
     SetProp,
     RadioProp,
-    RemoteSearch,
+    // RemoteSearch,
     NumberProp,
     DataComponentComputed,
     StringProp,
@@ -370,9 +373,11 @@ export default defineComponent({
     GeneralItem,
     CollapseContainer,
     CollapseItem,
+    Bar,
   },
   setup() {
     const mounted = ref(false);
+    // c3.generate();
     const selectedTab = ref('');
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
@@ -412,6 +417,16 @@ export default defineComponent({
       // showConfirmModal(submitForm, next);
     });
 
+    const selectOrAddResult = async (research: Research) => {
+      if (!research.withDates && patientResearch.value) {
+        if (patientResearch.value.researchResults.length > 0) {
+          await selectResult(patientResearch.value.researchResults[0].id as string);
+        } else {
+          await addResult(research, patientResearch.value.id);
+        }
+      }
+    };
+
     const createPatientResearch = async (research: Research) => {
       if (!patient.value.getPatientResearch(research.id)) {
         const item = PatientResearch.Create(patient.value.id, research);
@@ -419,6 +434,7 @@ export default defineComponent({
         await Provider.store.dispatch('patientsResearches/create', item);
       }
       await Provider.store.dispatch('researches/get', research.id);
+      await selectOrAddResult(research);
     };
 
     const selectResearchesPool = async (id: string) => {
@@ -431,6 +447,8 @@ export default defineComponent({
         return await createPatientResearch(item);
       }
       await Provider.store.dispatch('researches/get', item.id);
+      console.log(research.value.withDates, patientResearch.value);
+      await selectOrAddResult(research.value);
     };
 
     const selectResult = async (id: string) => {
@@ -449,6 +467,10 @@ export default defineComponent({
       if (patientResearch.value) {
         patientResearch.value.recalculate(result);
         await Provider.store.dispatch('patientsResearches/update', patientResearch.value);
+      }
+      if (!research.value.withDates) {
+        Provider.store.commit('researchesResults/set');
+        Provider.store.commit('researches/set');
       }
     };
 
