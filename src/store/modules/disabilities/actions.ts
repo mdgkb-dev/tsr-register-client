@@ -4,7 +4,7 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
-import { State } from './state';
+import { State } from './index';
 
 const httpClient = new HttpClient('disabilities');
 
