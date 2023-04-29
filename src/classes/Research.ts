@@ -46,7 +46,7 @@ export default class Research {
   getAnswers(result: ResearchResult): { [key: string]: number } {
     const results: { [key: string]: number } = {};
     this.questions.forEach((q: Question) => {
-      results[q.code] = result.getValue(q, false) as number;
+      results[q.code] = result.getOrCreateAnswer(q).valueNumber ?? 0;
     });
     return results;
   }

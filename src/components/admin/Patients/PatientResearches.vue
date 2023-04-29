@@ -50,105 +50,7 @@
             <template v-else>
               <GridContainer max-width="600px" grid-gap="6px" grid-template-columns="repeat(auto-fit, minmax(60px, 1fr))" margin-top="10px">
                 <template #grid-items>
-                  <Button
-                    :border="false"
-                    text="А-В"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Г-Ё"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Ж-К"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Л-Н"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="О-Р"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="С-У"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Ф-Ч"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Ш-Щ"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
-                  <Button
-                    :border="false"
-                    text="Э-Я"
-                    :color-swap="true"
-                    width="60px"
-                    height="40px"
-                    font-size="16px"
-                    color="#343E5C"
-                    background="#DFF2F8"
-                    :with-icon="false"
-                  ></Button>
+                  <AlphabetFilter />
                 </template>
               </GridContainer>
             </template>
@@ -182,9 +84,9 @@
                     </div>
                     <div class="scroll-block">
                       <CollapseContainer>
-                        <div v-for="question in research.questions" :key="question.id">
+                        <div v-for="(question, i) in research.questions" :key="question.id">
                           <CollapseItem
-                            :title="question.name"
+                            :title="`${i + 1}. ${question.name}`"
                             :is-collaps="true"
                             :change-color="researchResult.getAnswer(question.id).filled"
                             background="#DFF2F8"
@@ -193,19 +95,7 @@
                           >
                             <template #inside-content>
                               <div class="background-container">
-                                <StringProp
-                                  v-if="question.valueType.isString() || question.valueType.isText()"
-                                  :research-result="researchResult"
-                                  :question="question"
-                                />
-                                <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                                <DataComponentComputed
-                                  v-if="question.valueType.isDate()"
-                                  :research-result="researchResult"
-                                  :question="question"
-                                />
-                                <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                                <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+                                <QuestionComponent :question="question" :research-result="researchResult" />
                                 <div v-for="res in getCalculationsResults(research)" :key="res.name">
                                   <div>{{ res.formulaName }}</div>
                                   <div>{{ res.value }}</div>
@@ -214,49 +104,10 @@
                               </div>
                             </template>
                           </CollapseItem>
-                          <!-- <div class="question-name">{{ question.name }}</div> -->
-                          <!-- {{ researchResult.getAnswer(question.id).filled }} -->
                         </div>
                       </CollapseContainer>
                     </div>
                   </div>
-                  <!-- </div> -->
-                  <!-- <div class="scroll-block">
-                        <CollapseContainer>
-                          <div v-for="question in research.questions" :key="question.id">
-                            <CollapseItem 
-                              :title="question.name"
-                              :isCollaps="researchResult.getAnswer(question.id).filled"
-                              background="#DFF2F8"
-                              backgroundAttention="#EECEAF"
-                            >
-                              <template #inside-content>
-                                <div class="background-container">
-                                  <StringProp
-                                    v-if="question.valueType.isString() || question.valueType.isText()"
-                                    :research-result="researchResult"
-                                    :question="question"
-                                  />
-                                  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
-                                  <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
-                                  <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
-                                  <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
-                                  <div v-for="res in getCalculationsResults(research)" :key="res.name">
-                                    <div>{{ res.formulaName }}</div>
-                                    <div>{{ res.value }}</div>
-                                    <div :style="{ color: res.color }">{{ res.result }}</div>
-                                  </div>
-                                </div>
-                              </template>
-                            </CollapseItem> -->
-                  <!-- <div class="question-name">{{ question.name }}</div> -->
-                  <!-- {{ researchResult.getAnswer(question.id).filled }} -->
-
-                  <!-- </div>
-                        </CollapseContainer>
-                      </div> -->
-                  <!-- </div> -->
-                  <!-- </div> -->
                 </template>
               </div>
             </template>
@@ -264,14 +115,12 @@
               <GridContainer grid-gap="5px" margin-top="5px">
                 <template #grid-items>
                   <GeneralItem
-                    v-for="researchesPoolResearch in researchesPool.researchesPoolsResearches"
+                    v-for="(researchesPoolResearch, i) in researchesPool.researchesPoolsResearches"
                     :key="researchesPoolResearch.id"
                     :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
                     @click="selectResearch(researchesPoolResearch.research)"
                   >
-                    <template #general-item>
-                      {{ researchesPoolResearch.research.name }}
-                    </template>
+                    <template #general-item> {{ i + 1 }}. {{ researchesPoolResearch.research.name }} </template>
                   </GeneralItem>
                 </template>
               </GridContainer>
@@ -334,15 +183,12 @@ import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
+import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
 import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
-import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
-import NumberProp from '@/components/admin/Research/NumberProp.vue';
-import RadioProp from '@/components/admin/Research/RadioProp.vue';
-import SetProp from '@/components/admin/Research/SetProp.vue';
-import StringProp from '@/components/admin/Research/StringProp.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
@@ -352,28 +198,14 @@ export default defineComponent({
   name: 'PatientResearches',
   components: {
     RightTabsContainer,
-    SetProp,
-    RadioProp,
-    // RemoteSearch,
-    NumberProp,
-    DataComponentComputed,
-    StringProp,
-    // FilesProp,
-    // HumanForm,
-    // DataComponentComputed,
-    // StringProp,
-    // TextProp,
-    // NumberProp,
-    // SetProp,
-    // RadioProp,
-    // PropertyHeader,
+    QuestionComponent,
     Button,
     ResearcheContainer,
     GridContainer,
     GeneralItem,
     CollapseContainer,
     CollapseItem,
-    Bar,
+    AlphabetFilter,
   },
   setup() {
     const mounted = ref(false);

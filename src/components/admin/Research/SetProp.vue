@@ -45,10 +45,9 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const answer = props.researchResult.getOrCreateAnswer(props.question);
     const filledCheck = (): void => {
       answer.filled = answer.selectedAnswerVariants.length > 0;
-      console.log(answer.filled);
       props.researchResult.calculateFilling();
     };
     const selectVariant = (selected: boolean, variantId: string) => {

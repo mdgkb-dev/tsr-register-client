@@ -32,11 +32,7 @@ export default defineComponent({
     };
 
     onBeforeMount(() => {
-      answer.value = props.researchResult.getAnswer(props.question.id as string);
-      if (!answer.value) {
-        answer.value = Answer.Create(props.question);
-        props.researchResult.addAnswer(answer.value);
-      }
+      answer.value = props.researchResult.getOrCreateAnswer(props.question);
     });
     return {
       filledCheck,

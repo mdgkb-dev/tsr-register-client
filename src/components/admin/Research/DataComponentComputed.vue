@@ -31,7 +31,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const answer = props.researchResult.getAnswer(props.question.id as string);
+    const answer = props.researchResult.getOrCreateAnswer(props.question);
     const ignoreVisibility = (v: boolean) => (v = true);
 
     const filledCheck = (): void => {
