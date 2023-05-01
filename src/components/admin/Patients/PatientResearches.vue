@@ -88,7 +88,7 @@
                           <CollapseItem
                             :title="`${i + 1}. ${question.name}`"
                             :is-collaps="true"
-                            :change-color="researchResult.getAnswer(question.id).filled"
+                            :change-color="researchResult.getOrCreateAnswer(question).filled"
                             background="#DFF2F8"
                             background-attention="#EECEAF"
                             margin-top="20px"
