@@ -53,4 +53,8 @@ export default class Representative {
   patientExists(patientId: string): boolean {
     return this.representativeToPatient.some((rtp: PatientRepresentative) => rtp.patientId === patientId);
   }
+
+  getHuman(): Human {
+    return this.human;
+  }
 }

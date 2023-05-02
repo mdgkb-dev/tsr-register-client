@@ -204,7 +204,7 @@ export default defineComponent({
       // if (!validate(form.value)) {
       //   return;
       // }
-      patient.value.representativeToPatient = [];
+      patient.value.patientsRepresentatives = [];
       // await submitHandling('patients', patient.value, next, `registers/patients/${route.params.registerId}`);
     };
 

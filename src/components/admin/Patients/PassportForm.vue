@@ -2,19 +2,19 @@
   <div class="human-form-container">
     <el-form>
       <el-form-item label="Фамилия">
-        <el-input v-model="patient.human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman"></el-input>
+        <el-input v-model="human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman"></el-input>
       </el-form-item>
       <el-form-item label="Имя">
-        <el-input v-model="patient.human.name" placeholder="Введите имя" @blur="updateHuman"></el-input>
+        <el-input v-model="human.name" placeholder="Введите имя" @blur="updateHuman"></el-input>
       </el-form-item>
       <el-form-item label="Отчество">
-        <el-input v-model="patient.human.patronymic" placeholder="Введите отчество" @blur="updateHuman"></el-input>
+        <el-input v-model="human.patronymic" placeholder="Введите отчество" @blur="updateHuman"></el-input>
       </el-form-item>
 
       <div class="line-item">
         <div class="item-left">
           <el-form-item label="Пол">
-            <el-select v-model="patient.human.isMale" placeholder="Выберите пол" @change="updateHuman">
+            <el-select v-model="human.isMale" placeholder="Выберите пол" @change="updateHuman">
               <el-option label="Мужчина" :value="true"></el-option>
               <el-option label="Женщина" :value="false"></el-option>
             </el-select>
@@ -22,16 +22,16 @@
         </div>
         <div class="item-right">
           <el-form-item label="Дата рождения" @change="updateHuman">
-            <DatePicker v-model="patient.human.dateBirth" />
+            <DatePicker v-model="human.dateBirth" />
           </el-form-item>
         </div>
       </div>
       <el-form-item label="Адрес регистрации">
-        <el-input v-model="patient.human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman"></el-input>
       </el-form-item>
 
       <div class="tab-tools">
-        <svg v-if="patient.human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
+        <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
           <use xlink:href="#active" />
         </svg>
         <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
@@ -41,7 +41,7 @@
       </div>
 
       <el-form-item label="Адрес проживания">
-        <el-input v-model="patient.human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -65,30 +65,37 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
-import Patient from '@/classes/Patient';
+import Human from '@/classes/Human';
 import DatePicker from '@/services/components/DatePicker.vue';
 import Provider from '@/services/Provider/Provider';
-// import Active from '@/assets/svg/patient/Active.svg';
-// import NonActive from '@/assets/svg/patient/NonActive.svg';
 
 export default defineComponent({
   name: 'PassportForm',
   components: { DatePicker },
-
+  props: {
+    storeModule: {
+      type: String as PropType<string>,
+      default: '',
+    },
+    editMode: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
+  },
   setup(props, { emit }) {
     const form = ref();
-
+    const human: Ref<Human> = computed(() => Provider.store.getters[`${props.storeModule}/item`].getHuman());
     const toggleAddress = async (addressesEqual: boolean): Promise<void> => {
-      patient.value.human.setResidentialAddress(addressesEqual);
+      human.value.setResidentialAddress(addressesEqual);
       await updateHuman();
     };
 
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    // const human = props.patient.human;
     const updateHuman = async (): Promise<void> => {
-      await Provider.store.dispatch('humans/update', patient.value.human);
+      if (props.editMode) {
+        await Provider.store.dispatch('humans/update', human.value);
+      }
     };
     // const checkCompleteName = (n: string): void => {
     //   if (!!human.value.name && !!human.value.surname && !!human.value.patronymic) {
@@ -100,8 +107,8 @@ export default defineComponent({
     // watch(human, sanitizeName, { deep: true });
 
     return {
+      human,
       updateHuman,
-      patient,
       // checkCompleteName,
       // human,
       toggleAddress,

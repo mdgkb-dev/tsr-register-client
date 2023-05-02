@@ -161,7 +161,7 @@ export default defineComponent({
       //   return;
       // }
 
-      for (const item of patient.value.representativeToPatient) {
+      for (const item of patient.value.patientsRepresentatives) {
         // item.patient = undefined;
         // item.representative = undefined;
         // item.representativeType = undefined;
