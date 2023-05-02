@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import Representative from '@/classes/Representative';
 import RepresentativeType from '@/classes/RepresentativeType';
 import ClassHelper from '@/services/ClassHelper';
@@ -34,5 +36,15 @@ export default class PatientRepresentative {
     } else {
       return this.representativeType.childWomanType;
     }
+  }
+
+  static Create(representative: Representative, patient: Patient): PatientRepresentative {
+    const item = new PatientRepresentative();
+    item.id = uuidv4();
+    item.representative = new Representative(representative);
+    item.representativeId = representative.id;
+    item.patient = new Patient(patient);
+    item.patientId = patient.id;
+    return item;
   }
 }

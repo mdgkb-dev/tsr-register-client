@@ -26,7 +26,7 @@ export default class Patient {
   regionId?: string;
   // history?: IHistory = new History();
   @ClassHelper.GetClassConstructor(PatientRepresentative)
-  representativeToPatient: PatientRepresentative[] = [];
+  patientsRepresentatives: PatientRepresentative[] = [];
   representativeToPatientForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(Disability)
   disabilities: Disability[] = [];
@@ -133,7 +133,7 @@ export default class Patient {
 
   getParentsAddresses(): string[] {
     const addresses: string[] = [];
-    this.representativeToPatient.forEach((rtp: PatientRepresentative) => {
+    this.patientsRepresentatives.forEach((rtp: PatientRepresentative) => {
       if (rtp.representative?.human.addressResidential != '' && rtp.representative?.human.addressResidential) {
         addresses.push(rtp.representative?.human.addressResidential);
       }
@@ -191,15 +191,14 @@ export default class Patient {
     return this.patientDiagnosis;
   }
 
-  addRepresentative(representative: Representative): void {
-    const item = new PatientRepresentative();
-    item.representative = new Representative(representative);
-    item.representativeId = representative.id;
-    this.representativeToPatient.push(item);
+  addRepresentative(representative: Representative): PatientRepresentative {
+    const item = PatientRepresentative.Create(representative, this);
+    this.patientsRepresentatives.push(item);
+    return item;
   }
 
   representativeExists(representativeId: string): boolean {
-    return this.representativeToPatient.some((rtp: PatientRepresentative) => rtp.representativeId === representativeId);
+    return this.patientsRepresentatives.some((rtp: PatientRepresentative) => rtp.representativeId === representativeId);
   }
 
   addRegisterToPatient(register: Register): void {
@@ -255,5 +254,9 @@ export default class Patient {
 
   removeDisability(id: string) {
     ClassHelper.RemoveFromClassById(id, this.disabilities, this.disabilitiesForDelete);
+  }
+
+  getHuman(): Human {
+    return this.human;
   }
 }

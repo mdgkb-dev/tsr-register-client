@@ -5,10 +5,10 @@
     placeholder="Начните вводить название диагноза"
     @select="addRepresentative"
   />
-  <!--  <el-button style="margin-bottom: 20px" @click="openRepresentativeModal()">Создать представителя</el-button>-->
+  <el-button style="margin-bottom: 20px" @click="openRepresentativeModal()">Создать представителя</el-button>
   <el-table
     v-if="mount"
-    :data="patient.representativeToPatient"
+    :data="patient.patientsRepresentatives"
     style="width: 800px"
     class="table-shadow"
     header-row-class-name="header-style"
@@ -25,22 +25,20 @@
 
     <el-table-column label="Роль представителя" align="start" width="200">
       <template #default="scope">
-        <el-form-item
-          label-width="0"
-          style="margin: 0"
-          :rules="rules.representativeTypeId"
-          :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
+        <el-select
+          v-model="scope.row.representativeTypeId"
+          placeholder="Роль представителя"
+          :disabled="!scope.row.representativeId"
+          @change="selectRepresentativeType(scope.row)"
         >
-          <el-select v-model="scope.row.representativeTypeId" placeholder="Роль представителя" :disabled="!scope.row.representativeId">
-            <el-option
-              v-for="item in representativeTypes"
-              :key="item.id"
-              :label="getRepresentativeTypeLabel(item, scope.$index)"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
+          <el-option
+            v-for="item in representativeTypes"
+            :key="item.id"
+            :label="getRepresentativeTypeLabel(item, scope.$index)"
+            :value="item.id"
+          >
+          </el-option>
+        </el-select>
         <!--        <el-button v-else-if="isEditMode" @click="openRepresentativeModal(scope.$index)">Создать</el-button>-->
         <!--        <span v-else>{{ getRepresentativeTypeLabel(scope.row.representativeType, scope.$index) }}</span>-->
       </template>
@@ -62,26 +60,30 @@
       </template>
     </el-table-column>
 
+    <el-table-column label="Email" align="start">
+      <template #default="scope">
+        <div>
+          {{ scope.row.patientId }}
+        </div>
+      </template>
+    </el-table-column>
+
     <el-table-column width="50" fixed="right" align="center">
       <template #default="scope">
-        <TableButtonGroup
-          :show-remove-button="true"
-          @remove="
-            $classHelper.RemoveFromClassByIndex(scope.$index, patient.representativeToPatient, patient.representativeToPatientForDelete)
-          "
-        />
+        <TableButtonGroup :show-remove-button="true" @remove="remove(scope.row.id)" />
       </template>
     </el-table-column>
   </el-table>
-  <RepresentativeModal :show="representativeModal" @close="representativeModal = false" @save="saveAndAddRepresentative" />
+  <RepresentativeModal :show="showModal" @close="showModal = false" @save="createAndSaveRepresentative" />
 </template>
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import Patient from '@/classes/Patient';
+import PatientRepresentative from '@/classes/PatientRepresentative';
 import Representative from '@/classes/Representative';
 import RepresentativeToPatientRules from '@/classes/RepresentativeToPatientRules';
 import RepresentativeType from '@/classes/RepresentativeType';
@@ -89,29 +91,30 @@ import RepresentativeModal from '@/components/admin/Patients/RepresentativeModal
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import IOptionHuman from '@/interfaces/shared/IOptionHuman';
+import ClassHelper from '@/services/ClassHelper';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'PatientToRepresentativeForm',
+  name: 'PatientRepresentatives',
   components: {
     TableButtonGroup,
     RepresentativeModal,
     RemoteSearch,
   },
-  props: {
-    patient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    },
-  },
+  // props: {
+  //   patient: {
+  //     type: Object as PropType<Patient>,
+  //     required: true,
+  //   },
+  // },
   setup(props) {
     const store = useStore();
 
     const mount = ref(false);
     const rules = RepresentativeToPatientRules;
-    const representativeModal: Ref<boolean> = ref(false);
-    const representativeOptions: Ref<IOptionHuman[]> = ref([]);
+    const showModal: Ref<boolean> = ref(false);
     const representatives: ComputedRef<Representative[]> = computed(() => store.getters['representatives/items']);
+    const patient: ComputedRef<Patient> = computed(() => store.getters['patients/item']);
     const lastInsertedId: ComputedRef<string> = computed(() => store.getters['representatives/lastInsertedId']);
     const representative: ComputedRef<Representative> = computed(() => store.getters['representatives/item']);
     const creatingIndex: Ref<number | undefined> = ref(undefined);
@@ -119,26 +122,8 @@ export default defineComponent({
 
     // const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
-    const updateOptions = () => {
-      representativeOptions.value = [];
-      if (representatives.value) {
-        for (const item of representatives.value) {
-          if (item.id) {
-            representativeOptions.value.push({
-              label: `${item.human.surname} ${item.human.name} ${item.human.patronymic}`,
-              value: item.id,
-              human: item.human,
-            });
-          }
-        }
-      }
-    };
-
     onBeforeMount(async () => {
       await store.dispatch('representativeTypes/getAll');
-      await store.dispatch('representatives/getAll');
-      updateOptions();
-
       mount.value = true;
     });
 
@@ -147,7 +132,7 @@ export default defineComponent({
       //   return '';
       // }
       const representative = representatives.value.find((i: Representative) => {
-        return i.id === props.patient.representativeToPatient[index].representativeId;
+        return i.id === patient.value.patientsRepresentatives[index].representativeId;
       });
       if (representative?.human.isMale) {
         return item.parentMaleType;
@@ -157,35 +142,48 @@ export default defineComponent({
     };
 
     const addRepresentative = async (event: ISearchObject) => {
-      if (props.patient.representativeExists(event.value)) {
-        ElMessage({
-          type: 'warning',
-          message: 'Выбранный представитель уже добавлен',
-        });
-        return;
+      if (patient.value.representativeExists(event.value)) {
+        return ElMessage.warning('Выбранный представитель уже добавлен');
       }
       await store.dispatch('representatives/get', event.value);
-      props.patient.addRepresentative(representative.value);
+      const item = patient.value.addRepresentative(representative.value);
+      await store.dispatch('patientsRepresentatives/create', item);
     };
     //
-    const openRepresentativeModal = (index: number) => {
+    const openRepresentativeModal = (index?: number) => {
       creatingIndex.value = index;
-      representativeModal.value = true;
+      showModal.value = true;
       // store.commit('representatives/resetRepresentative');
     };
 
-    // const saveAndAddRepresentative = () => {
-    //   if (!creatingIndex.value) {
-    //     add();
-    //   }
-    //   updateOptions();
-    //   const i = creatingIndex.value ? creatingIndex.value : representativeToPatient.value.length - 1;
-    //   console.log(i);
-    //   selectRepresentative(lastInsertedId.value, i);
-    //   representativeModal.value = false;
-    // };
+    const createAndSaveRepresentative = async (representative: Representative) => {
+      await Provider.store.dispatch(`representatives/create`, representative);
+      const patientRepresentative = patient.value.addRepresentative(representative);
+      await store.dispatch('patientsRepresentatives/create', patientRepresentative);
+      // if (!creatingIndex.value) {
+      //   add();
+      // }
+      // const i = creatingIndex.value ? creatingIndex.value : representativeToPatient.value.length - 1;
+      // console.log(i);
+      // selectRepresentative(lastInsertedId.value, i);
+      showModal.value = false;
+    };
+
+    const remove = async (id: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, patient.value.patientsRepresentatives, []);
+      await store.dispatch('patientsRepresentatives/remove', id);
+    };
+
+    const selectRepresentativeType = async (patientRepresentative: PatientRepresentative): Promise<void> => {
+      await Provider.store.dispatch('patientsRepresentatives/update', patientRepresentative);
+    };
 
     return {
+      selectRepresentativeType,
+      remove,
+      createAndSaveRepresentative,
+      showModal,
+      patient,
       // saveAndAddRepresentative,
       // representativeModal,
       openRepresentativeModal,
@@ -193,7 +191,6 @@ export default defineComponent({
       mount,
       rules,
       representativeTypes,
-      representativeOptions,
       // representativeToPatient,
       // remove,
       // add,

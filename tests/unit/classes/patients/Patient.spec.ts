@@ -40,7 +40,7 @@ describe('Class Patient', () => {
     expect(patient.human).toBeInstanceOf(Human);
     expect(patient.patientDiagnosis).toHaveLength(0);
     expect(patient.patientDiagnosisForDelete).toHaveLength(0);
-    expect(patient.representativeToPatient).toHaveLength(0);
+    expect(patient.patientsRepresentatives).toHaveLength(0);
     expect(patient.representativeToPatientForDelete).toHaveLength(0);
     expect(patient.disabilities).toHaveLength(0);
     expect(patient.disabilitiesForDelete).toHaveLength(0);
@@ -91,7 +91,7 @@ describe('Class Patient', () => {
       history,
       patientDiagnosis,
       patientDiagnosisForDelete,
-      representativeToPatient,
+      patientsRepresentatives: representativeToPatient,
       representativeToPatientForDelete,
       disabilities,
       disabilitiesForDelete,

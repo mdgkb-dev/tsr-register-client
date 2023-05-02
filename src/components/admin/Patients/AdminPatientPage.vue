@@ -27,8 +27,8 @@ import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
 import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
+import PatientRepresentatives from '@/components/admin/Patients/PatientRepresentatives.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
-import PatientToRepresentativeForm from '@/components/admin/Patients/PatientToRepresentativeForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import CustomSection from '@/services/classes/page/CustomSection';
@@ -46,7 +46,7 @@ export default defineComponent({
     // DocumentForm,
     MkbForm,
     DisabilityForm,
-    PatientToRepresentativeForm,
+    PatientRepresentatives,
     PatientRegistersForm,
     DrugForm,
     PatientResearches,
@@ -57,6 +57,7 @@ export default defineComponent({
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
+      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
       CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
@@ -64,7 +65,6 @@ export default defineComponent({
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
       CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
-      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
     ];
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -107,7 +107,7 @@ export default defineComponent({
       //   return;
       // }
 
-      for (const item of patient.value.representativeToPatient) {
+      for (const item of patient.value.patientsRepresentatives) {
         // item.patient = undefined;
         // item.representative = undefined;
         // item.representativeType = undefined;

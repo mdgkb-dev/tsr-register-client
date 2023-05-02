@@ -21,59 +21,28 @@
         </div>
       </template>
       <el-row>
-        <RepresentativePageInfo />
-      </el-row>
-      <el-row>
-        <el-collapse>
-          <el-form
-            ref="form"
-            :status-icon="true"
-            :inline-message="true"
-            :model="representative"
-            label-width="150px"
-            :rules="rules"
-            @submit.prevent="submitForm"
-          >
-            <div>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">Паспортные данные</h2>
-                </template>
-                <HumanForm store-name="representatives" :addresses="representative.getChildrenAddresses()" />
-              </el-collapse-item>
-              <el-collapse-item>
-                <template #title>
-                  <h2 class="collapseHeader">Документы</h2>
-                </template>
-                <DocumentForm :store-module="'representatives'" />
-              </el-collapse-item>
-            </div>
-          </el-form>
-        </el-collapse>
+        <PassportForm :edit-mode="false" store-module="representatives" />
       </el-row>
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { v4 as uuidv4 } from 'uuid';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
-import { useStore } from 'vuex';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
+import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 // import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
-import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
-import HumanForm from '@/components/HumanForm.vue';
-import MessageSuccess from '@/services/classes/messages/MessageSuccess';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'RepresentativeModal',
   components: {
-    HumanForm,
-    // DocumentForm,
-    RepresentativePageInfo,
+    PassportForm,
   },
   props: {
     show: {
@@ -83,17 +52,13 @@ export default defineComponent({
   },
   emits: ['save', 'close'],
   setup(_, { emit }) {
-    const store = useStore();
-    // const { submitHandling } = useForm();
-    // const { validate } = useValidate();
     const mount = ref(false);
-    // const { saveButtonClick } = useConfirmLeavePage();
     const form = ref();
-    const representative: Ref<Representative> = computed(() => store.getters['representatives/representative']);
+    const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
     const rules = RepresentativeRules;
 
     onBeforeMount(async () => {
-      store.commit('representatives/resetRepresentative');
+      Provider.store.commit('representatives/resetItem');
     });
 
     const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
@@ -101,10 +66,9 @@ export default defineComponent({
       // if (!validate(form.value)) {
       //   return;
       // }
-      await store.dispatch(`representatives/create`, representative.value);
-      emit('save');
-      representative.value = new Representative();
-      ElNotification.error(new MessageSuccess());
+      representative.value.id = uuidv4();
+      await emit('save', representative.value);
+      // ElNotification.error(new MessageSuccess());
     };
 
     const beforeClose = (done: () => void) => {

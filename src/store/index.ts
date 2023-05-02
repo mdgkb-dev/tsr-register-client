@@ -13,6 +13,7 @@ import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
 import { patients } from '@/store/modules/patients';
+import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
 import { patientsResearches } from '@/store/modules/patientsResearches';
 import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
 import { registers } from '@/store/modules/registers';
@@ -63,6 +64,7 @@ const store: StoreOptions<RootState> = {
     search,
     admin,
     patientsResearches,
+    patientsRepresentatives,
     humans,
   },
 };
