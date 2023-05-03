@@ -68,6 +68,11 @@
                 <template v-if="researchResult.id">
                   <div class="blur"></div>
                   <div class="research-info">
+                    <div class="patient-name">Иванов Иван Иванович</div>
+                    <div class="header-container">
+                      <div class="researche-title-name">Название исследования</div>
+                      <div class="researche-counter">45 баллов</div>
+                    </div>
                     <div class="tools">
                       <Button
                         text="Сохранить"
@@ -545,35 +550,35 @@ export default defineComponent({
   top: 52%;
   left: 50%;
   width: calc(99% - 22px);
-  height: calc(92% - 102px);
+  height: calc(92% - 22px);
   transform: translate(-50%, -50%);
   background: #dff2f8;
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   margin: 10px 10px 0 0;
-  padding: 90px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
   overflow: hidden;
   overflow-y: auto;
   z-index: 21;
 }
 
 .tools {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
+  // z-index: 1;
   display: flex;
   justify-content: left;
   align-items: center;
   height: auto;
-  padding: 10px;
-  width: calc(100% - 22px);
+  padding: 10px 0;
+  width: calc(100% - 2px);
   background: #dff2f8;
 }
 
 .scroll-block {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 200px);
   overflow: hidden;
   overflow-y: auto;
 }
@@ -606,4 +611,38 @@ export default defineComponent({
   border-radius: 5px;
   border: 1px solid #c3c3c3;
 }
+
+.patient-name {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 24px;
+  height: 40px;
+  color: #343e5c;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.researche-title-name {
+  font-size: 20px;
+  display: block;
+  color: #343e5c;
+  padding: 10px 0;
+}
+
+.researche-counter {
+  font-size: 20px;
+  color: #379fff;
+  display: flex;
+  justify-content: right;
+  align-items: start;
+  text-transform: uppercase;
+  white-space: nowrap;
+  height: 100%;
+}
+
 </style>
