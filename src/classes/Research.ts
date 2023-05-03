@@ -1,3 +1,4 @@
+import AnswerVariant from '@/classes/AnswerVariant';
 import Formula from '@/classes/Formula';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
@@ -49,5 +50,11 @@ export default class Research {
       results[q.code] = result.getOrCreateAnswer(q).valueNumber ?? 0;
     });
     return results;
+  }
+
+  getAnswerVariants(): AnswerVariant[] {
+    const a: AnswerVariant[] = [];
+    this.questions.forEach((q: Question) => a.push(...q.answerVariants));
+    return a;
   }
 }

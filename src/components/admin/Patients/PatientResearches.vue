@@ -60,18 +60,17 @@
             <template v-if="research.id && patientResearch">
               <div v-for="result in patientResearch.researchResults" :key="result.id">
                 <GeneralItem :ready="`${result.fillingPercentage}%`" margin="10px 0px" :scale="false" @click="selectResult(result.id)">
-                  <template #general-item>
-                    {{ result.date }}
-                  </template>
+                  <template #general-item> Исследование от {{ $dateTimeFormatter.format(result.date) }} </template>
                 </GeneralItem>
 
                 <template v-if="researchResult.id">
                   <div class="blur"></div>
                   <div class="research-info">
-                    <div class="patient-name">Иванов Иван Иванович</div>
+                    <div class="patient-name">{{ patient.human.getFullName() }}</div>
                     <div class="header-container">
-                      <div class="researche-title-name">Название исследования</div>
-                      <div class="researche-counter">45 баллов</div>
+                      <div class="researche-title-name">{{ research.name }}</div>
+                      <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>
+                      <div class="researche-counter">Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}</div>
                     </div>
                     <div class="tools">
                       <Button
@@ -644,5 +643,4 @@ export default defineComponent({
   white-space: nowrap;
   height: 100%;
 }
-
 </style>
