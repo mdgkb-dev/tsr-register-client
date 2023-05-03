@@ -15,6 +15,7 @@
         :research-result="researchResult"
         :question="additionalQuestion"
       />
+      <NumberProp v-if="additionalQuestion.valueType.isNumber()" :research-result="researchResult" :question="additionalQuestion" />
       <DataComponentComputed
         v-if="additionalQuestion.valueType.isDate()"
         :research-result="researchResult"
@@ -32,11 +33,12 @@ import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
+import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
 
 export default defineComponent({
   name: 'RadioProp',
-  components: { StringProp, DataComponentComputed },
+  components: { NumberProp, StringProp, DataComponentComputed },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
