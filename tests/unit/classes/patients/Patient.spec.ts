@@ -9,7 +9,7 @@ import History from '@/classes/history/History';
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
-import PatientDiagnosisAnamnesis from '@/classes/PatientDiagnosisAnamnesis';
+import Anamnesis from '@/classes/PatientDiagnosisAnamnesis';
 import Question from '@/classes/Question';
 import PatientAnswer from '@/classes/RegisterPropertySetToPatient';
 import ValueType from '@/classes/valueTypes/ValueType';
@@ -1140,7 +1140,7 @@ describe('Class Patient', () => {
     patient = new Patient();
 
     // Assert
-    expect(patient.getAnamnesis(id)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(id)).toBeInstanceOf(Anamnesis);
     expect(patient.getAnamnesis(id).id).toBeUndefined();
   });
 
@@ -1150,10 +1150,10 @@ describe('Class Patient', () => {
     const uuid2 = '5c5ca9aa-5509-4540-a589-6e6d4f22030b';
     const uuid3 = '144e526a-8961-4519-b761-f92445fef766';
     const uuid4 = '3758f082-b550-4103-bbea-4ab6cdd9f0c4';
-    const patientDiagnosisAnamnesis1 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis2 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis3 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis4 = new PatientDiagnosisAnamnesis();
+    const patientDiagnosisAnamnesis1 = new Anamnesis();
+    const patientDiagnosisAnamnesis2 = new Anamnesis();
+    const patientDiagnosisAnamnesis3 = new Anamnesis();
+    const patientDiagnosisAnamnesis4 = new Anamnesis();
     patientDiagnosisAnamnesis1.id = uuid1;
     patientDiagnosisAnamnesis2.id = uuid2;
     patientDiagnosisAnamnesis3.id = uuid3;
@@ -1164,16 +1164,16 @@ describe('Class Patient', () => {
     const patientDiagnosis3 = new PatientDiagnosis();
     const patientDiagnosis4 = new PatientDiagnosis();
 
-    patientDiagnosis1.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis1];
-    patientDiagnosis2.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis2, patientDiagnosisAnamnesis3];
-    patientDiagnosis3.patientDiagnosisAnamnesis = [];
-    patientDiagnosis4.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis4];
+    patientDiagnosis1.anamneses = [patientDiagnosisAnamnesis1];
+    patientDiagnosis2.anamneses = [patientDiagnosisAnamnesis2, patientDiagnosisAnamnesis3];
+    patientDiagnosis3.anamneses = [];
+    patientDiagnosis4.anamneses = [patientDiagnosisAnamnesis4];
 
     patient = new Patient();
     patient.patientDiagnosis = [patientDiagnosis1, patientDiagnosis2, patientDiagnosis3, patientDiagnosis4];
 
     // Assert
-    expect(patient.getAnamnesis(uuid2)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(uuid2)).toBeInstanceOf(Anamnesis);
     expect(patient.getAnamnesis(uuid2).id).toBe(uuid2);
   });
 });

@@ -1,6 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
+import Anamnesis from '@/classes/Anamnesis';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
-import PatientDiagnosisAnamnesis from '@/classes/PatientDiagnosisAnamnesis';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class PatientDiagnosis {
@@ -10,8 +12,9 @@ export default class PatientDiagnosis {
   editMode = false;
   patientId?: string;
   patient?: Patient;
-  @ClassHelper.GetClassConstructor(PatientDiagnosisAnamnesis)
-  patientDiagnosisAnamnesis: PatientDiagnosisAnamnesis[] = [];
+  doctorName = '';
+  @ClassHelper.GetClassConstructor(Anamnesis)
+  anamneses: Anamnesis[] = [];
   patientDiagnosisAnamnesisForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(MkbItem)
   mkbItem?: MkbItem;
@@ -27,37 +30,11 @@ export default class PatientDiagnosis {
     return item;
   }
 
-  // saveDiagnosis(mkbClass: MkbClass): void {
-  //   if (!mkbClass.selectedDiagnosisId) {
-  //     this.editMode = false;
-  //     return;
-  //   }
-  //   const allDiagnosis = mkbClass.getAllDiagnosis();
-  //   const diagnosis = allDiagnosis.find((d: MkbDiagnosis) => d.id === mkbClass.selectedDiagnosisId);
-  //   if (diagnosis && diagnosis.id) {
-  //     this.mkbDiagnosis = new MkbDiagnosis(diagnosis);
-  //     this.mkbDiagnosisId = diagnosis.id;
-  //   }
-  //   if (mkbClass.selectedSubDiagnosisId) {
-  //     const mkbSubDiagnosis = this.mkbDiagnosis.mkbSubDiagnosis.find((msd: MkbSubDiagnosis) => msd.id === mkbClass.selectedSubDiagnosisId);
-  //     if (mkbSubDiagnosis && mkbSubDiagnosis.id) {
-  //       this.mkbSubDiagnosis = new MkbSubDiagnosis(mkbSubDiagnosis);
-  //       this.mkbSubDiagnosisId = mkbSubDiagnosis.id;
-  //       if (this.mkbSubDiagnosis.mkbDiagnosis) {
-  //         this.mkbSubDiagnosis.mkbDiagnosis.mkbGroup = undefined;
-  //       }
-  //     }
-  //   }
-  //   if (mkbClass.selectedConcreteDiagnosisId) {
-  //     const mkbConcreteDiagnosis = this.mkbDiagnosis.getConcreteDiagnosis(mkbClass.selectedConcreteDiagnosisId);
-  //     if (mkbConcreteDiagnosis && mkbConcreteDiagnosis.id) {
-  //       this.mkbConcreteDiagnosis = new MkbConcreteDiagnosis(mkbConcreteDiagnosis);
-  //       this.mkbConcreteDiagnosisId = mkbConcreteDiagnosis.id;
-  //     }
-  //   }
-  //   this.mkbDiagnosis.mkbSubDiagnosis = [];
-  //   this.mkbDiagnosis.mkbGroup = undefined;
-  //   this.editMode = false;
-  // }
-  //
+  addAnamnesis(): Anamnesis {
+    const item = new Anamnesis();
+    item.id = uuidv4();
+    item.patientDiagnosisId = this.id;
+    this.anamneses.push(item);
+    return item;
+  }
 }

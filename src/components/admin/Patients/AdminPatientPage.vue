@@ -57,12 +57,12 @@ export default defineComponent({
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
+      CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
       CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
       CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
-      CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
       CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
     ];

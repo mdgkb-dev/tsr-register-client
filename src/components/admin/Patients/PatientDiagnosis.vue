@@ -4,83 +4,89 @@
   <!--      <el-button @click="addDiagnosis">Добавить диагноз</el-button>-->
   <!--      <MkbTreeDialog :store-module="storeModule" />-->
   <!--    </el-space>-->
-  {{ mkbLinker.getMkbItems() }}
-  <el-table
-    :data="mkbLinker.getMkbItems()"
-    :row-key="(row) => row.id"
-    class="table-shadow"
-    header-row-class-name="header-style"
-    :expand-row-keys="expandRowKeys"
-  >
-    <!--      <el-table-column type="index" width="60" align="center" />-->
-
-    <!--      <el-table-column type="expand">-->
-    <!--        <template #default="props">-->
-    <!--          <div class="block" style="">-->
-    <!--            <el-timeline style="margin-top: 20px">-->
-    <!--              <el-timeline-item-->
-    <!--                v-for="(anamnesis, index) in props.row.patientDiagnosisAnamnesis"-->
-    <!--                :key="anamnesis.id"-->
-    <!--                :timestamp="$dateTimeFormatter.format(anamnesis.date)"-->
-    <!--                placement="top"-->
-    <!--              >-->
-    <!--                <AnamnesisForm-->
-    <!--                  :anamnesis-prop="anamnesis"-->
-    <!--                  :prop-name="'patientDiagnosis.' + props.$index + '.patientDiagnosisAnamnesis.' + index"-->
-    <!--                  @remove="RemoveFromClass(index, props.row.patientDiagnosisAnamnesis, props.row.patientDiagnosisAnamnesisForDelete)"-->
-    <!--                />-->
-    <!--              </el-timeline-item>-->
-    <!--            </el-timeline>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <el-table-column v-if="isEditMode" width="50" fixed="right" align="center">
-      <template #default="scope">
-        <TableButtonGroup show-remove-button @remove="mkbLinker.removeMkbItem(scope.$index)" />
+  <CollapseContainer>
+    <CollapseItem
+      v-for="patientDiagnosis in patient.patientDiagnosis"
+      :key="patientDiagnosis.id"
+      background="#DFF2F8"
+      margin-top="20px"
+      :title="patientDiagnosis.mkbItem.getFullName()"
+    >
+      <template #tools>
+        <!--         TODO: работает по щелчку на весь коллапс-->
+        <!--        <el-button @click="removePatientDiagnosis(patientDiagnosis.id)">Удалить</el-button>-->
       </template>
-    </el-table-column>
-  </el-table>
+      <template #inside-content>
+        <div>
+          <el-input v-model="patientDiagnosis.doctorName" @blur="updatePatientDiagnosis(patientDiagnosis)"></el-input>
+        </div>
+
+        <el-timeline style="margin-top: 20px">
+          <el-button @click="addAnamnesis(patientDiagnosis)">Добавить анамнез</el-button>
+          <el-timeline-item
+            v-for="anamnesis in patientDiagnosis.anamneses"
+            :key="anamnesis.id"
+            :timestamp="$dateTimeFormatter.format(anamnesis.date)"
+            placement="top"
+          >
+            <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(patientDiagnosis, anamnesis.id)" />
+          </el-timeline-item>
+        </el-timeline>
+      </template>
+    </CollapseItem>
+  </CollapseContainer>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
+import Anamnesis from '@/classes/Anamnesis';
 import MkbItem from '@/classes/MkbItem';
+import Patient from '@/classes/Patient';
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import AnamnesisForm from '@/components/admin/Patients/AnamnesisForm.vue';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 // import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IMkbLinker from '@/interfaces/IMkbLinker';
 import ISearchObject from '@/interfaces/ISearchObject';
+import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-
-// const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));
 
 export default defineComponent({
   name: 'PatientDiagnosis',
   components: {
+    CollapseItem,
+    CollapseContainer,
     RemoteSearch,
-    // AnamnesisForm,
+    AnamnesisForm,
     // MkbTreeDialog,
     TableButtonGroup,
   },
-  props: {
-    mkbLinker: {
-      type: Object as PropType<IMkbLinker>,
-      required: true,
-    },
-  },
+
   setup(props) {
     let expandRowKeys: Ref<(string | undefined)[]> = ref([]);
     const searchFormRef = ref();
     // const { formatDate } = useDateFormat();
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
     const mkbItem: ComputedRef<MkbItem> = computed<MkbItem>(() => Provider.store.getters['mkbItems/item']);
-
+    const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const addMkbItem = async (event: ISearchObject): Promise<void> => {
       await Provider.store.dispatch('mkbItems/get', event.value);
-      props.mkbLinker.addMkbItem(mkbItem.value);
-      const diagnosisLinks = props.mkbLinker.getMkbItems();
+      patient.value.addMkbItem(mkbItem.value);
+      const diagnosisLinks = patient.value.getMkbItems();
       await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
+    };
+
+    const addAnamnesis = async (patientDiagnosis: PatientDiagnosis): Promise<void> => {
+      const anamnesis = patientDiagnosis.addAnamnesis();
+      await Provider.store.dispatch('anamneses/create', new Anamnesis(anamnesis));
+    };
+
+    const removePatientDiagnosis = async (id: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, patient.value.patientDiagnosis, []);
+      await Provider.store.dispatch('patientDiagnosis/remove', id);
     };
 
     // const changeEditMode = (patientDiagnosis: IPatientDiagnosis) => {
@@ -95,7 +101,19 @@ export default defineComponent({
     //   return '';
     // };
 
+    const removeAnamnesis = async (patientDiagnosis: PatientDiagnosis, id: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, patientDiagnosis.anamneses, []);
+      await Provider.store.dispatch('anamneses/remove', id);
+    };
+    const updatePatientDiagnosis = async (patientDiagnosis: PatientDiagnosis) => {
+      await Provider.store.dispatch('patientDiagnosis/update', patientDiagnosis);
+    };
+
     return {
+      updatePatientDiagnosis,
+      addAnamnesis,
+      removeAnamnesis,
+      removePatientDiagnosis,
       // getRowClassName,
       searchFormRef,
       // changeEditMode,
@@ -116,6 +134,7 @@ export default defineComponent({
       // selectedElement,
       // RemoveFromClass,
       addMkbItem,
+      patient,
       //
       // selectedClass,
     };

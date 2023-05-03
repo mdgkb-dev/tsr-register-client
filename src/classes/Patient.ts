@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import Anamnesis from '@/classes/Anamnesis';
 import Disability from '@/classes/Disability';
 import Human from '@/classes/Human';
 import MkbItem from '@/classes/MkbItem';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
-import PatientDiagnosisAnamnesis from '@/classes/PatientDiagnosisAnamnesis';
 import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
 import PatientRegister from '@/classes/PatientRegister';
 import PatientRepresentative from '@/classes/PatientRepresentative';
@@ -16,7 +16,6 @@ import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import User from '@/classes/User';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IWithMkbItem from '@/interfaces/IWithMkbItem';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Patient {
@@ -121,14 +120,14 @@ export default class Patient {
     ];
   }
 
-  getAnamnesis(id: string): PatientDiagnosisAnamnesis {
+  getAnamnesis(id: string): Anamnesis {
     for (const diagnosis of this.patientDiagnosis) {
-      const anamnesis = diagnosis.patientDiagnosisAnamnesis.find((i: PatientDiagnosisAnamnesis) => i.id === id);
+      const anamnesis = diagnosis.anamneses.find((i: Anamnesis) => i.id === id);
       if (anamnesis) {
         return anamnesis;
       }
     }
-    return new PatientDiagnosisAnamnesis();
+    return new Anamnesis();
   }
 
   getParentsAddresses(): string[] {
@@ -177,6 +176,7 @@ export default class Patient {
 
   addMkbItem(mkbItem: MkbItem): void {
     const patientDiagnosis = new PatientDiagnosis();
+    patientDiagnosis.id = uuidv4();
     patientDiagnosis.mkbItem = new MkbItem(mkbItem);
     patientDiagnosis.mkbItemId = mkbItem.id;
     patientDiagnosis.patientId = this.id;
@@ -187,7 +187,7 @@ export default class Patient {
     ClassHelper.RemoveFromClassByIndex(index, this.patientDiagnosis, this.patientDiagnosisForDelete);
   }
 
-  getMkbItems(): IWithMkbItem[] {
+  getMkbItems(): PatientDiagnosis[] {
     return this.patientDiagnosis;
   }
 

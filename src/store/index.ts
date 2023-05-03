@@ -1,6 +1,7 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import { admin } from '@/store/modules/admin';
+import { anamneses } from '@/store/modules/anamnses';
 import auth from '@/store/modules/auth';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
@@ -66,6 +67,7 @@ const store: StoreOptions<RootState> = {
     patientsResearches,
     patientsRepresentatives,
     humans,
+    anamneses,
   },
 };
 
