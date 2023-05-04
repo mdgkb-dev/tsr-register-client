@@ -14,6 +14,7 @@ import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
 import { patients } from '@/store/modules/patients';
+import { patientsRegisters } from '@/store/modules/patientsRegisters';
 import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
 import { patientsResearches } from '@/store/modules/patientsResearches';
 import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
@@ -68,6 +69,7 @@ const store: StoreOptions<RootState> = {
     patientsRepresentatives,
     humans,
     anamneses,
+    patientsRegisters,
   },
 };
 

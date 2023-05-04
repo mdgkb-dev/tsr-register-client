@@ -38,7 +38,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       await store.dispatch('registers/getAll');
       tableRegisters.value.data.forEach((register: Register) => {
-        if (register.patientInRegister(props.patient.registerToPatient)) tableRegisters.value.toggleRowSelection(register);
+        if (register.patientInRegister(props.patient.patientsRegisters)) tableRegisters.value.toggleRowSelection(register);
       });
     });
 
@@ -50,9 +50,9 @@ export default defineComponent({
 
     const handleSelectionChange = (_: Register[], register: Register): void => {
       if (props.patient.patientInRegister(register.id)) {
-        ClassHelper.RemoveFromClassById(register.id, props.patient.registerToPatient, props.patient.representativeToPatientForDelete);
+        ClassHelper.RemoveFromClassById(register.id, props.patient.patientsRegisters, props.patient.representativeToPatientForDelete);
       } else {
-        props.patient.addRegisterToPatient(register);
+        // props.patient.addRegisterToPatient(register);
       }
     };
 

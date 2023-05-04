@@ -108,8 +108,8 @@
         <el-row>
           <el-col :span="12" class="light-title upper flex-center">Значится в регистрах</el-col>
           <el-col :span="12">
-            <el-space v-if="patient.registerToPatient.length" :wrap="true">
-              <div v-for="registerToPatient in patient.registerToPatient" :key="registerToPatient.id">
+            <el-space v-if="patient.patientsRegisters.length" :wrap="true">
+              <div v-for="registerToPatient in patient.patientsRegisters" :key="registerToPatient.id">
                 <el-tooltip class="item" effect="light" :content="registerToPatient.register.name" placement="top-end">
                   <el-tag class="tag-link" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">{{
                     registerToPatient.register.name

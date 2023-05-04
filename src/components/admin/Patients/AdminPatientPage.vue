@@ -27,6 +27,7 @@ import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
 import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
+import PatientRegisters from '@/components/admin/Patients/PatientRegisters.vue';
 import PatientRepresentatives from '@/components/admin/Patients/PatientRepresentatives.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
 import HumanForm from '@/components/HumanForm.vue';
@@ -53,18 +54,20 @@ export default defineComponent({
     MenuContainer,
     PatientDiagnosis,
     PatientDocuments,
+    PatientRegisters,
   },
   setup() {
     const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
+      CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
       CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
-      CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
       CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
       CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
+      CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
     ];
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -96,7 +99,7 @@ export default defineComponent({
       adminHeader: {
         title: computed(() => (Provider.route().params['id'] ? patient.value?.human?.getFullName() : 'Добавить пациента')),
         showBackButton: true,
-        buttons: [{ action: Hooks.submit() }],
+        buttons: [],
       },
     });
     Hooks.onBeforeRouteLeave();

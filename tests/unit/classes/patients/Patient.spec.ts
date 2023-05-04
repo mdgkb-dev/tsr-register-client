@@ -50,7 +50,7 @@ describe('Class Patient', () => {
     expect(patient.chestCircumferenceForDelete).toHaveLength(0);
     expect(patient.headCircumference).toHaveLength(0);
     expect(patient.headCircumferenceForDelete).toHaveLength(0);
-    expect(patient.registerToPatient).toHaveLength(0);
+    expect(patient.patientsRegisters).toHaveLength(0);
     expect(patient.registerToPatientForDelete).toHaveLength(0);
     expect(patient.registerPropertyToPatient).toHaveLength(0);
     expect(patient.registerPropertySetToPatient).toHaveLength(0);
@@ -101,7 +101,7 @@ describe('Class Patient', () => {
       chestCircumferenceForDelete,
       headCircumference,
       headCircumferenceForDelete,
-      registerToPatient,
+      patientsRegisters: registerToPatient,
       registerToPatientForDelete,
       registerPropertyToPatient,
       registerPropertySetToPatient,

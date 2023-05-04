@@ -283,7 +283,6 @@ export default defineComponent({
         return await createPatientResearch(item);
       }
       await Provider.store.dispatch('researches/get', item.id);
-      console.log(research.value.withDates, patientResearch.value);
       await selectOrAddResult(research.value);
     };
 

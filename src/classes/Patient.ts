@@ -35,8 +35,8 @@ export default class Patient {
   patientDiagnosisForDelete: string[] = [];
 
   @ClassHelper.GetClassConstructor(PatientRegister)
-  registerToPatient: PatientRegister[] = [];
-  registerToPatientForDelete: string[] = [];
+  patientsRegisters: PatientRegister[] = [];
+  // registerToPatientForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(PatientResearch)
   patientsResearches: PatientResearch[] = [];
   registerGroupsToPatientForDelete: string[] = [];
@@ -201,15 +201,15 @@ export default class Patient {
     return this.patientsRepresentatives.some((rtp: PatientRepresentative) => rtp.representativeId === representativeId);
   }
 
-  addRegisterToPatient(register: Register): void {
-    const item = new PatientRegister();
-    item.register = new Register(register);
-    item.registerId = register.id;
-    this.registerToPatient.push(item);
+  addRegister(register: Register, user: User): PatientRegister {
+    const item = PatientRegister.Create(this.id as string, register);
+    item.userId = user.id;
+    this.patientsRegisters.push(item);
+    return item;
   }
 
   patientInRegister(registerId: string | undefined): boolean {
-    return this.registerToPatient.some((i: PatientRegister) => registerId === i.registerId);
+    return this.patientsRegisters.some((i: PatientRegister) => registerId === i.registerId);
   }
 
   createPatientResearch(research: Research): void {
@@ -237,6 +237,10 @@ export default class Patient {
 
   hasResearchesPool(poolId: string): boolean {
     return this.patientsResearchesPools.some((p: PatientResearchesPool) => p.researchesPoolId === poolId);
+  }
+
+  hasRegister(id: string): boolean {
+    return this.patientsRegisters.some((p: PatientRegister) => p.registerId === id);
   }
 
   getResearchFillingPercentage(researchId: string): number {
