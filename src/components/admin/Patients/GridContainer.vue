@@ -6,7 +6,7 @@
       gridGap: gridGap,
       gridTemplateRows: gridTemplateRows,
       gridTemplateColumns: gridTemplateColumns,
-      marginTop: marginTop,
+      margin: margin,
     }"
   >
     <slot name="grid-items" />
@@ -45,10 +45,10 @@ export default defineComponent({
       default: 'repeat(0 0px)',
     },
 
-    marginTop: {
+    margin: {
       type: String as PropType<string>,
       required: false,
-      default: '10px',
+      default: '10px 0 0 0',
     },
   },
 });
@@ -64,25 +64,5 @@ export default defineComponent({
   margin-left: auto;
   margin-right: auto;
 }
-
-// .grid-block-item {
-//   position: relative;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 250px;
-//   height: 40px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   cursor: pointer;
-//   transition: 0.3s;
-//   padding: 10px;
-//   background: #ffffff;
-//   border-radius: $normal-border-radius;
-//   border: $custom-border;
-//   text-align: center;
-//   overflow: hidden;
-// }
 
 </style>

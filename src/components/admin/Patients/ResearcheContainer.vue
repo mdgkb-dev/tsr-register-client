@@ -2,6 +2,7 @@
   <div class="mainblock"
     :style="{
       background: background,
+      padding: padding,
     }"
   >
     <div class="mainblock-header"
@@ -33,6 +34,11 @@ export default defineComponent({
       required: false,
       default: 'inherit',
     },
+    padding: {
+      type: String as PropType<string>,
+      required: false,
+      default: '0px 10px',
+    },
   },
 });
 </script>
@@ -47,7 +53,6 @@ export default defineComponent({
   justify-content: space-between;
   width: auto;
   height: calc(100% - 20px);
-  padding: 0px 10px;
   overflow: hidden;
   overflow-y: auto;
 }
@@ -64,8 +69,6 @@ export default defineComponent({
 .mainblock-body {
   width: 100%;
   height: 100%;
-  // overflow: hidden;
-  // overflow-y: auto;
 }
 
 .mainblock-footer {
