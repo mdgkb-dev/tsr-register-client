@@ -97,7 +97,16 @@ const StringsService = (() => {
     return `${percent}%`;
   }
 
+  function stringsEquals(str1: string, str2: string): boolean {
+    const low1 = str1.toLowerCase().replaceAll(/\s/g, '');
+    const low2 = str2.toLowerCase().replaceAll(/\s/g, '');
+    const transl1 = translit(low1);
+    const transl2 = translit(low2);
+    return low2.includes(low1) || transl2.includes(low1) || low2.includes(transl1);
+  }
+
   return {
+    stringsEquals,
     removeEmoji,
     translit,
     getStringBetweenChars,

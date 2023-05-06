@@ -36,9 +36,9 @@
                   font-size="16px"
                   border-radius="5px"
                   color="#343e5c"
+                  :color-swap="true"
+                  :with-icon="false"
                   @click.prevent="cancelResearchResultsFilling"
-                  :colorSwap="true"
-                  :withIcon="false"
                 >
                   <template #icon>
                     <svg class="icon-back">
@@ -87,8 +87,8 @@
                             font-size="16px"
                             border-radius="5px"
                             color="#343e5c"
-                            :colorSwap="true"
-                            :withIcon="false"
+                            :color-swap="true"
+                            :with-icon="false"
                             @click.prevent="cancelResearchResultsFilling"
                           >
                             <template #icon>
@@ -98,12 +98,7 @@
                             </template>
                           </Button>
                           <div class="search">
-                            <RemoteSearch
-                              :must-be-translated="true"
-                              key-value="representative"
-                              placeholder="Начните вводить название диагноза"
-                              @select="addRepresentative"
-                            />
+                            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
                           </div>
                         </div>
                         <div class="right">
@@ -115,8 +110,8 @@
                             font-size="16px"
                             border-radius="5px"
                             color="#343e5c"
-                            :colorSwap="true"
-                            :withIcon="false"
+                            :color-swap="true"
+                            :with-icon="false"
                           >
                           </Button>
                           <Button
@@ -127,8 +122,8 @@
                             font-size="16px"
                             border-radius="5px"
                             color="#343e5c"
-                            :colorSwap="true"
-                            :withIcon="false"
+                            :color-swap="true"
+                            :with-icon="false"
                           >
                           </Button>
                         </div>
@@ -148,7 +143,7 @@
                     </div>
                     <div class="scroll-block">
                       <CollapseContainer>
-                        <div v-for="(question, i) in research.questions" :key="question.id">
+                        <div v-for="(question, i) in filteredQuestions" :key="question.id">
                           <CollapseItem
                             :title="`${i + 1}. ${question.name}`"
                             :is-collaps="true"
@@ -235,7 +230,7 @@
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from 'vue-router';
 
 import Formula from '@/classes/Formula';
@@ -257,7 +252,7 @@ import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
-import RemoteSearch from '@/components/RemoteSearch.vue';
+import StringsService from '@/services/Strings';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -271,9 +266,9 @@ export default defineComponent({
     CollapseContainer,
     CollapseItem,
     AlphabetFilter,
-    RemoteSearch,
   },
   setup() {
+    const questionsFilterString: Ref<string> = ref('');
     const mounted = ref(false);
     // c3.generate();
     const selectedTab = ref('');
@@ -283,6 +278,14 @@ export default defineComponent({
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const patientResearch: Ref<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
+
+    const filteredQuestions: ComputedRef<Question[]> = computed(() => {
+      if (questionsFilterString.value === '') {
+        return research.value.questions;
+      }
+      return research.value.questions.filter((q: Question) => StringsService.stringsEquals(questionsFilterString.value, q.name));
+    });
+
     // const researches: Ref<Register> = computed(() => Provider.store.getters['researches/items']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     // const activeCollapseName: Ref<string> = ref('');
@@ -409,6 +412,8 @@ export default defineComponent({
     };
 
     return {
+      questionsFilterString,
+      filteredQuestions,
       cancelResearchResultsFilling,
       toggleResearchesPools,
       researchesPoolsIsToggle,
@@ -733,6 +738,4 @@ export default defineComponent({
   justify-content: left;
   align-items: center;
 }
-
-
 </style>

@@ -74,4 +74,8 @@ export default class ResearchResult {
     });
     return sum;
   }
+
+  getQuestionVariantAnswer(questionVariantId: string): Answer | undefined {
+    return this.answers.find((a: Answer) => a.questionVariantId === questionVariantId);
+  }
 }

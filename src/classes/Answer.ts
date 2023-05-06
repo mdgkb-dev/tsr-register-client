@@ -19,6 +19,7 @@ export default class Answer {
   selectedAnswerVariantsForDelete: string[] = [];
   patientId?: string;
   questionId?: string;
+  questionVariantId?: string;
   filled = false;
 
   // researchResult?: ResearchResult;
