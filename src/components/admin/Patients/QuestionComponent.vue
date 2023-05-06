@@ -1,9 +1,10 @@
 <template>
   <StringProp v-if="question.valueType.isString() || question.valueType.isText()" :research-result="researchResult" :question="question" />
-  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" />
   <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" />
   <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" />
   <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" />
+  <NumberProp v-if="question.valueType.isNumber() & question.name !== 'Аллергены'" :research-result="researchResult" :question="question" />
+  <div v-if="question.name === 'Аллергены'"><SetSelect :research-result="researchResult" :question="question" /></div>
 </template>
 
 <script lang="ts">
@@ -16,6 +17,7 @@ import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RadioProp from '@/components/admin/Research/RadioProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
+import SetSelect from '@/components/admin/Research/SetSelect.vue';
 
 export default defineComponent({
   name: 'QuestionComponent',
@@ -25,6 +27,7 @@ export default defineComponent({
     NumberProp,
     DataComponentComputed,
     StringProp,
+    SetSelect,
   },
   props: {
     researchResult: {

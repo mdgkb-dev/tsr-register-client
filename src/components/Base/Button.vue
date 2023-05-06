@@ -21,7 +21,7 @@
     :style="{
       stroke: color,
       fill: color,
-      transform: hovering ? 'scale(1.2, 1.2)' : '',
+
       marginRight: text ? '10px' : '',
     }"
   >
@@ -123,6 +123,8 @@ export default defineComponent({
   margin-right: auto;
   text-align: center;
   padding: 0 10px;
+  cursor: pointer;
+  overflow: hidden;
 }
 
 .button-icon {
@@ -130,6 +132,15 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   transition: 0.3s;
+}
+
+.text {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  justify-content: center;
+  height: auto;
+  max-height: 36px;
 }
 
 </style>

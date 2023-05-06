@@ -187,7 +187,6 @@ $margin: 20px 0;
 }
 
 .el-form {
-  padding: 0 10px;
   width: 100%;
 }
 

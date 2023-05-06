@@ -45,7 +45,7 @@
     </el-table-column>
 
     <el-table-column label="Телефон" align="start">
-      <template #default="scope" v>
+      <template #default="scope">
         <div>
           {{ scope.row.representative.human.contact.phone }}
         </div>

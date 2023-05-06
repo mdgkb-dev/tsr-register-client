@@ -37,6 +37,8 @@
                   border-radius="5px"
                   color="#343e5c"
                   @click.prevent="cancelResearchResultsFilling"
+                  :colorSwap="true"
+                  :withIcon="false"
                 >
                   <template #icon>
                     <svg class="icon-back">
@@ -48,7 +50,7 @@
               </div>
             </template>
             <template v-else>
-              <GridContainer max-width="600px" grid-gap="6px" grid-template-columns="repeat(auto-fit, minmax(60px, 1fr))" margin-top="10px">
+              <GridContainer max-width="600px" grid-gap="6px" grid-template-columns="repeat(auto-fit, minmax(60px, 1fr))">
                 <template #grid-items>
                   <AlphabetFilter />
                 </template>
@@ -75,6 +77,62 @@
                       </div>
                     </div>
                     <div class="tools">
+                      <div class="control-buttons">
+                        <div class="left">
+                          <Button
+                            text="Назад"
+                            background="#ffffff"
+                            margin-right="10px"
+                            height="42px"
+                            font-size="16px"
+                            border-radius="5px"
+                            color="#343e5c"
+                            :colorSwap="true"
+                            :withIcon="false"
+                            @click.prevent="cancelResearchResultsFilling"
+                          >
+                            <template #icon>
+                              <svg class="icon-back">
+                                <use xlink:href="#back"></use>
+                              </svg>
+                            </template>
+                          </Button>
+                          <div class="search">
+                            <RemoteSearch
+                              :must-be-translated="true"
+                              key-value="representative"
+                              placeholder="Начните вводить название диагноза"
+                              @select="addRepresentative"
+                            />
+                          </div>
+                        </div>
+                        <div class="right">
+                          <Button
+                            text="Прерыдущий"
+                            background="#ffffff"
+                            margin-right="10px"
+                            height="42px"
+                            font-size="16px"
+                            border-radius="5px"
+                            color="#343e5c"
+                            :colorSwap="true"
+                            :withIcon="false"
+                          >
+                          </Button>
+                          <Button
+                            text="Следующий"
+                            background="#ffffff"
+                            margin-right="10px"
+                            height="42px"
+                            font-size="16px"
+                            border-radius="5px"
+                            color="#343e5c"
+                            :colorSwap="true"
+                            :withIcon="false"
+                          >
+                          </Button>
+                        </div>
+                      </div>
                       <Button
                         text="Сохранить"
                         :color-swap="true"
@@ -199,6 +257,7 @@ import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
+import RemoteSearch from '@/components/RemoteSearch.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -212,6 +271,7 @@ export default defineComponent({
     CollapseContainer,
     CollapseItem,
     AlphabetFilter,
+    RemoteSearch,
   },
   setup() {
     const mounted = ref(false);
@@ -568,6 +628,7 @@ export default defineComponent({
   // left: 0;
   // z-index: 1;
   display: flex;
+  flex-direction: column;
   justify-content: left;
   align-items: center;
   height: auto;
@@ -644,4 +705,34 @@ export default defineComponent({
   white-space: nowrap;
   height: 100%;
 }
+
+.control-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.left {
+  min-width: 300px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.right {
+  max-width: 300px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.search {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+
 </style>
