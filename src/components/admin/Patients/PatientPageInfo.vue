@@ -42,7 +42,7 @@
       </div>
     </template>
     <template #right>
-      <PassportForm store-module="patients" />
+      <PassportForm store-module="patients" :edit-mode="true" />
       <!--      <ContactForm />-->
     </template>
   </LeftRightContainer>

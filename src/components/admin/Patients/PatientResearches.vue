@@ -70,7 +70,9 @@
                     <div class="header-container">
                       <div class="researche-title-name">{{ research.name }}</div>
                       <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>
-                      <div class="researche-counter">Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}</div>
+                      <div v-if="research.withScores" class="researche-counter">
+                        Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
+                      </div>
                     </div>
                     <div class="tools">
                       <Button

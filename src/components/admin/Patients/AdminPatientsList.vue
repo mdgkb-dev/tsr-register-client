@@ -157,14 +157,12 @@
 
       <el-table-column label="РЕГИСТРЫ" width="115" align="center">
         <template #default="scope">
-          <div v-if="scope.row.registerToPatient && scope.row.registerToPatient.length">
-            <div v-for="registerToPatient in scope.row.registerToPatient" :key="registerToPatient.id">
-              <el-tooltip class="item" effect="dark" :content="registerToPatient.register.name" placement="top-end">
-                <el-tag class="tag-link" size="small" @click="$router.push(`/registers/patients/${registerToPatient.register.id}`)">
-                  <span>{{ registerToPatient.register.getTagName() }}</span>
-                </el-tag>
-              </el-tooltip>
-            </div>
+          <div v-for="patientRegister in scope.row.patientsRegisters" :key="patientRegister.id">
+            <el-tooltip class="item" effect="dark" :content="patientRegister.register.name" placement="top-end">
+              <el-tag class="tag-link" size="small" @click="$router.push(`/admin/patients/${scope.row.id}?menu=registers`)">
+                <span>{{ patientRegister.register.getTagName() }}</span>
+              </el-tag>
+            </el-tooltip>
           </div>
         </template>
       </el-table-column>
@@ -186,25 +184,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="createdAt" width="150" align="center">
-        <template #default="scope">
-          {{ $dateTimeFormatter.format(scope.row.createdAt) }}
-        </template>
-      </el-table-column>
-
-      <!--      <el-table-column prop="updatedAt" width="150" align="center">-->
-      <!--        <template #header>-->
-      <!--          <div class="table-header">-->
-      <!--            <span>Дата последнего обновления</span>-->
-      <!--            <FilterDateForm :table="schema.patient.tableName" :col="schema.patient.updatedAt" />-->
-      <!--            <SortButton :table="schema.patient.tableName" :col="schema.patient.updatedAt" />-->
-      <!--          </div>-->
-      <!--        </template>-->
-      <!--        <template #default="scope">-->
-      <!--          {{ $dateTimeFormatter.format(scope.row.updatedAt) }}-->
-      <!--        </template>-->
-      <!--      </el-table-column>-->
-
       <el-table-column width="50" align="center" class-name="sticky-right">
         <template #header>
           <FilterResetButton />
@@ -218,10 +197,10 @@
             </template>
             <el-timeline>
               <el-timeline-item :timestamp="$dateTimeFormatter.format(scope.row.createdAt)"
-                >Создано {{ scope.row.createdBy?.login }}</el-timeline-item
+                >Создано {{ scope.row.createdBy?.email }}</el-timeline-item
               >
               <el-timeline-item :timestamp="$dateTimeFormatter.format(scope.row.updatedAt)"
-                >Обновлено {{ scope.row.updatedBy?.login }}</el-timeline-item
+                >Обновлено {{ scope.row.updatedBy?.email }}</el-timeline-item
               >
             </el-timeline>
           </el-popover>

@@ -2,7 +2,7 @@
   <div style="min-height: 100vh">
     <KeepAlive :include="[]" :max="0">
       <div>
-        <AdminHeaderTop />
+        <AdminHeaderTop v-if="showTopHeader" />
         <div class="admin-main-container">
           <AdminSideMenu class="side-menu hidden-sm-and-down" />
           <div class="admin-container">
@@ -48,18 +48,18 @@ export default defineComponent({
     const store = useStore();
     const isDrawerOpen: ComputedRef<boolean> = computed(() => store.getters['admin/isDrawerOpen']);
     const closeDrawer = () => store.commit('admin/closeDrawer');
-
-    return { isDrawerOpen, closeDrawer, AdminLayout };
+    const showTopHeader = false;
+    return { isDrawerOpen, closeDrawer, AdminLayout, showTopHeader };
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .admin-main-container {
-  height: calc(100vh - 61px);
+  height: calc(100vh);
 }
 .admin-container {
-  height: calc(100vh - 121px);
+  height: calc(100vh - 61px);
   width: 100%;
 }
 .el-main {

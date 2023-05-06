@@ -6,6 +6,7 @@ import Human from '@/classes/Human';
 import MkbItem from '@/classes/MkbItem';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
+import PatientHistory from '@/classes/PatientHistory';
 import PatientRegister from '@/classes/PatientRegister';
 import PatientRepresentative from '@/classes/PatientRepresentative';
 import PatientResearch from '@/classes/PatientResearch';
@@ -49,11 +50,16 @@ export default class Patient {
   patientDrugRegimen: PatientDrugRegimen[] = [];
   patientDrugRegimenForDelete: string[] = [];
 
+  @ClassHelper.GetClassConstructor(PatientHistory)
+  patientHistories: PatientHistory[] = [];
+
   createdAt?: Date;
   updatedAt?: Date;
   createdById?: string;
   updatedById?: string;
+  @ClassHelper.GetClassConstructor(User)
   createdBy?: User;
+  @ClassHelper.GetClassConstructor(User)
   updatedBy?: User;
 
   fullName?: string;

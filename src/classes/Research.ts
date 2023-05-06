@@ -13,6 +13,7 @@ export default class Research {
   questionsForDelete: string[] = [];
   isEdit = false;
   withDates = false;
+  withScores = false;
 
   @ClassHelper.GetClassConstructor(Formula)
   formulas: Formula[] = [];

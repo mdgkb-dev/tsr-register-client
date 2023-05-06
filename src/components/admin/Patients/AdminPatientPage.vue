@@ -1,37 +1,40 @@
 <template>
-  <MenuContainer min-menu-item-width="200px" height="calc(100% - 2px)" background="#DFF2F8">
+  <MenuContainer v-if="mounted" min-menu-item-width="200px" height="calc(100% - 2px)" background="#DFF2F8">
     <template #menu>
       <div v-for="(menu, i) in menus" :key="menu.id">
-        <div :class="{ 'selected-tab': activeMenuIndex === i, tab: activeMenuIndex !== i }" @click="activeMenuIndex = i">
+        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
     </template>
     <template #body>
-      <component v-bind="menusProperties" :is="menus[activeMenuIndex].component" v-if="mounted" :patient="patient" />
+      <component v-bind="menusProperties" :is="activeMenu.component" :patient="patient" />
     </template>
   </MenuContainer>
 </template>
 
 <script lang="ts">
 import { computed, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
-import { NavigationGuardNext } from 'vue-router';
+import { onBeforeRouteLeave } from 'vue-router';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
+import PatientHistory from '@/classes/PatientHistory';
+import User from '@/classes/User';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
-// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
 import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
 import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
+import PatientHistories from '@/components/admin/Patients/PatientHistories.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
 import PatientRegisters from '@/components/admin/Patients/PatientRegisters.vue';
 import PatientRepresentatives from '@/components/admin/Patients/PatientRepresentatives.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
+import { PatientHistorActionType } from '@/interfaces/PatientHistorActionType';
 import CustomSection from '@/services/classes/page/CustomSection';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -55,9 +58,9 @@ export default defineComponent({
     PatientDiagnosis,
     PatientDocuments,
     PatientRegisters,
+    PatientHistories,
   },
   setup() {
-    const activeMenuIndex: Ref<0> = ref(0);
     const menus: CustomSection[] = [
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
@@ -68,22 +71,51 @@ export default defineComponent({
       CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
       CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
+      CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
     ];
+    const activeMenu: Ref<CustomSection> = ref(menus[0]);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-
+    const patientCopy: Patient = new Patient(patient.value);
+    const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const menusProperties = computed(() => {
-      if (menus[activeMenuIndex.value].component === 'PatientDiagnosis') {
+      if (activeMenu.value.component === 'PatientDiagnosis') {
         return { 'mkb-linker': patient.value };
       }
       return {};
     });
 
-    const customSections: Ref<CustomSection[]> = ref([]);
+    onBeforeRouteLeave(async () => {
+      await Provider.store.dispatch(
+        'patientHistories/create',
+        PatientHistory.Create(
+          patient.value,
+          user.value.id as string,
+          Provider.route().params['id'] ? PatientHistorActionType.Update : PatientHistorActionType.Create
+        )
+      );
+    });
+
     const form = ref();
-    const mount: Ref<boolean> = ref(false);
     const rules = {
       human: HumanRules,
+    };
+
+    const setMenuFromRoute = () => {
+      let menu = Provider.route().query.menu as string;
+      if (!menu) {
+        menu = menus[0].id;
+      }
+      changeMenu(menu);
+    };
+
+    const changeMenu = (customSectionId: string) => {
+      const section = menus.find((m: CustomSection) => m.id === customSectionId);
+      if (!section) {
+        return;
+      }
+      activeMenu.value = section;
+      Provider.router.replace({ query: { menu: section.id as string } });
     };
 
     // const { links, pushToLinks } = useBreadCrumbsLinks();
@@ -92,7 +124,13 @@ export default defineComponent({
     // const { submitHandling } = useForm(!!route.params.patientId);
 
     const load = async () => {
-      await Provider.loadItem();
+      setMenuFromRoute();
+      if (Provider.route().params['id']) {
+        return await Provider.loadItem();
+      }
+      const patient = new Patient();
+      patient.createdAt;
+      await Provider.store.dispatch('patients/create', patient);
     };
 
     Hooks.onBeforeMount(load, {
@@ -104,30 +142,15 @@ export default defineComponent({
     });
     Hooks.onBeforeRouteLeave();
 
-    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      // saveButtonClick.value = true;
-      // if (!validate(form.value)) {
-      //   return;
-      // }
-
-      for (const item of patient.value.patientsRepresentatives) {
-        // item.patient = undefined;
-        // item.representative = undefined;
-        // item.representativeType = undefined;
-      }
-
-      // await submitHandling('patients', patient.value, next);
-    };
-
     return {
+      changeMenu,
       menusProperties,
-      activeMenuIndex,
+      activeMenu,
       patient,
       form,
       menus,
       mounted: Provider.mounted,
       rules,
-      submitForm,
     };
   },
 });

@@ -13,6 +13,7 @@ import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
 import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
+import { patientHistories } from '@/store/modules/patientHistories';
 import { patients } from '@/store/modules/patients';
 import { patientsRegisters } from '@/store/modules/patientsRegisters';
 import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
@@ -70,6 +71,7 @@ const store: StoreOptions<RootState> = {
     humans,
     anamneses,
     patientsRegisters,
+    patientHistories,
   },
 };
 
