@@ -1,25 +1,33 @@
 <template>
   <div class="card-wrapper">
     <el-card class="box-card" style="position: relative">
-      <el-date-picker
-        :model-value="anamnesis.date"
-        type="date"
-        format="DD.MM.YYYY"
-        placeholder="Выберите дату"
-        @change="(e) => anamnesis.setDate(e)"
-        @keydown="dateFormat"
-      />
-      <el-input :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
-      <el-input
-        type="textarea"
-        class="textarea"
-        :autosize="{ minRows: 3, maxRows: 7 }"
-        :model-value="anamnesis.value"
-        @input="(e) => anamnesis.setValue(e)"
-        @blur="update"
-      >
-      </el-input>
-      <el-button @click="remove">Удалить</el-button>
+      <el-form>
+        <el-form-item label="Дата">
+          <el-date-picker
+            :model-value="anamnesis.date"
+            type="date"
+            format="DD.MM.YYYY"
+            placeholder="Выберите дату"
+            @change="(e) => anamnesis.setDate(e)"
+            @keydown="dateFormat"
+          />
+        </el-form-item>
+        <el-form-item label="ФИО врача">
+          <el-input placeholder="ФИО врача" :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            type="textarea"
+            class="textarea"
+            :autosize="{ minRows: 3, maxRows: 7 }"
+            :model-value="anamnesis.value"
+            @input="(e) => anamnesis.setValue(e)"
+            @blur="update"
+          >
+          </el-input>
+        </el-form-item>
+        <el-button @click="remove">Удалить</el-button>
+      </el-form>
     </el-card>
   </div>
 </template>
@@ -76,10 +84,7 @@ article {
   top: 10px;
   right: 10px;
 }
-:deep(.el-input__inner),
-:deep(.el-textarea__inner) {
-  border-radius: 15px;
-}
+
 .el-timeline {
   padding: 0;
 }

@@ -7,7 +7,6 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div class="slider-item-active">СМА</div>
         <div v-for="registerItem in registers" :key="registerItem.id" class="slider-item" @click="addRegister(registerItem.id)">
           {{ registerItem.name }}
         </div>

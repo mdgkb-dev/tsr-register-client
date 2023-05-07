@@ -26,6 +26,9 @@
         </div>
       </template>
     </el-menu>
+    <div class="exit-button-container">
+      <el-button @click="logout">Выйти</el-button>
+    </div>
   </div>
 </template>
 
@@ -35,8 +38,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import IAdminMenu from '@/interfaces/IAdminMenu';
-// import IApplicationsCount from '@/interfaces/IApplicationsCount';
-// import IPathPermission from '@/interfaces/IPathPermission';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'AdminSideMenu',
@@ -74,13 +76,25 @@ export default defineComponent({
       // await store.dispatch('admin/unsubscribeApplicationsCountsGet');
     });
 
-    return { menus, closeDrawer, isCollapseSideMenu, activePath, mounted };
+    const logout = async () => {
+      await Provider.store.dispatch('auth/logout');
+      await Provider.router.push('/login');
+    };
+    return { logout, menus, closeDrawer, isCollapseSideMenu, activePath, mounted };
   },
 });
 </script>
 
 <style lang="scss" scoped>
 $background-color: whitesmoke;
+
+.exit-button-container {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 50px;
+  left: 25%;
+}
 
 ::-webkit-scrollbar {
   display: block;
@@ -103,6 +117,7 @@ $background-color: whitesmoke;
 }
 
 .admin-side-menu {
+  position: relative;
   min-height: inherit;
   height: inherit;
   float: left;

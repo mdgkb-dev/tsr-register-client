@@ -15,10 +15,10 @@ export default class PatientDiagnosis {
   doctorName = '';
   @ClassHelper.GetClassConstructor(Anamnesis)
   anamneses: Anamnesis[] = [];
-  patientDiagnosisAnamnesisForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(MkbItem)
   mkbItem?: MkbItem;
   mkbItemId?: string;
+
   constructor(i?: PatientDiagnosis) {
     ClassHelper.BuildClass(this, i);
   }

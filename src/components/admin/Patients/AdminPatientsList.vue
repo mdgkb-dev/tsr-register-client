@@ -60,16 +60,18 @@
 
       <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
         <template #default="scope">
-          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
+          <div v-for="rep in scope.row.patientsRepresentatives" :key="rep">
             <el-tooltip class="item" effect="dark" placement="top-end">
               <template #content>
                 <div>
                   {{ rep.representative.human.getFullName() }}
                 </div>
-                <div v-if="rep.representative.human.contact.phone">Телефон: {{ rep.representative.human.contact.phone }}</div>
+                <a :href="'tel:' + rep.representative.human.contact.phone" style="color: white">
+                  <div v-if="rep.representative.human.contact.phone">Телефон: {{ rep.representative.human.contact.phone }}</div>
+                </a>
                 <div v-if="rep.representative.human.contact.email">Email: {{ rep.representative.human.contact.email }}</div>
               </template>
-              <el-tag class="tag-link" size="small" @click="$router.push(`/representatives/${rep.representative.id}`)">
+              <el-tag class="tag-link" size="small" @click="$router.push(`/admin/representatives/${rep.representative.id}`)">
                 {{ rep.getRepresentativeParentType() }}
               </el-tag>
             </el-tooltip>

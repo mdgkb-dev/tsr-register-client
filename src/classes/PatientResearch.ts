@@ -14,18 +14,11 @@ export default class PatientResearch {
   research?: Research;
   researchId?: string;
   order = 0;
-  // @ClassHelper.GetClassConstructor(Patient)
-  // patient?: Patient;
+
   patientId?: string;
   fillingPercentage = 0;
   @ClassHelper.GetClassConstructor(ResearchResult)
   researchResults: ResearchResult[] = [];
-  // patientQuestionsForDelete: string[] = [];
-  // @ClassHelper.GetClassConstructor(RegisterPropertyOtherToPatient)
-  // registerPropertyOthersToPatient: RegisterPropertyOtherToPatient[] = [];
-  // @ClassHelper.GetClassConstructor(RegisterPropertySetToPatient)
-  // registerPropertySetToPatient: RegisterPropertySetToPatient[] = [];
-  // registerPropertySetToPatientForDelete: string[] = [];
 
   constructor(i?: PatientResearch) {
     ClassHelper.BuildClass(this, i);
