@@ -251,13 +251,13 @@ export default defineComponent({
 
 .select-form {
   position: fixed;
-  top: 52%;
+  top: 49%;
   left: 50%;
   width: calc(99% - 22px);
-  height: calc(92% - 2px);
+  height: calc(98% - 22px);
   transform: translate(-50%, -50%);
   z-index: 21;
-  max-height: 95vh;
+  max-height: 97vh;
   background: #ffffff;
   border: $light-pink-border;
   border-radius: $normal-border-radius;

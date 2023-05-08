@@ -21,7 +21,6 @@
     :style="{
       stroke: color,
       fill: color,
-
       marginRight: text ? '10px' : '',
     }"
   >

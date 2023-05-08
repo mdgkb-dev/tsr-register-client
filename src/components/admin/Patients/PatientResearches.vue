@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools">
+  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools" sliderOnWidth="150px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -458,7 +458,7 @@ export default defineComponent({
 }
 
 .slider-body {
-  width: 442px;
+  width: 150px;
   height: auto;
   border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
@@ -468,7 +468,7 @@ export default defineComponent({
   display: grid;
   grid-gap: 6px;
   grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   padding: 6px;
 }
 
@@ -477,7 +477,7 @@ export default defineComponent({
 }
 
 .slider-item {
-  width: 101px;
+  width: 130px;
   height: 40px;
   border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
@@ -492,7 +492,7 @@ export default defineComponent({
 }
 
 .slider-item-active {
-  width: 101px;
+  width: 130px;
   height: 40px;
   border: 1px solid #379fff;
   border-radius: $normal-border-radius;
@@ -612,10 +612,10 @@ export default defineComponent({
 
 .research-info {
   position: fixed;
-  top: 52%;
+  top: 49%;
   left: 50%;
   width: calc(99% - 22px);
-  height: calc(92% - 22px);
+  height: calc(98% - 22px);
   transform: translate(-50%, -50%);
   background: #dff2f8;
   border: $light-pink-border;
@@ -644,7 +644,7 @@ export default defineComponent({
 
 .scroll-block {
   width: 100%;
-  height: calc(100% - 200px);
+  height: calc(100% - 220px);
   overflow: hidden;
   overflow-y: auto;
 }

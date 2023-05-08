@@ -53,8 +53,6 @@ export default defineComponent({
   justify-content: space-between;
   width: auto;
   height: calc(100% - 20px);
-  overflow: hidden;
-  overflow-y: auto;
 }
 
 .mainblock-header {
@@ -69,6 +67,8 @@ export default defineComponent({
 .mainblock-body {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .mainblock-footer {

@@ -9,7 +9,7 @@
         header-row-class-name="header-style"
         row-class-name="row-style"
         style="width: 100%; margin-bottom: 20px; overflow: auto"
-        height="calc(100vh - 200px)"
+        height="calc(100vh - 220px)"
         @row-click="link"
       >
         <el-table-column width="60" align="center" />

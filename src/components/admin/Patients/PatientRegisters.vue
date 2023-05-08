@@ -295,7 +295,7 @@ export default defineComponent({
 
 .research-info {
   position: fixed;
-  top: 52%;
+  top: 46%;
   left: 50%;
   width: calc(99% - 22px);
   height: calc(92% - 22px);
@@ -326,7 +326,7 @@ export default defineComponent({
 
 .scroll-block {
   width: 100%;
-  height: calc(100% - 200px);
+  height: calc(100% - 220px);
   overflow: hidden;
   overflow-y: auto;
 }
