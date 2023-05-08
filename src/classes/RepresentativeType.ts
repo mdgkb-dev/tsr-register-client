@@ -17,4 +17,8 @@ export default class RepresentativeType implements IRepresentativeType {
     this.childMaleType = representativeType.childMaleType;
     this.childWomanType = representativeType.childWomanType;
   }
+
+  getParentTypeName(isMale: boolean): string {
+    return isMale ? this.parentMaleType : this.parentWomanType;
+  }
 }
