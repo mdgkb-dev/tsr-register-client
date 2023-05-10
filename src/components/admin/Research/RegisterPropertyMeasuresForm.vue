@@ -20,7 +20,7 @@
     <template #item="{ element, index }">
       <div v-if="registerProperty.registerPropertyMeasures.length" class="property-row">
         <el-form-item label-width="170px" label="Единица измерения">
-          <el-icon size="20" class="el-icon-s-grid drug-icon">
+          <el-icon :size="20" class="el-icon-s-grid drug-icon">
             <Grid />
           </el-icon>
           <el-input v-model="element.name"> </el-input>

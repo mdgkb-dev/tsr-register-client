@@ -19,7 +19,7 @@
     <template #item="{ element, index }">
       <div class="property-row">
         <div class="property-row-header">
-          <el-icon size="20" class="el-icon-s-grid drug-icon">
+          <el-icon :size="20" class="el-icon-s-grid drug-icon">
             <Grid />
           </el-icon>
           <div class="card-button-group">

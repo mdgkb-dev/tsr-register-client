@@ -150,9 +150,6 @@ export default defineComponent({
       patient.value.patientDiagnosis.length > 0 ? patient.value.patientDiagnosis[0] : undefined
     );
     const toggle = async (toggle: boolean) => {
-      if (toggle) {
-        await Provider.store.dispatch('registers/getAll');
-      }
       isToggle.value = toggle;
     };
 
@@ -190,7 +187,6 @@ export default defineComponent({
 
     const selectPatientDiagnosis = (patientDiagnosisId: string): void => {
       selectedPatientDiagnosis.value = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
-      console.log(patientDiagnosisId);
     };
 
     return {

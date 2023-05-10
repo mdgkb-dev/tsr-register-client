@@ -1,17 +1,26 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
     <template #header>
+      Количество пациентов: {{ count }}
       <RemoteSearch
         :must-be-translated="true"
         :key-value="schema.patient.key"
         placeholder="Начните вводить ФИО пациента"
         @select="selectSearch"
       />
-      <!--      <FiltersList default-label="Пол" :models="createSexFilters()" @load="loadPatients" />-->
-      <!--      <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadPatients" />-->
+      <FilterMultipleSelect
+        placeholder="Выбрать регистры"
+        class="filters-block"
+        :filter-model="filterByRegister"
+        :options="createRegistersOptions()"
+        @load="loadPatients"
+      />
+      <!--      <FiltersList :models="createFilters()" @load="loadItems" />-->
+      <FiltersList default-label="Мужской и женский пол" :models="createSexFilters()" @load="loadPatients" />
+      <SortList class="filters-block" :store-mode="true" @load="loadPatients" />
     </template>
     <template #sort>
-      <SortList :max-width="400" @load="loadItems" />
+      <!--      <SortList :max-width="400" @load="loadItems" />-->
     </template>
     <el-table
       ref="table"
@@ -115,7 +124,7 @@
             <div>
               <span class="underline-label">{{ diagnosis.mkbItem.getCode() }}</span>
               <el-tooltip class="item" effect="dark" :content="diagnosis.mkbItem.getFullName()" placement="top-end">
-                <el-icon size="17" style="margin-left: 5px">
+                <el-icon :size="17" style="margin-left: 5px">
                   <QuestionFilled />
                 </el-icon>
               </el-tooltip>
@@ -214,19 +223,24 @@
 
 <script lang="ts">
 import { Document, QuestionFilled } from '@element-plus/icons-vue';
-import { computed, defineComponent, Ref } from 'vue';
+import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
-import Crud from '@/classes/shared/Crud';
+import Register from '@/classes/Register';
+import FilterMultipleSelect from '@/components/Filters/FilterMultipleSelect.vue';
 import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
+import FiltersList from '@/components/TableFilters/FiltersList.vue';
 import SortButton from '@/components/TableFilters/SortButton.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
+import IOption from '@/interfaces/shared/IOption';
+import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
+import FilterModel from '@/services/classes/filters/FilterModel';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 // import PatientsFiltersLib from '@/services/Provider/Provider/libs/filters/PatientsFiltersLib';
@@ -236,6 +250,7 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
+    FilterMultipleSelect,
     RemoteSearch,
     SortButton,
     Pagination,
@@ -245,19 +260,29 @@ export default defineComponent({
     // FilterSet,
     FilterResetButton,
     AdminListWrapper,
-    // FiltersList,
+    FiltersList,
     QuestionFilled,
     Document,
   },
   setup() {
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
+    const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
+    const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
+    const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
     // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
+    const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
-    const crud = new Crud('patients');
+
+    const loadPatients = async () => {
+      await Provider.loadItems();
+    };
 
     const load = async () => {
-      // Provider.setSortModels(PatientsSortsLib.byFullName());
-      await Provider.loadItems();
+      await Provider.store.dispatch('registers/getAll');
+      await loadPatients();
+
+      await Provider.store.dispatch('meta/getOptions', registers);
+      filterByRegister.value = PatientsFiltersLib.byRegisters([]);
     };
 
     Hooks.onBeforeMount(load, {
@@ -269,59 +294,31 @@ export default defineComponent({
       getAction: 'getAllWithCount',
     });
 
-    // const handleSearchInput = async (value: string): Promise<void> => {
-    //   if (value.length === 0) {
-    //     await Provider.store.dispatch('patients/getAll', Provider.store.getters['filter/filterQuery']);
-    //   }
-    //   Provider.store.commit('pagination/setCurPage', 0);
-    // };
-    //
-    // const findPatients = async (query: string, resolve: CallableFunction): Promise<void> => {
-    //   const patients: ISearchPatient[] = [];
-    //   if (query.length > 2) {
-    //     await Provider.store.dispatch('patients/searchPatients', query);
-    //     filteredPatients.value.forEach((p: Patient) => {
-    //       if (p.id) patients.push({ value: p.human.getFullName(), id: p.id, patient: p });
-    //     });
-    //   }
-    //   resolve(patients);
-    // };
-
-    // const handlePatientSelect = async (item: ISearch): Promise<void> => {
-    //   await Provider.store.dispatch('patients/getAllById', item.id);
-    // };
-
-    // const children = (representative: IRepresetnationType) => {
-    //   if (representative.patient) {
-    //     return representative.patient.human.isMale
-    //       ? representative.representativeType?.childMaleType
-    //       : representative.representativeType?.childWomanType;
-    //   }
-    //   return '';
-    // };
-
     const selectSearch = async (event: ISearchObject): Promise<void> => {
       await Provider.router.push(`/admin/patients/${event.value}`);
     };
 
-    // const createSexFilters = (): IFilterModel[] => {
-    //   return [PatientsFiltersLib.onlyMan(), PatientsFiltersLib.onlyWoman()];
-    // };
+    const createSexFilters = (): FilterModel[] => {
+      return [PatientsFiltersLib.onlyMale(), PatientsFiltersLib.onlyFemale()];
+    };
     //
-    // const createSortList = (): ISortModel[] => {
-    //   return [PatientsSortsLib.byFullName(), PatientsSortsLib.byDateBirth(), PatientsSortsLib.byUpdatedAt()];
-    // };
+
+    const createRegistersOptions = (): IOption[] => {
+      const ids: IOption[] = [];
+      registers.value.forEach((r: Register) => ids.push({ value: r.id as string, label: r.name }));
+      return ids;
+    };
 
     return {
+      count,
+      filterByStatus,
+      createRegistersOptions,
       authModalVisible,
-      // createSortList,
-      load,
       selectSearch,
-      // children,
-      // findPatients,
-      // handlePatientSelect,
-      // handleSearchInput,
+      filterByRegister,
+      loadPatients,
       patients,
+      createSexFilters,
       ...Provider.getAdminLib(),
     };
   },

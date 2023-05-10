@@ -22,7 +22,9 @@ export default class PatientRepresentative {
   }
 
   getRepresentativeParentType(): string {
-    if (!this.representativeType) return '';
+    if (!this.representativeType.id) {
+      return 'Представитель';
+    }
     if (this.representative?.human.isMale) {
       return this.representativeType.parentMaleType;
     } else {

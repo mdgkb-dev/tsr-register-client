@@ -7,7 +7,7 @@
             <div class="collapse-header-container">
               <!-- <div v-if="!element.isEdit" style="display: flex; align-items: center"> -->
               <div style="display: flex; align-items: center">
-                <el-icon size="20" class="el-icon-s-grid drug-icon">
+                <el-icon :size="20" class="el-icon-s-grid drug-icon">
                   <Grid />
                 </el-icon>
                 <h3 class="collapse-header">{{ element.shortName }}</h3>
