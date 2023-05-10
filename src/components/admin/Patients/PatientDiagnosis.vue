@@ -499,6 +499,6 @@ export default defineComponent({
 }
 
 :deep(.el-timeline-item) {
-  padding-bottom: 0px;
+  padding-bottom: 8px;
 }
 </style>
