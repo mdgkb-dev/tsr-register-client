@@ -22,9 +22,9 @@
       <div class="left-title">Инвалидность</div>
       <div class="left-info">
         <div v-if="patient.getActuallyDisability()">
-          <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" :size="20">
+          <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" ::size="20">
             <div style="color: #a1a8bd">До {{ $dateTimeFormatter.format(patient.getActuallyDisability().period.dateEnd) }}</div>
-            <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" :size="20" class="disability-circles">
+            <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
                 >A</el-button
               >
@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import ContactForm from '@/components/admin/Patients/ContactForm.vue';
@@ -68,13 +68,7 @@ export default defineComponent({
     PassportForm,
     ContactForm,
   },
-  props: {
-    patient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    },
-  },
-  setup(props) {
+  setup() {
     const checked = ref(true);
     const notChecked = ref(false);
 

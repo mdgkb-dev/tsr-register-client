@@ -46,7 +46,13 @@ export default class ResearchResult {
   }
 
   getOrCreateAnswer(question: Question): Answer {
+    // if (question.id === 'd8c2be17-bace-45c1-8eda-d76f16b27a10') {
+    //   console.log(this.answers, question.id);
+    // }
     let answer = this.getAnswer(question.id as string);
+    // if (question.id === 'd8c2be17-bace-45c1-8eda-d76f16b27a10') {
+    //   console.log(answer);
+    // }
     if (!answer) {
       answer = Answer.Create(question);
       this.addAnswer(answer);

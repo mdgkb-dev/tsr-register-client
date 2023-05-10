@@ -44,47 +44,47 @@ export default class FilterQuery {
   }
 
   toUrlQuery(): string {
-    let url = '';
-    url += 's=';
-    url += this.sortModel?.toUrlQuery();
-    url += 'p=';
-    url += this.pagination.toUrlQuery();
-
-    let filterModelsUrlQuery = 'f=';
-    this.filterModels.forEach((fm, i) => {
-      if (i !== 0) {
-        filterModelsUrlQuery += ',';
-      }
-      filterModelsUrlQuery += fm.toUrlQuery();
-    });
-    url += filterModelsUrlQuery;
+    const url = '';
+    // url += 's=';
+    // url += this.sortModel?.toUrlQuery();
+    // url += 'p=';
+    // url += this.pagination.toUrlQuery();
+    //
+    // let filterModelsUrlQuery = 'f=';
+    // this.filterModels.forEach((fm, i) => {
+    //   if (i !== 0) {
+    //     filterModelsUrlQuery += ',';
+    //   }
+    //   filterModelsUrlQuery += fm.toUrlQuery();
+    // });
+    // url += filterModelsUrlQuery;
     return url;
   }
 
   async fromUrlQuery(obj: LocationQuery): Promise<void> {
-    this.pagination.fromUrlQuery(obj);
-    if (!this.pagination.limit || !this.pagination.offset) {
-      this.pagination.limit = 25;
-    }
-
-    const sortModel = new SortModel();
-    await sortModel.fromUrlQuery(obj);
-    if (sortModel.model) {
-      this.setSortModel(sortModel);
-    }
-
-    const str = window.location.search;
-    const filterModels = str.substring(str.indexOf('f=') + 2, str.lastIndexOf('|'));
-    const modelsStrings = filterModels.split(',');
-    const params = modelsStrings.map((m) => new URLSearchParams(decodeURIComponent(m)));
-
-    params.forEach((p: URLSearchParams) => {
-      const fm = new FilterModel();
-      fm.fromUrlQuery(p);
-      if (fm.col) {
-        this.filterModels.push(fm);
-      }
-    });
+    // this.pagination.fromUrlQuery(obj);
+    // if (!this.pagination.limit || !this.pagination.offset) {
+    //   this.pagination.limit = 25;
+    // }
+    //
+    // const sortModel = new SortModel();
+    // await sortModel.fromUrlQuery(obj);
+    // if (sortModel.model) {
+    //   this.setSortModel(sortModel);
+    // }
+    //
+    // const str = window.location.search;
+    // const filterModels = str.substring(str.indexOf('f=') + 2, str.lastIndexOf('|'));
+    // const modelsStrings = filterModels.split(',');
+    // const params = modelsStrings.map((m) => new URLSearchParams(decodeURIComponent(m)));
+    //
+    // params.forEach((p: URLSearchParams) => {
+    //   const fm = new FilterModel();
+    //   fm.fromUrlQuery(p);
+    //   if (fm.col) {
+    //     this.filterModels.push(fm);
+    //   }
+    // });
   }
 
   setParams(col: string, value: string): void {

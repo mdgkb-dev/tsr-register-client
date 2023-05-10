@@ -59,7 +59,7 @@
           </template>
 
           <template #body>
-            <template v-if="research.id && patientResearch">
+            <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
               <div v-for="result in patientResearch.researchResults" :key="result.id">
                 <GeneralItem :ready="`${result.fillingPercentage}%`" margin="10px 0px" :scale="false" @click="selectResult(result.id)">
                   <template #general-item> Исследование от {{ $dateTimeFormatter.format(result.date) }} </template>
@@ -143,9 +143,9 @@
                     </div>
                     <div class="scroll-block">
                       <CollapseContainer>
-                        <div v-for="(question, i) in filteredQuestions" :key="question.id">
+                        <div v-for="question in filteredQuestions" :key="question.id">
                           <CollapseItem
-                            :title="`${i + 1}. ${question.name}`"
+                            :title="`${question.order + 1}. ${question.name} ${question.id}`"
                             :is-collaps="true"
                             :change-color="researchResult.getOrCreateAnswer(question).filled"
                             background="#DFF2F8"
@@ -230,8 +230,7 @@
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from 'vue-router';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, WritableComputedRef } from 'vue';
 
 import Formula from '@/classes/Formula';
 import FormulaResult from '@/classes/FormulaResult';
@@ -269,14 +268,15 @@ export default defineComponent({
   },
   setup() {
     const questionsFilterString: Ref<string> = ref('');
-    const mounted = ref(false);
     // c3.generate();
     const selectedTab = ref('');
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
     const researchesPools: Ref<ResearchesPool[]> = computed(() => Provider.store.getters['researchesPools/items']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
-    const patientResearch: Ref<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
+    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
+      patient.value.getPatientResearch(research.value.id)
+    );
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const filteredQuestions: ComputedRef<Question[]> = computed(() => {
@@ -300,22 +300,10 @@ export default defineComponent({
       await toggleResearchesPools(false);
     };
 
-    const selectFirstPool = async (): Promise<void> => {
+    onBeforeMount(async () => {
       if (patient.value.patientsResearchesPools[0]) {
         await selectResearchesPool(patient.value.patientsResearchesPools[0].researchesPoolId as string);
       }
-    };
-
-    onBeforeMount(async () => {
-      // const query = Provider.store.getters['researchesPools/getAll'];
-      // query.id = Provider.route().params.registerId;
-
-      await selectFirstPool();
-      mounted.value = true;
-    });
-
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      // showConfirmModal(submitForm, next);
     });
 
     const selectOrAddResult = async (research: Research) => {
@@ -347,8 +335,11 @@ export default defineComponent({
       if (!patientResearch.value) {
         return await createPatientResearch(item);
       }
-      await Provider.store.dispatch('researches/get', item.id);
+      Provider.store.commit('researches/set');
+      Provider.store.commit('researchesResults/set');
       await selectOrAddResult(research.value);
+
+      await Provider.store.dispatch('researches/get', item.id);
     };
 
     const selectResult = async (id: string) => {
@@ -382,9 +373,9 @@ export default defineComponent({
     };
 
     const cancelResearchResultsFilling = () => {
-      patientResearch.value = undefined;
+      // patientResearch.value = undefined;
       Provider.store.commit('researches/set');
-      // Provider.store.commit('researchesResults/set');
+      Provider.store.commit('researchesResults/set');
     };
 
     const birthDateToMonth = (birthDate: string): number => {
@@ -428,7 +419,6 @@ export default defineComponent({
       researchesPools,
       research,
       createPatientResearch,
-      mounted,
       addResearchesPool,
       Delete,
       selectedTab,

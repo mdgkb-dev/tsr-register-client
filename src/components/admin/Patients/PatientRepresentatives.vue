@@ -93,7 +93,6 @@ import RepresentativeModal from '@/components/admin/Patients/RepresentativeModal
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
@@ -101,27 +100,19 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'PatientRepresentatives',
   components: {
-    TableButtonGroup,
     RepresentativeModal,
     RemoteSearch,
     RightTabsContainer,
     ResearcheContainer,
     PassportForm,
   },
-  // props: {
-  //   patient: {
-  //     type: Object as PropType<Patient>,
-  //     required: true,
-  //   },
-  // },
-  setup(props) {
+  setup() {
     const store = useStore();
     const isToggle: Ref<boolean> = ref(false);
     const toggle = async (toggle: boolean) => {
       Provider.store.commit('representatives/set');
       isToggle.value = toggle;
     };
-
     const mount = ref(false);
     const rules = RepresentativeToPatientRules;
     const showModal: Ref<boolean> = ref(false);
@@ -205,7 +196,6 @@ export default defineComponent({
     };
 
     const selectPatientRepresentative = (id: string): void => {
-      console.log(id);
       const v = patient.value.patientsRepresentatives.find((p: PatientRepresentative) => p.id === id);
       Provider.store.commit('patientsRepresentatives/set', v);
       Provider.store.commit('representatives/set', v?.representative);

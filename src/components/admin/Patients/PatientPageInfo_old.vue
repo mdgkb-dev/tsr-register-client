@@ -20,9 +20,9 @@
 
         <h1 class="semi-bold-header">Инвалидность</h1>
         <div v-if="patient.getActuallyDisability()">
-          <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" :size="20">
+          <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" ::size="20">
             <div style="color: #a1a8bd">До {{ $dateTimeFormatter.format(patient.getActuallyDisability().period.dateEnd) }}</div>
-            <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" :size="20" class="disability-circles">
+            <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
                 >A</el-button
               >

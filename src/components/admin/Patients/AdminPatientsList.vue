@@ -11,7 +11,7 @@
       <!--      <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadPatients" />-->
     </template>
     <template #sort>
-      <SortList :max-width="400" @load="loadItems" />
+      <!--      <SortList :max-width="400" @load="loadItems" />-->
     </template>
     <el-table
       ref="table"
@@ -115,7 +115,7 @@
             <div>
               <span class="underline-label">{{ diagnosis.mkbItem.getCode() }}</span>
               <el-tooltip class="item" effect="dark" :content="diagnosis.mkbItem.getFullName()" placement="top-end">
-                <el-icon size="17" style="margin-left: 5px">
+                <el-icon :size="17" style="margin-left: 5px">
                   <QuestionFilled />
                 </el-icon>
               </el-tooltip>
@@ -257,6 +257,7 @@ export default defineComponent({
 
     const load = async () => {
       // Provider.setSortModels(PatientsSortsLib.byFullName());
+      console.log('bbb');
       await Provider.loadItems();
     };
 

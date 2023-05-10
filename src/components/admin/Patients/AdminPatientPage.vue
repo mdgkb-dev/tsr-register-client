@@ -1,25 +1,23 @@
 <template>
   <MenuContainer v-if="mounted" min-menu-item-width="200px" height="calc(100% - 2px)" background="#DFF2F8">
     <template #menu>
-      <div v-for="(menu, i) in menus" :key="menu.id">
+      <div v-for="menu in menus" :key="menu.id">
         <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
     </template>
     <template #body>
-      <component v-bind="menusProperties" :is="activeMenu.component" :patient="patient" />
+      <component v-bind="menusProperties" :is="activeMenu.component" />
     </template>
   </MenuContainer>
 </template>
 
 <script lang="ts">
 import { computed, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
-import { onBeforeRouteLeave } from 'vue-router';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
-import PatientHistory from '@/classes/PatientHistory';
 import User from '@/classes/User';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
@@ -34,7 +32,6 @@ import PatientRepresentatives from '@/components/admin/Patients/PatientRepresent
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import { PatientHistorActionType } from '@/interfaces/PatientHistorActionType';
 import CustomSection from '@/services/classes/page/CustomSection';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -67,33 +64,21 @@ export default defineComponent({
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
       CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
       CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
-      CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
-      CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
-      CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
+      // CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
+      // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
+      // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
       CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
-      CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
+      // CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
     ];
     const activeMenu: Ref<CustomSection> = ref(menus[0]);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const patientCopy: Patient = new Patient(patient.value);
     const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const menusProperties = computed(() => {
       if (activeMenu.value.component === 'PatientDiagnosis') {
         return { 'mkb-linker': patient.value };
       }
       return {};
-    });
-
-    onBeforeRouteLeave(async () => {
-      await Provider.store.dispatch(
-        'patientHistories/create',
-        PatientHistory.Create(
-          patient.value,
-          user.value.id as string,
-          Provider.route().params['id'] ? PatientHistorActionType.Update : PatientHistorActionType.Create
-        )
-      );
     });
 
     const form = ref();
@@ -118,18 +103,12 @@ export default defineComponent({
       Provider.router.replace({ query: { menu: section.id as string } });
     };
 
-    // const { links, pushToLinks } = useBreadCrumbsLinks();
-    // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
-    // const { validate } = useValidate();
-    // const { submitHandling } = useForm(!!route.params.patientId);
-
     const load = async () => {
       setMenuFromRoute();
       if (Provider.route().params['id']) {
         return await Provider.loadItem();
       }
       const patient = new Patient();
-      patient.createdAt;
       await Provider.store.dispatch('patients/create', patient);
     };
 

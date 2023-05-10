@@ -31,7 +31,7 @@
                 :content="diagnosis.mkbSubDiagnosis.name"
                 placement="top-end"
               >
-                <el-icon size="17" style="margin-left: 5px"> <QuestionFilled /></el-icon>
+                <el-icon :size="17" style="margin-left: 5px"> <QuestionFilled /></el-icon>
               </el-tooltip>
             </div>
             <div v-else>
@@ -43,7 +43,7 @@
                 :content="diagnosis.mkbDiagnosis.name"
                 placement="top-end"
               >
-                <el-icon size="17" style="margin-left: 5px"> <QuestionFilled /></el-icon>
+                <el-icon :size="17" style="margin-left: 5px"> <QuestionFilled /></el-icon>
               </el-tooltip>
             </div>
           </div>
