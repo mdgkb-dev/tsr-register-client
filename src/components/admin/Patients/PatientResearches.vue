@@ -145,7 +145,7 @@
                       <CollapseContainer>
                         <div v-for="question in filteredQuestions" :key="question.id">
                           <CollapseItem
-                            :title="`${question.order + 1}. ${question.name} ${question.id}`"
+                            :title="`${question.order + 1}. ${question.name}`"
                             :is-collaps="true"
                             :change-color="researchResult.getOrCreateAnswer(question).filled"
                             background="#DFF2F8"
