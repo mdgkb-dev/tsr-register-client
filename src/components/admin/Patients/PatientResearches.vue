@@ -7,7 +7,6 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div class="slider-item-active">СМА</div>
         <div v-for="pool in researchesPools" :key="pool.id" class="slider-item" @click="addResearchesPool(pool.id)">{{ pool.name }}</div>
       </div>
     </template>
