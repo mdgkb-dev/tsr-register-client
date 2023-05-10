@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="150px">
+  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -7,7 +7,9 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
+        <div class="slider-item-search">
+          <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
+        </div>
       </div>
     </template>
     <template #tabs>
@@ -26,26 +28,68 @@
         <ResearcheContainer background="#DFF2F8">
           <template #header>
             <div class="researche-name">{{ selectedPatientDiagnosis.mkbItem.getFullName() }}</div>
-          </template>
-          <template #body>
-            <div>
-              <div>Диагноз поставил врач:</div>
+            <div class="diagnosis-doctorName">
+              <div class="doctor-title">Диагноз поставил врач:</div>
               <el-input
                 v-model="selectedPatientDiagnosis.doctorName"
                 placeholder="ФИО врача, поставившего диагноз"
                 @blur="updatePatientDiagnosis(selectedPatientDiagnosis)"
               ></el-input>
             </div>
-
+          </template>
+          <template #body>
+            <Button text="Добавить анамнез" :withIcon="false" width="100%" height="60px" font-size="16px" border-radius="5px" color="#00B5A4" background="#C7ECEA" @click="addAnamnesis(selectedPatientDiagnosis)">
+              <!-- <template #icon>
+                <svg class="icon-plus">
+                  <use xlink:href="#plus"></use>
+                </svg>
+              </template> -->
+            </Button>
+            <!-- <div class="item-list">
+              <div
+                class="item-line"
+                v-for="anamnesis in selectedPatientDiagnosis.anamneses"
+                :key="anamnesis.id"
+              >
+                <div class="left">
+                  <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
+                </div>
+                <div class="button">
+                  <Button
+                    text="Удалить"
+                    width="100%"
+                    height="40px"
+                    font-size="16px"
+                    border-radius="5px"
+                    color="#B0A4C0"
+                    background="#ffffff"
+                    :with-icon="false"
+                    :color-swap="true"
+                  >
+                  </Button>
+                </div>
+              </div>
+            </div> -->
             <el-timeline style="margin-top: 20px">
-              <el-button @click="addAnamnesis(selectedPatientDiagnosis)">Добавить анамнез</el-button>
               <el-timeline-item
                 v-for="anamnesis in selectedPatientDiagnosis.anamneses"
                 :key="anamnesis.id"
-                :timestamp="$dateTimeFormatter.format(anamnesis.date)"
                 placement="top"
+                center
               >
-                <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
+              <CollapseItem
+                :title="$dateTimeFormatter.format(anamnesis.date)"
+                :is-collaps="true"
+                background="#DFF2F8"
+                margin-top="0px"
+                col
+              >
+                <template #inside-content>
+                  <div class="background-container">
+                    <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
+                  </div>
+                </template>
+              </CollapseItem>
               </el-timeline-item>
             </el-timeline>
           </template>
@@ -84,14 +128,18 @@ import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 
 export default defineComponent({
-  name: 'PatientDiagnosis',
+  name: 'PaCollapseItemtientDiagnosis',
   components: {
     RemoteSearch,
     AnamnesisForm,
     RightTabsContainer,
     ResearcheContainer,
+    Button,
+    CollapseItem,
   },
 
   setup(props) {
@@ -182,7 +230,7 @@ export default defineComponent({
 }
 
 .slider-body {
-  width: 150px;
+  width: 180px;
   height: auto;
   border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
@@ -200,8 +248,20 @@ export default defineComponent({
   object-fit: cover;
 }
 
+.slider-item-search {
+  width: 164px;
+  height: 40px;
+  border-radius: $normal-border-radius;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .slider-item {
-  width: 130px;
+  width: 163px;
   height: 40px;
   border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
@@ -216,7 +276,7 @@ export default defineComponent({
 }
 
 .slider-item-active {
-  width: 130px;
+  width: 163px;
   height: 40px;
   border: 1px solid #379fff;
   border-radius: $normal-border-radius;
@@ -432,5 +492,17 @@ export default defineComponent({
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
+}
+
+.diagnosis-doctorName {
+  padding: 10px 0;
+}
+
+.doctor-title {
+  padding: 10px 0;
+}
+
+:deep(.el-timeline-item) {
+  padding-bottom: 0px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools" sliderOnWidth="150px">
+  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools" sliderOnWidth="180px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -458,7 +458,7 @@ export default defineComponent({
 }
 
 .slider-body {
-  width: 150px;
+  width: 180px;
   height: auto;
   border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
@@ -477,7 +477,7 @@ export default defineComponent({
 }
 
 .slider-item {
-  width: 130px;
+  width: 163px;
   height: 40px;
   border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
@@ -492,7 +492,7 @@ export default defineComponent({
 }
 
 .slider-item-active {
-  width: 130px;
+  width: 163px;
   height: 40px;
   border: 1px solid #379fff;
   border-radius: $normal-border-radius;
