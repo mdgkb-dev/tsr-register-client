@@ -480,6 +480,14 @@ export default defineComponent({
   text-align: center;
 }
 
+.slider-item:hover {
+  border: 1px solid #379fff;
+  background: $base-background;
+  color: #379fff;
+}
+
+
+
 .slider-item-active {
   width: 163px;
   height: 40px;
@@ -493,6 +501,12 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.slider-item:active {
+  border: 1px solid #379fff;
+  background: $custom-background;
+  color: #343e5c;
 }
 
 .tabs-item {

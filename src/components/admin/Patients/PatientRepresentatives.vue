@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle">
+  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -7,17 +7,15 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div>
+        <div class="slider-item-search">
           <RemoteSearch
             :must-be-translated="true"
             key-value="representative"
             placeholder="Начните вводить название диагноза"
             @select="addRepresentative"
           />
-          <div>
-            <el-button style="margin-bottom: 20px" @click="openRepresentativeModal()">Создать представителя</el-button>
-          </div>
         </div>
+        <div class="slider-item" @click="openRepresentativeModal()">Создать представителя</div>
       </div>
     </template>
     <template #tabs>
@@ -37,23 +35,36 @@
           <template #header>
             <div>
               <div class="researche-name">Информация о представителе</div>
-              <el-button style="margin-bottom: 20px" @click="remove(selectedPatientRepresentative.id)">Удалить</el-button>
+              <!-- <div class="body-item">
+                <el-button style="margin-bottom: 20px" @click="remove(selectedPatientRepresentative.id)">Удалить</el-button>
+              </div> -->
             </div>
           </template>
           <template #body>
-            <el-select
-              v-model="selectedPatientRepresentative.representativeTypeId"
-              placeholder="Роль представителя"
-              @change="(e) => selectRepresentativeType(e, selectedPatientRepresentative)"
-            >
-              <el-option
-                v-for="item in representativeTypes"
-                :key="item.id"
-                :label="item.getParentTypeName(selectedPatientRepresentative.representative.human.isMale)"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+            <div class="line-item">
+              <div class="item-left">
+                <el-form>
+                  <el-form-item label="Роль представителя">
+                    <el-select
+                      v-model="selectedPatientRepresentative.representativeTypeId"
+                      placeholder="Выберите роль"
+                      @change="(e) => selectRepresentativeType(e, selectedPatientRepresentative)"
+                    >
+                      <el-option
+                        v-for="item in representativeTypes"
+                        :key="item.id"
+                        :label="item.getParentTypeName(selectedPatientRepresentative.representative.human.isMale)"
+                        :value="item.id"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-form>
+              </div>
+              <div class="item-right">
+                <el-button style="margin-bottom: 20px" @click="remove(selectedPatientRepresentative.id)">Удалить</el-button>
+              </div>
+            </div>
             <PassportForm :edit-mode="true" store-module="representatives" />
           </template>
         </ResearcheContainer>
@@ -96,6 +107,7 @@ import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'PatientRepresentatives',
@@ -105,6 +117,7 @@ export default defineComponent({
     RightTabsContainer,
     ResearcheContainer,
     PassportForm,
+    Button,
   },
   setup() {
     const store = useStore();
@@ -232,267 +245,334 @@ export default defineComponent({
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
 
-.hidden {
-  display: none;
-}
+  .hidden {
+    display: none;
+  }
 
-.el-form-item {
-  margin: 0;
-}
-.el-divider {
-  margin: 10px 0;
-}
+  .el-form-item {
+    margin: 0;
+  }
+  .el-divider {
+    margin: 10px 0;
+  }
 
-.slider-body {
-  width: 442px;
-  height: auto;
-  border: 1px solid #379fff;
-  border-top-left-radius: $normal-border-radius;
-  border-bottom-left-radius: $normal-border-radius;
-  background: #ffffff;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-  display: grid;
-  grid-gap: 6px;
-  grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  padding: 6px;
-}
+  .slider-body {
+    width: 180px;
+    height: auto;
+    border: 1px solid #379fff;
+    border-top-left-radius: $normal-border-radius;
+    border-bottom-left-radius: $normal-border-radius;
+    background: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    display: grid;
+    grid-gap: 6px;
+    grid-template-rows: repeat(0 0px);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    padding: 6px;
+  }
 
-.slider-body > div {
-  object-fit: cover;
-}
+  .slider-body > div {
+    object-fit: cover;
+  }
 
-.slider-item {
-  width: 101px;
-  height: 40px;
-  border: 1px solid #b0a4c0;
-  border-radius: $normal-border-radius;
-  background: $base-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  font-size: 14px;
-  color: #b0a4c0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .slider-item-search {
+    width: 164px;
+    height: 40px;
+    border-radius: $normal-border-radius;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.slider-item-active {
-  width: 101px;
-  height: 40px;
-  border: 1px solid #379fff;
-  border-radius: $normal-border-radius;
-  background: $custom-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  font-size: 14px;
-  color: #343e5c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
+  .slider-item {
+    width: 163px;
+    height: 40px;
+    border: 1px solid #b0a4c0;
+    border-radius: $normal-border-radius;
+    background: $base-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.tabs-item {
-  width: 101px;
-  height: 51px;
-  border: 1px solid #b0a4c0;
-  border-top-right-radius: $normal-border-radius;
-  border-bottom-right-radius: $normal-border-radius;
-  border-left: none;
-  background: $base-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  font-size: 14px;
-  color: #b0a4c0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 5px;
-}
+  .slider-item:hover {
+    border: 1px solid #379fff;
+    background: $base-background;
+    color: #379fff;
+  }
 
-.tabs-item-active {
-  position: relative;
-  width: 106px;
-  height: 56px;
-  border: 1px solid #379fff;
-  border-top-right-radius: $normal-border-radius;
-  border-bottom-right-radius: $normal-border-radius;
-  border-left: none;
-  background: $custom-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #343e5c;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-left: 0px;
-  z-index: 2;
-}
 
-.icon-plus {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-}
 
-.body {
-  width: 100%;
-  height: 100%;
-  border-right: 1px solid #379fff;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-  z-index: 5;
-}
+  .slider-item-active {
+    width: 163px;
+    height: 40px;
+    border: 1px solid #379fff;
+    border-radius: $normal-border-radius;
+    background: $custom-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #343e5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-.researche-title {
-  width: calc(100% - 2px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
-}
+  .slider-item:active {
+    border: 1px solid #379fff;
+    background: $custom-background;
+    color: #343e5c;
+  }
 
-.researche-name {
-  min-height: 40px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #343e5c;
-  font-size: 14px;
-  text-transform: uppercase;
-}
+  .tabs-item {
+    width: 101px;
+    height: 51px;
+    border: 1px solid #b0a4c0;
+    border-top-right-radius: $normal-border-radius;
+    border-bottom-right-radius: $normal-border-radius;
+    border-left: none;
+    background: $base-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 5px;
+  }
 
-.icon-back {
-  width: 24px;
-  height: 24px;
-}
+  .tabs-item-active {
+    position: relative;
+    width: 106px;
+    height: 56px;
+    border: 1px solid #379fff;
+    border-top-right-radius: $normal-border-radius;
+    border-bottom-right-radius: $normal-border-radius;
+    border-left: none;
+    background: $custom-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #343e5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 0px;
+    z-index: 2;
+  }
 
-.patient-research {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: calc(100% - 32px);
-  height: 40px;
-  border-radius: $normal-border-radius;
-  border: $light-pink-border;
-  background: #ffffff;
-  padding: 0 10px;
-  margin: 10px 10px 10px 0;
-  cursor: pointer;
-}
+  .icon-plus {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
 
-.blur {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  background: #000000;
-  opacity: 0.3;
-  z-index: 20;
-}
+  .body {
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #379fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    z-index: 5;
+  }
 
-.research-info {
-  position: fixed;
-  top: 52%;
-  left: 50%;
-  width: calc(99% - 22px);
-  height: calc(92% - 22px);
-  transform: translate(-50%, -50%);
-  background: #dff2f8;
-  border: $light-pink-border;
-  border-radius: $normal-border-radius;
-  margin: 10px 10px 0 0;
-  padding: 10px 10px 10px 10px;
-  overflow: hidden;
-  overflow-y: auto;
-  z-index: 21;
-}
+  .researche-title {
+    width: calc(100% - 2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+  }
 
-.tools {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // z-index: 1;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  height: auto;
-  padding: 10px 0;
-  width: calc(100% - 2px);
-  background: #dff2f8;
-}
+  .researche-name {
+    min-height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #343e5c;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
 
-.scroll-block {
-  width: 100%;
-  height: calc(100% - 200px);
-  overflow: hidden;
-  overflow-y: auto;
-}
+  .icon-back {
+    width: 24px;
+    height: 24px;
+  }
 
-.question-item {
-  background: #dff2f8;
-  border: $light-pink-border;
-  border-radius: $normal-border-radius;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffffff;
-}
-.question-name {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  font-size: 22px;
-  color: #343e5c;
-  margin-bottom: 10px;
-}
+  .patient-research {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: calc(100% - 32px);
+    height: 40px;
+    border-radius: $normal-border-radius;
+    border: $light-pink-border;
+    background: #ffffff;
+    padding: 0 10px;
+    margin: 10px 10px 10px 0;
+    cursor: pointer;
+  }
 
-.background-container {
-  width: auto;
-  padding: 10px;
-  margin: 0 10px 10px 10px;
-  background: #dff2f8;
-  background: #ffffff;
-  border-radius: 5px;
-  border: 1px solid #c3c3c3;
-}
+  .blur {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 0.3;
+    z-index: 20;
+  }
 
-.patient-name {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  font-size: 24px;
-  height: 40px;
-  color: #343e5c;
-}
+  .research-info {
+    position: fixed;
+    top: 52%;
+    left: 50%;
+    width: calc(99% - 22px);
+    height: calc(92% - 22px);
+    transform: translate(-50%, -50%);
+    background: #dff2f8;
+    border: $light-pink-border;
+    border-radius: $normal-border-radius;
+    margin: 10px 10px 0 0;
+    padding: 10px 10px 10px 10px;
+    overflow: hidden;
+    overflow-y: auto;
+    z-index: 21;
+  }
 
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
+  .tools {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    height: auto;
+    padding: 10px 0;
+    width: calc(100% - 2px);
+    background: #dff2f8;
+  }
 
-.researche-title-name {
-  font-size: 20px;
-  display: block;
-  color: #343e5c;
-  padding: 10px 0;
-}
+  .scroll-block {
+    width: 100%;
+    height: calc(100% - 200px);
+    overflow: hidden;
+    overflow-y: auto;
+  }
 
-.researche-counter {
-  font-size: 20px;
-  color: #379fff;
-  display: flex;
-  justify-content: right;
-  align-items: start;
-  text-transform: uppercase;
-  white-space: nowrap;
-  height: 100%;
-}
+  .question-item {
+    background: #dff2f8;
+    border: $light-pink-border;
+    border-radius: $normal-border-radius;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #ffffff;
+  }
+  .question-name {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 22px;
+    color: #343e5c;
+    margin-bottom: 10px;
+  }
+
+  .background-container {
+    width: auto;
+    padding: 10px;
+    margin: 0 10px 10px 10px;
+    background: #dff2f8;
+    background: #ffffff;
+    border-radius: 5px;
+    border: 1px solid #c3c3c3;
+  }
+
+  .patient-name {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 24px;
+    height: 40px;
+    color: #343e5c;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+  }
+
+  .researche-title-name {
+    font-size: 20px;
+    display: block;
+    color: #343e5c;
+    padding: 10px 0;
+  }
+
+  .researche-counter {
+    font-size: 20px;
+    color: #379fff;
+    display: flex;
+    justify-content: right;
+    align-items: start;
+    text-transform: uppercase;
+    white-space: nowrap;
+    height: 100%;
+  }
+
+  .item-left {
+    width: 50%;
+    color: #343e5c;
+    margin-right: 10px;
+  }
+
+  .item-right {
+    width: 50%;
+    color: #343e5c;
+    margin-left: 10px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: right;
+  }
+
+  .line-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 0 10px;
+    max-width: 768px;
+  }
+
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
+  .el-select {
+    width: 100%;
+  }
+
+  :deep(.el-form-item) {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  :deep(.el-form-item__label) {
+    color: $site_light_pink;
+    padding: 0 !important;
+    text-transform: uppercase;
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
 </style>

@@ -38,38 +38,17 @@
             </div>
           </template>
           <template #body>
-            <Button text="Добавить анамнез" :withIcon="false" width="100%" height="60px" font-size="16px" border-radius="5px" color="#00B5A4" background="#C7ECEA" @click="addAnamnesis(selectedPatientDiagnosis)">
-              <!-- <template #icon>
-                <svg class="icon-plus">
-                  <use xlink:href="#plus"></use>
-                </svg>
-              </template> -->
+            <Button 
+              text="Добавить анамнез" 
+              :withIcon="false" 
+              width="100%" 
+              height="60px" 
+              font-size="16px" 
+              border-radius="5px" 
+              color="#00B5A4" 
+              background="#C7ECEA" 
+              @click="addAnamnesis(selectedPatientDiagnosis)">
             </Button>
-            <!-- <div class="item-list">
-              <div
-                class="item-line"
-                v-for="anamnesis in selectedPatientDiagnosis.anamneses"
-                :key="anamnesis.id"
-              >
-                <div class="left">
-                  <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
-                </div>
-                <div class="button">
-                  <Button
-                    text="Удалить"
-                    width="100%"
-                    height="40px"
-                    font-size="16px"
-                    border-radius="5px"
-                    color="#B0A4C0"
-                    background="#ffffff"
-                    :with-icon="false"
-                    :color-swap="true"
-                  >
-                  </Button>
-                </div>
-              </div>
-            </div> -->
             <el-timeline style="margin-top: 20px">
               <el-timeline-item
                 v-for="anamnesis in selectedPatientDiagnosis.anamneses"
@@ -408,10 +387,6 @@ export default defineComponent({
 }
 
 .tools {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // z-index: 1;
   display: flex;
   justify-content: left;
   align-items: center;
