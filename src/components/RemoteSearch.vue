@@ -169,10 +169,8 @@ $margin: 20px 0;
 }
 
 :deep(.el-input__inner) {
-  border-radius: 20px;
-  padding-left: 25px;
+  padding-left: 10px;
   height: 34px;
-  // width: 100%;
   display: flex;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;

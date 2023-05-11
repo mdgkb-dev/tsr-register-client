@@ -98,7 +98,7 @@ export default defineComponent({
 
 .tab {
   position: relative;
-  width: 100%;
+  width: calc(100% - 2px);
   overflow: hidden;
   border: $light-pink-border;
   border-radius: $normal-border-radius;

@@ -1,6 +1,5 @@
 <template>
   <div class="card-wrapper">
-    <el-card class="box-card" style="position: relative">
       <el-form>
         <el-form-item label="Дата">
           <el-date-picker
@@ -28,7 +27,6 @@
         </el-form-item>
         <el-button @click="remove">Удалить</el-button>
       </el-form>
-    </el-card>
   </div>
 </template>
 
@@ -72,7 +70,9 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import '@/assets/styles/elements/base-style.scss';
+
 article {
   width: calc(100% - 75px);
 }
@@ -87,5 +87,44 @@ article {
 
 .el-timeline {
   padding: 0;
+}
+
+.el-form-item {
+  margin: 0;
+}
+.el-divider {
+  margin: 10px 0;
+}
+
+:deep(.el-form-item) {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+:deep(.el-input__inner) {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: $site_dark_gray;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: $site_light_pink;
+}
+
+:deep(.el-input__icon) {
+  color: $site_dark_gray;
+}
+
+:deep(.el-form-item__label) {
+  color: $site_light_pink;
+  padding: 0 !important;
+  text-transform: uppercase;
+  margin-left: 5px;
+  font-size: 14px;
+  margin-bottom: 6px;
 }
 </style>

@@ -104,13 +104,7 @@ export default defineComponent({
   margin-bottom: 16px;
 }
 
-:deep(.el-form-item__content) {
-  width: 100%;
-}
-
 :deep(.el-input__inner) {
-  border-radius: 40px;
-  padding-left: 25px;
   height: 32px;
   width: 100%;
   display: flex;
@@ -123,32 +117,8 @@ export default defineComponent({
   color: $site_light_pink;
 }
 
-:deep(.el-select .el-input .el-select__caret) {
-  color: #343e5c;
-  font-size: 15px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.el-select {
-  width: 100%;
-}
-
-:deep(.el-input__prefix) {
-  left: 230px;
-  top: -3px;
-}
-
-:deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
-  width: 100%;
-}
-
 :deep(.el-input__icon) {
   color: $site_dark_gray;
-}
-
-:deep(.el-input__suffix) {
-  top: -3px;
 }
 
 :deep(.el-form-item__label) {
@@ -158,27 +128,5 @@ export default defineComponent({
   margin-left: 5px;
   font-size: 14px;
   margin-bottom: 6px;
-}
-
-:deep(.el-input__prefix) {
-  left: auto;
-  right: 10px;
-}
-
-:deep(.el-textarea__inner) {
-  color: $site_dark_gray;
-  padding-left: 25px;
-}
-
-:deep(.el-textarea__inner::placeholder) {
-  color: $site_light_pink;
-}
-
-.option-field {
-  margin-top: 20px;
-}
-
-.line {
-  max-width: 300px;
 }
 </style>

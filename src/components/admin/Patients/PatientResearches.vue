@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools">
+  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" @toggle="toggleResearchesPools" sliderOnWidth="180px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -7,7 +7,6 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div class="slider-item-active">СМА</div>
         <div v-for="pool in researchesPools" :key="pool.id" class="slider-item" @click="addResearchesPool(pool.id)">{{ pool.name }}</div>
       </div>
     </template>
@@ -31,7 +30,7 @@
                 <Button
                   text="Назад"
                   background="#ffffff"
-                  margin-right="10px"
+                  margin="0 10px 0 0"
                   height="42px"
                   font-size="16px"
                   border-radius="5px"
@@ -82,7 +81,7 @@
                           <Button
                             text="Назад"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 10px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"
@@ -105,7 +104,7 @@
                           <Button
                             text="Прерыдущий"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 10px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"
@@ -117,7 +116,7 @@
                           <Button
                             text="Следующий"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 0px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"
@@ -448,7 +447,7 @@ export default defineComponent({
 }
 
 .slider-body {
-  width: 442px;
+  width: 180px;
   height: auto;
   border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
@@ -458,7 +457,7 @@ export default defineComponent({
   display: grid;
   grid-gap: 6px;
   grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   padding: 6px;
 }
 
@@ -467,7 +466,7 @@ export default defineComponent({
 }
 
 .slider-item {
-  width: 101px;
+  width: 163px;
   height: 40px;
   border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
@@ -481,8 +480,16 @@ export default defineComponent({
   text-align: center;
 }
 
+.slider-item:hover {
+  border: 1px solid #379fff;
+  background: $base-background;
+  color: #379fff;
+}
+
+
+
 .slider-item-active {
-  width: 101px;
+  width: 163px;
   height: 40px;
   border: 1px solid #379fff;
   border-radius: $normal-border-radius;
@@ -494,6 +501,12 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.slider-item:active {
+  border: 1px solid #379fff;
+  background: $custom-background;
+  color: #343e5c;
 }
 
 .tabs-item {
@@ -602,10 +615,10 @@ export default defineComponent({
 
 .research-info {
   position: fixed;
-  top: 52%;
+  top: 49%;
   left: 50%;
   width: calc(99% - 22px);
-  height: calc(92% - 22px);
+  height: calc(98% - 22px);
   transform: translate(-50%, -50%);
   background: #dff2f8;
   border: $light-pink-border;
@@ -634,7 +647,7 @@ export default defineComponent({
 
 .scroll-block {
   width: 100%;
-  height: calc(100% - 200px);
+  height: calc(100% - 220px);
   overflow: hidden;
   overflow-y: auto;
 }

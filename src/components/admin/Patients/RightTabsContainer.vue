@@ -3,7 +3,7 @@
     <div
       class="slider-block"
       :style="{
-        marginRight: isToggle ? '110px' : '-231px',
+        marginRight: isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`,
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
       }"
@@ -30,7 +30,11 @@
         </div>
       </div>
 
-      <div class="slider-body">
+      <div class="slider-info"
+        :style="{
+          width: `calc(${sliderOnWidth} - ${sliderOffWidth})`,
+        }"
+      >
         <slot name="slider-body" />
       </div>
     </div>
@@ -54,7 +58,7 @@ export default defineComponent({
     sliderOffWidth: {
       type: String as PropType<string>,
       required: false,
-      default: '92px',
+      default: '101px',
     },
     sliderOnWidth: {
       type: String as PropType<string>,
@@ -132,9 +136,9 @@ export default defineComponent({
   transition: 0.3s;
 }
 
-.slider-body {
-  width: auto;
-}
+// .slider-info {
+//   width: auto;
+// }
 
 .tab-block {
   width: 110px;
