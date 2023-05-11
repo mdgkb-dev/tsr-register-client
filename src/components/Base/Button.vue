@@ -6,6 +6,7 @@
       background: colorSwap ? (hovering ? color : background) : background,
       marginTop: marginTop,
       marginRight: marginRight,
+      margin: margin,
       width: width,
       borderColor: color,
       height: height,
@@ -68,6 +69,11 @@ export default defineComponent({
       required: false,
       default: 'auto',
     },
+    margin: {
+      type: String as PropType<string>,
+      required: false,
+      default: '',
+    },
     width: {
       type: String as PropType<string>,
       required: false,
@@ -118,8 +124,8 @@ export default defineComponent({
   align-items: center;
   border: 1px solid;
   transition: 0.3s;
-  margin-left: auto;
-  margin-right: auto;
+  // margin-left: auto;
+  // margin-right: auto;
   text-align: center;
   padding: 0 10px;
   cursor: pointer;

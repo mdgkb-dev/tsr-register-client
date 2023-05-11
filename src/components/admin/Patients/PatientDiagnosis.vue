@@ -61,7 +61,6 @@
                 :is-collaps="true"
                 background="#DFF2F8"
                 margin-top="0px"
-                col
               >
                 <template #inside-content>
                   <div class="background-container">

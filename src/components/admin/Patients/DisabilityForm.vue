@@ -1,5 +1,142 @@
 <template>
-  <div class="wrapper">
+  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
+    <template #icon>
+      <svg class="icon-plus">
+        <use xlink:href="#plus"></use>
+      </svg>
+    </template>
+    <template #slider-body>
+      <div class="slider-body">
+        <div class="slider-item-search">
+          <RemoteSearch
+            :must-be-translated="true"
+            key-value="representative"
+            placeholder="Начните вводить"
+          />
+        </div>
+        <div class="slider-item" @click="addDisability">Добавить инвалидность</div>
+      </div>
+    </template>
+    <template #tabs>
+
+    </template>
+    <template #body>
+      <div class="body">
+        <div v-for="disability in patient.disabilities" :key="disability.id">
+        <ResearcheContainer background="#DFF2F8">
+          <template #header>
+            <div class="researche-name">Инвалидность</div>
+            <div class="line-item">
+              <div class="item-left">
+                <div class="diagnosis-doctorName">
+                  <div class="doctor-title">Инвалидность признал врач:</div>
+                  <el-input
+                    placeholder="ФИО врача, признавшего инвалидность"
+                  ></el-input>
+                </div>
+              </div>
+              <div class="item-right">
+                <Button 
+                  text="Удалить" 
+                  :withIcon="false" 
+                  width="auto"
+                  height="40px" 
+                  font-size="16px" 
+                  border-radius="5px" 
+                  color="#343E5C" 
+                  background="#ffffff" 
+                  @click="removeDisability(disability.id)"
+                  :colorSwap="true"
+                >
+                </Button>
+              </div>
+            </div>
+          </template>
+          <template #body>
+            <Button 
+              text="Добавить ЕДВ" 
+              :withIcon="false" 
+              width="100%" 
+              height="60px"
+              font-size="16px" 
+              border-radius="5px" 
+              color="#00B5A4" 
+              background="#C7ECEA" 
+              @click="addEdv(disability)">
+            </Button>
+
+            <el-timeline style="margin-top: 20px">
+              <el-timeline-item
+                v-for="edv in disability.edvs" 
+                :key="edv.id"
+                placement="top"
+                center
+              >
+                <CollapseItem
+                  title="Дата присваивания"
+                  :is-collaps="true"
+                  background="#DFF2F8"
+                  margin-top="0px"
+                >
+                  <template #inside-content>
+                    <div class="background-container">
+                      <div class="choice">
+                        <div class="choice-item"
+                          v-for="parameter in [
+                            { letter: 'A', parameter: edv.parameter1 },
+                            { letter: 'B', parameter: edv.parameter2 },
+                            { letter: 'C', parameter: edv.parameter3 },
+                          ]"
+                          :key="parameter.letter"
+                        >
+                          <Button 
+                            :text="parameter.letter + ' ' + parameter.parameter" 
+                            :withIcon="false" 
+                            width="100%"
+                            height="40px"
+                            margin="10px 0 0 0"
+                            font-size="16px" 
+                            border-radius="5px" 
+                            color="#343E5C" 
+                            background="#ffffff" 
+                            @click="changeParameter(edv, parameter.letter)"
+                            :colorSwap="true"
+                          >
+                          </Button>
+                        </div>
+                      </div>
+                        <Button 
+                          text="Удалить ЕВД" 
+                          :withIcon="false" 
+                          width="auto"
+                          height="40px"
+                          margin="10px 0 0 0"
+                          font-size="16px" 
+                          border-radius="5px" 
+                          color="#343E5C" 
+                          background="#ffffff" 
+                          @click="removeEdv(disability, edv.id)"
+                          :colorSwap="true"
+                        >
+                        </Button>
+                    </div>
+                  </template>
+                </CollapseItem>
+              </el-timeline-item>
+            </el-timeline>
+          </template>
+        </ResearcheContainer>
+        </div>
+      </div>
+    </template>
+  </RightTabsContainer>
+
+  <svg width="0" height="0" class="hidden">
+    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
+    </symbol>
+  </svg>
+  <!-- <div class="wrapper">
     <el-button style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
     <div v-for="disability in patient.disabilities" :key="disability.id">
       <div>{{ disability.id }} <el-button @click="removeDisability(disability.id)">Удалить инвалидность</el-button></div>
@@ -20,157 +157,39 @@
         </div>
       </div>
     </div>
-    <!--    <el-table-->
-    <!--      :data="disabilities"-->
-    <!--      style="width: 950px; margin-bottom: 20px"-->
-    <!--      row-key="id"-->
-    <!--      :default-expand-all="true"-->
-    <!--      :tree-props="{ hasChildren: 'hasChildren', children: 'edvs' }"-->
-    <!--      class="table-shadow"-->
-    <!--      header-row-class-name="header-style"-->
-    <!--    >-->
-    <!--      <el-table-column label="" width="150" align="center">-->
-    <!--        <template #default="scope">-->
-    <!--          <span v-if="isEdv(scope.row)">ЕДВ</span>-->
-    <!--          <span v-else>Инвалидность</span>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-
-    <!--      <el-table-column prop="period.dateStart" label="Дата начала" sortable width="250" align="center">-->
-    <!--        <template #default="scope">-->
-    <!--          <el-form-item-->
-    <!--            :prop="getProp(scope, true)"-->
-    <!--            :rules="[{ required: true, message: 'Пожалуйста, укажите дату начала', trigger: 'change' }]"-->
-    <!--            label-width="0"-->
-    <!--            style="margin-bottom: 0"-->
-    <!--          >-->
-    <!--            <el-date-picker-->
-    <!--              ref="picker"-->
-    <!--              v-model="scope.row.period.dateStart"-->
-    <!--              format="DD.MM.YYYY"-->
-    <!--              placeholder="Выберите дату"-->
-    <!--              type="date"-->
-    <!--              @change="isEdv(scope.row) ? edvDateStartChangeHandler(scope.row.id) : null"-->
-    <!--            ></el-date-picker>-->
-    <!--          </el-form-item>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-
-    <!--      <el-table-column prop="period.dateEnd" label="Дата окончания" sortable width="250" align="center">-->
-    <!--        <template #default="scope">-->
-    <!--          <el-form-item-->
-    <!--            :prop="getProp(scope, false)"-->
-    <!--            :rules="[{ required: true, message: 'Пожалуйста, укажите дату конца', trigger: 'change' }]"-->
-    <!--            label-width="0"-->
-    <!--            style="margin-bottom: 0"-->
-    <!--          >-->
-    <!--            <el-date-picker-->
-    <!--              v-model="scope.row.period.dateEnd"-->
-    <!--              type="date"-->
-    <!--              :disabled-date="(time) => disabledDate(time, scope.row.period.dateStart)"-->
-    <!--              format="DD.MM.YYYY"-->
-    <!--              placeholder="Выберите дату"-->
-    <!--              :disabled="!isEdv(scope.row) && scope.row.period.dateStart ? false : true"-->
-    <!--            ></el-date-picker>-->
-    <!--          </el-form-item>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-
-    <!--      <el-table-column label="Инвалидность" width="180" sortable align="center">-->
-    <!--        <template #default="scope">-->
-    <!--          <div v-if="isEdv(scope.row)">-->
-    <!--            <el-button :type="scope.row.parameter1 ? 'primary' : undefined" circle @click="scope.row.parameter1 = !scope.row.parameter1"-->
-    <!--              >A</el-button-->
-    <!--            >-->
-    <!--            <el-button :type="scope.row.parameter2 ? 'primary' : undefined" circle @click="scope.row.parameter2 = !scope.row.parameter2"-->
-    <!--              >B</el-button-->
-    <!--            >-->
-    <!--            <el-button :type="scope.row.parameter3 ? 'primary' : undefined" circle @click="scope.row.parameter3 = !scope.row.parameter3"-->
-    <!--              >C</el-button-->
-    <!--            >-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-
-    <!--      <el-table-column>-->
-    <!--        <template #default="scope">-->
-    <!--          <div>-->
-    <!--            <div v-if="!isEdv(scope.row)" class="card-button-group">-->
-    <!--              <el-tooltip effect="light" placement="top-end" content="Добавить справку ЕДВ">-->
-    <!--                <el-button :icon="DocumentAdd" @click="addEdv(scope.row)"></el-button>-->
-    <!--              </el-tooltip>-->
-    <!--              <el-tooltip effect="light" placement="top-end" content="Удалить инвалидность">-->
-    <!--                <el-button :icon="Delete" @click.prevent="removeDisability(scope.row)"></el-button>-->
-    <!--              </el-tooltip>-->
-    <!--            </div>-->
-    <!--            <div v-else class="card-button-group">-->
-    <!--              <el-button-group v-if="!scope.row.fileInfo">-->
-    <!--                <el-tooltip v-if="!scope.row.fileInfo" effect="light" placement="top-end" content="Приложить файл">-->
-    <!--                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()"></el-button>-->
-    <!--                </el-tooltip>-->
-    <!--                <input-->
-    <!--                  :ref="scope.row.id"-->
-    <!--                  type="file"-->
-    <!--                  hidden-->
-    <!--                  @change="-->
-    <!--                    (event) => {-->
-    <!--                      addReplaceFile(event, scope.row.id);-->
-    <!--                    }-->
-    <!--                  "-->
-    <!--                />-->
-    <!--              </el-button-group>-->
-
-    <!--              <el-button-group v-else>-->
-    <!--                <el-tooltip v-if="scope.row.fileInfo.isDraft" effect="light" placement="top-end" content="Файл добавлен">-->
-    <!--                  <el-button disabled :icon="DocumentChecked"></el-button>-->
-    <!--                </el-tooltip>-->
-    <!--                <el-tooltip v-else placement="top-end" effect="light" content="Скачать файл">-->
-    <!--                  <el-button :data-file-id="scope.row.fileInfo.id" :icon="Download" @click.prevent="downloadFile"></el-button>-->
-    <!--                </el-tooltip>-->
-    <!--                <el-tooltip effect="light" placement="top-end" content="Загрузить новый файл (это заменит предыдущий)">-->
-    <!--                  <el-button :icon="Paperclip" @click="$refs[scope.row.id].click()" />-->
-    <!--                </el-tooltip>-->
-    <!--                <input-->
-    <!--                  :ref="scope.row.id"-->
-    <!--                  type="file"-->
-    <!--                  hidden-->
-    <!--                  @change="-->
-    <!--                    (event) => {-->
-    <!--                      addReplaceFile(event, scope.row.id);-->
-    <!--                    }-->
-    <!--                  "-->
-    <!--                />-->
-    <!--                <el-tooltip effect="light" placement="top-end" content="Удалить приложенный файл">-->
-    <!--                  <el-button :icon="DocumentDelete" @click.prevent="removeFile(scope.row.id)" />-->
-    <!--                </el-tooltip>-->
-    <!--              </el-button-group>-->
-
-    <!--              <el-tooltip effect="light" placement="top-end" content="Удалить справку">-->
-    <!--                <el-button :icon="Delete" @click.prevent="removeEdv(scope.row)"></el-button>-->
-    <!--              </el-tooltip>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--      </el-table-column>-->
-    <!--    </el-table>-->
-    <!--    <a ref="fileAnchor" style="display: none" />-->
-  </div>
+  </div> -->
 </template>
 
 <script lang="ts">
 import { Delete, DocumentAdd, DocumentChecked, DocumentDelete, Download, Paperclip } from '@element-plus/icons-vue';
-import { computed, ComputedRef, defineComponent, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, ref, Ref } from 'vue';
 
 import Disability from '@/classes/Disability';
 import Patient from '@/classes/Patient';
 import Provider from '@/services/Provider/Provider';
 import Edv from '@/classes/Edv';
+import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
+import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import RemoteSearch from '@/components/RemoteSearch.vue';
+import Button from '@/components/Base/Button.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 
 export default defineComponent({
   name: 'DisabilityForm',
+  components: {
+    RemoteSearch,
+    RightTabsContainer,
+    ResearcheContainer,
+    Button,
+    CollapseItem,
+  },
   setup() {
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const fileAnchor = ref();
+    const isToggle: Ref<boolean> = ref(false);
+    const toggle = async (toggle: boolean) => {
+      isToggle.value = toggle;
+    };
 
     const addDisability = async (): Promise<void> => {
       const item = patient.value.addDisability();
@@ -329,6 +348,8 @@ export default defineComponent({
       // birthDate,
       addDisability,
       // edvDateStartChangeHandler,
+      isToggle,
+      toggle,
       DocumentAdd,
       Delete,
       Paperclip,
@@ -339,12 +360,227 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.card-button-group {
-  display: flex;
-  justify-content: flex-end;
-}
-.but {
-  border-radius: 50%;
-}
+
+<style lang="scss" scoped>
+  @import '@/assets/styles/elements/base-style.scss';
+
+  .hidden {
+    display: none;
+  }
+
+  .card-button-group {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .but {
+    border-radius: 50%;
+  }
+
+  .icon-plus {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .slider-body {
+    width: 180px;
+    height: auto;
+    border: 1px solid #379fff;
+    border-top-left-radius: $normal-border-radius;
+    border-bottom-left-radius: $normal-border-radius;
+    background: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    display: grid;
+    grid-gap: 6px;
+    grid-template-rows: repeat(0 0px);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    padding: 6px;
+  }
+
+  .slider-body > div {
+    object-fit: cover;
+  }
+
+  .slider-item-search {
+    width: 164px;
+    height: 40px;
+    border-radius: $normal-border-radius;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slider-item {
+    width: 163px;
+    height: 40px;
+    border: 1px solid #b0a4c0;
+    border-radius: $normal-border-radius;
+    background: $base-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slider-item:hover {
+    border: 1px solid #379fff;
+    background: $base-background;
+    color: #379fff;
+  }
+
+
+
+  .slider-item-active {
+    width: 163px;
+    height: 40px;
+    border: 1px solid #379fff;
+    border-radius: $normal-border-radius;
+    background: $custom-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #343e5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slider-item:active {
+    border: 1px solid #379fff;
+    background: $custom-background;
+    color: #343e5c;
+  }
+
+  .tabs-item {
+    width: 101px;
+    height: 51px;
+    border: 1px solid #b0a4c0;
+    border-top-right-radius: $normal-border-radius;
+    border-bottom-right-radius: $normal-border-radius;
+    border-left: none;
+    background: $base-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    color: #b0a4c0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 5px;
+  }
+
+  .tabs-item-active {
+    position: relative;
+    width: 106px;
+    height: 56px;
+    border: 1px solid #379fff;
+    border-top-right-radius: $normal-border-radius;
+    border-bottom-right-radius: $normal-border-radius;
+    border-left: none;
+    background: $custom-background;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #343e5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 0px;
+    z-index: 2;
+  }
+
+  .body {
+    width: 100%;
+    height: 100%;
+    border-right: 1px solid #379fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    z-index: 5;
+  }
+
+  .researche-name {
+    min-height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #343e5c;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+
+  .diagnosis-doctorName {
+    padding: 10px 0;
+  }
+  .doctor-title {
+    padding: 10px 0;
+  }
+  .background-container {
+    width: auto;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 5px;
+  }
+
+  .item-left {
+    min-width: calc(100% - 100px);
+    color: #343e5c;
+    margin-right: 10px;
+  }
+
+  .item-right {
+    width: 100px;
+    color: #343e5c;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+    padding-bottom: 10px;
+  }
+
+  .line-item {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .choice {
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .choice-item {
+    width: 30%;
+  }
+
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
+  .el-select {
+    width: 100%;
+  }
+
+  :deep(.el-form-item) {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  :deep(.el-form-item__label) {
+    color: $site_light_pink;
+    padding: 0 !important;
+    text-transform: uppercase;
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
 </style>

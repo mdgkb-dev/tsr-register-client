@@ -33,12 +33,7 @@
       <div v-if="selectedPatientRepresentative && selectedPatientRepresentative.id" class="body">
         <ResearcheContainer background="#DFF2F8">
           <template #header>
-            <div>
               <div class="researche-name">Информация о представителе</div>
-              <!-- <div class="body-item">
-                <el-button style="margin-bottom: 20px" @click="remove(selectedPatientRepresentative.id)">Удалить</el-button>
-              </div> -->
-            </div>
           </template>
           <template #body>
             <div class="line-item">
