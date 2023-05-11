@@ -3,7 +3,7 @@
     class="button"
     :style="{
       color: colorSwap ? (hovering ? background : color) : color,
-      background: colorSwap ? (hovering ? color : background) : background,
+      background: colorSwap ? (hovering ? color : background) : (hovering ? backgroundHover : background),
       marginTop: marginTop,
       marginRight: marginRight,
       margin: margin,
@@ -55,6 +55,11 @@ export default defineComponent({
       required: false,
     },
     background: {
+      type: String as PropType<string>,
+      default: 'inherit',
+      required: false,
+    },
+    backgroundHover: {
       type: String as PropType<string>,
       default: 'inherit',
       required: false,

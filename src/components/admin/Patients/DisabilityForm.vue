@@ -90,7 +90,7 @@
                           :key="parameter.letter"
                         >
                           <Button 
-                            :text="parameter.letter + ' ' + parameter.parameter" 
+                            :text="parameter.letter" 
                             :withIcon="false" 
                             width="100%"
                             height="40px"
@@ -98,9 +98,10 @@
                             font-size="16px" 
                             border-radius="5px" 
                             color="#343E5C" 
-                            background="#ffffff" 
+                            :background="parameter.parameter ? '#DFF2F8' : '#ffffff'"
+                            backgroundHover="#DFF2F8"
                             @click="changeParameter(edv, parameter.letter)"
-                            :colorSwap="true"
+                            :colorSwap="false"
                           >
                           </Button>
                         </div>
