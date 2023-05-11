@@ -30,7 +30,7 @@
                 <Button
                   text="Назад"
                   background="#ffffff"
-                  margin-right="10px"
+                  margin="0 10px 0 0"
                   height="42px"
                   font-size="16px"
                   border-radius="5px"
@@ -81,7 +81,7 @@
                           <Button
                             text="Назад"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 10px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"
@@ -104,7 +104,7 @@
                           <Button
                             text="Прерыдущий"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 10px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"
@@ -116,7 +116,7 @@
                           <Button
                             text="Следующий"
                             background="#ffffff"
-                            margin-right="10px"
+                            margin="0 0px 0 0"
                             height="42px"
                             font-size="16px"
                             border-radius="5px"

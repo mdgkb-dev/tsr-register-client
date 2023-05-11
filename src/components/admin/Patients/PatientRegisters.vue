@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer v-if="mounted" :is-toggle="isToggle" @toggle="toggle">
+  <RightTabsContainer v-if="mounted" :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -26,7 +26,12 @@
     <template #body>
       <div class="body">
         <ResearcheContainer background="#DFF2F8">
-          <template #header> Пациент включен в регистр пользователем {{ patientRegister.user.email }} </template>
+          <template #header>
+            <div class="patientRegister">
+              <div class="patientRegister-info">Пациент включен в регистр пользователем</div>
+              <div class="patientRegister-user">{{ patientRegister.user.email }}</div>
+            </div>
+          </template>
         </ResearcheContainer>
       </div>
     </template>
@@ -141,7 +146,7 @@ export default defineComponent({
 }
 
 .slider-body {
-  width: 442px;
+  width: 180px;
   height: auto;
   border: 1px solid #379fff;
   border-top-left-radius: $normal-border-radius;
@@ -159,8 +164,20 @@ export default defineComponent({
   object-fit: cover;
 }
 
+.slider-item-search {
+  width: 164px;
+  height: 40px;
+  border-radius: $normal-border-radius;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .slider-item {
-  width: 101px;
+  width: 163px;
   height: 40px;
   border: 1px solid #b0a4c0;
   border-radius: $normal-border-radius;
@@ -174,8 +191,14 @@ export default defineComponent({
   text-align: center;
 }
 
+.slider-item:hover {
+  border: 1px solid #379fff;
+  background: $base-background;
+  color: #379fff;
+}
+
 .slider-item-active {
-  width: 101px;
+  width: 163px;
   height: 40px;
   border: 1px solid #379fff;
   border-radius: $normal-border-radius;
@@ -189,6 +212,11 @@ export default defineComponent({
   text-align: center;
 }
 
+.slider-item:active {
+  border: 1px solid #379fff;
+  background: $custom-background;
+  color: #343e5c;
+}
 .tabs-item {
   width: 101px;
   height: 51px;
@@ -311,10 +339,6 @@ export default defineComponent({
 }
 
 .tools {
-  // position: absolute;
-  // top: 0;
-  // left: 0;
-  // z-index: 1;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -391,5 +415,32 @@ export default defineComponent({
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
+}
+
+.patientRegister {
+  min-height: 100px;
+  max-width: 768px;
+  margin: 50px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  border-color: #00B5A4;
+
+  background: #C7ECEA;
+}
+
+.patientRegister-info {
+  color: #00B5A4;
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.patientRegister-user {
+  margin-left: 10px;
+  color: #379FFF;
+  font-size: 20px;
+  // text-transform: uppercase;
 }
 </style>

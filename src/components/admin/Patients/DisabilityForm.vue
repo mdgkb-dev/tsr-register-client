@@ -137,28 +137,6 @@
       <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
     </symbol>
   </svg>
-  <!-- <div class="wrapper">
-    <el-button style="margin-bottom: 20px" @click="addDisability">Добавить инвалидность</el-button>
-    <div v-for="disability in patient.disabilities" :key="disability.id">
-      <div>{{ disability.id }} <el-button @click="removeDisability(disability.id)">Удалить инвалидность</el-button></div>
-
-      <el-button style="margin-bottom: 20px" @click="addEdv(disability)">Добавить ЕДВ</el-button>
-      <div v-for="edv in disability.edvs" :key="edv.id">
-        {{ edv.id }} <el-button @click="removeEdv(disability, edv.id)">Удалить едв</el-button>
-        <div
-          v-for="parameter in [
-            { letter: 'A', parameter: edv.parameter1 },
-            { letter: 'B', parameter: edv.parameter2 },
-            { letter: 'C', parameter: edv.parameter3 },
-          ]"
-          :key="parameter.letter"
-          @click="changeParameter(edv, parameter.letter)"
-        >
-          {{ parameter.letter }} {{ parameter.parameter }}
-        </div>
-      </div>
-    </div>
-  </div> -->
 </template>
 
 <script lang="ts">
