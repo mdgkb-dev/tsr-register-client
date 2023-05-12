@@ -23,11 +23,18 @@
       stroke: color,
       fill: color,
       marginRight: text ? '10px' : '',
+      transform: colorSwap ? (hovering ? backgroundHover : background) : (hovering ? 'scale(1.1, 1.1)' : ''),
+      transition: colorSwap ? '' : '0.2s',
     }"
   >
     <slot name="icon" />
   </div>
-  <div  class="text">
+  <div  class="text"
+    :style="{
+      transform: colorSwap ? (hovering ? backgroundHover : background) : (hovering ? 'scale(1.1, 1.1)' : ''),
+      transition: colorSwap ? '' : '0.2s',
+    }"
+  >
     {{ text }}
   </div>
   </button>
@@ -129,8 +136,6 @@ export default defineComponent({
   align-items: center;
   border: 1px solid;
   transition: 0.3s;
-  // margin-left: auto;
-  // margin-right: auto;
   text-align: center;
   padding: 0 10px;
   cursor: pointer;

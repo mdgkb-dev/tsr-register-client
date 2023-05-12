@@ -46,8 +46,11 @@
               font-size="16px" 
               border-radius="5px" 
               color="#00B5A4" 
-              background="#C7ECEA" 
-              @click="addAnamnesis(selectedPatientDiagnosis)">
+              background="#C7ECEA"
+              backgroundHover="#C7ECEA"
+              @click="addAnamnesis(selectedPatientDiagnosis)"
+              :colorSwap="false"
+              >
             </Button>
             <el-timeline style="margin-top: 20px">
               <el-timeline-item
@@ -474,5 +477,12 @@ export default defineComponent({
 
 :deep(.el-timeline-item) {
   padding-bottom: 8px;
+}
+:deep(.el-timeline) {
+  padding: 0 0 0 10px;
+}
+
+:deep(.el-timeline-item__node) {
+  background: #B0A4C0;
 }
 </style>

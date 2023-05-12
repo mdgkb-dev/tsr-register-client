@@ -53,78 +53,84 @@
             </div>
           </template>
           <template #body>
-            <Button 
-              text="Добавить ЕДВ" 
-              :withIcon="false" 
-              width="100%" 
-              height="60px"
-              font-size="16px" 
-              border-radius="5px" 
-              color="#00B5A4" 
-              background="#C7ECEA" 
-              @click="addEdv(disability)">
-            </Button>
-
-            <el-timeline style="margin-top: 20px">
-              <el-timeline-item
-                v-for="edv in disability.edvs" 
-                :key="edv.id"
-                placement="top"
-                center
-              >
-                <CollapseItem
-                  title="Дата присваивания"
-                  :is-collaps="true"
-                  background="#DFF2F8"
-                  margin-top="0px"
+            <div class="tools">
+              <Button 
+                text="Добавить ЕДВ" 
+                :withIcon="false" 
+                width="100%" 
+                height="60px"
+                font-size="16px" 
+                border-radius="5px" 
+                color="#00B5A4" 
+                background="#C7ECEA" 
+                backgroundHover="#C7ECEA"
+                @click="addEdv(disability)"
+                :colorSwap="false"
                 >
-                  <template #inside-content>
-                    <div class="background-container">
-                      <div class="choice">
-                        <div class="choice-item"
-                          v-for="parameter in [
-                            { letter: 'A', parameter: edv.parameter1 },
-                            { letter: 'B', parameter: edv.parameter2 },
-                            { letter: 'C', parameter: edv.parameter3 },
-                          ]"
-                          :key="parameter.letter"
-                        >
+              </Button>
+            </div>
+            <div class="scroll-block">
+              <el-timeline style="margin-top: 20px">
+                <el-timeline-item
+                  v-for="edv in disability.edvs" 
+                  :key="edv.id"
+                  placement="top"
+                  center
+                >
+                  <CollapseItem
+                    title="Дата присваивания"
+                    :is-collaps="true"
+                    background="#DFF2F8"
+                    margin-top="0px"
+                  >
+                    <template #inside-content>
+                      <div class="background-container">
+                        <div class="choice">
+                          <div class="choice-item"
+                            v-for="parameter in [
+                              { letter: 'A', parameter: edv.parameter1 },
+                              { letter: 'B', parameter: edv.parameter2 },
+                              { letter: 'C', parameter: edv.parameter3 },
+                            ]"
+                            :key="parameter.letter"
+                          >
+                            <Button 
+                              :text="parameter.letter" 
+                              :withIcon="false" 
+                              width="100%"
+                              height="40px"
+                              margin="10px 0 0 0"
+                              font-size="16px" 
+                              border-radius="5px" 
+                              color="#343E5C" 
+                              :background="parameter.parameter ? '#DFF2F8' : '#ffffff'"
+                              backgroundHover="#DFF2F8"
+                              @click="changeParameter(edv, parameter.letter)"
+                              :colorSwap="false"
+                            >
+                            </Button>
+                          </div>
+                        </div>
                           <Button 
-                            :text="parameter.letter" 
+                            text="Удалить ЕВД" 
                             :withIcon="false" 
-                            width="100%"
+                            width="auto"
                             height="40px"
                             margin="10px 0 0 0"
                             font-size="16px" 
                             border-radius="5px" 
                             color="#343E5C" 
-                            :background="parameter.parameter ? '#DFF2F8' : '#ffffff'"
-                            backgroundHover="#DFF2F8"
-                            @click="changeParameter(edv, parameter.letter)"
-                            :colorSwap="false"
+                            background="#ffffff" 
+                            @click="removeEdv(disability, edv.id)"
+                            :colorSwap="true"
                           >
                           </Button>
-                        </div>
                       </div>
-                        <Button 
-                          text="Удалить ЕВД" 
-                          :withIcon="false" 
-                          width="auto"
-                          height="40px"
-                          margin="10px 0 0 0"
-                          font-size="16px" 
-                          border-radius="5px" 
-                          color="#343E5C" 
-                          background="#ffffff" 
-                          @click="removeEdv(disability, edv.id)"
-                          :colorSwap="true"
-                        >
-                        </Button>
-                    </div>
-                  </template>
-                </CollapseItem>
-              </el-timeline-item>
-            </el-timeline>
+                    </template>
+                  </CollapseItem>
+                </el-timeline-item>
+              </el-timeline>
+            </div>
           </template>
         </ResearcheContainer>
         </div>
@@ -541,6 +547,16 @@ export default defineComponent({
     width: 30%;
   }
 
+  .scroll-block {
+    max-height: 65vh;
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  .tools {
+    padding-bottom: 10px;
+  }
+
   :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
     width: 100%;
   }
@@ -561,5 +577,17 @@ export default defineComponent({
     margin-left: 5px;
     font-size: 14px;
     margin-bottom: 6px;
+  }
+
+  :deep(.el-timeline) {
+    padding: 0 0 0 10px;
+  }
+
+  :deep(.el-timeline-item) {
+    padding-bottom: 8px;
+  }
+
+  :deep(.el-timeline-item__node) {
+    background: #B0A4C0;
   }
 </style>

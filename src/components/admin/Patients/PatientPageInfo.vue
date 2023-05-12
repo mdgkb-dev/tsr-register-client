@@ -43,7 +43,6 @@
     </template>
     <template #right>
       <PassportForm store-module="patients" :edit-mode="true" />
-      <!--      <ContactForm />-->
     </template>
   </LeftRightContainer>
 </template>
@@ -119,4 +118,5 @@ export default defineComponent({
   margin-top: 3px;
   margin-left: 10px;
 }
+
 </style>
