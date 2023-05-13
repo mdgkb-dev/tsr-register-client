@@ -1,5 +1,5 @@
-import Drug from '@/classes/drugs/Drug';
-import DrugRegimen from '@/classes/drugs/DrugRegimen';
+import Drug from '@/classes/Drug';
+import DrugRegimen from '@/classes/DrugRegimen';
 import Patient from '@/classes/Patient';
 import PatientDrugRegimenItem from '@/classes/PatientDrugRegimenItem';
 import ClassHelper from '@/services/ClassHelper';

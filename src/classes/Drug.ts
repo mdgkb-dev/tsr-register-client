@@ -1,4 +1,4 @@
-import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
+import DrugDiagnosis from '@/classes/DrugDiagnosis';
 import ClassHelper from '@/services/ClassHelper';
 
 import DrugRegimen from './DrugRegimen';

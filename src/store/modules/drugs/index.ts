@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import Drug from '@/classes/drugs/Drug';
+import Drug from '@/classes/Drug';
 import RootState from '@/store/types';
 
 import actions from './actions';

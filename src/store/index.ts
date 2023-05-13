@@ -3,6 +3,8 @@ import Vuex, { StoreOptions } from 'vuex';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
 import auth from '@/store/modules/auth';
+import { commissions } from '@/store/modules/commissions';
+import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
 import { edvs } from '@/store/modules/edvs';
@@ -72,6 +74,8 @@ const store: StoreOptions<RootState> = {
     anamneses,
     patientsRegisters,
     patientHistories,
+    commissionsTemplates,
+    commissions,
   },
 };
 

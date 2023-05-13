@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 
-import Drug from '@/classes/drugs/Drug';
-import DrugDiagnosis from '@/classes/drugs/DrugDiagnosis';
+import Drug from '@/classes/Drug';
+import DrugDiagnosis from '@/classes/DrugDiagnosis';
 import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
 import IDrug from '@/interfaces/drugs/IDrug';
 import IDrugDiagnosis from '@/interfaces/drugs/IDrugDiagnosis';
