@@ -57,7 +57,19 @@
                 </el-form>
               </div>
               <div class="item-right">
-                <el-button style="margin-bottom: 20px" @click="remove(selectedPatientRepresentative.id)">Удалить</el-button>
+                <Button
+                  text="Удалить"
+                  background="#ffffff"
+                  margin="0"
+                  height="42px"
+                  font-size="16px"
+                  border-radius="5px"
+                  color="#343e5c"
+                  :color-swap="true"
+                  :with-icon="false"
+                  @click="remove(selectedPatientRepresentative.id)"
+                >
+                </Button>
               </div>
             </div>
             <PassportForm :edit-mode="true" store-module="representatives" />
@@ -544,9 +556,8 @@ export default defineComponent({
   .line-item {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    margin: 0 0 0 10px;
-    max-width: 768px;
+    width: calc(100% - 12px);
+    margin: 0 10px 0 10px;
   }
 
   :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
@@ -569,5 +580,9 @@ export default defineComponent({
     margin-left: 5px;
     font-size: 14px;
     margin-bottom: 6px;
+  }
+
+  :deep(.el-timeline) {
+    padding: 0px;
   }
 </style>

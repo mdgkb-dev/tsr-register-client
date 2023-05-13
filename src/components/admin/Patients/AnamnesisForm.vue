@@ -25,7 +25,19 @@
           >
           </el-input>
         </el-form-item>
-        <el-button @click="remove">Удалить</el-button>
+        <Button
+          text="Удалить"
+          background="#ffffff"
+          margin="0 10px 0 0"
+          height="42px"
+          font-size="16px"
+          border-radius="5px"
+          color="#343e5c"
+          :color-swap="true"
+          :with-icon="false"
+          @click="remove"
+        >
+        </Button>
       </el-form>
   </div>
 </template>
@@ -37,8 +49,12 @@ import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 import Anamnesis from '@/classes/Anamnesis';
 import dateFormat from '@/services/DateMask';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 export default defineComponent({
   name: 'AnamnesisForm',
+  components: {
+    Button,
+  },
   props: {
     anamnesis: {
       type: Object as PropType<Anamnesis>,
@@ -85,9 +101,9 @@ article {
   right: 10px;
 }
 
-.el-timeline {
-  padding: 0;
-}
+// .el-timeline {
+//   padding: 0;
+// }
 
 .el-form-item {
   margin: 0;

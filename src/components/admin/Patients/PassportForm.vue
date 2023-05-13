@@ -1,5 +1,9 @@
 <template>
-  <div class="human-form-container">
+  <div class="human-form-container"
+    :style="{
+      maxWidth: maxWidth
+    }"
+  >
     <el-form>
       <el-form-item label="Фамилия">
         <el-input v-model="human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman"></el-input>
@@ -60,8 +64,6 @@
       ></path>
     </symbol>
   </svg>
-  <!-- <Active />
-  <NonActive /> -->
 </template>
 
 <script lang="ts">
@@ -78,6 +80,11 @@ export default defineComponent({
     storeModule: {
       type: String as PropType<string>,
       default: '',
+    },
+
+    maxWidth: {
+      type: String as PropType<string>,
+      default: 'calc(100% - 10px)',
     },
     editMode: {
       type: Boolean as PropType<boolean>,
@@ -122,7 +129,6 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 .human-form-container {
   width: calc(100% - 10px);
-  max-width: 768px;
   margin-left: 10px;
 
   .item-left {

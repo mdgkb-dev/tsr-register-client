@@ -125,20 +125,14 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  // text-align: center;
 }
 
 .icon-block {
   display: flex;
   justify-content: center;
   align-items: center;
-  // text-align: center;
   transition: 0.3s;
 }
-
-// .slider-info {
-//   width: auto;
-// }
 
 .tab-block {
   width: 110px;
@@ -147,6 +141,7 @@ export default defineComponent({
   flex-direction: column;
   overflow: hidden;
   margin-top: 109px;
+  cursor: pointer;
 }
 
 .body-block {
