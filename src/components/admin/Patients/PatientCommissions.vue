@@ -27,7 +27,7 @@
         class="tabs-item"
         @click="selectCommission(commission)"
       >
-        {{ $dateTimeFormatter.format(commission.date) }}
+        №{{ commission.number }}
       </div>
     </template>
     <template #body>
@@ -35,9 +35,10 @@
         <ResearcheContainer background="#DFF2F8">
           <template #header>
             <div class="researche-name">Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</div>
+            <div class="researche-name">Протокол #{{ selectedCommission.number }}</div>
+            <div class="researche-name">Дата проведения:<el-date-picker v-model="selectedCommission.date" /></div>
+
             <div class="diagnosis-doctorName">
-              <div class="doctor-title">Дата комиссии:</div>
-              <el-date-picker v-model="selectedCommission.date" />
               <!--              <el-input-->
               <!--                v-model="selectedPatientDiagnosis.doctorName"-->
               <!--                placeholder="ФИО врача, поставившего диагноз"-->
@@ -46,37 +47,47 @@
             </div>
           </template>
           <template #body>
-            <div class="doctor-title">Дата окончания:</div>
-            <el-date-picker v-model="selectedCommission.endDate" />
-            <!--            <Button-->
-            <!--              text="Добавить анамнез"-->
-            <!--              :with-icon="false"-->
-            <!--              width="100%"-->
-            <!--              height="60px"-->
-            <!--              font-size="16px"-->
-            <!--              border-radius="5px"-->
-            <!--              color="#00B5A4"-->
-            <!--              background="#C7ECEA"-->
-            <!--              @click="addAnamnesis(selectedPatientDiagnosis)"-->
-            <!--            >-->
-            <!--            </Button>-->
-            <el-timeline style="margin-top: 20px">
-              <el-timeline-item
-                v-for="commissionDoctor in selectedCommission.commissionsDoctors"
-                :key="commissionDoctor.id"
-                placement="top"
-                center
-              >
-                {{ commissionDoctor.doctor.name }}
-                <!--                <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">-->
-                <!--                  <template #inside-content>-->
-                <!--                    <div class="background-container">-->
-                <!--                      <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />-->
-                <!--                    </div>-->
-                <!--                  </template>-->
-                <!--                </CollapseItem>-->
-              </el-timeline-item>
-            </el-timeline>
+            <div style="display: flex; justify-content: space-around">
+              <div>
+                <div class="doctor-title">Дата окончания:</div>
+                <el-date-picker v-model="selectedCommission.endDate" />
+                <!--            <Button-->
+                <!--              text="Добавить анамнез"-->
+                <!--              :with-icon="false"-->
+                <!--              width="100%"-->
+                <!--              height="60px"-->
+                <!--              font-size="16px"-->
+                <!--              border-radius="5px"-->
+                <!--              color="#00B5A4"-->
+                <!--              background="#C7ECEA"-->
+                <!--              @click="addAnamnesis(selectedPatientDiagnosis)"-->
+                <!--            >-->
+                <!--            </Button>-->
+                <el-timeline style="margin-top: 20px">
+                  <el-timeline-item
+                    v-for="commissionDoctor in selectedCommission.commissionsDoctors"
+                    :key="commissionDoctor.id"
+                    placement="top"
+                    center
+                  >
+                    {{ commissionDoctor.doctor.name }} - <i>{{ commissionDoctor.doctor.position }}</i>
+                    <el-button>Удалить члена комиссии</el-button>
+                  </el-timeline-item>
+                </el-timeline>
+                <el-button>Добавить члена комиссии</el-button>
+                <div>
+                  <el-button>Сформировать протокол врачебной комиссии</el-button>
+                </div>
+                <div>Статус заявки</div>
+                <el-select v-model="status">
+                  <el-option v-for="s in statuses" :key="s" :label="s" :value="s"></el-option>
+                </el-select>
+              </div>
+              <div v-if="status === 'Заявка подтверждена'">
+                <h3>Договор</h3>
+                <div>Информация по договору</div>
+              </div>
+            </div>
           </template>
         </ResearcheContainer>
       </div>
@@ -126,6 +137,9 @@ export default defineComponent({
 
   setup(props) {
     const mounted = ref(false);
+    const statuses: string[] = ['Собрана врачебная комиссия', 'Заявка отправлена в Фонд', 'Заявка подтверждена'];
+    const status: Ref<string> = ref('');
+
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
@@ -146,11 +160,13 @@ export default defineComponent({
       isToggle.value = false;
     };
 
-    const selectCommission = (commission: Commission): void {
-      selectedCommission.value = commission
-    }
+    const selectCommission = (commission: Commission): void => {
+      selectedCommission.value = commission;
+    };
 
     return {
+      status,
+      statuses,
       selectCommission,
       selectedCommission,
       commissionsTemplates,

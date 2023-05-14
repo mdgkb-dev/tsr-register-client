@@ -12,8 +12,23 @@ const menuList: IAdminMenu[] = [
     icon: 'el-icon-info',
   },
   {
-    title: 'Заявки',
-    to: '/admin/drugs-applications',
+    title: 'Врачебные комиссии/заявки',
+    to: '/admin/commissions',
+    icon: 'el-icon-info',
+  },
+  // {
+  //   title: 'Заявки',
+  //   to: '/admin/drugs-applications',
+  //   icon: 'el-icon-info',
+  // },
+  // {
+  //   title: 'Договоры',
+  //   to: '/admin/fund-contract',
+  //   icon: 'el-icon-info',
+  // },
+  {
+    title: 'Склад',
+    to: '/admin/drugs-store',
     icon: 'el-icon-info',
   },
 ];

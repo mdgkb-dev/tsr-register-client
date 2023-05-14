@@ -71,7 +71,6 @@ export default defineComponent({
       // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
       CustomSection.Create('commission', 'Врачебные комиссии', 'PatientCommissions', 0, true),
       CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
-      CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
       // CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
     ];
     const activeMenu: Ref<CustomSection> = ref(menus[0]);
