@@ -1,4 +1,4 @@
-import DrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
+import DrugRegimenBlock from '@/classes/DrugRegimenBlock';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class DrugRegimenBlockItem {

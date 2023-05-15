@@ -69,10 +69,10 @@
 import { QuestionFilled } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref } from 'vue';
 
+import Drug from '@/classes/Drug';
 import MainHeader from '@/classes/shared/MainHeader';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDrug from '@/interfaces/drugs/IDrug';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -87,7 +87,7 @@ export default defineComponent({
     QuestionFilled,
   },
   setup() {
-    const drugs: Ref<IDrug[]> = computed(() => Provider.store.getters['drugs/drugs']);
+    const drugs: Ref<Drug[]> = computed(() => Provider.store.getters['drugs/drugs']);
 
     const edit = async (id: string): Promise<void> => {
       await Provider.router.push(`/drugs/${id}`);

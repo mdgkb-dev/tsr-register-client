@@ -6,6 +6,7 @@ export default class Doctor {
   human = new Human();
   humanId?: string;
   position = '';
+  name = '';
 
   constructor(i?: Doctor) {
     ClassHelper.BuildClass(this, i);

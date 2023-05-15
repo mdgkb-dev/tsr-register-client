@@ -62,17 +62,17 @@ import { Delete, Document, Edit, FolderChecked, InfoFilled, Plus } from '@elemen
 import { computed, defineComponent, PropType, Ref } from 'vue';
 import { useStore } from 'vuex';
 
+import DrugRegimen from '@/classes/DrugRegimen';
+import DrugRegimenBlock from '@/classes/DrugRegimenBlock';
 import DrugRegimenBlockItemsForm from '@/components/Drugs/DrugRegimenBlockItemsForm.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
-import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
 
 export default defineComponent({
   name: 'DrugRegimenBlocksForm',
   components: { DrugRegimenBlockItemsForm, TableButtonGroup },
   props: {
     drugRegimen: {
-      type: Object as PropType<IDrugRegimen>,
+      type: Object as PropType<DrugRegimen>,
       required: true,
     },
   },
@@ -85,7 +85,7 @@ export default defineComponent({
       prop.drugRegimen.drugRegimenBlocks[drugRegimenBlockIndex].addDrugRegimenBlockItem();
       prop.drugRegimen.drugRegimenBlocks[drugRegimenBlockIndex].editDrugRegimenBlock(true);
     };
-    const editDrugRegimenBlock = (item: IDrugRegimenBlock): void => {
+    const editDrugRegimenBlock = (item: DrugRegimenBlock): void => {
       item.editDrugRegimenBlock();
     };
     const removeDrugRegimenBlock = (drugRegimenBlockIndex: number): void => {

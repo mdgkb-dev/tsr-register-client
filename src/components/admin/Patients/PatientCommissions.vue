@@ -34,9 +34,14 @@
       <div v-if="selectedCommission" class="body">
         <ResearcheContainer background="#DFF2F8">
           <template #header>
-            <div class="researche-name">Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</div>
+            <div class="researche-name">
+              <span>Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</span>
+              <span><el-button @click="removeCommission">Удалить</el-button></span>
+            </div>
             <div class="researche-name">Протокол #{{ selectedCommission.number }}</div>
-            <div class="researche-name">Дата проведения:<el-date-picker v-model="selectedCommission.date" /></div>
+            <div class="researche-name">
+              Дата проведения:<el-date-picker v-model="selectedCommission.date" @change="updateCommission" />
+            </div>
 
             <div class="diagnosis-doctorName">
               <!--              <el-input-->
@@ -49,20 +54,11 @@
           <template #body>
             <div style="display: flex; justify-content: space-around">
               <div>
-                <div class="doctor-title">Дата окончания:</div>
-                <el-date-picker v-model="selectedCommission.endDate" />
-                <!--            <Button-->
-                <!--              text="Добавить анамнез"-->
-                <!--              :with-icon="false"-->
-                <!--              width="100%"-->
-                <!--              height="60px"-->
-                <!--              font-size="16px"-->
-                <!--              border-radius="5px"-->
-                <!--              color="#00B5A4"-->
-                <!--              background="#C7ECEA"-->
-                <!--              @click="addAnamnesis(selectedPatientDiagnosis)"-->
-                <!--            >-->
-                <!--            </Button>-->
+                <div class="doctor-title">Дата начала периода:</div>
+                <el-date-picker v-model="selectedCommission.startDate" @change="updateCommission" />
+                <div class="doctor-title">Дата окончания периода:</div>
+                <el-date-picker v-model="selectedCommission.endDate" @change="updateCommission" />
+
                 <el-timeline style="margin-top: 20px">
                   <el-timeline-item
                     v-for="commissionDoctor in selectedCommission.commissionsDoctors"
@@ -71,10 +67,32 @@
                     center
                   >
                     {{ commissionDoctor.doctor.name }} - <i>{{ commissionDoctor.doctor.position }}</i>
-                    <el-button>Удалить члена комиссии</el-button>
+                    <el-button @click="removeCommissionDoctor(commissionDoctor)">Удалить члена комиссии</el-button>
                   </el-timeline-item>
                 </el-timeline>
-                <el-button>Добавить члена комиссии</el-button>
+                <el-button @click="showDoctorsList(true)">Добавить члена комиссии</el-button>
+                <template v-if="doctorsListShowed">
+                  <div v-for="doctor in doctors" :key="doctor.id" @click="addCommissionDoctor(doctor)">
+                    {{ doctor.name }}
+                  </div>
+                </template>
+                <div v-if="selectedCommission.drug">{{ selectedCommission.drug.name }}</div>
+                <el-button @click="showDrugsList(true)">Выбрать лекарство</el-button>
+                <template v-if="drugsListShowed">
+                  <div v-for="drug in drugs" :key="drug.id" @click="selectDrug(drug)">
+                    {{ drug.name }}
+                  </div>
+                </template>
+
+                <el-select v-model="selectedCommission.patientDiagnosisId" @change="updateCommission">
+                  <el-option
+                    v-for="patientDiagnosis in patient.patientDiagnosis"
+                    :key="patientDiagnosis.id"
+                    :label="patientDiagnosis.mkbItem.getFullName()"
+                    :value="patientDiagnosis.id"
+                  />
+                </el-select>
+
                 <div>
                   <el-button>Сформировать протокол врачебной комиссии</el-button>
                 </div>
@@ -114,7 +132,10 @@
 import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Commission from '@/classes/Commission';
+import CommissionDoctor from '@/classes/CommissionDoctor';
 import CommissionTemplate from '@/classes/CommissionTemplate';
+import Doctor from '@/classes/Doctor';
+import Drug from '@/classes/Drug';
 import Patient from '@/classes/Patient';
 import AnamnesisForm from '@/components/admin/Patients/AnamnesisForm.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
@@ -122,6 +143,7 @@ import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.v
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
+import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -139,10 +161,14 @@ export default defineComponent({
     const mounted = ref(false);
     const statuses: string[] = ['Собрана врачебная комиссия', 'Заявка отправлена в Фонд', 'Заявка подтверждена'];
     const status: Ref<string> = ref('');
-
+    const doctorsListShowed: Ref<boolean> = ref(false);
+    const drugsListShowed: Ref<boolean> = ref(false);
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
+    const commission: ComputedRef<Commission> = computed(() => Provider.store.getters['commissions/item']);
+    const doctors: ComputedRef<Doctor[]> = computed(() => Provider.store.getters['doctors/items']);
+    const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
     const selectedCommission: Ref<Commission | undefined> = ref(
       patient.value.commissions.length > 0 ? patient.value.commissions[0] : undefined
     );
@@ -155,16 +181,78 @@ export default defineComponent({
 
     const addCommission = async (template: CommissionTemplate): Promise<void> => {
       const item = patient.value.addCommission(template);
-      await Provider.store.dispatch('commissions/create', item);
+      await Provider.store.dispatch('commissions/createAndSetNumber', item);
       selectedCommission.value = patient.value.commissions[patient.value.commissions.length - 1];
       isToggle.value = false;
     };
 
-    const selectCommission = (commission: Commission): void => {
+    const updateCommission = async (): Promise<void> => {
+      await Provider.store.dispatch('commissions/updateWithoutReset', selectedCommission.value);
+    };
+
+    const selectCommission = (commission?: Commission): void => {
       selectedCommission.value = commission;
     };
 
+    const removeCommission = async (): Promise<void> => {
+      if (!selectedCommission.value) {
+        return;
+      }
+      ClassHelper.RemoveFromClassById(selectedCommission.value.id, patient.value.commissions, []);
+      await Provider.store.dispatch('commissions/remove', selectedCommission.value.id);
+      selectedCommission.value =
+        patient.value.commissions.length > 0 ? patient.value.commissions[patient.value.commissions.length - 1] : undefined;
+    };
+
+    const addCommissionDoctor = async (doctor: Doctor): Promise<void> => {
+      if (!selectedCommission.value) {
+        return;
+      }
+      const item = selectedCommission.value?.addDoctor(doctor);
+      await Provider.store.dispatch('commissionsDoctors/create', item);
+      doctorsListShowed.value = false;
+    };
+
+    const selectDrug = async (drug: Drug): Promise<void> => {
+      if (!selectedCommission.value) {
+        return;
+      }
+      selectedCommission.value.drug = drug;
+      selectedCommission.value.drugId = drug.id;
+      await updateCommission();
+      drugsListShowed.value = false;
+    };
+
+    const removeCommissionDoctor = async (commissionDoctor: CommissionDoctor): Promise<void> => {
+      if (!selectedCommission.value) {
+        return;
+      }
+      ClassHelper.RemoveFromClassById(commissionDoctor.id, selectedCommission.value.commissionsDoctors, []);
+      await Provider.store.dispatch('commissionsDoctors/remove', commissionDoctor.id);
+    };
+
+    const showDoctorsList = async (show: boolean): Promise<void> => {
+      await Provider.store.dispatch('doctors/getAll');
+      doctorsListShowed.value = show;
+    };
+
+    const showDrugsList = async (show: boolean): Promise<void> => {
+      await Provider.store.dispatch('drugs/getAll');
+      drugsListShowed.value = show;
+    };
+
     return {
+      drugs,
+      selectDrug,
+      showDrugsList,
+      drugsListShowed,
+      updateCommission,
+      doctorsListShowed,
+      showDoctorsList,
+      addCommissionDoctor,
+      doctors,
+      removeCommissionDoctor,
+      removeCommission,
       status,
       statuses,
       selectCommission,

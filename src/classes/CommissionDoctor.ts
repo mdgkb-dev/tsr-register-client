@@ -28,4 +28,12 @@ export default class CommissionDoctor {
     item.order = template.order;
     return item;
   }
+
+  static Create(doctor: Doctor): CommissionDoctor {
+    const item = new CommissionDoctor();
+    item.id = uuidv4();
+    item.doctor = doctor;
+    item.doctorId = doctor.id;
+    return item;
+  }
 }
