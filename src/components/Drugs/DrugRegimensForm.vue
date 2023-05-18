@@ -45,9 +45,9 @@ import { Delete, Document, Edit, FolderChecked, InfoFilled, Plus } from '@elemen
 import { computed, defineComponent, Ref } from 'vue';
 import { useStore } from 'vuex';
 
+import Drug from '@/classes/Drug';
+import DrugRegimen from '@/classes/DrugRegimen';
 import DrugRegimenBlocksForm from '@/components/Drugs/DrugRegimenBlocksForm.vue';
-import IDrug from '@/interfaces/drugs/IDrug';
-import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 
 export default defineComponent({
   name: 'DrugRegimensForm',
@@ -56,10 +56,10 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const drug: Ref<IDrug> = computed(() => store.getters['drugs/drug']);
+    const drug: Ref<Drug> = computed(() => store.getters['drugs/drug']);
     const activeCollapseName: Ref<string> = computed(() => store.getters['drugs/activeCollapseName']);
 
-    const editDrugRegimen = (drugRegimen: IDrugRegimen, drugRegimenIndex: number): void => {
+    const editDrugRegimen = (drugRegimen: DrugRegimen, drugRegimenIndex: number): void => {
       drugRegimen.editDrugRegimen();
       store.commit('drugs/setActiveCollapseName', String(drugRegimenIndex));
     };

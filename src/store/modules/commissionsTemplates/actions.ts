@@ -1,13 +1,13 @@
 import { ActionTree } from 'vuex';
 
-import Drug from '@/classes/Drug';
+import CommissionTemplate from '@/classes/CommissionTemplate';
 import getBaseActions from '@/store/baseModule/baseActions';
 import RootState from '@/store/types';
 
 import { State } from './index';
 
 const actions: ActionTree<State, RootState> = {
-  ...getBaseActions<Drug, State>('drugs'),
+  ...getBaseActions<CommissionTemplate, State>('commissions-templates'),
 };
 
 export default actions;

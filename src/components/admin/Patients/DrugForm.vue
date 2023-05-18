@@ -127,10 +127,10 @@ import { ElMessageBox } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, UnwrapRef } from 'vue';
 import { useStore } from 'vuex';
 
-import Drug from '@/classes/drugs/Drug';
-import DrugRegimen from '@/classes/drugs/DrugRegimen';
-import DrugRegimenBlock from '@/classes/drugs/DrugRegimenBlock';
-import DrugRegimenBlockItem from '@/classes/drugs/DrugRegimenBlockItem';
+import Drug from '@/classes/Drug';
+import DrugRegimen from '@/classes/DrugRegimen';
+import DrugRegimenBlock from '@/classes/DrugRegimenBlock';
+import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
 import PatientDrugRegimenItem from '@/classes/PatientDrugRegimenItem';

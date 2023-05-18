@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 
-import DrugRegimenBlockItem from '@/classes/drugs/DrugRegimenBlockItem';
+import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
 import ClassHelper from '@/services/ClassHelper';
 
 import Drug from './Drug';

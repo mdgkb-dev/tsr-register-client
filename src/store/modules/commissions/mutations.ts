@@ -1,12 +1,12 @@
 import { MutationTree } from 'vuex';
 
-import Drug from '@/classes/Drug';
+import Commission from '@/classes/Commission';
 import getBaseMutations from '@/store/baseModule/baseMutations';
 
 import { State } from './index';
 
 const mutations: MutationTree<State> = {
-  ...getBaseMutations<Drug, State>(Drug),
+  ...getBaseMutations<Commission, State>(Commission),
 };
 
 export default mutations;

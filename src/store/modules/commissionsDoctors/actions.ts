@@ -1,13 +1,13 @@
 import { ActionTree } from 'vuex';
 
-import Drug from '@/classes/Drug';
+import CommissionDoctor from '@/classes/CommissionDoctor';
 import getBaseActions from '@/store/baseModule/baseActions';
 import RootState from '@/store/types';
 
 import { State } from './index';
 
 const actions: ActionTree<State, RootState> = {
-  ...getBaseActions<Drug, State>('drugs'),
+  ...getBaseActions<CommissionDoctor, State>('commissions-doctors'),
 };
 
 export default actions;

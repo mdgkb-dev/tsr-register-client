@@ -1,8 +1,5 @@
 import FileInfo from '@/classes/files/FileInfo';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IHuman from '@/interfaces/IHuman';
 import ContactInfo from '@/services/classes/ContactInfo';
 import ClassHelper from '@/services/ClassHelper';
 import StringsService from '@/services/Strings';
@@ -80,16 +77,16 @@ export default class Human {
     this.photoMiniId = undefined;
   }
 
-  static GetFileInfos(item: IHuman): IFileInfo[] {
+  static GetFileInfos(item: Human): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
-
-    item.documents.forEach((doc: IDocument) => {
-      doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
-        if (fileInfoToDoc.fileInfo) {
-          fileInfos.push(fileInfoToDoc.fileInfo);
-        }
-      });
-    });
+    //
+    // item.documents.forEach((doc: IDocument) => {
+    //   doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
+    //     if (fileInfoToDoc.fileInfo) {
+    //       fileInfos.push(fileInfoToDoc.fileInfo);
+    //     }
+    //   });
+    // });
 
     if (item.photo) {
       fileInfos.push(item.photo);

@@ -37,16 +37,16 @@
 import { Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
 
+import DrugRegimenBlock from '@/classes/DrugRegimenBlock';
+import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDrugRegimenBlock from '@/interfaces/drugs/IDrugRegimenBlock';
-import IDrugRegimenBlockItem from '@/interfaces/drugs/IDrugRegimenBlockItem';
 
 export default defineComponent({
   name: 'DrugRegimenBlockItemsForm',
   components: { TableButtonGroup },
   props: {
     drugRegimenBlock: {
-      type: Object as PropType<IDrugRegimenBlock>,
+      type: Object as PropType<DrugRegimenBlock>,
       required: true,
     },
   },
@@ -61,7 +61,7 @@ export default defineComponent({
     const moveDrugRegimenBlockItemDown = (drugRegimenBlockItemIndex: number): void => {
       prop.drugRegimenBlock.moveDrugRegimenBlockItemDown(drugRegimenBlockItemIndex);
     };
-    const addTimesPerDay = (drugRegimenBlockItem: IDrugRegimenBlockItem): void => {
+    const addTimesPerDay = (drugRegimenBlockItem: DrugRegimenBlockItem): void => {
       drugRegimenBlockItem.timesPerDay = 1;
       prop.drugRegimenBlock.editDrugRegimenBlock(true);
     };

@@ -23,6 +23,7 @@ import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
 import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
+import PatientCommissions from '@/components/admin/Patients/PatientCommissions.vue';
 import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
 import PatientHistories from '@/components/admin/Patients/PatientHistories.vue';
@@ -56,6 +57,7 @@ export default defineComponent({
     PatientDocuments,
     PatientRegisters,
     PatientHistories,
+    PatientCommissions,
   },
   setup() {
     const menus: CustomSection[] = [
@@ -67,6 +69,7 @@ export default defineComponent({
       // CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
       // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
+      CustomSection.Create('commission', 'Врачебные комиссии', 'PatientCommissions', 0, true),
       CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
       // CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
     ];

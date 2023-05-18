@@ -3,8 +3,13 @@ import Vuex, { StoreOptions } from 'vuex';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
 import auth from '@/store/modules/auth';
+import { commissions } from '@/store/modules/commissions';
+import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
+import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
+import { doctors } from '@/store/modules/doctors';
+import { drugs } from '@/store/modules/drugs';
 import { edvs } from '@/store/modules/edvs';
 import { filter } from '@/store/modules/filter';
 import { humans } from '@/store/modules/humans';
@@ -72,6 +77,11 @@ const store: StoreOptions<RootState> = {
     anamneses,
     patientsRegisters,
     patientHistories,
+    commissionsTemplates,
+    commissionsDoctors,
+    commissions,
+    doctors,
+    drugs,
   },
 };
 

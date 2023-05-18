@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import Drug from '@/classes/Drug';
+import Commission from '@/classes/Commission';
 import getBaseDefaultState from '@/store/baseModule/baseIndex';
 import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
@@ -9,10 +9,10 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
-export type State = IBasicState<Drug>;
+export type State = IBasicState<Commission>;
 export const getDefaultState = (): State => {
   return {
-    ...getBaseDefaultState(Drug),
+    ...getBaseDefaultState(Commission),
   };
 };
 
@@ -20,7 +20,7 @@ const state = getDefaultState();
 
 const namespaced = true;
 
-export const drugs: Module<State, RootState> = {
+export const commissions: Module<State, RootState> = {
   namespaced,
   state,
   getters,

@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Anamnesis from '@/classes/Anamnesis';
+import Commission from '@/classes/Commission';
+import CommissionTemplate from '@/classes/CommissionTemplate';
 import Disability from '@/classes/Disability';
 import Human from '@/classes/Human';
 import MkbItem from '@/classes/MkbItem';
@@ -52,6 +54,9 @@ export default class Patient {
 
   @ClassHelper.GetClassConstructor(PatientHistory)
   patientHistories: PatientHistory[] = [];
+
+  @ClassHelper.GetClassConstructor(Commission)
+  commissions: Commission[] = [];
 
   createdAt?: Date;
   updatedAt?: Date;
@@ -268,5 +273,13 @@ export default class Patient {
 
   getHuman(): Human {
     return this.human;
+  }
+
+  addCommission(template: CommissionTemplate): Commission {
+    const item = Commission.CreateFromTemplate(template);
+    item.id = uuidv4();
+    item.patientId = this.id;
+    this.commissions.push(item);
+    return item;
   }
 }

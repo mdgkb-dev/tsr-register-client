@@ -63,13 +63,11 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import Drug from '@/classes/drugs/Drug';
-import DrugRegimen from '@/classes/drugs/DrugRegimen';
+import Drug from '@/classes/Drug';
+import DrugRegimen from '@/classes/DrugRegimen';
 import MainHeader from '@/classes/shared/MainHeader';
 import DrugRegimensForm from '@/components/Drugs/DrugRegimensForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import IDrug from '@/interfaces/drugs/IDrug';
-import IDrugRegimen from '@/interfaces/drugs/IDrugRegimen';
 
 export default defineComponent({
   name: 'DrugPage',
@@ -79,12 +77,12 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const drug: Ref<IDrug> = computed(() => store.getters['drugs/drug']);
+    const drug: Ref<Drug> = computed(() => store.getters['drugs/drug']);
     const form = ref();
     const newDrugRegimenForm = ref();
     const isEditMode: Ref<boolean> = ref(!!route.params.drugId);
     const mount: Ref<boolean> = ref(false);
-    const newDrugRegimen: Ref<IDrugRegimen> = ref(new DrugRegimen());
+    const newDrugRegimen: Ref<DrugRegimen> = ref(new DrugRegimen());
 
     // const { links, pushToLinks } = useBreadCrumbsLinks();
     // const { saveButtonClick, beforeWindowUnload, formUpdated, showConfirmModal } = useConfirmLeavePage();
