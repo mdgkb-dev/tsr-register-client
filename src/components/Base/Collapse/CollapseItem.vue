@@ -11,14 +11,22 @@
       <use xlink:href="#arrow-up"></use>
     </svg>
     <label :for="tabId" @click="handleItemClick">
-      <div :style="{ cursor: isCollaps ? 'pointer' : 'default', background: changeColor ? background : backgroundAttention,}" class="tab-name">
+      <div 
+        :style="{ 
+          cursor: isCollaps ? 'pointer' : 'default', 
+          background: changeColor ? background : backgroundAttention, 
+          padding: isCollaps ? '' : padding,
+        }" 
+        class="tab-name">
         <div class="inside-icon">
           <slot name="icon" />
         </div>
         <div v-if="title" class="title-in">
           {{ title }}
         </div>
-        <slot v-else name="inside-title" />
+        <div v-else class="title-in">
+          <slot  name="inside-title" />
+        </div>
         <div class="tools-bar" :class="{ 'hidden-part': showToolsOnHover }">
           <slot name="tools" />
         </div>
@@ -58,6 +66,7 @@ export default defineComponent({
     backgroundAttention: {type: String as PropType<string>, required: false, default: '#ffffff'},
     changeColor: { type: Boolean as PropType<boolean>, default: false },
     marginTop: { type: String as PropType<string>, default: '10px' },
+    padding: { type: String as PropType<string>, default: '0 10px' },
   },
   emits: ['changeActiveId'],
 
@@ -98,12 +107,14 @@ export default defineComponent({
 
 .tab {
   position: relative;
-  width: calc(100% - 2px);
+  width: calc(100% - 12px);
   overflow: hidden;
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   background: #ffffff;
-  margin-top: 10px;
+  margin: 10px 8px 2px 2px;
+  cursor: pointer;
+  transition: 0.15s;
 
   &-name {
     position: relative;
@@ -229,7 +240,8 @@ export default defineComponent({
 }
 
 .tab-name {
-  padding-left: 30px;
+  width: calc(100% - 12px);
+  padding-left: 10px;
 }
 
 .tab-name:hover > .tools-bar {
@@ -237,7 +249,12 @@ export default defineComponent({
   opacity: 1;
 }
 
+.tab:hover {
+  box-shadow: 0px 0px 1px 2px #1979CF;
+}
+
 .title-in {
+  width: calc(100% - 8px);
   display: flex;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
