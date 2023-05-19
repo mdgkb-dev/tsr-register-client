@@ -4,10 +4,9 @@
     :style="{
       color: colorSwap ? (hovering ? background : color) : color,
       background: colorSwap ? (hovering ? color : background) : (hovering ? backgroundHover : background),
-      marginTop: marginTop,
-      marginRight: marginRight,
       margin: margin,
-      width: width,
+      minWidth: width,
+      maxWidth: width,
       borderColor: color,
       height: height,
       borderRadius: borderRadius,
@@ -20,7 +19,6 @@
   >
   <div v-if="withIcon" class="button-icon"
     :style="{
-      stroke: color,
       fill: color,
       marginRight: text ? '10px' : '',
       transform: colorSwap ? (hovering ? backgroundHover : background) : (hovering ? 'scale(1.1, 1.1)' : ''),
@@ -53,7 +51,7 @@ export default defineComponent({
     },
     color: {
       type: String as PropType<string>,
-      default: '#449d7c',
+      default: 'inherit',
       required: false,
     },
     colorSwap: {
@@ -70,16 +68,6 @@ export default defineComponent({
       type: String as PropType<string>,
       default: 'inherit',
       required: false,
-    },
-    marginTop: {
-      type: String as PropType<string>,
-      required: false,
-      default: '0px',
-    },
-    marginRight: {
-      type: String as PropType<string>,
-      required: false,
-      default: 'auto',
     },
     margin: {
       type: String as PropType<string>,
@@ -135,7 +123,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   border: 1px solid;
-  transition: 0.3s;
+  transition: 0.15s;
   text-align: center;
   padding: 0 10px;
   cursor: pointer;

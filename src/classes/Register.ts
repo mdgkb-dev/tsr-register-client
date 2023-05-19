@@ -46,7 +46,7 @@ export default class Register {
   }
 
   getTagName(): string {
-    if (this.name.length > 10) return this.name.replace(/(?<=.{9}).+/g, '...');
+    if (this.name.length > 30) return this.name.replace(/(?<=.{9}).+/g, '...');
     return this.name;
   }
 
