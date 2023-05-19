@@ -9,9 +9,12 @@ import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
 import { doctors } from '@/store/modules/doctors';
+import { drugArrives } from '@/store/modules/drugArrives';
 import { drugs } from '@/store/modules/drugs';
 import { edvs } from '@/store/modules/edvs';
 import { filter } from '@/store/modules/filter';
+import { fundContracts } from '@/store/modules/fundContracts';
+import { fundCouncils } from '@/store/modules/fundCouncils';
 import { humans } from '@/store/modules/humans';
 import { main } from '@/store/modules/main';
 import { meta } from '@/store/modules/meta';
@@ -82,6 +85,9 @@ const store: StoreOptions<RootState> = {
     commissions,
     doctors,
     drugs,
+    drugArrives,
+    fundContracts,
+    fundCouncils,
   },
 };
 

@@ -22,6 +22,8 @@
     <template #sort>
       <!--      <SortList :max-width="400" @load="loadItems" />-->
     </template>
+    <el-button @click="openFundContract">Добавить контракт</el-button>
+    <el-button @click="openFundCouncil">Добавить экспертный совет</el-button>
     <el-table
       ref="table"
       :default-sort="{ prop: 'id', order: 'ascending' }"
@@ -101,7 +103,7 @@
             <span>ЗАБОЛЕВАНИЕ</span>
           </span>
         </template>
-        <template #default="scope">СПИНАЛЬНАЯ МЫШЕЧНАЯ АТРОФИЯ (G12.1)</template>
+        <template #default="scope">{{ scope.row.patientDiagnosis?.mkbItem?.getFullName() }}</template>
       </el-table-column>
 
       <el-table-column label="ВРАЧЕБНАЯ КОММИССИЯ" width="200" align="center">
@@ -138,6 +140,7 @@
         </template>
       </el-table-column>
     </el-table>
+
     <el-dialog v-model="expertCommitteeOpened" width="80%">
       <el-descriptions title="Протокол № ЭС № 29 от 20.04.2023" :column="1" border>
         <el-descriptions-item label="Препарат">РИСДИСПЛМАМ</el-descriptions-item>
@@ -171,15 +174,37 @@
         <el-table-column label="Результат" prop="result" />
       </el-table>
     </el-dialog>
+
+    <el-dialog v-model="fundContractOpened" width="80%">
+      <el-input v-model="fundContract.number" />
+      <el-date-picker v-model="fundContract.date" />
+
+      <el-button @click="fundContract.addDrugArrive()">Добавить поставку</el-button>
+      <div v-for="drugArrive in fundContract.drugArrives" :key="drugArrive.id">
+        <div>{{ drugArrive.stage }}</div>
+        <el-input-number v-model="drugArrive.quantity" />
+        <el-date-picker v-model="drugArrive.date" />
+      </div>
+
+      <el-button @click="createFundContract">Сохранить</el-button>
+    </el-dialog>
+
+    <el-dialog v-model="fundCouncilOpened" width="80%">
+      <el-input v-model="fundCouncil.number" />
+      <el-date-picker v-model="fundCouncil.date" />
+      <el-button @click="createFundCouncil">Сохранить</el-button>
+    </el-dialog>
   </AdminListWrapper>
 </template>
 
 <script lang="ts">
 import { Document, QuestionFilled } from '@element-plus/icons-vue';
+import { v4 as uuidv4 } from 'uuid';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Commission from '@/classes/Commission';
-import Register from '@/classes/Register';
+import FundContract from '@/classes/FundContract';
+import FundCouncil from '@/classes/FundCouncil';
 import FilterMultipleSelect from '@/components/Filters/FilterMultipleSelect.vue';
 import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
@@ -189,7 +214,6 @@ import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
 import FiltersList from '@/components/TableFilters/FiltersList.vue';
 import SortButton from '@/components/TableFilters/SortButton.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import IOption from '@/interfaces/shared/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -261,10 +285,13 @@ export default defineComponent({
     ];
 
     const drugContractOpened: Ref<boolean> = ref(false);
+    const fundContractOpened: Ref<boolean> = ref(false);
+    const fundCouncilOpened: Ref<boolean> = ref(false);
     const expertCommitteeOpened: Ref<boolean> = ref(false);
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const count: Ref<number> = computed(() => Provider.store.getters['commissions/count']);
-    const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
+    const fundContract: Ref<FundContract> = computed(() => Provider.store.getters['fundContracts/item']);
+    const fundCouncil: Ref<FundCouncil> = computed(() => Provider.store.getters['fundCouncils/item']);
     const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
     // const filteredcommissions: Ref<Patient[]> = computed(() => Provider.store.getters['commissions/filteredcommissions']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
@@ -275,11 +302,7 @@ export default defineComponent({
     };
 
     const load = async () => {
-      await Provider.store.dispatch('registers/getAll');
       await loadCommissions();
-
-      await Provider.store.dispatch('meta/getOptions', registers);
-      // filterByRegister.value = commissionsFiltersLib.byRegisters([]);
     };
 
     Hooks.onBeforeMount(load, {
@@ -295,12 +318,6 @@ export default defineComponent({
       await Provider.router.push(`/admin/commissions/${event.value}`);
     };
 
-    const createRegistersOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      registers.value.forEach((r: Register) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
-    };
-
     const openDrugContract = (): void => {
       drugContractOpened.value = !drugContractOpened.value;
     };
@@ -309,12 +326,42 @@ export default defineComponent({
       expertCommitteeOpened.value = !expertCommitteeOpened.value;
     };
 
+    const openFundContract = (): void => {
+      fundContractOpened.value = !fundContractOpened.value;
+    };
+
+    const openFundCouncil = (): void => {
+      fundCouncilOpened.value = !fundCouncilOpened.value;
+    };
+
+    const createFundCouncil = async (): Promise<void> => {
+      fundContract.value.id = uuidv4();
+      await Provider.store.dispatch('fundCouncils/create');
+      fundContractOpened.value = false;
+    };
+
+    const createFundContract = async (): Promise<void> => {
+      fundContract.value.id = uuidv4();
+      await Provider.store.dispatch('fundContracts/create');
+      fundContractOpened.value = false;
+    };
+
+    const addDrugApplication = async (): Promise<void> => {};
+
     return {
+      openFundCouncil,
+      createFundCouncil,
+      fundCouncilOpened,
+      fundCouncil,
+      addDrugApplication,
+      fundContractOpened,
+      fundContract,
+      createFundContract,
+      openFundContract,
       calendar,
       plan,
       count,
       filterByStatus,
-      createRegistersOptions,
       authModalVisible,
       selectSearch,
       filterByRegister,

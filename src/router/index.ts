@@ -51,7 +51,6 @@ export const adminGuard = async (to: RouteLocationNormalized, _: RouteLocationNo
 };
 
 const routes: Array<RouteRecordRaw> = [
-  ...indexAdminRoutes,
   {
     path: '/',
     redirect: '/admin/patients',
@@ -68,6 +67,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'NotFound',
     component: PageNotFound,
   },
+  ...indexAdminRoutes,
 ];
 
 const router = createRouter({

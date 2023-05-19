@@ -28,7 +28,7 @@ const menuList: IAdminMenu[] = [
   // },
   {
     title: 'Склад',
-    to: '/admin/drugs-store',
+    to: '/admin/drug-arrives',
     icon: 'el-icon-info',
   },
 ];
