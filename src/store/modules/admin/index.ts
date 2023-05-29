@@ -18,6 +18,8 @@ export const getDefaultState = (): State => {
     loading: undefined,
     menus: menuList,
     searchMenus: [],
+    headSuccess: false,
+    headSpinner: false,
     // applicationsCounts: [],
   };
 };

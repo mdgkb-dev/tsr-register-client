@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
+  <RightTabsContainer :is-toggle="isToggle" slider-on-width="180px" @toggle="toggle">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -8,131 +8,117 @@
     <template #slider-body>
       <div class="slider-body">
         <div class="slider-item-search">
-          <RemoteSearch
-            :must-be-translated="true"
-            key-value="representative"
-            placeholder="Начните вводить"
-          />
+          <RemoteSearch :must-be-translated="true" key-value="representative" placeholder="Начните вводить" />
         </div>
         <div class="slider-item" @click="addDisability">Добавить инвалидность</div>
       </div>
     </template>
-    <template #tabs>
-
-    </template>
+    <template #tabs> </template>
     <template #body>
       <div class="body">
         <div v-for="disability in patient.disabilities" :key="disability.id">
-        <ResearcheContainer background="#DFF2F8">
-          <template #header>
-            <div class="researche-name">Инвалидность</div>
-            <div class="line-item">
-              <div class="item-left">
-                <div class="diagnosis-doctorName">
-                  <div class="doctor-title">Инвалидность признал врач:</div>
-                  <el-input
-                    placeholder="ФИО врача, признавшего инвалидность"
-                  ></el-input>
+          <ResearcheContainer background="#DFF2F8">
+            <template #header>
+              <div class="researche-name">Инвалидность</div>
+              <div class="line-item">
+                <div class="item-left">
+                  <div class="diagnosis-doctorName">
+                    <div class="doctor-title">Период инвалидности:</div>
+                    <el-date-picker v-model="disability.dateStart" @change="updateDisability(disability)"></el-date-picker>
+                    <el-date-picker v-model="disability.dateEnd" @change="updateDisability(disability)"></el-date-picker>
+                  </div>
+                </div>
+                <div class="item-right">
+                  <Button
+                    text="Удалить"
+                    :with-icon="false"
+                    width="auto"
+                    height="40px"
+                    font-size="16px"
+                    border-radius="5px"
+                    color="#343E5C"
+                    background="#ffffff"
+                    :color-swap="true"
+                    @click="removeDisability(disability.id)"
+                  >
+                  </Button>
                 </div>
               </div>
-              <div class="item-right">
-                <Button 
-                  text="Удалить" 
-                  :withIcon="false" 
-                  width="auto"
-                  height="40px" 
-                  font-size="16px" 
-                  border-radius="5px" 
-                  color="#343E5C" 
-                  background="#ffffff" 
-                  @click="removeDisability(disability.id)"
-                  :colorSwap="true"
+            </template>
+            <template #body>
+              <div class="tools">
+                <Button
+                  text="Добавить ЕДВ"
+                  :with-icon="false"
+                  width="100%"
+                  height="60px"
+                  font-size="16px"
+                  border-radius="5px"
+                  color="#00B5A4"
+                  background="#C7ECEA"
+                  background-hover="#C7ECEA"
+                  :color-swap="false"
+                  @click="addEdv(disability)"
                 >
                 </Button>
               </div>
-            </div>
-          </template>
-          <template #body>
-            <div class="tools">
-              <Button 
-                text="Добавить ЕДВ" 
-                :withIcon="false" 
-                width="100%" 
-                height="60px"
-                font-size="16px" 
-                border-radius="5px" 
-                color="#00B5A4" 
-                background="#C7ECEA" 
-                backgroundHover="#C7ECEA"
-                @click="addEdv(disability)"
-                :colorSwap="false"
-                >
-              </Button>
-            </div>
-            <div class="scroll-block">
-              <el-timeline style="margin-top: 20px">
-                <el-timeline-item
-                  v-for="edv in disability.edvs" 
-                  :key="edv.id"
-                  placement="top"
-                  center
-                >
-                  <CollapseItem
-                    title="Дата присваивания"
-                    :is-collaps="true"
-                    background="#DFF2F8"
-                    margin-top="0px"
-                  >
-                    <template #inside-content>
-                      <div class="background-container">
-                        <div class="choice">
-                          <div class="choice-item"
-                            v-for="parameter in [
-                              { letter: 'A', parameter: edv.parameter1 },
-                              { letter: 'B', parameter: edv.parameter2 },
-                              { letter: 'C', parameter: edv.parameter3 },
-                            ]"
-                            :key="parameter.letter"
-                          >
-                            <Button 
-                              :text="parameter.letter" 
-                              :withIcon="false" 
-                              width="100%"
-                              height="40px"
-                              margin="10px 0 0 0"
-                              font-size="16px" 
-                              border-radius="5px" 
-                              color="#343E5C" 
-                              :background="parameter.parameter ? '#DFF2F8' : '#ffffff'"
-                              backgroundHover="#DFF2F8"
-                              @click="changeParameter(edv, parameter.letter)"
-                              :colorSwap="false"
+              <div class="scroll-block">
+                <el-timeline style="margin-top: 20px">
+                  <el-timeline-item v-for="edv in disability.edvs" :key="edv.id" placement="top" center>
+                    <CollapseItem title="Справка ЕДВ" :is-collaps="true" background="#DFF2F8" margin-top="0px">
+                      <template #inside-content>
+                        <div class="background-container">
+                          <el-date-picker v-model="edv.dateStart" @change="changeParameter(edv, '')"></el-date-picker>
+                          <el-date-picker v-model="edv.dateEnd" @change="changeParameter(edv, '')"></el-date-picker>
+                          <div class="choice">
+                            <div
+                              v-for="parameter in [
+                                { letter: 'A', parameter: edv.parameter1 },
+                                { letter: 'B', parameter: edv.parameter2 },
+                                { letter: 'C', parameter: edv.parameter3 },
+                              ]"
+                              :key="parameter.letter"
+                              class="choice-item"
                             >
-                            </Button>
+                              <Button
+                                :text="parameter.letter"
+                                :with-icon="false"
+                                width="100%"
+                                height="40px"
+                                margin="10px 0 0 0"
+                                font-size="16px"
+                                border-radius="5px"
+                                color="#343E5C"
+                                :background="parameter.parameter ? '#DFF2F8' : '#ffffff'"
+                                background-hover="#DFF2F8"
+                                :color-swap="false"
+                                @click="changeParameter(edv, parameter.letter)"
+                              >
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                          <Button 
-                            text="Удалить ЕВД" 
-                            :withIcon="false" 
+                          <Button
+                            text="Удалить ЕДВ"
+                            :with-icon="false"
                             width="auto"
                             height="40px"
                             margin="10px 0 0 0"
-                            font-size="16px" 
-                            border-radius="5px" 
-                            color="#343E5C" 
-                            background="#ffffff" 
+                            font-size="16px"
+                            border-radius="5px"
+                            color="#343E5C"
+                            background="#ffffff"
+                            :color-swap="true"
                             @click="removeEdv(disability, edv.id)"
-                            :colorSwap="true"
                           >
                           </Button>
-                      </div>
-                    </template>
-                  </CollapseItem>
-                </el-timeline-item>
-              </el-timeline>
-            </div>
-          </template>
-        </ResearcheContainer>
+                        </div>
+                      </template>
+                    </CollapseItem>
+                  </el-timeline-item>
+                </el-timeline>
+              </div>
+            </template>
+          </ResearcheContainer>
         </div>
       </div>
     </template>
@@ -147,17 +133,17 @@
 
 <script lang="ts">
 import { Delete, DocumentAdd, DocumentChecked, DocumentDelete, Download, Paperclip } from '@element-plus/icons-vue';
-import { computed, ComputedRef, defineComponent, ref, Ref } from 'vue';
+import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Disability from '@/classes/Disability';
-import Patient from '@/classes/Patient';
-import Provider from '@/services/Provider/Provider';
 import Edv from '@/classes/Edv';
+import Patient from '@/classes/Patient';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import RemoteSearch from '@/components/RemoteSearch.vue';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'DisabilityForm',
@@ -179,6 +165,10 @@ export default defineComponent({
     const addDisability = async (): Promise<void> => {
       const item = patient.value.addDisability();
       await Provider.store.dispatch('disabilities/create', item);
+    };
+
+    const updateDisability = async (item: Disability): Promise<void> => {
+      await Provider.store.dispatch('disabilities/update', item);
     };
 
     const addEdv = async (disability: Disability): Promise<void> => {
@@ -314,6 +304,7 @@ export default defineComponent({
     // };
 
     return {
+      updateDisability,
       changeParameter,
       removeDisability,
       removeEdv,
@@ -347,247 +338,245 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  @import '@/assets/styles/elements/base-style.scss';
+@import '@/assets/styles/elements/base-style.scss';
 
-  .hidden {
-    display: none;
-  }
+.hidden {
+  display: none;
+}
 
-  .card-button-group {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .but {
-    border-radius: 50%;
-  }
+.card-button-group {
+  display: flex;
+  justify-content: flex-end;
+}
+.but {
+  border-radius: 50%;
+}
 
-  .icon-plus {
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-  }
+.icon-plus {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
 
-  .slider-body {
-    width: 180px;
-    height: auto;
-    border: 1px solid #379fff;
-    border-top-left-radius: $normal-border-radius;
-    border-bottom-left-radius: $normal-border-radius;
-    background: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-    display: grid;
-    grid-gap: 6px;
-    grid-template-rows: repeat(0 0px);
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    padding: 6px;
-  }
+.slider-body {
+  width: 180px;
+  height: auto;
+  border: 1px solid #379fff;
+  border-top-left-radius: $normal-border-radius;
+  border-bottom-left-radius: $normal-border-radius;
+  background: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  display: grid;
+  grid-gap: 6px;
+  grid-template-rows: repeat(0 0px);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  padding: 6px;
+}
 
-  .slider-body > div {
-    object-fit: cover;
-  }
+.slider-body > div {
+  object-fit: cover;
+}
 
-  .slider-item-search {
-    width: 164px;
-    height: 40px;
-    border-radius: $normal-border-radius;
-    font-size: 14px;
-    color: #b0a4c0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+.slider-item-search {
+  width: 164px;
+  height: 40px;
+  border-radius: $normal-border-radius;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-  .slider-item {
-    width: 163px;
-    height: 40px;
-    border: 1px solid #b0a4c0;
-    border-radius: $normal-border-radius;
-    background: $base-background;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-    font-size: 14px;
-    color: #b0a4c0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+.slider-item {
+  width: 163px;
+  height: 40px;
+  border: 1px solid #b0a4c0;
+  border-radius: $normal-border-radius;
+  background: $base-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-  .slider-item:hover {
-    border: 1px solid #379fff;
-    background: $base-background;
-    color: #379fff;
-  }
+.slider-item:hover {
+  border: 1px solid #379fff;
+  background: $base-background;
+  color: #379fff;
+}
 
+.slider-item-active {
+  width: 163px;
+  height: 40px;
+  border: 1px solid #379fff;
+  border-radius: $normal-border-radius;
+  background: $custom-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #343e5c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
+.slider-item:active {
+  border: 1px solid #379fff;
+  background: $custom-background;
+  color: #343e5c;
+}
 
-  .slider-item-active {
-    width: 163px;
-    height: 40px;
-    border: 1px solid #379fff;
-    border-radius: $normal-border-radius;
-    background: $custom-background;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-    font-size: 14px;
-    color: #343e5c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+.tabs-item {
+  width: 101px;
+  height: 51px;
+  border: 1px solid #b0a4c0;
+  border-top-right-radius: $normal-border-radius;
+  border-bottom-right-radius: $normal-border-radius;
+  border-left: none;
+  background: $base-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 5px;
+}
 
-  .slider-item:active {
-    border: 1px solid #379fff;
-    background: $custom-background;
-    color: #343e5c;
-  }
+.tabs-item-active {
+  position: relative;
+  width: 106px;
+  height: 56px;
+  border: 1px solid #379fff;
+  border-top-right-radius: $normal-border-radius;
+  border-bottom-right-radius: $normal-border-radius;
+  border-left: none;
+  background: $custom-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #343e5c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: 0px;
+  z-index: 2;
+}
 
-  .tabs-item {
-    width: 101px;
-    height: 51px;
-    border: 1px solid #b0a4c0;
-    border-top-right-radius: $normal-border-radius;
-    border-bottom-right-radius: $normal-border-radius;
-    border-left: none;
-    background: $base-background;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-    font-size: 14px;
-    color: #b0a4c0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-top: 5px;
-  }
+.body {
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #379fff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  z-index: 5;
+}
 
-  .tabs-item-active {
-    position: relative;
-    width: 106px;
-    height: 56px;
-    border: 1px solid #379fff;
-    border-top-right-radius: $normal-border-radius;
-    border-bottom-right-radius: $normal-border-radius;
-    border-left: none;
-    background: $custom-background;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #343e5c;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-left: 0px;
-    z-index: 2;
-  }
+.researche-name {
+  min-height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #343e5c;
+  font-size: 14px;
+  text-transform: uppercase;
+}
 
-  .body {
-    width: 100%;
-    height: 100%;
-    border-right: 1px solid #379fff;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-    z-index: 5;
-  }
+.diagnosis-doctorName {
+  padding: 10px 0;
+}
+.doctor-title {
+  padding: 10px 0;
+}
+.background-container {
+  width: auto;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 5px;
+}
 
-  .researche-name {
-    min-height: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #343e5c;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
+.item-left {
+  min-width: calc(100% - 100px);
+  color: #343e5c;
+  margin-right: 10px;
+}
 
-  .diagnosis-doctorName {
-    padding: 10px 0;
-  }
-  .doctor-title {
-    padding: 10px 0;
-  }
-  .background-container {
-    width: auto;
-    padding: 10px;
-    background: #ffffff;
-    border-radius: 5px;
-  }
+.item-right {
+  width: 100px;
+  color: #343e5c;
+  display: flex;
+  justify-content: right;
+  align-items: end;
+  padding-bottom: 10px;
+}
 
-  .item-left {
-    min-width: calc(100% - 100px);
-    color: #343e5c;
-    margin-right: 10px;
-  }
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
+  max-width: 100%;
+}
 
-  .item-right {
-    width: 100px;
-    color: #343e5c;
-    display: flex;
-    justify-content: right;
-    align-items: end;
-    padding-bottom: 10px;
-  }
+.choice {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .line-item {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin: 0;
-    max-width: 100%;
-  }
+.choice-item {
+  width: 30%;
+}
 
-  .choice {
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.scroll-block {
+  max-height: 65vh;
+  overflow: hidden;
+  overflow-y: auto;
+}
 
-  .choice-item {
-    width: 30%;
-  }
+.tools {
+  padding-bottom: 10px;
+}
 
-  .scroll-block {
-    max-height: 65vh;
-    overflow: hidden;
-    overflow-y: auto;
-  }
+:deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+  width: 100%;
+}
 
-  .tools {
-    padding-bottom: 10px;
-  }
+.el-select {
+  width: 100%;
+}
 
-  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
-    width: 100%;
-  }
+:deep(.el-form-item) {
+  display: block;
+  margin-bottom: 16px;
+}
 
-  .el-select {
-    width: 100%;
-  }
+:deep(.el-form-item__label) {
+  color: $site_light_pink;
+  padding: 0 !important;
+  text-transform: uppercase;
+  margin-left: 5px;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
 
-  :deep(.el-form-item) {
-    display: block;
-    margin-bottom: 16px;
-  }
+:deep(.el-timeline) {
+  padding: 0 0 0 10px;
+}
 
-  :deep(.el-form-item__label) {
-    color: $site_light_pink;
-    padding: 0 !important;
-    text-transform: uppercase;
-    margin-left: 5px;
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
+:deep(.el-timeline-item) {
+  padding-bottom: 8px;
+}
 
-  :deep(.el-timeline) {
-    padding: 0 0 0 10px;
-  }
-
-  :deep(.el-timeline-item) {
-    padding-bottom: 8px;
-  }
-
-  :deep(.el-timeline-item__node) {
-    background: #B0A4C0;
-  }
+:deep(.el-timeline-item__node) {
+  background: #b0a4c0;
+}
 </style>

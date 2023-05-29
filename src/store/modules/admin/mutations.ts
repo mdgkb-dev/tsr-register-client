@@ -13,9 +13,7 @@ const mutations: MutationTree<State> = {
     state.headerParams = new AdminHeaderParams(params);
   },
   addButtons(state, buttons: AdminButtonParams[]) {
-    console.log(state.headerParams.buttons);
     state.headerParams.buttons.push(...buttons);
-    console.log(state.headerParams.buttons);
   },
   collapseSideMenu(state) {
     state.isCollapseSideMenu = !state.isCollapseSideMenu;
@@ -29,6 +27,13 @@ const mutations: MutationTree<State> = {
   },
   showHeader(state, showHeader: boolean) {
     state.showHeader = showHeader;
+  },
+  setHeadSpinner(state, show: boolean) {
+    state.headSpinner = show;
+    if (!show) {
+      state.headSuccess = true;
+      setTimeout(() => (state.headSuccess = false), 2000);
+    }
   },
   showLoading(state) {
     state.loading = ElLoading.service({

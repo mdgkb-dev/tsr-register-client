@@ -2,15 +2,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Edv from '@/classes/Edv';
 import Patient from '@/classes/Patient';
-import Period from '@/classes/shared/Period';
 import IEdv from '@/interfaces/disabilities/IEdv';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Disability {
   id?: string;
-  period?: Period = new Period();
-  periodId?: string;
+  dateStart: Date = new Date();
+  dateEnd: Date = new Date();
   patient?: Patient;
   patientId?: string;
   @ClassHelper.GetClassConstructor(Edv)
@@ -24,9 +23,6 @@ export default class Disability {
     return this.edvs[this.edvs.length - 1];
   }
 
-  dateIsCorrect(): boolean {
-    return !(this.period && this.period.dateStart && this.period.dateEnd && this.period.dateStart > this.period.dateEnd);
-  }
   static GetFileInfos(items: Disability[]): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
 

@@ -21,6 +21,13 @@
             {{ item.text }}
           </el-button>
         </div>
+        <div v-if="headSpinner">
+          <span class="loader-text">Сохранение</span>
+          <span class="loader-spinner"></span>
+        </div>
+        <div v-else-if="headSuccess">
+          <span style="color: green">Успешно сохранено</span>
+        </div>
       </div>
     </div>
   </div>
@@ -36,6 +43,8 @@ export default defineComponent({
 
   setup() {
     const headerParams: Ref<AdminHeaderParams> = computed(() => Provider.store.getters['admin/headerParams']);
+    const headSpinner: Ref<boolean> = computed(() => Provider.store.getters['admin/headSpinner']);
+    const headSuccess: Ref<boolean> = computed(() => Provider.store.getters['admin/headSuccess']);
     const goBack = () => {
       Provider.router.go(-1);
     };
@@ -48,6 +57,8 @@ export default defineComponent({
     };
 
     return {
+      headSpinner,
+      headSuccess,
       action,
       buttonClicked,
       headerParams,
@@ -58,6 +69,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/styles/elements/base-style.scss';
 $header-bottom-height: 20px;
 $header-bottom-background-color: whitesmoke;
 // $header-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
@@ -88,6 +100,33 @@ h4 {
   flex-wrap: wrap;
   .el-button {
     margin-left: 5px;
+  }
+}
+
+.loader-text {
+  vertical-align: middle;
+  margin-bottom: 10px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.loader-spinner {
+  width: 24px;
+  height: 24px;
+  border: 5px solid $custom-background;
+  border-bottom-color: #ff3d00;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

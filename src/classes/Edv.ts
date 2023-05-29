@@ -1,10 +1,10 @@
 import FileInfo from '@/classes/files/FileInfo';
-import Period from '@/classes/shared/Period';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Edv {
   id?: string;
-  period?: Period = new Period();
+  dateStart: Date = new Date();
+  dateEnd: Date = new Date();
   disabilityId?: string;
   parameter1 = false;
   parameter2 = false;

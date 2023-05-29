@@ -92,7 +92,17 @@ const Provider = (() => {
     };
   }
 
+  type func = () => Promise<void> | void;
+  async function withHeadLoader(f: func) {
+    Store.store.commit(`admin/setHeadSpinner`, true);
+    await f();
+    setTimeout(() => {
+      Store.store.commit(`admin/setHeadSpinner`, false);
+    }, 800);
+  }
+
   return {
+    withHeadLoader,
     dropPagination,
     saveButtonClicked,
     mounted,

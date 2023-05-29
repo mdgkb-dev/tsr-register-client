@@ -13,5 +13,7 @@ export interface State {
   loading: ILoadingInstance | undefined;
   menus: IAdminMenu[];
   searchMenus: ISearchQuery[];
+  headSpinner: boolean;
+  headSuccess: boolean;
   // applicationsCounts: IApplicationsCount[];
 }

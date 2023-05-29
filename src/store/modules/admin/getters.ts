@@ -26,6 +26,12 @@ const getters: GetterTree<State, RootState> = {
   showHeader(state): boolean {
     return state.showHeader;
   },
+  headSpinner(state): boolean {
+    return state.headSpinner;
+  },
+  headSuccess(state): boolean {
+    return state.headSuccess;
+  },
 };
 
 export default getters;

@@ -1,7 +1,8 @@
 <template>
-  <div class="human-form-container"
+  <div
+    class="human-form-container"
     :style="{
-      maxWidth: maxWidth
+      maxWidth: maxWidth,
     }"
   >
     <el-form>
@@ -100,10 +101,13 @@ export default defineComponent({
     };
 
     const updateHuman = async (): Promise<void> => {
-      if (props.editMode) {
-        await Provider.store.dispatch('humans/update', human.value);
-      }
+      await Provider.withHeadLoader(async () => {
+        if (props.editMode) {
+          await Provider.store.dispatch('humans/update', human.value);
+        }
+      });
     };
+
     // const checkCompleteName = (n: string): void => {
     //   if (!!human.value.name && !!human.value.surname && !!human.value.patronymic) {
     //     emit('inputNameComplete', human.value);
@@ -127,6 +131,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 @import '@/assets/styles/elements/base-style.scss';
+
 .human-form-container {
   width: calc(100% - 10px);
   margin-left: 10px;
