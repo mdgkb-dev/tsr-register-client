@@ -26,129 +26,317 @@
     <div v-for="patient in patients" :key="patient.id">
       <CollapseItem
         :is-collaps="false"
+        padding="0 8px"
       >
         <template #inside-title>
           
           <div class="flex-block">
-            <Button 
-              :withIcon="true"
-              width="40px" 
-              height="40px" 
-              border-radius="5px" 
-              color="#006BB4" 
-              background="#DFF2F8"
-              backgroundHover="#DFF2F8"
-              :colorSwap="false"
-              @click="edit(patient.id)"
-              >
+            <div class="item-flex">
+              <div class="line-item-left">
+                <Button 
+                  :withIcon="true"
+                  width="40px" 
+                  height="40px" 
+                  border-radius="5px" 
+                  color="#006BB4" 
+                  background="#DFF2F8"
+                  backgroundHover="#DFF2F8"
+                  :colorSwap="false"
+                  @click.prevent="edit(patient.id)"
+                  >
 
-              <template #icon>
-                <svg class="icon-edit">
-                  <use xlink:href="#edit"></use>
-                </svg>
-              </template>
-            </Button>
-            <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="300px" width="100%"/>
-            <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" />
-            <InfoItem  min-width="113px" margin="0 0 0 0px"> 
-              <template #title>
-                <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
-              </template>
-              <template #inside-content>
-                <StringItem string="До" font-size="14px" padding="0"/>
-                  <Button
-                    text="A"
-                    :withIcon="false"
-                    width="25px" 
-                    height="25px" 
-                    border-radius="15px" 
-                    background="#ffffff"
-                    backgroundHover="#ffffff"
-                    :colorSwap="false"
-                    margin="0 0 0 7px"
-                    padding="0"
-                  >
-                 </Button>
-                  <Button
-                    text="B"
-                    :withIcon="false"
-                    width="25px" 
-                    height="25px" 
-                    border-radius="15px" 
-                    background="#ffffff"
-                    backgroundHover="#ffffff"
-                    :colorSwap="false"
-                    margin="0 0 0 7px"
-                    padding="0"
-                  >
-                 </Button>
-                  <Button
-                    text="C"
-                    :withIcon="false"
-                    width="25px" 
-                    height="25px" 
-                    border-radius="15px" 
-                    background="#ffffff"
-                    backgroundHover="#ffffff"
-                    :colorSwap="false"
-                    margin="0 0 0 7px"
-                    padding="0"
-                  >
-                 </Button>
-              </template>
-            </InfoItem>
-            <div class="line-item">
-              <InfoItem  min-width="calc(50% - 5px)" margin="0 5px 0 0"> 
-                <template #title>
-                  <StringItem string="дата рождения" font-size="10px" padding="0 0 0 3px"/>
-                </template>
-                <template #inside-content>
-                  <StringItem :string="$dateTimeFormatter.format(patient.human.dateBirth)" font-size="16px" padding="0"/>
-                </template>
-              </InfoItem>              
-              <InfoItem  min-width="calc(50% - 5px)" margin="0 0 0 5px"> 
-                <template #title>
-                  <StringItem string="представители" font-size="10px" padding="0 0 0 3px"/>
-                </template>
-                <template #inside-content>
-                  <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-                    <StringItem :string="rep.getRepresentativeParentType()" font-size="14px" padding="0"/>
-                  </div>
-                </template>
-              </InfoItem>
+                  <template #icon>
+                    <svg class="icon-edit">
+                      <use xlink:href="#edit"></use>
+                    </svg>
+                  </template>
+                </Button>
+                <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="240px" width="100%"/>
+              </div>
+              <div class="line-item-right">
+                <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" />
+                <InfoItem  min-width="calc(50% - 27px)" margin="0" openWidth="135px"> 
+                  <template #title>
+                    <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
+                  </template>
+                  <template #close-inside-content>
+                    <StringItem string="До" font-size="14px" padding="0"/>
+                      <Button
+                        text="A"
+                        :withIcon="false"
+                        width="25px" 
+                        height="25px" 
+                        border-radius="15px" 
+                        background="#ffffff"
+                        backgroundHover="#ffffff"
+                        :colorSwap="false"
+                        margin="0 0 0 7px"
+                        padding="0"
+                      >
+                    </Button>
+                    <Button
+                      text="B"
+                      :withIcon="false"
+                      width="25px" 
+                      height="25px" 
+                      border-radius="15px" 
+                      background="#ffffff"
+                      backgroundHover="#ffffff"
+                      :colorSwap="false"
+                      margin="0 0 0 7px"
+                      padding="0"
+                    >
+                    </Button>
+                    <Button
+                      text="C"
+                      :withIcon="false"
+                      width="25px" 
+                      height="25px" 
+                      border-radius="15px" 
+                      background="#ffffff"
+                      backgroundHover="#ffffff"
+                      :colorSwap="false"
+                      margin="0 0 0 7px"
+                      padding="0"
+                    >
+                    </Button>
+                  </template>
+
+                  <!-- #TODO -->
+                  <template #open-inside-content>
+                    <StringItem string="До" font-size="14px" padding="0"/>
+                      <Button
+                        text="A"
+                        :withIcon="false"
+                        width="25px" 
+                        height="25px" 
+                        border-radius="15px" 
+                        background="#ffffff"
+                        backgroundHover="#ffffff"
+                        :colorSwap="false"
+                        margin="0 0 0 7px"
+                        padding="0"
+                      >
+                    </Button>
+                    <Button
+                      text="B"
+                      :withIcon="false"
+                      width="25px" 
+                      height="25px" 
+                      border-radius="15px" 
+                      background="#ffffff"
+                      backgroundHover="#ffffff"
+                      :colorSwap="false"
+                      margin="0 0 0 7px"
+                      padding="0"
+                    >
+                    </Button>
+                    <Button
+                      text="C"
+                      :withIcon="false"
+                      width="25px" 
+                      height="25px" 
+                      border-radius="15px" 
+                      background="#ffffff"
+                      backgroundHover="#ffffff"
+                      :colorSwap="false"
+                      margin="0 0 0 7px"
+                      padding="0"
+                    >
+                    </Button>
+                  </template>
+                  <!-- end -->
+                  
+                </InfoItem>
+              </div>
             </div>
-            <InfoItem  min-width="200px" margin="0 0 0 10px"> 
-              <template #title>
-                <StringItem string="регистры" font-size="10px" padding="0 0 0 3px"/>
-              </template>
-              <template #inside-content>
-                <div class="block">
-                <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id" >
-                  <StringItem :string="patientRegister.register.getTagName() + ','" font-size="14px" padding="0"/>
-                </div>
-                </div>
-              </template>
-            </InfoItem>
-            <InfoItem  min-width="200px" margin="0 0 0 10px"> 
-              <template #title>
-                <StringItem string="диагнозы" font-size="10px" padding="0 0 0 3px"/>
-              </template>
-              <template #inside-content>
-                <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
-                  <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" padding="0"/>
-                </div>
-              </template>
-            </InfoItem>
-            <InfoItem  min-width="200px" margin="0 0 0 10px"> 
-              <template #title>
-                <StringItem string="документы" font-size="10px" padding="0 0 0 3px"/>
-              </template>
-              <template #inside-content>
-                <div v-for="document in patient.human.documents" :key="document">
-                  <StringItem :string="document.documentType.getTagName()" font-size="14px" padding="0"/>
-                </div>
-              </template>
-            </InfoItem>
+            <div class="item-flex">
+              <GridContainer max-width="1920px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0px" >
+                <template #grid-items>
+                  <GridContainer max-width="auto" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px" >
+                    <template #grid-items>
+                    <InfoItem  margin="0" > 
+                      <template #title>
+                        <StringItem string="дата рождения" font-size="10px" padding="0 0 0 3px"/>
+                      </template>
+                      <template #close-inside-content>
+                        <StringItem :string="$dateTimeFormatter.format(patient.human.dateBirth)" font-size="16px" padding="0"/>
+                      </template>
+
+                      <!-- #TODO -->
+                      <template #open-inside-content>
+                        <StringItem :string="$dateTimeFormatter.format(patient.human.dateBirth)" font-size="16px" padding="0"/>
+                        <Button 
+                          text="Сохранить"
+                          :withIcon="false"
+                          width="86px" 
+                          height="34px" 
+                          border-radius="5px" 
+                          color="#006BB4" 
+                          background="#DFF2F8"
+                          backgroundHover="#DFF2F8"
+                          :colorSwap="false"
+                          >
+                        </Button>
+                      </template>
+                      <!-- end -->
+
+                    </InfoItem>
+                    <InfoItem margin="0" > 
+                      <template #title>
+                        <StringItem string="представители" font-size="10px" padding="0 0 0 3px"/>
+                      </template>
+                      <template #close-inside-content>
+                        <div v-for="rep in patient.patientsRepresentatives" :key="rep">
+                          <StringItem :string="rep.getRepresentativeParentType()" font-size="14px" padding="0"/>
+                        </div>
+                      </template>
+
+                      <!-- #TODO -->
+                      <template #open-inside-content>
+                        <div v-for="rep in patient.patientsRepresentatives" :key="rep">
+                          <StringItem :string="rep.getRepresentativeParentType()" font-size="14px" padding="0"/>
+                        </div>
+                        <Button 
+                          :withIcon="true"
+                          width="86px" 
+                          height="34px" 
+                          border-radius="5px" 
+                          color="#006BB4" 
+                          background="#DFF2F8"
+                          backgroundHover="#DFF2F8"
+                          :colorSwap="false"
+                          >
+
+                          <template #icon>
+                            <svg class="icon-plus">
+                              <use xlink:href="#plus"></use>
+                            </svg>
+                          </template>
+                        </Button>
+                      </template>
+                      <!-- end -->
+
+                    </InfoItem>
+                    </template>
+                    </GridContainer>
+                  <InfoItem  margin="0 0 0 0px"> 
+                    <template #title>
+                      <StringItem string="регистры" font-size="10px" padding="0 0 0 3px"/>
+                    </template>
+                    <template #close-inside-content>
+                      <div class="block">
+                        <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id" >
+                          <StringItem :string="patientRegister.register.getTagName() + ','" font-size="14px" padding="0"/>
+                        </div>
+                      </div>
+                    </template>
+
+                    <!-- #TODO -->
+                    <template #open-inside-content>
+                      <div class="block">
+                        <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id" >
+                          <StringItem :string="patientRegister.register.getTagName() + ','" font-size="14px" padding="0"/>
+                        </div>
+                      </div>
+                      <Button 
+                        :withIcon="true"
+                        width="86px" 
+                        height="34px" 
+                        border-radius="5px" 
+                        color="#006BB4" 
+                        background="#DFF2F8"
+                        backgroundHover="#DFF2F8"
+                        :colorSwap="false"
+                        >
+
+                        <template #icon>
+                          <svg class="icon-plus">
+                            <use xlink:href="#plus"></use>
+                          </svg>
+                        </template>
+                      </Button>
+                    </template>
+                    <!-- end --> 
+
+                  </InfoItem>
+                  <InfoItem margin="0 0 0 0px"> 
+                    <template #title>
+                      <StringItem string="диагнозы" font-size="10px" padding="0 0 0 3px"/>
+                    </template>
+                    <template #close-inside-content>
+                      <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
+                        <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" padding="0"/>
+                      </div>
+                    </template>
+
+                    <!-- #TODO -->
+                    <template #open-inside-content>
+                      <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
+                        <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" padding="0"/>
+                      </div>
+                      <Button 
+                        :withIcon="true"
+                        width="86px" 
+                        height="34px" 
+                        border-radius="5px" 
+                        color="#006BB4" 
+                        background="#DFF2F8"
+                        backgroundHover="#DFF2F8"
+                        :colorSwap="false"
+                        >
+
+                        <template #icon>
+                          <svg class="icon-plus">
+                            <use xlink:href="#plus"></use>
+                          </svg>
+                        </template>
+                      </Button>
+                    </template>
+                    <!-- end -->
+
+                  </InfoItem>
+                  <InfoItem margin="0 0 0 0px"> 
+                    <template #title>
+                      <StringItem string="документы" font-size="10px" padding="0 0 0 3px"/>
+                    </template>
+                    <template #close-inside-content>
+                      <div v-for="document in patient.human.documents" :key="document">
+                        <StringItem :string="document.documentType.getTagName()" font-size="14px" padding="0"/>
+                      </div>
+                    </template>
+
+
+                    <!-- #TODO -->
+                    <template #open-inside-content>
+                      <div v-for="document in patient.human.documents" :key="document">
+                        <StringItem :string="document.documentType.getTagName()" font-size="14px" padding="0"/>
+                      </div>
+                      <Button 
+                        :withIcon="true"
+                        width="86px" 
+                        height="34px" 
+                        border-radius="5px" 
+                        color="#006BB4" 
+                        background="#DFF2F8"
+                        backgroundHover="#DFF2F8"
+                        :colorSwap="false"
+                        >
+
+                        <template #icon>
+                          <svg class="icon-plus">
+                            <use xlink:href="#plus"></use>
+                          </svg>
+                        </template>
+                      </Button>
+                    </template> 
+                    <!-- end -->
+
+
+                  </InfoItem>
+                </template>
+              </GridContainer>
+            </div>
           </div>
 
         </template>
@@ -342,6 +530,11 @@
     <symbol fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" id="iconamoon_edit-light">
       <path d="M6.2513 2.50053L7.5013 3.75053M5.41797 8.33386H8.7513M2.08464 6.66719L1.66797 8.33386L3.33464 7.91719L8.16214 3.08969C8.31836 2.93342 8.40612 2.7215 8.40612 2.50053C8.40612 2.27956 8.31836 2.06763 8.16214 1.91136L8.09047 1.83969C7.9342 1.68347 7.72227 1.5957 7.5013 1.5957C7.28033 1.5957 7.06841 1.68347 6.91214 1.83969L2.08464 6.66719Z" stroke-width="0.6" stroke-linecap="round" stroke-linejoin="round"></path>
     </symbol>
+
+    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
+    </symbol>
+
   </svg>
 </template>
 
@@ -374,6 +567,7 @@ import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Button from '@/components/Base/Button.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue'
 import InfoItem from '@/components/admin/Patients/InfoItem.vue'
+import GridContainer from '@/components/admin/Patients/GridContainer.vue'
 
 export default defineComponent({
   name: 'AdminPatientsList',
@@ -395,6 +589,7 @@ export default defineComponent({
     Button,
     StringItem,
     InfoItem,
+    GridContainer,
   },
   setup() {
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
@@ -498,12 +693,84 @@ export default defineComponent({
     height: 28px;
   }
 
-  .line-item {
+  .item-flex {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 10px 0 0;
+  }
+
+  .item-flex:last-child {
+    margin: 10px 0;
+  }
+
+  .line-item-left {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: 170px;
-    padding: 0 44px 0 10px;
+    width: auto;
+    padding: 0px;
+  }
+
+  .line-item-right {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: auto;
+    padding: 0px;
+  }
+
+  .icon-plus {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1910px) {
+    .flex-block {
+      width: 100%;
+      display: block;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .line-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0px;
+    }
+    .item-flex {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .item-flex:last-child {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 560px) {
+
+    .line-item-left {
+      margin: 10px 0;
+    }
+
+    .line-item-right {
+      margin: 10px 0;
+      justify-content: space-between;
+    }
+
+    .item-flex:first-child {
+      display: block;
+      width: 100%;
+      margin: 0 0px 10px 0;
+    }
   }
 
 </style>
