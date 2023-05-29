@@ -1,7 +1,9 @@
 <template>
   <div class="tab"
     :style="{
-      marginTop: marginTop
+      marginTop: marginTop,
+      height: isCollaps && collapsed ? '60px' : '',
+      overflow: isCollaps && collapsed ? 'hidden' : ''
     }"
   >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
@@ -15,7 +17,8 @@
         :style="{ 
           cursor: isCollaps ? 'pointer' : 'default', 
           background: changeColor ? background : backgroundAttention, 
-          padding: isCollaps ? '' : padding,
+          padding: padding,
+          borderRadius: '5px',
         }" 
         class="tab-name">
         <div class="inside-icon">
@@ -32,7 +35,7 @@
         </div>
       </div>
     </label>
-    <div :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: changeColor ? background : backgroundAttention, }" :class="collapsed ? 'tab-content-down' : 'tab-content-up'">
+    <div :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: changeColor ? background : backgroundAttention }" :class="collapsed ? 'tab-content-down' : 'tab-content-up'">
       <slot name="inside-content" />
     </div>
   </div>
@@ -86,7 +89,7 @@ export default defineComponent({
 
     onBeforeMount(() => {
       if (props.activeId && props.activeId !== props.tabId) {
-        collapsed.value = true;
+        collapsed.value = false;
       }
     });
 
@@ -107,22 +110,23 @@ export default defineComponent({
 
 .tab {
   position: relative;
-  width: calc(100% - 12px);
-  overflow: hidden;
+  width: calc(100% - 16px);
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   background: #ffffff;
   margin: 10px 8px 2px 2px;
   cursor: pointer;
   transition: 0.15s;
+  // padding: 0 2px;
+  // visibility: ;
 
   &-name {
     position: relative;
     display: flex;
-    height: 60px;
+    min-height: 60px;
+    height: auto;
     align-items: center;
     font-weight: bold;
-    padding: 0 20px;
   }
 }
 
@@ -140,7 +144,7 @@ export default defineComponent({
   -o-transition: max-height 0.03s;
   transition: max-height 0.03s;
   color: #343e5c;
-  // padding: 0 5px;
+  padding: 0 5px;
 }
 
 .tab-content-up {
@@ -152,7 +156,7 @@ export default defineComponent({
   -o-transition: max-height 0.5s;
   transition: max-height 0.5s;
   color: #343e5c;
-  // padding-right: 5px;
+  padding-right: 5px;
 }
 
 .tab input:checked ~ .icon-arrow {
@@ -239,11 +243,6 @@ export default defineComponent({
   opacity: 1;
 }
 
-.tab-name {
-  width: calc(100% - 12px);
-  padding-left: 10px;
-}
-
 .tab-name:hover > .tools-bar {
   visibility: visible;
   opacity: 1;
@@ -254,13 +253,14 @@ export default defineComponent({
 }
 
 .title-in {
-  width: calc(100% - 8px);
+  width: 100%;
   display: flex;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   color: #303133;
-  height: 60px;
+  height: auto;
   align-items: center;
   font-weight: normal;
+  border-radius: 5px;
 }
 </style>

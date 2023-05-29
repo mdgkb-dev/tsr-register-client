@@ -1,35 +1,61 @@
 <template>
-  <div class="body"
+  <div class="base-box"
     :style="{
-      background: background,
-      padding: padding,
-      margin: margin,
       width: width,
       height: height,
       maxWidth: maxWidth,
       minWidth: minWidth,
-      border: hovering ? '1px solid #1979CF' : '',
-      boxShadow: hovering ? '0px 0px 1px 1px #1979CF' : 'none',
-      color: hovering ? '#1979CF' : '#343E5C',
     }"
-    @mouseenter="hovering = true"
-    @mouseleave="hovering = false"
+    @click.prevent="changeState"
   >
-    <slot name="inside-content" />
-    <div class="top-title"
+    <div class="body"
       :style="{
+        background: background,
+        zIndex: isToggle ? '2' : '0',
+        padding: isToggle ? '0' : padding,
+        margin: margin,
+        width: isToggle ? openWidth : width,
+        height: isToggle ? '134px' : height,
+        maxWidth: maxWidth,
+        minWidth: minWidth,
+        border: hovering | isToggle ? '1px solid #1979CF' : '',
         color: hovering ? '#1979CF' : '#343E5C',
-        stroke: hovering ? '#1979CF' : '#343E5C',
+        boxShadow: hovering | isToggle ? '0px 0px 1px 1px #1979CF' : 'none',
+        alignItems:  isToggle ? 'end' : 'center',
       }"
+      @mouseenter="hovering = true"
+      @mouseleave="hovering = false"
     >
-      <svg class="icon-top-title"
+      <div class="close-window"
         :style="{
-          stroke: hovering ? '#1979CF' : '#343E5C',
-        }"      
+          display: isToggle ? 'none' : '',
+          height: isToggle ? '0' : '',
+        }"
       >
-        <use xlink:href="#iconamoon_edit-light"></use>
-      </svg>
-      <slot name="title" />
+      <slot name="close-inside-content" /></div>
+      <div class="open-window"
+        :style="{
+          display: isToggle ? '' : 'none',
+          height: isToggle ? '130px' : '0',
+        }"
+      >
+      <slot name="open-inside-content" /></div>
+      <div class="top-title"
+        :style="{
+          color: hovering ? '#1979CF' : '#343E5C',
+          stroke: hovering ? '#1979CF' : '#343E5C',
+        }"
+      >
+        <svg class="icon-top-title"
+          :style="{
+            stroke: hovering ? '#1979CF' : '#343E5C',
+            display: withIcon ? '' : 'none',
+          }"      
+        >
+          <use xlink:href="#iconamoon_edit-light"></use>
+        </svg>
+        <slot name="title" />
+      </div>
     </div>
   </div>
   <svg width="0" height="0" class="hidden">
@@ -40,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, Ref } from 'vue';
 
 export default defineComponent({
   name: 'InfoItem',
@@ -49,17 +75,27 @@ export default defineComponent({
     background: { type: String as PropType<string>, required: false, default: '#ffffff' },
     padding: { type: String as PropType<string>, required: false, default: '0 10px' },
     width: { type: String as PropType<string>, required: false, default: 'auto' },
+    openWidth: { type: String as PropType<string>, required: false, default: 'auto' },
     maxWidth: { type: String as PropType<string>, required: false, default: '100%' },
-    minWidth: { type: String as PropType<string>, required: false, default: '100px' },
+    minWidth: { type: String as PropType<string>, required: false, default: '80px' },
     margin: { type: String as PropType<string>, required: false, default: '0, 10px, 0 0' },
     height: { type: String as PropType<string>, required: false, default: '40px' },
+    withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
   },
 
   setup() {
     const hovering = ref(false);
+    const isToggle: Ref<boolean> = ref(false);
+
+    const changeState = () => {
+      isToggle.value = !isToggle.value;
+    };
+
 
     return {
       hovering,
+      isToggle,
+      changeState,
     };
   },
 });
@@ -72,13 +108,16 @@ export default defineComponent({
     display: none;
   }
 
+  .base-box {
+    position: relative;
+  }
+
   .body {
     border: $light-pink-border;
     border-radius: $normal-border-radius;
     position: relative;
     display: flex;
     justify-content: left;
-    align-items: center;
     cursor: pointer;
     transition: 0.15s;
   }
@@ -95,18 +134,30 @@ export default defineComponent({
     padding: 0 3px;
   }
 
-  .inside-content {
-    width: 100%;
+  .close-window {
     display: flex;
     justify-content: left;
     align-items: center;
     max-height: 28px;
-    background: #c3c3c3;
   }
 
   .icon-top-title {
     width: 10px;
     height: 10px;
     stroke: #343E5C;
+  }
+
+  .open-window {
+    position: absolute;
+    z-index: 5;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background: #ffffff;
+    background: #c4c4c4;
+    overflow: hidden;
+    // height: 130px;
+    transition: 0.15s;
+    // width: 194px;
   }
 </style>

@@ -2,6 +2,7 @@
   <div class="grid-block"
     :style="{
       maxWidth: maxWidth,
+      width: width,
       background: background,
       gridGap: gridGap,
       gridTemplateRows: gridTemplateRows,
@@ -20,6 +21,11 @@ export default defineComponent({
   name: 'GridContainer',
   props: {
     maxWidth: {
+      type: String as PropType<string>,
+      required: false,
+      default: '100%',
+    },
+    width: {
       type: String as PropType<string>,
       required: false,
       default: '100%',
@@ -63,6 +69,7 @@ export default defineComponent({
   display: grid;
   margin-left: auto;
   margin-right: auto;
+  justify-content: center;
 }
 
 </style>
