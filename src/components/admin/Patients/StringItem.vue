@@ -1,5 +1,6 @@
 <template>
-  <div class="string"
+  <div
+    class="string"
     :style="{
       color: color,
       fontSize: fontSize,
@@ -11,6 +12,7 @@
       minWidth: minWidth,
       margin: margin,
     }"
+    @click="$emit('click')"
   >
     {{ string }}
   </div>
@@ -22,8 +24,8 @@ import { defineComponent, PropType } from 'vue';
 export default defineComponent({
   name: 'StringItem',
   props: {
-    string: {type: String as PropType<string>, required: false, default: 'String'},
-    color: {type: String as PropType<string>, required: false, default: 'inherit'},
+    string: { type: String as PropType<string>, required: false, default: 'String' },
+    color: { type: String as PropType<string>, required: false, default: 'inherit' },
     fontSize: { type: String as PropType<string>, required: false, default: '14px' },
     fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
     background: { type: String as PropType<string>, required: false, default: '#ffffff' },
@@ -32,11 +34,12 @@ export default defineComponent({
     minWidth: { type: String as PropType<string>, required: false, default: '' },
     margin: { type: String as PropType<string>, required: false, default: '0, 0px, 0 0' },
   },
+  emits: ['click'],
 });
 </script>
 
 <style scoped lang="scss">
-  .string {
-    max-width: 100%;
-  }
+.string {
+  max-width: 100%;
+}
 </style>
