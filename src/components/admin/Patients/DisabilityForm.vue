@@ -110,7 +110,8 @@
                             :color-swap="true"
                             @click="removeEdv(disability, edv.id)"
                           >
-                          </Button>
+                          </Button
+                          ><й></й>
                         </div>
                       </template>
                     </CollapseItem>
