@@ -1,9 +1,17 @@
 <template>
-  <el-date-picker v-model="date" type="date" format="DD.MM.YYYY" :placeholder="placeholder" @change="changeHandler"></el-date-picker>
+  <div class="style-container">
+    <el-date-picker 
+      v-model="date" 
+      type="date" 
+      format="DD.MM.YYYY" 
+      :placeholder="placeholder" 
+      @change="changeHandler"
+      ></el-date-picker>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { defineComponent, onBeforeMount, Ref, ref, PropType } from 'vue';
 
 export default defineComponent({
   name: 'DatePicker',

@@ -8,47 +8,50 @@
     }"
     @click.prevent="changeState"
   >
+  <!-- padding: isToggle && withOpenWindow ? '0' : padding, -->
     <div class="body"
       :style="{
         background: background,
-        zIndex: isToggle ? '2' : '0',
-        padding: isToggle ? '0' : padding,
+        zIndex: isToggle && withOpenWindow ? '2' : '0',
+        padding: isToggle && withOpenWindow ? '0' : padding,
         margin: margin,
-        width: isToggle ? openWidth : width,
-        height: isToggle ? '134px' : height,
+        width: isToggle && withOpenWindow ? openWidth : width,
+        height: isToggle && withOpenWindow ? openHeight : height,
+        minHeight: height,
         maxWidth: maxWidth,
         minWidth: minWidth,
-        border: hovering | isToggle ? '1px solid #1979CF' : '',
-        color: hovering ? '#1979CF' : '#343E5C',
-        boxShadow: hovering | isToggle ? '0px 0px 1px 1px #1979CF' : 'none',
-        alignItems:  isToggle ? 'end' : 'center',
+        borderColor: hovering | isToggle ? colorSelected : '',
+        color: hovering ? colorSelected : '#343E5C',
+        boxShadow: hovering | isToggle ? `0px 0px 1px 1px ${colorSelected}` : 'none',
+        alignItems:  isToggle && withOpenWindow ? 'end' : 'center',
       }"
       @mouseenter="hovering = true"
       @mouseleave="hovering = false"
     >
       <div class="close-window"
         :style="{
-          display: isToggle ? 'none' : '',
-          height: isToggle ? '0' : '',
+          display: isToggle && withOpenWindow ? 'none' : '',
+          height: isToggle && withOpenWindow ? '0' : '',
         }"
       >
       <slot name="close-inside-content" /></div>
       <div class="open-window"
         :style="{
-          display: isToggle ? '' : 'none',
-          height: isToggle ? '130px' : '0',
+          display: isToggle && withOpenWindow ? 'flex' : 'none',
+          height: isToggle && withOpenWindow ? 'auto' : '0',
         }"
       >
       <slot name="open-inside-content" /></div>
       <div class="top-title"
         :style="{
-          color: hovering ? '#1979CF' : '#343E5C',
-          stroke: hovering ? '#1979CF' : '#343E5C',
+          color: hovering ? colorSelected : '#343E5C',
+          fill: hovering ? colorSelected : '#343E5C',
+
         }"
       >
         <svg class="icon-top-title"
           :style="{
-            stroke: hovering ? '#1979CF' : '#343E5C',
+            stroke: hovering ? colorSelected : '#343E5C',
             display: withIcon ? '' : 'none',
           }"      
         >
@@ -76,11 +79,14 @@ export default defineComponent({
     padding: { type: String as PropType<string>, required: false, default: '0 10px' },
     width: { type: String as PropType<string>, required: false, default: 'auto' },
     openWidth: { type: String as PropType<string>, required: false, default: 'auto' },
-    maxWidth: { type: String as PropType<string>, required: false, default: '100%' },
+    openHeight: { type: String as PropType<string>, required: false, default: 'auto' },
+    maxWidth: { type: String as PropType<string>, required: false, default: 'auto' },
     minWidth: { type: String as PropType<string>, required: false, default: '80px' },
     margin: { type: String as PropType<string>, required: false, default: '0, 10px, 0 0' },
     height: { type: String as PropType<string>, required: false, default: '40px' },
     withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
+    withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
+    colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
   },
 
   setup() {
@@ -148,16 +154,15 @@ export default defineComponent({
   }
 
   .open-window {
-    position: absolute;
     z-index: 5;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    background: #ffffff;
-    background: #c4c4c4;
+    border-radius: $normal-border-radius;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
     overflow: hidden;
-    // height: 130px;
-    transition: 0.15s;
-    // width: 194px;
+    max-height: 130px;
+    padding: 7px;
+    width: calc(100% - 16px);
+    margin-top: 5px;
   }
 </style>

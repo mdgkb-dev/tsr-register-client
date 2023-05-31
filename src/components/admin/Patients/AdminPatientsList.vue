@@ -55,98 +55,19 @@
               </div>
               <div class="line-item-right">
                 <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" />
-                <InfoItem  min-width="calc(50% - 27px)" margin="0" openWidth="135px"> 
+                <InfoItem  margin="0" :withOpenWindow="false" > 
                   <template #title>
                     <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
                   </template>
                   <template #close-inside-content>
-                    <StringItem string="До" font-size="14px" padding="0"/>
-                      <Button
-                        text="A"
-                        :withIcon="false"
-                        width="25px" 
-                        height="25px" 
-                        border-radius="15px" 
-                        background="#ffffff"
-                        backgroundHover="#ffffff"
-                        :colorSwap="false"
-                        margin="0 0 0 7px"
-                        padding="0"
-                      >
-                    </Button>
-                    <Button
-                      text="B"
-                      :withIcon="false"
-                      width="25px" 
-                      height="25px" 
-                      border-radius="15px" 
-                      background="#ffffff"
-                      backgroundHover="#ffffff"
-                      :colorSwap="false"
-                      margin="0 0 0 7px"
-                      padding="0"
-                    >
-                    </Button>
-                    <Button
-                      text="C"
-                      :withIcon="false"
-                      width="25px" 
-                      height="25px" 
-                      border-radius="15px" 
-                      background="#ffffff"
-                      backgroundHover="#ffffff"
-                      :colorSwap="false"
-                      margin="0 0 0 7px"
-                      padding="0"
-                    >
-                    </Button>
+                    <!-- <div v-if="patient.getActuallyDisability().getActuallyEdv()" class="disability-circles"> -->
+                    <StringItem string="А" font-size="14px" padding="0" margin="0 5px 0 0" color="#B0A4C0" />
+                    <StringItem string="В" font-size="14px" padding="0" margin="0 5px 0 0" color="" />
+                    <StringItem string="С" font-size="14px" padding="0" margin="0 0 0 0" color="#B0A4C0" />
+                    <StringItem string=", до 29.12.23г." font-size="12px" padding="0" color=""/>
+                    <!-- </div> -->
+                    <!-- <div v-else>Нет справок ЕДВ</div> -->
                   </template>
-
-                  <!-- #TODO -->
-                  <template #open-inside-content>
-                    <StringItem string="До" font-size="14px" padding="0"/>
-                      <Button
-                        text="A"
-                        :withIcon="false"
-                        width="25px" 
-                        height="25px" 
-                        border-radius="15px" 
-                        background="#ffffff"
-                        backgroundHover="#ffffff"
-                        :colorSwap="false"
-                        margin="0 0 0 7px"
-                        padding="0"
-                      >
-                    </Button>
-                    <Button
-                      text="B"
-                      :withIcon="false"
-                      width="25px" 
-                      height="25px" 
-                      border-radius="15px" 
-                      background="#ffffff"
-                      backgroundHover="#ffffff"
-                      :colorSwap="false"
-                      margin="0 0 0 7px"
-                      padding="0"
-                    >
-                    </Button>
-                    <Button
-                      text="C"
-                      :withIcon="false"
-                      width="25px" 
-                      height="25px" 
-                      border-radius="15px" 
-                      background="#ffffff"
-                      backgroundHover="#ffffff"
-                      :colorSwap="false"
-                      margin="0 0 0 7px"
-                      padding="0"
-                    >
-                    </Button>
-                  </template>
-                  <!-- end -->
-                  
                 </InfoItem>
               </div>
             </div>
@@ -155,7 +76,7 @@
                 <template #grid-items>
                   <GridContainer max-width="auto" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px" >
                     <template #grid-items>
-                    <InfoItem  margin="0" > 
+                    <InfoItem  margin="0" openHeight="auto"> 
                       <template #title>
                         <StringItem string="дата рождения" font-size="10px" padding="0 0 0 3px"/>
                       </template>
@@ -165,62 +86,78 @@
 
                       <!-- #TODO -->
                       <template #open-inside-content>
-                        <StringItem :string="$dateTimeFormatter.format(patient.human.dateBirth)" font-size="16px" padding="0"/>
-                        <Button 
-                          text="Сохранить"
-                          :withIcon="false"
-                          width="86px" 
-                          height="34px" 
-                          border-radius="5px" 
-                          color="#006BB4" 
-                          background="#DFF2F8"
-                          backgroundHover="#DFF2F8"
-                          :colorSwap="false"
-                          >
-                        </Button>
+                        <GridContainer max-width="auto" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px" >
+                          <template #grid-items>
+                            <SmallDatePicker  placeholder="Выбрать" width="100%" height="34px" />
+                            <Button 
+                              text="Сохранить"
+                              :withIcon="false"
+                              width="100%" 
+                              height="34px" 
+                              border-radius="5px" 
+                              color="#006BB4" 
+                              background="#DFF2F8"
+                              backgroundHover="#DFF2F8"
+                              :colorSwap="false"
+                              >
+                            </Button>
+                          </template>
+                        </GridContainer>
                       </template>
                       <!-- end -->
 
                     </InfoItem>
-                    <InfoItem margin="0" > 
+                    <InfoItem margin="0" openHeight="auto" openWidth="290px"> 
                       <template #title>
                         <StringItem string="представители" font-size="10px" padding="0 0 0 3px"/>
                       </template>
                       <template #close-inside-content>
                         <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-                          <StringItem :string="rep.getRepresentativeParentType()" font-size="14px" padding="0"/>
+                          <StringItem v-if="patient.patientsRepresentatives" :string="rep.getRepresentativeParentType() + ',&nbsp'" font-size="14px" padding="0" />
                         </div>
                       </template>
 
                       <!-- #TODO -->
                       <template #open-inside-content>
-                        <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-                          <StringItem :string="rep.getRepresentativeParentType()" font-size="14px" padding="0"/>
-                        </div>
-                        <Button 
-                          :withIcon="true"
-                          width="86px" 
-                          height="34px" 
-                          border-radius="5px" 
-                          color="#006BB4" 
-                          background="#DFF2F8"
-                          backgroundHover="#DFF2F8"
-                          :colorSwap="false"
-                          >
-
-                          <template #icon>
-                            <svg class="icon-plus">
-                              <use xlink:href="#plus"></use>
-                            </svg>
+                        <GridContainer max-width="auto" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(276px, 1fr))" margin="0px" >
+                          <template #grid-items>
+                            <div v-for="(rep, key, index) in patient.patientsRepresentatives" :key="index">
+                              <InfoItem margin="0" :withOpenWindow="false" height="32px">
+                                <template #title>
+                                  <StringItem :string="rep.getRepresentativeParentType()" font-size="10px" padding="0 0 0 3px" color="#D42E61" />
+                                </template>
+                                <template #close-inside-content>
+                                  <div>
+                                    <StringItem v-if="rep.representative.human.contact.phone" :string="rep.representative.human.contact.phone" font-size="12px" padding="0 0 0 3px" color="#1979CF" />
+                                    <StringItem :string="rep.representative.human.getFullName()" font-size="12px" padding="0 0 0 3px"/>
+                                  </div>
+                                </template>
+                              </InfoItem>
+                            </div>
+                            <Button 
+                              :withIcon="true"
+                              width="100%" 
+                              height="34px" 
+                              border-radius="5px" 
+                              color="#00BEA5" 
+                              background="#C1EFEB"
+                              backgroundHover="#C1EFEB"
+                              :colorSwap="false"
+                              >
+                              <template #icon>
+                                <svg class="icon-plus">
+                                  <use xlink:href="#plus"></use>
+                                </svg>
+                              </template>
+                            </Button>
                           </template>
-                        </Button>
+                        </GridContainer>
                       </template>
                       <!-- end -->
-
                     </InfoItem>
                     </template>
-                    </GridContainer>
-                  <InfoItem  margin="0 0 0 0px"> 
+                  </GridContainer>
+                  <InfoItem  margin="0 0 0 0px" openHeight="auto" openWidth="100%"> 
                     <template #title>
                       <StringItem string="регистры" font-size="10px" padding="0 0 0 3px"/>
                     </template>
@@ -234,28 +171,39 @@
 
                     <!-- #TODO -->
                     <template #open-inside-content>
-                      <div class="block">
-                        <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id" >
-                          <StringItem :string="patientRegister.register.getTagName() + ','" font-size="14px" padding="0"/>
-                        </div>
-                      </div>
-                      <Button 
-                        :withIcon="true"
-                        width="86px" 
-                        height="34px" 
-                        border-radius="5px" 
-                        color="#006BB4" 
-                        background="#DFF2F8"
-                        backgroundHover="#DFF2F8"
-                        :colorSwap="false"
-                        >
+                      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(99px, 1fr))" margin="0px" >
+                        <template #grid-items>
+                          <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id" >
+                            <InfoItem margin="0" :withOpenWindow="false" height="32px" :withIcon="false" colorSelected="#E46862" >
+                              <template #title>
+                                <svg class="icon-del">
+                                  <use xlink:href="#del"></use>
+                                </svg>
+                              </template>
+                              <template #close-inside-content>
+                                <StringItem :string="patientRegister.register.getTagName()" font-size="11px" padding="0"/>
+                              </template>
+                            </InfoItem>
+                          </div>
 
-                        <template #icon>
-                          <svg class="icon-plus">
-                            <use xlink:href="#plus"></use>
-                          </svg>
+                            <Button 
+                              :withIcon="true"
+                              width="100%" 
+                              height="34px" 
+                              border-radius="5px" 
+                              color="#00BEA5" 
+                              background="#C1EFEB"
+                              backgroundHover="#C1EFEB"
+                              :colorSwap="false"
+                              >
+                              <template #icon>
+                                <svg class="icon-plus">
+                                  <use xlink:href="#plus"></use>
+                                </svg>
+                              </template>
+                            </Button>
                         </template>
-                      </Button>
+                      </GridContainer>
                     </template>
                     <!-- end --> 
 
@@ -272,26 +220,39 @@
 
                     <!-- #TODO -->
                     <template #open-inside-content>
-                      <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
-                        <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" padding="0"/>
-                      </div>
-                      <Button 
-                        :withIcon="true"
-                        width="86px" 
-                        height="34px" 
-                        border-radius="5px" 
-                        color="#006BB4" 
-                        background="#DFF2F8"
-                        backgroundHover="#DFF2F8"
-                        :colorSwap="false"
-                        >
+                      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(99px, 1fr))" margin="0px" >
+                        <template #grid-items>
+                          <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
+                            <InfoItem margin="0" :withOpenWindow="false" height="32px" :withIcon="false" colorSelected="#E46862" >
+                              <template #title>
+                                <svg class="icon-del">
+                                  <use xlink:href="#del"></use>
+                                </svg>
+                              </template>
+                              <template #close-inside-content>
+                                <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="11px" padding="0"/>
+                              </template>
+                            </InfoItem>
+                          </div>
 
-                        <template #icon>
-                          <svg class="icon-plus">
-                            <use xlink:href="#plus"></use>
-                          </svg>
+                            <Button 
+                              :withIcon="true"
+                              width="100%" 
+                              height="34px" 
+                              border-radius="5px" 
+                              color="#00BEA5" 
+                              background="#C1EFEB"
+                              backgroundHover="#C1EFEB"
+                              :colorSwap="false"
+                              >
+                              <template #icon>
+                                <svg class="icon-plus">
+                                  <use xlink:href="#plus"></use>
+                                </svg>
+                              </template>
+                            </Button>
                         </template>
-                      </Button>
+                      </GridContainer>
                     </template>
                     <!-- end -->
 
@@ -309,30 +270,41 @@
 
                     <!-- #TODO -->
                     <template #open-inside-content>
-                      <div v-for="document in patient.human.documents" :key="document">
-                        <StringItem :string="document.documentType.getTagName()" font-size="14px" padding="0"/>
-                      </div>
-                      <Button 
-                        :withIcon="true"
-                        width="86px" 
-                        height="34px" 
-                        border-radius="5px" 
-                        color="#006BB4" 
-                        background="#DFF2F8"
-                        backgroundHover="#DFF2F8"
-                        :colorSwap="false"
-                        >
+                      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(99px, 1fr))" margin="0px" >
+                        <template #grid-items>
+                          <div v-for="document in patient.human.documents" :key="document">
+                            <InfoItem margin="0" :withOpenWindow="false" height="32px" :withIcon="false" colorSelected="#E46862" >
+                              <template #title>
+                                <svg class="icon-del">
+                                  <use xlink:href="#del"></use>
+                                </svg>
+                              </template>
+                              <template #close-inside-content>
+                                <StringItem :string="document.documentType.getTagName()" font-size="11px" padding="0"/>
+                              </template>
+                            </InfoItem>
+                          </div>
 
-                        <template #icon>
-                          <svg class="icon-plus">
-                            <use xlink:href="#plus"></use>
-                          </svg>
+                            <Button 
+                              :withIcon="true"
+                              width="100%" 
+                              height="34px" 
+                              border-radius="5px" 
+                              color="#00BEA5" 
+                              background="#C1EFEB"
+                              backgroundHover="#C1EFEB"
+                              :colorSwap="false"
+                              >
+                              <template #icon>
+                                <svg class="icon-plus">
+                                  <use xlink:href="#plus"></use>
+                                </svg>
+                              </template>
+                            </Button>
                         </template>
-                      </Button>
-                    </template> 
+                      </GridContainer>
+                    </template>
                     <!-- end -->
-
-
                   </InfoItem>
                 </template>
               </GridContainer>
@@ -535,6 +507,9 @@
       <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
     </symbol>
 
+    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" id="del">
+      <path d="M2.91797 8.75C2.6888 8.75 2.49255 8.66833 2.32922 8.505C2.16589 8.34167 2.08436 8.14556 2.08464 7.91667V2.5H1.66797V1.66667H3.7513V1.25H6.2513V1.66667H8.33464V2.5H7.91797V7.91667C7.91797 8.14583 7.8363 8.34208 7.67297 8.50542C7.50964 8.66875 7.31352 8.75028 7.08464 8.75H2.91797ZM7.08464 2.5H2.91797V7.91667H7.08464V2.5ZM3.7513 7.08333H4.58464V3.33333H3.7513V7.08333ZM5.41797 7.08333H6.2513V3.33333H5.41797V7.08333Z"></path>
+    </symbol>
   </svg>
 </template>
 
@@ -569,6 +544,8 @@ import StringItem from '@/components/admin/Patients/StringItem.vue'
 import InfoItem from '@/components/admin/Patients/InfoItem.vue'
 import GridContainer from '@/components/admin/Patients/GridContainer.vue'
 
+import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
+
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
@@ -590,6 +567,7 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
+    SmallDatePicker,
   },
   setup() {
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
@@ -722,12 +700,19 @@ export default defineComponent({
   }
 
   .icon-plus {
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+  }
+
+  .icon-del {
+    width: 10px;
+    height: 10px;
     cursor: pointer;
   }
 
-  @media (max-width: 1910px) {
+  @media (max-width: 1915px) {
     .flex-block {
       width: 100%;
       display: block;
