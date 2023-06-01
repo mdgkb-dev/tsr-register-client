@@ -26,6 +26,12 @@
                     <div class="doctor-title">Период инвалидности:</div>
                     <el-date-picker v-model="disability.dateStart" @change="updateDisability(disability)"></el-date-picker>
                     <el-date-picker v-model="disability.dateEnd" @change="updateDisability(disability)"></el-date-picker>
+
+                    <div class="doctor-title">Серия:</div>
+                    <el-input v-model="disability.series" @blur="updateDisability(disability)" />
+
+                    <div class="doctor-title">Номер:</div>
+                    <el-input v-model="disability.number" @blur="updateDisability(disability)" />
                   </div>
                 </div>
                 <div class="item-right">

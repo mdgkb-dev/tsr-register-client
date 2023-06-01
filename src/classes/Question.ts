@@ -137,4 +137,8 @@ export default class Question {
   //     return s.name.toLowerCase().includes(this.setFilterString.toLowerCase());
   //   });
   // }
+
+  getIdWithoutDashes(): string {
+    return this.id ? this.name.replaceAll(/\s+/g, '') : '';
+  }
 }

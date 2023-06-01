@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+import { ElMessageBox } from 'element-plus';
 import { computed, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
 
 import HumanRules from '@/classes/humans/HumanRules';
@@ -115,11 +116,22 @@ export default defineComponent({
       await Provider.store.dispatch('patients/create', patient);
     };
 
+    const remove = async () => {
+      ElMessageBox.confirm('Вы уверены, что хотите удалить пациента?', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: 'Удалить',
+        cancelButtonText: 'Отмена',
+      }).then(async () => {
+        await Provider.store.dispatch('patients/remove', Provider.route().params['id']);
+        await Provider.router.push('/admin/patients');
+      });
+    };
+
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: computed(() => (Provider.route().params['id'] ? patient.value?.human?.getFullName() : 'Добавить пациента')),
         showBackButton: true,
-        buttons: [],
+        buttons: [{ text: 'Удалить пациента', type: 'warning', action: remove }],
       },
     });
     Hooks.onBeforeRouteLeave();

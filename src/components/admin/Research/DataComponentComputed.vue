@@ -30,13 +30,15 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['fill'],
+  setup(props, { emit }) {
     const answer = props.researchResult.getOrCreateAnswer(props.question);
     const ignoreVisibility = (v: boolean) => (v = true);
 
     const filledCheck = (): void => {
       answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
       props.researchResult.calculateFilling();
+      emit('fill');
     };
 
     return {

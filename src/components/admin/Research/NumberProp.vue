@@ -32,7 +32,8 @@ export default defineComponent({
       default: '',
     },
   },
-  setup(props) {
+  emits: ['fill'],
+  setup(props, { emit }) {
     const answer = props.variantId
       ? props.researchResult.getQuestionVariantAnswer(props.variantId)
       : props.researchResult.getOrCreateAnswer(props.question);
@@ -42,6 +43,7 @@ export default defineComponent({
       }
       answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
       props.researchResult.calculateFilling();
+      emit('fill');
     };
     return {
       filledCheck,
