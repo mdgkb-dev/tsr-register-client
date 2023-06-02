@@ -38,44 +38,45 @@
                     :color-swap="false"
                     @click.prevent="edit(patient.id)"
                   >
+                    <template #icon>
+                      <svg class="icon-edit">
+                        <use xlink:href="#edit"></use>
+                      </svg>
+                    </template>
+                  </Button>
+                  <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="240px" width="100%"/>
+                </div>
 
-                  <template #icon>
-                    <svg class="icon-edit">
-                      <use xlink:href="#edit"></use>
-                    </svg>
-                  </template>
-                </Button>
-                <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="240px" width="100%"/>
-              </div>
-              <div class="line-item-right">
-                <Button 
-                  :text="patient.human.getGender()"
-                  :withIcon="false"
-                  width="42px" 
-                  height="42px" 
-                  color="#006BB4" 
-                  background="#DFF2F8"
-                  backgroundHover="#DFF2F8"
-                  :colorSwap="false"
-                  margin="2px 10px 0 0"
-                  fontSize="18px"
-                >
-                </Button>
-                <!-- <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" /> -->
-                <InfoItem  margin="0" :withOpenWindow="false" > 
-                  <template #title>
-                    <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
-                  </template>
-                  <template #close-inside-content>
-                    <!-- <div v-if="patient.getActuallyDisability().getActuallyEdv()" class="disability-circles"> -->
-                    <StringItem string="А" font-size="14px" padding="0" margin="0 5px 0 0" color="#B0A4C0" />
-                    <StringItem string="В" font-size="14px" padding="0" margin="0 5px 0 0" color="" />
-                    <StringItem string="С" font-size="14px" padding="0" margin="0 0 0 0" color="#B0A4C0" />
-                    <StringItem string=", до 29.12.23г." font-size="12px" padding="0" color=""/>
-                    <!-- </div> -->
-                    <!-- <div v-else>Нет справок ЕДВ</div> -->
-                  </template>
-                </InfoItem>
+                <div class="line-item-right">
+                  <Button 
+                    :text="patient.human.getGender()"
+                    :withIcon="false"
+                    width="42px" 
+                    height="42px" 
+                    color="#006BB4" 
+                    background="#DFF2F8"
+                    backgroundHover="#DFF2F8"
+                    :colorSwap="false"
+                    margin="2px 10px 0 0"
+                    fontSize="18px"
+                  >
+                  </Button>
+                  <!-- <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" /> -->
+                  <InfoItem  margin="0" :withOpenWindow="false" > 
+                    <template #title>
+                      <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
+                    </template>
+                    <template #close-inside-content>
+                      <!-- <div v-if="patient.getActuallyDisability().getActuallyEdv()" class="disability-circles"> -->
+                      <StringItem string="А" font-size="14px" padding="0" margin="0 5px 0 0" color="#B0A4C0" />
+                      <StringItem string="В" font-size="14px" padding="0" margin="0 5px 0 0" color="" />
+                      <StringItem string="С" font-size="14px" padding="0" margin="0 0 0 0" color="#B0A4C0" />
+                      <StringItem string=", до 29.12.23г." font-size="12px" padding="0" color=""/>
+                      <!-- </div> -->
+                      <!-- <div v-else>Нет справок ЕДВ</div> -->
+                    </template>
+                  </InfoItem>
+                </div>
               </div>
               <div class="item-flex">
                 <GridContainer max-width="1920px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0px">
@@ -369,7 +370,6 @@
           <template #inside-content> </template>
         </CollapseItem>
       </div>
-    </div>
     </div>
 
   </AdminListWrapper>
