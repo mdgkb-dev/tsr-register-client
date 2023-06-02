@@ -87,7 +87,7 @@ export default defineComponent({
     borderRadius: {
       type: String as PropType<string>,
       required: false,
-      default: '0px',
+      default: '5px',
     },
     border: {
       type: Boolean as PropType<boolean>,

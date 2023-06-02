@@ -54,7 +54,20 @@
                 <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="240px" width="100%"/>
               </div>
               <div class="line-item-right">
-                <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" />
+                <Button 
+                  :text="patient.human.getGender()"
+                  :withIcon="false"
+                  width="42px" 
+                  height="42px" 
+                  color="#006BB4" 
+                  background="#DFF2F8"
+                  backgroundHover="#DFF2F8"
+                  :colorSwap="false"
+                  margin="2px 10px 0 0"
+                  fontSize="18px"
+                >
+                </Button>
+                <!-- <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" /> -->
                 <InfoItem  margin="0" :withOpenWindow="false" > 
                   <template #title>
                     <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
@@ -320,179 +333,6 @@
     </div>
     </div>
 
-
-
-    <!-- <el-table
-      ref="table"
-      :default-sort="{ prop: 'id', order: 'ascending' }"
-      :data="patients"
-      class="table-shadow"
-      header-row-class-name="header-style"
-      row-class-name="no-hover"
-    > -->
-      <!-- <el-table-column width="60" align="center" /> -->
-
-      <!-- <el-table-column prop="human.surname">
-        <template #header>
-          <span class="table-header">
-            <span>ФИО</span>
-          </span>
-        </template>
-        <template #default="scope">
-          <div class="patient-link" @click="$router.push(`/admin/patients/${scope.row.id}`)">
-            {{ scope.row.human.getFullName() }}
-          </div>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column width="110" prop="human.isMale" align="center">
-        <template #header>
-          <span class="table-header">
-            <span>Пол</span>
-          </span>
-        </template>
-        <template #default="scope">
-          {{ scope.row.human.getGender() }}
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column prop="human.dateBirth" width="150" align="center">
-        <template #header>
-          <div class="table-header">
-            <span>Дата рождения</span>
-          </div>
-        </template>
-        <template #default="scope">
-          {{ $dateTimeFormatter.format(scope.row.human.dateBirth) }}
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column width="130" label="ЗАКОННЫЕ ПРЕДСТАВИТЕЛИ" align="center">
-        <template #default="scope">
-          <div v-for="rep in scope.row.patientsRepresentatives" :key="rep">
-            <el-tooltip class="item" effect="dark" placement="top-end">
-              <template #content>
-                <div>
-                  {{ rep.representative.human.getFullName() }}
-                </div>
-                <a :href="'tel:' + rep.representative.human.contact.phone" style="color: white">
-                  <div v-if="rep.representative.human.contact.phone">Телефон: {{ rep.representative.human.contact.phone }}</div>
-                </a>
-                <div v-if="rep.representative.human.contact.email">Email: {{ rep.representative.human.contact.email }}</div>
-              </template>
-              <el-tag class="tag-link" size="small" @click="$router.push(`/admin/representatives/${rep.representative.id}`)">
-                {{ rep.getRepresentativeParentType() }}
-              </el-tag>
-            </el-tooltip>
-          </div>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column width="120" label="ДИАГНОЗЫ" align="center">
-        <template #header>
-          <span class="table-header">
-            <span>Диагнозы</span>
-          </span>
-        </template>
-        <template #default="scope">
-          <div v-for="diagnosis in scope.row.patientDiagnosis" :key="diagnosis">
-            <div>
-              <span class="underline-label">{{ diagnosis.mkbItem.getCode() }}</span>
-              <el-tooltip class="item" effect="dark" :content="diagnosis.mkbItem.getFullName()" placement="top-end">
-                <el-icon :size="17" style="margin-left: 5px">
-                  <QuestionFilled />
-                </el-icon>
-              </el-tooltip>
-            </div>
-          </div>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column label="ИНВАЛИДНОСТЬ" width="200" align="center">
-        <template #default="scope">
-          <el-space v-if="scope.row.getActuallyDisability()" direction="vertical">
-            <span>До {{ $dateTimeFormatter.format(scope.row.getActuallyDisability().period.dateEnd) }}</span>
-            <div v-if="scope.row.getActuallyDisability().getActuallyEdv()" class="disability-circles">
-              <el-button
-                size="mini"
-                disabled
-                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined"
-                circle
-              >
-                A
-              </el-button>
-              <el-button
-                size="mini"
-                disabled
-                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined"
-                circle
-                >B</el-button
-              >
-              <el-button
-                size="mini"
-                disabled
-                :type="scope.row.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined"
-                circle
-                >C</el-button
-              >
-            </div>
-            <div v-else>Нет справок ЕДВ</div>
-          </el-space>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column label="РЕГИСТРЫ" width="115" align="center">
-        <template #default="scope">
-          <div v-for="patientRegister in scope.row.patientsRegisters" :key="patientRegister.id">
-            <el-tooltip class="item" effect="dark" :content="patientRegister.register.name" placement="top-end">
-              <el-tag class="tag-link" size="small" @click="$router.push(`/admin/patients/${scope.row.id}?menu=registers`)">
-                <span>{{ patientRegister.register.getTagName() }}</span>
-              </el-tag>
-            </el-tooltip>
-          </div>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-        <template #default="scope">
-          <div v-if="scope.row.human.documents">
-            <div v-for="document in scope.row.human.documents" :key="document">
-              <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-                <el-tag size="small">
-                  <el-icon style="margin-right: 3px">
-                    <Document />
-                  </el-icon>
-                  <span>{{ document.documentType.getTagName() }}</span>
-                </el-tag>
-              </el-tooltip>
-            </div>
-          </div>
-        </template>
-      </el-table-column> -->
-
-      <!-- <el-table-column width="50" align="center" class-name="sticky-right">
-        <template #header>
-          <FilterResetButton />
-        </template>
-        <template #default="scope">
-          <TableButtonGroup :show-edit-button="true" :show-remove-button="true" @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" />
-
-          <el-popover placement="top-end" :width="200" trigger="hover">
-            <template #reference>
-              <el-button class="table-button" icon="el-icon-view" @click="$router.push(`/patients/history/${scope.row.id}`)" />
-            </template>
-            <el-timeline>
-              <el-timeline-item :timestamp="$dateTimeFormatter.format(scope.row.createdAt)"
-                >Создано {{ scope.row.createdBy?.email }}</el-timeline-item
-              >
-              <el-timeline-item :timestamp="$dateTimeFormatter.format(scope.row.updatedAt)"
-                >Обновлено {{ scope.row.updatedBy?.email }}</el-timeline-item
-              >
-            </el-timeline>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table> -->
   </AdminListWrapper>
   <svg width="0" height="0" class="hidden">
     <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="edit">

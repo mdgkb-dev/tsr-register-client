@@ -61,7 +61,7 @@
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
               <el-timeline style="margin-top: 20px">
                 <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
-                  <GeneralItem :ready="`${result.fillingPercentage}%`" margin="0px" :scale="false" @click="selectResult(result.id)">
+                  <GeneralItem :ready="`${result.fillingPercentage}%`" margin="0px" :scale="false" @click="selectResult(result.id)" :withIcon="true">
                     <template #general-item> Исследование от {{ $dateTimeFormatter.format(result.date) }} </template>
                   </GeneralItem>
 
