@@ -49,7 +49,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['fill'],
+  setup(props, { emit }) {
     const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
     const answer: Ref<Answer | undefined> = ref(undefined);
     const filledCheck = (variant: AnswerVariant): void => {
@@ -59,6 +60,7 @@ export default defineComponent({
       selectVariant(variant);
       answer.value.filled = answer.value.answerVariantId === variant.id;
       props.researchResult.calculateFilling();
+      emit('fill');
     };
 
     const selectVariant = (variant?: AnswerVariant): void => {

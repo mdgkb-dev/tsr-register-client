@@ -21,7 +21,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['fill'],
+  setup(props, { emit }) {
     const answer: Ref<Answer | undefined> = ref(undefined);
     const filledCheck = (input: string): void => {
       if (!answer.value) {
@@ -29,6 +30,7 @@ export default defineComponent({
       }
       answer.value.filled = input.length > 0;
       props.researchResult.calculateFilling();
+      emit('fill');
     };
 
     onBeforeMount(() => {

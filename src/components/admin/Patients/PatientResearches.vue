@@ -93,6 +93,10 @@
                             >
                             </Button>
                             <div class="search">
+                              <span>Отобразить только незаполненные</span
+                              ><el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+                            </div>
+                            <div class="search">
                               <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
                             </div>
                           </div>
@@ -124,8 +128,12 @@
                               margin-top="20px"
                             >
                               <template #inside-content>
-                                <div class="background-container">
-                                  <QuestionComponent :question="question" :research-result="researchResult" />
+                                <div :id="question.getIdWithoutDashes()" class="background-container">
+                                  <QuestionComponent
+                                    :question="question"
+                                    :research-result="researchResult"
+                                    @fill="scroll(question.getIdWithoutDashes())"
+                                  />
                                   <div v-for="res in getCalculationsResults(research)" :key="res.name">
                                     <div>{{ res.formulaName }}</div>
                                     <div>{{ res.value }}</div>
@@ -229,8 +237,7 @@ import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
-import StringsService from '@/services/Strings';
-
+import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'PatientResearches',
   components: {
@@ -247,8 +254,10 @@ export default defineComponent({
   setup() {
     const questionsFilterString: Ref<string> = ref('');
     // c3.generate();
+
     const selectedTab = ref('');
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
+    const showOnlyNotFilled: Ref<boolean> = ref(false);
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
     const researchesPools: Ref<ResearchesPool[]> = computed(() => Provider.store.getters['researchesPools/items']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
@@ -258,10 +267,7 @@ export default defineComponent({
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const filteredQuestions: ComputedRef<Question[]> = computed(() => {
-      if (questionsFilterString.value === '') {
-        return research.value.questions;
-      }
-      return research.value.questions.filter((q: Question) => StringsService.stringsEquals(questionsFilterString.value, q.name));
+      return research.value.getFilteredQuestions(questionsFilterString.value, showOnlyNotFilled.value, researchResult.value);
     });
 
     // const researches: Ref<Register> = computed(() => Provider.store.getters['researches/items']);
@@ -386,6 +392,7 @@ export default defineComponent({
     };
 
     return {
+      showOnlyNotFilled,
       cancelResearchFilling,
       questionsFilterString,
       filteredQuestions,
@@ -411,6 +418,7 @@ export default defineComponent({
       Edit,
       Document,
       getCalculationsResults,
+      scroll,
     };
   },
 });

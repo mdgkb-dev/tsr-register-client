@@ -14,7 +14,8 @@ export default class Disability {
   patientId?: string;
   @ClassHelper.GetClassConstructor(Edv)
   edvs: Edv[] = [];
-
+  series = '';
+  number = '';
   constructor(i?: Disability) {
     ClassHelper.BuildClass(this, i);
   }

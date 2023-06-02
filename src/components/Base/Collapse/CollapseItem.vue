@@ -13,13 +13,13 @@
       <use xlink:href="#arrow-up"></use>
     </svg>
     <label :for="tabId" @click="handleItemClick">
-      <div 
-        :style="{ 
-          cursor: isCollaps ? 'pointer' : 'default', 
-          background: changeColor ? background : backgroundAttention, 
+      <div
+        :style="{
+          cursor: isCollaps ? 'pointer' : 'default',
+          background: changeColor ? background : backgroundAttention,
           padding: padding,
           borderRadius: '5px',
-        }" 
+        }"
         class="tab-name">
         <div class="inside-icon">
           <slot name="icon" />
