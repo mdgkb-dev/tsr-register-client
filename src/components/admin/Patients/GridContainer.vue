@@ -64,12 +64,19 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 
 .grid-block {
-  width: auto;
   height: auto;
   display: grid;
   margin-left: auto;
   margin-right: auto;
   justify-content: center;
 }
+
+
+
+// .grid-block > div {
+//   max-width: 290px;
+//   min-width: 120px;
+//   object-fit: cover;
+// }
 
 </style>

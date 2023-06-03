@@ -1,5 +1,5 @@
 <template>
-  <el-form :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }" @submit.prevent="onEnter">
+  <el-form :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}`}" @submit.prevent="onEnter" >
     <el-form-item style="margin: 0">
       <el-autocomplete
         ref="searchForm"
@@ -174,6 +174,7 @@ $margin: 20px 0;
   display: flex;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;
+  border-radius: 5px;
 }
 
 :deep(.el-input__suffix) {

@@ -64,12 +64,8 @@ export default defineComponent({
 }
 .el-main {
   height: inherit;
-  overflow: scroll;
+  overflow: auto;
+  padding: 0px;
 }
 
-@media screen and (max-width: 600px) {
-  .el-main {
-    padding: 10px;
-  }
-}
 </style>

@@ -2,18 +2,18 @@
   <button
     class="button"
     :style="{
-      color: colorSwap ? (hovering ? background : color) : color,
-      background: colorSwap ? (hovering ? color : background) : (hovering ? backgroundHover : background),
+      color: toggleMode ? (isToggle | hovering ? color : '#B0A4C0') : colorSwap ? (hovering | isToggle ? background : color) : color,
+      background: colorSwap ? (hovering | isToggle ? color : background) : (hovering | isToggle ? backgroundHover : background),
       margin: margin,
       minWidth: width,
       maxWidth: width,
-      borderColor: color,
+      border: border ? '' : 'none',
+      borderColor: toggleMode ? (isToggle | hovering ? color : '#B0A4C0') : color,
       height: height,
       borderRadius: borderRadius,
-      border: border ? '' : 'none',
       fontSize: fontSize,
     }"
-    @click.prevent="saveDishSample"
+    @click.prevent="changeState"
     @mouseenter="hovering = true"
     @mouseleave="hovering = false"
   >
@@ -21,16 +21,16 @@
     :style="{
       fill: color,
       marginRight: text ? '10px' : '',
-      transform: colorSwap ? (hovering ? backgroundHover : background) : (hovering ? 'scale(1.1, 1.1)' : ''),
-      transition: colorSwap ? '' : '0.2s',
+      transform: colorSwap | toggleMode ? (hovering | isToggle ? backgroundHover : background) : (hovering | isToggle ? 'scale(1.1, 1.1)' : ''),
+      transition: colorSwap | toggleMode ? '' : '0.2s',
     }"
   >
     <slot name="icon" />
   </div>
   <div  class="text"
     :style="{
-      transform: colorSwap ? (hovering ? backgroundHover : background) : (hovering ? 'scale(1.1, 1.1)' : ''),
-      transition: colorSwap ? '' : '0.2s',
+      transform: colorSwap | toggleMode ? (hovering | isToggle ? backgroundHover : background) : (hovering | isToggle ? 'scale(1.1, 1.1)' : ''),
+      transition: colorSwap | toggleMode ? '' : '0.2s',
     }"
   >
     {{ text }}
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, Ref } from 'vue';
 
 export default defineComponent({
   name: 'Button',
@@ -104,12 +104,28 @@ export default defineComponent({
       required: false,
       default: '10px',
     },
+    toggleMode: {
+      type: Boolean as PropType<boolean>,
+      required: false,
+      default: false,
+    },
   },
-  setup() {
+  setup(props) {
     const hovering = ref(false);
+    const isToggle: Ref<boolean> = ref(false);
+
+    const changeState = () => {
+      if (props.toggleMode) {
+        isToggle.value = !isToggle.value;
+      } else {
+        isToggle.value = false;
+      };
+    };
 
     return {
       hovering,
+      changeState,
+      isToggle,
     };
   },
 });

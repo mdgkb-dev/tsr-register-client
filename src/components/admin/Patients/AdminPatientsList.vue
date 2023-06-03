@@ -1,8 +1,314 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <template #header>
-      Количество пациентов: {{ count }}
-      <RemoteSearch
+    <div class="filter-block">
+      <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px" >
+        <template #grid-items>
+
+          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false" > 
+            <template #title>
+              <StringItem string="поиск и сортировка" font-size="10px" padding="0" />
+            </template>
+            <template #close-inside-content>
+              <div :style="{ width: '100%' }">
+                <RemoteSearch
+                  :must-be-translated="true"
+                  :key-value="schema.patient.key"
+                  placeholder="Начните вводить ФИО"
+                  @select="selectSearch"
+                  maxWidth="100%"
+                />
+                <SortList class="filters-block" :store-mode="true" @load="loadPatients" labelName="" maxWidth="100%"/>
+              </div>
+            </template>
+          </InfoItem>
+
+          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+            <template #title>
+              <StringItem string="регистры" font-size="10px" padding="0" />
+            </template>
+            <template #close-inside-content>
+              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
+                <template #grid-items>
+                  <Button
+                    text="Альфа-маннозиоз"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+                  <Button
+                    text="Анафилаксия"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+                  <Button
+                    text="Болезнь Помпе"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+                  <Button
+                    text="СМА"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+              
+                </template>
+              </Gridcontainer>
+            </template>
+          </InfoItem>
+
+          <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8" >
+            <template #grid-items>
+
+              <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+                <template #title>
+                  <StringItem string="пол" font-size="10px" padding="0" />
+                </template>
+                <template #close-inside-content>
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+                    <template #grid-items>
+                      <Button
+                        text="Мужской"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="Женский"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                    </template>
+                  </Gridcontainer>
+                </template>
+              </InfoItem>
+
+              <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+                <template #title>
+                  <StringItem string="инвалидность" font-size="10px" padding="0" />
+                </template>
+                <template #close-inside-content>
+              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
+                <template #grid-items>
+                  <Button
+                    text="A"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+                  <Button
+                    text="B"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+                  <Button
+                    text="C"
+                    :with-icon="false"
+                    width="auto"
+                    height="34px"
+                    border-radius="5px"
+                    color="#006BB4"
+                    background="#ffffff"
+                    background-hover="#DFF2F8"
+                    :toggleMode="true"
+                    fontSize="12px"
+                  >
+                  </Button>
+              
+                </template>
+              </Gridcontainer>
+                </template>
+              </InfoItem>
+
+            </template>
+          </GridContainer>
+
+          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+            <template #title>
+              <StringItem string="документы" font-size="10px" padding="0"/>
+            </template>
+            <template #close-inside-content>
+              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+                <template #grid-items>
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))" margin="0px" >
+                    <template #grid-items>
+                      <Button
+                        text="Паспорт"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="СНИЛС"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="ОМС"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                    </template>
+                  </Gridcontainer>
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px" >
+                    <template #grid-items>
+                      <Button
+                        text="Свидетельство пенсионера"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="Удостоверение инвалида"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggleMode="true"
+                        fontSize="12px"
+                      >
+                      </Button>
+                    </template>
+                  </Gridcontainer>
+                </template>
+              </Gridcontainer>
+            </template>
+          </InfoItem>
+
+        </template>
+      </Gridcontainer>
+
+      <div class="tools-block">
+        <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+          <template #title>
+            <StringItem string="сохранить" font-size="10px" padding="0"/>
+          </template>
+          <template #close-inside-content>
+            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+              <template #grid-items>
+                <Button
+                  text="xlsx"
+                  :with-icon="false"
+                  width="auto"
+                  height="34px"
+                  border-radius="5px"
+                  color="#006BB4"
+                  background="#DFF2F8"
+                  background-hover="#DFF2F8"
+                  fontSize="12px"
+                >
+                </Button>
+                <Button
+                  text="pdf"
+                  :with-icon="false"
+                  width="auto"
+                  height="34px"
+                  border-radius="5px"
+                  color="#006BB4"
+                  background="#DFF2F8"
+                  background-hover="#DFF2F8"
+                  fontSize="12px"
+                >
+                </Button>
+              </template>
+            </Gridcontainer>
+          </template>
+        </InfoItem>
+      </div>
+      <!-- <RemoteSearch
         :must-be-translated="true"
         :key-value="schema.patient.key"
         placeholder="Начните вводить ФИО пациента"
@@ -17,10 +323,10 @@
       />
 
       <FiltersList default-label="Мужской и женский пол" :models="createSexFilters()" @load="loadPatients" />
-      <SortList class="filters-block" :store-mode="true" @load="loadPatients" />
-    </template>
-    <template #sort> </template>
+      <SortList class="filters-block" :store-mode="true" @load="loadPatients" /> -->
+    </div>
     <div class="scroll-block">
+      <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
@@ -545,9 +851,10 @@ export default defineComponent({
 }
 
 .scroll-block {
-  height: 70vh;
+  height: 75vh;
   overflow: hidden;
   overflow-y: scroll;
+  margin-left: 8px;
 }
 
 .registers-tooltip {
@@ -617,6 +924,42 @@ export default defineComponent({
   width: 10px;
   height: 10px;
   cursor: pointer;
+}
+
+.filter-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter-block {
+  position: relative;
+  display: flex;
+  z-index: 3;
+  justify-content: space-between;
+  align-items: end;
+  width: calc(100% - 20px);
+  padding: 10px 10px 24px 10px;
+  background: #F5F5F5;
+  height: auto;
+  border-bottom: 1px solid #c4c4c4;
+}
+
+.tools-block {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.patient-count {
+  margin-top: 10px;
+  color: $site_light_pink;
+  font-size: 14px;
+}
+
+:deep(.el-form-item) {
+  margin: 8px 0 0 0;
 }
 
 @media (max-width: 1915px) {

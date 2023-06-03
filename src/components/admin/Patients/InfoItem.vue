@@ -20,12 +20,13 @@
         minHeight: height,
         maxWidth: maxWidth,
         minWidth: minWidth,
-        borderColor: hovering | isToggle ? colorSelected : '',
+        borderColor: hovering | isToggle ? colorSelected : borderColor,
         color: hovering ? colorSelected : '#343E5C',
         boxShadow: hovering | isToggle ? `0px 0px 1px 1px ${colorSelected}` : 'none',
         alignItems:  isToggle && withOpenWindow ? 'end' : 'center',
+        cursor: withHover ? 'pointer' : '',
       }"
-      @mouseenter="hovering = true"
+      @mouseenter="withHover ? hovering = true : hovering = false"
       @mouseleave="hovering = false"
     >
       <div class="close-window"
@@ -46,7 +47,7 @@
         :style="{
           color: hovering ? colorSelected : '#343E5C',
           fill: hovering ? colorSelected : '#343E5C',
-
+          background: background,
         }"
       >
         <svg class="icon-top-title"
@@ -81,20 +82,26 @@ export default defineComponent({
     openWidth: { type: String as PropType<string>, required: false, default: 'auto' },
     openHeight: { type: String as PropType<string>, required: false, default: 'auto' },
     maxWidth: { type: String as PropType<string>, required: false, default: 'auto' },
-    minWidth: { type: String as PropType<string>, required: false, default: '80px' },
+    minWidth: { type: String as PropType<string>, required: false, default: '50px' },
     margin: { type: String as PropType<string>, required: false, default: '0, 10px, 0 0' },
     height: { type: String as PropType<string>, required: false, default: '40px' },
     withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
     withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
+    borderColor: { type: String as PropType<string>, required: false, default: '#B0A4C0' },
+    withHover: { type: Boolean as PropType<boolean>, required: false, default: true },
   },
 
-  setup() {
+  setup(props) {
     const hovering = ref(false);
     const isToggle: Ref<boolean> = ref(false);
 
     const changeState = () => {
-      isToggle.value = !isToggle.value;
+      if (props.withOpenWindow) {
+        isToggle.value = !isToggle.value;
+      } else {
+        isToggle.value = false;
+      };
     };
 
 
@@ -124,7 +131,6 @@ export default defineComponent({
     position: relative;
     display: flex;
     justify-content: left;
-    cursor: pointer;
     transition: 0.15s;
   }
 
@@ -144,7 +150,7 @@ export default defineComponent({
     display: flex;
     justify-content: left;
     align-items: center;
-    max-height: 28px;
+    width: 100%;
   }
 
   .icon-top-title {

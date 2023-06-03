@@ -84,8 +84,8 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
-  border-radius: 20px;
-  padding-left: 25px;
+  border-radius: 5px;
+  padding-left: 10px;
   height: 34px;
   // width: 100%;
   display: flex;
@@ -108,8 +108,8 @@ export default defineComponent({
   width: 100%;
 }
 
-:deep(.el-form-item) {
-  padding: 10px;
-  margin: 0;
-}
+// :deep(.el-form-item) {
+//   padding: 10px;
+//   margin: 10px 0 0 0;
+// }
 </style>

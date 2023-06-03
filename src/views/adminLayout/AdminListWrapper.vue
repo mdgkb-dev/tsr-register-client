@@ -79,8 +79,8 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: calc(100% - 30px);
-  padding: 10px;
+  height: calc(100% - 0px);
+  padding: 0px 0px;
   box-sizing: border-box;
   &-main {
     flex-shrink: 1;
@@ -88,7 +88,7 @@ export default defineComponent({
     height: 100%;
   }
   .filters {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     &-header-top {
       display: flex;
       justify-content: space-between;

@@ -10,7 +10,7 @@ const PatientsSortsLib = (() => {
       modelName,
       ClassHelper.GetPropertyName(Patient).fullName,
       order ? order : Orders.Asc,
-      `По ФИО ${order === Orders.Asc ? '(по возрастанию)' : '(по убыванию)'}`,
+      `По ФИО ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`,
       order === Orders.Desc ? false : true
     );
   }
@@ -20,7 +20,7 @@ const PatientsSortsLib = (() => {
       modelName,
       ClassHelper.GetPropertyName(Patient).dateBirth,
       order ? order : Orders.Asc,
-      `По дате рождения ${order === Orders.Asc ? '(по возрастанию)' : '(по убыванию)'}`
+      `По рождению ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`
     );
   }
 
