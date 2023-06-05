@@ -20,7 +20,7 @@ export default class Disability {
     ClassHelper.BuildClass(this, i);
   }
 
-  getActuallyEdv(): IEdv {
+  getActuallyEdv(): Edv | undefined {
     return this.edvs[this.edvs.length - 1];
   }
 
