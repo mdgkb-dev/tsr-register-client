@@ -95,7 +95,7 @@
       </el-table-column>
     </el-table> -->
 
-    <div class="scroll-block">
+    <div id="list" class="scroll-block">
       <div class="patient-count">Количество представителей: {{ count }}</div>
       <div v-for="representative in representatives" :key="representative.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
