@@ -20,6 +20,13 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
+  function genderSet(set: string[]): FilterModel {
+    const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
+    filterModel.operator = Operators.In;
+    filterModel.set = set;
+    return filterModel;
+  }
+
   function byRegisters(set: string[]): FilterModel {
     const filterModel = FilterModel.CreateFilterModelWithJoin(
       table,
@@ -36,7 +43,15 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
+  function withDisabilities(): FilterModel {
+    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'disabilities', 'id', 'patient_id', DataTypes.Join);
+    filterModel.label = 'Только с инвалидностью';
+    return filterModel;
+  }
+
   return {
+    withDisabilities,
+    genderSet,
     onlyMale,
     onlyFemale,
     byRegisters,
