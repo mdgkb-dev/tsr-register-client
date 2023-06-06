@@ -1,10 +1,18 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
     <div class="filter-block">
-      <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px" >
+      <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <template #grid-items>
-
-          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false" > 
+          <InfoItem
+            margin="0"
+            :with-open-window="false"
+            :with-icon="false"
+            height="76px"
+            background="#F5F5F5"
+            border-color="#C4C4C4"
+            padding="7px"
+            :with-hover="false"
+          >
             <template #title>
               <StringItem string="поиск и сортировка" font-size="10px" padding="0" />
             </template>
@@ -14,20 +22,34 @@
                   :must-be-translated="true"
                   :key-value="schema.patient.key"
                   placeholder="Начните вводить ФИО"
+                  max-width="100%"
                   @select="selectSearch"
-                  maxWidth="100%"
                 />
-                <SortList class="filters-block" :store-mode="true" @load="loadPatients" labelName="" maxWidth="100%"/>
+                <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="loadPatients" />
               </div>
             </template>
           </InfoItem>
 
-          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+          <InfoItem
+            margin="0"
+            :with-open-window="false"
+            :with-icon="false"
+            height="76px"
+            background="#F5F5F5"
+            border-color="#C4C4C4"
+            padding="7px"
+            :with-hover="false"
+          >
             <template #title>
               <StringItem string="регистры" font-size="10px" padding="0" />
             </template>
             <template #close-inside-content>
-              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
+              <GridContainer
+                max-width="100%"
+                grid-gap="7px"
+                grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))"
+                margin="0px"
+              >
                 <template #grid-items>
                   <Button
                     text="Альфа-маннозиоз"
@@ -38,8 +60,8 @@
                     color="#006BB4"
                     background="#ffffff"
                     background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
+                    :toggle-mode="true"
+                    font-size="12px"
                   >
                   </Button>
                   <Button
@@ -51,8 +73,8 @@
                     color="#006BB4"
                     background="#ffffff"
                     background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
+                    :toggle-mode="true"
+                    font-size="12px"
                   >
                   </Button>
                   <Button
@@ -64,8 +86,8 @@
                     color="#006BB4"
                     background="#ffffff"
                     background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
+                    :toggle-mode="true"
+                    font-size="12px"
                   >
                   </Button>
                   <Button
@@ -77,25 +99,38 @@
                     color="#006BB4"
                     background="#ffffff"
                     background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
+                    :toggle-mode="true"
+                    font-size="12px"
                   >
                   </Button>
-              
                 </template>
-              </Gridcontainer>
+              </GridContainer>
             </template>
           </InfoItem>
 
-          <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8" >
+          <GridContainer
+            max-width="500px"
+            grid-gap="10px"
+            grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+            margin="0px"
+            background="#F5F6F8"
+          >
             <template #grid-items>
-
-              <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+              <InfoItem
+                margin="0"
+                :with-open-window="false"
+                :with-icon="false"
+                height="76px"
+                background="#F5F5F5"
+                border-color="#C4C4C4"
+                padding="7px"
+                :with-hover="false"
+              >
                 <template #title>
                   <StringItem string="пол" font-size="10px" padding="0" />
                 </template>
                 <template #close-inside-content>
-                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
                     <template #grid-items>
                       <Button
                         text="Мужской"
@@ -106,8 +141,8 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                       <Button
@@ -119,78 +154,104 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                     </template>
-                  </Gridcontainer>
+                  </GridContainer>
                 </template>
               </InfoItem>
 
-              <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+              <InfoItem
+                margin="0"
+                :with-open-window="false"
+                :with-icon="false"
+                height="76px"
+                background="#F5F5F5"
+                border-color="#C4C4C4"
+                padding="7px"
+                :with-hover="false"
+              >
                 <template #title>
                   <StringItem string="инвалидность" font-size="10px" padding="0" />
                 </template>
                 <template #close-inside-content>
-              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
-                <template #grid-items>
-                  <Button
-                    text="A"
-                    :with-icon="false"
-                    width="auto"
-                    height="34px"
-                    border-radius="5px"
-                    color="#006BB4"
-                    background="#ffffff"
-                    background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
+                  <GridContainer
+                    max-width="100%"
+                    grid-gap="7px"
+                    grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))"
+                    margin="0px"
                   >
-                  </Button>
-                  <Button
-                    text="B"
-                    :with-icon="false"
-                    width="auto"
-                    height="34px"
-                    border-radius="5px"
-                    color="#006BB4"
-                    background="#ffffff"
-                    background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
-                  >
-                  </Button>
-                  <Button
-                    text="C"
-                    :with-icon="false"
-                    width="auto"
-                    height="34px"
-                    border-radius="5px"
-                    color="#006BB4"
-                    background="#ffffff"
-                    background-hover="#DFF2F8"
-                    :toggleMode="true"
-                    fontSize="12px"
-                  >
-                  </Button>
-              
-                </template>
-              </Gridcontainer>
+                    <template #grid-items>
+                      <Button
+                        text="A"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggle-mode="true"
+                        font-size="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="B"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggle-mode="true"
+                        font-size="12px"
+                      >
+                      </Button>
+                      <Button
+                        text="C"
+                        :with-icon="false"
+                        width="auto"
+                        height="34px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#ffffff"
+                        background-hover="#DFF2F8"
+                        :toggle-mode="true"
+                        font-size="12px"
+                      >
+                      </Button>
+                    </template>
+                  </GridContainer>
                 </template>
               </InfoItem>
-
             </template>
           </GridContainer>
 
-          <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+          <InfoItem
+            margin="0"
+            :with-open-window="false"
+            :with-icon="false"
+            height="76px"
+            background="#F5F5F5"
+            border-color="#C4C4C4"
+            padding="7px"
+            :with-hover="false"
+          >
             <template #title>
-              <StringItem string="документы" font-size="10px" padding="0"/>
+              <StringItem string="документы" font-size="10px" padding="0" />
             </template>
             <template #close-inside-content>
-              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+              <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
                 <template #grid-items>
-                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))" margin="0px" >
+                  <GridContainer
+                    max-width="100%"
+                    grid-gap="7px"
+                    grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))"
+                    margin="0px"
+                  >
                     <template #grid-items>
                       <Button
                         text="Паспорт"
@@ -201,8 +262,8 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                       <Button
@@ -214,8 +275,8 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                       <Button
@@ -227,13 +288,13 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                     </template>
-                  </Gridcontainer>
-                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px" >
+                  </GridContainer>
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px">
                     <template #grid-items>
                       <Button
                         text="Свидетельство пенсионера"
@@ -244,8 +305,8 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                       <Button
@@ -257,27 +318,35 @@
                         color="#006BB4"
                         background="#ffffff"
                         background-hover="#DFF2F8"
-                        :toggleMode="true"
-                        fontSize="12px"
+                        :toggle-mode="true"
+                        font-size="12px"
                       >
                       </Button>
                     </template>
-                  </Gridcontainer>
+                  </GridContainer>
                 </template>
-              </Gridcontainer>
+              </GridContainer>
             </template>
           </InfoItem>
-
         </template>
-      </Gridcontainer>
+      </GridContainer>
 
       <div class="tools-block">
-        <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
+        <InfoItem
+          margin="0"
+          :with-open-window="false"
+          :with-icon="false"
+          height="76px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          padding="7px"
+          :with-hover="false"
+        >
           <template #title>
-            <StringItem string="сохранить" font-size="10px" padding="0"/>
+            <StringItem string="сохранить" font-size="10px" padding="0" />
           </template>
           <template #close-inside-content>
-            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px" >
+            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
               <template #grid-items>
                 <Button
                   text="xlsx"
@@ -288,7 +357,7 @@
                   color="#006BB4"
                   background="#DFF2F8"
                   background-hover="#DFF2F8"
-                  fontSize="12px"
+                  font-size="12px"
                 >
                 </Button>
                 <Button
@@ -300,11 +369,11 @@
                   color="#006BB4"
                   background="#DFF2F8"
                   background-hover="#DFF2F8"
-                  fontSize="12px"
+                  font-size="12px"
                 >
                 </Button>
               </template>
-            </Gridcontainer>
+            </GridContainer>
           </template>
         </InfoItem>
       </div>
@@ -350,36 +419,68 @@
                       </svg>
                     </template>
                   </Button>
-                  <StringItem :string="patient.human.getFullName()" color="#006BB4" font-size="17px" minWidth="240px" width="100%"/>
+                  <div v-if="patient.editNameMode">
+                    <el-input v-model="patient.human.surname" />
+                    <el-input v-model="patient.human.name" />
+                    <el-input v-model="patient.human.patronymic" />
+                    <el-button @click="updateHumanName(patient)">Сохранить</el-button>
+                  </div>
+                  <StringItem
+                    :string="patient.human.getFullName()"
+                    color="#006BB4"
+                    font-size="17px"
+                    min-width="240px"
+                    width="100%"
+                    @click="patient.editNameMode = true"
+                  />
                 </div>
 
                 <div class="line-item-right">
-                  <Button 
+                  <Button
                     :text="patient.human.getGender()"
-                    :withIcon="false"
-                    width="42px" 
-                    height="42px" 
-                    color="#006BB4" 
+                    :with-icon="false"
+                    width="42px"
+                    height="42px"
+                    color="#006BB4"
                     background="#DFF2F8"
-                    backgroundHover="#DFF2F8"
-                    :colorSwap="false"
+                    background-hover="#DFF2F8"
+                    :color-swap="false"
                     margin="2px 10px 0 0"
-                    fontSize="18px"
+                    font-size="18px"
+                    @click="updateIsMale(patient.human)"
                   >
                   </Button>
                   <!-- <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" /> -->
-                  <InfoItem  margin="0" :withOpenWindow="false" > 
+                  <InfoItem margin="0" :with-open-window="false" @click="$router.push(`/admin/patients/${patient.id}?menu=disability`)">
                     <template #title>
-                      <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px"/>
+                      <StringItem string="инвалидность" font-size="10px" padding="0 0 0 3px" />
                     </template>
                     <template #close-inside-content>
-                      <!-- <div v-if="patient.getActuallyDisability().getActuallyEdv()" class="disability-circles"> -->
-                      <StringItem string="А" font-size="14px" padding="0" margin="0 5px 0 0" color="#B0A4C0" />
-                      <StringItem string="В" font-size="14px" padding="0" margin="0 5px 0 0" color="" />
-                      <StringItem string="С" font-size="14px" padding="0" margin="0 0 0 0" color="#B0A4C0" />
-                      <StringItem string=", до 29.12.23г." font-size="12px" padding="0" color=""/>
-                      <!-- </div> -->
-                      <!-- <div v-else>Нет справок ЕДВ</div> -->
+                      <div v-if="patient.getActuallyDisability()?.getActuallyEdv()" class="disability-circles">
+                        <StringItem
+                          string="А"
+                          font-size="14px"
+                          padding="0"
+                          margin="0 5px 0 0"
+                          :color="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? '#B0A4C0' : ''"
+                        />
+                        <StringItem
+                          string="В"
+                          font-size="14px"
+                          padding="0"
+                          margin="0 5px 0 0"
+                          :color="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? '#B0A4C0' : ''"
+                        />
+                        <StringItem
+                          string="С"
+                          font-size="14px"
+                          padding="0"
+                          margin="0 0 0 0"
+                          :color="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? '#B0A4C0' : ''"
+                        />
+                        <StringItem string=", до 29.12.23г." font-size="12px" padding="0" color="" />
+                      </div>
+                      <div v-else @click="$router.push(`/admin/patients/${patient.id}?menu=disability`)">Нет справок ЕДВ</div>
                     </template>
                   </InfoItem>
                 </div>
@@ -499,6 +600,13 @@
                                     </svg>
                                   </template>
                                 </Button>
+                                <RemoteSearch
+                                  :must-be-translated="true"
+                                  key-value="representative"
+                                  placeholder="Начните вводить имя представителя"
+                                  @click.stop="() => undefined"
+                                  @select="(e) => addRepresentative(e, patient)"
+                                />
                               </template>
                             </GridContainer>
                           </template>
@@ -527,35 +635,27 @@
                           margin="0px"
                         >
                           <template #grid-items>
-                            <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id">
-                              <InfoItem margin="0" :with-open-window="false" height="32px" :with-icon="false" color-selected="#E46862">
+                            <div v-for="register in registers" :key="register.id">
+                              <InfoItem
+                                margin="0"
+                                :with-open-window="false"
+                                height="32px"
+                                :with-icon="false"
+                                :border-color="patient.inRegister(register.id) ? '#1979CF' : ''"
+                                color-selected="#E46862"
+                                @click="toggleRegister(register, patient)"
+                              >
                                 <template #title>
                                   <svg class="icon-del">
                                     <use xlink:href="#del"></use>
                                   </svg>
                                 </template>
                                 <template #close-inside-content>
-                                  <StringItem :string="patientRegister.register.getTagName()" font-size="11px" padding="0" />
+                                  <StringItem :string="register.name" font-size="11px" padding="0" />
+                                  <!--                                  <StringItem :string="patientRegister.register.getTagName()" font-size="11px" padding="0" />-->
                                 </template>
                               </InfoItem>
                             </div>
-
-                            <Button
-                              :with-icon="true"
-                              width="100%"
-                              height="34px"
-                              border-radius="5px"
-                              color="#00BEA5"
-                              background="#C1EFEB"
-                              background-hover="#C1EFEB"
-                              :color-swap="false"
-                            >
-                              <template #icon>
-                                <svg class="icon-plus">
-                                  <use xlink:href="#plus"></use>
-                                </svg>
-                              </template>
-                            </Button>
                           </template>
                         </GridContainer>
                       </template>
@@ -581,7 +681,14 @@
                         >
                           <template #grid-items>
                             <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
-                              <InfoItem margin="0" :with-open-window="false" height="32px" :with-icon="false" color-selected="#E46862">
+                              <InfoItem
+                                margin="0"
+                                :with-open-window="false"
+                                height="32px"
+                                :with-icon="false"
+                                color-selected="#E46862"
+                                @click="removeMkbItem(diagnosis.id, patient)"
+                              >
                                 <template #title>
                                   <svg class="icon-del">
                                     <use xlink:href="#del"></use>
@@ -609,6 +716,13 @@
                                 </svg>
                               </template>
                             </Button>
+                            <RemoteSearch
+                              :must-be-translated="true"
+                              key-value="mkbItem"
+                              placeholder="Начните вводить диагноз"
+                              @click.stop="() => undefined"
+                              @select="(e) => addMkbItem(e, patient)"
+                            />
                           </template>
                         </GridContainer>
                       </template>
@@ -677,7 +791,6 @@
         </CollapseItem>
       </div>
     </div>
-
   </AdminListWrapper>
   <svg width="0" height="0" class="hidden">
     <symbol id="edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -710,31 +823,31 @@
 </template>
 
 <script lang="ts">
-import { Document, QuestionFilled } from '@element-plus/icons-vue';
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
+import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import PatientRegister from '@/classes/PatientRegister';
 import Register from '@/classes/Register';
+import Representative from '@/classes/Representative';
+import User from '@/classes/User';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import FilterMultipleSelect from '@/components/Filters/FilterMultipleSelect.vue';
-import Pagination from '@/components/Pagination.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
-import FilterResetButton from '@/components/TableFilters/FilterResetButton.vue';
-import FiltersList from '@/components/TableFilters/FiltersList.vue';
-import SortButton from '@/components/TableFilters/SortButton.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import ClassHelper from '@/services/ClassHelper';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -745,19 +858,11 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
-    FilterMultipleSelect,
     RemoteSearch,
-    SortButton,
-    Pagination,
-    TableButtonGroup,
     SortList,
     // FilterDateForm,
     // FilterSet,
-    FilterResetButton,
     AdminListWrapper,
-    FiltersList,
-    QuestionFilled,
-    Document,
     CollapseItem,
     Button,
     StringItem,
@@ -772,8 +877,9 @@ export default defineComponent({
     const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
     // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
+    const editMode: Ref<boolean> = ref(false);
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
-
+    const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const loadPatients = async () => {
       await Provider.loadItems();
     };
@@ -795,7 +901,10 @@ export default defineComponent({
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Пациенты',
-        buttons: [{ text: 'Добавить пациента', type: 'primary', action: addPatient }],
+        buttons: [
+          { text: 'Добавить пациента', type: 'primary', action: () => (editMode.value = !editMode.value) },
+          { text: 'Режим редактирования', type: 'warning', action: addPatient },
+        ],
       },
       sortsLib: PatientsSortsLib,
       getAction: 'getAllWithCount',
@@ -825,8 +934,58 @@ export default defineComponent({
       human.isMale = !human.isMale;
       await updateHuman(human);
     };
+    const updateHumanName = async (patient: Patient): Promise<void> => {
+      patient.editNameMode = false;
+      await updateHuman(patient.human);
+    };
+
+    const representative: ComputedRef<Representative> = computed(() => Provider.store.getters['representatives/item']);
+    const addRepresentative = async (event: ISearchObject, patient: Patient) => {
+      if (patient.representativeExists(event.value)) {
+        return ElMessage.warning('Выбранный представитель уже добавлен');
+      }
+      await Provider.store.dispatch('representatives/get', event.value);
+      const item = patient.addRepresentative(representative.value);
+      await Provider.store.dispatch('patientsRepresentatives/create', item);
+    };
+
+    const toggleRegister = async (register: Register, patient: Patient): Promise<void> => {
+      let patientRegister = patient.patientsRegisters.find((pr: PatientRegister) => pr.registerId === register.id);
+      if (patientRegister) {
+        ClassHelper.RemoveFromClassById(patientRegister.id, patient.patientsRegisters, []);
+        return await Provider.store.dispatch('patientsRegisters/remove', patientRegister.id);
+      }
+      patientRegister = patient.addRegister(register, user.value);
+      return await Provider.store.dispatch('patientsRegisters/create', patientRegister);
+    };
+
+    const mkbItem: ComputedRef<MkbItem> = computed<MkbItem>(() => Provider.store.getters['mkbItems/item']);
+    const addMkbItem = async (event: ISearchObject, patient: Patient): Promise<void> => {
+      const patientDiagnosis = patient.getMkbItems().find((pd: PatientDiagnosis) => pd.mkbItemId === event.value);
+      if (patientDiagnosis) {
+        ElMessage.warning('Выбранный диагноз уже добавлен');
+        return;
+      }
+      await Provider.store.dispatch('mkbItems/get', event.value);
+      patient.addMkbItem(mkbItem.value);
+      const diagnosisLinks = patient.getMkbItems();
+      await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
+    };
+
+    const removeMkbItem = async (id: string, patient: Patient): Promise<void> => {
+      console.log(id);
+      console.log(patient.patientDiagnosis);
+      ClassHelper.RemoveFromClassById(id, patient.patientDiagnosis, []);
+      return await Provider.store.dispatch('patientDiagnosis/remove', id);
+    };
 
     return {
+      removeMkbItem,
+      addMkbItem,
+      toggleRegister,
+      registers,
+      addRepresentative,
+      updateHumanName,
       updateIsMale,
       updateHuman,
       count,
@@ -940,7 +1099,7 @@ export default defineComponent({
   align-items: end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
-  background: #F5F5F5;
+  background: #f5f5f5;
   height: auto;
   border-bottom: 1px solid #c4c4c4;
 }

@@ -49,7 +49,7 @@ export default defineComponent({
     };
 
     const handleSelectionChange = (_: Register[], register: Register): void => {
-      if (props.patient.patientInRegister(register.id)) {
+      if (props.patient.inRegister(register.id)) {
         ClassHelper.RemoveFromClassById(register.id, props.patient.patientsRegisters, props.patient.representativeToPatientForDelete);
       } else {
         // props.patient.addRegisterToPatient(register);

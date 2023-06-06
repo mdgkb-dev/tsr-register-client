@@ -69,12 +69,12 @@ export default class Patient {
 
   fullName?: string;
   dateBirth?: string;
-
+  editNameMode = false;
   constructor(i?: Patient) {
     ClassHelper.BuildClass(this, i);
   }
 
-  getActuallyDisability(): Disability {
+  getActuallyDisability(): Disability | undefined {
     return this.disabilities[this.disabilities.length - 1];
   }
 
@@ -219,7 +219,7 @@ export default class Patient {
     return item;
   }
 
-  patientInRegister(registerId: string | undefined): boolean {
+  inRegister(registerId: string | undefined): boolean {
     return this.patientsRegisters.some((i: PatientRegister) => registerId === i.registerId);
   }
 
