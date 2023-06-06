@@ -579,8 +579,6 @@ export default defineComponent({
     FiltersButtonsSelect,
     RemoteSearch,
     SortList,
-    // FilterDateForm,
-    // FilterSet,
     AdminListWrapper,
     CollapseItem,
     Button,

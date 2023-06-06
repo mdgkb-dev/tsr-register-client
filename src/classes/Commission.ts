@@ -1,5 +1,8 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import CommissionDoctorTemplate from '@/classes/CommissionDoctorTemplate';
+import CommissionStatus from '@/classes/CommissionStatus';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Doctor from '@/classes/Doctor';
 import Drug from '@/classes/Drug';
@@ -8,7 +11,6 @@ import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import ClassHelper from '@/services/ClassHelper';
-
 export default class Commission {
   id?: string;
   date = new Date();
@@ -25,7 +27,6 @@ export default class Commission {
   volume = '';
   @ClassHelper.GetClassConstructor(CommissionDoctor)
   commissionsDoctors: CommissionDoctor[] = [];
-  status = '';
   number?: number;
   @ClassHelper.GetClassConstructor(FundContract)
   fundContract: FundContract = new FundContract();
@@ -33,6 +34,9 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(PatientDiagnosis)
   patientDiagnosis?: PatientDiagnosis;
   patientDiagnosisId?: string;
+  @ClassHelper.GetClassConstructor(CommissionStatus)
+  commissionStatus?: CommissionStatus;
+  commissionStatusId?: string;
 
   constructor(i?: Commission) {
     ClassHelper.BuildClass(this, i);
@@ -40,6 +44,7 @@ export default class Commission {
 
   static CreateFromTemplate(template: CommissionTemplate): Commission {
     const item = new Commission();
+    item.id = uuidv4();
     item.drug = template.drug;
     item.drugRegimen = template.drugRegimen;
     item.volume = template.volume;
@@ -55,5 +60,15 @@ export default class Commission {
     item.commissionId = this.id;
     item.order = this.commissionsDoctors.length - 1;
     return item;
+  }
+
+  setPatient(patient: Patient): void {
+    this.patient = patient;
+    this.patientId = patient.id;
+  }
+
+  setDrug(drug: Drug): void {
+    this.drug = drug;
+    this.drugId = drug.id;
   }
 }

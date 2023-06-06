@@ -31,6 +31,11 @@ const menuList: IAdminMenu[] = [
     to: '/admin/drug-arrives',
     icon: 'el-icon-info',
   },
+  {
+    title: 'Лекарства',
+    to: '/admin/drugs',
+    icon: 'el-icon-info',
+  },
 ];
 
 export default menuList;

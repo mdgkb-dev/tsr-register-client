@@ -277,7 +277,6 @@ export default class Patient {
 
   addCommission(template: CommissionTemplate): Commission {
     const item = Commission.CreateFromTemplate(template);
-    item.id = uuidv4();
     item.patientId = this.id;
     this.commissions.push(item);
     return item;

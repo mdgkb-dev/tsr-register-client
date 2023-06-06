@@ -5,6 +5,7 @@ import { anamneses } from '@/store/modules/anamnses';
 import auth from '@/store/modules/auth';
 import { commissions } from '@/store/modules/commissions';
 import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
+import { commissionsStatuses } from '@/store/modules/commissionsStatuses';
 import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
@@ -88,6 +89,7 @@ const store: StoreOptions<RootState> = {
     drugArrives,
     fundContracts,
     fundCouncils,
+    commissionsStatuses,
   },
 };
 
