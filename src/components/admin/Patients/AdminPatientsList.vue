@@ -28,17 +28,6 @@
       <template  #filter>
         <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0 0 0 10px" >
           <template #grid-items>
-                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
-                  <template #grid-items>
-                    <FiltersButtonsMultiply
-                      :filter-model="filterByRegister"
-                      :options="createRegistersOptions()"
-                      default-label="Регистры"
-                      @load="loadPatients"
-                    />
-                  </template>
-                </Gridcontainer>
-
             <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8" >
               <template #grid-items>
                 <FiltersButtonsSelect
@@ -55,6 +44,16 @@
                 />
               </template>
             </GridContainer>
+            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px" >
+              <template #grid-items>
+                <FiltersButtonsMultiply
+                  :filter-model="filterByRegister"
+                  :options="createRegistersOptions()"
+                  default-label="Регистры"
+                  @load="loadPatients"
+                />
+              </template>
+            </Gridcontainer>
 
             <InfoItem  margin="0" :withOpenWindow="false" :withIcon="false" height="76px" background="#F5F5F5" borderColor="#C4C4C4" padding="7px" :withHover="false"> 
               <template #title>
