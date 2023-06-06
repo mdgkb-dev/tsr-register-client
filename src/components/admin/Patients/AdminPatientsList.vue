@@ -109,7 +109,7 @@
         </InfoItem>
       </div>
     </div>
-    <div class="scroll-block">
+    <div id="list" class="scroll-block">
       <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
