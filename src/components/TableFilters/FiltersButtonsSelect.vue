@@ -13,7 +13,7 @@
       <StringItem :string="defaultLabel" font-size="10px" padding="0" />
     </template>
     <template #close-inside-content>
-      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
         <template #grid-items>
           <Button
             v-for="(model, index) in models"

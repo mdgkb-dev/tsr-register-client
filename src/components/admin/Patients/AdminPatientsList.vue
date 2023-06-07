@@ -1,91 +1,244 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <div class="filter-block">
-      <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <template #grid-items>
-          <InfoItem
-            margin="0"
-            :with-open-window="false"
-            height="76px"
-            background="#F5F5F5"
-            border-color="#C4C4C4"
-            padding="7px"
-            :with-hover="false"
-          >
-            <template #title>
-              <StringItem string="поиск и сортировка" font-size="10px" />
-            </template>
-            <template #close-inside-content>
-              <div :style="{ width: '100%' }">
-                <RemoteSearch
-                  :must-be-translated="true"
-                  :key-value="schema.patient.key"
-                  placeholder="Начните вводить ФИО"
-                  max-width="100%"
-                  @select="selectSearch"
-                />
-                <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="loadPatients" />
-              </div>
-            </template>
-          </InfoItem>
-
-          <GridContainer
-            max-width="500px"
-            grid-gap="10px"
-            grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-            margin="0px"
-            background="#F5F6F8"
-          >
-            <template #grid-items>
-              <!--              <FiltersList default-label="Мужской и женский пол" :models="createSexFilters()" @load="loadPatients" />-->
-              <FiltersButtonsSelect
-                :filter-model="filterByRegister"
-                :models="createSexFilters()"
-                default-label="Пол"
-                @load="loadPatients"
-              />
-            </template>
-          </GridContainer>
-          <FiltersButtonsSelect
-            :filter-model="filterByDisabilities"
-            :models="createDisabilityFilters()"
-            default-label="Инвалидность"
-            @load="loadPatients"
-          />
-          <FiltersButtonsMultiply
-            :filter-model="filterByRegister"
-            :options="createRegistersOptions()"
-            default-label="Регистры"
-            @load="loadPatients"
-          />
-        </template>
-      </GridContainer>
-
-      <div class="tools-block">
-        <InfoItem
-          margin="0"
-          :with-open-window="false"
-          height="76px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          padding="7px"
-          :with-hover="false"
-        >
-          <template #title>
-            <StringItem string="сохранить" font-size="10px" />
+    <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+      <template #visability>
+        <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
+          <template #grid-items>
+            <InfoItem
+              margin="0"
+              :with-open-window="false"
+              :with-icon="false"
+              height="76px"
+              background="#F5F5F5"
+              border-color="#C4C4C4"
+              padding="7px"
+              :with-hover="false"
+            >
+              <template #title>
+                <StringItem string="поиск и сортировка" font-size="10px" padding="0" />
+              </template>
+              <template #close-inside-content>
+                <div :style="{ width: '100%' }">
+                  <RemoteSearch
+                    :must-be-translated="true"
+                    :key-value="schema.patient.key"
+                    placeholder="Начните вводить ФИО"
+                    max-width="100%"
+                    @select="selectSearch"
+                  />
+                  <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="loadPatients" />
+                </div>
+              </template>
+            </InfoItem>
           </template>
-          <template #close-inside-content>
-            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+        </GridContainer>
+      </template>
+
+      <template #filter>
+        <GridContainer
+          max-width="900px"
+          grid-gap="27px 10px"
+          grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+          margin="0 0 0 10px"
+        >
+          <template #grid-items>
+            <GridContainer
+              max-width="500px"
+              grid-gap="10px"
+              grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+              margin="0px"
+              background="#F5F6F8"
+            >
               <template #grid-items>
-                <Button button-class="files-buttons" text="xlsx" />
-                <Button text="pdf" button-class="files-buttons" />
+                <FiltersButtonsSelect
+                  :filter-model="filterByRegister"
+                  :models="createSexFilters()"
+                  default-label="Пол"
+                  @load="loadPatients"
+                />
+                <FiltersButtonsSelect
+                  :filter-model="filterByDisabilities"
+                  :models="createDisabilityFilters()"
+                  default-label="Инвалидность"
+                  @load="loadPatients"
+                />
               </template>
             </GridContainer>
+            <GridContainer
+              max-width="100%"
+              grid-gap="7px"
+              grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))"
+              margin="0px"
+            >
+              <template #grid-items>
+                <FiltersButtonsMultiply
+                  :filter-model="filterByRegister"
+                  :options="createRegistersOptions()"
+                  default-label="Регистры"
+                  @load="loadPatients"
+                />
+              </template>
+            </GridContainer>
+
+            <InfoItem
+              margin="0"
+              :with-open-window="false"
+              :with-icon="false"
+              height="76px"
+              background="#F5F5F5"
+              border-color="#C4C4C4"
+              padding="7px"
+              :with-hover="false"
+            >
+              <template #title>
+                <StringItem string="документы" font-size="10px" padding="0" />
+              </template>
+              <template #close-inside-content>
+                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                  <template #grid-items>
+                    <GridContainer
+                      max-width="100%"
+                      grid-gap="7px"
+                      grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))"
+                      margin="0px"
+                    >
+                      <template #grid-items>
+                        <Button
+                          text="Паспорт"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#ffffff"
+                          background-hover="#DFF2F8"
+                          :toggle-mode="true"
+                          font-size="12px"
+                        >
+                        </Button>
+                        <Button
+                          text="СНИЛС"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#ffffff"
+                          background-hover="#DFF2F8"
+                          :toggle-mode="true"
+                          font-size="12px"
+                        >
+                        </Button>
+                        <Button
+                          text="ОМС"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#ffffff"
+                          background-hover="#DFF2F8"
+                          :toggle-mode="true"
+                          font-size="12px"
+                        >
+                        </Button>
+                      </template>
+                    </GridContainer>
+                    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px">
+                      <template #grid-items>
+                        <Button
+                          text="Свидетельство пенсионера"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#ffffff"
+                          background-hover="#DFF2F8"
+                          :toggle-mode="true"
+                          font-size="12px"
+                        >
+                        </Button>
+                        <Button
+                          text="Удостоверение инвалида"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#ffffff"
+                          background-hover="#DFF2F8"
+                          :toggle-mode="true"
+                          font-size="12px"
+                        >
+                        </Button>
+                      </template>
+                    </GridContainer>
+                  </template>
+                </GridContainer>
+              </template>
+            </InfoItem>
           </template>
-        </InfoItem>
-      </div>
-    </div>
-    <div id="list" class="scroll-block">
+        </GridContainer>
+      </template>
+      <template #download>
+        <GridContainer
+          max-width="65px"
+          grid-gap="27px 10px"
+          grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))"
+          margin="0 0 0 10px"
+        >
+          <template #grid-items>
+            <InfoItem
+              margin="0"
+              :with-open-window="false"
+              :with-icon="false"
+              height="76px"
+              background="#F5F5F5"
+              border-color="#C4C4C4"
+              padding="7px"
+              :with-hover="false"
+            >
+              <template #title>
+                <StringItem string="сохранить" font-size="10px" padding="0" />
+              </template>
+              <template #close-inside-content>
+                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                  <template #grid-items>
+                    <Button
+                      text="xlsx"
+                      :with-icon="false"
+                      width="auto"
+                      height="34px"
+                      border-radius="5px"
+                      color="#006BB4"
+                      background="#DFF2F8"
+                      background-hover="#DFF2F8"
+                      font-size="12px"
+                    >
+                    </Button>
+                    <Button
+                      text="pdf"
+                      :with-icon="false"
+                      width="auto"
+                      height="34px"
+                      border-radius="5px"
+                      color="#006BB4"
+                      background="#DFF2F8"
+                      background-hover="#DFF2F8"
+                      font-size="12px"
+                    >
+                    </Button>
+                  </template>
+                </GridContainer>
+              </template>
+            </InfoItem>
+          </template>
+        </GridContainer>
+      </template>
+    </RightSliderContainer>
+
+    <div class="scroll-block">
       <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
@@ -391,6 +544,7 @@ import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
@@ -424,6 +578,7 @@ export default defineComponent({
     GridContainer,
     SmallDatePicker,
     Del,
+    RightSliderContainer,
   },
   setup() {
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
@@ -700,36 +855,18 @@ export default defineComponent({
   cursor: pointer;
 }
 
+.icon-filter {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  stroke: #006bb4;
+  fill: none;
+}
+
 .icon-del {
   width: 10px;
   height: 10px;
   cursor: pointer;
-}
-
-.filter-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.filter-block {
-  position: relative;
-  display: flex;
-  z-index: 3;
-  justify-content: space-between;
-  align-items: end;
-  width: calc(100% - 20px);
-  padding: 10px 10px 24px 10px;
-  background: #f5f5f5;
-  height: auto;
-  border-bottom: 1px solid #c4c4c4;
-}
-
-.tools-block {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  margin-left: 10px;
 }
 
 .patient-count {
