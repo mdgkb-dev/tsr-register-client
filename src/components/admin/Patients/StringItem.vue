@@ -1,19 +1,5 @@
 <template>
-  <div
-    class="string"
-    :style="{
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      background: background,
-      padding: padding,
-      width: width,
-      maxWidth: width,
-      minWidth: minWidth,
-      margin: margin,
-    }"
-    @click="$emit('click')"
-  >
+  <div class="string" :style="styleObject" :class="customClass" @click="$emit('click')">
     {{ string }}
   </div>
 </template>
@@ -24,17 +10,42 @@ import { defineComponent, PropType } from 'vue';
 export default defineComponent({
   name: 'StringItem',
   props: {
-    string: { type: String as PropType<string>, required: false, default: 'String' },
-    color: { type: String as PropType<string>, required: false, default: 'inherit' },
-    fontSize: { type: String as PropType<string>, required: false, default: '14px' },
-    fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
-    background: { type: String as PropType<string>, required: false, default: 'inherit' },
-    padding: { type: String as PropType<string>, required: false, default: '0 10px' },
+    // string: { type: String as PropType<string>, required: false, default: '' },
+    // color: { type: String as PropType<string>, required: false, default: 'inherit' },
+    // fontSize: { type: String as PropType<string>, required: false, default: '14px' },
+    // fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
+    // background: { type: String as PropType<string>, required: false, default: 'inherit' },
+    // padding: { type: String as PropType<string>, required: false, default: '0 10px' },
+    // width: { type: String as PropType<string>, required: false, default: '' },
+    // minWidth: { type: String as PropType<string>, required: false, default: '' },
+    // margin: { type: String as PropType<string>, required: false, default: '0, 0px, 0 0' },
+    // customClass: { type: String as PropType<string>, required: false, default: '' },
+    string: { type: String as PropType<string>, required: false, default: '' },
+    color: { type: String as PropType<string>, required: false, default: '' },
+    fontSize: { type: String as PropType<string>, required: false, default: '' },
+    fontWeight: { type: String as PropType<string>, required: false, default: '' },
+    background: { type: String as PropType<string>, required: false, default: '' },
+    padding: { type: String as PropType<string>, required: false, default: '' },
     width: { type: String as PropType<string>, required: false, default: '' },
     minWidth: { type: String as PropType<string>, required: false, default: '' },
-    margin: { type: String as PropType<string>, required: false, default: '0, 0px, 0 0' },
+    margin: { type: String as PropType<string>, required: false, default: '' },
+    customClass: { type: String as PropType<string>, required: false, default: '' },
   },
   emits: ['click'],
+  setup(props) {
+    const styleObject = {
+      color: props.color,
+      fontSize: props.fontSize,
+      fontWeight: props.fontWeight,
+      background: props.background,
+      padding: props.padding,
+      width: props.width,
+      maxWidth: props.width,
+      minWidth: props.minWidth,
+      margin: props.margin,
+    };
+    return { styleObject };
+  },
 });
 </script>
 

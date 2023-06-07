@@ -1,72 +1,20 @@
 <template>
-  <div
-    class="base-box"
-    :style="{
-      width: width,
-      height: height,
-      maxWidth: maxWidth,
-      minWidth: minWidth,
-    }"
-    @click.prevent="changeState"
-  >
+  <div class="base-box" :style="baseBoxStyle" @click.prevent="changeState">
     <!-- padding: isToggle && withOpenWindow ? '0' : padding, -->
-    <div
-      class="body"
-      :style="{
-        background: background,
-        zIndex: isToggle && withOpenWindow ? '2' : '0',
-        padding: isToggle && withOpenWindow ? '0' : padding,
-        margin: margin,
-        width: isToggle && withOpenWindow ? openWidth : width,
-        height: isToggle && withOpenWindow ? openHeight : height,
-        minHeight: height,
-        maxWidth: maxWidth,
-        minWidth: minWidth,
-        borderColor: hovering | isToggle ? colorSelected : borderColor,
-        color: hovering ? colorSelected : '#343E5C',
-        boxShadow: hovering | isToggle ? `0px 0px 1px 1px ${colorSelected}` : 'none',
-        alignItems: isToggle && withOpenWindow ? 'end' : 'center',
-        cursor: withHover ? 'pointer' : '',
-      }"
-      @mouseenter="withHover ? (hovering = true) : (hovering = false)"
-      @mouseleave="hovering = false"
-    >
-      <div
-        class="close-window"
-        :style="{
-          display: isToggle && withOpenWindow ? 'none' : '',
-          height: isToggle && withOpenWindow ? '0' : '',
-        }"
-      >
+    <div class="body" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
+      <div class="close-window" :style="closeWindowStyle">
         <slot name="close-inside-content" />
       </div>
-      <div
-        class="open-window"
-        :style="{
-          display: isToggle && withOpenWindow ? 'flex' : 'none',
-          height: isToggle && withOpenWindow ? 'auto' : '0',
-        }"
-      >
+      <div class="open-window" :style="openWindowStyle">
         <slot name="open-inside-content" />
       </div>
-      <div
-        class="top-title"
-        :style="{
-          color: hovering ? colorSelected : '#343E5C',
-          fill: hovering ? colorSelected : '#343E5C',
-          background: background,
-        }"
-      >
-        <svg
-          class="icon-top-title"
-          :style="{
-            stroke: hovering ? colorSelected : '#343E5C',
-            display: withIcon ? '' : 'none',
-          }"
-        >
+      <div class="top-title" :style="topTitleStyle">
+        <svg class="icon-top-title" :style="iconTopTitleStyle">
           <use xlink:href="#iconamoon_edit-light"></use>
         </svg>
-        <slot name="title" />
+        <slot name="title">
+          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" />
+        </slot>
       </div>
     </div>
   </div>
@@ -83,10 +31,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 
 export default defineComponent({
   name: 'InfoItem',
+  components: {
+    StringItem,
+  },
   props: {
     fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
     background: { type: String as PropType<string>, required: false, default: '#ffffff' },
@@ -103,6 +56,8 @@ export default defineComponent({
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
     borderColor: { type: String as PropType<string>, required: false, default: '#B0A4C0' },
     withHover: { type: Boolean as PropType<boolean>, required: false, default: true },
+    title: { type: String as PropType<string>, required: false, default: '' },
+    customClass: { type: String as PropType<string>, required: false, default: '' },
   },
   emits: ['click'],
   setup(props, { emit }) {
@@ -118,7 +73,73 @@ export default defineComponent({
       }
     };
 
+    const baseBoxStyle =
+      props.customClass === ''
+        ? {
+            width: props.width,
+            height: props.height,
+            maxWidth: props.maxWidth,
+            minWidth: props.minWidth,
+          }
+        : undefined;
+
+    const windowOpened = computed(() => isToggle.value && props.withOpenWindow);
+
+    const bodyStyle = computed(() => {
+      return {
+        background: props.background,
+        zIndex: windowOpened.value ? '2' : '0',
+        padding: windowOpened.value ? '0' : props.padding,
+        margin: props.margin,
+        width: windowOpened.value ? props.openWidth : props.width,
+        height: windowOpened.value ? props.openHeight : props.height,
+        minHeight: props.height,
+        maxWidth: props.maxWidth,
+        minWidth: props.minWidth,
+        borderColor: hovering.value || isToggle.value ? props.colorSelected : props.borderColor,
+        color: hovering.value ? props.colorSelected : '#343E5C',
+        boxShadow: hovering.value || isToggle.value ? `0px 0px 1px 1px ${props.colorSelected}` : 'none',
+        alignItems: windowOpened.value ? 'end' : 'center',
+        cursor: props.withHover ? 'pointer' : '',
+      };
+    });
+
+    const closeWindowStyle = computed(() => {
+      return {
+        display: windowOpened.value ? 'none' : '',
+        height: windowOpened.value ? '0' : '',
+      };
+    });
+
+    const openWindowStyle = computed(() => {
+      return {
+        display: windowOpened.value ? 'flex' : 'none',
+        height: windowOpened.value ? 'auto' : '0',
+      };
+    });
+
+    const topTitleStyle = computed(() => {
+      return {
+        color: hovering.value ? props.colorSelected : '#343E5C',
+        fill: hovering.value ? props.colorSelected : '#343E5C',
+        background: props.background,
+      };
+    });
+
+    const iconTopTitleStyle = computed(() => {
+      return {
+        stroke: hovering.value ? props.colorSelected : '#343E5C',
+        display: props.withIcon ? '' : 'none',
+      };
+    });
+
     return {
+      iconTopTitleStyle,
+      topTitleStyle,
+      openWindowStyle,
+      closeWindowStyle,
+      baseBoxStyle,
+      bodyStyle,
       hovering,
       isToggle,
       changeState,
