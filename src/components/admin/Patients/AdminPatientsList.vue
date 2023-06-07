@@ -93,7 +93,7 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click.prevent="edit(patient.id)" />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
 
                   <div v-if="patient.editNameMode">
                     <el-input v-model="patient.human.surname" />
@@ -443,8 +443,6 @@ export default defineComponent({
     const load = async () => {
       await Provider.store.dispatch('registers/getAll');
       await loadPatients();
-
-      await Provider.store.dispatch('meta/getOptions', registers);
       filterByRegister.value = PatientsFiltersLib.byRegisters([]);
     };
 

@@ -73,7 +73,8 @@ export default defineComponent({
     iconClass: { type: String as PropType<string>, required: false, default: '' },
     icon: { type: String as PropType<string>, required: false, default: '' },
   },
-  setup(props) {
+  emits: ['click'],
+  setup(props, { emit }) {
     const hovering = ref(false);
     const isToggle: Ref<boolean> = ref(false);
     const changeState = () => {
@@ -82,6 +83,7 @@ export default defineComponent({
       } else {
         isToggle.value = false;
       }
+      emit('click');
     };
 
     const buttonIsActive = computed(() => isToggle.value || hovering.value);

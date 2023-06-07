@@ -37,7 +37,7 @@
                   color="#343e5c"
                   :color-swap="true"
                   :with-icon="false"
-                  @click.prevent="cancelResearchResultsFilling(true)"
+                  @click="cancelResearchResultsFilling(true)"
                 >
                 </Button>
                 <div class="researche-name">{{ research.name }}</div>
@@ -61,7 +61,13 @@
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
               <el-timeline style="margin-top: 20px">
                 <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
-                  <GeneralItem :ready="`${result.fillingPercentage}%`" margin="0px" :scale="false" @click="selectResult(result.id)" :withIcon="true">
+                  <GeneralItem
+                    :ready="`${result.fillingPercentage}%`"
+                    margin="0px"
+                    :scale="false"
+                    :with-icon="true"
+                    @click="selectResult(result.id)"
+                  >
                     <template #general-item> Исследование от {{ $dateTimeFormatter.format(result.date) }} </template>
                   </GeneralItem>
 
@@ -89,7 +95,7 @@
                               color="#343e5c"
                               :color-swap="true"
                               :with-icon="false"
-                              @click.prevent="cancelResearchResultsFilling(false)"
+                              @click="cancelResearchResultsFilling(false)"
                             >
                             </Button>
                             <div class="search">
@@ -177,7 +183,7 @@
                 color="#00B5A4"
                 background="#C7ECEA"
                 background-hover="#C7ECEA"
-                @click.prevent="addResult(research, patientResearch.id)"
+                @click="addResult(research, patientResearch.id)"
               >
                 <template #icon>
                   <svg class="icon-plus">
