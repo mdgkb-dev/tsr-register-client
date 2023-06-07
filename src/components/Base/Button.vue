@@ -19,15 +19,21 @@
     <EditLight />
     <Plus />
     <Del />
+    <Filter />
+    <Download />
+    <Close />
   </button>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
+import Close from '@/assets/svg/Close.svg';
 import Del from '@/assets/svg/Del.svg';
+import Download from '@/assets/svg/Download.svg';
 import Edit from '@/assets/svg/Edit.svg';
 import EditLight from '@/assets/svg/EditLight.svg';
+import Filter from '@/assets/svg/Filter.svg';
 import Plus from '@/assets/svg/Plus.svg';
 
 export default defineComponent({
@@ -37,6 +43,9 @@ export default defineComponent({
     EditLight,
     Plus,
     Del,
+    Filter,
+    Download,
+    Close,
   },
   inheritAttrs: false,
   props: {
