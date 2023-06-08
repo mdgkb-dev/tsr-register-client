@@ -175,6 +175,7 @@ $margin: 20px 0;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;
   border-radius: 5px;
+  border: 1px solid #C4C4C4;
 }
 
 :deep(.el-input__suffix) {
