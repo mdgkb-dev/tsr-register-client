@@ -24,10 +24,13 @@
             height="34px"
             border-radius="5px"
             color="#006BB4"
-            :background="model.id === selectedFilterModel?.id ? '#DFF2F8' : '#ffffff'"
+            background="#ffffff"
+            :isToggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
             background-hover="#DFF2F8"
+            :toggle-mode="true"
             font-size="12px"
             @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
+            :inverse="inverse"
           >
           </Button>
         </template>
@@ -57,12 +60,16 @@ export default defineComponent({
       type: String as PropType<string>,
       default: 'Все',
     },
+    inverse: { type: Boolean as PropType<boolean>, required: false, default: false },
   },
   emits: ['load'],
   setup(props, { emit }) {
     const emptyFilterModel: WritableComputedRef<FilterModel> = computed(() => new FilterModel());
     const selectedFilterModel: Ref<FilterModel | undefined> = ref(undefined);
     const selectedId: Ref<string | undefined> = ref(undefined);
+    const selected = computed(() => {
+      return props.inverse && !selectedFilterModel.value?.id
+    });
     const setDefaultFilterModel = (): void => {
       selectedFilterModel.value = emptyFilterModel.value;
     };
@@ -94,6 +101,7 @@ export default defineComponent({
       setDefaultFilterModel,
       setFilter,
       emptyFilterModel,
+      selected,
     };
   },
 });

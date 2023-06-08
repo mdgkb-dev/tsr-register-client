@@ -1,6 +1,6 @@
 <template>
 <div v-if="isToggle" @click="isToggle=false" class="blur"></div>
-  <div class="base-box" :style="baseBoxStyle" @click.prevent="changeState">
+  <div class="base-box" :style="baseBoxStyle" @click.prevent="isToggle=true">
     <div class="body" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
       <div class="close-window" :style="closeWindowStyle">
         <slot name="close-inside-content" />

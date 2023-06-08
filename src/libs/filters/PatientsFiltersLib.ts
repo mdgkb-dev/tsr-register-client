@@ -4,19 +4,19 @@ import { Operators } from '@/services/interfaces/Operators';
 
 const PatientsFiltersLib = (() => {
   const table = 'patients_view';
-  function onlyMale(): FilterModel {
+  function onlyFemale(): FilterModel {
     const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
     filterModel.boolean = true;
     filterModel.operator = Operators.Eq;
-    filterModel.label = 'Мужской';
+    filterModel.label = 'Женский';
     return filterModel;
   }
 
-  function onlyFemale(): FilterModel {
+  function onlyMale(): FilterModel {
     const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
     filterModel.boolean = false;
     filterModel.operator = Operators.Eq;
-    filterModel.label = 'Женский';
+    filterModel.label = 'Мужской';
     return filterModel;
   }
 

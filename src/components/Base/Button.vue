@@ -8,7 +8,7 @@
     @mouseleave="hovering = false"
   >
     <div v-if="icon" class="button-icon" :style="buttonIconStyle">
-      <svg :class="iconClass">
+      <svg :class="iconClass" >
         <use :xlink:href="'#' + icon"></use>
       </svg>
     </div>
@@ -81,21 +81,17 @@ export default defineComponent({
     buttonClass: { type: String as PropType<string>, required: false, default: '' },
     iconClass: { type: String as PropType<string>, required: false, default: '' },
     icon: { type: String as PropType<string>, required: false, default: '' },
+    isToggle: { type: Boolean as PropType<boolean>, required: false, default: false},
+    inverse: { type: Boolean as PropType<boolean>, required: false, default: false},
   },
   emits: ['click'],
   setup(props, { emit }) {
     const hovering = ref(false);
-    const isToggle: Ref<boolean> = ref(false);
     const changeState = () => {
-      if (props.toggleMode) {
-        isToggle.value = !isToggle.value;
-      } else {
-        isToggle.value = false;
-      }
       emit('click');
     };
 
-    const buttonIsActive = computed(() => isToggle.value || hovering.value);
+    const buttonIsActive = computed(() => props.isToggle || hovering.value);
     const getActiveColor = (active: string, inactive: string): string => {
       return buttonIsActive.value ? active : inactive;
     };
@@ -150,7 +146,7 @@ export default defineComponent({
       textStyle,
       hovering,
       changeState,
-      isToggle,
+
     };
   },
 });

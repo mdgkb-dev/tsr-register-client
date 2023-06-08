@@ -71,7 +71,7 @@ export default defineComponent({
     },
     maxWidth: {
       type: [Number, String],
-      default: 300,
+      default: 350,
     },
   },
   emits: ['select', 'load', 'input'],

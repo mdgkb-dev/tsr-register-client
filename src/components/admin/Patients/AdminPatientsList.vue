@@ -53,13 +53,14 @@
                 <FiltersButtonsSelect
                   :filter-model="filterByRegister"
                   :models="createSexFilters()"
-                  default-label="Пол"
+                  default-label="пол"
                   @load="loadPatients"
+                  :inverse="true"
                 />
                 <FiltersButtonsSelect
                   :filter-model="filterByDisabilities"
                   :models="createDisabilityFilters()"
-                  default-label="Инвалидность"
+                  default-label="инвалидность"
                   @load="loadPatients"
                 />
               </template>
@@ -74,7 +75,7 @@
                 <FiltersButtonsMultiply
                   :filter-model="filterByRegister"
                   :options="createRegistersOptions()"
-                  default-label="Регистры"
+                  default-label="регистры"
                   @load="loadPatients"
                 />
               </template>
@@ -414,26 +415,23 @@
                           margin="0px"
                         >
                           <template #grid-items>
-                            <div v-for="register in registers" :key="register.id">
-                              <InfoItem
-                                margin="0"
-                                :with-open-window="false"
-                                height="32px"
-                                :border-color="patient.inRegister(register.id) ? '#1979CF' : ''"
-                                color-selected="#E46862"
+                              <Button
+                                v-for="register in registers"
+                                :key="register.id"
+                                :text="register.name"
+                                :with-icon="false"
+                                width="auto"
+                                height="34px"
+                                border-radius="5px"
+                                color="#006BB4"
+                                :isToggle="patient.inRegister(register.id) ? true : false"
+                                background="#ffffff"
+                                background-hover="#DFF2F8"
+                                :toggleMode="true"
+                                font-size="12px"
                                 @click="toggleRegister(register, patient)"
                               >
-                                <template #title>
-                                  <svg class="icon-del">
-                                    <use xlink:href="#del"></use>
-                                  </svg>
-                                </template>
-                                <template #close-inside-content>
-                                  <StringItem :string="register.name" font-size="11px" />
-                                  <!--                                  <StringItem :string="patientRegister.register.getTagName()" font-size="11px"  />-->
-                                </template>
-                              </InfoItem>
-                            </div>
+                              </Button>
                           </template>
                         </GridContainer>
                       </template>
@@ -462,6 +460,7 @@
                                 height="32px"
                                 color-selected="#E46862"
                                 @click="removeMkbItem(diagnosis.id, patient)"
+                                :withIcon="false"
                               >
                                 <template #title>
                                   <svg class="icon-del">
@@ -473,10 +472,9 @@
                                 </template>
                               </InfoItem>
                             </div>
-                            <Button button-class="plus-button" icon="plus" icon-class="icon-plus" />
-
                           </template>
                         </GridContainer>
+
                         <RemoteSearch
                           :must-be-translated="true"
                           key-value="mkbItem"
@@ -871,7 +869,7 @@ export default defineComponent({
 }
 
 :deep(.icon-plus) {
-  color: #006bb4;
+  fill: #00B5A4;
   width: 24px;
   height: 24px;
   cursor: pointer;
