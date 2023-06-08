@@ -336,12 +336,14 @@
                         </InfoItem>
                         <InfoItem title="представители" margin="0" open-height="auto" open-width="290px">
                           <template #close-inside-content>
-                            <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-                              <StringItem
-                                v-if="patient.patientsRepresentatives"
-                                :string="rep.getRepresentativeParentType() + ',&nbsp'"
-                                font-size="14px"
-                              />
+                            <div class="block">
+                              <div v-for="rep in patient.patientsRepresentatives" :key="rep">
+                                <StringItem
+                                  v-if="patient.patientsRepresentatives"
+                                  :string="rep.getRepresentativeParentType() + ','"
+                                  font-size="14px"
+                                />
+                              </div>
                             </div>
                           </template>
 
