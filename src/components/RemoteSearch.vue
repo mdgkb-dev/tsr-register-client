@@ -71,7 +71,7 @@ export default defineComponent({
     },
     maxWidth: {
       type: [Number, String],
-      default: 300,
+      default: 350,
     },
   },
   emits: ['select', 'load', 'input'],
@@ -175,6 +175,7 @@ $margin: 20px 0;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;
   border-radius: 5px;
+  border: 1px solid #C4C4C4;
 }
 
 :deep(.el-input__suffix) {

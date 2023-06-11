@@ -53,13 +53,14 @@
                 <FiltersButtonsSelect
                   :filter-model="filterByRegister"
                   :models="createSexFilters()"
-                  default-label="Пол"
+                  default-label="пол"
                   @load="loadPatients"
+                  :inverse="true"
                 />
                 <FiltersButtonsSelect
                   :filter-model="filterByDisabilities"
                   :models="createDisabilityFilters()"
-                  default-label="Инвалидность"
+                  default-label="инвалидность"
                   @load="loadPatients"
                 />
               </template>
@@ -74,7 +75,7 @@
                 <FiltersButtonsMultiply
                   :filter-model="filterByRegister"
                   :options="createRegistersOptions()"
-                  default-label="Регистры"
+                  default-label="регистры"
                   @load="loadPatients"
                 />
               </template>
@@ -247,20 +248,44 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
+                  <InfoItem margin="0 0 0 10px" open-height="auto" width="auto" borderColor="#ffffff" :withIcon="false" :withHover="false">
+                    <template #close-inside-content>
+                      <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.editNameMode = true"/>
+                    </template>
 
-                  <div v-if="patient.editNameMode">
-                    <el-input v-model="patient.human.surname" />
-                    <el-input v-model="patient.human.name" />
-                    <el-input v-model="patient.human.patronymic" />
-                    <el-button @click="updateHumanName(patient)">Сохранить</el-button>
-                  </div>
-                  <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.editNameMode = true" />
+                    <template #open-inside-content>
+                      <GridContainer
+                        max-width="auto"
+                        grid-gap="10px"
+                        grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
+                        margin="0px"
+                      >
+                        <template #grid-items>
+                          <InfoItem title="фамилия" margin="0" open-height="auto" width="auto" :withIcon="false" :withOpenWindow="false" :withHover="false" borderColor="#ffffff" padding="0" >
+                            <template #close-inside-content>
+                              <el-input @click.stop="() => undefined" v-model="patient.human.surname" />
+                            </template>
+                          </InfoItem>
+                          <InfoItem title="имя" margin="0" open-height="auto" width="auto" :withIcon="false" :withOpenWindow="false" :withHover="false" borderColor="#ffffff" padding="0" >
+                            <template #close-inside-content>
+                              <el-input @click.stop="() => undefined" v-model="patient.human.name" />
+                            </template>
+                          </InfoItem>
+                          <InfoItem title="отчество" margin="0" open-height="auto" width="auto" :withIcon="false" :withOpenWindow="false" :withHover="false" borderColor="#ffffff" padding="0" >
+                            <template #close-inside-content>
+                              <el-input @click.stop="() => undefined" v-model="patient.human.patronymic" />
+                            </template>
+                          </InfoItem>
+                          <Button button-class="save-button" text="Сохранить" @click="updateHumanName(patient)" />
+                          <!-- <el-button @click="updateHumanName(patient)">Сохранить</el-button> -->
+                        </template>
+                      </GridContainer>
+                    </template>
+                  </InfoItem>
                 </div>
 
                 <div class="line-item-right">
                   <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
-
-                  <!-- <StringItem :string="patient.human.getGender()" color="#343E5C" font-size="20px" /> -->
                   <InfoItem
                     title="инвалидность"
                     margin="0"
@@ -299,41 +324,27 @@
                       margin="0px"
                     >
                       <template #grid-items>
-                        <InfoItem title="дата рождения" margin="0" open-height="auto">
+                        <InfoItem title="дата рождения" margin="0" open-height="auto" :with-open-window="false">
                           <template #close-inside-content>
-                            <StringItem :string="$dateTimeFormatter.format(patient.human.dateBirth)" font-size="16px" />
+                            <SmallDatePicker
+                              v-model:model-value="patient.human.dateBirth"
+                              placeholder="Выбрать"
+                              width="100%"
+                              height="34px"
+                              @change="updateHuman(patient.human)"
+                            />
                           </template>
-
-                          <!-- #TODO -->
-                          <template #open-inside-content>
-                            <GridContainer
-                              max-width="auto"
-                              grid-gap="10px"
-                              grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
-                              margin="0px"
-                            >
-                              <template #grid-items>
-                                <SmallDatePicker
-                                  v-model:model-value="patient.human.dateBirth"
-                                  placeholder="Выбрать"
-                                  width="100%"
-                                  height="34px"
-                                  @change="updateHuman(patient.human)"
-                                />
-                                <Button button-class="save-picker-button" text="Сохранить"> </Button>
-                              </template>
-                            </GridContainer>
-                          </template>
-                          <!-- end -->
                         </InfoItem>
                         <InfoItem title="представители" margin="0" open-height="auto" open-width="290px">
                           <template #close-inside-content>
-                            <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-                              <StringItem
-                                v-if="patient.patientsRepresentatives"
-                                :string="rep.getRepresentativeParentType() + ',&nbsp'"
-                                font-size="14px"
-                              />
+                            <div class="block">
+                              <div v-for="rep in patient.patientsRepresentatives" :key="rep">
+                                <StringItem
+                                  v-if="patient.patientsRepresentatives"
+                                  :string="rep.getRepresentativeParentType() + ','"
+                                  font-size="14px"
+                                />
+                              </div>
                             </div>
                           </template>
 
@@ -404,26 +415,23 @@
                           margin="0px"
                         >
                           <template #grid-items>
-                            <div v-for="register in registers" :key="register.id">
-                              <InfoItem
-                                margin="0"
-                                :with-open-window="false"
-                                height="32px"
-                                :border-color="patient.inRegister(register.id) ? '#1979CF' : ''"
-                                color-selected="#E46862"
+                              <Button
+                                v-for="register in registers"
+                                :key="register.id"
+                                :text="register.name"
+                                :with-icon="false"
+                                width="auto"
+                                height="34px"
+                                border-radius="5px"
+                                color="#006BB4"
+                                :isToggle="patient.inRegister(register.id) ? true : false"
+                                background="#ffffff"
+                                background-hover="#DFF2F8"
+                                :toggleMode="true"
+                                font-size="12px"
                                 @click="toggleRegister(register, patient)"
                               >
-                                <template #title>
-                                  <svg class="icon-del">
-                                    <use xlink:href="#del"></use>
-                                  </svg>
-                                </template>
-                                <template #close-inside-content>
-                                  <StringItem :string="register.name" font-size="11px" />
-                                  <!--                                  <StringItem :string="patientRegister.register.getTagName()" font-size="11px"  />-->
-                                </template>
-                              </InfoItem>
-                            </div>
+                              </Button>
                           </template>
                         </GridContainer>
                       </template>
@@ -442,7 +450,7 @@
                           max-width="100%"
                           grid-gap="7px"
                           grid-template-columns="repeat(auto-fit, minmax(99px, 1fr))"
-                          margin="0px"
+                          margin="0 0 10px 0"
                         >
                           <template #grid-items>
                             <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
@@ -452,6 +460,7 @@
                                 height="32px"
                                 color-selected="#E46862"
                                 @click="removeMkbItem(diagnosis.id, patient)"
+                                :withIcon="false"
                               >
                                 <template #title>
                                   <svg class="icon-del">
@@ -463,17 +472,16 @@
                                 </template>
                               </InfoItem>
                             </div>
-                            <Button button-class="plus-button" icon="plus" icon-class="icon-plus" />
-
-                            <RemoteSearch
-                              :must-be-translated="true"
-                              key-value="mkbItem"
-                              placeholder="Начните вводить диагноз"
-                              @click.stop="() => undefined"
-                              @select="(e) => addMkbItem(e, patient)"
-                            />
                           </template>
                         </GridContainer>
+
+                        <RemoteSearch
+                          :must-be-translated="true"
+                          key-value="mkbItem"
+                          placeholder="Начните вводить диагноз"
+                          @click.stop="() => undefined"
+                          @select="(e) => addMkbItem(e, patient)"
+                        />
                       </template>
                       <!-- end -->
                     </InfoItem>
@@ -742,6 +750,18 @@ export default defineComponent({
   font-size: 18px;
 }
 
+.save-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
+}
+
+
+
 :deep(.edit-button) {
   width: 40px;
   height: 40px;
@@ -776,7 +796,7 @@ export default defineComponent({
   font-size: 17px;
   min-width: 240px;
   width: 100%;
-  padding: 0 10px;
+  padding: 0px;
 }
 
 .hidden {
@@ -849,7 +869,7 @@ export default defineComponent({
 }
 
 :deep(.icon-plus) {
-  color: #006bb4;
+  fill: #00B5A4;
   width: 24px;
   height: 24px;
   cursor: pointer;

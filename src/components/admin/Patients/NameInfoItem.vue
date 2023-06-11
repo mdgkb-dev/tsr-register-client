@@ -1,6 +1,6 @@
 <template>
-<div v-if="isToggle" @click="isToggle=false" class="blur"></div>
-  <div class="base-box" :style="baseBoxStyle" @click.prevent="changeState()">
+  <div class="base-box" :style="baseBoxStyle" @click.prevent="changeState">
+    <!-- padding: isToggle && withOpenWindow ? '0' : padding, -->
     <div class="body" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
       <div class="close-window" :style="closeWindowStyle">
         <slot name="close-inside-content" />
@@ -36,7 +36,7 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 
 export default defineComponent({
-  name: 'InfoItem',
+  name: 'NameInfoItem',
   components: {
     StringItem,
   },
@@ -67,7 +67,7 @@ export default defineComponent({
     const changeState = () => {
       emit('click');
       if (props.withOpenWindow) {
-        isToggle.value = true;
+        isToggle.value = !isToggle.value;
       } else {
         isToggle.value = false;
       }
@@ -100,7 +100,7 @@ export default defineComponent({
         color: hovering.value ? props.colorSelected : '#343E5C',
         boxShadow: hovering.value || isToggle.value ? `0px 0px 1px 1px ${props.colorSelected}` : 'none',
         alignItems: windowOpened.value ? 'end' : 'center',
-        cursor: props.withHover ? 'pointer' : 'pointer',
+        cursor: props.withHover ? 'pointer' : '',
       };
     });
 
@@ -200,21 +200,9 @@ export default defineComponent({
   align-items: start;
   flex-direction: column;
   overflow: hidden;
-  max-height: auto;
+  max-height: 130px;
   padding: 7px;
   width: calc(100% - 16px);
   margin-top: 5px;
-}
-
-.blur {
-  position: fixed;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-:deep(.el-input__inner) {
-  border-color: #B0A4C0;
 }
 </style>

@@ -62,60 +62,22 @@ export default defineComponent({
 <style scoped lang="scss">
 @import '@/assets/styles/elements/base-style.scss';
 
-// :deep(.el-form-item__content) {
-//   width: 100%;
-// }
-
-// :deep(.el-input__inner::placeholder) {
-//   color: $site_light_pink;
-// }
-
-// :deep(.el-select .el-input .el-select__caret) {
-//   color: #343e5c;
-//   font-size: 15px;
-//   font-weight: bold;
-//   margin-right: 5px;
-// }
-
-// .el-select {
-//   width: 100%;
-// }
-
-// :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
-//   width: 100%;
-// }
-
-// :deep(.el-input__icon) {
-//   color: #343e5c;
-// }
-
-// :deep(.el-form-item__label) {
-//   color: $site_light_pink;
-//   padding: 0 !important;
-//   text-transform: uppercase;
-//   margin-left: 5px;
-//   font-size: 14px;
-//   margin-bottom: 6px;
-// }
-
-// :deep(.el-input__prefix) {
-//   left: auto;
-//   right: 10px;
-// }
-
 :deep(.el-form-item) {
   display: block;
   margin-bottom: 16px;
+  width: 100%;
 }
 
 :deep(.el-input__inner) {
   height: 34px;
   display: flex;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   color: $site_dark_gray;
   padding-left: 20px;
-  padding-right: 5px;
+  padding-right: 0px;
+  border: none;
+  width: 100%;
 }
 
 :deep(.el-input__prefix) {
@@ -124,7 +86,7 @@ export default defineComponent({
 }
 
 :deep(.el-input--prefix .el-input__inner) {
-  padding-left: 22px;
+  padding-left: 23px;
 }
 
 :deep(.el-input__suffix) {
@@ -134,7 +96,7 @@ export default defineComponent({
 }
 
 :deep(.el-input--suffix .el-input__inner) {
-  padding-right: 5px;
+  padding-right: 0px;
 }
 
 :deep(.el-input__inner::placeholder) {
@@ -143,6 +105,7 @@ export default defineComponent({
 
 :deep(.el-input__icon) {
   color: #b0a4c0;
+  width: auto;
 }
 
 :deep(.el-form-item__label) {
