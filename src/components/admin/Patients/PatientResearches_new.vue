@@ -121,7 +121,6 @@
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from 'vue-router';
 
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
@@ -129,16 +128,11 @@ import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
-import NumberProp from '@/components/admin/Research/NumberProp.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import ISearchObject from '@/interfaces/ISearchObject';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'PatientResearches',
   components: {
-    RemoteSearch,
-    NumberProp,
     // FilesProp,
     // HumanForm,
     // DataComponentComputed,
@@ -150,7 +144,7 @@ export default defineComponent({
     // PropertyHeader,
     RightTabsContainer,
   },
-  setup(_, { emit }) {
+  setup() {
     const mounted = ref(false);
     const selectedTab = ref('');
     const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
@@ -165,17 +159,11 @@ export default defineComponent({
       await Provider.store.dispatch('patientsResearchesPools/create', item);
     };
 
-    const selectSearch = async (event: ISearchObject): Promise<void> => {};
-
     onBeforeMount(async () => {
       // const query = Provider.store.getters['researchesPools/getAll'];
       // query.id = Provider.route().params.registerId;
       await Provider.store.dispatch('researchesPools/getAll');
       mounted.value = true;
-    });
-
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      // showConfirmModal(submitForm, next);
     });
 
     const createPatientResearch = async (research: Research) => {

@@ -7,6 +7,7 @@ import CommissionTemplate from '@/classes/CommissionTemplate';
 import Doctor from '@/classes/Doctor';
 import Drug from '@/classes/Drug';
 import DrugRegimen from '@/classes/DrugRegimen';
+import FileInfo from '@/classes/files/FileInfo';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
@@ -37,6 +38,11 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(CommissionStatus)
   commissionStatus?: CommissionStatus;
   commissionStatusId?: string;
+
+  @ClassHelper.GetClassConstructor(FileInfo)
+  dzmAnswerFile?: FileInfo;
+  dzmAnswerFileId?: string;
+  dzmAnswerComment = '';
 
   constructor(i?: Commission) {
     ClassHelper.BuildClass(this, i);

@@ -68,7 +68,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const drag = ref(false);
     const activeCollapseName: Ref<string> = ref('');
     const form = ref();

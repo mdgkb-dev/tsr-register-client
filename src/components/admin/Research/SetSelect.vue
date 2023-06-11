@@ -115,23 +115,19 @@ import Question from '@/classes/Question';
 import QuestionVariant from '@/classes/QuestionVariant';
 import ResearchResult from '@/classes/ResearchResult';
 import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
-import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import Button from '@/components/Base/Button.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import StringsService from '@/services/Strings';
 
 export default defineComponent({
   name: 'SetSelect',
   components: {
     GridContainer,
-    GeneralItem,
     Button,
     ResearcheContainer,
     AlphabetFilter,
-    RemoteSearch,
     NumberProp,
   },
   props: {
@@ -166,7 +162,7 @@ export default defineComponent({
       filledCheck();
     };
 
-    const toggleAddAllergen = async (toggle: boolean) => {
+    const toggleAddAllergen = async () => {
       addAllergen.value = !addAllergen.value;
     };
     const addAnswerToQuestionVariant = async (questionVariant: QuestionVariant): Promise<void> => {

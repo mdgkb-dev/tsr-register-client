@@ -39,7 +39,6 @@ import { useStore } from 'vuex';
 
 import RepresentativeType from '@/classes/RepresentativeType';
 import RepresentativeTypeRules from '@/classes/RepresentativeTypeRules';
-import MainHeader from '@/classes/shared/MainHeader';
 import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
 
 export default defineComponent({
@@ -71,7 +70,6 @@ export default defineComponent({
       }
 
       // pushToLinks(['/representative-types'], ['Типы представителей']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'RepresentativeTypes');
       mount.value = true;
 

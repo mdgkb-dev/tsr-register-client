@@ -1,28 +1,28 @@
 <template>
-  <!--  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">-->
-  <!--    <div class="filter-form">-->
-  <!--      <el-form label-position="top" :model="filterModel">-->
-  <!--        <el-form-item :label="label">-->
-  <!--          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">-->
-  <!--            <el-option-->
-  <!--              v-for="(item, index) in filterList"-->
-  <!--              :key="index"-->
-  <!--              :label="item.label"-->
-  <!--              :value="item.value"-->
-  <!--              @click="setTrigger('click')"-->
-  <!--            ></el-option>-->
-  <!--          </el-select>-->
-  <!--        </el-form-item>-->
-  <!--        <el-form-item v-if="filterModel.isUnaryFilter()">-->
-  <!--          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>-->
-  <!--        </el-form-item>-->
-  <!--        <el-form-item v-if="filterModel.isBetweenFilter()">-->
-  <!--          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>-->
-  <!--          <el-date-picker v-model="filterModel.date2" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>-->
-  <!--        </el-form-item>-->
-  <!--      </el-form>-->
-  <!--    </div>-->
-  <!--  </component>-->
+  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
+    <div class="filter-form">
+      <el-form label-position="top" :model="filterModel">
+        <el-form-item :label="label">
+          <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
+            <el-option
+              v-for="(item, index) in filterList"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              @click="setTrigger('click')"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="filterModel.isUnaryFilter()">
+          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
+        </el-form-item>
+        <el-form-item v-if="filterModel.isBetweenFilter()">
+          <el-date-picker v-model="filterModel.date1" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
+          <el-date-picker v-model="filterModel.date2" size="mini" format="DD.MM.YYYY" @change="onchange"></el-date-picker>
+        </el-form-item>
+      </el-form>
+    </div>
+  </component>
 </template>
 
 <script lang="ts">

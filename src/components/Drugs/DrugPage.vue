@@ -65,7 +65,6 @@ import { useStore } from 'vuex';
 
 import Drug from '@/classes/Drug';
 import DrugRegimen from '@/classes/DrugRegimen';
-import MainHeader from '@/classes/shared/MainHeader';
 import DrugRegimensForm from '@/components/Drugs/DrugRegimensForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 
@@ -109,8 +108,6 @@ export default defineComponent({
         title = drug.value.name;
       }
 
-      // pushToLinks(['/drugs'], ['Список лекарств']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'DrugsList');
       mount.value = true;
 

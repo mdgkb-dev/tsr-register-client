@@ -1,25 +1,26 @@
 <template>
-  <!--  <span class="filter-popover">-->
-  <!--    <el-popover placement="bottom-end" width="auto" :trigger="trigger">-->
-  <!--      <template #reference>-->
-  <!--        <el-icon class="cursor" style="margin-left: 3px">-->
-  <!--          <FilterFilled :class="{ set: filterModel.isSet }" />-->
-  <!--        </el-icon>-->
-  <!--      </template>-->
-  <!--      <slot></slot>-->
-  <!--      <el-button-group>-->
-  <!--        <el-button size="mini" type="success" @click="setFilter">Применить</el-button>-->
-  <!--        <el-button size="mini" @click="dropFilter">Сбросить</el-button>-->
-  <!--      </el-button-group>-->
-  <!--    </el-popover>-->
-  <!--  </span>-->
+  <span class="filter-popover">
+    <el-popover placement="bottom-end" width="auto" :trigger="trigger">
+      <template #reference>
+        <el-icon class="cursor" style="margin-left: 3px">
+          <FilterFilled :class="{ set: filterModel.isSet }" />
+        </el-icon>
+      </template>
+      <slot></slot>
+      <el-button-group>
+        <el-button size="mini" type="success" @click="setFilter">Применить</el-button>
+        <el-button size="mini" @click="dropFilter">Сбросить</el-button>
+      </el-button-group>
+    </el-popover>
+  </span>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import IFilterModel from '@/interfaces/filters/IFilterModel';
+import FilterModel from '@/services/classes/filters/FilterModel';
+
 export default defineComponent({
   // name: 'FilterPopover',
   components: {
@@ -27,7 +28,7 @@ export default defineComponent({
   },
   props: {
     filterModel: {
-      type: Object as PropType<IFilterModel>,
+      type: Object as PropType<FilterModel>,
       required: true,
     },
   },

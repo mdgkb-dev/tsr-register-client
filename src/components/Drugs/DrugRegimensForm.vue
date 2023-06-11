@@ -70,7 +70,7 @@ export default defineComponent({
       }
       if (Number(activeCollapseName.value) === drugRegimenIndex) activeCollapseName.value = '';
     };
-    const addDrugRegimenBlock = (drugRegimen: IDrugRegimen, drugRegimenIndex: number): void => {
+    const addDrugRegimenBlock = (drugRegimen: DrugRegimen, drugRegimenIndex: number): void => {
       drugRegimen.addDrugRegimenBlock();
       const lastDrugRegimenBlockIndex = drugRegimen.drugRegimenBlocks.length - 1;
       drugRegimen.drugRegimenBlocks[lastDrugRegimenBlockIndex].editDrugRegimenBlock(true);

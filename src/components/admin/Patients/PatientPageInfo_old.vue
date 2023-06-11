@@ -149,7 +149,6 @@ import { Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
-import ColoredGroupTag from '@/components/admin/Patients/ColoredGroupTag.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 export default defineComponent({
@@ -158,7 +157,6 @@ export default defineComponent({
     // Uploader,
     UploaderSingleScan,
     PopoverInfo,
-    ColoredGroupTag,
     Plus,
   },
   props: {

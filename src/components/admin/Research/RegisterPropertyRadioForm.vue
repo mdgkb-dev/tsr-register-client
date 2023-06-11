@@ -57,9 +57,9 @@ import { Delete, Grid, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
+import AnswerVariant from '@/classes/AnswerVariant';
+import Question from '@/classes/Question';
 import RegisterPropertyOthersForm from '@/components/admin/Research/RegisterPropertyOthersForm.vue';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterPropertyRadio from '@/interfaces/IRegisterPropertyRadio';
 export default defineComponent({
   name: 'RegisterPropertyRadioForm',
   components: {
@@ -69,13 +69,13 @@ export default defineComponent({
   },
   props: {
     registerProperty: {
-      type: Object as PropType<IRegisterProperty>,
+      type: Object as PropType<Question>,
       required: true,
     },
   },
   setup(props) {
     const activeCollapseName: Ref<string> = ref('');
-    const newRegisterPropertyRadio: Ref<IRegisterPropertyRadio> = ref(new AnswerVariants());
+    const newRegisterPropertyRadio: Ref<AnswerVariant> = ref(new AnswerVariant());
     const newRegisterPropertyRadioForm = ref();
     // const { validateWithoutMessageBox } = useValidate();
 
@@ -84,10 +84,10 @@ export default defineComponent({
       //   return;
       // }
       props.registerProperty.addRadioItem(newRegisterPropertyRadio.value);
-      newRegisterPropertyRadio.value = new AnswerVariants();
+      newRegisterPropertyRadio.value = new AnswerVariant();
     };
 
-    const addRegisterPropertyOther = (registerPropertyRadio: IRegisterPropertyRadio, index: number) => {
+    const addRegisterPropertyOther = (registerPropertyRadio: AnswerVariant, index: number) => {
       registerPropertyRadio.addRegisterPropertyOther();
       activeCollapseName.value = String(index);
     };

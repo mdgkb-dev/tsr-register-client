@@ -108,6 +108,7 @@ import { Document } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent } from 'vue';
 
+import Patient from '@/classes/Patient';
 import MainHeader from '@/classes/shared/MainHeader';
 import Pagination from '@/components/Pagination.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';

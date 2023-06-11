@@ -39,16 +39,14 @@
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import Register from '@/classes/Register';
 import Research from '@/classes/Research';
-import MainHeader from '@/classes/shared/MainHeader';
+import ResearchesPool from '@/classes/ResearchesPool';
 import RegisterGroupForm from '@/components/admin/Registers/RegisterGroupForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
-import IRegister from '@/interfaces/IRegister';
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
 
 export default defineComponent({
   name: 'RegisterPage',
@@ -60,13 +58,12 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
 
-    const register: Ref<IRegister> = computed(() => store.getters['registers/item']);
-    const newRegisterGroup: Ref<IRegisterGroup> = ref(new Research());
+    const register: Ref<ResearchesPool> = computed(() => store.getters['registers/item']);
+    const newRegisterGroup: Ref<Research> = ref(new Research());
     const newRegisterGroupForm = ref();
     const activeCollapseName: ComputedRef<string> = computed(() => store.getters['registers/activeCollapseName']);
 
     const form = ref();
-    const isEditMode: Ref<boolean> = ref(!!route.params.registerId);
     const mount: Ref<boolean> = ref(false);
     const rules = { name: [{ required: true, message: 'Необходимо заполнить название регистра', trigger: 'blur' }] };
 
@@ -82,14 +79,13 @@ export default defineComponent({
         store.commit('registers/set', new Register());
         title = 'Создать регистр';
       } else {
-        title = 'Редактировать регистр';
         const query = store.getters['filter/filterQuery'];
         query.id = route.params.registerId;
         await store.dispatch('registers/get', query);
       }
 
       // pushToLinks(['/registers'], ['Регистры пациентов']);
-      store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
+      // store.commit('main/setMainHeader', new MainHeader({ title, links, save: submitForm }));
       store.commit('main/setActiveMenu', 'Registers');
       mount.value = true;
 
@@ -97,11 +93,7 @@ export default defineComponent({
       // watch(register, formUpdated, { deep: true });
     });
 
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      // showConfirmModal(submitForm, next);
-    });
-
-    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+    const submitForm = async (): Promise<void> => {
       // saveButtonClick.value = true;
       // if (!validate(form.value)) return;
       //
@@ -117,7 +109,7 @@ export default defineComponent({
       store.commit('registers/setActiveCollapseName', String(register.value.registerGroups.length - 1));
     };
 
-    const changeCollapseHadler = (name: string) => {
+    const changeCollapseHadler = () => {
       // const activeCollapse = document.getElementById(`collapse-${name}`);
       // const pageContainer = document.querySelector('.page-container');
       // if (!activeCollapse || !pageContainer) return;

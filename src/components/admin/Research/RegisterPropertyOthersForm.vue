@@ -41,8 +41,7 @@ import { Delete, Grid, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import IRegisterPropertyRadio from '@/interfaces/IRegisterPropertyRadio';
-import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
+import AnswerVariant from '@/classes/AnswerVariant';
 export default defineComponent({
   name: 'RegisterPropertyOthersForm',
   components: {
@@ -51,13 +50,13 @@ export default defineComponent({
   },
   props: {
     registerProperty: {
-      type: Object as PropType<IRegisterPropertyRadio | IRegisterPropertySet>,
+      type: Object as PropType<AnswerVariant>,
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const activeCollapseName: Ref<string> = ref('');
-    const newRegisterPropertyRadio: Ref<IRegisterPropertyRadio> = ref(new AnswerVariants());
+    const newRegisterPropertyRadio: Ref<AnswerVariant> = ref(new AnswerVariant());
     const newRegisterPropertyRadioForm = ref();
 
     return {

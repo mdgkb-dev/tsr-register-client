@@ -172,7 +172,6 @@ import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
-import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
@@ -187,7 +186,6 @@ export default defineComponent({
   name: 'AdminCommissionsList',
   components: {
     RemoteSearch,
-    SortList,
     AdminListWrapper,
     CollapseItem,
     Button,
@@ -266,8 +264,6 @@ export default defineComponent({
     //   fundContractOpened.value = false;
     // };
 
-    const addDrugApplication = async (): Promise<void> => {};
-
     const createStatusesOptions = (): IOption[] => {
       const ids: IOption[] = [];
       commissionsStatuses.value.forEach((r: CommissionStatus) => ids.push({ value: r.id as string, label: r.name }));
@@ -313,7 +309,6 @@ export default defineComponent({
       // createFundCouncil,
       // fundCouncilOpened,
       // fundCouncil,
-      addDrugApplication,
       // fundContractOpened,
       // fundContract,
       // createFundContract,

@@ -56,10 +56,9 @@ import { Delete, Grid, InfoFilled, Plus } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import RegisterPropertySet from '@/classes/RegisterPropertySet';
+import AnswerVariant from '@/classes/AnswerVariant';
+import Question from '@/classes/Question';
 import RegisterPropertyOthersForm from '@/components/admin/Research/RegisterPropertyOthersForm.vue';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterPropertySet from '@/interfaces/IRegisterPropertySet';
 export default defineComponent({
   name: 'RegisterPropertySetForm',
   components: {
@@ -69,24 +68,24 @@ export default defineComponent({
   },
   props: {
     registerProperty: {
-      type: Object as PropType<IRegisterProperty>,
+      type: Object as PropType<Question>,
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const activeCollapseName: Ref<string> = ref('');
-    const newRegisterPropertySet: Ref<IRegisterPropertySet> = ref(new RegisterPropertySet());
+    const newRegisterPropertySet: Ref<AnswerVariant> = ref(new AnswerVariant());
     const newRegisterPropertySetForm = ref();
 
     const addSetItem = (): void => {
       // if (!validateWithoutMessageBox(newRegisterPropertySetForm.value)) {
       //   return;
       // }
-      props.registerProperty.addSetItem(newRegisterPropertySet.value);
-      newRegisterPropertySet.value = new RegisterPropertySet();
+      // props.registerProperty.addRegisterPropertyVariant(newRegisterPropertySet.value);
+      newRegisterPropertySet.value = new AnswerVariant();
     };
 
-    const addRegisterPropertyOther = (registerPropertySet: IRegisterPropertySet, index: number) => {
+    const addRegisterPropertyOther = (registerPropertySet: AnswerVariant, index: number) => {
       registerPropertySet.addRegisterPropertyOther();
       activeCollapseName.value = String(index);
     };

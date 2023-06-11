@@ -41,23 +41,22 @@
 import { Delete, InfoFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
+import Question from '@/classes/Question';
 import QuestionMeasure from '@/classes/QuestionMeasure';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterPropertyMeasure from '@/interfaces/IRegisterPropertyMeasure';
 
 export default defineComponent({
   name: 'RegisterPropertyVariantsForm',
   props: {
     registerProperty: {
-      type: Object as PropType<IRegisterProperty>,
+      type: Object as PropType<Question>,
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const drag = ref(false);
     const activeCollapseName: Ref<string> = ref('');
     const form = ref();
-    const newMeasure: Ref<IRegisterPropertyMeasure> = ref(new QuestionMeasure());
+    const newMeasure: Ref<QuestionMeasure> = ref(new QuestionMeasure());
     const newRegisterPropertyMeasureForm = ref();
     // const { validateWithoutMessageBox } = useValidate();
 

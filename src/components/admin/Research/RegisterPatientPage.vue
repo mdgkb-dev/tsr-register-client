@@ -134,13 +134,11 @@
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
-import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import Patient from '@/classes/Patient';
 import Register from '@/classes/Register';
-import ResearchResult from '@/classes/ResearchResult';
-import MainHeader from '@/classes/shared/MainHeader';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
 import FilesProp from '@/components/admin/Research/FilesProp.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
@@ -187,7 +185,7 @@ export default defineComponent({
       await store.dispatch('registers/get', query);
       await store.dispatch('patients/get', route.params.patientId);
       // pushToLinks(['/register-link-list/', `/registers/patients/${route.params.registerId}`], ['Регистры пациентов', register.value.name]);
-      store.commit('main/setMainHeader', new MainHeader({ title: patient.value.human.getFullName(), links, save: submitForm }));
+      // store.commit('main/setMainHeader', new MainHeader({ title: patient.value.human.getFullName(), links, save: submitForm }));
 
       mount.value = true;
       // window.addEventListener('beforeunload', beforeWindowUnload);
@@ -195,11 +193,7 @@ export default defineComponent({
       // watch(patient, formUpdated, { deep: true });
     });
 
-    onBeforeRouteLeave((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-      // showConfirmModal(submitForm, next);
-    });
-
-    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+    const submitForm = async (): Promise<void> => {
       // saveButtonClick.value = true;
       // if (!validate(form.value)) {
       //   return;
@@ -221,14 +215,14 @@ export default defineComponent({
       if (!group || !group.id) {
         return;
       }
-      if (group.withDates) {
-        const selectedGroup = patient.value.registerGroupsToPatient.filter((r: ResearchResult) => r.researchId === group.id);
-        if (selectedGroup[0]) {
-          selectTab(selectedGroup[0].id);
-        }
-      } else {
-        patient.value.initRegisterGroupsToPatient(group.id);
-      }
+      // if (group.withDates) {
+      //   const selectedGroup = patient.value.registerGroupsToPatient.filter((r: ResearchResult) => r.researchId === group.id);
+      //   if (selectedGroup[0]) {
+      //     selectTab(selectedGroup[0].id);
+      //   }
+      // } else {
+      //   patient.value.initRegisterGroupsToPatient(group.id);
+      // }
       scroll(groupIndex);
     };
 
@@ -242,24 +236,24 @@ export default defineComponent({
 
     const addTab = (registerGroupId: string) => {
       patient.value.addRegisterGroupToPatient(registerGroupId);
-      const sel = patient.value.registerGroupsToPatient[patient.value.registerGroupsToPatient.length - 1].id;
-      selectTab(sel);
+      // const sel = patient.value.registerGroupsToPatient[patient.value.registerGroupsToPatient.length - 1].id;
+      // selectTab(sel);
     };
 
-    const removeTab = (name: string) => {
-      const group = patient.value.registerGroupsToPatient.find((r: ResearchResult) => r.id === name);
-      if (group && group.researchSectionId) {
-        const selectedGroup = patient.value.registerGroupsToPatient.filter((r: ResearchResult) => r.researchId === group.researchSectionId);
-        if (selectedGroup[0]) {
-          selectTab(selectedGroup[0].id);
-        }
-      }
-      patient.value.removeRegisterGroupToPatient(name);
-    };
+    // const removeTab = (name: string) => {
+    // const group = patient.value.registerGroupsToPatient.find((r: ResearchResult) => r.id === name);
+    // if (group && group.researchSectionId) {
+    //   const selectedGroup = patient.value.registerGroupsToPatient.filter((r: ResearchResult) => r.researchId === group.researchSectionId);
+    //   if (selectedGroup[0]) {
+    //     selectTab(selectedGroup[0].id);
+    //   }
+    // }
+    // patient.value.removeRegisterGroupToPatient(name);
+    // };
 
     return {
       Delete,
-      removeTab,
+      // removeTab,
       addTab,
       selectedTab,
       collapseChangeHandler,

@@ -58,6 +58,7 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Patient from '@/classes/Patient';
 import Pagination from '@/components/Pagination.vue';
 
 export default defineComponent({

@@ -1,27 +1,27 @@
 <template>
-  <!--  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">-->
-  <!--    <div class="filter-form">-->
-  <!--      <el-form label-position="top">-->
-  <!--        <el-form-item>-->
-  <!--          <el-select-->
-  <!--            ref="filter"-->
-  <!--            v-model="filterModel.set"-->
-  <!--            multiple-->
-  <!--            filterable-->
-  <!--            remote-->
-  <!--            placeholder="Выберите диагноз"-->
-  <!--            size="mini"-->
-  <!--            :remote-method="find"-->
-  <!--            :loading="loading"-->
-  <!--            @change="blurSelect()"-->
-  <!--            @click="setTrigger('manual')"-->
-  <!--          >-->
-  <!--            <el-option v-for="item in diagnosis" :key="item.value" :label="item.label" :value="item.value" @click="setTrigger('click')" />-->
-  <!--          </el-select>-->
-  <!--        </el-form-item>-->
-  <!--      </el-form>-->
-  <!--    </div>-->
-  <!--  </component>-->
+  <component :is="'FilterPopover'" :filter-model="filterModel" @addFilterModel="addFilterModel" @dropFilterModel="dropFilterModel">
+    <div class="filter-form">
+      <el-form label-position="top">
+        <el-form-item>
+          <el-select
+            ref="filter"
+            v-model="filterModel.set"
+            multiple
+            filterable
+            remote
+            placeholder="Выберите диагноз"
+            size="mini"
+            :remote-method="find"
+            :loading="loading"
+            @change="blurSelect()"
+            @click="setTrigger('manual')"
+          >
+            <el-option v-for="item in diagnosis" :key="item.value" :label="item.label" :value="item.value" @click="setTrigger('click')" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </div>
+  </component>
 </template>
 
 <script lang="ts">
