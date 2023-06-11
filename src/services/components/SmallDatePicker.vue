@@ -14,6 +14,7 @@
       :style="{
         width: width,
         position: 'relative',
+        cursor: pointer,
       }"
       @change="changeHandler"
     ></el-date-picker>

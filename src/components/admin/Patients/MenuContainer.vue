@@ -1,20 +1,23 @@
 <template>
-  <div class="mainblock"
+  <div
+    class="mainblock"
     :style="{
       height: height,
-    }"  
+    }"
   >
-    <div class="top-menu"
+    <div
+      class="top-menu"
       :style="{
         gridTemplateColumns: `repeat(auto-fit, minmax(${minMenuItemWidth}, 1fr))`,
       }"
     >
       <slot name="menu" />
     </div>
-    <div class="body"
+    <div
+      class="body"
       :style="{
         background: background,
-      }"  
+      }"
     >
       <slot name="body" />
     </div>
@@ -52,10 +55,11 @@ export default defineComponent({
 .mainblock {
   display: flex;
   flex-direction: column;
-  width: calc(100% - 2px);
+  width: calc(100% - 12px);
   border-radius: $big-border-radius;
   border: $custom-border;
   overflow: hidden;
+  margin: 0 10px 0 0;
 }
 
 .top-menu {
@@ -71,7 +75,7 @@ export default defineComponent({
 
 .body {
   margin-top: 1px;
-  border-top: 0.5px solid #343D5C;
+  border-top: 0.5px solid #343d5c;
   overflow-y: auto;
   height: 74vh;
   height: 100%;

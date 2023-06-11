@@ -1,6 +1,6 @@
 <template>
   <div class="select-block">
-    <Button width="100%" height="60px" font-size="16px" border-radius="5px" color="#00B5A4" background="#C7ECEA" @click="toggleAddAllergen">
+    <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleAddAllergen">
       <template #icon>
         <svg class="icon-plus">
           <use xlink:href="#plus"></use>
@@ -201,7 +201,16 @@ export default defineComponent({
   display: none;
 }
 
-.icon-plus {
+.plus-button {
+  width: 100%;
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+  height: 60px;
+}
+
+:deep(.icon-plus) {
+  fill: #00b5a4;
   width: 40px;
   height: 40px;
   cursor: pointer;

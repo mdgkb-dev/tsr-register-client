@@ -169,7 +169,7 @@ export default defineComponent({
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 
-  background: $base-background;
+  background: #F5F5F5;
   margin: -0.5px;
 }
 

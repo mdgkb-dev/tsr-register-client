@@ -23,7 +23,7 @@
     </template>
     <template #body>
       <div class="body">
-        <ResearcheContainer background="#DFF2F8">
+        <ResearcheContainer background="#DFF2F8" padding="0">
           <template #header>
             <template v-if="research.id && patientResearch">
               <div class="researche-title">
@@ -41,18 +41,54 @@
                 >
                 </Button>
                 <div class="researche-name">{{ research.name }}</div>
+                <Button
+                  text="График"
+                  :with-icon="false"
+                  width="63px"
+                  height="42px"
+                  border-radius="5px"
+                  color="#343e5c"
+                  background="#ffffff"
+                  font-size="16px"
+                  :color-swap="true"
+                >
+                </Button>
               </div>
             </template>
             <template v-else>
               <div class="line-item">
-                <GridContainer max-width="600px" grid-gap="6px" grid-template-columns="repeat(auto-fit, minmax(60px, 1fr))">
-                  <template #grid-items>
-                    <AlphabetFilter />
+                <InfoItem
+                  margin="0"
+                  :with-open-window="false"
+                  :with-icon="false"
+                  height="45px"
+                  background="#F5F5F5"
+                  border-color="#C4C4C4"
+                  padding="7px"
+                  :with-hover="false"
+                >
+                  <template #title>
+                    <StringItem string="сохранить" font-size="10px" padding="0" />
                   </template>
-                </GridContainer>
-                <svg class="icon-xlsx">
-                  <use xlink:href="#xlsx"></use>
-                </svg>
+                  <template #close-inside-content>
+                    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                      <template #grid-items>
+                        <Button
+                          text="xlsx"
+                          :with-icon="false"
+                          width="auto"
+                          height="34px"
+                          border-radius="5px"
+                          color="#006BB4"
+                          background="#DFF2F8"
+                          background-hover="#DFF2F8"
+                          font-size="12px"
+                        >
+                        </Button>
+                      </template>
+                    </GridContainer>
+                  </template>
+                </InfoItem>
               </div>
             </template>
           </template>
@@ -63,12 +99,25 @@
                 <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
                   <GeneralItem
                     :ready="`${result.fillingPercentage}%`"
-                    margin="0px"
+                    margin="0 10px 0 0"
                     :scale="false"
                     :with-icon="true"
                     @click="selectResult(result.id)"
                   >
-                    <template #general-item> Исследование от {{ $dateTimeFormatter.format(result.date) }} </template>
+                    <template #general-item>
+                      <div class="flex-line">
+                        <StringItem string="Исследование&nbsp;от&nbsp;" font-size="14px" padding="0" />
+
+                        <SmallDatePicker
+                          v-model:model-value="result.date"
+                          placeholder="Выбрать"
+                          width="100px"
+                          height="34px"
+                          @change="updateHuman(patient.human)"
+                          @click.stop="() => undefined"
+                        />
+                      </div>
+                    </template>
                   </GeneralItem>
 
                   <template v-if="researchResult.id">
@@ -98,15 +147,18 @@
                               @click="cancelResearchResultsFilling(false)"
                             >
                             </Button>
-                            <div class="search">
-                              <span>Отобразить только незаполненные</span
-                              ><el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-                            </div>
-                            <div class="search">
-                              <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+                          </div>
+                          <div class="right">
+                            <div class="flex-line2">
+                              <div class="search">
+                                <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+                              </div>
                             </div>
                           </div>
-                          <div class="right"></div>
+                        </div>
+                        <div class="flex-line3">
+                          <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />
+                          <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
                         </div>
                         <Button
                           text="Сохранить"
@@ -157,7 +209,12 @@
               </el-timeline>
             </template>
             <template v-else>
-              <GridContainer grid-gap="5px" margin-top="5px">
+              <GridContainer
+                grid-gap="5px"
+                margin="10px"
+                width="calc(100% - 20px)"
+                grid-template-columns="repeat(auto-fit, minmax(280px, 1fr))"
+              >
                 <template #grid-items>
                   <GeneralItem
                     v-for="(researchesPoolResearch, i) in researchesPool.researchesPoolsResearches"
@@ -175,16 +232,7 @@
 
           <template #footer>
             <template v-if="research.id && patientResearch">
-              <Button
-                width="100%"
-                height="60px"
-                font-size="16px"
-                border-radius="5px"
-                color="#00B5A4"
-                background="#C7ECEA"
-                background-hover="#C7ECEA"
-                @click="addResult(research, patientResearch.id)"
-              >
+              <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult(research, patientResearch.id)">
                 <template #icon>
                   <svg class="icon-plus">
                     <use xlink:href="#plus"></use>
@@ -233,17 +281,20 @@ import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
-import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
 import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
+
 export default defineComponent({
   name: 'PatientResearches',
   components: {
@@ -255,7 +306,9 @@ export default defineComponent({
     GeneralItem,
     CollapseContainer,
     CollapseItem,
-    AlphabetFilter,
+    InfoItem,
+    StringItem,
+    SmallDatePicker,
   },
   setup() {
     const questionsFilterString: Ref<string> = ref('');
@@ -569,11 +622,12 @@ export default defineComponent({
 }
 
 .researche-title {
-  width: calc(100% - 2px);
+  width: calc(100% - 22px);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 60px;
+  margin: 0 10px;
 }
 
 .researche-name {
@@ -587,9 +641,20 @@ export default defineComponent({
   text-transform: uppercase;
 }
 
-.icon-back {
-  width: 24px;
-  height: 24px;
+.plus-button {
+  width: calc(100% - 20px);
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+  height: 60px;
+  margin: 0 10px;
+}
+
+:deep(.icon-plus) {
+  fill: #00b5a4;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .patient-research {
@@ -721,7 +786,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
+  // padding-bottom: 10px;
 }
 
 .left {
@@ -759,11 +824,34 @@ export default defineComponent({
 
 .line-item {
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
+  align-items: center;
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  max-width: 100%;
+  height: 54px;
+}
+
+.flex-line {
+  display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 0;
-  max-width: 100%;
+}
+
+.flex-line2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.flex-line3 {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 60px;
 }
 
 :deep(.el-timeline) {
@@ -776,5 +864,9 @@ export default defineComponent({
 
 :deep(.el-timeline-item__node) {
   background: #b0a4c0;
+}
+
+:deep(.el-timeline-item__wrapper) {
+  padding-left: 20px;
 }
 </style>
