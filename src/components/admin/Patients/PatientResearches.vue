@@ -126,15 +126,15 @@
                       <div class="patient-name">{{ patient.human.getFullName() }}</div>
                       <div class="header-container">
                         <div class="researche-title-name">{{ research.name }}</div>
-                        <div class="flex-line4" v-for="res in getCalculationsResults(research)" :key="res.name">
-                          <div class="res-name" v-if="Number.isFinite(res.value)" >{{ res.formulaName + ':'}}</div>
-                          <div v-if="Number.isFinite(res.value)" >{{ res.value.toFixed(2) }}</div>
-                          <div :style="{ color: res.color }">{{ res.result }}</div>
-                        </div>
                         <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>
                         <div v-if="research.withScores" class="researche-counter">
                           Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
                         </div>
+                      </div>
+                      <div class="flex-line4" v-for="res in getCalculationsResults(research)" :key="res.name">
+                        <div class="res-name" v-if="Number.isFinite(res.value)" >{{ res.formulaName + ':'}}</div>
+                        <div v-if="Number.isFinite(res.value)" >{{ res.value.toFixed(2) }}</div>
+                        <div :style="{ color: res.color }">{{ res.result }}</div>
                       </div>
                       <div class="tools">
                         <div class="control-buttons">
@@ -858,8 +858,9 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   align-items: center;
-  max-width: 200px;
-  height: 40px;
+  width: 100%;
+  height: auto;
+  padding: 10px 0;
   color: #00b5a4;
   font-size: 18px;
 }
