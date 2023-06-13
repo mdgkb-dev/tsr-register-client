@@ -21,12 +21,12 @@
             {{ item.text }}
           </el-button>
         </div>
-        <div v-if="headSpinner">
-          <span class="loader-text">Сохранение</span>
+        <div class="system-message" v-if="headSpinner">
+          <StringItem string="Сохранение" font-size="20px" padding="0 10px" />
           <span class="loader-spinner"></span>
         </div>
-        <div v-else-if="headSuccess">
-          <span style="color: green">Успешно сохранено</span>
+        <div class="system-message" v-else-if="headSuccess">
+          <StringItem string="Успешно сохранено" font-size="20px" padding="0 10px" color="green"/>
         </div>
       </div>
     </div>
@@ -38,8 +38,12 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
 import Provider from '@/services/Provider/Provider';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 export default defineComponent({
   name: 'AdminHeaderBottom',
+  components: {
+    StringItem,
+  },
 
   setup() {
     const headerParams: Ref<AdminHeaderParams> = computed(() => Provider.store.getters['admin/headerParams']);
@@ -119,6 +123,19 @@ h4 {
   display: inline-block;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+}
+
+.system-message {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 5;
+  background: #ffffff;
 }
 
 @keyframes rotation {
