@@ -224,7 +224,7 @@ export default defineComponent({
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Врачебные комиссии',
-        buttons: [{ text: 'Создать комиссию', type: 'primary', action: openCreateCommissionModal }],
+        buttons: [{ text: 'Создать комиссию', type: 'normal-button', action: openCreateCommissionModal }],
       },
       sortsLib: CommissionsSortsLib,
       getAction: 'getAllWithCount',

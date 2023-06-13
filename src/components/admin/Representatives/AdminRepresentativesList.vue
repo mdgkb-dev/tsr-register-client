@@ -419,7 +419,7 @@ export default defineComponent({
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Представители',
-        buttons: [{ text: 'Добавить представителя', type: 'primary', action: Provider.createAdmin }],
+        buttons: [{ text: 'Добавить представителя', type: 'normal-button', action: Provider.createAdmin }],
       },
       sortsLib: RepresentativesSortsLib,
       getAction: 'getAllWithCount',

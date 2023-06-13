@@ -131,7 +131,7 @@ export default defineComponent({
       adminHeader: {
         title: computed(() => (Provider.route().params['id'] ? patient.value?.human?.getFullName() : 'Добавить пациента')),
         showBackButton: true,
-        buttons: [{ text: 'Удалить пациента', type: 'warning', action: remove }],
+        buttons: [{ text: 'Удалить пациента', type: 'warning-button', action: remove }],
       },
     });
     Hooks.onBeforeRouteLeave();
