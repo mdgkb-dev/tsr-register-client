@@ -1,13 +1,13 @@
 import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
-import AdminDrugApplicationsList from '@/components/admin/DrugApplications/AdminDrugApplicationsList.vue';
+import AdminCommissionsList from '@/components/admin/Commissions/AdminCommissionsList.vue';
 import { authGuard, isAuthorized } from '@/router/index';
 
 export default [
   {
-    path: '/admin/drug-applications',
-    name: 'AdminDrugApplicationsList',
-    component: AdminDrugApplicationsList,
+    path: '/admin/commissions',
+    name: 'AdminCommissionsList',
+    component: AdminCommissionsList,
     beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
       isAuthorized(next);
       authGuard();

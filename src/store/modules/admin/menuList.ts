@@ -16,6 +16,11 @@ const menuList: IAdminMenu[] = [
     to: '/admin/commissions',
     icon: 'el-icon-info',
   },
+  {
+    title: 'Заявки в ДЗМ/Фонд добра',
+    to: '/admin/drug-applications',
+    icon: 'el-icon-info',
+  },
   // {
   //   title: 'Заявки',
   //   to: '/admin/drugs-applications',

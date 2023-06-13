@@ -17,6 +17,14 @@ const actions: ActionTree<State, RootState> = {
       item.number = resp.number;
     }
   },
+  filledApplicationDownload: async (_, item: Commission): Promise<void> => {
+    await httpClient.post<Commission, Commission>({
+      payload: item,
+      query: `fill-commission-template`,
+      isBlob: true,
+      downloadFileName: item.getProtocolName(),
+    });
+  },
 };
 
 export default actions;
