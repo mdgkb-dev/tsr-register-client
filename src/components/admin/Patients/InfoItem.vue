@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
 
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 
@@ -58,19 +58,27 @@ export default defineComponent({
     withHover: { type: Boolean as PropType<boolean>, required: false, default: true },
     title: { type: String as PropType<string>, required: false, default: '' },
     customClass: { type: String as PropType<string>, required: false, default: '' },
+    close: { type: Boolean as PropType<boolean>, required: false, default: true },
   },
   emits: ['click'],
   setup(props, { emit }) {
     const hovering = ref(false);
+
     const isToggle: Ref<boolean> = ref(false);
+    const localClose: Ref<boolean> = ref(props.close);
 
     const changeState = () => {
+      console.log(isToggle.value)
       emit('click');
       if (props.withOpenWindow) {
         isToggle.value = true;
       } else {
         isToggle.value = false;
       }
+      if (localClose.value !== props.close) {
+        isToggle.value = false;
+        localClose.value = !localClose.value;
+      } 
     };
 
     const baseBoxStyle =

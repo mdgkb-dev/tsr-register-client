@@ -240,7 +240,7 @@
     </RightSliderContainer>
 
     <div class="scroll-block">
-      <div class="patient-count">Количество пациентов: {{ count }}</div>
+      <div class="patient-count">Количество пациентов: {{ count }} </div>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
@@ -248,7 +248,7 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
-                  <InfoItem margin="0 0 0 10px" open-height="auto" width="auto" borderColor="#ffffff" :withIcon="false" :withHover="false">
+                  <InfoItem :close="infoItemToggle" margin="0 0 0 10px" open-height="auto" width="auto" borderColor="#ffffff" :withIcon="false" :with-hover="false" :with-open-window="editMode">
                     <template #close-inside-content>
                       <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.editNameMode = true"/>
                     </template>
@@ -261,7 +261,7 @@
                         margin="0px"
                       >
                         <template #grid-items>
-                          <InfoItem title="фамилия" margin="0" open-height="auto" width="auto" :withIcon="false" :withOpenWindow="false" :withHover="false" borderColor="#ffffff" padding="0" >
+                          <InfoItem  title="фамилия" margin="0" open-height="auto" width="auto" :withIcon="false" :withOpenWindow="false" :withHover="false" borderColor="#ffffff" padding="0" >
                             <template #close-inside-content>
                               <el-input @click.stop="() => undefined" v-model="patient.human.surname" />
                             </template>
@@ -277,7 +277,6 @@
                             </template>
                           </InfoItem>
                           <Button button-class="save-button" text="Сохранить" @click="updateHumanName(patient)" />
-                          <!-- <el-button @click="updateHumanName(patient)">Сохранить</el-button> -->
                         </template>
                       </GridContainer>
                     </template>
@@ -290,7 +289,7 @@
                     title="инвалидность"
                     margin="0"
                     :with-open-window="false"
-                    @click="$router.push(`/admin/patients/${patient.id}?menu=disability`)"
+                    :with-hover="editMode"
                   >
                     <template #close-inside-content>
                       <div v-if="patient.getActuallyDisability()?.getActuallyEdv()" class="disability-circles">
@@ -309,7 +308,7 @@
                         />
                         <StringItem string=", до 29.12.23г." font-size="12px" />
                       </div>
-                      <div v-else @click="$router.push(`/admin/patients/${patient.id}?menu=disability`)">Нет справок ЕДВ</div>
+                      <div v-else>Нет справок ЕДВ</div>
                     </template>
                   </InfoItem>
                 </div>
@@ -324,7 +323,7 @@
                       margin="0px"
                     >
                       <template #grid-items>
-                        <InfoItem title="дата рождения" margin="0" open-height="auto" :with-open-window="false">
+                        <InfoItem title="дата рождения" margin="0" open-height="auto" :with-open-window="false" :with-hover="editMode">
                           <template #close-inside-content>
                             <SmallDatePicker
                               v-model:model-value="patient.human.dateBirth"
@@ -335,7 +334,7 @@
                             />
                           </template>
                         </InfoItem>
-                        <InfoItem title="представители" margin="0" open-height="auto" open-width="290px">
+                        <InfoItem title="представители" margin="0" open-height="auto" open-width="290px" :with-hover="editMode" :with-open-window="editMode">
                           <template #close-inside-content>
                             <div class="block">
                               <div v-for="rep in patient.patientsRepresentatives" :key="rep">
@@ -397,7 +396,7 @@
                         </InfoItem>
                       </template>
                     </GridContainer>
-                    <InfoItem title="регистры" margin="0 0 0 0px" open-height="auto" open-width="100%">
+                    <InfoItem title="регистры" margin="0 0 0 0px" open-height="auto" open-width="100%" :with-hover="editMode" :with-open-window="editMode">
                       <template #close-inside-content>
                         <div class="block">
                           <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id">
@@ -437,7 +436,7 @@
                       </template>
                       <!-- end -->
                     </InfoItem>
-                    <InfoItem title="диагнозы" margin="0 0 0 0px">
+                    <InfoItem title="диагнозы" margin="0 0 0 0px" :with-hover="editMode" :with-open-window="editMode">
                       <template #close-inside-content>
                         <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
                           <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" />
@@ -485,7 +484,7 @@
                       </template>
                       <!-- end -->
                     </InfoItem>
-                    <InfoItem title="документы" margin="0 0 0 0px">
+                    <InfoItem title="документы" margin="0 0 0 0px" :with-hover="editMode" :with-open-window="editMode">
                       <template #close-inside-content>
                         <div v-for="document in patient.human.documents" :key="document">
                           <StringItem :string="document.documentType.getTagName()" font-size="14px" />
@@ -597,6 +596,7 @@ export default defineComponent({
     // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const editMode: Ref<boolean> = ref(false);
+    const infoItemToggle: Ref<boolean> = ref(false);
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
     const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const loadPatients = async () => {
@@ -619,8 +619,11 @@ export default defineComponent({
       adminHeader: {
         title: 'Пациенты',
         buttons: [
-          { text: 'Добавить пациента', type: 'primary', action: () => (editMode.value = !editMode.value) },
-          { text: 'Режим редактирования', type: 'warning', action: addPatient },
+          { text: 'Добавить пациента', type: 'normal-button', action: addPatient },
+          {
+            text: computed(() => (editMode.value ? 'Просмотр' : 'Редактирование')),
+            action: () => (editMode.value = !editMode.value), type: 'normal-button'
+          },
         ],
       },
       sortsLib: PatientsSortsLib,
@@ -657,6 +660,7 @@ export default defineComponent({
     };
     const updateHumanName = async (patient: Patient): Promise<void> => {
       patient.editNameMode = false;
+      infoItemToggle.value = !infoItemToggle.value;
       await updateHuman(patient.human);
     };
 
@@ -719,6 +723,8 @@ export default defineComponent({
       patients,
       createSexFilters,
       ...Provider.getAdminLib(),
+      infoItemToggle,
+      editMode,
     };
   },
 });
@@ -759,7 +765,6 @@ export default defineComponent({
   margin: 2px 10px 0 0;
   font-size: 14px;
 }
-
 
 
 :deep(.edit-button) {
