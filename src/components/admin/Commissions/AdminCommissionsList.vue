@@ -29,96 +29,96 @@
               </div>
             </template>
           </InfoItem>
-
-          <FiltersButtonsMultiply
-            :filter-model="filterByStatus"
-            :options="createStatusesOptions()"
-            default-label="Статусы"
-            @load="loadCommissions"
-          />
         </template>
       </GridContainer>
     </div>
     <div class="scroll-block">
       <div class="patient-count">Количество комиссий: {{ count }}</div>
       <div v-for="commission in commissions" :key="commission.id">
-        <CollapseItem :is-collaps="true" padding="0 8px">
-          <template #inside-title>
-            <div class="flex-block" @click.prevent="() => undefined">
-              <div class="item-flex">
-                <div class="line-item-left">
-                  <Button
-                    :with-icon="true"
-                    width="40px"
-                    height="40px"
-                    border-radius="5px"
-                    color="#006BB4"
-                    background="#DFF2F8"
-                    background-hover="#DFF2F8"
-                    :color-swap="false"
-                    @click.prevent="edit(patient.id)"
-                  >
-                    <template #icon>
-                      <svg class="icon-edit">
-                        <use xlink:href="#edit"></use>
-                      </svg>
-                    </template>
-                  </Button>
-                  <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="17px" min-width="240px" width="100%" />
-                  <StringItem
-                    :string="`Статус: ${commission.commissionStatus?.name}`"
-                    :color="commission.commissionStatus?.color"
-                    font-size="17px"
-                    min-width="240px"
-                    width="100%"
-                  />
-                  <SmallDatePicker
-                    v-model:model-value="commission.date"
-                    placeholder="Выбрать"
-                    width="100%"
-                    height="34px"
-                    @change="updateCommission(commission)"
-                  />
-                  <SmallDatePicker
-                    v-model:model-value="commission.startDate"
-                    placeholder="Выбрать"
-                    width="100%"
-                    height="34px"
-                    @change="updateCommission(commission)"
-                  />
-                  <SmallDatePicker
-                    v-model:model-value="commission.endDate"
-                    placeholder="Выбрать"
-                    width="100%"
-                    height="34px"
-                    @change="updateCommission(commission)"
-                  />
-                  <el-select v-model="commission.commissionStatusId" @change="(e) => updateStatus(commission, e)">
-                    <el-option v-for="status in commissionsStatuses" :key="status.id" :label="status.name" :value="status" />
-                  </el-select>
-                  <div>{{ commission.patient.human.getFullName() }}</div>
-                  <RemoteSearch
-                    :must-be-translated="true"
-                    key-value="patient"
-                    placeholder="Введите имя пациента"
-                    @click.stop="() => undefined"
-                    @select="(e) => setPatient(e, commission)"
-                  />
+        <CollapseContainer>
+          <template #default="scope">
+            <CollapseItem :tab-id="commission.number" :is-collaps="true" :collapsed="true" :active-id="scope.activeId" padding="0 8px">
+              <template #inside-title>
+                <div class="flex-block" @click.prevent="() => undefined">
+                  <div class="item-flex">
+                    <div class="line-item-left">
+                      <Button
+                        :with-icon="true"
+                        width="40px"
+                        height="40px"
+                        border-radius="5px"
+                        color="#006BB4"
+                        background="#DFF2F8"
+                        background-hover="#DFF2F8"
+                        :color-swap="false"
+                        @click.prevent="edit(patient.id)"
+                      >
+                        <template #icon>
+                          <svg class="icon-edit">
+                            <use xlink:href="#edit"></use>
+                          </svg>
+                        </template>
+                      </Button>
+                      <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="17px" min-width="240px" width="100%" />
+
+                      <SmallDatePicker
+                        v-model:model-value="commission.date"
+                        placeholder="Выбрать"
+                        width="100%"
+                        height="34px"
+                        @change="updateCommission(commission)"
+                      />
+                      <SmallDatePicker
+                        v-model:model-value="commission.startDate"
+                        placeholder="Выбрать"
+                        width="100%"
+                        height="34px"
+                        @change="updateCommission(commission)"
+                      />
+                      <SmallDatePicker
+                        v-model:model-value="commission.endDate"
+                        placeholder="Выбрать"
+                        width="100%"
+                        height="34px"
+                        @change="updateCommission(commission)"
+                      />
+                      <div>{{ commission.patient.human.getFullName() }}</div>
+                      <RemoteSearch
+                        :must-be-translated="true"
+                        key-value="patient"
+                        placeholder="Введите имя пациента"
+                        @click.stop="() => undefined"
+                        @select="(e) => setPatient(e, commission)"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </template>
-          <template #inside-content>
-            <div class="background-container">
-              <div style="display: flex">
-                <div>
-                  <CommissionDoctors :commission="commission" />
+              </template>
+              <template #inside-content>
+                <div class="background-container">
+                  <div style="display: flex">
+                    <div>
+                      <CommissionDoctors :commission="commission" />
+                    </div>
+                    <div><CommissionDrug :commission="commission" /></div>
+                    <el-select v-model="commission.patientDiagnosisId" @change="updateCommission(commission)">
+                      <el-option
+                        v-for="patientDiagnosis in commission.patient.patientDiagnosis"
+                        :key="patientDiagnosis.id"
+                        :label="patientDiagnosis.mkbItem.getFullName()"
+                        :value="patientDiagnosis.id"
+                      />
+                    </el-select>
+
+                    <div v-if="commission.canGetProtocol()">
+                      <el-button @click="fillCommissionDownload(commission)">Сформировать протокол врачебной комиссии</el-button>
+                    </div>
+                  </div>
                 </div>
-                <div><CommissionDrug :commission="commission" /></div>
-              </div>
-            </div>
+              </template>
+            </CollapseItem>
           </template>
-        </CollapseItem>
+        </CollapseContainer>
       </div>
     </div>
   </AdminListWrapper>
@@ -161,7 +161,6 @@
 import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Commission from '@/classes/Commission';
-import CommissionStatus from '@/classes/CommissionStatus';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Patient from '@/classes/Patient';
 import CommissionDoctors from '@/components/admin/Commissions/CommissionDoctors.vue';
@@ -170,12 +169,12 @@ import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import IOption from '@/interfaces/shared/IOption';
-import CommissionsFiltersLib from '@/libs/filters/CommissionsFiltersLib';
+import CommissionsSortsLib from '@/libs/sorts/CommissionsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
@@ -185,6 +184,7 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminCommissionsList',
   components: {
+    CollapseContainer,
     RemoteSearch,
     AdminListWrapper,
     CollapseItem,
@@ -202,7 +202,6 @@ export default defineComponent({
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const commissionsStatuses: Ref<CommissionStatus[]> = computed(() => Provider.store.getters['commissionsStatuses/items']);
     const count: Ref<number> = computed(() => Provider.store.getters['commissions/count']);
     // const filteredcommissions: Ref<Patient[]> = computed(() => Provider.store.getters['commissions/filteredcommissions']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
@@ -210,7 +209,6 @@ export default defineComponent({
     const loadCommissions = async () => {
       await Provider.store.dispatch('commissionsStatuses/getAll');
       await Provider.loadItems();
-      filterByStatus.value = CommissionsFiltersLib.byStatus();
     };
 
     const load = async () => {
@@ -228,58 +226,18 @@ export default defineComponent({
         title: 'Врачебные комиссии',
         buttons: [{ text: 'Создать комиссию', type: 'primary', action: openCreateCommissionModal }],
       },
-      // sortsLib: commissionsSortsLib,
+      sortsLib: CommissionsSortsLib,
       getAction: 'getAllWithCount',
     });
 
     const selectSearch = async (event: ISearchObject): Promise<void> => {
       await Provider.router.push(`/admin/commissions/${event.value}`);
     };
-    //
-    // const openDrugContract = (): void => {
-    //   drugContractOpened.value = !drugContractOpened.value;
-    // };
-    //
-    // const openExpertCommittee = (): void => {
-    //   expertCommitteeOpened.value = !expertCommitteeOpened.value;
-    // };
-    //
-    // const openFundContract = (): void => {
-    //   fundContractOpened.value = !fundContractOpened.value;
-    // };
-    //
-    // const openFundCouncil = (): void => {
-    //   fundCouncilOpened.value = !fundCouncilOpened.value;
-    // };
-    //
-    // const createFundCouncil = async (): Promise<void> => {
-    //   fundContract.value.id = uuidv4();
-    //   await Provider.store.dispatch('fundCouncils/create');
-    //   fundContractOpened.value = false;
-    // };
-    //
-    // const createFundContract = async (): Promise<void> => {
-    //   fundContract.value.id = uuidv4();
-    //   await Provider.store.dispatch('fundContracts/create');
-    //   fundContractOpened.value = false;
-    // };
-
-    const createStatusesOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      commissionsStatuses.value.forEach((r: CommissionStatus) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
-    };
 
     const updateCommission = async (commission: Commission): Promise<void> => {
       await Provider.withHeadLoader(async () => {
         await Provider.store.dispatch('commissions/update', commission);
       });
-    };
-
-    const updateStatus = async (commission: Commission, status: CommissionStatus): Promise<void> => {
-      commission.commissionStatus = status;
-      commission.commissionStatusId = status.id;
-      await updateCommission(commission);
     };
 
     const setPatient = async (event: ISearchObject, commission: Commission) => {
@@ -295,36 +253,23 @@ export default defineComponent({
       templatesOpened.value = false;
     };
 
+    const fillCommissionDownload = async (commission: Commission): Promise<void> => {
+      await Provider.store.dispatch('commissions/filledApplicationDownload', commission);
+    };
+
     return {
+      fillCommissionDownload,
       createCommission,
       templatesOpened,
       commissionsTemplates,
       setPatient,
       filterByStatus,
-      commissionsStatuses,
-      updateStatus,
-      createStatusesOptions,
       updateCommission,
-      // openFundCouncil,
-      // createFundCouncil,
-      // fundCouncilOpened,
-      // fundCouncil,
-      // fundContractOpened,
-      // fundContract,
-      // createFundContract,
-      // openFundContract,
       count,
-      // authModalVisible,
       selectSearch,
-      // filterByRegister,
       loadCommissions,
       commissions,
-      // createSexFilters,
       ...Provider.getAdminLib(),
-      // openDrugContract,
-      // openExpertCommittee,
-      // drugContractOpened,
-      // expertCommitteeOpened,
     };
   },
 });

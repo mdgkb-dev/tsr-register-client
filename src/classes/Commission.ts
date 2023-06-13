@@ -2,16 +2,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import CommissionDoctorTemplate from '@/classes/CommissionDoctorTemplate';
-import CommissionStatus from '@/classes/CommissionStatus';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Doctor from '@/classes/Doctor';
 import Drug from '@/classes/Drug';
 import DrugRegimen from '@/classes/DrugRegimen';
-import FileInfo from '@/classes/files/FileInfo';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import ClassHelper from '@/services/ClassHelper';
+import DateTimeFormat from '@/services/DateFormat';
+
 export default class Commission {
   id?: string;
   date = new Date();
@@ -35,14 +35,6 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(PatientDiagnosis)
   patientDiagnosis?: PatientDiagnosis;
   patientDiagnosisId?: string;
-  @ClassHelper.GetClassConstructor(CommissionStatus)
-  commissionStatus?: CommissionStatus;
-  commissionStatusId?: string;
-
-  @ClassHelper.GetClassConstructor(FileInfo)
-  dzmAnswerFile?: FileInfo;
-  dzmAnswerFileId?: string;
-  dzmAnswerComment = '';
 
   constructor(i?: Commission) {
     ClassHelper.BuildClass(this, i);
@@ -76,5 +68,14 @@ export default class Commission {
   setDrug(drug: Drug): void {
     this.drug = drug;
     this.drugId = drug.id;
+  }
+
+  getProtocolName(): string {
+    const formatter = new DateTimeFormat();
+    return `Протокол №${this.number} от ${formatter.format(this.date)}. Пациент ${this.patient.human.getFullName()}.docx`;
+  }
+
+  canGetProtocol(): boolean {
+    return !!this.patient && !!this.patient.human && !!this.drug && !!this.patientDiagnosis?.mkbItem;
   }
 }
