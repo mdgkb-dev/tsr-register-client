@@ -1,5 +1,6 @@
 <template>
   <el-input-number v-model="answer.valueNumber" @change="filledCheck" />
+
   <!--  <el-radio-group-->
   <!--    :model-value="registerGroupToPatient.getMeasureId(prop.id)"-->
   <!--    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"-->
@@ -69,5 +70,17 @@ export default defineComponent({
 }
 .el-divider {
   margin: 10px 0;
+}
+
+:deep(.el-input-number__increase) {
+  border-radius: 0px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+:deep(.el-input-number__decrease) {
+  border-radius: 0px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 </style>
