@@ -131,6 +131,11 @@
                           Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
                         </div>
                       </div>
+                      <div class="flex-line4" v-for="res in getCalculationsResults(research)" :key="res.name">
+                        <div class="res-name" v-if="Number.isFinite(res.value)" >{{ res.formulaName + ':'}}</div>
+                        <div v-if="Number.isFinite(res.value)" >{{ res.value.toFixed(2) }}</div>
+                        <div :style="{ color: res.color }">{{ res.result }}</div>
+                      </div>
                       <div class="tools">
                         <div class="control-buttons">
                           <div class="left">
@@ -192,11 +197,6 @@
                                     :research-result="researchResult"
                                     @fill="scroll(question.getIdWithoutDashes())"
                                   />
-                                  <div v-for="res in getCalculationsResults(research)" :key="res.name">
-                                    <div>{{ res.formulaName }}</div>
-                                    <div>{{ res.value }}</div>
-                                    <div :style="{ color: res.color }">{{ res.result }}</div>
-                                  </div>
                                 </div>
                               </template>
                             </CollapseItem>
@@ -852,6 +852,21 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   height: 60px;
+}
+
+.flex-line4 {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: 10px 0;
+  color: #00b5a4;
+  font-size: 18px;
+}
+
+.res-name {
+  margin-right: 10px;
 }
 
 :deep(.el-timeline) {
