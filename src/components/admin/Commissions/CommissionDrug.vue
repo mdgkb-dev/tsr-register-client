@@ -23,7 +23,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['select'],
+  setup(props, { emit }) {
     const drugsListShowed: Ref<boolean> = ref(false);
     const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
 
@@ -32,8 +33,8 @@ export default defineComponent({
         return;
       }
       props.commission.setDrug(drug);
-      await Provider.store.dispatch('commissions/updateWithoutReset', props.commission);
       drugsListShowed.value = false;
+      emit('select');
     };
 
     const showDrugsList = async (show: boolean): Promise<void> => {

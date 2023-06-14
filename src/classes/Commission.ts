@@ -65,6 +65,11 @@ export default class Commission {
     this.patientId = patient.id;
   }
 
+  setPatientDiagnosis(patientDiagnosis: PatientDiagnosis): void {
+    this.patientDiagnosis = patientDiagnosis;
+    this.patientDiagnosisId = patientDiagnosis.id;
+  }
+
   setDrug(drug: Drug): void {
     this.drug = drug;
     this.drugId = drug.id;
@@ -76,6 +81,6 @@ export default class Commission {
   }
 
   canGetProtocol(): boolean {
-    return !!this.patient && !!this.patient.human && !!this.drug && !!this.patientDiagnosis?.mkbItem;
+    return !!this.patient.id && !!this.patient.human.id && !!this.drug && !!this.patientDiagnosis?.mkbItem;
   }
 }

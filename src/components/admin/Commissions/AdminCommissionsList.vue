@@ -100,16 +100,23 @@
                     <div>
                       <CommissionDoctors :commission="commission" />
                     </div>
-                    <div><CommissionDrug :commission="commission" /></div>
-                    <el-select v-model="commission.patientDiagnosisId" @change="updateCommission(commission)">
+                    <div v-if="commission.patient.id">
+                      <CommissionDrug :commission="commission" @select="updateCommission(commission)" />
+                    </div>
+                    <el-select
+                      v-if="commission.patient.id"
+                      v-model="commission.patientDiagnosisId"
+                      @change="(e) => setPatientDiagnosis(e, commission)"
+                    >
                       <el-option
                         v-for="patientDiagnosis in commission.patient.patientDiagnosis"
                         :key="patientDiagnosis.id"
                         :label="patientDiagnosis.mkbItem.getFullName()"
-                        :value="patientDiagnosis.id"
+                        :value="patientDiagnosis"
                       />
                     </el-select>
 
+                    {{ commission.canGetProtocol() }}
                     <div v-if="commission.canGetProtocol()">
                       <el-button @click="fillCommissionDownload(commission)">Сформировать протокол врачебной комиссии</el-button>
                     </div>
@@ -127,34 +134,6 @@
       {{ template.name }}
     </div>
   </el-dialog>
-  <svg width="0" height="0" class="hidden">
-    <symbol id="edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-      <path
-        d="M13 3C9.145 3 6 6.145 6 10C6 12.41 7.23 14.55 9.094 15.813C5.527 17.343 3 20.883 3 25H5C5 20.57 8.57 17 13 17C15.145 17 17.063 17.879 18.5 19.25L13.781 23.969L13.719 24.281L13.031 27.813L12.719 29.281L14.188 28.969L17.718 28.281L18.031 28.219L28.125 18.125C29.285 16.965 29.285 15.035 28.125 13.875C27.5652 13.3197 26.8103 13.0056 26.0218 12.9998C25.2333 12.994 24.4739 13.297 23.906 13.844L19.938 17.813C19.0565 16.9686 18.0292 16.291 16.906 15.813C17.8575 15.1707 18.637 14.3049 19.1764 13.2915C19.7158 12.2782 19.9986 11.148 20 10C20 6.145 16.855 3 13 3ZM13 5C15.773 5 18 7.227 18 10C18 12.773 15.773 15 13 15C10.227 15 8 12.773 8 10C8 7.227 10.227 5 13 5ZM26 15C26.254 15 26.52 15.082 26.719 15.281C26.8134 15.3721 26.8885 15.4813 26.9398 15.6021C26.9911 15.7229 27.0175 15.8528 27.0175 15.984C27.0175 16.1152 26.9911 16.2451 26.9398 16.3659C26.8885 16.4867 26.8134 16.5959 26.719 16.687L17.031 26.375L15.25 26.75L15.625 24.969L25.313 15.281C25.4022 15.1897 25.5092 15.1177 25.6274 15.0693C25.7455 15.021 25.8724 14.9974 26 15Z"
-      ></path>
-      <path
-        d="M13 3C9.145 3 6 6.145 6 10C6 12.41 7.23 14.55 9.094 15.813C5.527 17.343 3 20.883 3 25H5C5 20.57 8.57 17 13 17C15.145 17 17.063 17.879 18.5 19.25L13.781 23.969L13.719 24.281L13.031 27.813L12.719 29.281L14.188 28.969L17.718 28.281L18.031 28.219L28.125 18.125C29.285 16.965 29.285 15.035 28.125 13.875C27.5652 13.3197 26.8103 13.0056 26.0218 12.9998C25.2333 12.994 24.4739 13.297 23.906 13.844L19.938 17.813C19.0565 16.9686 18.0292 16.291 16.906 15.813C17.8575 15.1707 18.637 14.3049 19.1764 13.2915C19.7158 12.2782 19.9986 11.148 20 10C20 6.145 16.855 3 13 3ZM13 5C15.773 5 18 7.227 18 10C18 12.773 15.773 15 13 15C10.227 15 8 12.773 8 10C8 7.227 10.227 5 13 5ZM26 15C26.254 15 26.52 15.082 26.719 15.281C26.8134 15.3721 26.8885 15.4813 26.9398 15.6021C26.9911 15.7229 27.0175 15.8528 27.0175 15.984C27.0175 16.1152 26.9911 16.2451 26.9398 16.3659C26.8885 16.4867 26.8134 16.5959 26.719 16.687L17.031 26.375L15.25 26.75L15.625 24.969L25.313 15.281C25.4022 15.1897 25.5092 15.1177 25.6274 15.0693C25.7455 15.021 25.8724 14.9974 26 15Z"
-      ></path>
-    </symbol>
-    <symbol id="iconamoon_edit-light" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-      <path
-        d="M6.2513 2.50053L7.5013 3.75053M5.41797 8.33386H8.7513M2.08464 6.66719L1.66797 8.33386L3.33464 7.91719L8.16214 3.08969C8.31836 2.93342 8.40612 2.7215 8.40612 2.50053C8.40612 2.27956 8.31836 2.06763 8.16214 1.91136L8.09047 1.83969C7.9342 1.68347 7.72227 1.5957 7.5013 1.5957C7.28033 1.5957 7.06841 1.68347 6.91214 1.83969L2.08464 6.66719Z"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></path>
-    </symbol>
-
-    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
-    </symbol>
-
-    <symbol id="del" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-      <path
-        d="M2.91797 8.75C2.6888 8.75 2.49255 8.66833 2.32922 8.505C2.16589 8.34167 2.08436 8.14556 2.08464 7.91667V2.5H1.66797V1.66667H3.7513V1.25H6.2513V1.66667H8.33464V2.5H7.91797V7.91667C7.91797 8.14583 7.8363 8.34208 7.67297 8.50542C7.50964 8.66875 7.31352 8.75028 7.08464 8.75H2.91797ZM7.08464 2.5H2.91797V7.91667H7.08464V2.5ZM3.7513 7.08333H4.58464V3.33333H3.7513V7.08333ZM5.41797 7.08333H6.2513V3.33333H5.41797V7.08333Z"
-      ></path>
-    </symbol>
-  </svg>
 </template>
 
 <script lang="ts">
@@ -163,6 +142,7 @@ import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 import Commission from '@/classes/Commission';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Patient from '@/classes/Patient';
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import CommissionDoctors from '@/components/admin/Commissions/CommissionDoctors.vue';
 import CommissionDrug from '@/components/admin/Commissions/CommissionDrug.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
@@ -257,7 +237,13 @@ export default defineComponent({
       await Provider.store.dispatch('commissions/filledApplicationDownload', commission);
     };
 
+    const setPatientDiagnosis = async (patientDiagnosis: PatientDiagnosis, commission: Commission): Promise<void> => {
+      commission.setPatientDiagnosis(patientDiagnosis);
+      await updateCommission(commission);
+    };
+
     return {
+      setPatientDiagnosis,
       fillCommissionDownload,
       createCommission,
       templatesOpened,
