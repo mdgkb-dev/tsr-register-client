@@ -7,15 +7,13 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div class="slider-item-search">
-          <div
-            v-for="commissionTemplate in commissionsTemplates"
-            :key="commissionTemplate.id"
-            class="slider-item"
-            @click="addCommission(commissionTemplate)"
-          >
-            {{ commissionTemplate.name }}
-          </div>
+        <div
+          v-for="commissionTemplate in commissionsTemplates"
+          :key="commissionTemplate.id"
+          class="slider-item"
+          @click="addCommission(commissionTemplate)"
+        >
+          {{ commissionTemplate.name.substring(12) }}
         </div>
       </div>
     </template>
