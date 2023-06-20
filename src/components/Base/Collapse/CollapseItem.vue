@@ -1,9 +1,10 @@
 <template>
-  <div class="tab"
+  <div
+    class="tab"
     :style="{
       marginTop: marginTop,
       height: isCollaps && collapsed ? '60px' : '',
-      overflow: isCollaps && collapsed ? 'hidden' : ''
+      overflow: isCollaps && collapsed ? 'hidden' : '',
     }"
   >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
@@ -20,7 +21,8 @@
           padding: padding,
           borderRadius: '5px',
         }"
-        class="tab-name">
+        class="tab-name"
+      >
         <div class="inside-icon">
           <slot name="icon" />
         </div>
@@ -28,24 +30,27 @@
           {{ title }}
         </div>
         <div v-else class="title-in">
-          <slot  name="inside-title" />
+          <slot name="inside-title" />
         </div>
         <div class="tools-bar" :class="{ 'hidden-part': showToolsOnHover }">
           <slot name="tools" />
         </div>
       </div>
     </label>
-    <div :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: changeColor ? background : backgroundAttention }" :class="collapsed ? 'tab-content-down' : 'tab-content-up'">
+    <div
+      :style="{ maxHeight: isCollaps ? '' : '1000000vh', background: changeColor ? background : backgroundAttention }"
+      :class="collapsed ? 'tab-content-down' : 'tab-content-up'"
+    >
       <slot name="inside-content" />
     </div>
   </div>
   <!-- <Arrows /> -->
   <svg width="0" height="0" class="hidden">
-    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="arrow-down">
+    <symbol id="arrow-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <path d="M5 6L10 11L15 6L17 7L10 14L3 7L5 6Z"></path>
     </symbol>
 
-    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" id="arrow-up">
+    <symbol id="arrow-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <path d="M15 14L10 9L5 14L3 13L10 6L17 13L15 14Z"></path>
     </symbol>
   </svg>
@@ -65,8 +70,8 @@ export default defineComponent({
     isCollaps: { type: Boolean as PropType<boolean>, default: true },
     title: { type: String as PropType<string>, default: '' },
     showToolsOnHover: { type: Boolean as PropType<boolean>, default: true },
-    background: {type: String as PropType<string>, required: false, default: '#ffffff'},
-    backgroundAttention: {type: String as PropType<string>, required: false, default: '#ffffff'},
+    background: { type: String as PropType<string>, required: false, default: '#ffffff' },
+    backgroundAttention: { type: String as PropType<string>, required: false, default: '#ffffff' },
     changeColor: { type: Boolean as PropType<boolean>, default: false },
     marginTop: { type: String as PropType<string>, default: '10px' },
     padding: { type: String as PropType<string>, default: '0 10px' },
@@ -249,7 +254,7 @@ export default defineComponent({
 }
 
 .tab:hover {
-  box-shadow: 0px 0px 1px 2px #1979CF;
+  box-shadow: 0px 0px 1px 2px #1979cf;
 }
 
 .title-in {

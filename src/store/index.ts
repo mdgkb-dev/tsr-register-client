@@ -14,6 +14,7 @@ import { doctors } from '@/store/modules/doctors';
 import { drugApplications } from '@/store/modules/drugApplications';
 import { drugApplicationsStatuses } from '@/store/modules/drugApplicationsStatuses';
 import { drugArrives } from '@/store/modules/drugArrives';
+import { drugDecreases } from '@/store/modules/drugDecreases';
 import { drugs } from '@/store/modules/drugs';
 import { edvs } from '@/store/modules/edvs';
 import { filter } from '@/store/modules/filter';
@@ -96,6 +97,7 @@ const store: StoreOptions<RootState> = {
     drugApplications,
     commissionsDrugApplications,
     drugApplicationsStatuses,
+    drugDecreases,
   },
 };
 

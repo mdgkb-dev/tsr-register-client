@@ -6,6 +6,7 @@ export default class DrugApplicationFile {
   @ClassHelper.GetClassConstructor(FileInfo)
   fileInfo: FileInfo = new FileInfo();
   fileInfoId?: string;
+  drugApplicationId?: string;
   comment = '';
   name = '';
 

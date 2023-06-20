@@ -4,7 +4,7 @@ import Commission from '@/classes/Commission';
 import CommissionDrugApplication from '@/classes/CommissionDrugApplication';
 import DrugApplicationFile from '@/classes/DrugApplicationFile';
 import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
-import FileInfo from '@/classes/files/FileInfo';
+import FundContract from '@/classes/FundContract';
 import ClassHelper from '@/services/ClassHelper';
 export default class DrugApplication {
   id?: string;
@@ -13,13 +13,16 @@ export default class DrugApplication {
   drugApplicationStatus?: DrugApplicationStatus;
   drugApplicationStatusId?: string;
   number = '';
-  // @ClassHelper.GetClassConstructor(FileInfo)
-  // dzmAnswerFile?: FileInfo;
-  // dzmAnswerFileId?: string;
-  // dzmAnswerComment = '';
 
   @ClassHelper.GetClassConstructor(CommissionDrugApplication)
   commissionsDrugApplications: CommissionDrugApplication[] = [];
+
+  @ClassHelper.GetClassConstructor(DrugApplicationFile)
+  drugApplicationFiles: DrugApplicationFile[] = [];
+
+  @ClassHelper.GetClassConstructor(FundContract)
+  fundContract: FundContract = new FundContract();
+  fundContractId?: string;
 
   constructor(i?: DrugApplication) {
     ClassHelper.BuildClass(this, i);
@@ -46,7 +49,14 @@ export default class DrugApplication {
   addFile(): DrugApplicationFile {
     const item = new DrugApplicationFile();
     item.id = uuidv4();
-    item.fileInfo = new FileInfo();
+    item.drugApplicationId = this.id;
+    this.drugApplicationFiles.push(item);
     return item;
+  }
+
+  initFundContract(): void {
+    this.fundContract.id = uuidv4();
+    this.fundContractId = this.fundContract.id;
+    this.fundContract.drugApplicationId = this.id;
   }
 }

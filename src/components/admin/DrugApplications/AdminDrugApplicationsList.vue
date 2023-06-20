@@ -168,6 +168,27 @@
                   <el-option v-for="item in commissions" :key="item.number" :label="item.number" :value="item" />
                 </el-select>
               </div>
+
+              <div>Файлы</div>
+              <el-button @click="addFile(drugApplication)">Добавить</el-button>
+              <div v-for="drugApplicationFile in drugApplication.drugApplicationFiles" :key="drugApplicationFile.id">
+                <FileUploader :file-info="drugApplicationFile.fileInfo" />
+                <el-input v-model="drugApplicationFile.comment" />
+                <el-button @click="removeFile(drugApplication, drugApplicationFile.id)">Удалить</el-button>
+              </div>
+
+              <div>Поставки лекарств</div>
+              <template v-if="!drugApplication.fundContract.id">
+                <el-button @click="initFundContract(drugApplication)">Добавить контракт фонда</el-button>
+              </template>
+              <template v-else>
+                <el-button @click="addDrugArrive(drugApplication)">Добавить</el-button>
+                <div v-for="drugArrive in drugApplication.fundContract.drugArrives" :key="drugArrive.id">
+                  <el-input-number v-model="drugArrive.stage" @blur="updateDrugArrive(drugArrive)" />
+                  <el-input-number v-model="drugArrive.quantity" />
+                  <el-button @click="removeDrugArrive(drugApplication, drugArrive.id)">Удалить</el-button>
+                </div>
+              </template>
             </template>
           </CollapseItem>
         </CollapseContainer>
@@ -185,6 +206,7 @@ import Del from '@/assets/svg/Del.svg';
 import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
 import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
+import DrugArrive from '@/classes/DrugArrive';
 import User from '@/classes/User';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import InfoItem from '@/components/admin/Patients/InfoItem.vue';
@@ -193,6 +215,7 @@ import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
+import FileUploader from '@/components/FileUploader.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
@@ -211,9 +234,11 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
+    FileUploader,
     CollapseContainer,
     FiltersButtonsMultiply,
     RemoteSearch,
+
     AdminListWrapper,
     CollapseItem,
     Button,
@@ -259,7 +284,6 @@ export default defineComponent({
 
     const addApplication = async (): Promise<void> => {
       const drugApplication = new DrugApplication();
-      console.log(drugApplication);
       await Provider.store.dispatch('drugApplications/createWithoutReset', drugApplication);
       Provider.store.commit('drugApplications/unshiftToAll', drugApplication);
     };
@@ -299,7 +323,42 @@ export default defineComponent({
       return await Provider.store.dispatch('commissionsDrugApplications/remove', id);
     };
 
+    const addFile = async (drugApplication: DrugApplication) => {
+      const item = drugApplication.addFile();
+      // await Provider.store.dispatch('commissionsDrugApplications/create', item);
+    };
+
+    const removeFile = async (drugApplication: DrugApplication, id?: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, drugApplication.drugApplicationFiles, []);
+      // return await Provider.store.dispatch('commissionsDrugApplications/remove', id);
+    };
+
+    const initFundContract = async (drugApplication: DrugApplication) => {
+      drugApplication.initFundContract();
+      await Provider.store.dispatch('fundContracts/create', drugApplication.fundContract);
+    };
+
+    const addDrugArrive = async (drugApplication: DrugApplication) => {
+      const item = drugApplication.fundContract?.addDrugArrive();
+      await Provider.store.dispatch('drugArrives/create', item);
+    };
+
+    const removeDrugArrive = async (drugApplication: DrugApplication, id?: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, drugApplication.fundContract.drugArrives, []);
+      return await Provider.store.dispatch('drugArrives/remove', id);
+    };
+
+    const updateDrugArrive = async (item: DrugArrive) => {
+      await Provider.store.dispatch('drugArrives/update', item);
+    };
+
     return {
+      updateDrugArrive,
+      initFundContract,
+      addDrugArrive,
+      removeDrugArrive,
+      addFile,
+      removeFile,
       loadDrugApplications,
       drugApplicationsStatuses,
       filterByStatus,

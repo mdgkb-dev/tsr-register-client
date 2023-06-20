@@ -14,6 +14,9 @@ export default class FundContract {
   @ClassHelper.GetClassConstructor(Drug)
   drug?: Drug;
   drugId?: string;
+
+  drugApplicationId?: string;
+
   constructor(i?: FundContract) {
     ClassHelper.BuildClass(this, i);
   }
@@ -21,6 +24,7 @@ export default class FundContract {
   addDrugArrive(): DrugArrive {
     const item = DrugArrive.Create(this);
     item.stage = this.drugArrives.length + 1;
+    item.fundContractId = this.id;
     this.drugArrives.push(item);
     return item;
   }

@@ -34,99 +34,141 @@
     </div>
     <div class="scroll-block">
       <div class="patient-count">Количество комиссий: {{ count }}</div>
-      <div v-for="commission in commissions" :key="commission.id">
-        <CollapseContainer>
-          <template #default="scope">
-            <CollapseItem :tab-id="commission.number" :is-collaps="true" :collapsed="true" :active-id="scope.activeId" padding="0 8px">
-              <template #inside-title>
-                <div class="flex-block" @click.prevent="() => undefined">
-                  <div class="item-flex">
-                    <div class="line-item-left">
-                      <Button
-                        :with-icon="true"
-                        width="40px"
-                        height="40px"
-                        border-radius="5px"
-                        color="#006BB4"
-                        background="#DFF2F8"
-                        background-hover="#DFF2F8"
-                        :color-swap="false"
-                        @click.prevent="edit(patient.id)"
-                      >
-                        <template #icon>
-                          <svg class="icon-edit">
-                            <use xlink:href="#edit"></use>
-                          </svg>
-                        </template>
-                      </Button>
-                      <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="17px" min-width="240px" width="100%" />
-
-                      <SmallDatePicker
-                        v-model:model-value="commission.date"
-                        placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
-                        @change="updateCommission(commission)"
-                      />
-                      <SmallDatePicker
-                        v-model:model-value="commission.startDate"
-                        placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
-                        @change="updateCommission(commission)"
-                      />
-                      <SmallDatePicker
-                        v-model:model-value="commission.endDate"
-                        placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
-                        @change="updateCommission(commission)"
-                      />
-                      <div>{{ commission.patient.human.getFullName() }}</div>
-                      <RemoteSearch
-                        :must-be-translated="true"
-                        key-value="patient"
-                        placeholder="Введите имя пациента"
-                        @click.stop="() => undefined"
-                        @select="(e) => setPatient(e, commission)"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template #inside-content>
-                <div class="background-container">
-                  <div style="display: flex">
-                    <div>
-                      <CommissionDoctors :commission="commission" />
-                    </div>
-                    <div v-if="commission.patient.id">
-                      <CommissionDrug :commission="commission" @select="updateCommission(commission)" />
-                    </div>
-                    <el-select
-                      v-if="commission.patient.id"
-                      v-model="commission.patientDiagnosisId"
-                      @change="(e) => setPatientDiagnosis(e, commission)"
+      <CollapseContainer>
+        <template #default="scope">
+          <CollapseItem
+            v-for="(commission, i) in commissions"
+            :key="commission.id"
+            :tab-id="i + 1"
+            :active-id="scope.activeId"
+            padding="0 8px"
+            @changeActiveId="scope.changeActiveId"
+          >
+            <template #inside-title>
+              <div class="flex-block" @click.prevent="() => undefined">
+                <div class="item-flex">
+                  <div class="line-item-left">
+                    <Button
+                      :with-icon="true"
+                      width="40px"
+                      height="40px"
+                      border-radius="5px"
+                      color="#006BB4"
+                      background="#DFF2F8"
+                      background-hover="#DFF2F8"
+                      :color-swap="false"
+                      @click.prevent="edit(patient.id)"
                     >
-                      <el-option
-                        v-for="patientDiagnosis in commission.patient.patientDiagnosis"
-                        :key="patientDiagnosis.id"
-                        :label="patientDiagnosis.mkbItem.getFullName()"
-                        :value="patientDiagnosis"
-                      />
-                    </el-select>
+                      <template #icon>
+                        <svg class="icon-edit">
+                          <use xlink:href="#edit"></use>
+                        </svg>
+                      </template>
+                    </Button>
+                    <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="17px" min-width="240px" width="100%" />
+                    <GridContainer
+                      max-width="auto"
+                      grid-gap="10px"
+                      grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
+                      margin="0px"
+                    >
+                      <template #grid-items>
+                        <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false">
+                          <template #close-inside-content>
+                            <SmallDatePicker
+                              v-model:model-value="commission.date"
+                              placeholder="Выбрать"
+                              width="100%"
+                              height="34px"
+                              @change="updateCommission(commission)"
+                            />
+                          </template>
+                        </InfoItem>
+                      </template>
+                    </GridContainer>
 
-                    {{ commission.canGetProtocol() }}
-                    <div v-if="commission.canGetProtocol()">
-                      <el-button @click="fillCommissionDownload(commission)">Сформировать протокол врачебной комиссии</el-button>
-                    </div>
+                    <InfoItem
+                      :close="infoItemToggle"
+                      margin="0 0 0 10px"
+                      open-height="auto"
+                      width="auto"
+                      border-color="#ffffff"
+                      :with-icon="false"
+                      :with-hover="false"
+                      :with-open-window="editMode"
+                    >
+                      <template #close-inside-content>
+                        <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" />
+                      </template>
+
+                      <template #open-inside-content>
+                        <GridContainer
+                          max-width="auto"
+                          grid-gap="10px"
+                          grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
+                          margin="0px"
+                        >
+                          <template #grid-items>
+                            <div>{{ commission.patient.human.getFullName() }}</div>
+                            <InfoItem
+                              title="фамилия"
+                              margin="0"
+                              open-height="auto"
+                              width="auto"
+                              :with-icon="false"
+                              :with-open-window="false"
+                              :with-hover="false"
+                              border-color="#ffffff"
+                              padding="0"
+                            >
+                              <RemoteSearch
+                                :must-be-translated="true"
+                                key-value="patient"
+                                placeholder="Введите имя пациента"
+                                @click.stop="() => undefined"
+                                @select="(e) => setPatient(e, commission)"
+                              />
+                            </InfoItem>
+                          </template>
+                        </GridContainer>
+                      </template>
+                    </InfoItem>
                   </div>
                 </div>
-              </template>
-            </CollapseItem>
-          </template>
-        </CollapseContainer>
-      </div>
+              </div>
+            </template>
+            <template #inside-content>
+              <div class="background-container">
+                <div style="display: flex">
+                  <div>
+                    <CommissionDoctors :commission="commission" />
+                  </div>
+                  <div v-if="commission.patient.id">
+                    <CommissionDrug :commission="commission" @select="updateCommission(commission)" />
+                  </div>
+                  <el-select
+                    v-if="commission.patient.id"
+                    v-model="commission.patientDiagnosisId"
+                    @change="(e) => setPatientDiagnosis(e, commission)"
+                  >
+                    <el-option
+                      v-for="patientDiagnosis in commission.patient.patientDiagnosis"
+                      :key="patientDiagnosis.id"
+                      :label="patientDiagnosis.mkbItem.getFullName()"
+                      :value="patientDiagnosis"
+                    />
+                  </el-select>
+
+                  {{ commission.canGetProtocol() }}
+                  <div v-if="commission.canGetProtocol()">
+                    <el-button @click="fillCommissionDownload(commission)">Сформировать протокол врачебной комиссии</el-button>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </CollapseItem>
+        </template>
+      </CollapseContainer>
     </div>
   </AdminListWrapper>
   <el-dialog :model-value="templatesOpened" title="Выбрать шаблон комиссии" :close-on-click-modal="false" :close-on-press-escape="false">
@@ -262,6 +304,14 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.patient-name {
+  color: #006bb4;
+  font-size: 17px;
+  min-width: 240px;
+  width: 100%;
+  padding: 0px;
+}
 
 .hidden {
   display: none;
