@@ -95,42 +95,19 @@
                       border-color="#ffffff"
                       :with-icon="false"
                       :with-hover="false"
-                      :with-open-window="editMode"
                     >
                       <template #close-inside-content>
                         <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" />
                       </template>
 
                       <template #open-inside-content>
-                        <GridContainer
-                          max-width="auto"
-                          grid-gap="10px"
-                          grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
-                          margin="0px"
-                        >
-                          <template #grid-items>
-                            <div>{{ commission.patient.human.getFullName() }}</div>
-                            <InfoItem
-                              title="фамилия"
-                              margin="0"
-                              open-height="auto"
-                              width="auto"
-                              :with-icon="false"
-                              :with-open-window="false"
-                              :with-hover="false"
-                              border-color="#ffffff"
-                              padding="0"
-                            >
-                              <RemoteSearch
-                                :must-be-translated="true"
-                                key-value="patient"
-                                placeholder="Введите имя пациента"
-                                @click.stop="() => undefined"
-                                @select="(e) => setPatient(e, commission)"
-                              />
-                            </InfoItem>
-                          </template>
-                        </GridContainer>
+                        <RemoteSearch
+                          :must-be-translated="true"
+                          key-value="patient"
+                          placeholder="Введите имя пациента"
+                          @click.stop="() => undefined"
+                          @select="(e) => setPatient(e, commission)"
+                        />
                       </template>
                     </InfoItem>
                   </div>
@@ -148,7 +125,7 @@
                   </div>
                   <el-select
                     v-if="commission.patient.id"
-                    v-model="commission.patientDiagnosisId"
+                    v-model="commission.patientDiagnosis"
                     @change="(e) => setPatientDiagnosis(e, commission)"
                   >
                     <el-option
@@ -159,7 +136,6 @@
                     />
                   </el-select>
 
-                  {{ commission.canGetProtocol() }}
                   <div v-if="commission.canGetProtocol()">
                     <el-button @click="fillCommissionDownload(commission)">Сформировать протокол врачебной комиссии</el-button>
                   </div>
@@ -227,6 +203,7 @@ export default defineComponent({
     const count: Ref<number> = computed(() => Provider.store.getters['commissions/count']);
     // const filteredcommissions: Ref<Patient[]> = computed(() => Provider.store.getters['commissions/filteredcommissions']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
+    const infoItemToggle: Ref<boolean> = ref(false);
 
     const loadCommissions = async () => {
       await Provider.store.dispatch('commissionsStatuses/getAll');
@@ -266,6 +243,7 @@ export default defineComponent({
       await Provider.store.dispatch('patients/get', event.value);
       commission.setPatient(patient.value);
       await updateCommission(commission);
+      infoItemToggle.value = !infoItemToggle.value;
     };
 
     const createCommission = async (template: CommissionTemplate): Promise<void> => {
@@ -285,6 +263,7 @@ export default defineComponent({
     };
 
     return {
+      infoItemToggle,
       setPatientDiagnosis,
       fillCommissionDownload,
       createCommission,

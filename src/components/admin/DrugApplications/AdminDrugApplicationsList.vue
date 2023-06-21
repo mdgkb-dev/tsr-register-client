@@ -58,13 +58,6 @@
               <div class="flex-block" @click.prevent="() => undefined">
                 <div class="item-flex">
                   <div class="line-item-left">
-                    <Button
-                      button-class="edit-button"
-                      color="#006bb4"
-                      icon="edit"
-                      icon-class="edit-icon"
-                      @click="edit(drugApplication.id)"
-                    />
                     <InfoItem
                       margin="0 0 0 10px"
                       open-height="auto"
@@ -80,7 +73,7 @@
                           @click="drugApplication.editNameMode = true"
                         />
                         <el-select v-model="drugApplication.drugApplicationStatusId" @change="(e) => updateStatus(drugApplication, e)">
-                          <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status" />
+                          <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status.id" />
                         </el-select>
                       </template>
                       <template #open-inside-content>
@@ -121,13 +114,6 @@
                       height="34px"
                       @change="updateDrugApplication(drugApplication)"
                     />
-                    <StringItem
-                      :string="`Статус: ${drugApplication.drugApplicationStatus?.name}`"
-                      :color="drugApplication.drugApplicationStatus?.color"
-                      font-size="17px"
-                      min-width="240px"
-                      width="100%"
-                    />
                   </div>
                 </div>
                 <div class="item-flex">
@@ -153,42 +139,54 @@
             </template>
 
             <template #inside-content>
-              <div class="background-container">
-                <div>Комиссии</div>
-                <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
-                  №{{ commissionDrugApplication.commission.number }}
-                  <el-button @click="removeCommission(commissionDrugApplication.id, drugApplication)">Удалить</el-button>
+              <div style="display: flex">
+                <div>
+                  <div>Комиссии</div>
+                  <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
+                    №{{ commissionDrugApplication.commission.number }}
+                    <el-button @click="removeCommission(commissionDrugApplication.id, drugApplication)">Удалить</el-button>
+                  </div>
+                  <el-select
+                    v-model="selectCommissionModel"
+                    :popper-append-to-body="false"
+                    value-key="label"
+                    placeholder="Выберите комиссию"
+                    @change="(e) => addCommission(e, drugApplication)"
+                  >
+                    <el-option v-for="item in commissions" :key="item.number" :label="item.number" :value="item" />
+                  </el-select>
                 </div>
-                <el-select
-                  :popper-append-to-body="false"
-                  value-key="label"
-                  placeholder="Выберите комиссию"
-                  @change="(e) => addCommission(e, drugApplication)"
-                >
-                  <el-option v-for="item in commissions" :key="item.number" :label="item.number" :value="item" />
-                </el-select>
-              </div>
-
-              <div>Файлы</div>
-              <el-button @click="addFile(drugApplication)">Добавить</el-button>
-              <div v-for="drugApplicationFile in drugApplication.drugApplicationFiles" :key="drugApplicationFile.id">
-                <FileUploader :file-info="drugApplicationFile.fileInfo" />
-                <el-input v-model="drugApplicationFile.comment" />
-                <el-button @click="removeFile(drugApplication, drugApplicationFile.id)">Удалить</el-button>
-              </div>
-
-              <div>Поставки лекарств</div>
-              <template v-if="!drugApplication.fundContract.id">
-                <el-button @click="initFundContract(drugApplication)">Добавить контракт фонда</el-button>
-              </template>
-              <template v-else>
-                <el-button @click="addDrugArrive(drugApplication)">Добавить</el-button>
-                <div v-for="drugArrive in drugApplication.fundContract.drugArrives" :key="drugArrive.id">
-                  <el-input-number v-model="drugArrive.stage" @blur="updateDrugArrive(drugArrive)" />
-                  <el-input-number v-model="drugArrive.quantity" />
-                  <el-button @click="removeDrugArrive(drugApplication, drugArrive.id)">Удалить</el-button>
+                <div>
+                  <div>Файлы</div>
+                  <el-button @click="addFile(drugApplication)">Добавить</el-button>
+                  <div v-for="drugApplicationFile in drugApplication.drugApplicationFiles" :key="drugApplicationFile.id">
+                    <FileUploader :file-info="drugApplicationFile.fileInfo" />
+                    <el-input v-model="drugApplicationFile.comment" />
+                    <el-button @click="removeFile(drugApplication, drugApplicationFile.id)">Удалить</el-button>
+                  </div>
                 </div>
-              </template>
+                <div>
+                  <div>Поставки лекарств</div>
+                  <template v-if="!drugApplication.fundContract.id">
+                    <el-button @click="initFundContract(drugApplication)">Добавить контракт фонда</el-button>
+                  </template>
+                  <template v-else>
+                    <el-button @click="addDrugArrive(drugApplication)">Добавить</el-button>
+                    <div v-for="drugArrive in drugApplication.fundContract.drugArrives" :key="drugArrive.id">
+                      {{ drugArrive.stage }}
+                      <SmallDatePicker
+                        v-model:model-value="drugArrive.date"
+                        placeholder="Выбрать"
+                        width="100%"
+                        height="34px"
+                        @change="updateDrugArrive(drugArrive)"
+                      />
+                      <el-input-number v-model="drugArrive.quantity" @change="updateDrugArrive(drugArrive)" />
+                      <el-button @click="removeDrugArrive(drugApplication, drugArrive.id)">Удалить</el-button>
+                    </div>
+                  </template>
+                </div>
+              </div>
             </template>
           </CollapseItem>
         </CollapseContainer>
@@ -219,7 +217,6 @@ import FileUploader from '@/components/FileUploader.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
-import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
@@ -261,12 +258,16 @@ export default defineComponent({
       return ids;
     };
 
-    const updateStatus = async (drugApplication: DrugApplication, status: DrugApplicationStatus): Promise<void> => {
+    const updateStatus = async (drugApplication: DrugApplication, statusId: string): Promise<void> => {
+      const status = drugApplicationsStatuses.value.find((s: DrugApplicationStatus) => s.id === statusId);
+      if (!status) {
+        return;
+      }
       drugApplication.drugApplicationStatus = status;
       drugApplication.drugApplicationStatusId = status.id;
       await updateDrugApplication(drugApplication);
     };
-
+    const selectCommissionModel = ref('');
     const editMode: Ref<boolean> = ref(false);
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
     const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
@@ -299,10 +300,6 @@ export default defineComponent({
       // sortsLib: PatientsSortsLib,
       getAction: 'getAllWithCount',
     });
-
-    const selectSearch = async (event: ISearchObject): Promise<void> => {
-      await Provider.router.push(`/admin/drugApplications/${event.value}`);
-    };
 
     const updateDrugApplication = async (drugApplication: DrugApplication): Promise<void> => {
       await Provider.withHeadLoader(async () => {
@@ -345,6 +342,7 @@ export default defineComponent({
 
     const removeDrugArrive = async (drugApplication: DrugApplication, id?: string): Promise<void> => {
       ClassHelper.RemoveFromClassById(id, drugApplication.fundContract.drugArrives, []);
+      drugApplication.fundContract.normalizeArrivesStages();
       return await Provider.store.dispatch('drugArrives/remove', id);
     };
 
@@ -353,6 +351,7 @@ export default defineComponent({
     };
 
     return {
+      selectCommissionModel,
       updateDrugArrive,
       initFundContract,
       addDrugArrive,
@@ -369,7 +368,6 @@ export default defineComponent({
       updateDrugApplication,
       count,
       authModalVisible,
-      selectSearch,
       drugApplications,
       addApplication,
       addCommission,

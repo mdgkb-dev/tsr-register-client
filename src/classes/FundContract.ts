@@ -1,6 +1,7 @@
 import Drug from '@/classes/Drug';
 import DrugArrive from '@/classes/DrugArrive';
 import ClassHelper from '@/services/ClassHelper';
+import sort from '@/services/sort';
 
 export default class FundContract {
   id?: string;
@@ -27,5 +28,9 @@ export default class FundContract {
     item.fundContractId = this.id;
     this.drugArrives.push(item);
     return item;
+  }
+  normalizeArrivesStages(): void {
+    sort(this.drugArrives);
+    this.drugArrives.forEach((d: DrugArrive) => (d.stage = d.order));
   }
 }

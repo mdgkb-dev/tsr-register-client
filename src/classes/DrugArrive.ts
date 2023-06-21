@@ -19,6 +19,7 @@ export default class DrugArrive {
   arrived = false;
   quantity = 0;
   stage = 0;
+  order = 0;
 
   @ClassHelper.GetClassConstructor(DrugDecrease)
   drugDecreases: DrugDecrease[] = [];

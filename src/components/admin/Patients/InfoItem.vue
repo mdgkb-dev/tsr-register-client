@@ -1,6 +1,6 @@
 <template>
-<div v-if="isToggle" @click="isToggle=false" class="blur"></div>
-  <div class="base-box" :style="baseBoxStyle" @click.prevent="changeState()">
+  <div v-if="isToggle" class="blur" @click="isToggle = false"></div>
+  <div class="base-box" :style="baseBoxStyle" @click.prevent.stop="changeState()">
     <div class="body" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
       <div class="close-window" :style="closeWindowStyle">
         <slot name="close-inside-content" />
@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 
@@ -68,7 +68,7 @@ export default defineComponent({
     const localClose: Ref<boolean> = ref(props.close);
 
     const changeState = () => {
-      console.log(isToggle.value)
+      console.log(isToggle.value);
       emit('click');
       if (props.withOpenWindow) {
         isToggle.value = true;
@@ -78,7 +78,7 @@ export default defineComponent({
       if (localClose.value !== props.close) {
         isToggle.value = false;
         localClose.value = !localClose.value;
-      } 
+      }
     };
 
     const baseBoxStyle =
@@ -223,6 +223,6 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
-  border-color: #B0A4C0;
+  border-color: #b0a4c0;
 }
 </style>

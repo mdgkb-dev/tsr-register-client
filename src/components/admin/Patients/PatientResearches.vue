@@ -131,9 +131,9 @@
                           Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
                         </div>
                       </div>
-                      <div class="flex-line4" v-for="res in getCalculationsResults(research)" :key="res.name">
-                        <div class="res-name" v-if="Number.isFinite(res.value)" >{{ res.formulaName + ':'}}</div>
-                        <div v-if="Number.isFinite(res.value)" >{{ res.value.toFixed(2) }}</div>
+                      <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
+                        <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
+                        <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
                         <div :style="{ color: res.color }">{{ res.result }}</div>
                       </div>
                       <div class="tools">
@@ -183,6 +183,7 @@
                         <CollapseContainer>
                           <div v-for="question in filteredQuestions" :key="question.id">
                             <CollapseItem
+                              :active-id="question.id"
                               :title="`${question.order + 1}. ${question.name}`"
                               :is-collaps="true"
                               :change-color="researchResult.getOrCreateAnswer(question).filled"

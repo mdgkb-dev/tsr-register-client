@@ -1,27 +1,36 @@
 <template>
-  <el-timeline style="margin-top: 20px">
-    <el-timeline-item v-for="commissionDoctor in commission.commissionsDoctors" :key="commissionDoctor.id" placement="top" center>
-      {{ commissionDoctor.doctor.name }} - <i>{{ commissionDoctor.doctor.position }}</i>
-      <el-button @click="removeCommissionDoctor(commissionDoctor)">Удалить члена комиссии</el-button>
-    </el-timeline-item>
-  </el-timeline>
+  <draggable :list="commission.commissionsDoctors" item-key="id" @end="updateOrder(commission)">
+    <template #item="{ element, index }">
+      <div style="display: flex">
+        <!--        <el-tooltip effect="dark" :content="element.doctor.position" placement="top-start">-->
+        <div class="doctor-name">{{ element.doctor.name }}</div>
+        <!--        </el-tooltip>-->
+        <Button icon="del" icon-class="edit-icon" @click="removeCommissionDoctor(element)" />
+      </div>
+    </template>
+  </draggable>
   <el-button @click="showDoctorsList(true)">Добавить члена комиссии</el-button>
   <template v-if="doctorsListShowed">
     <div v-for="doctor in doctors" :key="doctor.id" @click="addCommissionDoctor(doctor)">
       {{ doctor.name }}
     </div>
   </template>
+  <Del />
+  <Move />
 </template>
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
+import draggable from 'vuedraggable';
 
+import Move from '@/assets/svg/Move.svg';
 import Commission from '@/classes/Commission';
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import Doctor from '@/classes/Doctor';
+import Button from '@/components/Base/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-
+import sort from '@/services/sort';
 export default defineComponent({
   name: 'CommissionDoctors',
   props: {
@@ -29,6 +38,11 @@ export default defineComponent({
       type: Object as PropType<Commission>,
       required: true,
     },
+  },
+  components: {
+    draggable,
+    Move,
+    Button,
   },
   setup(props) {
     const doctorsListShowed: Ref<boolean> = ref(false);
@@ -53,7 +67,15 @@ export default defineComponent({
       await Provider.store.dispatch('commissionsDoctors/create', item);
       doctorsListShowed.value = false;
     };
+
+    const updateOrder = async (commission: Commission): Promise<void> => {
+      sort(commission.commissionsDoctors);
+      await Provider.store.dispatch('commissions/update', commission);
+    };
+
     return {
+      updateOrder,
+      sort,
       doctors,
       doctorsListShowed,
       showDoctorsList,
@@ -65,6 +87,29 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.icon-move {
+  //visibility: hidden;
+  width: 24px;
+  height: 24px;
+  //fill: #dff2f8;
+  //stroke: #747474;
+  animation-name: ripple;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+:deep(.edit-icon) {
+  width: 28px;
+  height: 28px;
+  color: #006bb4;
+}
+
+.doctor-name {
+  &:hover {
+    cursor: pointer;
+  }
+}
 
 .hidden {
   display: none;

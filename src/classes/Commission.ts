@@ -63,16 +63,18 @@ export default class Commission {
   setPatient(patient: Patient): void {
     this.patient = patient;
     this.patientId = patient.id;
+    this.setDrug();
+    this.setPatientDiagnosis();
   }
 
-  setPatientDiagnosis(patientDiagnosis: PatientDiagnosis): void {
+  setPatientDiagnosis(patientDiagnosis?: PatientDiagnosis): void {
     this.patientDiagnosis = patientDiagnosis;
-    this.patientDiagnosisId = patientDiagnosis.id;
+    this.patientDiagnosisId = patientDiagnosis ? patientDiagnosis.id : undefined;
   }
 
-  setDrug(drug: Drug): void {
+  setDrug(drug?: Drug): void {
     this.drug = drug;
-    this.drugId = drug.id;
+    this.drugId = drug ? drug.id : undefined;
   }
 
   getProtocolName(): string {

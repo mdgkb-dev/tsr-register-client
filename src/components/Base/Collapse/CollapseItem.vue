@@ -79,7 +79,7 @@ export default defineComponent({
   emits: ['changeActiveId'],
 
   setup(props, { emit }) {
-    const collapsed: Ref<boolean> = ref(false);
+    const collapsed: Ref<boolean> = ref(props.activeId === 0);
 
     const handleItemClick = () => {
       collapsed.value = !collapsed.value;
