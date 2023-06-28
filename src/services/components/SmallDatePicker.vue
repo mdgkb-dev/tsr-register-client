@@ -46,7 +46,6 @@ export default defineComponent({
       const userTimezoneOffset = date.getTimezoneOffset() * 60000;
       emit('update:modelValue', new Date(date.getTime() - userTimezoneOffset));
       emit('change');
-      console.log('value', value);
     };
     onBeforeMount(() => {
       date.value = props.modelValue;

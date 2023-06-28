@@ -24,7 +24,7 @@
             height="34px"
             border-radius="5px"
             color="#006BB4"
-            :isToggle="selectedOptions.some((s) => s === option.value)"
+            :is-toggle="selectedOptions.some((s) => s === option.value)"
             background="#ffffff"
             background-hover="#DFF2F8"
             :toggle-mode="true"
@@ -42,9 +42,9 @@
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
 import IOption from '@/interfaces/schema/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';

@@ -1,21 +1,11 @@
 <template>
-  <div class="grid-block"
-    :style="{
-      maxWidth: maxWidth,
-      width: width,
-      background: background,
-      gridGap: gridGap,
-      gridTemplateRows: gridTemplateRows,
-      gridTemplateColumns: gridTemplateColumns,
-      margin: margin,
-    }"
-  >
-    <slot name="grid-items" />
+  <div class="grid-block" :style="style" :class="customClass">
+    <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name: 'GridContainer',
@@ -50,12 +40,29 @@ export default defineComponent({
       required: false,
       default: 'repeat(0 0px)',
     },
-
     margin: {
       type: String as PropType<string>,
       required: false,
       default: '10px 0 0 0',
     },
+    customClass: { type: String as PropType<string>, required: false, default: '' },
+  },
+  setup(props, { emit }) {
+    const style = computed(() => {
+      return {
+        maxWidth: props.maxWidth,
+        width: props.width,
+        background: props.background,
+        gridGap: props.gridGap,
+        gridTemplateColumns: props.gridTemplateColumns,
+        gridTemplateRows: props.gridTemplateRows,
+        margin: props.margin,
+      };
+    });
+
+    return {
+      style,
+    };
   },
 });
 </script>
@@ -71,12 +78,9 @@ export default defineComponent({
   justify-content: center;
 }
 
-
-
 // .grid-block > div {
 //   max-width: 290px;
 //   min-width: 120px;
 //   object-fit: cover;
 // }
-
 </style>

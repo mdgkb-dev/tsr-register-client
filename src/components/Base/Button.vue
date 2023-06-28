@@ -8,7 +8,7 @@
     @mouseleave="hovering = false"
   >
     <div v-if="icon" class="button-icon" :style="buttonIconStyle">
-      <svg :class="iconClass" >
+      <svg :class="iconClass">
         <use :xlink:href="'#' + icon"></use>
       </svg>
     </div>
@@ -16,7 +16,7 @@
       {{ text }}
     </div>
     <Edit />
-    <EditLight />
+    <EditTitle />
     <Plus />
     <Del />
     <Filter />
@@ -26,13 +26,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, ref } from 'vue';
 
 import Close from '@/assets/svg/Close.svg';
 import Del from '@/assets/svg/Del.svg';
 import Download from '@/assets/svg/Download.svg';
 import Edit from '@/assets/svg/Edit.svg';
-import EditLight from '@/assets/svg/EditLight.svg';
+import EditTitle from '@/assets/svg/EditTitle.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Plus from '@/assets/svg/Plus.svg';
 
@@ -40,7 +40,7 @@ export default defineComponent({
   name: 'Button',
   components: {
     Edit,
-    EditLight,
+    EditTitle,
     Plus,
     Del,
     Filter,
@@ -81,8 +81,8 @@ export default defineComponent({
     buttonClass: { type: String as PropType<string>, required: false, default: '' },
     iconClass: { type: String as PropType<string>, required: false, default: '' },
     icon: { type: String as PropType<string>, required: false, default: '' },
-    isToggle: { type: Boolean as PropType<boolean>, required: false, default: false},
-    inverse: { type: Boolean as PropType<boolean>, required: false, default: false},
+    isToggle: { type: Boolean as PropType<boolean>, required: false, default: false },
+    inverse: { type: Boolean as PropType<boolean>, required: false, default: false },
   },
   emits: ['click'],
   setup(props, { emit }) {
@@ -146,7 +146,6 @@ export default defineComponent({
       textStyle,
       hovering,
       changeState,
-
     };
   },
 });

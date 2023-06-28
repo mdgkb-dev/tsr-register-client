@@ -16,7 +16,7 @@
     </RightSliderContainer>
 
     <div class="scroll-block">
-      <div class="patient-count">Количество заявок: {{ count }}</div>
+      <div class="patient-count">Количество поставок: {{ count }}</div>
       <div v-for="drugArrive in drugArrives" :key="drugArrive.id">
         <CollapseContainer>
           <CollapseItem :is-collaps="true" padding="0 8px">
@@ -24,11 +24,11 @@
               <div class="flex-block" @click.prevent="() => undefined">
                 <div class="item-flex">
                   <div class="line-item-left">
-                    <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(drugArrive.id)" />
                     <div>Всего: {{ drugArrive.quantity }}</div>
                     <div>Осталось: {{ drugArrive.getRemain() }}</div>
                     <el-input-number
                       :model-value="drugArrive.quantity"
+                      @click.stop="() => undefined"
                       @change="(cur, prev) => setDrugArriveQuantity(cur, prev, drugArrive)"
                     />
                     <el-date-picker v-model="drugArrive.date" />
@@ -43,10 +43,17 @@
                 <el-button @click="addDrugDecrease(drugArrive)">Добавить расход лекарств</el-button>
                 <div v-for="drugDecrease in drugArrive.drugDecreases" :key="drugDecrease.id">
                   <hr />
-                  <el-input-number
-                    :model-value="drugDecrease.quantity"
-                    @change="(cur, prev) => updateDrugDecreaseQuantity(cur, prev, drugArrive, drugDecrease)"
-                  />
+
+                  <div class="inblock">
+                    <svg class="icon-minus" @click.stop="updateDrugDecreaseQuantity(0, 1, drugArrive, drugDecrease)">
+                      <use xlink:href="#minus"></use>
+                    </svg>
+                    <div class="text">{{ drugDecrease.quantity }}</div>
+                    <svg class="icon-plus" @click.stop="updateDrugDecreaseQuantity(1, 0, drugArrive, drugDecrease)">
+                      <use xlink:href="#plus"></use>
+                    </svg>
+                  </div>
+
                   <el-input v-model="drugDecrease.comment" @blur="updateDrugDecrease(drugDecrease)" />
                   <el-date-picker v-model="drugDecrease.date" @change="updateDrugDecrease(drugDecrease)" />
                   <RemoteSearch
@@ -67,25 +74,27 @@
       </div>
     </div>
   </AdminListWrapper>
+  <Icons />
 </template>
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
+import Icons from '@/assets/svg/Button/Icons.svg';
 import Del from '@/assets/svg/Del.svg';
 import DrugArrive from '@/classes/DrugArrive';
 import DrugDecrease from '@/classes/DrugDecrease';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import FileUploader from '@/components/FileUploader.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
@@ -98,6 +107,7 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminDrugArrives',
   components: {
+    Icons,
     FileUploader,
     CollapseContainer,
     FiltersButtonsMultiply,
@@ -175,20 +185,12 @@ export default defineComponent({
       drugArrive: DrugArrive,
       drugDecrease: DrugDecrease
     ): Promise<void> => {
-      if (cur > prev) {
-        if (drugArrive.canSpend()) {
-          drugDecrease.quantity++;
-          await updateDrugDecrease(drugDecrease);
-          return;
-        } else {
-          ElMessage.warning('Перерасход');
-          return;
-        }
+      console.log(drugDecrease, cur, prev);
+      const succeedMove = drugArrive.drugMove(cur, prev, drugDecrease);
+      if (succeedMove) {
+        return await updateDrugDecrease(drugDecrease);
       }
-      if (drugDecrease.quantity > 1) {
-        drugDecrease.quantity--;
-        await updateDrugDecrease(drugDecrease);
-      }
+      ElMessage.warning('Перерасход');
     };
 
     const setPatientToDecrease = async (event: ISearchObject, drugDecrease: DrugDecrease) => {
@@ -230,6 +232,46 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.icon-plus {
+  width: 16px;
+  height: 16px;
+  fill: #ffffff;
+  cursor: pointer;
+  transition: 0, 3s;
+  opacity: 0.8;
+  padding: 9px;
+}
+
+.icon-plus:hover {
+  transform: scale(1.2, 1.2);
+  opacity: 1;
+}
+
+.icon-plus:active {
+  transform: scale(1.2, 1.2);
+  opacity: 0.8;
+}
+
+.icon-minus {
+  width: 16px;
+  height: 16px;
+  fill: #ffffff;
+  cursor: pointer;
+  transition: 0, 3s;
+  opacity: 0.8;
+  padding: 9px;
+}
+
+.icon-minus:hover {
+  transform: scale(1.2, 1.2);
+  opacity: 1;
+}
+
+.icon-minus:active {
+  transform: scale(1.2, 1.2);
+  opacity: 0.8;
+}
 
 .plus-button {
   width: 100%;
@@ -445,5 +487,44 @@ export default defineComponent({
     width: 100%;
     margin: 0 0px 10px 0;
   }
+}
+
+.icon-loader {
+  width: 16px;
+  height: 16px;
+  stroke: #a1a7bd;
+  cursor: pointer;
+  transition: 0.3s;
+  padding-right: 10px;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  border: $normal-border;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 0 15px;
+}
+
+.inblock {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 13px;
+}
+
+.text {
+  max-width: 260px;
+  font-size: 14px;
+  padding: 0;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 </style>

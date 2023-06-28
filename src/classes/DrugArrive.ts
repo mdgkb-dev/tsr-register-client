@@ -65,9 +65,22 @@ export default class DrugArrive {
     }
     if (this.canSpend()) {
       this.quantity--;
-      console.log('decr');
       return true;
     }
     return false;
+  }
+
+  drugMove(cur: number, prev: number, drugDecrease: DrugDecrease): boolean {
+    let succeedMove = true;
+    if (cur > prev) {
+      if (this.canSpend()) {
+        drugDecrease.quantity++;
+      } else {
+        succeedMove = false;
+      }
+    } else if (cur < prev && drugDecrease.quantity > 0) {
+      drugDecrease.quantity--;
+    }
+    return succeedMove;
   }
 }

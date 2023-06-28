@@ -2,8 +2,8 @@
   <div v-if="isToggle" class="blur" @click="isToggle = false"></div>
   <div class="base-box" :style="baseBoxStyle" @click.prevent.stop="changeState()">
     <div class="body" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
-      <div class="close-window" :style="closeWindowStyle">
-        <slot name="close-inside-content" />
+      <div class="close-window" :style="closeWindowStyle" :class="customClass">
+        <slot />
       </div>
       <div class="open-window" :style="openWindowStyle">
         <slot name="open-inside-content" />
@@ -36,21 +36,20 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 
 export default defineComponent({
-  name: 'InfoItem',
+  name: 'DropItem',
   components: {
     StringItem,
   },
   props: {
-    fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
-    background: { type: String as PropType<string>, required: false, default: '#ffffff' },
-    padding: { type: String as PropType<string>, required: false, default: '0 10px' },
-    width: { type: String as PropType<string>, required: false, default: 'auto' },
+    background: { type: String as PropType<string>, required: false, default: '' },
+    padding: { type: String as PropType<string>, required: false, default: '' },
+    width: { type: String as PropType<string>, required: false, default: '' },
     openWidth: { type: String as PropType<string>, required: false, default: 'auto' },
     openHeight: { type: String as PropType<string>, required: false, default: 'auto' },
-    maxWidth: { type: String as PropType<string>, required: false, default: 'auto' },
-    minWidth: { type: String as PropType<string>, required: false, default: '50px' },
-    margin: { type: String as PropType<string>, required: false, default: '0, 10px, 0 0' },
-    height: { type: String as PropType<string>, required: false, default: '40px' },
+    maxWidth: { type: String as PropType<string>, required: false, default: '' },
+    minWidth: { type: String as PropType<string>, required: false, default: '' },
+    margin: { type: String as PropType<string>, required: false, default: '' },
+    height: { type: String as PropType<string>, required: false, default: '' },
     withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
     withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
@@ -62,19 +61,28 @@ export default defineComponent({
   },
   emits: ['click'],
   setup(props, { emit }) {
+    const defaultClass =
+      props.customClass !== ''
+        ? props.customClass
+        : {
+            fontWeight: 'normal',
+            background: '#ffffff',
+            padding: '0 10px',
+            width: 'auto',
+            maxWidth: 'auto',
+            minWidth: '50px',
+            margin: '0',
+            height: '40px',
+          };
+
     const hovering = ref(false);
 
     const isToggle: Ref<boolean> = ref(false);
     const localClose: Ref<boolean> = ref(props.close);
 
     const changeState = () => {
-      console.log(isToggle.value);
       emit('click');
-      if (props.withOpenWindow) {
-        isToggle.value = true;
-      } else {
-        isToggle.value = false;
-      }
+      isToggle.value = !!props.withOpenWindow;
       if (localClose.value !== props.close) {
         isToggle.value = false;
         localClose.value = !localClose.value;
@@ -142,6 +150,7 @@ export default defineComponent({
     });
 
     return {
+      defaultClass,
       iconTopTitleStyle,
       topTitleStyle,
       openWindowStyle,
