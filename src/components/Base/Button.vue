@@ -22,6 +22,7 @@
     <Filter />
     <Download />
     <Close />
+    <Outlined />
   </button>
 </template>
 
@@ -35,6 +36,7 @@ import Edit from '@/assets/svg/Edit.svg';
 import EditLight from '@/assets/svg/EditLight.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Plus from '@/assets/svg/Plus.svg';
+import Outlined from '@/assets/svg/Outlined.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -46,6 +48,7 @@ export default defineComponent({
     Filter,
     Download,
     Close,
+    Outlined,
   },
   inheritAttrs: false,
   props: {
@@ -129,14 +132,14 @@ export default defineComponent({
         marginRight: props.text ? '10px' : '',
         transform: getAnimation(),
 
-        transition: props.colorSwap || props.toggleMode ? '' : '0.2s',
+        transition: props.colorSwap || props.toggleMode ? '' : '0s',
       };
     });
 
     const textStyle = computed(() => {
       return {
         transform: getAnimation(),
-        transition: props.colorSwap || props.toggleMode ? '' : '0.2s',
+        transition: props.colorSwap || props.toggleMode ? '' : '0s',
       };
     });
 

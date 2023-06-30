@@ -4,7 +4,6 @@
     :style="{
       marginTop: marginTop,
       height: isCollaps && collapsed ? '60px' : '',
-      overflow: isCollaps && collapsed ? 'hidden' : '',
     }"
   >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
@@ -26,10 +25,20 @@
         <div class="inside-icon">
           <slot name="icon" />
         </div>
-        <div v-if="title" class="title-in">
+        <div v-if="title" class="title-in"
+          :style="{
+            marginRight: isCollaps ? '50px' : '0',
+            width: isCollaps ? 'calc(100% - 50px)' : '100%',
+          }"
+        >
           {{ title }}
         </div>
-        <div v-else class="title-in">
+        <div v-else class="title-in"
+          :style="{
+            marginRight: isCollaps ? '50px' : '0',
+            width: isCollaps ? 'calc(100% - 50px)' : '100%',
+          }"
+        >
           <slot name="inside-title" />
         </div>
         <div class="tools-bar" :class="{ 'hidden-part': showToolsOnHover }">
@@ -258,7 +267,6 @@ export default defineComponent({
 }
 
 .title-in {
-  width: 100%;
   display: flex;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;

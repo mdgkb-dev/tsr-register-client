@@ -96,7 +96,7 @@ export default defineComponent({
     const bodyStyle = computed(() => {
       return {
         background: props.background,
-        zIndex: windowOpened.value ? '2' : '0',
+        zIndex: windowOpened.value ? '5' : '0',
         padding: windowOpened.value ? '0' : props.padding,
         margin: props.margin,
         width: windowOpened.value ? props.openWidth : props.width,
@@ -109,6 +109,7 @@ export default defineComponent({
         boxShadow: hovering.value || isToggle.value ? `0px 0px 1px 1px ${props.colorSelected}` : 'none',
         alignItems: windowOpened.value ? 'end' : 'center',
         cursor: props.withHover ? 'pointer' : 'pointer',
+
       };
     });
 
@@ -165,6 +166,7 @@ export default defineComponent({
 
 .base-box {
   position: relative;
+  box-sizing: border-box;
 }
 
 .body {
@@ -174,6 +176,7 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   transition: 0.15s;
+  box-sizing: border-box;
 }
 
 .top-title {
@@ -202,7 +205,6 @@ export default defineComponent({
 }
 
 .open-window {
-  z-index: 5;
   border-radius: $normal-border-radius;
   justify-content: center;
   align-items: start;
@@ -220,6 +222,8 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   z-index: 1;
+  // background: #343e5c;
+  // opacity: 0.2;
 }
 
 :deep(.el-input__inner) {
