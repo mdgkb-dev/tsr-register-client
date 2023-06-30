@@ -25,12 +25,12 @@
             border-radius="5px"
             color="#006BB4"
             background="#ffffff"
-            :isToggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
+            :is-toggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
             background-hover="#DFF2F8"
             :toggle-mode="true"
             font-size="12px"
-            @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
             :inverse="inverse"
+            @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
           >
           </Button>
         </template>
@@ -43,9 +43,9 @@
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref, WritableComputedRef } from 'vue';
 
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({
@@ -68,7 +68,7 @@ export default defineComponent({
     const selectedFilterModel: Ref<FilterModel | undefined> = ref(undefined);
     const selectedId: Ref<string | undefined> = ref(undefined);
     const selected = computed(() => {
-      return props.inverse && !selectedFilterModel.value?.id
+      return props.inverse && !selectedFilterModel.value?.id;
     });
     const setDefaultFilterModel = (): void => {
       selectedFilterModel.value = emptyFilterModel.value;

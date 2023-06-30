@@ -181,8 +181,11 @@
                       </div>
                       <div class="scroll-block">
                         <CollapseContainer>
-                          <div v-for="question in filteredQuestions" :key="question.id">
+                          <template #default="scope">
                             <CollapseItem
+                              v-for="question in filteredQuestions"
+                              :key="question.id"
+                              :tab-id="question.id"
                               :active-id="question.id"
                               :title="`${question.order + 1}. ${question.name}`"
                               :is-collaps="true"
@@ -201,7 +204,7 @@
                                 </div>
                               </template>
                             </CollapseItem>
-                          </div>
+                          </template>
                         </CollapseContainer>
                       </div>
                     </div>
@@ -284,7 +287,6 @@ import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
 import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import InfoItem from '@/components/admin/Patients/InfoItem.vue';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
@@ -292,6 +294,7 @@ import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
