@@ -82,7 +82,7 @@
                       title="ФИО пациента"
                       minWidth="200px"
                     >
-                      <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" />
+                      <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" width="230px"/>
                       <template #open-inside-content>
                         <RemoteSearch
                           :must-be-translated="true"
