@@ -237,11 +237,11 @@
           <template #footer>
             <template v-if="research.id && patientResearch">
               <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult(research, patientResearch.id)">
-                <template #icon>
+                <!-- <template #icon>
                   <svg class="icon-plus">
                     <use xlink:href="#plus"></use>
                   </svg>
-                </template>
+                </template> -->
               </Button>
             </template>
             <template v-else> </template>

@@ -1,21 +1,20 @@
 <template>
-  <div class="representative-page-container">
-    <el-dialog
-      v-if="show"
-      top="10vh"
-      :model-value="show"
-      width="60%"
-      :show-close="true"
-      :before-close="beforeClose"
-      @close="$emit('close')"
-    >
-      <template #title>
-
-      </template>
-      <el-row>
-      </el-row>
-    </el-dialog>
-  </div>
+  <el-dialog
+    v-if="show"
+    top="10vh"
+    :model-value="show"
+    width="60%"
+    :show-close="true"
+    :before-close="beforeClose"
+    @close="$emit('close')"
+  >
+    <template #title>
+      {{ title }}
+    </template>
+    <el-row>
+      <slot />
+    </el-row>
+  </el-dialog>
 </template>
 
 <script lang="ts">
@@ -37,6 +36,10 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       default: false,
     },
+    title: {
+      type: String as PropType<string>,
+      default: "",
+    }
   },
   emits: ['save', 'close'],
   setup(_, { emit }) {
@@ -131,16 +134,15 @@ export default defineComponent({
 :deep(.el-dialog) {
   background-color: #eef1f6;
   overflow: hidden;
-  height: 70vh;
   display: flex;
   flex-direction: column;
 }
 :deep(.el-dialog__body) {
   padding-top: 0;
-  height: 100%;
   overflow: auto;
 }
 :deep(.el-dialog__header) {
   padding-top: 0;
+  font-size: 20px;
 }
 </style>

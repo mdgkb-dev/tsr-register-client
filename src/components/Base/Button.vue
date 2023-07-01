@@ -23,6 +23,7 @@
     <Download />
     <Close />
     <Outlined />
+    <Commission />
   </button>
 </template>
 
@@ -37,6 +38,7 @@ import EditTitle from '@/assets/svg/EditTitle.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Plus from '@/assets/svg/Plus.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
+import Commission from '@/assets/svg/Commission.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -49,6 +51,7 @@ export default defineComponent({
     Download,
     Close,
     Outlined,
+    Commission,
   },
   inheritAttrs: false,
   props: {

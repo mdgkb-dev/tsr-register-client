@@ -1,6 +1,27 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <ModalWindow :show="showModal" @close="showModal = false"  />
+
+    <ModalWindow :show="showModalDoctorList" @close="showModalDoctorList = false" title="Список врачей" >
+      <PersonalityList />
+    </ModalWindow>
+
+    <ModalWindow :show="showModalDiagnosis" @close="showModalDiagnosis = false"  title="Выберите диагноз" >
+      <GridContainer grid-gap="5px" margin="10px 0">
+        <Button button-class="change-button" text="Диагноз 1" />
+        <Button button-class="change-button" text="Диагноз 2" />
+        <Button button-class="change-button" text="Диагноз 3" background="#dff2f8" />
+        <Button button-class="change-button" text="Диагноз 4" />
+      </GridContainer>
+    </ModalWindow>
+
+    <ModalWindow :show="showModalMedicine" @close="showModalMedicine = false" title="Выберите лекарство" >
+      <GridContainer grid-gap="5px" margin="10px 0">
+        <Button button-class="change-button" text="Лекарство 1" />
+        <Button button-class="change-button" text="Лекарство 2" background="#dff2f8" />
+        <Button button-class="change-button" text="Лекарство 3" />
+      </GridContainer>
+    </ModalWindow>
+    
     <div class="filter-block">
       <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <template #grid-items>
@@ -44,31 +65,24 @@
             :active-id="scope.activeId"
             padding="0 8px"
             @changeActiveId="scope.changeActiveId"
+            :isCollaps="false"
           >
             <template #inside-title>
               <div class="flex-block" @click.prevent="() => undefined">
                 <div class="item-flex">
                   <div class="line-item-left">
+                    <!-- <Button :text="`№${commission.number}`" button-class="edit-button" color="#006bb4" @click="edit(patient.id)"/> -->
                     <Button button-class="edit-button" color="#006bb4" icon="outlined" icon-class="edit-icon" @click="edit(patient.id)" />
-                    <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="17px" min-width="60px" margin="0 0 0 20px" />
-
+                    <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="20px" min-width="110px" margin="0 10px 0 0" />
+                  </div>
+                  <div class="line-item-right">
+                    <Button button-class="commission-button" color="#006bb4" icon="commission" icon-class="edit-icon" @click="openModalDoctorList()" />
                     <InfoItem
                       :close="infoItemToggle"
-                      margin="0 0 0 10px"
-                      open-height="auto"
-                      width="300px"
-                      border-color="#C4C4C4"
-                      :with-icon="false"
-                      :with-hover="true"
-                      openWidth="320px"
+                      title="ФИО пациента"
+                      minWidth="200px"
                     >
-                    <template #title>
-                      <StringItem string="ФИО пациента" font-size="10px" padding="0" />
-                    </template>
-                      <template #close-inside-content>
-                        <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" />
-                      </template>
-
+                      <StringItem :string="commission.patient.human.getFullName()" custom-class="patient-name" />
                       <template #open-inside-content>
                         <RemoteSearch
                           :must-be-translated="true"
@@ -81,50 +95,52 @@
                       </template>
                     </InfoItem>
                   </div>
+                </div>
+                <div class="item-flex">
                   <GridContainer
-                    max-width="340px"
+                    max-width="1920px"
                     grid-gap="10px"
-                    grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
+                    grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
                     margin="0px"
                   >
-                    <template #grid-items>
-                      <InfoItem
-                        :close="infoItemToggle"
-                        margin="0"
+                    <InfoItem
+                      :close="infoItemToggle"
+                      margin="0"
+                      width="100%"
+                      :withOpenWindow="false"
+                      title="диагноз"
+                    >
+                      <StringItem @click="openModalDiagnosis()" string="диагноз" custom-class="medicine" />
+                    </InfoItem>
+
+                    <InfoItem
+                      :close="infoItemToggle"
+                      margin="0"
+                      width="100%"
+                      :withOpenWindow="false"
+                      title="лекарство"
+                    >
+                      <StringItem @click="openModalMedicine()" string="лекарство" custom-class="medicine" />
+                    </InfoItem>
+                    <InfoItem title="дата комиссии" margin="0" open-height="auto" :withOpenWindow="false" width="100%" >
+                      <SmallDatePicker
+                        v-model:model-value="commission.date"
+                        placeholder="Выбрать"
                         width="100%"
-                        border-color="#C4C4C4"
-                        :with-icon="false"
-                        :with-hover="true"
-                        :withOpenWindow="false"
-                      >
-                      <template #title>
-                        <StringItem string="лекарство" font-size="10px" padding="0" />
-                      </template>
-                        <template #close-inside-content>
-                          <StringItem @click="openModal()" string="лекарство" custom-class="medicine" />
-                        </template>
-                      </InfoItem>
-                      <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%" >
-                        <template #close-inside-content>
-                          <SmallDatePicker
-                            v-model:model-value="commission.date"
-                            placeholder="Выбрать"
-                            width="100%"
-                            height="34px"
-                            @change="updateCommission(commission)"
-                          />
-                        </template>
-                      </InfoItem>
-                    </template>
+                        height="34px"
+                        @change="updateCommission(commission)"
+                      />
+                    </InfoItem>
+                    <Button text="Сформировать протокол" button-class="medical-commission-button" color="#006bb4" @click="edit(patient.id)" />
                   </GridContainer>
                 </div>
               </div>
             </template>
-            <template #inside-content>
+            <!-- <template #inside-content>
               <div class="background-container">
                 <div style="display: flex">
                   <div>
-                    <!-- <CommissionDoctors :commission="commission" /> -->
+                    <CommissionDoctors :commission="commission" />
                   </div>
                   <div v-if="commission.patient.id">
                     <CommissionDrug :commission="commission" @select="updateCommission(commission)" />
@@ -147,7 +163,7 @@
                   </div>
                 </div>
               </div>
-            </template>
+            </template> -->
           </CollapseItem>
         </template>
       </CollapseContainer>
@@ -186,6 +202,7 @@ import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue'
+import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 
 export default defineComponent({
   name: 'AdminCommissionsList',
@@ -203,6 +220,7 @@ export default defineComponent({
     CommissionDoctors,
     CommissionDrug,
     ModalWindow,
+    PersonalityList,
   },
   setup() {
     const templatesOpened: Ref<boolean> = ref(false);
@@ -213,7 +231,10 @@ export default defineComponent({
     // const filteredcommissions: Ref<Patient[]> = computed(() => Provider.store.getters['commissions/filteredcommissions']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
     const infoItemToggle: Ref<boolean> = ref(false);
-    const showModal: Ref<boolean> = ref(false);
+    const showModalDiagnosis: Ref<boolean> = ref(false);
+    const showModalMedicine: Ref<boolean> = ref(false);
+    const showModalDoctorList: Ref<boolean> = ref(false);
+    
 
     const loadCommissions = async () => {
       await Provider.store.dispatch('commissionsStatuses/getAll');
@@ -272,8 +293,17 @@ export default defineComponent({
       await updateCommission(commission);
     };
 
-    const openModal = (index?: number) => {
-      showModal.value = true;
+    const openModalDiagnosis = (index?: number) => {
+      showModalDiagnosis.value = true;
+      // store.commit('representatives/resetRepresentative');
+    };
+    const openModalMedicine = (index?: number) => {
+      showModalMedicine.value = true;
+      // store.commit('representatives/resetRepresentative');
+    };
+
+    const openModalDoctorList = (index?: number) => {
+      showModalDoctorList.value = true;
       // store.commit('representatives/resetRepresentative');
     };
 
@@ -292,8 +322,12 @@ export default defineComponent({
       loadCommissions,
       commissions,
       ...Provider.getAdminLib(),
-      openModal,
-      showModal,
+      openModalDiagnosis,
+      showModalDiagnosis,
+      openModalMedicine,
+      showModalMedicine,
+      openModalDoctorList,
+      showModalDoctorList,
     };
   },
 });
@@ -303,8 +337,7 @@ export default defineComponent({
 
 .patient-name {
   color: #006bb4;
-  font-size: 17px;
-  min-width: 240px;
+  font-size: 14px;
   width: 100%;
   padding: 0px;
 }
@@ -441,6 +474,33 @@ export default defineComponent({
 
 :deep(.edit-button) {
   width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 10px 0 0;
+}
+
+:deep(.commission-button) {
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 10px 0 0;
+}
+
+:deep(.change-button) {
+  width: 100%;
+  height: 42px;
+  border-radius: 5px;
+  background: #ffffff;
+  color:#343e5c;
+}
+
+:deep(.medical-commission-button) {
+  width: 100%;
   height: 40px;
   border-radius: 5px;
   color: #006bb4;
