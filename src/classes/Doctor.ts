@@ -11,4 +11,9 @@ export default class Doctor {
   constructor(i?: Doctor) {
     ClassHelper.BuildClass(this, i);
   }
+
+  getNameWithPosition(): string {
+    const position = this.position !== '' ? ` (${this.position})` : '';
+    return this.name + position;
+  }
 }

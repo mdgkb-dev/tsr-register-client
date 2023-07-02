@@ -60,6 +60,10 @@ export default class Commission {
     return item;
   }
 
+  doctorExists(id?: string): boolean {
+    return this.commissionsDoctors.some((c: CommissionDoctor) => c.doctorId === id);
+  }
+
   setPatient(patient: Patient): void {
     this.patient = patient;
     this.patientId = patient.id;

@@ -57,7 +57,7 @@ export default class ClassHelper {
     arrayFromDelete.splice(index, 1);
   }
 
-  static RemoveFromClassById(id: string | undefined, arrayFromDelete: IWithId[], arrayForDelete: string[]): void {
+  static RemoveFromClassById(id: string | undefined, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
     if (!id) {
       return;
     }
@@ -66,7 +66,7 @@ export default class ClassHelper {
       return;
     }
     const idForDelete = arrayFromDelete[index].id;
-    if (idForDelete) {
+    if (idForDelete && arrayForDelete) {
       arrayForDelete.push(idForDelete);
     }
     arrayFromDelete.splice(index, 1);
