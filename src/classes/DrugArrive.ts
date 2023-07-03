@@ -83,4 +83,8 @@ export default class DrugArrive {
     }
     return succeedMove;
   }
+
+  setDate(newDate: Date): void {
+    this.date = newDate;
+  }
 }

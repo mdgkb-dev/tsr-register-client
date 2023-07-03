@@ -1,119 +1,58 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
-      <template #visability> </template>
+    <ModalWindow :show="showDrugArrives" title="Поставки лекарств" @close="showDrugArrives = false">
+      <DrugArrivesList />
+    </ModalWindow>
 
-      <template #filter>
-        <GridContainer
-          max-width="900px"
-          grid-gap="27px 10px"
-          grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-          margin="0 0 0 10px"
-        >
-          <template #grid-items>
-            <GridContainer
-              max-width="500px"
-              grid-gap="10px"
-              grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-              margin="0px"
-              background="#F5F6F8"
-            >
-              <template #grid-items>
-                <FiltersButtonsMultiply
-                  :filter-model="filterByStatus"
-                  :options="createStatusesOptions()"
-                  default-label="Статусы"
-                  @load="loadDrugApplications"
-              /></template>
-            </GridContainer>
-            <GridContainer
-              max-width="100%"
-              grid-gap="7px"
-              grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))"
-              margin="0px"
-            >
-              <template #grid-items> </template>
-            </GridContainer>
-          </template>
-        </GridContainer>
-      </template>
-      <template #download>
-        <GridContainer
-          max-width="65px"
-          grid-gap="27px 10px"
-          grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))"
-          margin="0 0 0 10px"
-        >
-          <template #grid-items> </template>
-        </GridContainer>
-      </template>
-    </RightSliderContainer>
+    <ModalWindow :show="showDrugApplicationFilesList" title="Файлы" @close="showDrugApplicationFilesList = false">
+      <DrugApplicationFilesList />
+    </ModalWindow>
 
     <div class="scroll-block">
       <div class="patient-count">Количество заявок: {{ count }}</div>
-      <div v-for="drugApplication in drugApplications" :key="drugApplication.id">
-        <CollapseContainer>
-          <CollapseItem :is-collaps="true" padding="0 8px">
+
+      <CollapseContainer>
+        <template #default="scope">
+          <CollapseItem
+            v-for="(drugApplication, i) in drugApplications"
+            :key="drugApplication.id"
+            :tab-id="i + 1"
+            :active-id="scope.activeId"
+            padding="0 8px"
+            :is-collaps="false"
+            @changeActiveId="scope.changeActiveId"
+          >
             <template #inside-title>
               <div class="flex-block" @click.prevent="() => undefined">
                 <div class="item-flex">
+                  <InfoItem :close="infoItemToggle" title="Номер заявки" min-width="200px">
+                    <StringItem :string="drugApplication.number" custom-class="patient-name" />
+                    <template #open-inside-content>
+                      <el-input v-model="drugApplication.number" @blur="updateApplicationNumber(drugApplication)" />
+                    </template>
+                  </InfoItem>
                   <div class="line-item-left">
-                    <InfoItem
-                      margin="0 0 0 10px"
-                      open-height="auto"
-                      width="auto"
-                      border-color="#ffffff"
-                      :with-icon="false"
-                      :with-hover="false"
-                    >
-                      <template #close-inside-content>
-                        <StringItem
-                          :string="drugApplication.getNumber()"
-                          custom-class="patient-name"
-                          @click="drugApplication.editNameMode = true"
-                        />
-                        <el-select v-model="drugApplication.drugApplicationStatusId" @change="(e) => updateStatus(drugApplication, e)">
-                          <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status.id" />
-                        </el-select>
-                      </template>
-                      <template #open-inside-content>
-                        <GridContainer
-                          max-width="auto"
-                          grid-gap="10px"
-                          grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
-                          margin="0px"
-                        >
-                          <template #grid-items>
-                            <InfoItem
-                              title="номер"
-                              margin="0"
-                              open-height="auto"
-                              width="auto"
-                              :with-icon="false"
-                              :with-open-window="false"
-                              :with-hover="false"
-                              border-color="#ffffff"
-                              padding="0"
-                            >
-                              <template #close-inside-content>
-                                <el-input v-model="drugApplication.number" @click.stop="() => undefined" />
-                              </template>
-                            </InfoItem>
-                            <Button button-class="save-button" text="Сохранить" @click="updateDrugApplication(drugApplication)" />
-                          </template>
-                        </GridContainer>
-                      </template>
-                    </InfoItem>
-                  </div>
-
-                  <div class="line-item-right">
-                    <SmallDatePicker
-                      v-model:model-value="drugApplication.date"
-                      placeholder="Выбрать"
-                      width="100%"
-                      height="34px"
-                      @change="updateDrugApplication(drugApplication)"
+                    <Button
+                      button-class="edit-button"
+                      color="#006bb4"
+                      icon="outlined"
+                      icon-class="edit-icon"
+                      @click="openDrugArrivesModal(drugApplication)"
                     />
+                    <Button
+                      button-class="edit-button"
+                      color="#006bb4"
+                      icon="outlined"
+                      icon-class="edit-icon"
+                      @click="openDrugApplicationFilesModal(drugApplication)"
+                    />
+                  </div>
+                  <div class="line-item-right">
+                    <InfoItem :close="infoItemToggle" margin="0" width="100%" :with-open-window="false" title="лекарство">
+                      <el-select v-model="drugApplication.drugApplicationStatusId" @change="(e) => updateStatus(drugApplication, e)">
+                        <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status.id" />
+                      </el-select>
+                    </InfoItem>
                   </div>
                 </div>
                 <div class="item-flex">
@@ -123,74 +62,37 @@
                     grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
                     margin="0px"
                   >
-                    <template #grid-items>
-                      <GridContainer
-                        max-width="auto"
-                        grid-gap="10px"
-                        grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
-                        margin="0px"
-                      >
-                        <template #grid-items> </template>
-                      </GridContainer>
-                    </template>
+                    <InfoItem title="дата заявки" margin="0" open-height="auto" :with-open-window="false" width="100%">
+                      <SmallDatePicker
+                        v-model:model-value="drugApplication.date"
+                        placeholder="Выбрать"
+                        width="100%"
+                        height="34px"
+                        @change="updateDrugApplication(drugApplication)"
+                      />
+                    </InfoItem>
+                    <InfoItem
+                      :close="infoItemToggle"
+                      margin="0"
+                      width="100%"
+                      :with-open-window="false"
+                      title="комиссия"
+                      @click="openModalCommissions(drugApplication)"
+                    >
+                      <StringItem
+                        v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications"
+                        :key="commissionDrugApplication"
+                        :string="commissionDrugApplication.commission.number.toString()"
+                        custom-class="medicine"
+                      />
+                    </InfoItem>
                   </GridContainer>
                 </div>
               </div>
             </template>
-
-            <template #inside-content>
-              <div style="display: flex">
-                <div>
-                  <div>Комиссии</div>
-                  <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
-                    №{{ commissionDrugApplication.commission.number }}
-                    <el-button @click="removeCommission(commissionDrugApplication.id, drugApplication)">Удалить</el-button>
-                  </div>
-                  <el-select
-                    v-model="selectCommissionModel"
-                    :popper-append-to-body="false"
-                    value-key="label"
-                    placeholder="Выберите комиссию"
-                    @change="(e) => addCommission(e, drugApplication)"
-                  >
-                    <el-option v-for="item in commissions" :key="item.number" :label="item.number" :value="item" />
-                  </el-select>
-                </div>
-                <div>
-                  <div>Файлы</div>
-                  <el-button @click="addFile(drugApplication)">Добавить</el-button>
-                  <div v-for="drugApplicationFile in drugApplication.drugApplicationFiles" :key="drugApplicationFile.id">
-                    <FileUploader :file-info="drugApplicationFile.fileInfo" />
-                    <el-input v-model="drugApplicationFile.comment" />
-                    <el-button @click="removeFile(drugApplication, drugApplicationFile.id)">Удалить</el-button>
-                  </div>
-                </div>
-                <div>
-                  <div>Поставки лекарств</div>
-                  <template v-if="!drugApplication.fundContract.id">
-                    <el-button @click="initFundContract(drugApplication)">Добавить контракт фонда</el-button>
-                  </template>
-                  <template v-else>
-                    <el-button @click="addDrugArrive(drugApplication)">Добавить</el-button>
-                    <div v-for="drugArrive in drugApplication.fundContract.drugArrives" :key="drugArrive.id">
-                      {{ drugArrive.stage }}
-                      <SmallDatePicker
-                        v-model:model-value="drugArrive.date"
-                        placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
-                        @change="updateDrugArrive(drugArrive)"
-                      />
-                      <el-input-number v-model="drugArrive.quantity" @change="updateDrugArrive(drugArrive)" />
-                      <el-button @click="removeDrugArrive(drugApplication, drugArrive.id)">Удалить</el-button>
-                    </div>
-                  </template>
-                </div>
-              </div>
-            </template>
           </CollapseItem>
-        </CollapseContainer>
-      </div>
+        </template>
+      </CollapseContainer>
     </div>
   </AdminListWrapper>
   <Del />
@@ -204,18 +106,16 @@ import Del from '@/assets/svg/Del.svg';
 import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
 import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
-import DrugArrive from '@/classes/DrugArrive';
 import User from '@/classes/User';
+import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugApplicationFilesList.vue';
+import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import FileUploader from '@/components/FileUploader.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import IOption from '@/interfaces/shared/IOption';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
@@ -231,11 +131,9 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
-    FileUploader,
+    DrugArrivesList,
+    ModalWindow,
     CollapseContainer,
-    FiltersButtonsMultiply,
-    RemoteSearch,
-
     AdminListWrapper,
     CollapseItem,
     Button,
@@ -244,9 +142,15 @@ export default defineComponent({
     GridContainer,
     SmallDatePicker,
     Del,
-    RightSliderContainer,
+    DrugApplicationFilesList,
   },
   setup() {
+    const infoItemToggle: Ref<boolean> = ref(false);
+    const showDrugArrives: Ref<boolean> = ref(false);
+    const showDrugApplicationFilesList: Ref<boolean> = ref(false);
+    const openModalCommissions: Ref<boolean> = ref(false);
+
+    const selectedDrugApplication: Ref<DrugApplication> = computed(() => Provider.store.getters['drugApplications/item']);
     const drugApplications: Ref<DrugApplication[]> = computed(() => Provider.store.getters['drugApplications/items']);
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const drugApplicationsStatuses: Ref<DrugApplicationStatus[]> = computed(() => Provider.store.getters['drugApplicationsStatuses/items']);
@@ -292,10 +196,7 @@ export default defineComponent({
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Заявки в ДЗМ/Круг Добра',
-        buttons: [
-          { text: 'Добавить заявку', type: 'primary', action: addApplication },
-          { text: 'Режим редактирования', type: 'warning', action: () => (editMode.value = !editMode.value) },
-        ],
+        buttons: [{ text: 'Добавить заявку', type: 'normal-button', action: addApplication }],
       },
       // sortsLib: PatientsSortsLib,
       getAction: 'getAllWithCount',
@@ -320,44 +221,41 @@ export default defineComponent({
       return await Provider.store.dispatch('commissionsDrugApplications/remove', id);
     };
 
-    const addFile = async (drugApplication: DrugApplication) => {
-      const item = drugApplication.addFile();
-      // await Provider.store.dispatch('commissionsDrugApplications/create', item);
-    };
-
-    const removeFile = async (drugApplication: DrugApplication, id?: string): Promise<void> => {
-      ClassHelper.RemoveFromClassById(id, drugApplication.drugApplicationFiles, []);
-      // return await Provider.store.dispatch('commissionsDrugApplications/remove', id);
-    };
-
     const initFundContract = async (drugApplication: DrugApplication) => {
       drugApplication.initFundContract();
       await Provider.store.dispatch('fundContracts/create', drugApplication.fundContract);
     };
 
-    const addDrugArrive = async (drugApplication: DrugApplication) => {
-      const item = drugApplication.fundContract?.addDrugArrive();
-      await Provider.store.dispatch('drugArrives/create', item);
+    const updateApplicationNumber = async (item: DrugApplication) => {
+      infoItemToggle.value = !infoItemToggle.value;
+      await updateDrugApplication(item);
     };
 
-    const removeDrugArrive = async (drugApplication: DrugApplication, id?: string): Promise<void> => {
-      ClassHelper.RemoveFromClassById(id, drugApplication.fundContract.drugArrives, []);
-      drugApplication.fundContract.normalizeArrivesStages();
-      return await Provider.store.dispatch('drugArrives/remove', id);
+    const selectDrugApplication = (c: DrugApplication): void => {
+      Provider.store.commit('drugApplications/set', c);
     };
 
-    const updateDrugArrive = async (item: DrugArrive) => {
-      await Provider.store.dispatch('drugArrives/update', item);
+    const openDrugArrivesModal = (i: DrugApplication) => {
+      selectDrugApplication(i);
+      showDrugArrives.value = true;
+    };
+
+    const openDrugApplicationFilesModal = (i: DrugApplication) => {
+      selectDrugApplication(i);
+      showDrugApplicationFilesList.value = true;
     };
 
     return {
+      openDrugApplicationFilesModal,
+      showDrugApplicationFilesList,
+      openDrugArrivesModal,
+      openModalCommissions,
+      selectedDrugApplication,
+      showDrugArrives,
+      updateApplicationNumber,
+      infoItemToggle,
       selectCommissionModel,
-      updateDrugArrive,
       initFundContract,
-      addDrugArrive,
-      removeDrugArrive,
-      addFile,
-      removeFile,
       loadDrugApplications,
       drugApplicationsStatuses,
       filterByStatus,
