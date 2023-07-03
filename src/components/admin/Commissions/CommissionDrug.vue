@@ -1,11 +1,21 @@
 <template>
+      <GridContainer grid-gap="5px" margin="10px 0">
+        <Button
+          v-for="drug in drugs"
+          :key="drug.id"
+          button-class="change-button"
+          :text="drug.name"
+
+          @click="selectDrug(drug)"
+        />
+      </GridContainer>
   <div v-if="commission.drug">{{ commission.drug.name }}</div>
   <el-button @click="showDrugsList(true)">Выбрать лекарство</el-button>
-  <template v-if="drugsListShowed">
+  <!-- <template v-if="drugsListShowed">
     <div v-for="drug in drugs" :key="drug.id" @click="selectDrug(drug)">
       {{ drug.name }}
     </div>
-  </template>
+  </template> -->
 </template>
 
 <script lang="ts">
@@ -14,6 +24,7 @@ import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
 import Commission from '@/classes/Commission';
 import Drug from '@/classes/Drug';
 import Provider from '@/services/Provider/Provider';
+import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 
 export default defineComponent({
   name: 'CommissionDrug',
@@ -22,6 +33,9 @@ export default defineComponent({
       type: Object as PropType<Commission>,
       required: true,
     },
+  },
+  components: {
+    GridContainer,
   },
   emits: ['select'],
   setup(props, { emit }) {

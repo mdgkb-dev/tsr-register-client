@@ -180,11 +180,11 @@ export default defineComponent({
     fill: #c4c4c4;
   }
 
-  :deep(.el-form-item) {
-    display: block;
-    width: 100%;
-    margin-bottom: 16px;
-  }
+  // :deep(.el-form-item) {
+  //   display: block;
+  //   width: 100%;
+  //   margin-bottom: 16px;
+  // }
 
   // :deep(.el-form-item__content) {
   //   width: 100%;
@@ -211,20 +211,10 @@ export default defineComponent({
   //   font-weight: bold;
   //   margin-right: 5px;
   // }
-
-  .el-select {
-    width: 100%;
-  }
-
   // :deep(.el-input__prefix) {
   //   left: 230px;
   //   top: -3px;
   // }
-
-  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
-    width: 100%;
-  }
-
   // :deep(.el-input__icon) {
   //   color: #343e5c;
   // }
@@ -246,6 +236,13 @@ export default defineComponent({
   //   left: auto;
   //   right: 10px;
   // }
+  .el-select {
+    width: 100%;
+  }
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
 
   :deep(.el-form-item) {
     display: block;

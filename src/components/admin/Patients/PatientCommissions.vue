@@ -29,60 +29,160 @@
       </div>
     </template>
     <template #body>
+      <ModalWindow :show="showModalDoctorList" title="Список врачей" @close="showModalDoctorList = false">
+        <PersonalityList />
+      </ModalWindow>
+      <ModalWindow :show="showModalDiagnosis" title="Выберите диагноз" @close="showModalDiagnosis = false">
+        <GridContainer grid-gap="5px" margin="10px 0">
+          <Button
+            v-for="patientDiagnosis in selectedCommission.patient.patientDiagnosis"
+            :key="patientDiagnosis.id"
+            button-class="change-button"
+            :text="patientDiagnosis.mkbItem.getFullName()"
+            @click="setPatientDiagnosis(patientDiagnosis, selectedCommission)"
+          />
+        </GridContainer>
+      </ModalWindow>
+
+      <ModalWindow :show="showModalMedicine" title="Выберите лекарство" @close="showModalMedicine = false">
+        <GridContainer grid-gap="5px" margin="10px 0">
+          <Button
+            v-for="drug in drugs"
+            :key="drug.id"
+            button-class="change-button"
+            :text="drug.name"
+            :background="selectedCommission.drugId === drug.id ? '#dff2f8' : ''"
+            @click="selectDrug(drug, selectedCommission)"
+          />
+        </GridContainer>
+      </ModalWindow>
+        
       <div v-if="selectedCommission" class="body">
         <ResearcheContainer background="#DFF2F8">
           <template #header>
             <div class="researche-name">
               <span>Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</span>
-              <span><el-button @click="removeCommission">Удалить</el-button></span>
-            </div>
-            <div class="researche-name">Протокол #{{ selectedCommission.number }}</div>
-            <div class="researche-name">
-              Дата проведения:<el-date-picker v-model="selectedCommission.date" @change="updateCommission" />
             </div>
 
-            <div class="diagnosis-doctorName">
+            <div class="line-item">
+                <div class="item-name">Протокол №{{ selectedCommission.number }}</div>
+                <Button
+                  text="Удалить"
+                  background="#ffffff"
+                  margin="0"
+                  height="42px"
+                  font-size="16px"
+                  border-radius="5px"
+                  color="#343e5c"
+                  :color-swap="true"
+                  @click="removeCommission"
+                >
+                </Button>
+            </div>
+            
+              <div class="line-item">
+                <div class="item-left">
+                  <el-form>
+                    <el-form-item label="Дата проведения" @change="updateCommission">
+                      <DatePicker v-model="selectedCommission.date" />
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="item-right">
+                <el-form>
+                  <el-form-item label="Стасус заявки:" >
+                    <el-select v-model="status">
+                      <el-option v-for="s in statuses" :key="s" :label="s" :value="s"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-form>
+                </div>
+              </div>
+
+
+            <!-- <div class="item-name"> -->
+              <!-- <el-form>
+                <el-form-item label="Дата проведения" @change="updateCommission">
+                  <DatePicker v-model="selectedCommission.date" />
+                </el-form-item>
+              </el-form> -->
+            <!-- </div> -->
+
               <!--              <el-input-->
               <!--                v-model="selectedPatientDiagnosis.doctorName"-->
               <!--                placeholder="ФИО врача, поставившего диагноз"-->
               <!--                @blur="updatePatientDiagnosis(selectedPatientDiagnosis)"-->
               <!--              ></el-input>-->
-            </div>
+
           </template>
           <template #body>
-            <div style="display: flex; justify-content: space-around">
-              <div>
-                <div class="doctor-title">Дата начала периода:</div>
-                <el-date-picker v-model="selectedCommission.startDate" @change="updateCommission" />
-                <div class="doctor-title">Дата окончания периода:</div>
-                <el-date-picker v-model="selectedCommission.endDate" @change="updateCommission" />
-                <CommissionDoctors :commission="selectedCommission" />
-                <CommissionDrug :commission="selectedCommission" />
-                <el-select v-model="selectedCommission.patientDiagnosisId" @change="updateCommission">
-                  <el-option
-                    v-for="patientDiagnosis in patient.patientDiagnosis"
-                    :key="patientDiagnosis.id"
-                    :label="patientDiagnosis.mkbItem.getFullName()"
-                    :value="patientDiagnosis.id"
-                  />
-                </el-select>
-
-                <div>
-                  <el-button>Сформировать протокол врачебной комиссии</el-button>
-                </div>
-                <div>Статус заявки</div>
-                <el-select v-model="status">
-                  <el-option v-for="s in statuses" :key="s" :label="s" :value="s"></el-option>
-                </el-select>
+            <div class="line-item">
+              <div class="item-left">
+                <el-form>
+                  <el-form-item label="Дата начала периода:" @change="updateCommission">
+                    <DatePicker v-model="selectedCommission.startDate" />
+                  </el-form-item>
+                </el-form>
               </div>
-              <div v-if="status === 'Заявка подтверждена'">
-                <h3>Договор</h3>
-                <div>Информация по договору</div>
+              <div class="item-right">
+              <el-form>
+                <el-form-item label="Дата окончания периода:" @change="updateCommission">
+                  <DatePicker v-model="selectedCommission.endDate" />
+                </el-form-item>
+              </el-form>
               </div>
             </div>
+                
+            <!-- <CommissionDoctors :commission="selectedCommission" /> -->
+
+            <!-- <CommissionDrug :commission="selectedCommission" /> -->
+            <!-- <el-select v-model="selectedCommission.patientDiagnosisId" @change="updateCommission">
+              <el-option
+                v-for="patientDiagnosis in patient.patientDiagnosis"
+                :key="patientDiagnosis.id"
+                :label="patientDiagnosis.mkbItem.getFullName()"
+                :value="patientDiagnosis.id"
+              />
+            </el-select> -->
+            <div class="flex-block">
+              <div class="flex-block-left">
+                <Button
+                  text="Состав врачебной комиссии"
+                  button-class="medical-commission-button"
+                  color="#006bb4"
+                  @click="openModalDoctorList(commission)"
+                />
+                <Button
+                  text="E84 Кистозный фиброз"
+                  button-class="medical-commission-button"
+                  color="#006bb4"
+                  @click="openModalDiagnosis(commission)"
+                />
+                <Button
+                  text="Выбрать лекартсво"
+                  button-class="medical-commission-button"
+                  color="#B0A4C0"
+                  margin="0"
+                  @click="openModalMedicine(commission)"
+                />
+            </div>
+
+            <Button
+              text="Сформировать протокол"
+              button-class="protocol-button"
+              color="#B0A4C0"
+              margin="0 0 0 10px"
+            />
+            </div>
+
+          <div v-if="status === 'Заявка подтверждена'">
+            <h3>Договор</h3>
+            <div>Информация по договору</div>
+          </div>
           </template>
         </ResearcheContainer>
       </div>
+      
     </template>
   </RightTabsContainer>
   <svg width="0" height="0" class="hidden">
@@ -114,6 +214,10 @@ import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.v
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
+import DatePicker from '@/services/components/DatePicker.vue';
+import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 
 export default defineComponent({
   name: 'PatientCommissions',
@@ -122,6 +226,10 @@ export default defineComponent({
     ResearcheContainer,
     CommissionDoctors,
     CommissionDrug,
+    Button,
+    DatePicker,
+    PersonalityList,
+    ModalWindow,
   },
 
   setup(props) {
@@ -133,6 +241,9 @@ export default defineComponent({
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
     const commission: ComputedRef<Commission> = computed(() => Provider.store.getters['commissions/item']);
+    const showModalDiagnosis: Ref<boolean> = ref(false);
+    const showModalMedicine: Ref<boolean> = ref(false);
+    const showModalDoctorList: Ref<boolean> = ref(false);
 
     const selectedCommission: Ref<Commission | undefined> = ref(
       patient.value.commissions.length > 0 ? patient.value.commissions[0] : undefined
@@ -169,6 +280,21 @@ export default defineComponent({
         patient.value.commissions.length > 0 ? patient.value.commissions[patient.value.commissions.length - 1] : undefined;
     };
 
+    const openModalDiagnosis = (c: Commission) => {
+      selectCommission(c);
+      showModalDiagnosis.value = true;
+    };
+    const openModalMedicine = async (c: Commission) => {
+      await Provider.store.dispatch('drugs/getAll');
+      selectCommission(c);
+      showModalMedicine.value = true;
+    };
+
+    const openModalDoctorList = (c: Commission) => {
+      selectCommission(c);
+      showModalDoctorList.value = true;
+    };
+
     return {
       updateCommission,
       removeCommission,
@@ -183,6 +309,12 @@ export default defineComponent({
       mounted,
       schema: Provider.schema,
       patient,
+      openModalDiagnosis,
+      showModalDiagnosis,
+      openModalMedicine,
+      showModalMedicine,
+      openModalDoctorList,
+      showModalDoctorList,
     };
   },
 });
@@ -475,4 +607,123 @@ export default defineComponent({
 :deep(.el-timeline-item) {
   padding-bottom: 8px;
 }
+
+  .el-select {
+    width: 100%;
+  }
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
+
+  :deep(.el-form-item) {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  :deep(.el-input__inner) {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    font-family: Comfortaa, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-input__inner::placeholder) {
+    color: $site_light_pink;
+  }
+
+  :deep(.el-input__icon) {
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-form-item__label) {
+    color: $site_light_pink;
+    padding: 0 !important;
+    text-transform: uppercase;
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  :deep(.el-input-number__increase) {
+    border-radius: 0px;
+  }
+
+  :deep(.el-input-number__decrease) {
+    border-radius: 0px;
+  }
+
+.item-left {
+  width: 50%;
+  color: #343e5c;
+  margin-right: 10px;
+}
+
+.item-right {
+  width: 50%;
+  color: #343e5c;
+  margin-left: 10px;
+}
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.item-name {
+  min-height: 42px;
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  color: #343e5c;
+  font-size: 16px;
+  margin-bottom: 20px;
+  // text-transform: uppercase;  
+}
+
+.container-item {
+  width: 100%; 
+}
+
+:deep(.medical-commission-button) {
+  width: 33%;
+  height: 40px;
+  border-radius: $normal-border-radius;
+  color: #B0A4C0;
+  margin: 0 10px 0 0;
+  // color: #006bb4;
+  background: #ffffff;
+}
+
+:deep(.protocol-button) {
+  width: 25%;
+  height: 62px;
+  border-radius: $normal-border-radius;
+  color: #B0A4C0;
+  // color: #006bb4;
+  background: #ffffff;
+}
+
+.flex-block {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-block-left {  
+  width: 75%;
+  padding: 10px;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 </style>

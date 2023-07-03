@@ -1,22 +1,51 @@
 <template>
-  <draggable :list="commission.commissionsDoctors" item-key="id" @end="updateOrder(commission)">
-    <template #item="{ element, index }">
-      <div style="display: flex">
-        <!--        <el-tooltip effect="dark" :content="element.doctor.position" placement="top-start">-->
+
+  <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="showDoctorsList(true)" />
+  <div class="scroll-block">
+    <draggable tag="el-collapse" :list="commission.commissionsDoctors" item-key="id" @end="sortDoctors">
+      <template #item="{ element }">
+        <PersonalityItem :title="element.doctor.getNameWithPosition()" @remove="removeCommissionDoctor(element)" />
+      </template>
+    </draggable>
+  </div>
+
+  <div v-if="doctorsListShowed" class="blur" @click="doctorsListShowed = false"></div>
+  <div v-if="doctorsListShowed" class="add-doctor">
+    <div class="scroll-block">
+      <PersonalityItem
+        v-for="doctor in doctors.filter((d) => !commission.doctorExists(d.id))"
+        :key="doctor.id"
+        :with-icon="false"
+        :title="doctor.getNameWithPosition()"
+        @click="addCommissionDoctor(doctor)"
+      />
+    </div>
+  </div>
+      <!-- <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="showDoctorsList(true)" />
+      <div class="scroll-block">
+        <draggable tag="el-collapse" :list="commission.commissionsDoctors" item-key="id" @end="sortDoctors">
+          <template #item="{ element }">
+            <PersonalityItem :title="element.doctor.getNameWithPosition()" @remove="removeCommissionDoctor(element)" />
+          </template>
+        </draggable>
+      </div> -->
+      <!-- <div style="display: flex">
+
+          
         <div class="doctor-name">{{ element.doctor.name }}</div>
-        <!--        </el-tooltip>-->
+
         <Button icon="del" icon-class="edit-icon" @click="removeCommissionDoctor(element)" />
-      </div>
-    </template>
-  </draggable>
-  <el-button @click="showDoctorsList(true)">Добавить члена комиссии</el-button>
-  <template v-if="doctorsListShowed">
+      </div> -->
+    <!-- </template>
+  </draggable> -->
+  <!-- <el-button @click="showDoctorsList(true)">Добавить члена комиссии</el-button> -->
+  <!-- <template v-if="doctorsListShowed">
     <div v-for="doctor in doctors" :key="doctor.id" @click="addCommissionDoctor(doctor)">
       {{ doctor.name }}
     </div>
-  </template>
-  <Del />
-  <Move />
+  </template> -->
+  <!-- <Del />
+  <Move /> -->
 </template>
 
 <script lang="ts">
@@ -31,6 +60,10 @@ import Button from '@/components/Base/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
+import PersonalityItem from '@/components/admin/Patients/PersonalityItem.vue';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+
 export default defineComponent({
   name: 'CommissionDoctors',
   props: {
@@ -43,6 +76,9 @@ export default defineComponent({
     draggable,
     Move,
     Button,
+    PersonalityItem,
+    CollapseContainer,
+    CollapseItem,
   },
   setup(props) {
     const doctorsListShowed: Ref<boolean> = ref(false);
@@ -116,9 +152,10 @@ export default defineComponent({
 }
 
 .scroll-block {
-  height: 75vh;
+  min-height: 35vh;
+  max-height: 75vh;
   overflow: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-left: 8px;
 }
 
@@ -270,5 +307,51 @@ export default defineComponent({
     width: 100%;
     margin: 0 0px 10px 0;
   }
+}
+
+
+
+
+
+
+
+.plus-button {
+  width: calc(100% - 20px);
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+  height: 60px;
+  margin: 10px;
+  // box-sizing: border-box;
+}
+
+:deep(.icon-plus) {
+  fill: #00b5a4;
+  // width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.add-doctor {
+  position: absolute;
+  z-index: 2;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  min-width: 300px;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+}
+
+.blur {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 </style>
