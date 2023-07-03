@@ -102,7 +102,7 @@
                       @click="openModalDoctorList(commission)"
                     />
                     <InfoItem :close="infoItemToggle" title="ФИО пациента" min-width="200px">
-                      <StringItem :string="commission.patient ? commission.patient.human.getFullName() : ''" custom-class="patient-name" />
+                      <StringItem :string="commission.patient ? commission.patient.human.getFullName() : ''" custom-class="patient-name" width="230px" />
                       <template #open-inside-content>
                         <RemoteSearch
                           :must-be-translated="true"
