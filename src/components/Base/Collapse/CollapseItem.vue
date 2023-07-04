@@ -124,7 +124,7 @@ export default defineComponent({
 
 .tab {
   position: relative;
-  width: calc(100% - 16px);
+  width: calc(100% - 10px);
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   background: #ffffff;
