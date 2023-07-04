@@ -55,7 +55,7 @@ export default class Patient {
   @ClassHelper.GetClassConstructor(PatientHistory)
   patientHistories: PatientHistory[] = [];
 
-  @ClassHelper.GetClassConstructor(Commission)
+  // @ClassHelper.GetClassConstructor(Commission)
   commissions: Commission[] = [];
 
   createdAt?: Date;
@@ -72,6 +72,10 @@ export default class Patient {
   editNameMode = false;
   constructor(i?: Patient) {
     ClassHelper.BuildClass(this, i);
+    if (!i) {
+      return;
+    }
+    this.commissions = i.commissions ? i.commissions.map((i: Commission) => new Commission(i)) : [];
   }
 
   getActuallyDisability(): Disability | undefined {
