@@ -1,4 +1,5 @@
 import DrugDiagnosis from '@/classes/DrugDiagnosis';
+import DrugForm from '@/classes/DrugForm';
 import ClassHelper from '@/services/ClassHelper';
 
 import DrugRegimen from './DrugRegimen';
@@ -6,14 +7,14 @@ import DrugRegimen from './DrugRegimen';
 export default class Drug {
   id?: string;
   name = '';
-  nameMNN = '';
-  form = '';
-  doze = '';
-  // dateRegistration: Date | undefined = undefined;
-  registered = false;
+  nameINN = '';
+
+  @ClassHelper.GetClassConstructor(DrugForm)
+  drugForms: DrugForm[] = [];
+
   @ClassHelper.GetClassConstructor(DrugRegimen)
   drugRegimens: DrugRegimen[] = [];
-  drugRegimensForDelete: string[] = [];
+
   @ClassHelper.GetClassConstructor(DrugDiagnosis)
   drugsDiagnosis: DrugDiagnosis[] = [];
   drugsDiagnosisForDelete: string[] = [];
@@ -24,12 +25,5 @@ export default class Drug {
 
   addDrugRegimen(item: DrugRegimen): void {
     this.drugRegimens.push(item);
-  }
-  removeDrugRegimen(index: number): void {
-    const itemId = this.drugRegimens[index].id;
-    if (itemId) {
-      this.drugRegimensForDelete.push(itemId);
-    }
-    this.drugRegimens.splice(index, 1);
   }
 }
