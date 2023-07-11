@@ -28,16 +28,7 @@
     </ModalWindow>
     <!--    :background="patientDiagnosis.mkbItemId === commission.drugId ? '#dff2f8' : ''"-->
     <ModalWindow :show="showModalMedicine" title="Выберите лекарство" @close="showModalMedicine = false">
-      <GridContainer grid-gap="5px" margin="10px 0">
-        <Button
-          v-for="drug in drugs"
-          :key="drug.id"
-          button-class="change-button"
-          :text="drug.name"
-          :background="selectedCommission.drugId === drug.id ? '#dff2f8' : ''"
-          @click="selectDrug(drug, selectedCommission)"
-        />
-      </GridContainer>
+      <CommissionDrugForm :commission="selectedCommission" @select="(e) => selectDrug(e, selectedCommission)" />
     </ModalWindow>
 
     <div class="filter-block">
@@ -102,7 +93,11 @@
                       @click="openModalDoctorList(commission)"
                     />
                     <InfoItem :close="infoItemToggle" title="ФИО пациента" min-width="200px">
-                      <StringItem :string="commission.patient ? commission.patient.human.getFullName() : ''" custom-class="patient-name" width="230px" />
+                      <StringItem
+                        :string="commission.patient ? commission.patient.human.getFullName() : ''"
+                        custom-class="patient-name"
+                        width="230px"
+                      />
                       <template #open-inside-content>
                         <RemoteSearch
                           :must-be-translated="true"
@@ -146,7 +141,7 @@
                       title="лекарство"
                       @click="openModalMedicine(commission)"
                     >
-                      <StringItem :string="commission.drug && commission.drug.id ? commission.drug.name : ''" custom-class="medicine" />
+                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getName() : ''" custom-class="medicine" />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
                       <SmallDatePicker
@@ -180,9 +175,10 @@ import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Commission from '@/classes/Commission';
 import CommissionTemplate from '@/classes/CommissionTemplate';
-import Drug from '@/classes/Drug';
+import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import CommissionDrugForm from '@/components/admin/Commissions/CommissionDrugForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
@@ -203,6 +199,7 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminCommissionsList',
   components: {
+    CommissionDrugForm,
     CollapseContainer,
     RemoteSearch,
     AdminListWrapper,
@@ -216,14 +213,12 @@ export default defineComponent({
     PersonalityList,
   },
   setup() {
-    const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
     const templatesOpened: Ref<boolean> = ref(false);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const selectedCommission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const count: Ref<number> = computed(() => Provider.store.getters['commissions/count']);
-    // const filteredcommissions: Ref<Patient[]> = computed(() => Provider.store.getters['commissions/filteredcommissions']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
     const infoItemToggle: Ref<boolean> = ref(false);
     const showModalDiagnosis: Ref<boolean> = ref(false);
@@ -300,7 +295,6 @@ export default defineComponent({
       showModalDiagnosis.value = true;
     };
     const openModalMedicine = async (c: Commission) => {
-      await Provider.store.dispatch('drugs/getAll');
       selectCommission(c);
       showModalMedicine.value = true;
     };
@@ -310,10 +304,10 @@ export default defineComponent({
       showModalDoctorList.value = true;
     };
 
-    const selectDrug = async (drug: Drug, c: Commission): Promise<void> => {
+    const selectDrug = async (drug: DrugRecipe, c: Commission): Promise<void> => {
       const findedCommission = commissions.value.find((com: Commission) => com.id === c.id);
       if (findedCommission) {
-        findedCommission.setDrug(drug);
+        findedCommission.setDrugRecipe(drug);
         showModalMedicine.value = false;
         await updateCommission(findedCommission);
       }
@@ -322,7 +316,6 @@ export default defineComponent({
     return {
       selectedCommission,
       selectDrug,
-      drugs,
       infoItemToggle,
       setPatientDiagnosis,
       fillCommissionDownload,

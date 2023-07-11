@@ -4,8 +4,7 @@ import CommissionDoctor from '@/classes/CommissionDoctor';
 import CommissionDoctorTemplate from '@/classes/CommissionDoctorTemplate';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Doctor from '@/classes/Doctor';
-import Drug from '@/classes/Drug';
-import DrugRegimen from '@/classes/DrugRegimen';
+import DrugRecipe from '@/classes/DrugRecipe';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
@@ -20,11 +19,10 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(Patient)
   patient: Patient = new Patient();
   patientId?: string;
-  @ClassHelper.GetClassConstructor(Drug)
-  drug?: Drug;
-  drugId?: string;
-  @ClassHelper.GetClassConstructor(DrugRegimen)
-  drugRegimen?: DrugRegimen;
+  @ClassHelper.GetClassConstructor(DrugRecipe)
+  drugRecipe?: DrugRecipe;
+  drugRecipeId?: string;
+
   volume = '';
   @ClassHelper.GetClassConstructor(CommissionDoctor)
   commissionsDoctors: CommissionDoctor[] = [];
@@ -43,8 +41,6 @@ export default class Commission {
   static CreateFromTemplate(template: CommissionTemplate): Commission {
     const item = new Commission();
     item.id = uuidv4();
-    item.drug = template.drug;
-    item.drugRegimen = template.drugRegimen;
     item.volume = template.volume;
     item.commissionsDoctors = template.commissionsDoctorsTemplates.map((cdt: CommissionDoctorTemplate) =>
       CommissionDoctor.CreateFromTemplate(cdt)
@@ -67,7 +63,7 @@ export default class Commission {
   setPatient(patient: Patient): void {
     this.patient = patient;
     this.patientId = patient.id;
-    this.setDrug();
+    this.setDrugRecipe();
     this.setPatientDiagnosis();
   }
 
@@ -76,9 +72,9 @@ export default class Commission {
     this.patientDiagnosisId = patientDiagnosis ? patientDiagnosis.id : undefined;
   }
 
-  setDrug(drug?: Drug): void {
-    this.drug = drug;
-    this.drugId = drug ? drug.id : undefined;
+  setDrugRecipe(item?: DrugRecipe): void {
+    this.drugRecipe = item;
+    this.drugRecipeId = item ? item.id : undefined;
   }
 
   getProtocolName(): string {
@@ -87,6 +83,6 @@ export default class Commission {
   }
 
   canGetProtocol(): boolean {
-    return !!this.patient.id && !!this.patient.human.id && !!this.drug && !!this.patientDiagnosis?.mkbItem;
+    return !!this.patient.id && !!this.patient.human.id && !!this.drugRecipe && !!this.patientDiagnosis?.mkbItem;
   }
 }

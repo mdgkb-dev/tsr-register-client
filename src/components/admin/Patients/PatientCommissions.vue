@@ -195,6 +195,7 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import Commission from '@/classes/Commission';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Drug from '@/classes/Drug';
+import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
@@ -294,11 +295,11 @@ export default defineComponent({
       await updateCommission();
     };
 
-    const selectDrug = async (drug: Drug): Promise<void> => {
+    const selectDrug = async (item: DrugRecipe): Promise<void> => {
       if (!selectedCommission.value) {
         return;
       }
-      selectedCommission.value.setDrug(drug);
+      selectedCommission.value?.setDrugRecipe(item);
       showModalMedicine.value = false;
       await updateCommission();
     };
