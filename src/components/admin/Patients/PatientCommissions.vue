@@ -57,116 +57,118 @@
         </GridContainer>
       </ModalWindow>
 
-      <div v-if="selectedCommission" class="body">
-        <ResearcheContainer background="#DFF2F8">
-          <template #header>
-            <div class="researche-name">
-              <span>Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</span>
-            </div>
-
-            <div class="line-item">
-              <div class="item-name">Протокол №{{ selectedCommission.number }}</div>
-              <Button
-                text="Удалить"
-                background="#ffffff"
-                margin="0"
-                height="42px"
-                font-size="16px"
-                border-radius="5px"
-                color="#343e5c"
-                :color-swap="true"
-                @click="removeCommission"
-              >
-              </Button>
-            </div>
-
-            <div class="line-item">
-              <div class="item-left">
-                <el-form>
-                  <el-form-item label="Дата проведения" @change="updateCommission">
-                    <DatePicker v-model="selectedCommission.date" />
-                  </el-form-item>
-                </el-form>
+      <div class="body">
+        <div v-if="selectedCommission">
+          <ResearcheContainer background="#DFF2F8">
+            <template #header>
+              <div class="researche-name">
+                <span>Заболевание СПИНАЛЬНО МЫШЕЧНАЯ АТРОФИЯ</span>
               </div>
-              <div class="item-right">
-                <el-form>
-                  <el-form-item label="Стасус заявки:">
-                    <el-select v-model="status">
-                      <el-option v-for="s in statuses" :key="s" :label="s" :value="s"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </div>
-          </template>
-          <template #body>
-            <div class="line-item">
-              <div class="item-left">
-                <el-form>
-                  <el-form-item label="Дата начала периода:" @change="updateCommission">
-                    <DatePicker v-model="selectedCommission.startDate" />
-                  </el-form-item>
-                </el-form>
-              </div>
-              <div class="item-right">
-                <el-form>
-                  <el-form-item label="Дата окончания периода:" @change="updateCommission">
-                    <DatePicker v-model="selectedCommission.endDate" />
-                  </el-form-item>
-                </el-form>
-              </div>
-            </div>
 
-            <!-- <CommissionDoctors :commission="selectedCommission" /> -->
-
-            <!-- <CommissionDrug :commission="selectedCommission" /> -->
-            <!-- <el-select v-model="selectedCommission.patientDiagnosisId" @change="updateCommission">
-              <el-option
-                v-for="patientDiagnosis in patient.patientDiagnosis"
-                :key="patientDiagnosis.id"
-                :label="patientDiagnosis.mkbItem.getFullName()"
-                :value="patientDiagnosis.id"
-              />
-            </el-select> -->
-            <div class="flex-block">
-              <div class="flex-block-left">
+              <div class="line-item">
+                <div class="item-name">Протокол №{{ selectedCommission.number }}</div>
                 <Button
-                  text="Состав врачебной комиссии"
-                  button-class="medical-commission-button"
-                  color="#006bb4"
-                  @click="openModalDoctorList()"
-                />
-                <Button
-                  :text="
-                    selectedCommission.patientDiagnosis ? selectedCommission.patientDiagnosis.mkbItem.getFullName() : 'Выбрать диагноз'
-                  "
-                  button-class="medical-commission-button"
-                  :color="selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
-                  @click="openModalDiagnosis()"
-                />
-                <Button
-                  :text="selectedCommission.drug ? selectedCommission.drug.name : 'Выбрать лекарство'"
-                  button-class="medical-commission-button"
-                  :color="selectedCommission.drug ? '#006bb4' : '#B0A4C0'"
+                  text="Удалить"
+                  background="#ffffff"
                   margin="0"
-                  @click="openModalMedicine()"
+                  height="42px"
+                  font-size="16px"
+                  border-radius="5px"
+                  color="#343e5c"
+                  :color-swap="true"
+                  @click="removeCommission"
+                >
+                </Button>
+              </div>
+
+              <div class="line-item">
+                <div class="item-left">
+                  <el-form>
+                    <el-form-item label="Дата проведения" @change="updateCommission">
+                      <DatePicker v-model="selectedCommission.date" />
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="item-right">
+                  <el-form>
+                    <el-form-item label="Стасус заявки:">
+                      <el-select v-model="status">
+                        <el-option v-for="s in statuses" :key="s" :label="s" :value="s"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </div>
+            </template>
+            <template #body>
+              <div class="line-item">
+                <div class="item-left">
+                  <el-form>
+                    <el-form-item label="Дата начала периода:" @change="updateCommission">
+                      <DatePicker v-model="selectedCommission.startDate" />
+                    </el-form-item>
+                  </el-form>
+                </div>
+                <div class="item-right">
+                  <el-form>
+                    <el-form-item label="Дата окончания периода:" @change="updateCommission">
+                      <DatePicker v-model="selectedCommission.endDate" />
+                    </el-form-item>
+                  </el-form>
+                </div>
+              </div>
+
+              <!-- <CommissionDoctors :commission="selectedCommission" /> -->
+
+              <!-- <CommissionDrug :commission="selectedCommission" /> -->
+              <!-- <el-select v-model="selectedCommission.patientDiagnosisId" @change="updateCommission">
+                <el-option
+                  v-for="patientDiagnosis in patient.patientDiagnosis"
+                  :key="patientDiagnosis.id"
+                  :label="patientDiagnosis.mkbItem.getFullName()"
+                  :value="patientDiagnosis.id"
+                />
+              </el-select> -->
+              <div class="flex-block">
+                <div class="flex-block-left">
+                  <Button
+                    text="Состав врачебной комиссии"
+                    button-class="medical-commission-button"
+                    color="#006bb4"
+                    @click="openModalDoctorList()"
+                  />
+                  <Button
+                    :text="
+                      selectedCommission.patientDiagnosis ? selectedCommission.patientDiagnosis.mkbItem.getFullName() : 'Выбрать диагноз'
+                    "
+                    button-class="medical-commission-button"
+                    :color="selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
+                    @click="openModalDiagnosis()"
+                  />
+                  <Button
+                    :text="selectedCommission.drug ? selectedCommission.drug.name : 'Выбрать лекарство'"
+                    button-class="medical-commission-button"
+                    :color="selectedCommission.drug ? '#006bb4' : '#B0A4C0'"
+                    margin="0"
+                    @click="openModalMedicine()"
+                  />
+                </div>
+                <Button
+                  text="Сформировать протокол"
+                  button-class="protocol-button"
+                  :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
+                  margin="0 0 0 10px"
+                  @click="fillCommissionDownload"
                 />
               </div>
-              <Button
-                text="Сформировать протокол"
-                button-class="protocol-button"
-                :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
-                margin="0 0 0 10px"
-                @click="fillCommissionDownload"
-              />
-            </div>
 
-            <div v-if="status === 'Заявка подтверждена'">
-              <h3>Договор</h3>
-              <div>Информация по договору</div>
-            </div>
-          </template>
-        </ResearcheContainer>
+              <div v-if="status === 'Заявка подтверждена'">
+                <h3>Договор</h3>
+                <div>Информация по договору</div>
+              </div>
+            </template>
+          </ResearcheContainer>
+        </div>
       </div>
     </template>
   </RightTabsContainer>
@@ -424,7 +426,7 @@ export default defineComponent({
   border: 1px solid #b0a4c0;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
-  border-left: none;
+  border-left: #DFF2F8;
   background: $base-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
@@ -443,7 +445,7 @@ export default defineComponent({
   border: 1px solid #379fff;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
-  border-left: none;
+  border-left: #DFF2F8;
   background: $custom-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;

@@ -24,57 +24,59 @@
       </div>
     </template>
     <template #body>
-      <div v-if="selectedPatientDiagnosis" class="body">
-        <ResearcheContainer background="#DFF2F8">
-          <template #header>
-            <div class="researche-name">{{ selectedPatientDiagnosis.mkbItem.getFullName() }}</div>
-            <div class="diagnosis-doctorName">
-              <div class="doctor-title">Диагноз поставил врач:</div>
-              <el-input
-                v-model="selectedPatientDiagnosis.doctorName"
-                placeholder="ФИО врача, поставившего диагноз"
-                @blur="updatePatientDiagnosis(selectedPatientDiagnosis)"
-              ></el-input>
-            </div>
-          </template>
-          <template #body>
-            <Button 
-              text="Добавить анамнез" 
-              :withIcon="false" 
-              width="100%" 
-              height="60px" 
-              font-size="16px" 
-              border-radius="5px" 
-              color="#00B5A4" 
-              background="#C7ECEA"
-              backgroundHover="#C7ECEA"
-              @click="addAnamnesis(selectedPatientDiagnosis)"
-              :colorSwap="false"
-              >
-            </Button>
-            <el-timeline style="margin-top: 20px">
-              <el-timeline-item
-                v-for="anamnesis in selectedPatientDiagnosis.anamneses"
-                :key="anamnesis.id"
-                placement="top"
-                center
-              >
-              <CollapseItem
-                :title="$dateTimeFormatter.format(anamnesis.date)"
-                :is-collaps="true"
-                background="#DFF2F8"
-                margin-top="0px"
-              >
-                <template #inside-content>
-                  <div class="background-container">
-                    <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
-                  </div>
-                </template>
-              </CollapseItem>
-              </el-timeline-item>
-            </el-timeline>
-          </template>
-        </ResearcheContainer>
+      <div class="body">
+        <div v-if="selectedPatientDiagnosis">
+          <ResearcheContainer background="#DFF2F8">
+            <template #header>
+              <div class="researche-name">{{ selectedPatientDiagnosis.mkbItem.getFullName() }}</div>
+              <div class="diagnosis-doctorName">
+                <div class="doctor-title">Диагноз поставил врач:</div>
+                <el-input
+                  v-model="selectedPatientDiagnosis.doctorName"
+                  placeholder="ФИО врача, поставившего диагноз"
+                  @blur="updatePatientDiagnosis(selectedPatientDiagnosis)"
+                ></el-input>
+              </div>
+            </template>
+            <template #body>
+              <Button 
+                text="Добавить анамнез" 
+                :withIcon="false" 
+                width="100%" 
+                height="60px" 
+                font-size="16px" 
+                border-radius="5px" 
+                color="#00B5A4" 
+                background="#C7ECEA"
+                backgroundHover="#C7ECEA"
+                @click="addAnamnesis(selectedPatientDiagnosis)"
+                :colorSwap="false"
+                >
+              </Button>
+              <el-timeline style="margin-top: 20px">
+                <el-timeline-item
+                  v-for="anamnesis in selectedPatientDiagnosis.anamneses"
+                  :key="anamnesis.id"
+                  placement="top"
+                  center
+                >
+                <CollapseItem
+                  :title="$dateTimeFormatter.format(anamnesis.date)"
+                  :is-collaps="true"
+                  background="#DFF2F8"
+                  margin-top="0px"
+                >
+                  <template #inside-content>
+                    <div class="background-container">
+                      <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
+                    </div>
+                  </template>
+                </CollapseItem>
+                </el-timeline-item>
+              </el-timeline>
+            </template>
+          </ResearcheContainer>
+        </div>
       </div>
     </template>
   </RightTabsContainer>
