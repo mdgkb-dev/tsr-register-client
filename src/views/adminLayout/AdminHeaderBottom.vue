@@ -2,7 +2,7 @@
   <div :key="headerParams" class="admin-header-bottom">
     <div class="flex-between">
       <el-page-header v-if="headerParams.showBackButton" title=" " :content="headerParams.title" @back="goBack" />
-      <h4 v-else style="margin-left: 20px">
+      <h4 v-else style="margin-left: 0px">
         {{ headerParams.title }}
         <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger"></el-badge>
       </h4>
@@ -14,18 +14,6 @@
             :button-class="item.type" 
             @click="action(item.action)"
           />
-          <!-- <el-button
-            v-if="item.action && item.condition"
-            :key="item.condition"
-            round
-            size="small"
-            :loading="buttonClicked"
-            :disabled="buttonClicked"
-            :type="item.type"
-            @click.prevent="action(item.action)"
-          >
-            {{ item.text }}
-          </el-button> -->
         </div>
         <div class="system-message" v-if="headSpinner">
           <StringItem string="Сохранение" font-size="20px" padding="0 10px" />
@@ -106,7 +94,7 @@ h4 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 0 20px;
+  margin: 0 0px;
 }
 .button-group {
   display: flex;
@@ -207,6 +195,18 @@ h4 {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media ( max-width: 425px) {
+  .normal-button {
+    width: 100%;
+    min-width: 80px;
+    max-width: 80px;
+    height: 34px;
+    border-radius: 5px;
+    color: #379FFF;
+    background: #DFF2F8;
   }
 }
 </style>
