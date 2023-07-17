@@ -25,6 +25,7 @@
           borderTopLeftRadius: mobileWindow ? '5px' : '',
           borderBottomLeftRadius: mobileWindow ? '5px' : '',
           boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
+          height: '370px',
         }"
       >
         <div v-if="mobileWindow" class="title">
@@ -65,6 +66,7 @@
           borderTopLeftRadius: mobileWindow ? '5px' : '',
           borderBottomLeftRadius: mobileWindow ? '5px' : '',
           boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
+          height: '150px',
         }"
       >
         <div v-if="mobileWindow" class="title">

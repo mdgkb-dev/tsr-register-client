@@ -29,7 +29,7 @@
       <template #filter>
         <GridContainer
           max-width="900px"
-          grid-gap="27px 10px"
+          grid-gap="70px 10px"
           grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
           margin="0 0 0 10px"
         >
