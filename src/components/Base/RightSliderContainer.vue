@@ -107,7 +107,7 @@
           color="#006BB4"
           background="#ffffff"
           background-hover="#DFF2F8"
-          margin="8px 0 0 10px"
+          margin="13px 0 0 10px"
           icon="download"
           icon-class="icon-download"
           @click="handClick2()"
