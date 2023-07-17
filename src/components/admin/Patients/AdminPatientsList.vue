@@ -611,7 +611,8 @@ export default defineComponent({
 }
 
 :deep(.edit-button) {
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   height: 40px;
   border-radius: 5px;
   color: #006bb4;
@@ -642,7 +643,7 @@ export default defineComponent({
 .patient-name {
   color: #006bb4;
   font-size: 17px;
-  min-width: 240px;
+  min-width: 150px;
   width: 100%;
   padding: 0px;
 }

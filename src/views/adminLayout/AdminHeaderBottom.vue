@@ -2,7 +2,7 @@
   <div :key="headerParams" class="admin-header-bottom">
     <div class="flex-between">
       <el-page-header v-if="headerParams.showBackButton" title=" " :content="headerParams.title" @back="goBack" />
-      <h4 v-else style="margin-left: 0px">
+      <h4 v-else class="menu-title">
         {{ headerParams.title }}
         <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger"></el-badge>
       </h4>
@@ -189,6 +189,10 @@ h4 {
   font-size: 14px;
 }
 
+.menu-title {
+  margin-left: 0px;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
@@ -198,7 +202,7 @@ h4 {
   }
 }
 
-@media ( max-width: 425px) {
+@media ( max-width: 560px) {
   .normal-button {
     width: 100%;
     min-width: 80px;
@@ -207,6 +211,12 @@ h4 {
     border-radius: 5px;
     color: #379FFF;
     background: #DFF2F8;
+  }
+}
+
+@media ( max-width: 992px) {
+  .menu-title {
+    margin-left: 34px;
   }
 }
 </style>

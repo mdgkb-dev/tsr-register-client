@@ -4,7 +4,7 @@
       <div>
         <AdminHeaderTop v-if="showTopHeader" />
         <div class="admin-main-container">
-          <AdminSideMenu class="side-menu hidden-sm-and-down" />
+          <AdminSideMenu />
           <div class="admin-container">
             <AdminHeaderBottom style="position: sticky; z-index: 2" />
             <div v-if="$route.meta.adminLayout === AdminLayout.TableList" style="height: inherit">
