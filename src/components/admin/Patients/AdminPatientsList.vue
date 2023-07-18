@@ -7,10 +7,9 @@
             title="поиск и сортировка"
             margin="0"
             :with-open-window="false"
-            height="76px"
+            height="98px"
             background="#F5F5F5"
             border-color="#C4C4C4"
-            padding="7px"
             :with-hover="false"
           >
             <div :style="{ width: '100%' }">
@@ -30,7 +29,7 @@
       <template #filter>
         <GridContainer
           max-width="900px"
-          grid-gap="27px 10px"
+          grid-gap="70px 10px"
           grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
           margin="0 0 0 10px"
         >
@@ -73,7 +72,7 @@
             title="документы"
             margin="0"
             :with-open-window="false"
-            height="76px"
+            height="98px"
             background="#F5F5F5"
             border-color="#C4C4C4"
             padding="7px"
@@ -109,7 +108,7 @@
             title="сохранить"
             margin="0"
             :with-open-window="false"
-            height="76px"
+            height="98px"
             background="#F5F5F5"
             border-color="#C4C4C4"
             padding="7px"
@@ -612,7 +611,8 @@ export default defineComponent({
 }
 
 :deep(.edit-button) {
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   height: 40px;
   border-radius: 5px;
   color: #006bb4;
@@ -643,7 +643,7 @@ export default defineComponent({
 .patient-name {
   color: #006bb4;
   font-size: 17px;
-  min-width: 240px;
+  min-width: 150px;
   width: 100%;
   padding: 0px;
 }

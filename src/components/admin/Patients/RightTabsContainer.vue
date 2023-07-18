@@ -152,8 +152,8 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 600px) {
-  .mainblock {
-    padding: 10px 0;
-  }
+  // .mainblock {
+  //   padding: 10px 0;
+  // }
 }
 </style>

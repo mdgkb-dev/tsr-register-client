@@ -3,7 +3,7 @@
     margin="0"
     :with-open-window="false"
     :with-icon="false"
-    height="76px"
+    height="98px"
     background="#F5F5F5"
     border-color="#C4C4C4"
     padding="7px"

@@ -1,5 +1,15 @@
 <template>
-  <div v-if="mounted" class="admin-side-menu">
+  <div v-if="showMenuBar" class="blur" @click="showMenuBar = false"></div>
+  <div class="menu-icon" @click="openMenuBar()">
+    <svg class="menu-icon-svg">
+      <use xlink:href="#menu-icon"></use>
+    </svg>
+  </div>
+  <div v-if="mounted" class="admin-side-menu"
+    :style="{
+      marginLeft: showMenuBar ? '0px' : ''
+    }"
+  >
     <el-menu :default-active="activePath" :collapse="isCollapseSideMenu" background-color="whitesmoke" unique-opened @select="closeDrawer">
       <template v-for="item in menus" :key="item.title">
         <el-sub-menu v-if="item?.children?.length" :index="item.title">
@@ -18,10 +28,9 @@
             </div>
           </el-menu-item>
         </el-sub-menu>
-        <div v-else>
+        <div v-else @click="showMenuBar = false">
           <el-menu-item v-if="item.to !== '/'" :index="item.to" @click="$router.push(item.to)">
-            <i :class="item.icon"></i>
-            <template #title>{{ item.title }}</template>
+            <template #title >{{ item.title }}</template>
           </el-menu-item>
         </div>
       </template>
@@ -30,6 +39,7 @@
       <el-button @click="logout">Выйти</el-button>
     </div>
   </div>
+  <Menu />
 </template>
 
 <script lang="ts">
@@ -39,9 +49,13 @@ import { useStore } from 'vuex';
 
 import IAdminMenu from '@/interfaces/IAdminMenu';
 import Provider from '@/services/Provider/Provider';
+import Menu from '@/assets/svg/Menu.svg'
 
 export default defineComponent({
   name: 'AdminSideMenu',
+  components: {
+    Menu
+  },
   props: { isCollapse: { type: Boolean } },
 
   setup() {
@@ -52,6 +66,7 @@ export default defineComponent({
     const activePath: Ref<string> = ref('');
     // const applicationsCounts: Ref<IApplicationsCount[]> = computed(() => store.getters['admin/applicationsCounts']);
     const mounted = ref(false);
+    const showMenuBar: Ref<boolean> = ref(false);
     // const userPermissions: ComputedRef<IPathPermission[]> = computed(() => store.getters['auth/userPathPermissions']);
     const menus: ComputedRef<IAdminMenu[]> = computed<IAdminMenu[]>(() => store.getters['admin/menus']);
     watch(
@@ -76,11 +91,16 @@ export default defineComponent({
       // await store.dispatch('admin/unsubscribeApplicationsCountsGet');
     });
 
+    const openMenuBar = async () => {
+      showMenuBar.value = true;
+    };
+
+
     const logout = async () => {
       await Provider.store.dispatch('auth/logout');
       await Provider.router.push('/login');
     };
-    return { logout, menus, closeDrawer, isCollapseSideMenu, activePath, mounted };
+    return { logout, menus, closeDrawer, isCollapseSideMenu, activePath, mounted, openMenuBar, showMenuBar };
   },
 });
 </script>
@@ -88,9 +108,13 @@ export default defineComponent({
 <style lang="scss" scoped>
 $background-color: whitesmoke;
 
+.hidden {
+  display: none;
+}
+
 .exit-button-container {
   display: flex;
-  justify-content: space-around;
+  justify-content: left;
   position: absolute;
   bottom: 50px;
   left: 25%;
@@ -125,6 +149,7 @@ $background-color: whitesmoke;
   border-right: 1px solid #e6e6e6;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-right: 0;
 
   :deep(.el-sub-menu__icon-arrow) {
     margin-left: 10px;
@@ -158,6 +183,45 @@ $background-color: whitesmoke;
   align-items: center;
   .el-badge {
     margin-left: 5px;
+  }
+}
+
+.menu-icon-svg {
+  width: 32px;
+  height: 32px;
+  fill: #409EFF
+}
+
+.menu-icon {
+  display: none;
+}
+
+.blur {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+}
+
+@media screen and (max-width: 992px) {
+  .admin-side-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    margin-left: -250px;
+  }
+
+  .menu-icon {
+    position: absolute;
+    top: 14px;
+    left: 5px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>

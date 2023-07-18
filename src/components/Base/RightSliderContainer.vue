@@ -25,6 +25,7 @@
           borderTopLeftRadius: mobileWindow ? '5px' : '',
           borderBottomLeftRadius: mobileWindow ? '5px' : '',
           boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
+          height: mobileWindow ? '370px' : '',
         }"
       >
         <div v-if="mobileWindow" class="title">
@@ -65,6 +66,7 @@
           borderTopLeftRadius: mobileWindow ? '5px' : '',
           borderBottomLeftRadius: mobileWindow ? '5px' : '',
           boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
+          height: mobileWindow ? '150px' : '',
         }"
       >
         <div v-if="mobileWindow" class="title">
@@ -105,7 +107,7 @@
           color="#006BB4"
           background="#ffffff"
           background-hover="#DFF2F8"
-          margin="8px 0 0 10px"
+          margin="13px 0 0 10px"
           icon="download"
           icon-class="icon-download"
           @click="handClick2()"
@@ -199,9 +201,9 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: calc(100% - 20px);
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   background: #f5f5f5;
-  height: auto;
+  height: 100px;
   border-bottom: 1px solid #c4c4c4;
 }
 
