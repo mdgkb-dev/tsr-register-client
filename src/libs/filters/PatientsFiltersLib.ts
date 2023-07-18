@@ -43,6 +43,12 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
+  function byQuestionVariantId(variantId: string): FilterModel {
+    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'answers', 'id', 'patient_id', DataTypes.Join, variantId, '');
+    filterModel.operator = Operators.Eq;
+    return filterModel;
+  }
+
   function withDisabilities(): FilterModel {
     const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'disabilities', 'id', 'patient_id', DataTypes.Join);
     filterModel.label = 'Только с инвалидностью';
@@ -50,6 +56,7 @@ const PatientsFiltersLib = (() => {
   }
 
   return {
+    byQuestionVariantId,
     withDisabilities,
     genderSet,
     onlyMale,
