@@ -34,6 +34,7 @@ import { patientsRegisters } from '@/store/modules/patientsRegisters';
 import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
 import { patientsResearches } from '@/store/modules/patientsResearches';
 import { patientsResearchesPools } from '@/store/modules/patientsResearchesPools';
+import { questions } from '@/store/modules/questions';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
@@ -102,6 +103,7 @@ const store: StoreOptions<RootState> = {
     drugDecreases,
     drugForms,
     drugRecipes,
+    questions,
   },
 };
 

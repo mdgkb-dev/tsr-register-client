@@ -86,4 +86,16 @@ export default class Human {
   setResidentialAddress(addressesEqual: boolean): void {
     addressesEqual ? (this.addressResidential = this.addressRegistration) : (this.addressResidential = '');
   }
+
+  setName(item: string): void {
+    this.name = item;
+  }
+
+  setSurname(item: string): void {
+    this.surname = item;
+  }
+
+  setPatronymic(item: string): void {
+    this.patronymic = item;
+  }
 }

@@ -285,4 +285,8 @@ export default class Patient {
     this.commissions.push(item);
     return item;
   }
+
+  setEditNameMode(value: boolean): void {
+    this.editNameMode = value;
+  }
 }

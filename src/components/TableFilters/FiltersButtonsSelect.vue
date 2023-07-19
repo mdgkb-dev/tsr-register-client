@@ -12,30 +12,26 @@
     <template #title>
       <StringItem :string="defaultLabel" font-size="10px" padding="0" />
     </template>
-    <template #close-inside-content>
-      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-        <template #grid-items>
-          <Button
-            v-for="(model, index) in models"
-            :key="index"
-            :text="model.label"
-            :with-icon="false"
-            width="auto"
-            height="34px"
-            border-radius="5px"
-            color="#006BB4"
-            background="#ffffff"
-            :is-toggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
-            background-hover="#DFF2F8"
-            :toggle-mode="true"
-            font-size="12px"
-            :inverse="inverse"
-            @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
-          >
-          </Button>
-        </template>
-      </GridContainer>
-    </template>
+    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+      <Button
+        v-for="(model, index) in models"
+        :key="index"
+        :text="model.label"
+        :with-icon="false"
+        width="auto"
+        height="34px"
+        border-radius="5px"
+        color="#006BB4"
+        background="#ffffff"
+        :is-toggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
+        background-hover="#DFF2F8"
+        :toggle-mode="true"
+        font-size="12px"
+        :inverse="inverse"
+        @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
+      >
+      </Button>
+    </GridContainer>
   </InfoItem>
 </template>
 

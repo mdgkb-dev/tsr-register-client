@@ -43,9 +43,19 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
-  function byQuestionVariantId(variantId: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'answers', 'id', 'patient_id', DataTypes.Join, variantId, '');
+  function byQuestionVariantId(variantId: string, label: string): FilterModel {
+    const filterModel = FilterModel.CreateFilterModelWithJoin(
+      table,
+      'id',
+      'answers',
+      'id',
+      'patient_id',
+      DataTypes.Join,
+      variantId,
+      'answer_variant_id'
+    );
     filterModel.operator = Operators.Eq;
+    filterModel.label = label;
     return filterModel;
   }
 
