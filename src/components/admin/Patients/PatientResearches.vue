@@ -649,7 +649,6 @@ export default defineComponent({
 }
 
 :deep(.icon-plus) {
-  fill: #00b5a4;
   width: 40px;
   height: 40px;
   cursor: pointer;
