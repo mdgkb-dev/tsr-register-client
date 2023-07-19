@@ -70,24 +70,20 @@
                   <template #title>
                     <StringItem string="сохранить" font-size="10px" padding="0" />
                   </template>
-                  <template #close-inside-content>
-                    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-                      <template #grid-items>
-                        <Button
-                          text="xlsx"
-                          :with-icon="false"
-                          width="auto"
-                          height="34px"
-                          border-radius="5px"
-                          color="#006BB4"
-                          background="#DFF2F8"
-                          background-hover="#DFF2F8"
-                          font-size="12px"
-                        >
-                        </Button>
-                      </template>
-                    </GridContainer>
-                  </template>
+                  <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                    <Button
+                      text="xlsx"
+                      :with-icon="false"
+                      width="auto"
+                      height="34px"
+                      border-radius="5px"
+                      color="#006BB4"
+                      background="#DFF2F8"
+                      background-hover="#DFF2F8"
+                      font-size="12px"
+                    >
+                    </Button>
+                  </GridContainer>
                 </InfoItem>
               </div>
             </template>
@@ -219,17 +215,15 @@
                 width="calc(100% - 20px)"
                 grid-template-columns="repeat(auto-fit, minmax(280px, 1fr))"
               >
-                <template #grid-items>
-                  <GeneralItem
-                    v-for="(researchesPoolResearch, i) in researchesPool.researchesPoolsResearches"
-                    :key="researchesPoolResearch.id"
-                    :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
-                    height="60px"
-                    @click="selectResearch(researchesPoolResearch.research)"
-                  >
-                    <template #general-item> {{ i + 1 }}. {{ researchesPoolResearch.research.name }} </template>
-                  </GeneralItem>
-                </template>
+                <GeneralItem
+                  v-for="(researchesPoolResearch, i) in researchesPool.researchesPoolsResearches"
+                  :key="researchesPoolResearch.id"
+                  :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
+                  height="60px"
+                  @click="selectResearch(researchesPoolResearch.research)"
+                >
+                  <template #general-item> {{ i + 1 }}. {{ researchesPoolResearch.research.name }} </template>
+                </GeneralItem>
               </GridContainer>
             </template>
           </template>
