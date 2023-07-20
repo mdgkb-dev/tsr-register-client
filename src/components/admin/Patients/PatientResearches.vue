@@ -51,6 +51,7 @@
                   background="#ffffff"
                   font-size="16px"
                   :color-swap="true"
+                  @click="openChart"
                 >
                 </Button>
               </div>
@@ -91,6 +92,7 @@
 
           <template #body>
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
+              <PatientResearchChart v-if="research && patientResearch" :research="research" :patient-research="patientResearch" />
               <el-timeline style="margin-top: 20px">
                 <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
                   <GeneralItem
@@ -177,30 +179,28 @@
                       </div>
                       <div class="scroll-block">
                         <CollapseContainer>
-                          <template #default="scope">
-                            <CollapseItem
-                              v-for="question in filteredQuestions"
-                              :key="question.id"
-                              :tab-id="question.id"
-                              :active-id="question.id"
-                              :title="`${question.order + 1}. ${question.name}`"
-                              :is-collaps="true"
-                              :change-color="researchResult.getOrCreateAnswer(question).filled"
-                              background="#DFF2F8"
-                              background-attention="#EECEAF"
-                              margin-top="20px"
-                            >
-                              <template #inside-content>
-                                <div :id="question.getIdWithoutDashes()" class="background-container">
-                                  <QuestionComponent
-                                    :question="question"
-                                    :research-result="researchResult"
-                                    @fill="scroll(question.getIdWithoutDashes())"
-                                  />
-                                </div>
-                              </template>
-                            </CollapseItem>
-                          </template>
+                          <CollapseItem
+                            v-for="question in filteredQuestions"
+                            :key="question.id"
+                            :tab-id="question.id"
+                            :active-id="question.id"
+                            :title="`${question.order + 1}. ${question.name}`"
+                            :is-collaps="true"
+                            :change-color="researchResult.getOrCreateAnswer(question).filled"
+                            background="#DFF2F8"
+                            background-attention="#EECEAF"
+                            margin-top="20px"
+                          >
+                            <template #inside-content>
+                              <div :id="question.getIdWithoutDashes()" class="background-container">
+                                <QuestionComponent
+                                  :question="question"
+                                  :research-result="researchResult"
+                                  @fill="scroll(question.getIdWithoutDashes())"
+                                />
+                              </div>
+                            </template>
+                          </CollapseItem>
                         </CollapseContainer>
                       </div>
                     </div>
@@ -272,6 +272,7 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref, Writab
 
 import Formula from '@/classes/Formula';
 import FormulaResult from '@/classes/FormulaResult';
+import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import PatientResearchesPool from '@/classes/PatientResearchesPool';
@@ -281,6 +282,7 @@ import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
 import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
@@ -296,6 +298,7 @@ import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'PatientResearches',
   components: {
+    PatientResearchChart,
     RightTabsContainer,
     QuestionComponent,
     Button,
@@ -448,7 +451,19 @@ export default defineComponent({
       return results;
     };
 
+    const updateHuman = async (human: Human): Promise<void> => {
+      await Provider.store.dispatch('humans/update', human);
+    };
+
+    const chartOpened: Ref<boolean> = ref(false);
+    const openChart = () => {
+      chartOpened.value = true;
+    };
+
     return {
+      chartOpened,
+      openChart,
+      updateHuman,
       showOnlyNotFilled,
       cancelResearchFilling,
       questionsFilterString,

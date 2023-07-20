@@ -26,6 +26,7 @@ export default class Formula {
     let parsedFormula = this.formula;
     for (const [key, value] of Object.entries(variables)) {
       parsedFormula = parsedFormula.replaceAll(key, value.toString());
+      console.log(parsedFormula, key);
     }
     return mexp.eval(parsedFormula, [], {});
   }
