@@ -585,4 +585,30 @@ export default defineComponent({
 :deep(.el-timeline-item__node) {
   background: #b0a4c0;
 }
+
+@media screen and (max-width: 768px) {
+
+  .tabs-item {
+    width: 40px;
+    height: 100px;
+  }
+
+  .tabs-item:hover {
+    width: 44px;
+  }
+
+  .tabs-item-active {
+    position: relative;
+    width: 45px;
+    height: 100px;
+  }
+
+  .tabs-item-active:hover {
+    width: 45px;
+  }
+
+  .tab-item-text {
+    transform: rotate(90deg);
+  }
+}
 </style>

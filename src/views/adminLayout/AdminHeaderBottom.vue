@@ -202,6 +202,12 @@ h4 {
   }
 }
 
+@media ( max-width: 992px) {
+  .menu-title {
+    margin-left: 34px;
+  }
+}
+
 @media ( max-width: 560px) {
   .normal-button {
     width: 100%;
@@ -212,11 +218,45 @@ h4 {
     color: #379FFF;
     background: #DFF2F8;
   }
+
+  .warning-button {
+    width: 100%;
+    min-width: 80px;
+    max-width: 80px;
+    height: 34px;
+    border-radius: 5px;
+    color: #F6922E;
+    background: #FAE3C9;
+  }
 }
 
-@media ( max-width: 992px) {
+@media ( max-width: 500px) {
   .menu-title {
-    margin-left: 34px;
+    font-size: 14px;
+  }
+  :deep(.el-page-header__content) {
+    font-size: 14px;
+  }
+
+  :deep(.el-page-header__left) {
+    margin-right: 0px;
+  }
+
+  :deep(.el-page-header__left)::after {
+    display: none;
+  }
+
+  :deep(.el-page-header__icon) {
+    margin-left: 30px;
+  }
+}
+
+@media ( max-width: 360px) {
+  .menu-title {
+    font-size: 12px;
+  }
+  :deep(.el-page-header__content) {
+    font-size: 12px;
   }
 }
 </style>

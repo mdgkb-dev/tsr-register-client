@@ -3,7 +3,7 @@
     <div
       class="slider-block"
       :style="{
-        marginRight: isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`,
+        marginRight: mobileWindow ? (isToggle ? '49px' : `calc(49px - ${sliderOnWidth})`) : (isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`),
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
       }"
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, Ref, onBeforeMount, } from 'vue';
 
 export default defineComponent({
   name: 'RightTabsContainer',
@@ -75,17 +75,42 @@ export default defineComponent({
       required: false,
       default: false,
     },
+    mobileWidth: {
+      type: String as PropType<string>,
+      required: false,
+      default: '768px',
+    },
   },
   emits: ['toggle'],
   setup(props, { emit }) {
+    const mounted = ref(false);
+    const mobileWindow = ref(window.matchMedia('(max-width: 768px)').matches);
     const toggleSlider = (toggle: boolean) => {
       emit('toggle', toggle);
     };
     const hovering = ref(false);
 
+    onBeforeMount(async () => {
+      window.addEventListener('resize', () => {
+        switch (props.mobileWidth) {
+          case '1330px':
+            return (mobileWindow.value = window.matchMedia('(max-width: 1330px)').matches);
+          case '1215px':
+            return (mobileWindow.value = window.matchMedia('(max-width: 1215px)').matches);
+          case '1024px':
+            return (mobileWindow.value = window.matchMedia('(max-width: 1024px)').matches);
+          case '768px':
+            return (mobileWindow.value = window.matchMedia('(max-width: 768px)').matches);
+        }
+        return (mobileWindow.value = window.matchMedia('(max-width: 1330px)').matches);
+      });
+      mounted.value = true;
+    });
+
     return {
       toggleSlider,
       hovering,
+      mobileWindow,
     };
   },
 });
@@ -151,9 +176,35 @@ export default defineComponent({
   background: $custom-background;
 }
 
-@media screen and (max-width: 600px) {
-  // .mainblock {
-  //   padding: 10px 0;
-  // }
+@media screen and (max-width: 768px) {
+
+  .slider-icon {
+    min-width: 42px;
+    height: 42px;
+    margin-right: 8px;
+    border-radius: $normal-border-radius;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab-block {
+    width: 50px;
+    background: $custom-background;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 55px;
+    cursor: pointer;
+  }
+
+  .body-block {
+    position: relative;
+    width: calc(100% - 55px);
+    height: 100%;
+    background: $custom-background;
+  }
 }
+
 </style>

@@ -18,7 +18,7 @@
         class="tabs-item"
         @click="selectResearchesPool(patientResearchesPool.researchesPoolId)"
       >
-        {{ patientResearchesPool.researchesPool.name }}
+        <div class="tab-item-text">{{ patientResearchesPool.researchesPool.name }}</div>
       </div>
     </template>
     <template #body>
@@ -664,7 +664,6 @@ export default defineComponent({
 }
 
 :deep(.icon-plus) {
-  fill: #00b5a4;
   width: 40px;
   height: 40px;
   cursor: pointer;
@@ -882,6 +881,7 @@ export default defineComponent({
   margin-right: 10px;
 }
 
+
 :deep(.el-timeline) {
   padding: 0 0 0 10px;
 }
@@ -896,5 +896,31 @@ export default defineComponent({
 
 :deep(.el-timeline-item__wrapper) {
   padding-left: 20px;
+}
+
+@media screen and (max-width: 768px) {
+
+  .tabs-item {
+    width: 40px;
+    height: 100px;
+  }
+
+  .tabs-item:hover {
+    width: 44px;
+  }
+
+  .tabs-item-active {
+    position: relative;
+    width: 45px;
+    height: 100px;
+  }
+
+  .tabs-item-active:hover {
+    width: 45px;
+  }
+
+  .tab-item-text {
+    transform: rotate(90deg);
+  }
 }
 </style>
