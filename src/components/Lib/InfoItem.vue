@@ -20,7 +20,11 @@
           <!--          <use xlink:href="#iconamoon_edit-light"></use>-->
         </svg>
         <slot name="title">
-          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" color="#c4c4c4" />
+          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" 
+          :style="{
+            color: hovering ? '#006BB4' : '#c4c4c4',
+            transition: '0.2s',
+          }"/>
         </slot>
       </div>
     </div>
