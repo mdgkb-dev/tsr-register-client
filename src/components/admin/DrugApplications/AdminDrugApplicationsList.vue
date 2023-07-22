@@ -48,7 +48,7 @@
                     />
                   </div>
                   <div class="line-item-right">
-                    <InfoItem :close="infoItemToggle" margin="0" width="100%" :with-open-window="false" title="лекарство">
+                    <InfoItem :close="infoItemToggle" margin="0" width="100%" :with-open-window="false" title="статус" padding="0">
                       <el-select v-model="drugApplication.drugApplicationStatusId" @change="(e) => updateStatus(drugApplication, e)">
                         <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status.id" />
                       </el-select>
@@ -446,6 +446,12 @@ export default defineComponent({
 
 :deep(.el-form-item) {
   margin: 8px 0 0 0;
+}
+
+:deep(.el-input__inner) {
+  border: none;
+  height: 37px;
+  color: $site_dark_gray;
 }
 
 @media (max-width: 1915px) {
