@@ -20,7 +20,7 @@
           <!--          <use xlink:href="#iconamoon_edit-light"></use>-->
         </svg>
         <slot name="title">
-          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" />
+          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" color="#c4c4c4" />
         </slot>
       </div>
     </div>
@@ -56,7 +56,7 @@ export default defineComponent({
     // withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
     withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
-    borderColor: { type: String as PropType<string>, required: false, default: '#B0A4C0' },
+    borderColor: { type: String as PropType<string>, required: false, default: '#E3E3E3' },
     withHover: { type: Boolean as PropType<boolean>, required: false, default: true },
     title: { type: String as PropType<string>, required: false, default: '' },
     customClass: { type: String as PropType<string>, required: false, default: '' },

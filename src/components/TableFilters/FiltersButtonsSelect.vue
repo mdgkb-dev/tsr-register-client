@@ -10,7 +10,7 @@
     :with-hover="false"
   >
     <template #title>
-      <StringItem :string="defaultLabel" font-size="10px" padding="0" />
+      <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
     </template>
     <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
       <Button

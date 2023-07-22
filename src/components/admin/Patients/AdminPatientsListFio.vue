@@ -32,6 +32,7 @@ import StringItem from '@/components/admin/Patients/StringItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListFio',
@@ -39,6 +40,7 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
+    Button,
   },
   props: {
     patient: {
