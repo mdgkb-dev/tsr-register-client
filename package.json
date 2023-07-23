@@ -15,6 +15,7 @@
     "@element-plus/icons-vue": "^2.0.6",
     "axios": "^0.21.1",
     "chart.js": "^4.3.0",
+    "chartjs-plugin-annotation": "^3.0.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
     "el-table-draggable": "^1.0.1",

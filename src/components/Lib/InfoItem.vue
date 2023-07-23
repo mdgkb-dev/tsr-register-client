@@ -112,7 +112,6 @@ export default defineComponent({
         boxShadow: hovering.value || isToggle.value ? `0px 0px 1px 1px ${props.colorSelected}` : 'none',
         alignItems: windowOpened.value ? 'end' : 'center',
         cursor: props.withHover ? 'pointer' : 'pointer',
-
       };
     });
 

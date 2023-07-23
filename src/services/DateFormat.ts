@@ -55,4 +55,8 @@ export default class DateTimeFormat {
     const endOfWeek = new Date(now.getFullYear(), now.getMonth(), startOfWeek.getDate() + 7);
     return this.getPeriod(startOfWeek, endOfWeek, options ? options : { month: '2-digit', day: 'numeric', year: undefined });
   }
+
+  getMonthsDiff(dateFrom: Date, dateTo: Date): number {
+    return dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
+  }
 }

@@ -84,4 +84,15 @@ export default class ResearchResult {
   getQuestionVariantAnswer(questionVariantId: string): Answer | undefined {
     return this.answers.find((a: Answer) => a.questionVariantId === questionVariantId);
   }
+
+  getQuestionsAnswersMap(questions: Question[]): { [key: string]: number } {
+    const map: { [key: string]: number } = {};
+    questions.forEach((q: Question) => {
+      if (q.code) {
+        const answer = this.getAnswerByQuestionId(q.id as string)?.valueNumber as number;
+        map[q.code] = answer;
+      }
+    });
+    return map;
+  }
 }

@@ -4,113 +4,142 @@
     <div class="patient-name">{{ patient.human.getFullName() }}</div>
     <div class="header-container">
       <div class="researche-title-name">{{ research.name }}</div>
-      <!--      <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>-->
-      <!--      <div v-if="research.withScores" class="researche-counter">-->
-      <!--        Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}-->
-      <!--      </div>-->
+      <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>
+      <div v-if="research.withScores" class="researche-counter">
+        Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
+      </div>
     </div>
-    <!--    <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">-->
-    <!--      <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>-->
-    <!--      <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>-->
-    <!--      <div :style="{ color: res.color }">{{ res.result }}</div>-->
-    <!--    </div>-->
+    <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
+      <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
+      <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
+      <div :style="{ color: res.color }">{{ res.result }}</div>
+    </div>
     <div class="tools">
       <div class="control-buttons">
         <div class="left">
-          <Button text="Назад" button-class="back-button" :color-swap="true" :with-icon="false" @click="$emit('close')"> </Button>
+          <Button text="Назад" button-class="back-button" :color-swap="true" :with-icon="false" @click="$emit('cancel', false)"> </Button>
         </div>
         <div class="right">
           <div class="flex-line2">
-            <!--            <div class="search">-->
-            <!--              <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />-->
-            <!--            </div>-->
+            <div class="search">
+              <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+            </div>
           </div>
         </div>
       </div>
       <div class="flex-line3">
-        <!--        <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />-->
-        <!--        <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />-->
+        <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />
+        <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
       </div>
+      <Button
+        text="Сохранить"
+        :color-swap="false"
+        width="100%"
+        height="60px"
+        font-size="16px"
+        border-radius="5px"
+        color="#00B5A4"
+        background="#C7ECEA"
+        background-hover="#C7ECEA"
+        :with-icon="false"
+        @click="$emit('save', researchResult)"
+      ></Button>
     </div>
     <div class="scroll-block">
-      <Line v-if="mounted && data" :data="data" :options="options" />
+      <CollapseContainer>
+        <CollapseItem
+          v-for="question in filteredQuestions"
+          :key="question.id"
+          :tab-id="question.id"
+          :active-id="question.id"
+          :title="`${question.order + 1}. ${question.name}`"
+          :is-collaps="true"
+          :change-color="researchResult.getOrCreateAnswer(question).filled"
+          background="#DFF2F8"
+          background-attention="#EECEAF"
+          margin-top="20px"
+        >
+          <template #inside-content>
+            <div :id="question.getIdWithoutDashes()" class="background-container">
+              <QuestionComponent :question="question" :research-result="researchResult" @fill="scroll(question.getIdWithoutDashes())" />
+            </div>
+          </template>
+        </CollapseItem>
+      </CollapseContainer>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
-import { Line } from 'vue-chartjs';
+import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
-import ChartData from '@/classes/chartData/ChartData';
+import Formula from '@/classes/Formula';
+import FormulaResult from '@/classes/FormulaResult';
 import Patient from '@/classes/Patient';
-import PatientResearch from '@/classes/PatientResearch';
+import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
+import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import ResearchesResultsFiltersLib from '@/libs/filters/ResearchesResultsFiltersLib';
-import ResearchesResultsSortsLib from '@/libs/sorts/ResearchesResultsSortsLib';
-import FilterQuery from '@/services/classes/filters/FilterQuery';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin);
-
+import scroll from '@/services/Scroll';
 export default defineComponent({
-  name: 'PatientResearchChart',
-  components: { Line, Button },
-  props: {
-    research: {
-      type: Object as PropType<Research>,
-      required: true,
-    },
-    patientResearch: {
-      type: Object as PropType<PatientResearch>,
-      required: true,
-    },
+  name: 'PatientResearchesQuestion',
+  components: {
+    CollapseItem,
+    CollapseContainer,
+    QuestionComponent,
+    Button,
+    StringItem,
   },
-  emits: ['close'],
-  setup(props) {
-    const researchResults: Ref<ResearchResult[]> = computed(() => Provider.store.getters['researchesResults/items']);
-    const data: Ref<ChartData | undefined> = ref();
-    const mounted = ref(false);
+  emits: ['save', 'cancel'],
+  setup() {
+    const questionsFilterString: Ref<string> = ref('');
+    const showOnlyNotFilled: Ref<boolean> = ref(false);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+    const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
+    const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
-    onBeforeMount(async () => {
-      const fq = new FilterQuery();
-      if (!props.patientResearch.id) {
-        return;
-      }
-      fq.filterModels.push(ResearchesResultsFiltersLib.byPatientResearchId(props.patientResearch.id));
-      fq.sortModels.push(ResearchesResultsSortsLib.byDate());
-      await Provider.store.dispatch('researchesResults/getAll', fq);
-      data.value = props.research.getChartDataSets(researchResults.value, patient.value.human.dateBirth, patient.value.human.isMale);
-      mounted.value = true;
+    const filteredQuestions: ComputedRef<Question[]> = computed(() => {
+      return research.value.getFilteredQuestions(questionsFilterString.value, showOnlyNotFilled.value, researchResult.value);
     });
 
-    const options = {
-      responsive: true,
-      maintainAspectRatio: false,
-      elements: {
-        point: {
-          radius: 5,
-        },
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context: any) => context.formattedValue + ': ' + context.dataset.results[context.dataIndex],
-          },
-        },
-      },
+    const birthDateToMonth = (birthDate: string): number => {
+      return (new Date().getFullYear() - new Date(birthDate).getFullYear()) * 12;
+    };
+
+    const getCalculationsResults = (research: Research): FormulaResult[] => {
+      const results: FormulaResult[] = [];
+
+      let item: { [key: string]: number } = {};
+      const monthsToResearch = researchResult.value.date.getMilliseconds() - patient.value.human.dateBirth.getMilliseconds();
+      const months = birthDateToMonth(monthsToResearch.toString());
+
+      research.questions.forEach((q: Question) => {
+        if (q.code) {
+          item[q.code] = researchResult.value.getAnswerByQuestionId(q.id as string)?.valueNumber as number;
+        }
+      });
+      research.formulas.forEach((f: Formula) => {
+        const res = f.getResult(item, patient.value.human.isMale, months);
+        res.formulaName = f.name;
+        results.push(res);
+      });
+      return results;
     };
 
     return {
+      getCalculationsResults,
+      questionsFilterString,
+      filteredQuestions,
+      showOnlyNotFilled,
+      researchResult,
       patient,
-      mounted,
-      options,
-      data,
+      research,
+      scroll,
     };
   },
 });
@@ -119,6 +148,31 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.xlsx-button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+  font-size: 12px;
+}
+.back-button {
+  background: #ffffff;
+  margin: 0 10px 0 0;
+  height: 42px;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #343e5c;
+}
+.chart-button {
+  width: 63px;
+  height: 42px;
+  border-radius: 5px;
+  color: #343e5c;
+  background: #ffffff;
+  font-size: 16px;
+}
 
 .hidden {
   display: none;
@@ -284,7 +338,6 @@ export default defineComponent({
 }
 
 :deep(.icon-plus) {
-  fill: #00b5a4;
   width: 40px;
   height: 40px;
   cursor: pointer;
@@ -516,5 +569,30 @@ export default defineComponent({
 
 :deep(.el-timeline-item__wrapper) {
   padding-left: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .tabs-item {
+    width: 40px;
+    height: 100px;
+  }
+
+  .tabs-item:hover {
+    width: 44px;
+  }
+
+  .tabs-item-active {
+    position: relative;
+    width: 45px;
+    height: 100px;
+  }
+
+  .tabs-item-active:hover {
+    width: 45px;
+  }
+
+  .tab-item-text {
+    transform: rotate(90deg);
+  }
 }
 </style>

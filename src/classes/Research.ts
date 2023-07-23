@@ -1,14 +1,18 @@
 import AnswerVariant from '@/classes/AnswerVariant';
+import ChartData from '@/classes/chartData/ChartData';
+import ChartDataSet from '@/classes/chartData/ChartDataSet';
 import Formula from '@/classes/Formula';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import ClassHelper from '@/services/ClassHelper';
+import DateTimeFormat from '@/services/DateFormat';
 import StringsService from '@/services/Strings';
 
 export default class Research {
   id?: string;
   name = '';
   order = 0;
+
   @ClassHelper.GetClassConstructor(Question)
   questions: Question[] = [];
   questionsForDelete: string[] = [];
@@ -19,6 +23,8 @@ export default class Research {
   @ClassHelper.GetClassConstructor(Formula)
   formulas: Formula[] = [];
   formulasForDelete: string[] = [];
+  //
+  selectedFormula?: Formula;
 
   constructor(i?: Research) {
     ClassHelper.BuildClass(this, i);
@@ -72,5 +78,30 @@ export default class Research {
 
   getFilteredQuestions(filterString: string, showOnlyNotFilled: boolean, researchResult: ResearchResult): Question[] {
     return this.getNotFilledQuestions(researchResult, showOnlyNotFilled, this.getQuestionsByString(filterString));
+  }
+  selectFormula(item: Formula): void {
+    this.selectedFormula = item;
+  }
+
+  getChartDataSets(researchResults: ResearchResult[], dateBirth: Date, isMale: boolean): ChartData {
+    const dateFormatter = new DateTimeFormat();
+    const data = new ChartData();
+    data.labels = researchResults.map((rr: ResearchResult) => dateFormatter.format(rr.date));
+
+    this.formulas.forEach((f: Formula) => {
+      const dataSet = new ChartDataSet();
+      dataSet.label = f.name;
+      dataSet.backgroundColor = f.color;
+      researchResults.forEach((rr: ResearchResult) => {
+        const res = f.getResult(rr.getQuestionsAnswersMap(this.questions), isMale, dateFormatter.getMonthsDiff(dateBirth, rr.date));
+        if (res) {
+          dataSet.results.push(res.result);
+          dataSet.data.push(res.value);
+        }
+      });
+      data.datasets.push(dataSet);
+    });
+
+    return data;
   }
 }
