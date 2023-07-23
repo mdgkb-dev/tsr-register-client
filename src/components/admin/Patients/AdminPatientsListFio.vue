@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, nextTick } from 'vue';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
@@ -79,7 +79,9 @@ export default defineComponent({
     const updateHumanName = async (patient: Patient): Promise<void> => {
       patient.editNameMode = false;
       emit('toggleInfo');
+      await nextTick();
       await updateHuman(patient.human);
+      await nextTick();
     };
 
     return {

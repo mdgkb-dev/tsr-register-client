@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
 
 import Del from '@/assets/svg/Del.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
@@ -148,6 +148,11 @@ export default defineComponent({
         // display: props.withIcon ? '' : 'none',
       };
     });
+
+    watch(
+      () => props.close,
+      () => (isToggle.value = false)
+    );
 
     return {
       insideClass,
