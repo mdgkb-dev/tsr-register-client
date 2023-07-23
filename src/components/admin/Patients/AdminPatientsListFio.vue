@@ -3,7 +3,7 @@
     <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.setEditNameMode(true)" />
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
+      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0" v-on:keyup.enter="updateHumanName(patient)">
         <InfoItem title="фамилия" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
           <el-input :model-value="patient.human.surname" @input="(e) => patient.human.setSurname(e)" @click.stop="() => undefined" />
         </InfoItem>
