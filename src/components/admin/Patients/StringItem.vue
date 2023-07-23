@@ -10,16 +10,6 @@ import { defineComponent, PropType } from 'vue';
 export default defineComponent({
   name: 'StringItem',
   props: {
-    // string: { type: String as PropType<string>, required: false, default: '' },
-    // color: { type: String as PropType<string>, required: false, default: 'inherit' },
-    // fontSize: { type: String as PropType<string>, required: false, default: '14px' },
-    // fontWeight: { type: String as PropType<string>, required: false, default: 'normal' },
-    // background: { type: String as PropType<string>, required: false, default: 'inherit' },
-    // padding: { type: String as PropType<string>, required: false, default: '0 10px' },
-    // width: { type: String as PropType<string>, required: false, default: '' },
-    // minWidth: { type: String as PropType<string>, required: false, default: '' },
-    // margin: { type: String as PropType<string>, required: false, default: '0, 0px, 0 0' },
-    // customClass: { type: String as PropType<string>, required: false, default: '' },
     string: { type: String as PropType<string>, required: false, default: '' },
     color: { type: String as PropType<string>, required: false, default: '' },
     fontSize: { type: String as PropType<string>, required: false, default: '' },

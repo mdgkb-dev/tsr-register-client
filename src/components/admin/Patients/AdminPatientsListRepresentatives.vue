@@ -51,6 +51,7 @@ import InfoItem from '@/components/Lib/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListRepresentatives',
@@ -59,6 +60,7 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
+    Button,
   },
   props: {
     patient: {

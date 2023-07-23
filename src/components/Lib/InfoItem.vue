@@ -20,7 +20,11 @@
           <!--          <use xlink:href="#iconamoon_edit-light"></use>-->
         </svg>
         <slot name="title">
-          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" />
+          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" 
+          :style="{
+            color: hovering ? '#006BB4' : '#c4c4c4',
+            transition: '0.2s',
+          }"/>
         </slot>
       </div>
     </div>
@@ -30,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
 
 import Del from '@/assets/svg/Del.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
@@ -56,7 +60,7 @@ export default defineComponent({
     // withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
     withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
-    borderColor: { type: String as PropType<string>, required: false, default: '#B0A4C0' },
+    borderColor: { type: String as PropType<string>, required: false, default: '#E3E3E3' },
     withHover: { type: Boolean as PropType<boolean>, required: false, default: true },
     title: { type: String as PropType<string>, required: false, default: '' },
     customClass: { type: String as PropType<string>, required: false, default: '' },
@@ -143,6 +147,11 @@ export default defineComponent({
         // display: props.withIcon ? '' : 'none',
       };
     });
+
+    watch(
+      () => props.close,
+      () => (isToggle.value = false)
+    );
 
     return {
       insideClass,

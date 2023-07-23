@@ -25,6 +25,7 @@ import Patient from '@/classes/Patient';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListDocuments',
@@ -32,6 +33,7 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
+    Button,
   },
   props: {
     patient: {
