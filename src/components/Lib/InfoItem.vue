@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isToggle" class="blur" @click="isToggle = false">blur</div>
+  <div v-if="isToggle" class="blur">blur</div>
   <div class="base-box" :style="baseBoxStyle" @click.prevent.stop="changeState()">
     <div
       class="body"
@@ -8,11 +8,10 @@
       @mouseenter="withHover ? (hovering = true) : (hovering = false)"
       @mouseleave="hovering = false"
     >
-      {{ isToggle }}
       <div v-if="!isToggle" class="close-window" :style="closeWindowStyle" :class="customClass">
         <slot />
       </div>
-      <div v-if="isToggle" id="info-item-opened-content" class="open-window" :style="openWindowStyle">
+      <div v-if="isToggle" id="info-item-opened-content" v-click-outside="outsideClick" class="open-window" :style="openWindowStyle">
         <slot name="open-inside-content" />
       </div>
       <div class="top-title" :style="topTitleStyle">
@@ -83,6 +82,7 @@ export default defineComponent({
     watch(
       () => props.close,
       () => {
+        console.log('close');
         isToggle.value = false;
       }
     );
@@ -153,14 +153,12 @@ export default defineComponent({
 
     const closeWindowStyle = computed(() => {
       return {
-        // display: windowOpened.value ? 'none' : '',
         height: windowOpened.value ? '0' : '',
       };
     });
 
     const openWindowStyle = computed(() => {
       return {
-        // display: windowOpened.value ? 'flex' : 'none',
         height: windowOpened.value ? 'auto' : '0',
       };
     });
@@ -176,11 +174,15 @@ export default defineComponent({
     const iconTopTitleStyle = computed(() => {
       return {
         stroke: hovering.value ? props.colorSelected : '#343E5C',
-        // display: props.withIcon ? '' : 'none',
       };
     });
 
+    const outsideClick = () => {
+      isToggle.value = false;
+    };
+
     return {
+      outsideClick,
       windowOpened,
       insideClass,
       iconTopTitleStyle,

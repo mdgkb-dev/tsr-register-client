@@ -30,6 +30,20 @@ app.config.globalProperties.$stringsService = StringsService;
 app.use(setupElementPlusComponents, { locale: ru });
 app.use(setupElementPlusPlugins);
 
+app.directive('click-outside', {
+  mounted(el, binding, vnode) {
+    el.clickOutsideEvent = function (event: Event) {
+      if (!(el === event.target || el.contains(event.target))) {
+        binding.value(event, el);
+      }
+    };
+    document.body.addEventListener('click', el.clickOutsideEvent);
+  },
+  unmounted(el) {
+    document.body.removeEventListener('click', el.clickOutsideEvent);
+  },
+});
+
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import ru from 'element-plus/es/locale/lang/ru';
 
