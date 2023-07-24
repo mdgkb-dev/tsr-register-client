@@ -1,9 +1,16 @@
 <template>
-  <InfoItem :close="toggle" margin="0 0 0 10px" border-color="#ffffff" :with-hover="false" :with-open-window="editMode">
+  <InfoItem
+    :close="toggle"
+    margin="0 0 0 10px"
+    border-color="#ffffff"
+    :with-hover="false"
+    :with-open-window="editMode"
+    @keyup-enter="updateHumanName(patient)"
+  >
     <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.setEditNameMode(true)" />
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0" v-on:keyup.enter="updateHumanName(patient)">
+      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
         <InfoItem title="фамилия" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
           <el-input :model-value="patient.human.surname" @input="(e) => patient.human.setSurname(e)" @click.stop="() => undefined" />
         </InfoItem>
@@ -13,14 +20,14 @@
         <InfoItem title="отчество" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
           <el-input :model-value="patient.human.patronymic" @input="(e) => patient.human.setPatronymic(e)" @click.stop="() => undefined" />
         </InfoItem>
-        <Button button-class="save-button" text="Сохранить" @click="updateHumanName(patient)" />
+        <Button button-class="save-button" text="Сохранить" @click="submit(patient)" />
       </GridContainer>
     </template>
   </InfoItem>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, nextTick } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
@@ -29,10 +36,10 @@ import Register from '@/classes/Register';
 import User from '@/classes/User';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListFio',
@@ -76,15 +83,18 @@ export default defineComponent({
       });
     };
 
+    const submit = async (patient: Patient): Promise<void> => {
+      emit('toggleInfo');
+      await updateHumanName(patient);
+    };
+
     const updateHumanName = async (patient: Patient): Promise<void> => {
       patient.editNameMode = false;
-      emit('toggleInfo');
-      await nextTick();
       await updateHuman(patient.human);
-      await nextTick();
     };
 
     return {
+      submit,
       updateHumanName,
       registers,
       toggleRegister,

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isToggle" class="blur" @click="isToggle = false"></div>
+  <div v-if="isToggle" class="blur" @click="isToggle = false">blur</div>
   <div class="base-box" :style="baseBoxStyle" @click.prevent.stop="changeState()">
     <div
       class="body"
@@ -8,10 +8,11 @@
       @mouseenter="withHover ? (hovering = true) : (hovering = false)"
       @mouseleave="hovering = false"
     >
-      <div class="close-window" :style="closeWindowStyle" :class="customClass">
+      {{ isToggle }}
+      <div v-if="!isToggle" class="close-window" :style="closeWindowStyle" :class="customClass">
         <slot />
       </div>
-      <div class="open-window" :style="openWindowStyle">
+      <div v-if="isToggle" id="info-item-opened-content" class="open-window" :style="openWindowStyle">
         <slot name="open-inside-content" />
       </div>
       <div class="top-title" :style="topTitleStyle">
@@ -20,11 +21,15 @@
           <!--          <use xlink:href="#iconamoon_edit-light"></use>-->
         </svg>
         <slot name="title">
-          <StringItem :string="title" font-size="10px" padding="0 0 0 3px" 
-          :style="{
-            color: hovering ? '#006BB4' : '#c4c4c4',
-            transition: '0.2s',
-          }"/>
+          <StringItem
+            :string="title"
+            font-size="10px"
+            padding="0 0 0 3px"
+            :style="{
+              color: hovering ? '#006BB4' : '#c4c4c4',
+              transition: '0.2s',
+            }"
+          />
         </slot>
       </div>
     </div>
@@ -34,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, nextTick, PropType, Ref, ref, watch } from 'vue';
 
 import Del from '@/assets/svg/Del.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
@@ -66,7 +71,7 @@ export default defineComponent({
     customClass: { type: String as PropType<string>, required: false, default: '' },
     close: { type: Boolean as PropType<boolean>, required: false, default: true },
   },
-  emits: ['click'],
+  emits: ['click', 'keyup-enter'],
   setup(props, { emit }) {
     const insideClass = props.customClass !== '' ? props.customClass : 'inside-class';
 
@@ -74,6 +79,33 @@ export default defineComponent({
 
     const isToggle: Ref<boolean> = ref(false);
     const localClose: Ref<boolean> = ref(props.close);
+
+    watch(
+      () => props.close,
+      () => {
+        isToggle.value = false;
+      }
+    );
+
+    const keysHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        isToggle.value = false;
+      }
+      if (e.key === 'Enter') {
+        emit('keyup-enter');
+        isToggle.value = false;
+      }
+    };
+
+    watch(isToggle, async () => {
+      await nextTick();
+      if (isToggle.value) {
+        document.getElementById('info-item-opened-content')?.querySelector('input')?.focus();
+        document.body.addEventListener('keydown', keysHandler);
+      } else {
+        document.body.removeEventListener('keydown', keysHandler, false);
+      }
+    });
 
     const changeState = () => {
       emit('click');
@@ -121,14 +153,14 @@ export default defineComponent({
 
     const closeWindowStyle = computed(() => {
       return {
-        display: windowOpened.value ? 'none' : '',
+        // display: windowOpened.value ? 'none' : '',
         height: windowOpened.value ? '0' : '',
       };
     });
 
     const openWindowStyle = computed(() => {
       return {
-        display: windowOpened.value ? 'flex' : 'none',
+        // display: windowOpened.value ? 'flex' : 'none',
         height: windowOpened.value ? 'auto' : '0',
       };
     });
@@ -148,12 +180,8 @@ export default defineComponent({
       };
     });
 
-    watch(
-      () => props.close,
-      () => (isToggle.value = false)
-    );
-
     return {
+      windowOpened,
       insideClass,
       iconTopTitleStyle,
       topTitleStyle,
