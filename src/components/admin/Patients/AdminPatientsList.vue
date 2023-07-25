@@ -11,12 +11,7 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
-                  <AdminPatientsListFio
-                    :toggle="infoItemToggle"
-                    :patient="patient"
-                    :edit-mode="editMode"
-                    @toggle-info="infoItemToggle = !infoItemToggle"
-                  />
+                  <AdminPatientsListFio :patient="patient" :edit-mode="editMode" />
                 </div>
 
                 <div class="line-item-right">
@@ -102,7 +97,6 @@ export default defineComponent({
     // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const editMode: Ref<boolean> = ref(true);
-    const infoItemToggle: Ref<boolean> = ref(false);
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
     const loadPatients = async () => {
       await Provider.loadItems();
@@ -158,7 +152,6 @@ export default defineComponent({
       loadPatients,
       patients,
       ...Provider.getAdminLib(),
-      infoItemToggle,
       editMode,
     };
   },

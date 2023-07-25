@@ -17,6 +17,7 @@
         cursor: pointer,
       }"
       @change="changeHandler"
+      @focus="open"
     ></el-date-picker>
   </div>
 </template>
@@ -51,7 +52,12 @@ export default defineComponent({
       date.value = props.modelValue;
     });
 
+    const open = () => {
+      console.log(open);
+    };
+
     return {
+      open,
       date,
       changeHandler,
     };

@@ -1,6 +1,5 @@
 <template>
   <InfoItem
-    :close="toggle"
     margin="0 0 0 10px"
     border-color="#ffffff"
     :with-hover="false"
@@ -58,12 +57,7 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       required: true,
     },
-    toggle: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-    },
   },
-  emits: ['toggleInfo'],
   setup(props, { emit }) {
     const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
     const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
