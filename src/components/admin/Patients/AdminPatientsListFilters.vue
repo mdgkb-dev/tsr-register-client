@@ -39,13 +39,27 @@
           margin="0px"
           background="#F5F6F8"
         >
-          <FiltersButtonsSelect
+          <InfoItem
+            title="пол"
+            margin="0"
+            :with-open-window="false"
+            height="98px"
+            background="#F5F5F5"
+            border-color="#C4C4C4"
+            padding="7px"
+            :with-hover="false"
+          >
+            <!-- <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px"> -->
+              <Switch3Pos />
+            <!-- </GridContainer> -->
+          </InfoItem>
+          <!-- <FiltersButtonsSelect
             :filter-model="filterByRegister"
             :models="createSexFilters()"
             default-label="пол"
             :inverse="true"
             @load="$emit('load')"
-          />
+          /> -->
           <FiltersButtonsSelect
             :filter-model="filterByDisabilities"
             :models="createDisabilityFilters()"
@@ -141,6 +155,8 @@ import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
+import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
+
 
 export default defineComponent({
   name: 'AdminPatientsListFilters',
@@ -153,6 +169,7 @@ export default defineComponent({
     InfoItem,
     GridContainer,
     RightSliderContainer,
+    Switch3Pos,
   },
   emits: ['load'],
   setup() {
