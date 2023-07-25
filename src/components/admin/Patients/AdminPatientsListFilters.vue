@@ -50,7 +50,7 @@
             :with-hover="false"
           >
             <!-- <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px"> -->
-              <Switch3Pos />
+            <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
             <!-- </GridContainer> -->
           </InfoItem>
           <!-- <FiltersButtonsSelect
@@ -150,13 +150,12 @@ import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
+import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
-import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
-
 
 export default defineComponent({
   name: 'AdminPatientsListFilters',
@@ -185,10 +184,6 @@ export default defineComponent({
       filterByRegister.value = PatientsFiltersLib.byRegisters([]);
     });
 
-    const createSexFilters = (): FilterModel[] => {
-      return [PatientsFiltersLib.onlyMale(), PatientsFiltersLib.onlyFemale()];
-    };
-
     const createDisabilityFilters = (): FilterModel[] => {
       return [PatientsFiltersLib.withDisabilities()];
     };
@@ -214,7 +209,8 @@ export default defineComponent({
       questions,
       registers,
       createDisabilityFilters,
-      createSexFilters,
+      onlyMaleFilter: PatientsFiltersLib.onlyMale(),
+      onlyFemaleFilter: PatientsFiltersLib.onlyFemale(),
       filterByDisabilities,
       filterByRegister,
       selectSearch,

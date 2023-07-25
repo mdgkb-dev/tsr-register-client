@@ -6,17 +6,17 @@ const PatientsFiltersLib = (() => {
   const table = 'patients_view';
   function onlyFemale(): FilterModel {
     const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
-    filterModel.boolean = true;
+    filterModel.boolean = false;
     filterModel.operator = Operators.Eq;
-    filterModel.label = 'Женский';
+    filterModel.label = 'Ж';
     return filterModel;
   }
 
   function onlyMale(): FilterModel {
     const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
-    filterModel.boolean = false;
+    filterModel.boolean = true;
     filterModel.operator = Operators.Eq;
-    filterModel.label = 'Мужской';
+    filterModel.label = 'М';
     return filterModel;
   }
 
