@@ -1,8 +1,8 @@
 import Answer from '@/classes/Answer';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
 import Disability from '@/classes/Disability';
-import Document from '@/classes/documents/Document';
-import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
+import Document from '@/classes/Document';
+import DocumentFileInfo from '@/classes/DocumentFileInfo';
 import Edv from '@/classes/Edv';
 import FileInfo from '@/classes/files/FileInfo';
 import History from '@/classes/history/History';
@@ -1077,9 +1077,9 @@ describe('Class Patient', () => {
     const humanDocumentFileInfo3 = new FileInfo();
     const humanPhotoFileInfo = new FileInfo();
 
-    const fileInfoToDocument1 = new FileInfoToDocument();
-    const fileInfoToDocument2 = new FileInfoToDocument();
-    const fileInfoToDocument3 = new FileInfoToDocument();
+    const fileInfoToDocument1 = new DocumentFileInfo();
+    const fileInfoToDocument2 = new DocumentFileInfo();
+    const fileInfoToDocument3 = new DocumentFileInfo();
     fileInfoToDocument1.fileInfo = humanDocumentFileInfo1;
     fileInfoToDocument2.fileInfo = humanDocumentFileInfo2;
     fileInfoToDocument3.fileInfo = humanDocumentFileInfo3;

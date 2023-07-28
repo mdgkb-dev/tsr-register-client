@@ -76,9 +76,9 @@ import { computed, defineComponent, onBeforeMount, reactive, Ref, ref, WritableC
 import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized, useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-import DocumentType from '@/classes/documents/DocumentType';
-import DocumentTypeField from '@/classes/documents/DocumentTypeField';
-import DocumentTypeRules from '@/classes/documents/DocumentTypeRules';
+import DocumentType from '@/classes/DocumentType';
+import DocumentTypeField from '@/classes/DocumentTypeField';
+import DocumentTypeRules from '@/classes/DocumentTypeRules';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IDocumentType from '@/interfaces/documents/IDocumentType';
 import IDocumentTypeField from '@/interfaces/documents/IDocumentTypeField';

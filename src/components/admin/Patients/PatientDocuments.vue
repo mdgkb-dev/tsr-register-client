@@ -1,145 +1,120 @@
 <template>
-  <div class="form-under-collapse">
-    <el-row v-if="isEditMode" type="flex" justify="start">
-      <el-col :span="12">
-        <el-button @click="add">Добавить документ</el-button>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item ref="selectDocType" :error="docTypeError">
-          <el-select v-model="selectedDocumentTypeId" placeholder="Выберите тип документа" @change="selectDocTypeEvent">
-            <el-option v-for="type in documentTypes" :key="type.id" :label="type.name" :value="type.id" />
-          </el-select>
-        </el-form-item>
-      </el-col>
-    </el-row>
-
-    <section v-for="(document, documentIndex) in documents" :key="document.id">
-      <el-card class="box-card" style="margin-top: 20px; position: relative">
-        <h3>{{ document.documentType.name }}</h3>
-        <div v-if="isEditMode" class="card-button-group">
-          <el-tooltip effect="light" placement="top-end" content="Приложить файлы">
-            <el-button :icon="Paperclip" @click="$refs[document.id].click()"></el-button>
-          </el-tooltip>
-          <el-popconfirm
-            confirm-button-text="Да"
-            cancel-button-text="Отмена"
-            :icon="InfoFilled"
-            icon-color="red"
-            title="Вы уверен, что хотите удалить документ?"
-            @confirm="() => remove(document.id)"
-            @cancel="() => null"
-          >
-            <template #reference>
-              <el-button class="table-button" :icon="Delete" />
-              <el-button :icon="Delete"></el-button>
-            </template>
-          </el-popconfirm>
+  <RightTabsContainer :is-toggle="documentsIsToggle" slider-on-width="180px" @toggle="toggleDocuments">
+    <template #icon>
+      <svg class="icon-plus">
+        <use xlink:href="#plus"></use>
+      </svg>
+    </template>
+    <template #slider-body>
+      <div class="slider-body">
+        <div v-for="docType in documentTypes" :key="docType.id" class="slider-item" @click="addDocument(docType.id)">
+          {{ docType.name }}
         </div>
+      </div>
+    </template>
+    <template #tabs>
+      <div
+        v-for="doc in patient.human.documents"
+        :key="doc.id"
+        :class="{ 'tabs-item-active': doc.id === document.id }"
+        class="tabs-item"
+        @click="selectDocument(doc.id)"
+      >
+        <div class="tab-item-text">{{ doc.documentType.name }}</div>
+      </div>
+    </template>
+    <template #body>
+      <div class="body">
+        <ResearcheContainer background="#DFF2F8" padding="0">
+          <template #header>
+            <div class="researche-title">
+              <div class="researche-name">{{ document.documentType.name }}</div>
+            </div>
+            <div class="line-item">
+              <InfoItem
+                margin="0"
+                :with-open-window="false"
+                :with-icon="false"
+                height="45px"
+                background="#F5F5F5"
+                border-color="#C4C4C4"
+                padding="7px"
+                :with-hover="false"
+              >
+                <template #title>
+                  <StringItem string="сохранить" font-size="10px" padding="0" />
+                </template>
+                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                  <Button text="xlsx" :with-icon="false" background-hover:#DFF2F8; button-class="xlsx-button"> </Button>
+                </GridContainer>
+              </InfoItem>
+            </div>
+          </template>
 
-        <section v-for="(value, valueIndex) in document.documentFieldValues" :key="value.id">
-          <el-form-item
-            v-if="value.documentTypeField.type === 'string'"
-            :label="value.documentTypeField.name"
-            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueString`"
-            size="mini"
-          >
-            <el-input v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueString" size="mini" />
-            <span v-else>{{ value.valueString }}</span>
-          </el-form-item>
+          <template #body>
+            <template v-if="document.id">
+              <Button text="добавить документ" @click="addFile" />
+              <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id">
+                {{ documentFileInfo.id }}
+                <FileUploader :file-info="documentFileInfo.fileInfo" />
+                <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeFile(documentFileInfo.id)" />
+              </div>
+              <div v-for="value in document.documentFieldValues" :key="value.id">
+                <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
+                  <el-input v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
+                </el-form-item>
 
-          <el-form-item
-            v-if="value.documentTypeField.type === 'number'"
-            :label="value.documentTypeField.name"
-            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueNumber`"
-            size="mini"
-          >
-            <el-input-number v-if="isEditMode" v-model="document.documentFieldValues[valueIndex].valueNumber" size="mini" />
-            <span v-else>{{ value.valueNumber }}</span>
-          </el-form-item>
+                <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
+                  <el-input-number v-model="document.valueNumber" size="mini" @blur="updateDocumentField(value)" />
+                </el-form-item>
 
-          <el-form-item
-            v-if="value.documentTypeField.type === 'date'"
-            :label="value.documentTypeField.name"
-            :prop="`human.documents.${documentIndex}.documentFieldValues.${valueIndex}.valueDate`"
-            size="mini"
-          >
-            <el-date-picker
-              v-if="isEditMode"
-              v-model="document.documentFieldValues[valueIndex].valueDate"
-              format="DD.MM.YYYY"
-              type="date"
-              placeholder="Выберите дату"
-              size="mini"
-              @keydown="dateFormat"
-            />
-            <span v-else>{{ $dateTimeFormatter.format(value.valueDate) }}</span>
-          </el-form-item>
-        </section>
-
-        <input
-          :ref="document.id"
-          type="file"
-          hidden
-          multiple
-          @change="
-            (event) => {
-              addFiles(event, document.id);
-            }
-          "
-        />
-        <el-table empty-text="Файлов нет" :data="document.fileInfoToDocument" size="mini" style="width: 100%">
-          <el-table-column label="Приложенные файлы">
-            <template #default="scope">
-              {{ scope.row.fileInfo.originalName }}
+                <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">
+                  <el-date-picker
+                    v-model="value.valueDate"
+                    format="DD.MM.YYYY"
+                    type="date"
+                    placeholder="Выберите дату"
+                    size="mini"
+                    @blur="updateDocumentField(value)"
+                    @change="updateDocumentField(value)"
+                  />
+                </el-form-item>
+              </div>
             </template>
-          </el-table-column>
-          <el-table-column align="right">
-            <template #default="scope">
-              <TableButtonGroup
-                v-if="isEditMode"
-                :show-remove-button="true"
-                :show-download-button="!scope.row.fileInfo.isDraft"
-                :horizontal="true"
-                @download="downloadFile(scope.row.fileInfo.id)"
-                @remove="removeFile(scope.row.id)"
-              />
-              <TableButtonGroup
-                v-else
-                :show-download-button="!scope.row.fileInfo.isDraft"
-                :horizontal="true"
-                @download="downloadFile(scope.row.fileInfo.id)"
-              />
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
-    </section>
-
-    <a ref="fileAnchor" style="display: none" />
-  </div>
+          </template>
+        </ResearcheContainer>
+      </div>
+    </template>
+  </RightTabsContainer>
 </template>
 
 <script lang="ts">
-import { Delete, InfoFilled, Paperclip } from '@element-plus/icons-vue';
-import { v4 as uuidv4 } from 'uuid';
-import { computed, ComputedRef, defineComponent, onBeforeMount, PropType, Ref, ref, toRefs } from 'vue';
-import { useStore } from 'vuex';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
-import Document from '@/classes/documents/Document';
-import DocumentFieldValue from '@/classes/documents/DocumentFieldValue';
-import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
-import FileInfo from '@/classes/files/FileInfo';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
-import IDocument from '@/interfaces/documents/IDocument';
-import IDocumentType from '@/interfaces/documents/IDocumentType';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
-import IFileAnchor from '@/interfaces/files/IFileAnchor';
-import IFileInfo from '@/interfaces/files/IFileInfo';
-import dateFormat from '@/services/DateMask';
+import Document from '@/classes/Document';
+import DocumentFieldValue from '@/classes/DocumentFieldValue';
+import DocumentType from '@/classes/DocumentType';
+import Patient from '@/classes/Patient';
+import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
+import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Button from '@/components/Base/Button.vue';
+import FileUploader from '@/components/FileUploader.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
+import ClassHelper from '@/services/ClassHelper';
+import Provider from '@/services/Provider/Provider';
+import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'PatientDocuments',
   components: {
-    TableButtonGroup,
+    RightTabsContainer,
+    Button,
+    ResearcheContainer,
+    GridContainer,
+    InfoItem,
+    StringItem,
+    FileUploader,
   },
   props: {
     storeModule: {
@@ -147,121 +122,518 @@ export default defineComponent({
       default: '',
     },
   },
-  setup(props) {
-    const store = useStore();
+  setup() {
+    const documentsIsToggle: Ref<boolean> = ref(false);
 
-    const fileAnchor: Ref<HTMLAnchorElement | undefined> = ref<HTMLAnchorElement>();
-    const selectedDocumentTypeId: Ref<string> = ref('');
-    const selectedType: Ref<IDocumentType | undefined> = ref(undefined);
-    const selectDocType = ref();
-    const docTypeError = ref('');
-    const { storeModule } = toRefs(props);
-    const documents: ComputedRef<IDocument[]> = computed(() => store.getters[`${storeModule.value}/documents`]);
-    const fileInfos: ComputedRef<IFileInfo[]> = computed(() => store.getters[`${storeModule.value}/fileInfos`]);
-    const documentTypes: ComputedRef<IDocumentType[]> = computed(() => store.getters['documentTypes/documentTypes']);
-    const anchorInfo: ComputedRef<IFileAnchor> = computed(() => store.getters['files/fileAnchor']);
-    const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
+    const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
+    const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
+    const document: Ref<Document> = computed(() => Provider.store.getters['documents/item']);
 
-    onBeforeMount(async (): Promise<void> => {
-      await store.dispatch('documentTypes/getAll');
+    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+
+    const addDocument = async (id: string) => {
+      await Provider.store.dispatch('documentTypes/get', id);
+      const item = patient.value.human.addDocument(documentType.value);
+      await Provider.store.dispatch('documents/create', item);
+    };
+
+    onBeforeMount(async () => {
+      if (patient.value.human.documents.length > 0) {
+        await selectDocument(patient.value.human.documents[0].id);
+      }
     });
 
-    const selectDocTypeEvent = (): void => {
-      docTypeError.value = '';
+    const selectDocument = async (id?: string) => {
+      await Provider.store.dispatch('documents/get', id);
     };
 
-    const add = (): void => {
-      selectedType.value = documentTypes.value.find((type) => type.id === selectedDocumentTypeId.value);
-
-      if (!selectedType.value || !selectedType.value.id || !selectedType.value?.documentTypeFields) {
-        docTypeError.value = 'Необходим тип документа';
-        return;
+    const toggleDocuments = async (toggle: boolean) => {
+      if (toggle) {
+        await Provider.store.dispatch('documentTypes/getAll');
       }
-
-      const documentFieldValues: DocumentFieldValue[] = selectedType.value.documentTypeFields.map(
-        (typeField) => new DocumentFieldValue({ id: uuidv4(), documentTypeField: typeField, documentTypeFieldId: typeField.id })
-      );
-
-      const document = new Document({
-        id: uuidv4(),
-        documentTypeId: selectedType.value.id,
-        documentType: { ...selectedType.value },
-        documentFieldValues,
-        isDraft: true,
-        fileInfoToDocument: [],
-        fileInfoToDocumentForDelete: [],
-      });
-
-      store.commit(`${storeModule.value}/addDocument`, document);
+      documentsIsToggle.value = toggle;
     };
 
-    const remove = (documentId: string): void => store.commit(`${storeModule.value}/removeDocument`, documentId);
-
-    const addFiles = (event: InputEvent, documentId: string): void => {
-      const target = event.target as HTMLInputElement;
-      if (!target || !target.files) return;
-      const newInfos: IFileInfoToDocument[] = Array.from(target.files).map((file: File) => {
-        const fileInfo = FileInfo.CreateDraft(file, documentId);
-        return new FileInfoToDocument({
-          documentId: documentId,
-          fileInfoId: fileInfo.id,
-          fileInfo: fileInfo,
-        });
-      });
-      store.commit(`${storeModule.value}/addDocumentsFiles`, newInfos);
+    const removeFile = async (id: string) => {
+      await Provider.store.dispatch('documentFileInfos/remove', id);
+      ClassHelper.RemoveFromClassById(id, document.value.documentFileInfos);
     };
 
-    const removeFile = (fileId: string): void => store.commit(`${storeModule.value}/removeFile`, fileId);
-
-    const downloadFile = async (fileId: string): Promise<void> => {
-      try {
-        await store.dispatch('files/generateLink', fileId);
-      } catch (error) {
-        return;
-      }
-
-      if (!fileAnchor.value) return;
-      fileAnchor.value.href = anchorInfo.value.href;
-      fileAnchor.value.download = String(anchorInfo.value.download);
-      fileAnchor.value.click();
+    const addFile = async () => {
+      const file = document.value.addFile();
+      await Provider.store.dispatch('documentFileInfos/create', file);
     };
 
-    const filterFilesByDocId = (docId: string): IFileInfo[] => {
-      return fileInfos.value.filter((info: IFileInfo) => info.category === docId);
+    const updateDocumentField = async (field: DocumentFieldValue) => {
+      await Provider.store.dispatch('documentFieldValues/updateWithoutReset', field);
     };
 
     return {
-      filterFilesByDocId,
-      selectDocTypeEvent,
-      docTypeError,
-      selectDocType,
-      documents,
-      documentTypes,
-      fileAnchor,
-      fileInfos,
-      selectedDocumentTypeId,
-      add,
-      addFiles,
-      downloadFile,
-      remove,
+      updateDocumentField,
+      addFile,
       removeFile,
-      isEditMode,
-      Paperclip,
-      InfoFilled,
-      Delete,
-      dateFormat,
+      selectDocument,
+      document,
+      patient,
+      addDocument,
+      documentTypes,
+      documentsIsToggle,
+      toggleDocuments,
+      scroll,
     };
   },
 });
 </script>
 
-<style scoped>
-h3 {
-  margin-top: 0;
+<style lang="scss" scoped>
+@import '@/assets/elements/collapse.scss';
+@import '@/assets/styles/elements/base-style.scss';
+
+.xlsx-button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+  font-size: 12px;
 }
-.card-button-group {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+
+.back-button {
+  background: #ffffff;
+  margin: 0 10px 0 0;
+  height: 42px;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #343e5c;
+}
+.chart-button {
+  width: 63px;
+  height: 42px;
+  border-radius: 5px;
+  color: #343e5c;
+  background: #ffffff;
+  font-size: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+.el-form-item {
+  margin: 0;
+}
+.el-divider {
+  margin: 10px 0;
+}
+
+.slider-body {
+  width: 180px;
+  height: auto;
+  border: 1px solid #379fff;
+  border-top-left-radius: $normal-border-radius;
+  border-bottom-left-radius: $normal-border-radius;
+  background: #ffffff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  display: grid;
+  grid-gap: 6px;
+  grid-template-rows: repeat(0 0px);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  padding: 6px;
+}
+
+.slider-body > div {
+  object-fit: cover;
+}
+
+.slider-item {
+  width: 163px;
+  height: 40px;
+  border: 1px solid #b0a4c0;
+  border-radius: $normal-border-radius;
+  background: $base-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slider-item:hover {
+  border: 1px solid #379fff;
+  background: $base-background;
+  color: #379fff;
+}
+
+.slider-item-active {
+  width: 163px;
+  height: 40px;
+  border: 1px solid #379fff;
+  border-radius: $normal-border-radius;
+  background: $custom-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #343e5c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slider-item:active {
+  border: 1px solid #379fff;
+  background: $custom-background;
+  color: #343e5c;
+}
+
+.tabs-item {
+  width: 101px;
+  height: 51px;
+  border: 1px solid #b0a4c0;
+  border-top-right-radius: $normal-border-radius;
+  border-bottom-right-radius: $normal-border-radius;
+  border-left: none;
+  background: $base-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+
+.tabs-item:hover {
+  width: 105px;
+}
+
+.tabs-item-active {
+  position: relative;
+  width: 106px;
+  height: 56px;
+  border: 1px solid #379fff;
+  border-top-right-radius: $normal-border-radius;
+  border-bottom-right-radius: $normal-border-radius;
+  border-left: none;
+  background: $custom-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #343e5c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-left: 0px;
+  z-index: 2;
+}
+
+.tabs-item-active:hover {
+  width: 106px;
+}
+
+.icon-plus {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+  border-right: 1px solid #379fff;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  z-index: 5;
+}
+
+.researche-title {
+  width: calc(100% - 22px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  margin: 0 10px;
+}
+
+.researche-name {
+  min-height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #343e5c;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.plus-button {
+  width: calc(100% - 20px);
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+  height: 60px;
+  margin: 0 10px;
+}
+
+:deep(.icon-plus) {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.patient-research {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100% - 32px);
+  height: 40px;
+  border-radius: $normal-border-radius;
+  border: $light-pink-border;
+  background: #ffffff;
+  padding: 0 10px;
+  margin: 10px 10px 10px 0;
+  cursor: pointer;
+}
+
+.blur {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  opacity: 0.3;
+  z-index: 20;
+}
+
+.research-info {
+  position: fixed;
+  top: 49%;
+  left: 50%;
+  width: calc(99% - 22px);
+  height: calc(98% - 22px);
+  transform: translate(-50%, -50%);
+  background: #dff2f8;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  margin: 10px 10px 0 0;
+  padding: 10px 10px 10px 10px;
+  overflow: hidden;
+  overflow-y: auto;
+  z-index: 21;
+}
+
+.tools {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: center;
+  height: auto;
+  padding: 10px 0;
+  width: calc(100% - 2px);
+  background: #dff2f8;
+}
+
+.scroll-block {
+  width: 100%;
+  height: calc(100% - 220px);
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.question-item {
+  background: #dff2f8;
+  border: $light-pink-border;
+  border-radius: $normal-border-radius;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+.question-name {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 22px;
+  color: #343e5c;
+  margin-bottom: 10px;
+}
+
+.background-container {
+  width: auto;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  background: #dff2f8;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #c3c3c3;
+}
+
+.patient-name {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 24px;
+  height: 40px;
+  color: #343e5c;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.researche-title-name {
+  font-size: 20px;
+  display: block;
+  color: #343e5c;
+  padding: 10px 0;
+}
+
+.researche-counter {
+  font-size: 20px;
+  color: #379fff;
+  display: flex;
+  justify-content: right;
+  align-items: start;
+  text-transform: uppercase;
+  white-space: nowrap;
+  height: 100%;
+}
+
+.control-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // padding-bottom: 10px;
+}
+
+.left {
+  min-width: 300px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.right {
+  max-width: 300px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.search {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.icon-xlsx {
+  width: 40px;
+  height: 40px;
+  fill: #343e5c;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.icon-xlsx:hover {
+  fill: #379fff;
+}
+
+.line-item {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: calc(100% - 20px);
+  margin: 10px 0;
+  max-width: 100%;
+  height: 54px;
+}
+
+.flex-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.flex-line2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.flex-line3 {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+}
+
+.flex-line4 {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding: 10px 0;
+  color: #00b5a4;
+  font-size: 18px;
+}
+
+.res-name {
+  margin-right: 10px;
+}
+
+:deep(.el-timeline) {
+  padding: 0 0 0 10px;
+}
+
+:deep(.el-timeline-item) {
+  padding-bottom: 8px;
+}
+
+:deep(.el-timeline-item__node) {
+  background: #b0a4c0;
+}
+
+:deep(.el-timeline-item__wrapper) {
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .tabs-item {
+    width: 40px;
+    height: 100px;
+  }
+
+  .tabs-item:hover {
+    width: 44px;
+  }
+
+  .tabs-item-active {
+    position: relative;
+    width: 45px;
+    height: 100px;
+  }
+
+  .tabs-item-active:hover {
+    width: 45px;
+  }
+
+  .tab-item-text {
+    transform: rotate(90deg);
+  }
 }
 </style>

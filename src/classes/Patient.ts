@@ -37,6 +37,10 @@ export default class Patient {
   patientDiagnosis: PatientDiagnosis[] = [];
   patientDiagnosisForDelete: string[] = [];
 
+  // @ClassHelper.GetClassConstructor(PatientDiagnosis)
+  // patientDiagnosis: PatiDo[] = [];
+  // patientDiagnosisForDelete: string[] = [];
+
   @ClassHelper.GetClassConstructor(PatientRegister)
   patientsRegisters: PatientRegister[] = [];
   // registerToPatientForDelete: string[] = [];
