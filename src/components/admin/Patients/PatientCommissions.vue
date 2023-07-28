@@ -25,7 +25,9 @@
         class="tabs-item"
         @click="selectCommission(commission)"
       >
-        №{{ commission.number }}
+        <div class="tab-item-text">
+          №{{ commission.number }}
+        </div>
       </div>
     </template>
     <template #body>

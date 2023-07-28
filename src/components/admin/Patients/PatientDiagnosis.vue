@@ -20,7 +20,9 @@
         class="tabs-item"
         @click="selectPatientDiagnosis(patientDiagnosis.id)"
       >
-        {{ patientDiagnosis.mkbItem.getCode() }}
+        <div class="tab-item-text">
+          {{ patientDiagnosis.mkbItem.getCode() }}
+        </div>
       </div>
     </template>
     <template #body>
