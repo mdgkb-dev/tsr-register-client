@@ -15,26 +15,10 @@
           <Button
             v-for="authButton in auth.getAuthButtons()"
             :key="authButton.getStatus()"
-            @click.prevent="authButtonClick(authButton)"
+            @click="authButtonClick(authButton)"
             :text="authButton.label"
-            button-class="save-button"
+            :button-class="[{ 'save-button-active': authButton.isSubmit }, 'save-button']"
           />
-
-          <!-- <Button
-            v-if="item.action && item.condition"
-            :text="item.text"
-            :button-class="item.type" 
-            @click="action(item.action)"
-          /> -->
-          <!-- <el-button
-            v-for="authButton in auth.getAuthButtons()"
-            :key="authButton.getStatus()"
-            class="button"
-            :class="{ 'auth-btn': authButton.isSubmit }"
-            @click.prevent="authButtonClick(authButton)"
-          >
-            {{ authButton.label }}
-          </el-button> -->
         </div>
       </el-form>
     </div>
@@ -177,6 +161,22 @@ h3 {
 }
 
 .save-button:last-child {
+  margin: 10px 0 0 0;
+}
+
+.save-button-active {
+  width: 30%;
+  max-width: 200px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 10px 10px 0 0;
+  font-size: 14px;
+  box-shadow: 0px 0px 1px 1px #006bb4;
+}
+
+.save-button-active:last-child {
   margin: 10px 0 0 0;
 }
 
