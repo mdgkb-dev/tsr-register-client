@@ -12,7 +12,21 @@
           <el-input v-model="auth.profile.password" placeholder="Пароль" type="password" />
         </el-form-item>
         <div class="btn-group">
-          <el-button
+          <Button
+            v-for="authButton in auth.getAuthButtons()"
+            :key="authButton.getStatus()"
+            @click.prevent="authButtonClick(authButton)"
+            :text="authButton.label"
+            button-class="save-button"
+          />
+
+          <!-- <Button
+            v-if="item.action && item.condition"
+            :text="item.text"
+            :button-class="item.type" 
+            @click="action(item.action)"
+          /> -->
+          <!-- <el-button
             v-for="authButton in auth.getAuthButtons()"
             :key="authButton.getStatus()"
             class="button"
@@ -20,7 +34,7 @@
             @click.prevent="authButtonClick(authButton)"
           >
             {{ authButton.label }}
-          </el-button>
+          </el-button> -->
         </div>
       </el-form>
     </div>
@@ -35,9 +49,13 @@ import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import Auth from '@/services/classes/auth/Auth';
 import AuthButton from '@/services/classes/auth/AuthButton';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AuthComponent',
+  components: {
+    Button,
+  },
   props: {
     isEvent: {
       type: Boolean,
@@ -147,6 +165,32 @@ h3 {
   }
 }
 
+.save-button {
+  width: 30%;
+  max-width: 200px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 10px 10px 0 0;
+  font-size: 14px;
+}
+
+.save-button:last-child {
+  margin: 10px 0 0 0;
+}
+
+.btn-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.auth-btn {
+  color: white;
+  background-color: #224af2;
+}
+
 @media screen and (max-width: 1024px) {
   h3 {
     font-size: 20px;
@@ -158,23 +202,23 @@ h3 {
     width: auto;
   }
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 800px) {
   h3 {
     font-size: 18px;
   }
   .auth-card {
     padding: 0;
   }
+  .save-button {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 5px;
+    height: 42px;
+    color: #006bb4;
+    background: #dff2f8;
+    margin: 10px 0 0 0;
+    font-size: 14px;
+  }
 }
 
-.btn-group {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.auth-btn {
-  color: white;
-  background-color: #224af2;
-}
 </style>
