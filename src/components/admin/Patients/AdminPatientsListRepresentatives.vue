@@ -1,5 +1,5 @@
 <template>
-  <InfoItem title="представители" margin="0" open-width="290px" :with-hover="editMode" :with-open-window="editMode">
+  <InfoItem title="представители" margin="0" :with-hover="editMode" :with-open-window="editMode">
     <div class="block">
       <div v-for="rep in patient.patientsRepresentatives" :key="rep">
         <StringItem v-if="patient.patientsRepresentatives" :string="rep.getRepresentativeParentType() + ','" font-size="14px" />
@@ -7,7 +7,7 @@
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(276px, 1fr))">
+      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))">
         <div v-for="(rep, key, index) in patient.patientsRepresentatives" :key="index">
           <InfoItem margin="0" :with-open-window="false" height="32px">
             <template #title>

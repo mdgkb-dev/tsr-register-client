@@ -265,8 +265,9 @@ export default defineComponent({
   overflow: hidden;
   max-height: auto;
   padding: 7px;
-  width: calc(100% - 16px);
+  width: calc(100% - 14px);
   margin-top: 5px;
+  
 }
 
 .blur {
@@ -282,4 +283,5 @@ export default defineComponent({
 :deep(.el-input__inner) {
   border-color: #b0a4c0;
 }
+
 </style>

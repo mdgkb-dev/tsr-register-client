@@ -49,17 +49,9 @@
             padding="7px"
             :with-hover="false"
           >
-            <!-- <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px"> -->
             <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
-            <!-- </GridContainer> -->
           </InfoItem>
-          <!-- <FiltersButtonsSelect
-            :filter-model="filterByRegister"
-            :models="createSexFilters()"
-            default-label="пол"
-            :inverse="true"
-            @load="$emit('load')"
-          /> -->
+
           <FiltersButtonsSelect
             :filter-model="filterByDisabilities"
             :models="createDisabilityFilters()"
@@ -68,10 +60,13 @@
           />
         </GridContainer>
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-          <FiltersButtonsMultiply
+          <FiltersButtonsSelect
+            v-for="question in questions"
+            :key="question.id"
             :filter-model="filterByRegister"
-            :options="createRegistersOptions()"
-            default-label="регистры"
+            :models="createCustomFilterModels(question)"
+            :default-label="question.name"
+            :inverse="true"
             @load="$emit('load')"
           />
         </GridContainer>
@@ -103,15 +98,6 @@
             </GridContainer>
           </GridContainer>
         </InfoItem>
-        <FiltersButtonsSelect
-          v-for="question in questions"
-          :key="question.id"
-          :filter-model="filterByRegister"
-          :models="createCustomFilterModels(question)"
-          :default-label="question.name"
-          :inverse="true"
-          @load="$emit('load')"
-        />
       </GridContainer>
     </template>
     <template #download>

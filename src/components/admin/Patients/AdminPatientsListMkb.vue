@@ -5,7 +5,7 @@
     </div>
 
     <template #open-inside-content>
-      <GridContainer max-width="100%" grid-gap="7px" margin="0 0 10px 0">
+      <GridContainer max-width="100%" grid-gap="7px" margin="0 0 10px 0" gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))">
         <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
           <InfoItem
             margin="0"

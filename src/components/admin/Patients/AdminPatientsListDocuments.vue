@@ -5,7 +5,7 @@
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px">
+      <GridContainer custom-class="grid" grid-gap="7px" gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))">
         <div v-for="document in patient.human.documents" :key="document">
           <InfoItem icon="del" margin="0" :with-open-window="false" height="32px" color-selected="#E46862">
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />

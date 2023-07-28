@@ -34,10 +34,10 @@
                         @change="updateHuman(patient.human)"
                       />
                     </InfoItem>
-                    <AdminPatientsListRepresentatives :patient="patient" :edit-mode="editMode" />
+                    <AdminPatientsListRegisters :patient="patient" :edit-mode="editMode" />
                   </GridContainer>
 
-                  <AdminPatientsListRegisters :patient="patient" :edit-mode="editMode" />
+                  <AdminPatientsListRepresentatives :patient="patient" :edit-mode="editMode" />
                   <AdminPatientsListMkb :patient="patient" :edit-mode="editMode" />
                   <AdminPatientsListDocuments :patient="patient" :edit-mode="editMode" />
                 </GridContainer>
