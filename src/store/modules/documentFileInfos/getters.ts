@@ -1,13 +1,13 @@
 import { GetterTree } from 'vuex';
 
-import DocumentType from '@/classes/DocumentType';
+import DocumentFileInfo from '@/classes/DocumentFileInfo';
 import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
 import { State } from './index';
 
 const getters: GetterTree<State, RootState> = {
-  ...getBaseGetters<DocumentType, State>(),
+  ...getBaseGetters<DocumentFileInfo, State>(),
 };
 
 export default getters;

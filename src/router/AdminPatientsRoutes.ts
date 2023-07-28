@@ -3,7 +3,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 import AdminPatientPage from '@/components/admin/Patients/AdminPatientPage.vue';
 import AdminPatientsList from '@/components/admin/Patients/AdminPatientsList.vue';
 import PatientsHistoryList from '@/components/admin/Patients/PatientsHistoryList.vue';
-import PatientsDocumentsList from '@/components/PatientsDocumentsList/PatientsDocumentsList.vue';
 import { authGuard, isAuthorized } from '@/router/index';
 // import { isAuthorized } from '@/router/index';
 
@@ -17,15 +16,7 @@ export default [
       authGuard();
     },
   },
-  {
-    path: '/admin/patients/documents-list',
-    name: 'PatientsDocumentsList',
-    component: PatientsDocumentsList,
-    beforeEnter(to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext): void {
-      isAuthorized(next);
-      authGuard();
-    },
-  },
+
   {
     path: '/admin/patients/new',
     name: 'AdminNewPatientPage',

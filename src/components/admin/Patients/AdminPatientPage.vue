@@ -67,7 +67,7 @@ export default defineComponent({
       CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
       CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
       CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
-      // CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
+      CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
       // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
       // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
       CustomSection.Create('commission', 'Врачебные комиссии', 'PatientCommissions', 0, true),
@@ -169,7 +169,7 @@ export default defineComponent({
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 
-  background: #F5F5F5;
+  background: #f5f5f5;
   margin: -0.5px;
 }
 

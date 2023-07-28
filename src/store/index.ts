@@ -11,6 +11,10 @@ import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
 import { doctors } from '@/store/modules/doctors';
+import { documentFieldValues } from '@/store/modules/documentFieldValues';
+import { documentFileInfos } from '@/store/modules/documentFileInfos';
+import { documents } from '@/store/modules/documents';
+import { documentTypes } from '@/store/modules/documentTypes';
 import { drugApplications } from '@/store/modules/drugApplications';
 import { drugApplicationsStatuses } from '@/store/modules/drugApplicationsStatuses';
 import { drugArrives } from '@/store/modules/drugArrives';
@@ -104,6 +108,10 @@ const store: StoreOptions<RootState> = {
     drugForms,
     drugRecipes,
     questions,
+    documentTypes,
+    documents,
+    documentFieldValues,
+    documentFileInfos,
   },
 };
 

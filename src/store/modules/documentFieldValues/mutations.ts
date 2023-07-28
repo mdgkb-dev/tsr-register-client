@@ -1,12 +1,12 @@
 import { MutationTree } from 'vuex';
 
-import DocumentType from '@/classes/DocumentType';
+import DocumentFieldValue from '@/classes/DocumentFieldValue';
 import getBaseMutations from '@/store/baseModule/baseMutations';
 
 import { State } from './index';
 
 const mutations: MutationTree<State> = {
-  ...getBaseMutations<DocumentType, State>(DocumentType),
+  ...getBaseMutations<DocumentFieldValue, State>(DocumentFieldValue),
 };
 
 export default mutations;

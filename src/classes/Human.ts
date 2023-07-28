@@ -1,7 +1,7 @@
+import Document from '@/classes/Document';
+import DocumentType from '@/classes/DocumentType';
 import FileInfo from '@/classes/files/FileInfo';
 import Contact from '@/classes/humans/Contact';
-import IDocument from '@/interfaces/documents/IDocument';
-import IFileInfoToDocument from '@/interfaces/documents/IFileInfoToDocument';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
@@ -20,7 +20,8 @@ export default class Human {
   contactId?: string;
   insuranceCompanyToHuman: IInsuranceCompanyToHuman[] = [];
   insuranceCompanyToHumanForDelete: string[] = [];
-  documents: IDocument[] = [];
+  @ClassHelper.GetClassConstructor(Document)
+  documents: Document[] = [];
   documentsForDelete: string[] = [];
   fileInfos: IFileInfo[] = [];
   photo: IFileInfo = new FileInfo();
@@ -41,26 +42,16 @@ export default class Human {
     return this.isMale ? 'М' : 'Ж';
   }
 
-  removeDocumentFieldValuesIds(): void {
-    for (const document of this.documents) {
-      if (document.isDraft) {
-        for (const value of document.documentFieldValues) {
-          value.id = undefined;
-        }
-      }
-    }
-  }
-
   static GetFileInfos(item: Human): IFileInfo[] {
     const fileInfos: IFileInfo[] = [];
 
-    item.documents.forEach((doc: IDocument) => {
-      doc.fileInfoToDocument.forEach((fileInfoToDoc: IFileInfoToDocument) => {
-        if (fileInfoToDoc.fileInfo) {
-          fileInfos.push(fileInfoToDoc.fileInfo);
-        }
-      });
-    });
+    // item.documents.forEach((doc: Document) => {
+    //   doc.fi.forEach((fileInfoToDoc: IFileInfoToDocument) => {
+    //     if (fileInfoToDoc.fileInfo) {
+    //       fileInfos.push(fileInfoToDoc.fileInfo);
+    //     }
+    //   });
+    // });
 
     if (item.photo) {
       fileInfos.push(item.photo);
@@ -77,7 +68,7 @@ export default class Human {
   }
 
   haveDocument(documentTypeId: string): boolean {
-    return !!this.documents.find((doc: IDocument) => doc.documentTypeId === documentTypeId);
+    return !!this.documents.find((doc: Document) => doc.documentTypeId === documentTypeId);
   }
 
   addressesEqual(): boolean {
@@ -97,5 +88,11 @@ export default class Human {
 
   setPatronymic(item: string): void {
     this.patronymic = item;
+  }
+
+  addDocument(docType: DocumentType): Document | undefined {
+    const doc = Document.CreateFromType(docType, this.id);
+    this.documents.push(doc);
+    return doc;
   }
 }
