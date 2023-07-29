@@ -4,6 +4,7 @@
     border-color="#ffffff"
     :with-hover="false"
     :with-open-window="editMode"
+    :close="closeToggle"
     @keyup-enter="updateHumanName(patient)"
   >
     <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.setEditNameMode(true)" />
@@ -26,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
@@ -61,6 +62,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
     const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
+    const closeToggle: Ref<boolean> = ref(false);
     const toggleRegister = async (register: Register, patient: Patient): Promise<void> => {
       let patientRegister = patient.patientsRegisters.find((pr: PatientRegister) => pr.registerId === register.id);
       if (patientRegister) {
@@ -78,7 +80,7 @@ export default defineComponent({
     };
 
     const submit = async (patient: Patient): Promise<void> => {
-      emit('toggleInfo');
+      closeToggle.value = !closeToggle.value;
       await updateHumanName(patient);
     };
 
@@ -88,6 +90,7 @@ export default defineComponent({
     };
 
     return {
+      closeToggle,
       submit,
       updateHumanName,
       registers,

@@ -1,90 +1,47 @@
 <template>
-  <RightTabsContainer :is-toggle="documentsIsToggle" slider-on-width="180px" @toggle="toggleDocuments">
-    <template #icon>
-      <svg class="icon-plus">
-        <use xlink:href="#plus"></use>
-      </svg>
-    </template>
-    <template #slider-body>
-      <div class="slider-body">
-        <div v-for="docType in documentTypes" :key="docType.id" class="slider-item" @click="addDocument(docType.id)">
-          {{ docType.name }}
-        </div>
-      </div>
-    </template>
-    <template #tabs>
-      <div
-        v-for="doc in patient.human.documents"
-        :key="doc.id"
-        :class="{ 'tabs-item-active': doc.id === document.id }"
-        class="tabs-item"
-        @click="selectDocument(doc.id)"
-      >
-        <div class="tab-item-text">{{ doc.documentType.name }}</div>
-      </div>
-    </template>
-    <template #body>
-      <div class="body">
-        <ResearcheContainer background="#DFF2F8" padding="0">
-          <template #header>
-            <div class="researche-title">
-              <div class="researche-name">{{ document.documentType.name }}</div>
-            </div>
-            <div class="line-item">
-              <InfoItem
-                margin="0"
-                :with-open-window="false"
-                :with-icon="false"
-                height="45px"
-                background="#F5F5F5"
-                border-color="#C4C4C4"
-                padding="7px"
-                :with-hover="false"
-              >
-                <template #title>
-                  <StringItem string="сохранить" font-size="10px" padding="0" />
-                </template>
-                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-                  <Button text="xlsx" :with-icon="false" background-hover:#DFF2F8; button-class="xlsx-button"> </Button>
-                </GridContainer>
-              </InfoItem>
-            </div>
-          </template>
+  <Button text="добавить документ" @click="addFile" />
+  <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id">
+    {{ documentFileInfo.id }}
+    <FileUploader :file-info="documentFileInfo.fileInfo" />
+    <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeFile(documentFileInfo.id)" />
+  </div>
+  <div v-for="value in document.documentFieldValues" :key="value.id">
+    <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
+      <el-input v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
+    </el-form-item>
 
-          <template #body>
-            <DocumentForm v-if="document.id" @remove="removeDocument" />
-          </template>
-        </ResearcheContainer>
-      </div>
-    </template>
-  </RightTabsContainer>
+    <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
+      <el-input-number v-model="document.valueNumber" size="mini" @blur="updateDocumentField(value)" />
+    </el-form-item>
+
+    <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">
+      <el-date-picker
+        v-model="value.valueDate"
+        format="DD.MM.YYYY"
+        type="date"
+        placeholder="Выберите дату"
+        size="mini"
+        @blur="updateDocumentField(value)"
+        @change="updateDocumentField(value)"
+      />
+    </el-form-item>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
-import DocumentType from '@/classes/DocumentType';
-import Patient from '@/classes/Patient';
-import DocumentForm from '@/components/admin/DocumentForm.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Document from '@/classes/Document';
+import DocumentFieldValue from '@/classes/DocumentFieldValue';
 import Button from '@/components/Base/Button.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-import scroll from '@/services/Scroll';
 export default defineComponent({
-  name: 'PatientDocuments',
+  name: 'PatientDocumentForm',
   components: {
-    DocumentForm,
-    RightTabsContainer,
     Button,
-    ResearcheContainer,
-    GridContainer,
-    InfoItem,
-    StringItem,
+    FileUploader,
   },
   props: {
     storeModule: {
@@ -93,56 +50,27 @@ export default defineComponent({
     },
   },
   setup() {
-    const documentsIsToggle: Ref<boolean> = ref(false);
-
-    const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
-    const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
     const document: Ref<Document> = computed(() => Provider.store.getters['documents/item']);
 
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-
-    const addDocument = async (id: string) => {
-      await Provider.store.dispatch('documentTypes/get', id);
-      const item = patient.value.human.addDocument(documentType.value);
-      await Provider.store.dispatch('documents/createWithoutReset', item);
-      selectDocument(patient.value.human.documents[patient.value.human.documents.length - 1].id);
+    const removeFile = async (id: string) => {
+      await Provider.store.dispatch('documentFileInfos/remove', id);
+      ClassHelper.RemoveFromClassById(id, document.value.documentFileInfos);
     };
 
-    onBeforeMount(async () => {
-      if (patient.value.human.documents.length > 0) {
-        await selectDocument(patient.value.human.documents[0].id);
-      }
-    });
-
-    const selectDocument = async (id?: string) => {
-      await Provider.store.dispatch('documents/get', id);
+    const addFile = async () => {
+      const file = document.value.addFile();
+      await Provider.store.dispatch('documentFileInfos/create', file);
     };
 
-    const removeDocument = async (id?: string) => {
-      ClassHelper.RemoveFromClassById(id, patient.value.human.documents);
-      await Provider.store.dispatch('documents/get', id);
-      if (patient.value.human.documents.length > 0) {
-        await selectDocument(patient.value.human.documents[0].id);
-      }
-    };
-
-    const toggleDocuments = async (toggle: boolean) => {
-      if (toggle) {
-        await Provider.store.dispatch('documentTypes/getAll');
-      }
-      documentsIsToggle.value = toggle;
+    const updateDocumentField = async (field: DocumentFieldValue) => {
+      await Provider.store.dispatch('documentFieldValues/updateWithoutReset', field);
     };
 
     return {
-      removeDocument,
-      selectDocument,
+      updateDocumentField,
+      addFile,
+      removeFile,
       document,
-      patient,
-      addDocument,
-      documentTypes,
-      documentsIsToggle,
-      toggleDocuments,
-      scroll,
     };
   },
 });

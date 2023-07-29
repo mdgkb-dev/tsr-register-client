@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import Document from '@/classes/Document';
 import DocumentType from '@/classes/DocumentType';
 import FileInfo from '@/classes/files/FileInfo';
@@ -6,7 +8,6 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 import ClassHelper from '@/services/ClassHelper';
-
 export default class Human {
   id?: string;
   name = '';
@@ -67,7 +68,7 @@ export default class Human {
     ];
   }
 
-  haveDocument(documentTypeId: string): boolean {
+  documentExists(documentTypeId: string): boolean {
     return !!this.documents.find((doc: Document) => doc.documentTypeId === documentTypeId);
   }
 
@@ -92,6 +93,7 @@ export default class Human {
 
   addDocument(docType: DocumentType): Document | undefined {
     const doc = Document.CreateFromType(docType, this.id);
+    doc.id = uuidv4();
     this.documents.push(doc);
     return doc;
   }

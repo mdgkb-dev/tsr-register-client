@@ -7,29 +7,49 @@
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px">
         <div v-for="document in patient.human.documents" :key="document">
-          <InfoItem icon="del" margin="0" :with-open-window="false" height="32px" color-selected="#E46862">
+          <InfoItem
+            icon="del"
+            margin="0"
+            :with-open-window="false"
+            height="32px"
+            color-selected="#E46862"
+            @click="selectDocument(document.id)"
+          >
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />
           </InfoItem>
         </div>
 
-        <Button button-class="plus-button" icon="plus" icon-class="icon-plus" />
+        <div v-if="documentsIsToggle">
+          <div v-for="docType in documentTypes" :key="docType.id" @click="addDocument(docType.id)">{{ docType.name }}</div>
+        </div>
+        <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleDocuments(true)" />
       </GridContainer>
     </template>
   </InfoItem>
+  <ModalWindow :show="showDocumentModal" title="Документ" @close="showDocumentModal = false">
+    <DocumentForm @remove="removeDocument" />
+  </ModalWindow>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
+import DocumentType from '@/classes/DocumentType';
 import Patient from '@/classes/Patient';
+import DocumentForm from '@/components/admin/DocumentForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
 import Button from '@/components/Base/Button.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
+import ClassHelper from '@/services/ClassHelper';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'AdminPatientsListDocuments',
   components: {
+    DocumentForm,
+    ModalWindow,
     StringItem,
     InfoItem,
     GridContainer,
@@ -44,6 +64,48 @@ export default defineComponent({
       type: Boolean as PropType<boolean>,
       required: true,
     },
+  },
+  setup(props) {
+    const showDocumentModal: Ref<boolean> = ref(false);
+    const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
+    const documentsIsToggle: Ref<boolean> = ref(false);
+    const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
+
+    const removeDocument = async (id?: string) => {
+      ClassHelper.RemoveFromClassById(id, props.patient.human.documents);
+      showDocumentModal.value = false;
+      Provider.store.commit('documents/set');
+    };
+
+    const toggleDocuments = async (toggle: boolean) => {
+      if (toggle) {
+        await Provider.store.dispatch('documentTypes/getAll');
+      }
+      documentsIsToggle.value = toggle;
+    };
+
+    const addDocument = async (id: string) => {
+      await Provider.store.dispatch('documentTypes/get', id);
+      const item = props.patient.human.addDocument(documentType.value);
+      await Provider.store.dispatch('documents/createWithoutReset', item);
+      await selectDocument(props.patient.human.documents[props.patient.human.documents.length - 1].id);
+    };
+
+    const selectDocument = async (id?: string) => {
+      await Provider.store.dispatch('documents/get', id);
+      showDocumentModal.value = true;
+      documentsIsToggle.value = false;
+    };
+
+    return {
+      toggleDocuments,
+      addDocument,
+      documentTypes,
+      documentsIsToggle,
+      removeDocument,
+      selectDocument,
+      showDocumentModal,
+    };
   },
 });
 </script>
