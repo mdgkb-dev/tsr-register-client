@@ -7,7 +7,7 @@
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px">
+      <GridContainer custom-class="grid" grid-gap="7px" gridTemplateColumns="repeat(auto-fit, minmax(90px, 1fr))">
         <Button
           v-for="register in registers"
           :key="register.id"
@@ -94,6 +94,7 @@ export default defineComponent({
 
 :deep(.button-register) {
   width: auto;
+  min-width: none;
   height: 34px;
   border-radius: 5px;
   color: #006bb4;

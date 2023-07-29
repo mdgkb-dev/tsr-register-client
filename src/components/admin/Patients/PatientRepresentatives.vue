@@ -26,7 +26,9 @@
         class="tabs-item"
         @click="selectPatientRepresentative(patientRepresentative.id)"
       >
-        {{ patientRepresentative.getRepresentativeParentType() }}
+        <div class="tab-item-text">
+          {{ patientRepresentative.getRepresentativeParentType() }}
+        </div>
       </div>
     </template>
     <template #body>

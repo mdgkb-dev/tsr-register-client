@@ -20,7 +20,9 @@
         class="tabs-item"
         @click="selectPatientRegister(patientRegisterItem.id)"
       >
-        {{ patientRegisterItem.register.name }}
+        <div class="tab-item-text">
+          {{ patientRegisterItem.register.name }}
+        </div>
       </div>
     </template>
     <template #body>
