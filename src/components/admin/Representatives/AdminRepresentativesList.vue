@@ -1,338 +1,42 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <template #header>
-      <RemoteSearch
-        :must-be-translated="true"
-        key-value="representative"
-        placeholder="Начните вводить ФИО представителя"
-        @select="selectSearch"
-      />
-      <!--      <FiltersList default-label="Пол" :models="createSexFilters()" @load="loadPatients" />-->
-      <!--      <SortList class="filters-block" :models="createSortList()" :store-mode="true" @load="loadPatients" />-->
-    </template>
-    <template #sort>
-      <SortList :max-width="400" @load="loadItems" />
-    </template>
-
-    <!-- <el-table :data="representatives" class="table-shadow" header-row-class-name="header-style" row-class-name="no-hover">
-      <el-table-column type="index" width="60" align="center" />
-      <el-table-column align="left" min-width="110" resizable>
-        <template #header>
-          <span class="table-header">
-            <span>Фамилия Имя Отчество</span>
-          </span>
-        </template>
-        <template #default="scope">
-          {{ scope.row.human.getFullName() }}
-        </template>
-      </el-table-column>
-
-      <el-table-column width="130" prop="human.isMale" align="center">
-        <template #header>
-          <span class="table-header">
-            <span>Пол</span>
-          </span>
-        </template>
-        <template #default="scope">
-          {{ scope.row.human.getGender() }}
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="human.dateBirth" width="150" align="center">
-        <template #header>
-          <span class="table-header">
-            <span>Дата рождения</span>
-          </span>
-        </template>
-        <template #default="scope">
-          {{ $dateTimeFormatter.format(scope.row.human.dateBirth) }}
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="human.addressRegistration" label="АДРЕС РЕГИСТРАЦИИ" width="130" />
-
-      <el-table-column width="120" label="ПОДОПЕЧНЫЕ" align="center">
-        <template #default="scope">
-          <div v-for="rep in scope.row.representativeToPatient" :key="rep">
-            <el-tooltip
-              class="item"
-              effect="dark"
-              :content="`${rep.patient.human.surname} ${rep.patient.human.name} ${rep.patient.human.patronymic}`"
-              placement="top-end"
-            >
-              <el-tag class="tag-link" @click="$router.push(`/patients/${rep.patient.id}`)">
-                {{ rep.getRepresentativeChildType() }}
-              </el-tag>
-            </el-tooltip>
-          </div>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="ТЕЛЕФОН" width="150" align="center">
-        <template #default="scope">
-          {{ scope.row.human.contact.phone }}
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="human.contact.email" label="EMAIL" min-width="150" align="center" />
-
-      <el-table-column label="ДОКУМЕНТЫ" width="115" align="center">
-        <template #default="scope">
-          <div v-for="document in scope.row.human.documents" :key="document">
-            <el-tooltip class="item" effect="dark" :content="document.documentType.name" placement="top-end">
-              <el-tag size="small">
-                <el-icon style="margin-right: 3px"><Document /></el-icon>
-                <span>{{ document.documentType.getTagName() }}</span>
-              </el-tag>
-            </el-tooltip>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column width="50" align="center" class-name="sticky-right">
-        <template #default="scope">
-          <TableButtonGroup :show-edit-button="true" :show-remove-button="true" @edit="edit(scope.row.id)" @remove="remove(scope.row.id)" />
-        </template>
-      </el-table-column>
-    </el-table> -->
-
-    <div id="list" class="scroll-block">
-      <div class="patient-count">Количество представителей: {{ count }}</div>
+    <div class="scroll-block">
+      <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="representative in representatives" :key="representative.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button
-                    :with-icon="true"
-                    width="40px"
-                    height="40px"
-                    border-radius="5px"
-                    color="#006BB4"
-                    background="#DFF2F8"
-                    background-hover="#DFF2F8"
-                    :color-swap="false"
-                    @click.prevent="edit(representative.id)"
-                  >
-                    <template #icon>
-                      <svg class="icon-edit">
-                        <use xlink:href="#edit"></use>
-                      </svg>
-                    </template>
-                  </Button>
-                  <StringItem
-                    :string="representative.human.getFullName()"
-                    color="#006BB4"
-                    font-size="17px"
-                    min-width="240px"
-                    width="100%"
-                  />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(representative.id)" />
+                  <FioToggleForm :human="representative.human" />
                 </div>
 
                 <div class="line-item-right">
                   <Button
+                    button-class="gender-button"
                     :text="representative.human.getGender()"
-                    :with-icon="false"
-                    width="42px"
-                    height="42px"
-                    color="#006BB4"
-                    background="#DFF2F8"
-                    background-hover="#DFF2F8"
-                    :color-swap="false"
-                    margin="2px 10px 0 0"
-                    font-size="18px"
-                  >
-                  </Button>
+                    @click="updateIsMale(representative.human)"
+                  />
                 </div>
-
-                <div class="item-flex">
-                  <GridContainer
-                    max-width="1920px"
-                    grid-gap="10px"
-                    grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                    margin="0px"
-                  >
-                    <template #grid-items>
-                      <GridContainer
-                        max-width="auto"
-                        grid-gap="10px"
-                        grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
-                        margin="0px"
-                      >
-                        <template #grid-items>
-                          <InfoItem margin="0" open-height="auto">
-                            <template #title>
-                              <StringItem string="дата рождения" font-size="10px" padding="0 0 0 3px" />
-                            </template>
-                            <template #close-inside-content>
-                              <StringItem
-                                :string="$dateTimeFormatter.format(representative.human.dateBirth)"
-                                font-size="16px"
-                                padding="0"
-                              />
-                            </template>
-
-                            <!-- #TODO -->
-                            <template #open-inside-content>
-                              <GridContainer
-                                max-width="auto"
-                                grid-gap="10px"
-                                grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"
-                                margin="0px"
-                              >
-                                <template #grid-items>
-                                  <SmallDatePicker
-                                    v-model:model-value="representative.human.dateBirth"
-                                    placeholder="Выбрать"
-                                    width="100%"
-                                    height="34px"
-                                    @change="updateHuman(representative.human)"
-                                  />
-                                  <Button
-                                    text="Сохранить"
-                                    :with-icon="false"
-                                    width="100%"
-                                    height="34px"
-                                    border-radius="5px"
-                                    color="#006BB4"
-                                    background="#DFF2F8"
-                                    background-hover="#DFF2F8"
-                                    :color-swap="false"
-                                  >
-                                  </Button>
-                                </template>
-                              </GridContainer>
-                            </template>
-                            <!-- end -->
-                          </InfoItem>
-                          <InfoItem margin="0" open-height="auto" open-width="290px">
-                            <template #title>
-                              <StringItem string="подопечные" font-size="10px" padding="0 0 0 3px" />
-                            </template>
-                            <template #close-inside-content>
-                              <div v-for="rep in representative.representativeToPatient" :key="rep">
-                                <StringItem
-                                  v-if="representative.representativeToPatient"
-                                  :string="rep.getRepresentativeParentType() + ',&nbsp'"
-                                  font-size="14px"
-                                  padding="0"
-                                />
-                              </div>
-                            </template>
-
-                            <!-- #TODO -->
-                            <template #open-inside-content>
-                              <GridContainer
-                                max-width="auto"
-                                grid-gap="10px"
-                                grid-template-columns="repeat(auto-fit, minmax(276px, 1fr))"
-                                margin="0px"
-                              >
-                                <template #grid-items>
-                                  <div v-for="(pat, key, index) in representative.representativeToPatient" :key="index">
-                                    <InfoItem margin="0" :with-open-window="false" height="32px">
-                                      <template #title>
-                                        <StringItem
-                                          :string="pat.getRepresentativeChildType()"
-                                          font-size="10px"
-                                          padding="0 0 0 3px"
-                                          color="#D42E61"
-                                        />
-                                      </template>
-                                      <template #close-inside-content>
-                                        <div>
-                                          <StringItem
-                                            v-if="pat.patient.human.contact.phone"
-                                            :string="pat.patient.human.contact.phone"
-                                            font-size="12px"
-                                            padding="0 0 0 3px"
-                                            color="#1979CF"
-                                          />
-                                          <StringItem :string="pat.patient.human.getFullName()" font-size="12px" padding="0 0 0 3px" />
-                                        </div>
-                                      </template>
-                                    </InfoItem>
-                                  </div>
-                                  <Button
-                                    :with-icon="true"
-                                    width="100%"
-                                    height="34px"
-                                    border-radius="5px"
-                                    color="#00BEA5"
-                                    background="#C1EFEB"
-                                    background-hover="#C1EFEB"
-                                    :color-swap="false"
-                                  >
-                                    <template #icon>
-                                      <svg class="icon-plus">
-                                        <use xlink:href="#plus"></use>
-                                      </svg>
-                                    </template>
-                                  </Button>
-                                </template>
-                              </GridContainer>
-                            </template>
-                            <!-- end -->
-                          </InfoItem>
-                        </template>
-                      </GridContainer>
-
-                      <InfoItem margin="0 0 0 0px">
-                        <template #title>
-                          <StringItem string="документы" font-size="10px" padding="0 0 0 3px" />
-                        </template>
-                        <template #close-inside-content>
-                          <div v-for="document in representative.human.documents" :key="document">
-                            <StringItem :string="document.documentType.getTagName()" font-size="14px" padding="0" />
-                          </div>
-                        </template>
-
-                        <!-- #TODO -->
-                        <template #open-inside-content>
-                          <GridContainer
-                            max-width="100%"
-                            grid-gap="7px"
-                            grid-template-columns="repeat(auto-fit, minmax(99px, 1fr))"
-                            margin="0px"
-                          >
-                            <template #grid-items>
-                              <div v-for="document in representative.human.documents" :key="document">
-                                <InfoItem margin="0" :with-open-window="false" height="32px" :with-icon="false" color-selected="#E46862">
-                                  <template #title>
-                                    <svg class="icon-del">
-                                      <use xlink:href="#del"></use>
-                                    </svg>
-                                  </template>
-                                  <template #close-inside-content>
-                                    <StringItem :string="document.documentType.getTagName()" font-size="11px" padding="0" />
-                                  </template>
-                                </InfoItem>
-                              </div>
-
-                              <Button
-                                :with-icon="true"
-                                width="100%"
-                                height="34px"
-                                border-radius="5px"
-                                color="#00BEA5"
-                                background="#C1EFEB"
-                                background-hover="#C1EFEB"
-                                :color-swap="false"
-                              >
-                                <template #icon>
-                                  <svg class="icon-plus">
-                                    <use xlink:href="#plus"></use>
-                                  </svg>
-                                </template>
-                              </Button>
-                            </template>
-                          </GridContainer>
-                        </template>
-                        <!-- end -->
-                      </InfoItem>
-                    </template>
+              </div>
+              <div class="item-flex">
+                <GridContainer
+                  max-width="1920px"
+                  custom-class="grid"
+                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
+                  margin="0"
+                >
+                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
+                    <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
+                      <SmallDatePicker
+                        v-model:model-value="representative.human.dateBirth"
+                        placeholder="Выбрать"
+                        @change="updateHuman(representative.human)"
+                      />
+                    </InfoItem>
                   </GridContainer>
-                </div>
+                </GridContainer>
               </div>
             </div>
           </template>
@@ -340,44 +44,18 @@
       </div>
     </div>
   </AdminListWrapper>
-  <Edit />
-  <svg width="0" height="0" class="hidden">
-    <symbol id="iconamoon_edit-light" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-      <path
-        d="M6.2513 2.50053L7.5013 3.75053M5.41797 8.33386H8.7513M2.08464 6.66719L1.66797 8.33386L3.33464 7.91719L8.16214 3.08969C8.31836 2.93342 8.40612 2.7215 8.40612 2.50053C8.40612 2.27956 8.31836 2.06763 8.16214 1.91136L8.09047 1.83969C7.9342 1.68347 7.72227 1.5957 7.5013 1.5957C7.28033 1.5957 7.06841 1.68347 6.91214 1.83969L2.08464 6.66719Z"
-        stroke-width="0.6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></path>
-    </symbol>
-
-    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
-    </symbol>
-
-    <symbol id="del" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
-      <path
-        d="M2.91797 8.75C2.6888 8.75 2.49255 8.66833 2.32922 8.505C2.16589 8.34167 2.08436 8.14556 2.08464 7.91667V2.5H1.66797V1.66667H3.7513V1.25H6.2513V1.66667H8.33464V2.5H7.91797V7.91667C7.91797 8.14583 7.8363 8.34208 7.67297 8.50542C7.50964 8.66875 7.31352 8.75028 7.08464 8.75H2.91797ZM7.08464 2.5H2.91797V7.91667H7.08464V2.5ZM3.7513 7.08333H4.58464V3.33333H3.7513V7.08333ZM5.41797 7.08333H6.2513V3.33333H5.41797V7.08333Z"
-      ></path>
-    </symbol>
-  </svg>
 </template>
 
 <script lang="ts">
-import { Document } from '@element-plus/icons-vue';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
-import Edit from '@/assets/svg/Edit.svg';
 import Human from '@/classes/Human';
 import Representative from '@/classes/Representative';
+import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import SortList from '@/components/SortList.vue';
-import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import RepresentativesSortsLib from '@/libs/sorts/RepresentativesSortsLib';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
@@ -388,17 +66,12 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminRepresentativesList',
   components: {
-    Edit,
-    RemoteSearch,
-    TableButtonGroup,
+    FioToggleForm,
     AdminListWrapper,
-    SortList,
-    Document,
     GridContainer,
     InfoItem,
     CollapseItem,
     Button,
-    StringItem,
     SmallDatePicker,
   },
   setup() {
@@ -435,7 +108,13 @@ export default defineComponent({
       });
     };
 
+    const updateIsMale = async (human: Human): Promise<void> => {
+      human.isMale = !human.isMale;
+      await updateHuman(human);
+    };
+
     return {
+      updateIsMale,
       loadRepresentatives,
       selectSearch,
       updateHuman,
@@ -450,6 +129,115 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  font-size: 12px;
+  &-filter {
+    background: #ffffff;
+  }
+  &-download {
+    background: #dff2f8;
+  }
+}
+
+:deep(.button-register) {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #ffffff;
+  font-size: 12px;
+}
+
+:deep(.name-item) {
+  margin: 0px;
+  width: auto;
+  border-color: #ffffff;
+  padding: 0px;
+}
+
+.grid {
+  max-width: auto;
+  grid-gap: 10px;
+  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+}
+
+.plus-button {
+  width: 100%;
+  height: 34px;
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+}
+.save-picker-button {
+  width: 100%;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+}
+.gender-button {
+  width: 42px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 2px 10px 0 0;
+  font-size: 18px;
+}
+
+.save-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
+}
+
+:deep(.edit-button) {
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+}
+
+:deep(.files-buttons) {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+  font-size: 12px;
+  &:hover {
+    background: #dff2f8;
+  }
+}
+
+.edv {
+  font-size: 14px;
+  padding: 0;
+  margin: 0 5px 0 0;
+  &-active {
+    color: #b0a4c0;
+  }
+}
+
+.patient-name {
+  color: #006bb4;
+  font-size: 17px;
+  min-width: 150px;
+  width: 100%;
+  padding: 0px;
+}
 
 .hidden {
   display: none;
@@ -486,9 +274,10 @@ export default defineComponent({
   align-items: center;
 }
 
-.icon-edit {
+:deep(.edit-icon) {
   width: 28px;
   height: 28px;
+  color: #006bb4;
 }
 
 .item-flex {
@@ -519,42 +308,25 @@ export default defineComponent({
   padding: 0px;
 }
 
-.icon-plus {
+:deep(.icon-plus) {
+  fill: #00b5a4;
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+
+.icon-filter {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  stroke: #006bb4;
+  fill: none;
 }
 
 .icon-del {
   width: 10px;
   height: 10px;
   cursor: pointer;
-}
-
-.filter-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.filter-block {
-  position: relative;
-  display: flex;
-  z-index: 3;
-  justify-content: space-between;
-  align-items: end;
-  width: calc(100% - 20px);
-  padding: 10px 10px 24px 10px;
-  background: #f5f5f5;
-  height: auto;
-  border-bottom: 1px solid #c4c4c4;
-}
-
-.tools-block {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  margin-left: 10px;
 }
 
 .patient-count {

@@ -28,6 +28,7 @@ export default class Human {
   photo: IFileInfo = new FileInfo();
   photoId?: string;
 
+  editNameMode = false;
   constructor(i?: Human) {
     ClassHelper.BuildClass(this, i);
   }
@@ -96,5 +97,9 @@ export default class Human {
     doc.id = uuidv4();
     this.documents.push(doc);
     return doc;
+  }
+
+  setEditNameMode(value: boolean): void {
+    this.editNameMode = value;
   }
 }

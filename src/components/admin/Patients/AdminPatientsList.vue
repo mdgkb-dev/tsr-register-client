@@ -11,7 +11,7 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
-                  <AdminPatientsListFio :patient="patient" :edit-mode="editMode" />
+                  <FioToggleForm :human="patient.human" />
                 </div>
 
                 <div class="line-item-right">
@@ -55,10 +55,10 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
+import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import AdminPatientsListDisability from '@/components/admin/Patients/AdminPatientsListDisability.vue';
 import AdminPatientsListDocuments from '@/components/admin/Patients/AdminPatientsListDocuments.vue';
 import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
-import AdminPatientsListFio from '@/components/admin/Patients/AdminPatientsListFio.vue';
 import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
 import AdminPatientsListRegisters from '@/components/admin/Patients/AdminPatientsListRegisters.vue';
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
@@ -80,7 +80,7 @@ export default defineComponent({
     AdminListWrapper,
     CollapseItem,
     Button,
-    AdminPatientsListFio,
+    FioToggleForm,
     InfoItem,
     GridContainer,
     SmallDatePicker,

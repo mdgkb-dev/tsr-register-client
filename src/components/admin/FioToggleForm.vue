@@ -5,44 +5,39 @@
     :with-hover="false"
     :with-open-window="editMode"
     :close="closeToggle"
-    @keyup-enter="updateHumanName(patient)"
+    @keyup-enter="updateHumanName()"
   >
-    <StringItem :string="patient.human.getFullName()" custom-class="patient-name" @click="patient.setEditNameMode(true)" />
+    <StringItem :string="human.getFullName()" custom-class="patient-name" @click="human.setEditNameMode(true)" />
 
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
         <InfoItem title="фамилия" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="patient.human.surname" @input="(e) => patient.human.setSurname(e)" @click.stop="() => undefined" />
+          <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" />
         </InfoItem>
         <InfoItem title="имя" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="patient.human.name" @input="(e) => patient.human.setName(e)" @click.stop="() => undefined" />
+          <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" />
         </InfoItem>
         <InfoItem title="отчество" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="patient.human.patronymic" @input="(e) => patient.human.setPatronymic(e)" @click.stop="() => undefined" />
+          <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" />
         </InfoItem>
-        <Button button-class="save-button" text="Сохранить" @click="submit(patient)" />
+        <Button button-class="save-button" text="Сохранить" @click="submit" />
       </GridContainer>
     </template>
   </InfoItem>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
-import Patient from '@/classes/Patient';
-import PatientRegister from '@/classes/PatientRegister';
-import Register from '@/classes/Register';
-import User from '@/classes/User';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
-import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'AdminPatientsListFio',
+  name: 'FioToggleForm',
   components: {
     StringItem,
     InfoItem,
@@ -50,51 +45,34 @@ export default defineComponent({
     Button,
   },
   props: {
-    patient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    },
-    editMode: {
-      type: Boolean as PropType<boolean>,
+    human: {
+      type: Object as PropType<Human>,
       required: true,
     },
   },
   setup(props, { emit }) {
-    const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
-    const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const closeToggle: Ref<boolean> = ref(false);
-    const toggleRegister = async (register: Register, patient: Patient): Promise<void> => {
-      let patientRegister = patient.patientsRegisters.find((pr: PatientRegister) => pr.registerId === register.id);
-      if (patientRegister) {
-        ClassHelper.RemoveFromClassById(patientRegister.id, patient.patientsRegisters, []);
-        return await Provider.store.dispatch('patientsRegisters/remove', patientRegister.id);
-      }
-      patientRegister = patient.addRegister(register, user.value);
-      return await Provider.store.dispatch('patientsRegisters/create', patientRegister);
-    };
 
-    const updateHuman = async (human: Human): Promise<void> => {
+    const updateHuman = async (): Promise<void> => {
       await Provider.withHeadLoader(async () => {
-        await Provider.store.dispatch('humans/update', human);
+        await Provider.store.dispatch('humans/update', props.human);
       });
     };
 
-    const submit = async (patient: Patient): Promise<void> => {
+    const submit = async (): Promise<void> => {
       closeToggle.value = !closeToggle.value;
-      await updateHumanName(patient);
+      await updateHumanName();
     };
 
-    const updateHumanName = async (patient: Patient): Promise<void> => {
-      patient.editNameMode = false;
-      await updateHuman(patient.human);
+    const updateHumanName = async (): Promise<void> => {
+      props.human.setEditNameMode(false);
+      await updateHuman();
     };
 
     return {
       closeToggle,
       submit,
       updateHumanName,
-      registers,
-      toggleRegister,
     };
   },
 });

@@ -73,7 +73,6 @@ export default class Patient {
 
   fullName?: string;
   dateBirth?: string;
-  editNameMode = false;
   constructor(i?: Patient) {
     ClassHelper.BuildClass(this, i);
     if (!i) {
@@ -288,9 +287,5 @@ export default class Patient {
     item.patientId = this.id;
     this.commissions.push(item);
     return item;
-  }
-
-  setEditNameMode(value: boolean): void {
-    this.editNameMode = value;
   }
 }
