@@ -17,7 +17,7 @@
     <div class="tools">
       <div class="control-buttons">
         <div class="left">
-          <Button text="Назад" button-class="back-button" :color-swap="true" :with-icon="false" @click="$emit('close')"> </Button>
+          <Button text="Назад" button-class="back-button" :color-swap="true" :with-icon="false" @click="$emit('close')" />
         </div>
         <div class="right">
           <div class="flex-line2">
@@ -288,6 +288,15 @@ export default defineComponent({
   width: 40px;
   height: 40px;
   cursor: pointer;
+}
+
+.back-button {
+  background: #ffffff;
+  margin: 0 10px 0 0;
+  height: 42px;
+  font-size: 16px;
+  border-radius: 5px;
+  color: #343e5c;
 }
 
 .patient-research {
