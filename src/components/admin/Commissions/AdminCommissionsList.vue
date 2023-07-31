@@ -28,7 +28,7 @@
     </ModalWindow>
     <!--    :background="patientDiagnosis.mkbItemId === commission.drugId ? '#dff2f8' : ''"-->
     <ModalWindow :show="showModalMedicine" title="Выберите лекарство" @close="showModalMedicine = false">
-      <CommissionDrugForm :commission="selectedCommission" @select="(e) => selectDrug(e, selectedCommission)" />
+      <CommissionDrugForm :commission="selectedCommission" @select="(e) => setDrugRecipe(e, selectedCommission)" />
     </ModalWindow>
 
     <div class="filter-block">
@@ -141,7 +141,7 @@
                       title="лекарство"
                       @click="openModalMedicine(commission)"
                     >
-                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getName() : ''" custom-class="medicine" />
+                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
                       <SmallDatePicker
@@ -304,10 +304,11 @@ export default defineComponent({
       showModalDoctorList.value = true;
     };
 
-    const selectDrug = async (drug: DrugRecipe, c: Commission): Promise<void> => {
+    const setDrugRecipe = async (drugRecipe: DrugRecipe, c: Commission): Promise<void> => {
       const findedCommission = commissions.value.find((com: Commission) => com.id === c.id);
       if (findedCommission) {
-        findedCommission.setDrugRecipe(drug);
+        findedCommission.setDrugRecipe(drugRecipe);
+        console.log(drugRecipe);
         showModalMedicine.value = false;
         await updateCommission(findedCommission);
       }
@@ -315,7 +316,7 @@ export default defineComponent({
 
     return {
       selectedCommission,
-      selectDrug,
+      setDrugRecipe,
       infoItemToggle,
       setPatientDiagnosis,
       fillCommissionDownload,

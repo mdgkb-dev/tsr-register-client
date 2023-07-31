@@ -1,30 +1,35 @@
 <template>
-  <GridContainer grid-gap="5px" margin="10px 0">
-    <Button button-class="change-button" @click="stepper.decreaseStep()" />
-    <Button
-      v-for="item in stepsArrays[stepper.getStep()]"
-      :key="item.id"
-      button-class="change-button"
-      :text="item.getName()"
-      @click="stepper.actStepFunc(item)"
-    />
-  </GridContainer>
+  <Button v-if="stepper.getStepNumber() > 0" button-class="change-button" text="Назад" @click="stepper.decreaseStep()" />
+  <div v-if="mounted">
+    <GridContainer grid-gap="5px" margin="10px 0">
+      <Button
+        v-for="item in stepsArrays[stepper.getStepNumber()]"
+        :key="item.id"
+        button-class="change-button"
+        :text="item.getName()"
+        @click="stepper.actStepFunc(item)"
+      />
+    </GridContainer>
+  </div>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, ref } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
 import Drug from '@/classes/Drug';
 import DrugDoze from '@/classes/DrugDoze';
 import DrugForm from '@/classes/DrugForm';
 import DrugRecipe from '@/classes/DrugRecipe';
-import Stepper from '@/classes/Stepper';
+import Step from '@/classes/stepper/Step';
+import Stepper from '@/classes/stepper/Stepper';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import Button from '@/components/Base/Button.vue';
+import DrugDozesFiltersLib from '@/libs/filters/DrugDozesFiltersLib';
+import DrugFormsFiltersLib from '@/libs/filters/DrugFormsFiltersLib';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'CommissionDrugForm',
   components: {
@@ -34,50 +39,67 @@ export default defineComponent({
   emits: ['select'],
   setup(_, { emit }) {
     const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
-    const drug: ComputedRef<Drug> = computed(() => Provider.store.getters['drugs/item']);
+    const drugForms: ComputedRef<DrugForm[]> = computed(() => Provider.store.getters['drugForms/items']);
+    const drugDozes: ComputedRef<DrugDoze[]> = computed(() => Provider.store.getters['drugDozes/items']);
     const drugRecipe: ComputedRef<DrugRecipe> = computed(() => Provider.store.getters['drugRecipes/item']);
-    const drugForm: ComputedRef<DrugForm> = computed(() => Provider.store.getters['drugForms/item']);
+
+    const mounted = ref(false);
+    const stepsArrays = ref();
+    const stepper: Ref<Stepper> = ref(new Stepper([]));
 
     onBeforeMount(async () => {
       const filterQuery = new FilterQuery();
       filterQuery.pagination.limit = 0;
       filterQuery.setSortModel(DrugsSortsLib.byNameINN());
       await Provider.store.dispatch('drugs/getAll', filterQuery);
+
+      stepsArrays.value = {
+        0: drugs,
+        1: drugForms,
+        2: drugDozes,
+      };
+
+      stepper.value = new Stepper([
+        new Step(selectDrug, 'Выберите лекарство'),
+        new Step(selectDrugForm, 'Выберите форму выпуска'),
+        new Step(selectDrugDoze, 'Выберите дозировку'),
+      ]);
+
+      mounted.value = true;
     });
 
     const selectDrug = async (item: Drug): Promise<void> => {
-      stepper.getStepFunc()(item);
+      const filterQuery = new FilterQuery();
+      filterQuery.setFilterModel(DrugFormsFiltersLib.byDrugId(item.id));
+      filterQuery.pagination.limit = 0;
+      await Provider.store.dispatch('drugForms/getAll', filterQuery);
+      drugRecipe.value.setDrug(item);
     };
 
-    const selectDrugForm = (item: DrugForm): void => {
-      stepper.getStepFunc()(item);
+    const selectDrugForm = async (item: DrugForm): Promise<void> => {
+      const filterQuery = new FilterQuery();
+      filterQuery.setFilterModel(DrugDozesFiltersLib.byDrugFormId(item.id));
+      filterQuery.pagination.limit = 0;
+      await Provider.store.dispatch('drugDozes/getAll', filterQuery);
+      drugRecipe.value.setDrugForm(item);
     };
 
     const selectDrugDoze = async (item: DrugDoze): Promise<void> => {
       drugRecipe.value.setDrugDoze(item);
-      await Provider.store.dispatch('drugRecipes/create', drugRecipe.value);
+      drugRecipe.value.id = uuidv4();
+      await Provider.store.dispatch('drugRecipes/createWithoutReset', drugRecipe.value);
       emit('select', drugRecipe.value);
     };
 
-    const stepsArrays = ref({
-      0: drugs.value,
-      1: drug.value.drugForms,
-      2: drugForm.value.drugDozes,
-    });
-
-    const stepper = new Stepper(drugRecipe.value.getStepsFunctions, selectDrugDoze);
-
     return {
+      mounted,
       stepper,
       stepsArrays,
       drugRecipe,
       selectDrugDoze,
-      drugForm,
       selectDrugForm,
-      drug,
       selectDrug,
       drugs,
-      ...Provider.getAdminLib(),
     };
   },
 });

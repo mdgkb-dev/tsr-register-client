@@ -19,6 +19,7 @@ import { drugApplications } from '@/store/modules/drugApplications';
 import { drugApplicationsStatuses } from '@/store/modules/drugApplicationsStatuses';
 import { drugArrives } from '@/store/modules/drugArrives';
 import { drugDecreases } from '@/store/modules/drugDecreases';
+import { drugDozes } from '@/store/modules/drugDozes';
 import { drugForms } from '@/store/modules/drugForms';
 import { drugRecipes } from '@/store/modules/drugRecipes';
 import { drugs } from '@/store/modules/drugs';
@@ -112,6 +113,7 @@ const store: StoreOptions<RootState> = {
     documents,
     documentFieldValues,
     documentFileInfos,
+    drugDozes,
   },
 };
 

@@ -39,30 +39,30 @@ export default class DrugRecipe {
   }
 
   getName(): string {
-    if (!this.drug) {
-      return '';
-    }
-    return this.drug.nameINN;
+    return this.drug ? this.drug.nameINN : '';
   }
 
-  setDrug(item?: Drug) {
+  setDrug(item?: Drug): void {
     this.drug = item;
     this.drugId = item ? item.id : undefined;
     this.setDrugForm();
   }
 
-  setDrugForm(item?: DrugForm) {
+  setDrugForm(item?: DrugForm): void {
     this.drugForm = item;
     this.drugFormId = item ? item.id : undefined;
     this.setDrugDoze();
   }
 
-  setDrugDoze(item?: DrugDoze) {
+  setDrugDoze(item?: DrugDoze): void {
     this.drugDoze = item;
     this.drugDozeId = item ? item.id : undefined;
   }
 
-  getStepsFunctions() {
-    return [this.setDrug.bind(this), this.setDrugForm.bind(this)];
+  getFullName(): string {
+    const drugName = this.drug ? this.drug.name : '';
+    const drugFormName = this.drugForm ? this.drugForm.name : '';
+    const drugDozeName = this.drugDoze ? this.drugDoze.name : '';
+    return `${drugName}, ${drugFormName}, ${drugDozeName}`;
   }
 }
