@@ -9,4 +9,8 @@ export default class DrugDoze {
   constructor(i?: DrugDoze) {
     ClassHelper.BuildClass(this, i);
   }
+
+  getName(): string {
+    return this.name;
+  }
 }

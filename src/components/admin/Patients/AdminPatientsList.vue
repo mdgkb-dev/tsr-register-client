@@ -39,7 +39,7 @@
 
                   <AdminPatientsListRepresentatives :patient="patient" :edit-mode="editMode" />
                   <AdminPatientsListMkb :patient="patient" :edit-mode="editMode" />
-                  <AdminPatientsListDocuments :patient="patient" :edit-mode="editMode" />
+                  <ToggleDocumentsForm :human="patient.human" />
                 </GridContainer>
               </div>
             </div>
@@ -57,12 +57,12 @@ import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import AdminPatientsListDisability from '@/components/admin/Patients/AdminPatientsListDisability.vue';
-import AdminPatientsListDocuments from '@/components/admin/Patients/AdminPatientsListDocuments.vue';
 import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
 import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
 import AdminPatientsListRegisters from '@/components/admin/Patients/AdminPatientsListRegisters.vue';
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
@@ -88,7 +88,8 @@ export default defineComponent({
     AdminPatientsListMkb,
     AdminPatientsListRegisters,
     AdminPatientsListDisability,
-    AdminPatientsListDocuments,
+
+    ToggleDocumentsForm,
   },
   setup() {
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);

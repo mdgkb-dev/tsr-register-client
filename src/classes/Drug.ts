@@ -26,4 +26,8 @@ export default class Drug {
   addDrugRegimen(item: DrugRegimen): void {
     this.drugRegimens.push(item);
   }
+
+  getName(): string {
+    return this.nameINN;
+  }
 }

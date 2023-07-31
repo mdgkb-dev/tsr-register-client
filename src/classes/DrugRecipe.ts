@@ -44,4 +44,25 @@ export default class DrugRecipe {
     }
     return this.drug.nameINN;
   }
+
+  setDrug(item?: Drug) {
+    this.drug = item;
+    this.drugId = item ? item.id : undefined;
+    this.setDrugForm();
+  }
+
+  setDrugForm(item?: DrugForm) {
+    this.drugForm = item;
+    this.drugFormId = item ? item.id : undefined;
+    this.setDrugDoze();
+  }
+
+  setDrugDoze(item?: DrugDoze) {
+    this.drugDoze = item;
+    this.drugDozeId = item ? item.id : undefined;
+  }
+
+  getStepsFunctions() {
+    return [this.setDrug.bind(this), this.setDrugForm.bind(this)];
+  }
 }

@@ -1,12 +1,12 @@
 <template>
-  <InfoItem title="документы" margin="0 0 0 0px" :with-hover="editMode" :with-open-window="editMode">
-    <div v-for="document in patient.human.documents" :key="document">
+  <InfoItem title="документы" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
+    <div v-for="document in human.documents" :key="document">
       <StringItem :string="document.documentType.getTagName()" font-size="14px" />
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))">
-        <div v-for="document in patient.human.documents" :key="document">
+      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
+        <div v-for="document in human.documents" :key="document">
           <InfoItem
             icon="del"
             margin="0"
@@ -35,7 +35,7 @@
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import DocumentType from '@/classes/DocumentType';
-import Patient from '@/classes/Patient';
+import Human from '@/classes/Human';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
@@ -46,7 +46,7 @@ import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'AdminPatientsListDocuments',
+  name: 'ToggleDocumentsForm',
   components: {
     DocumentForm,
     ModalWindow,
@@ -56,12 +56,8 @@ export default defineComponent({
     Button,
   },
   props: {
-    patient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    },
-    editMode: {
-      type: Boolean as PropType<boolean>,
+    human: {
+      type: Object as PropType<Human>,
       required: true,
     },
   },
@@ -72,7 +68,7 @@ export default defineComponent({
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
 
     const removeDocument = async (id?: string) => {
-      ClassHelper.RemoveFromClassById(id, props.patient.human.documents);
+      ClassHelper.RemoveFromClassById(id, props.human.documents);
       showDocumentModal.value = false;
       Provider.store.commit('documents/set');
     };
@@ -86,9 +82,9 @@ export default defineComponent({
 
     const addDocument = async (id: string) => {
       await Provider.store.dispatch('documentTypes/get', id);
-      const item = props.patient.human.addDocument(documentType.value);
+      const item = props.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/createWithoutReset', item);
-      await selectDocument(props.patient.human.documents[props.patient.human.documents.length - 1].id);
+      await selectDocument(props.human.documents[props.human.documents.length - 1].id);
     };
 
     const selectDocument = async (id?: string) => {

@@ -14,4 +14,8 @@ export default class DrugForm {
   constructor(i?: DrugForm) {
     ClassHelper.BuildClass(this, i);
   }
+
+  getName(): string {
+    return this.name;
+  }
 }

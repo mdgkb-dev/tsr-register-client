@@ -28,7 +28,7 @@
                   margin="0"
                 >
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
-                    <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
+                    <InfoItem title="дата рождения" margin="0" :with-open-window="false">
                       <SmallDatePicker
                         v-model:model-value="representative.human.dateBirth"
                         placeholder="Выбрать"
@@ -36,6 +36,7 @@
                       />
                     </InfoItem>
                   </GridContainer>
+                  <ToggleDocumentsForm :human="representative.human" />
                 </GridContainer>
               </div>
             </div>
@@ -53,6 +54,7 @@ import Human from '@/classes/Human';
 import Representative from '@/classes/Representative';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
@@ -73,6 +75,7 @@ export default defineComponent({
     CollapseItem,
     Button,
     SmallDatePicker,
+    ToggleDocumentsForm,
   },
   setup() {
     const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);

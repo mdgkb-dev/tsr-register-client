@@ -1,31 +1,24 @@
 <template>
   <GridContainer grid-gap="5px" margin="10px 0">
-    <template v-if="!drug.id">
-      <Button v-for="drug in drugs" :key="drug.id" button-class="change-button" :text="drug.nameINN" @click="selectDrug(drug)" />
-    </template>
-    <template v-if="drug.id && !drugForm.id">
-      <Button v-for="form in drug.drugForms" :key="form.id" button-class="change-button" :text="form.name" @click="selectDrugForm(form)" />
-    </template>
-    <template v-if="drugForm.id">
-      <Button
-        v-for="drugDoze in drugForm.drugDozes"
-        :key="drugDoze.id"
-        button-class="change-button"
-        :text="drugDoze.name"
-        @click="selectDrugDoze(drugDoze)"
-      />
-    </template>
+    <Button button-class="change-button" @click="stepper.decreaseStep()" />
+    <Button
+      v-for="item in stepsArrays[stepper.getStep()]"
+      :key="item.id"
+      button-class="change-button"
+      :text="item.getName()"
+      @click="stepper.actStepFunc(item)"
+    />
   </GridContainer>
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, PropType } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, ref } from 'vue';
 
-import Commission from '@/classes/Commission';
 import Drug from '@/classes/Drug';
 import DrugDoze from '@/classes/DrugDoze';
 import DrugForm from '@/classes/DrugForm';
 import DrugRecipe from '@/classes/DrugRecipe';
+import Stepper from '@/classes/Stepper';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import Button from '@/components/Base/Button.vue';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
@@ -38,17 +31,11 @@ export default defineComponent({
     Button,
     GridContainer,
   },
-  props: {
-    commission: {
-      type: Object as PropType<Commission>,
-      required: true,
-    },
-  },
   emits: ['select'],
   setup(_, { emit }) {
     const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
     const drug: ComputedRef<Drug> = computed(() => Provider.store.getters['drugs/item']);
-    const drugRecipe: ComputedRef<Drug> = computed(() => Provider.store.getters['drugRecipes/item']);
+    const drugRecipe: ComputedRef<DrugRecipe> = computed(() => Provider.store.getters['drugRecipes/item']);
     const drugForm: ComputedRef<DrugForm> = computed(() => Provider.store.getters['drugForms/item']);
 
     onBeforeMount(async () => {
@@ -59,26 +46,31 @@ export default defineComponent({
     });
 
     const selectDrug = async (item: Drug): Promise<void> => {
-      await Provider.store.dispatch('drugs/get', item.id);
+      stepper.getStepFunc()(item);
     };
 
     const selectDrugForm = (item: DrugForm): void => {
-      Provider.store.commit('drugForms/set', item);
-    };
-
-    const createRecipe = async (item: DrugDoze): Promise<DrugRecipe> => {
-      const drugRecipe = DrugRecipe.Create(drug.value, drugForm.value, item);
-      await Provider.store.dispatch('drugRecipes/create', drugRecipe);
-      return drugRecipe;
+      stepper.getStepFunc()(item);
     };
 
     const selectDrugDoze = async (item: DrugDoze): Promise<void> => {
-      const drugRecipe = await createRecipe(item);
-      console.log(drugRecipe);
-      emit('select', drugRecipe);
+      drugRecipe.value.setDrugDoze(item);
+      await Provider.store.dispatch('drugRecipes/create', drugRecipe.value);
+      emit('select', drugRecipe.value);
     };
 
+    const stepsArrays = ref({
+      0: drugs.value,
+      1: drug.value.drugForms,
+      2: drugForm.value.drugDozes,
+    });
+
+    const stepper = new Stepper(drugRecipe.value.getStepsFunctions, selectDrugDoze);
+
     return {
+      stepper,
+      stepsArrays,
+      drugRecipe,
       selectDrugDoze,
       drugForm,
       selectDrugForm,
