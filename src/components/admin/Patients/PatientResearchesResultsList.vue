@@ -473,6 +473,10 @@ export default defineComponent({
   margin-right: 10px;
 }
 
+:deep(.el-input__inner) {
+  background: inherit;
+}
+
 :deep(.el-timeline) {
   padding: 0 0 0 10px;
 }
