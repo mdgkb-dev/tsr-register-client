@@ -1,15 +1,15 @@
 <template>
   <el-form v-if="document.id">
-    <Button text="добавить документ" @click="addFile" />
-    <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id">
+    <Button button-class="plus-button" @click="addFile" text='Добавить скан документа'/>
+    <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id" class="background-field">
       <FileUploader :file-info="documentFileInfo.fileInfo" />
-      <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeFile(documentFileInfo.id)" />
+      <Button button-class="delete-button" icon-class="edit-icon" @click="removeFile(documentFileInfo.id)" text="Удалить файл"/>
     </div>
-    <div v-for="value in document.documentFieldValues" :key="value.id">
+    <div v-for="value in document.documentFieldValues" :key="value.id" class="margin-field">
       <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
         <el-input v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
       </el-form-item>
-
+      
       <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
         <el-input-number v-model="document.valueNumber" size="mini" @blur="updateDocumentField(value)" />
       </el-form-item>
@@ -26,7 +26,7 @@
         />
       </el-form-item>
     </div>
-    <Button text="удалить" @click="removeDocument" />
+    <Button button-class="delete-document-button" @click="removeDocument" text="Удалить документ"/>
   </el-form>
 </template>
 
@@ -88,6 +88,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.background-field{
+  // margin-left: 20px;
+  background: $grey-background;
+  margin-top: 10px;
+  width: calc(100% - 22px);
+  padding: 10px;
+  border-radius: $normal-border-radius;
+  border: $normal-border;
+}
+
+.margin-field {
+  // margin-left: 20px;
+}
 
 .xlsx-button {
   width: auto;
@@ -270,19 +284,35 @@ export default defineComponent({
 }
 
 .plus-button {
-  width: calc(100% - 20px);
+  width: 100%;
   border-radius: 5px;
+  height: 42px;
   color: #00bea5;
   background: #c1efeb;
-  height: 60px;
-  margin: 0 10px;
+  margin: 0px 10px 0 0;
+  font-size: 14px;
 }
 
-:deep(.icon-plus) {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+.delete-button {
+  width: 120px;
+  border-radius: 5px;
+  height: 42px;
+  color: #E62C21;
+  background: #eeb2af;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
 }
+
+.delete-document-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #E62C21;
+  background: #eeb2af;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
+}
+
 
 .patient-research {
   position: relative;
@@ -496,6 +526,25 @@ export default defineComponent({
   margin-right: 10px;
 }
 
+.save-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
+}
+
+:deep(.del-button) {
+  width: 42px;
+  height: 42px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #343e5c;
+  border: none;
+}
+
 :deep(.el-timeline) {
   padding: 0 0 0 10px;
 }
@@ -511,6 +560,53 @@ export default defineComponent({
 :deep(.el-timeline-item__wrapper) {
   padding-left: 20px;
 }
+
+  .el-select {
+    width: 100%;
+  }
+  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+    width: 100%;
+  }
+
+
+  :deep(.el-form-item) {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  :deep(.el-input__inner) {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    font-family: Comfortaa, Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-input__inner::placeholder) {
+    color: $site_light_pink;
+  }
+
+  :deep(.el-input__icon) {
+    color: $site_dark_gray;
+  }
+
+  :deep(.el-form-item__label) {
+    color: $site_light_pink;
+    padding: 0 !important;
+    text-transform: uppercase;
+    margin-left: 5px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  :deep(.el-input-number__increase) {
+    border-radius: 0px;
+  }
+
+  :deep(.el-input-number__decrease) {
+    border-radius: 0px;
+  }
 
 @media screen and (max-width: 768px) {
   .tabs-item {
