@@ -52,7 +52,9 @@
           </template>
 
           <template #body>
-            <DocumentForm v-if="document.id" @remove="removeDocument" />
+            <div class="padding-field">
+              <DocumentForm v-if="document.id" @remove="removeDocument" />
+            </div>
           </template>
         </ResearcheContainer>
       </div>
@@ -151,6 +153,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.padding-field {
+  padding: 10px;
+}
 
 .xlsx-button {
   width: auto;

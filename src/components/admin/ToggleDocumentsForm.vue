@@ -1,18 +1,17 @@
 <template>
   <InfoItem title="документы" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
     <div v-for="document in human.documents" :key="document">
-      <StringItem :string="document.documentType.getTagName()" font-size="14px" />
+      <StringItem :string="document.documentType.getTagName() + ',&nbsp'" font-size="14px" width="100%"/>
     </div>
 
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
         <div v-for="document in human.documents" :key="document">
           <InfoItem
-            icon="del"
+            icon="edit-title"
             margin="0"
             :with-open-window="false"
             height="32px"
-            color-selected="#E46862"
             @click="selectDocument(document.id)"
           >
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />

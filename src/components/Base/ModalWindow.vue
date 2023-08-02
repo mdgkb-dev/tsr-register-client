@@ -11,9 +11,7 @@
     <template #title>
       {{ title }}
     </template>
-    <el-row>
-      <slot />
-    </el-row>
+    <slot />
   </el-dialog>
 </template>
 
@@ -115,16 +113,17 @@ export default defineComponent({
   justify-content: space-between;
 }
 
-.el-row {
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
+// .el-row {
+//   display: block;
+//   &:last-child {
+//     margin-bottom: 0;
+//   }
+// }
 
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
+// .row-bg {
+//   padding: 10px 0;
+//   background-color: #f9fafc;
+// }
 
 .modal-wrapper {
   width: 100%;
