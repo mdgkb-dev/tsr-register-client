@@ -25,6 +25,7 @@ export default class Patient {
   id?: string;
   patientHistoryId?: string;
   human = new Human();
+  humanId?: string;
   regionId?: string;
   // history?: IHistory = new History();
   @ClassHelper.GetClassConstructor(PatientRepresentative)
@@ -79,6 +80,14 @@ export default class Patient {
       return;
     }
     this.commissions = i.commissions ? i.commissions.map((i: Commission) => new Commission(i)) : [];
+  }
+
+  static Create(): Patient {
+    const item = new Patient();
+    item.id = uuidv4();
+    item.human.id = uuidv4();
+    item.humanId = item.human.id;
+    return item;
   }
 
   getActuallyDisability(): Disability | undefined {

@@ -23,7 +23,7 @@
       <div class="left-info">
         <div v-if="patient.getActuallyDisability()">
           <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" ::size="20">
-            <div style="color: #a1a8bd">До {{ $dateTimeFormatter.format(patient.getActuallyDisability().period.dateEnd) }}</div>
+            <div style="color: #a1a8bd">До {{ $dateTimeFormatter.format(patient.getActuallyDisability()?.period?.dateEnd) }}</div>
             <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
                 >A</el-button
@@ -51,7 +51,6 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
-import ContactForm from '@/components/admin/Patients/ContactForm.vue';
 import LeftRightContainer from '@/components/admin/Patients/LeftRightContainer.vue';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
@@ -65,7 +64,7 @@ export default defineComponent({
     UploaderSingleScan,
     LeftRightContainer,
     PassportForm,
-    ContactForm,
+    // ContactForm,
   },
   setup() {
     const checked = ref(true);
@@ -118,5 +117,4 @@ export default defineComponent({
   margin-top: 3px;
   margin-left: 10px;
 }
-
 </style>
