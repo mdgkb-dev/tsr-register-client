@@ -239,6 +239,7 @@ export default defineComponent({
   border-radius: 5px;
   color: #006bb4;
   background: #dff2f8;
+  margin-right: 10px;
 }
 
 :deep(.files-buttons) {
@@ -327,7 +328,8 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
+  width: 100%;
+  margin-right: 10px;
   padding: 0px;
 }
 
@@ -335,7 +337,8 @@ export default defineComponent({
   display: flex;
   justify-content: right;
   align-items: center;
-  width: auto;
+  width: 100%;
+  min-width: 210px;
   padding: 0px;
 }
 

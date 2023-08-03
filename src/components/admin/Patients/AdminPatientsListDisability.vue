@@ -1,5 +1,5 @@
 <template>
-  <InfoItem title="инвалидность" icon="edit-title" margin="0" :with-open-window="false" :with-hover="editMode">
+  <InfoItem width="100%" title="инвалидность" icon="edit-title" margin="0" :with-open-window="false" :with-hover="editMode">
     <div v-if="patient.getActuallyDisability()?.getActuallyEdv()" class="disability-circles">
       <StringItem string="А" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? 'edv-active' : 'edv'" />
       <StringItem string="В" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter2 ? 'edv-active' : 'edv'" />
