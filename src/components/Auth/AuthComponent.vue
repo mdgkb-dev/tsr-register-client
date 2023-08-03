@@ -12,13 +12,15 @@
           <el-input v-model="auth.profile.password" placeholder="Пароль" type="password" />
         </el-form-item>
         <div class="btn-group">
-          <Button
+          <Button text="Войти" button-class="save-button" @click="authButtonClick(AuthButton.Login(true))" />
+          <!-- Для всех режимов: -->
+          <!-- <Button
             v-for="authButton in auth.getAuthButtons()"
             :key="authButton.getStatus()"
-            @click="authButtonClick(authButton)"
             :text="authButton.isSubmit ? 'Продолжить' : authButton.label"
             button-class="save-button"
-          />
+            @click="authButtonClick(authButton)"
+          /> -->
         </div>
       </el-form>
     </div>
@@ -29,11 +31,12 @@
 import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent, ref } from 'vue';
 
+import Button from '@/components/Base/Button.vue';
 import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import Auth from '@/services/classes/auth/Auth';
 import AuthButton from '@/services/classes/auth/AuthButton';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
+import validate from '@/services/validate';
 
 export default defineComponent({
   name: 'AuthComponent',
@@ -85,9 +88,9 @@ export default defineComponent({
       if (!authButton.isSubmit) {
         return auth.value.setStatus(authButton.getStatus());
       }
-      // if (!(await validate(form, false))) {
-      //   return;
-      // }
+      if (!(await validate(form, false))) {
+        return;
+      }
       try {
         await Provider.store.dispatch(`auth/${auth.value.status}`);
         const message = auth.value.getSuccessMessage();
@@ -109,6 +112,7 @@ export default defineComponent({
       authButtonClick,
       rules,
       form,
+      AuthButton,
     };
   },
 });
@@ -167,7 +171,9 @@ h3 {
 .btn-group {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  // Для всех режимов:
+  // justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
 }
 .auth-btn {
@@ -204,5 +210,4 @@ h3 {
     font-size: 14px;
   }
 }
-
 </style>

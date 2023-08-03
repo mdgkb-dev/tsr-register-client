@@ -1,29 +1,67 @@
 <template>
-  <InfoItem
-    margin="0 0 0 10px"
-    border-color="#ffffff"
-    :with-hover="false"
-    :with-open-window="editMode"
-    :close="closeToggle"
-    @keyup-enter="updateHumanName()"
-  >
-    <StringItem :string="human.getFullName()" custom-class="patient-name" @click="human.setEditNameMode(true)" />
-
-    <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
-        <InfoItem title="фамилия" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" />
-        </InfoItem>
-        <InfoItem title="имя" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" />
-        </InfoItem>
-        <InfoItem title="отчество" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" padding="0">
-          <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" />
-        </InfoItem>
-        <Button button-class="save-button" text="Сохранить" @click="submit" />
-      </GridContainer>
-    </template>
-  </InfoItem>
+  <el-form ref="form" :model="humanCopy" style="width: 100%">
+    <InfoItem
+      title="ФИО"
+      :show-save-dialog="true"
+      icon="edit-title"
+      :with-hover="true"
+      :close="closeToggle"
+      width="100%"
+      @keyup-enter="submit"
+    >
+      <StringItem :string="human.getFullName()" />
+      <template #open-inside-content>
+        <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
+          <InfoItem
+            title="фамилия"
+            icon="edit-title"
+            :with-open-window="false"
+            :with-hover="false"
+            border-color="#ffffff"
+            base-box-margin="0 0 15px 0"
+            padding="0"
+            width="100%"
+          >
+            <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname">
+              <el-input v-model="humanCopy.surname" />
+              <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
+            </el-form-item>
+          </InfoItem>
+          <InfoItem
+            title="имя"
+            icon="edit-title"
+            :with-open-window="false"
+            :with-hover="false"
+            border-color="#ffffff"
+            base-box-margin="0 0 15px 0"
+            padding="0"
+            width="100%"
+          >
+            <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name">
+              <el-input v-model="humanCopy.name" />
+              <!-- <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" /> -->
+            </el-form-item>
+          </InfoItem>
+          <InfoItem
+            title="отчество"
+            icon="edit-title"
+            :with-open-window="false"
+            :with-hover="false"
+            border-color="#ffffff"
+            base-box-margin="0 0 15px 0"
+            padding="0"
+            width="100%"
+          >
+            <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic">
+              <el-input v-model="humanCopy.patronymic" />
+              <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
+            </el-form-item>
+          </InfoItem>
+          <Button button-class="save-button" text="Сохранить" @click="submit" />
+        </GridContainer>
+      </template>
+    </InfoItem>
+  </el-form>
 </template>
 
 <script lang="ts">
@@ -35,6 +73,7 @@ import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
+import validate from '@/services/validate';
 
 export default defineComponent({
   name: 'FioToggleForm',
@@ -50,16 +89,22 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const closeToggle: Ref<boolean> = ref(false);
+    const form = ref();
+    const humanCopy: Ref<Human> = ref(new Human(props.human));
 
     const updateHuman = async (): Promise<void> => {
+      props.human.setFullName(humanCopy.value);
       await Provider.withHeadLoader(async () => {
         await Provider.store.dispatch('humans/update', props.human);
       });
     };
 
     const submit = async (): Promise<void> => {
+      if (!validate(form)) {
+        return;
+      }
       closeToggle.value = !closeToggle.value;
       await updateHumanName();
     };
@@ -73,13 +118,14 @@ export default defineComponent({
       closeToggle,
       submit,
       updateHumanName,
+      form,
+      humanCopy,
     };
   },
 });
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
-
 .button {
   width: auto;
   height: 34px;

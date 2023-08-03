@@ -11,7 +11,13 @@
       <div v-if="!isToggle" class="close-window" :style="closeWindowStyle" :class="customClass">
         <slot />
       </div>
-      <div v-if="isToggle" id="info-item-opened-content" v-click-outside="outsideClick" class="open-window" :style="openWindowStyle">
+      <div
+        v-if="isToggle"
+        id="info-item-opened-content"
+        v-click-outside.prevent="outsideClick"
+        class="open-window"
+        :style="openWindowStyle"
+      >
         <slot name="open-inside-content" />
       </div>
       <div class="top-title" :style="topTitleStyle">
@@ -33,11 +39,24 @@
       </div>
     </div>
   </div>
+  <el-dialog
+    v-if="showSaveDialog"
+    v-model="isMessageBoxOpen"
+    center
+    width="500px"
+    title="У вас остались несохраненные изменения, вы уверены что хотите закрыть окно?"
+  >
+    <div style="display: flex; justify-content: center">
+      <el-button size="small" type="danger" @click="notSaveClickHandler">Не сохранять</el-button>
+      <el-button size="small" type="success" @click="saveClickHandler">Сохранить</el-button>
+    </div>
+  </el-dialog>
   <EditTitle />
   <Del />
 </template>
 
 <script lang="ts">
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { computed, defineComponent, nextTick, PropType, Ref, ref, watch } from 'vue';
 
 import Del from '@/assets/svg/Del.svg';
@@ -69,6 +88,8 @@ export default defineComponent({
     title: { type: String as PropType<string>, required: false, default: '' },
     customClass: { type: String as PropType<string>, required: false, default: '' },
     close: { type: Boolean as PropType<boolean>, required: false, default: true },
+    baseBoxMargin: { type: String as PropType<string>, required: false, default: '' },
+    showSaveDialog: { type: Boolean as PropType<boolean>, required: false, default: false },
   },
   emits: ['click', 'keyup-enter'],
   setup(props, { emit }) {
@@ -77,6 +98,7 @@ export default defineComponent({
     const hovering = ref(false);
 
     const isToggle: Ref<boolean> = ref(false);
+    const isMessageBoxOpen: Ref<boolean> = ref(false);
     const localClose: Ref<boolean> = ref(props.close);
 
     watch(
@@ -88,13 +110,39 @@ export default defineComponent({
     );
 
     const keysHandler = (e: KeyboardEvent) => {
+      e.stopPropagation();
       if (e.key === 'Escape') {
-        isToggle.value = false;
+        if (props.showSaveDialog) {
+          isMessageBoxOpen.value = true;
+        } else {
+          isToggle.value = false;
+        }
       }
-      if (e.key === 'Enter') {
-        emit('keyup-enter');
-        isToggle.value = false;
-      }
+      // Прописывать в родителе @keyup-enter="submit"
+      // if (e.key === 'Enter') {
+      // emit('keyup-enter');
+      // isToggle.value = false;
+      // }
+    };
+
+    const message = async () => {
+      return await ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+      })
+        .then(() => {
+          ElMessage({
+            type: 'success',
+            message: 'Delete completed',
+          });
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: 'Delete canceled',
+          });
+        });
     };
 
     watch(isToggle, async () => {
@@ -120,15 +168,17 @@ export default defineComponent({
       }
     };
 
-    const baseBoxStyle =
-      props.customClass === ''
+    const baseBoxStyle = computed(() => {
+      return props.customClass === ''
         ? {
             width: props.width,
             height: '40px',
             maxWidth: props.maxWidth,
             minWidth: props.minWidth,
+            margin: props.baseBoxMargin,
           }
         : undefined;
+    });
 
     const windowOpened = computed(() => isToggle.value && props.withOpenWindow);
 
@@ -177,8 +227,49 @@ export default defineComponent({
       };
     });
 
-    const outsideClick = () => {
+    const outsideClick = (e: Event) => {
+      // console.log('outsideClick');
+      // console.log('isMessageBoxOpen.value', isMessageBoxOpen.value);
+      // if (!isMessageBoxOpen.value) {
+      //   isMessageBoxOpen.value = true;
+
+      //   ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
+      //     confirmButtonText: 'OK',
+      //     cancelButtonText: 'Cancel',
+      //     type: 'warning',
+      //   })
+      //     .then(() => {
+      //       ElMessage({
+      //         type: 'success',
+      //         message: 'Delete completed',
+      //       });
+      //       isToggle.value = false;
+      //       isMessageBoxOpen.value = false;
+      //     })
+      //     .catch(() => {
+      //       ElMessage({
+      //         type: 'info',
+      //         message: 'Delete canceled',
+      //       });
+      //       isMessageBoxOpen.value = false;
+      //     });
+      // }
+      if (props.showSaveDialog) {
+        isMessageBoxOpen.value = true;
+      } else {
+        isToggle.value = false;
+      }
+    };
+
+    const saveClickHandler = async () => {
+      await emit('keyup-enter');
       isToggle.value = false;
+      isMessageBoxOpen.value = false;
+    };
+
+    const notSaveClickHandler = () => {
+      isToggle.value = false;
+      isMessageBoxOpen.value = false;
     };
 
     return {
@@ -194,6 +285,9 @@ export default defineComponent({
       hovering,
       isToggle,
       changeState,
+      isMessageBoxOpen,
+      saveClickHandler,
+      notSaveClickHandler,
     };
   },
 });
@@ -206,8 +300,8 @@ export default defineComponent({
   font-weight: normal;
   background: #ffffff;
   padding: 0 10px;
-  width: auto;
-  max-width: auto;
+  width: 100%;
+  max-width: 100%;
   min-width: 50px;
   margin: 0;
   height: 40px;
@@ -267,7 +361,6 @@ export default defineComponent({
   padding: 7px;
   width: calc(100% - 14px);
   margin-top: 5px;
-  
 }
 
 .blur {
@@ -283,5 +376,4 @@ export default defineComponent({
 :deep(.el-input__inner) {
   border-color: #b0a4c0;
 }
-
 </style>

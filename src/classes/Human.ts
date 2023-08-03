@@ -37,6 +37,12 @@ export default class Human {
     return `${this.surname} ${this.name} ${this.patronymic}`;
   }
 
+  setFullName(human: Human): void {
+    this.surname = human.surname;
+    this.name = human.name;
+    this.patronymic = human.patronymic;
+  }
+
   getGender(full?: boolean): string {
     if (full) {
       return this.isMale ? 'Мужской' : 'Женский';
@@ -101,5 +107,13 @@ export default class Human {
 
   setEditNameMode(value: boolean): void {
     this.editNameMode = value;
+  }
+
+  getValidationRules(): Record<string, Array<Record<string, string | boolean>>> {
+    return {
+      surname: [{ required: true, message: 'Необходимо указать фамилию', trigger: 'blur' }],
+      name: [{ required: true, message: 'Необходимо указать имя', trigger: 'blur' }],
+      patronymic: [{ required: true, message: 'Необходимо указать отчество', trigger: 'blur' }],
+    };
   }
 }
