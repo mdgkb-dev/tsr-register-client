@@ -34,7 +34,6 @@
                   <div class="line-item-left">
                     <Button
                       button-class="edit-button"
-                      color="#006bb4"
                       icon="outlined"
                       icon-class="edit-icon"
                       @click="openDrugArrivesModal(drugApplication)"
@@ -71,21 +70,7 @@
                         @change="updateDrugApplication(drugApplication)"
                       />
                     </InfoItem>
-                    <InfoItem
-                      :close="infoItemToggle"
-                      margin="0"
-                      width="100%"
-                      :with-open-window="false"
-                      title="комиссия"
-                      @click="openModalCommissions(drugApplication)"
-                    >
-                      <StringItem
-                        v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications"
-                        :key="commissionDrugApplication"
-                        :string="commissionDrugApplication.commission.number.toString()"
-                        custom-class="medicine"
-                      />
-                    </InfoItem>
+                    <ToggleCommissionsForm :drug-application="drugApplication" />
                   </GridContainer>
                 </div>
               </div>
@@ -109,6 +94,7 @@ import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
 import User from '@/classes/User';
 import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugApplicationFilesList.vue';
 import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
+import ToggleCommissionsForm from '@/components/admin/DrugApplications/ToggleCommissionsForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
@@ -143,6 +129,7 @@ export default defineComponent({
     SmallDatePicker,
     Del,
     DrugApplicationFilesList,
+    ToggleCommissionsForm,
   },
   setup() {
     const infoItemToggle: Ref<boolean> = ref(false);
@@ -213,6 +200,7 @@ export default defineComponent({
         return ElMessage.warning('Выбранная заявка уже добавлена');
       }
       const item = drugApplication.addCommission(commission);
+      infoItemToggle.value = !infoItemToggle.value;
       await Provider.store.dispatch('commissionsDrugApplications/create', item);
     };
 
