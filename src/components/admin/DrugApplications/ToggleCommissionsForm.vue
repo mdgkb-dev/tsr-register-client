@@ -18,10 +18,10 @@
           </InfoItem>
         </div>
 
-        <!--        <div v-if="isToggle">-->
-        <!--          <div v-for="commission in commissions" :key="commission.id" @click="addDocument(docType.id)">{{ docType.name }}</div>-->
-        <!--        </div>-->
-        <!--        <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggle(true)" />-->
+        <div v-if="isToggle">
+          <div v-for="commission in commissions" :key="commission.id" @click="add(commission.id)">{{ commission.number }}</div>
+        </div>
+        <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggle(true)" />
       </GridContainer>
     </template>
   </InfoItem>
@@ -33,11 +33,12 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
-import DocumentType from '@/classes/DocumentType';
+import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
 import CommissionCard from '@/components/admin/CommissionCard.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
@@ -50,6 +51,7 @@ export default defineComponent({
     InfoItem,
     GridContainer,
     CommissionCard,
+    Button,
   },
   props: {
     drugApplication: {
@@ -59,9 +61,8 @@ export default defineComponent({
   },
   setup(props) {
     const showModal: Ref<boolean> = ref(false);
-    const commissions: Ref<DocumentType[]> = computed(() => Provider.store.getters['commissions/items']);
+    const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const isToggle: Ref<boolean> = ref(false);
-    const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
 
     const remove = async (id?: string) => {
       // ClassHelper.RemoveFromClassById(id, props.human.documents);
@@ -71,7 +72,7 @@ export default defineComponent({
 
     const toggle = async (toggle: boolean) => {
       if (toggle) {
-        await Provider.store.dispatch('documentTypes/getAll');
+        await Provider.store.dispatch('commissions/getAll');
       }
       isToggle.value = toggle;
     };
@@ -92,11 +93,12 @@ export default defineComponent({
     return {
       toggleDocuments: toggle,
       add,
-      // documentTypes,
-      documentsIsToggle: isToggle,
+      commissions,
       remove,
       select,
       showModal,
+      isToggle,
+      toggle,
     };
   },
 });
