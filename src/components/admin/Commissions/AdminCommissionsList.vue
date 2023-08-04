@@ -4,6 +4,10 @@
       <PersonalityList />
     </ModalWindow>
 
+    <ModalWindow :show="showModalDrugApplications" title="Список комиссий" @close="showModalDrugApplications = false">
+      <CommissionDrugApplications />
+    </ModalWindow>
+
     <ModalWindow :show="templatesOpened" title="Выбрать шаблон комиссии" @close="templatesOpened = false">
       <GridContainer grid-gap="5px" margin="10px 0">
         <Button
@@ -159,6 +163,12 @@
                       color="#006bb4"
                       @click="fillCommissionDownload(commission)"
                     />
+                    <Button
+                      text="Заявки в ДЗМ"
+                      button-class="medical-commission-button"
+                      color="#006bb4"
+                      @click="openModalDrugApplications(commission)"
+                    />
                   </GridContainer>
                 </div>
               </div>
@@ -178,6 +188,7 @@ import CommissionTemplate from '@/classes/CommissionTemplate';
 import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import CommissionDrugApplications from '@/components/admin/Commissions/CommissionDrugApplications.vue';
 import CommissionDrugForm from '@/components/admin/Commissions/CommissionDrugForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
@@ -200,6 +211,7 @@ export default defineComponent({
   name: 'AdminCommissionsList',
   components: {
     CommissionDrugForm,
+    CommissionDrugApplications,
     CollapseContainer,
     RemoteSearch,
     AdminListWrapper,
@@ -224,6 +236,7 @@ export default defineComponent({
     const showModalDiagnosis: Ref<boolean> = ref(false);
     const showModalMedicine: Ref<boolean> = ref(false);
     const showModalDoctorList: Ref<boolean> = ref(false);
+    const showModalDrugApplications: Ref<boolean> = ref(false);
 
     const loadCommissions = async () => {
       await Provider.store.dispatch('commissionsStatuses/getAll');
@@ -304,6 +317,11 @@ export default defineComponent({
       showModalDoctorList.value = true;
     };
 
+    const openModalDrugApplications = (c: Commission) => {
+      selectCommission(c);
+      showModalDrugApplications.value = true;
+    };
+
     const setDrugRecipe = async (drugRecipe: DrugRecipe, c: Commission): Promise<void> => {
       const findedCommission = commissions.value.find((com: Commission) => com.id === c.id);
       if (findedCommission) {
@@ -315,6 +333,8 @@ export default defineComponent({
     };
 
     return {
+      showModalDrugApplications,
+      openModalDrugApplications,
       selectedCommission,
       setDrugRecipe,
       infoItemToggle,

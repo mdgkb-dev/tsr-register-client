@@ -19,7 +19,7 @@
               max-width="100%"
               @select="selectSearch"
             />
-            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="loadPatients" />
+            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="$emit('load')" />
           </div>
         </InfoItem>
       </GridContainer>
@@ -134,7 +134,6 @@ import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
-import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
 import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
@@ -146,7 +145,6 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'AdminPatientsListFilters',
   components: {
-    FiltersButtonsMultiply,
     FiltersButtonsSelect,
     RemoteSearch,
     SortList,
