@@ -1,7 +1,7 @@
 <template>
   <InfoItem title="документы" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
     <div v-for="document in human.documents" :key="document">
-      <StringItem :string="document.documentType.getTagName() + ',&nbsp'" font-size="14px" width="100%"/>
+      <StringItem :string="document.documentType.getTagName() + ',&nbsp'" font-size="14px" width="100%" />
     </div>
 
     <template #open-inside-content>
@@ -19,7 +19,13 @@
         </div>
 
         <div v-if="documentsIsToggle">
-          <div v-for="docType in documentTypes" :key="docType.id" @click="addDocument(docType.id)">{{ docType.name }}</div>
+          <Button 
+            v-for="docType in documentTypes" 
+            :key="docType.id" 
+            @click="addDocument(docType.id)" 
+            button-class="save-button"  
+            :text="docType.name"
+          />
         </div>
         <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleDocuments(true)" />
       </GridContainer>
@@ -121,6 +127,20 @@ export default defineComponent({
   }
 }
 
+.doc-list {
+  color: #343E5C;
+  padding: 10px 0;
+  border: 1px solid #006bb4;
+  border-radius: $normal-border-radius}
+
+.doc-list:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.doc-list:hover {
+  color: #006bb4;
+}
+
 :deep(.button-register) {
   width: auto;
   height: 34px;
@@ -174,8 +194,12 @@ export default defineComponent({
   height: 42px;
   color: #006bb4;
   background: #dff2f8;
-  margin: 2px 10px 0 0;
+  margin: 0 0 10px 0;
   font-size: 14px;
+}
+
+.save-button:last-child {
+  margin: 0;
 }
 
 :deep(.edit-button) {

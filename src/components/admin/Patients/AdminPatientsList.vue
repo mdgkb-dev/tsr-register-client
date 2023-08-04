@@ -121,12 +121,12 @@ export default defineComponent({
       adminHeader: {
         title: 'Пациенты',
         buttons: [
-          { text: 'Добавить пациента', type: 'normal-button', action: addPatient },
-          {
-            text: computed(() => (editMode.value ? 'Просмотр' : 'Редактирование')),
-            action: () => (editMode.value = !editMode.value),
-            type: 'normal-button',
-          },
+          { text: 'Добавить', type: 'normal-button', action: addPatient },
+          // {
+          //   text: computed(() => (editMode.value ? 'Просмотр' : 'Редактирование')),
+          //   action: () => (editMode.value = !editMode.value),
+          //   type: 'normal-button',
+          // },
         ],
       },
       sortsLib: PatientsSortsLib,

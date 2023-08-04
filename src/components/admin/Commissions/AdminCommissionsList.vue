@@ -141,7 +141,7 @@
                       title="лекарство"
                       @click="openModalMedicine(commission)"
                     >
-                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" />
+                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" font-size="10px" />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
                       <SmallDatePicker
