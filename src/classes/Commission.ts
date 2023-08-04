@@ -88,8 +88,7 @@ export default class Commission {
 
   getFullNameWithPatient(): string {
     const n = `№${this.number}`;
-    console.log(this.patient);
-    const fio = this.patient.human.getFullName();
+    const fio = this.patient.human.getShortName();
     return `${n} (${fio})`;
   }
 }

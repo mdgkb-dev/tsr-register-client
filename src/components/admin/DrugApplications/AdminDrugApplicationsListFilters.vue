@@ -1,107 +1,92 @@
 <template>
-  <InfoItem title="комиссии" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
-    <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
-      <StringItem :string="commissionDrugApplication.commission.getFullNameWithPatient() + ',&nbsp'" font-size="14px" width="100%" />
-    </div>
-
-    <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
-        <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
-          <InfoItem
-            icon="edit-title"
-            margin="0"
-            :with-open-window="false"
-            height="32px"
-            @click="select(commissionDrugApplication.commission.id)"
-          >
-            <StringItem :string="commissionDrugApplication.commission.getFullNameWithPatient()" font-size="11px" />
-          </InfoItem>
-        </div>
-
-        <div v-if="isToggle">
-          <div v-for="commission in commissions" :key="commission.id" @click="add(commission.id)">
-            {{ commission.getFullNameWithPatient() }}
+  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+    <template #visability>
+      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
+        <InfoItem
+          title="поиск и сортировка"
+          margin="0"
+          :with-open-window="false"
+          height="98px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          :with-hover="false"
+        >
+          <div :style="{ width: '100%' }">
+            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="load" />
           </div>
-        </div>
-        <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggle(true)" />
+        </InfoItem>
       </GridContainer>
     </template>
-  </InfoItem>
-  <ModalWindow :show="showModal" title="Коммиссия" @close="showModal = false">
-    <CommissionCard @remove="remove" />
-  </ModalWindow>
+
+    <template #filter>
+      <GridContainer
+        max-width="900px"
+        grid-gap="70px 10px"
+        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0 0 0 10px"
+      >
+        <GridContainer
+          max-width="500px"
+          grid-gap="10px"
+          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+          margin="0px"
+          background="#F5F6F8"
+        >
+        </GridContainer>
+        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+          <FiltersButtonsMultiply
+            :filter-model="filterByStatus"
+            :options="createStatusesOptions()"
+            default-label="По статусу"
+            :inverse="true"
+            @load="$emit('load')"
+          />
+        </GridContainer>
+      </GridContainer>
+    </template>
+  </RightSliderContainer>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
-import Commission from '@/classes/Commission';
-import DrugApplication from '@/classes/DrugApplication';
-import CommissionCard from '@/components/admin/CommissionCard.vue';
+import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
-import Button from '@/components/Base/Button.vue';
-import ModalWindow from '@/components/Base/ModalWindow.vue';
+import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
+import SortList from '@/components/SortList.vue';
+import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
+import IOption from '@/interfaces/shared/IOption';
+import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
+import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'ToggleCommissionsForm',
+  name: 'AdminDrugApplicationsListFilters',
   components: {
-    ModalWindow,
-    StringItem,
+    FiltersButtonsMultiply,
+    SortList,
     InfoItem,
     GridContainer,
-    CommissionCard,
-    Button,
+    RightSliderContainer,
   },
-  props: {
-    drugApplication: {
-      type: Object as PropType<DrugApplication>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const showModal: Ref<boolean> = ref(false);
-    const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
-    const commission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
-    const isToggle: Ref<boolean> = ref(false);
+  emits: ['load'],
+  setup() {
+    const filterByStatus: Ref<FilterModel> = ref(DrugApplicationsFiltersLib.byStatus());
+    const drugApplicationsStatuses: Ref<DrugApplicationStatus[]> = computed(() => Provider.store.getters['drugApplicationsStatuses/items']);
+    onBeforeMount(() => {
+      console.log(drugApplicationsStatuses.value);
+    });
 
-    const remove = async () => {
-      // ClassHelper.RemoveFromClassById(id, props.human.documents);
-      showModal.value = false;
-      Provider.store.commit('documents/set');
-    };
-
-    const toggle = async (toggle: boolean) => {
-      if (toggle) {
-        await Provider.store.dispatch('commissions/getAll');
-      }
-      isToggle.value = toggle;
-    };
-
-    const add = async (id: string) => {
-      await Provider.store.dispatch('commissions/get', id);
-      const item = props.drugApplication.addCommission(commission.value);
-      await Provider.store.dispatch('commissionsDrugApplications/createWithoutReset', item);
-      await select(props.drugApplication.commissionsDrugApplications[props.drugApplication.commissionsDrugApplications.length - 1].id);
-    };
-
-    const select = async (id?: string) => {
-      await Provider.store.dispatch('commissions/get', id);
-      showModal.value = true;
-      isToggle.value = false;
+    const createStatusesOptions = (): IOption[] => {
+      const ids: IOption[] = [];
+      drugApplicationsStatuses.value.forEach((r: DrugApplicationStatus) => ids.push({ value: r.id as string, label: r.name }));
+      return ids;
     };
 
     return {
-      toggleDocuments: toggle,
-      add,
-      commissions,
-      remove,
-      select,
-      showModal,
-      isToggle,
-      toggle,
+      createStatusesOptions,
+      filterByStatus,
     };
   },
 });

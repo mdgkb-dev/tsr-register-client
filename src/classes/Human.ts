@@ -37,6 +37,10 @@ export default class Human {
     return `${this.surname} ${this.name} ${this.patronymic}`;
   }
 
+  getShortName(): string {
+    return `${this.name.slice(0, 1)}.${this.patronymic.slice(0, 1)}. ${this.surname}`;
+  }
+
   setFullName(human: Human): void {
     this.surname = human.surname;
     this.name = human.name;
