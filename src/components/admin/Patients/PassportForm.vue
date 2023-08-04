@@ -41,21 +41,21 @@
       <el-form-item label="Адрес регистрации">
         <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman()"></el-input>
       </el-form-item>
+
+      <div class="tab-tools">
+        <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
+          <use xlink:href="#active" />
+        </svg>
+        <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
+          <use xlink:href="#non-active" />
+        </svg>
+        Адрес регистрации и адрес проживания совпадают
+      </div>
+
+      <el-form-item label="Адрес проживания">
+        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+      </el-form-item>
     </el-form>
-
-    <div class="tab-tools">
-      <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
-        <use xlink:href="#active" />
-      </svg>
-      <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
-        <use xlink:href="#non-active" />
-      </svg>
-      Адрес регистрации и адрес проживания совпадают
-    </div>
-
-    <el-form-item label="Адрес проживания">
-      <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
-    </el-form-item>
   </div>
 
   <svg width="0" height="0" class="hidden">
