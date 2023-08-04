@@ -5,8 +5,9 @@
         :file-info="patient.human.photo"
         :height="280"
         :default-ratio="1"
+        :emit-crop="true"
         @ratio="(e) => (element.ratio = e)"
-        @remove-file="$classHelper.RemoveFromClassByIndex(index, fileList, fileListForDelete)"
+        @crop="savePhoto"
       />
       <div class="left-title">Диагноз</div>
       <div class="left-info">
@@ -72,7 +73,14 @@ export default defineComponent({
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
 
+    const savePhoto = async () => {
+      await Provider.store.dispatch('fileInfos/create', patient.value.human.photo);
+      patient.value.human.photoId = patient.value.human.photo.id;
+      await Provider.store.dispatch('patients/updateWithoutReset');
+    };
+
     return {
+      savePhoto,
       patient,
       checked,
       notChecked,

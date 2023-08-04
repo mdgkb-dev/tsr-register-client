@@ -12,6 +12,8 @@ import '@/assets/element-variables.scss';
 import '@/router/componentHooks';
 import Provider from '@/services/Provider/Provider';
 
+import './assets/styles/element-variables.scss';
+
 const app = createApp(App);
 app.use(store);
 app.use(router);

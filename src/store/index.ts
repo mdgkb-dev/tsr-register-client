@@ -24,6 +24,7 @@ import { drugForms } from '@/store/modules/drugForms';
 import { drugRecipes } from '@/store/modules/drugRecipes';
 import { drugs } from '@/store/modules/drugs';
 import { edvs } from '@/store/modules/edvs';
+import { fileInfos } from '@/store/modules/fileInfos';
 import { filter } from '@/store/modules/filter';
 import { fundContracts } from '@/store/modules/fundContracts';
 import { fundCouncils } from '@/store/modules/fundCouncils';
@@ -114,6 +115,7 @@ const store: StoreOptions<RootState> = {
     documentFieldValues,
     documentFileInfos,
     drugDozes,
+    fileInfos,
   },
 };
 
