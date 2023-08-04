@@ -1,14 +1,15 @@
 <template>
   <InfoItem width="100%" title="инвалидность" icon="edit-title" margin="0" :with-open-window="false" :with-hover="editMode">
     <div v-if="patient.getActuallyDisability()?.getActuallyEdv()" class="disability-circles">
-      <StringItem string="А" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? 'edv-active' : 'edv'" />
-      <StringItem string="В" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter2 ? 'edv-active' : 'edv'" />
+      <StringItem string="А" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter1 ? 'edv-active' : 'edv'" font-size="14px"/>
+      <StringItem string="В" :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter2 ? 'edv-active' : 'edv'" font-size="14px"/>
       <StringItem
         string="С"
         :custom-class="patient.getActuallyDisability()?.getActuallyEdv()?.parameter3 ? 'edv-active' : 'edv'"
         margin="0 0 0 0"
+        font-size="14px"
       />
-      <StringItem string=", до 29.12.23г." font-size="12px" />
+      <StringItem string=", до 29.12.23г." font-size="14px" />
     </div>
     <div v-else>Нет справок ЕДВ</div>
   </InfoItem>
@@ -249,6 +250,12 @@ export default defineComponent({
 
 :deep(.el-form-item) {
   margin: 8px 0 0 0;
+}
+
+.disability-circles {
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 @media (max-width: 1915px) {

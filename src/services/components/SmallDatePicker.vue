@@ -7,6 +7,7 @@
     }"
   >
     <el-date-picker
+      disabled="true"
       v-model="date"
       type="date"
       format="DD.MM.YY"

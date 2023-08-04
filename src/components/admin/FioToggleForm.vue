@@ -9,7 +9,8 @@
       width="100%"
       @keyup-enter="submit"
     >
-      <StringItem :string="human.getFullName()" />
+      <StringItem v-if="human.getFullName().length > 3" :string="human.getFullName()" />
+      <StringItem v-else string="Введите данные" color="#B0A4C0"/>
       <template #open-inside-content>
         <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
           <InfoItem
