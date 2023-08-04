@@ -1,5 +1,6 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
+    <AdminDrugApplicationsListFilters @load="loadDrugApplications" />
     <ModalWindow :show="showDrugArrives" title="Поставки лекарств" @close="showDrugArrives = false">
       <DrugArrivesList />
     </ModalWindow>
@@ -34,7 +35,6 @@
                   <div class="line-item-left">
                     <Button
                       button-class="edit-button"
-                      color="#006bb4"
                       icon="outlined"
                       icon-class="edit-icon"
                       @click="openDrugArrivesModal(drugApplication)"
@@ -71,21 +71,7 @@
                         @change="updateDrugApplication(drugApplication)"
                       />
                     </InfoItem>
-                    <InfoItem
-                      :close="infoItemToggle"
-                      margin="0"
-                      width="100%"
-                      :with-open-window="false"
-                      title="комиссия"
-                      @click="openModalCommissions(drugApplication)"
-                    >
-                      <StringItem
-                        v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications"
-                        :key="commissionDrugApplication"
-                        :string="commissionDrugApplication.commission.number.toString()"
-                        custom-class="medicine"
-                      />
-                    </InfoItem>
+                    <ToggleCommissionsForm :drug-application="drugApplication" />
                   </GridContainer>
                 </div>
               </div>
@@ -106,9 +92,10 @@ import Del from '@/assets/svg/Del.svg';
 import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
 import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
-import User from '@/classes/User';
+import AdminDrugApplicationsListFilters from '@/components/admin/DrugApplications/AdminDrugApplicationsListFilters.vue';
 import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugApplicationFilesList.vue';
 import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
+import ToggleCommissionsForm from '@/components/admin/DrugApplications/ToggleCommissionsForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
@@ -117,8 +104,8 @@ import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
-import IOption from '@/interfaces/shared/IOption';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
+import DrugApplicationsSortsLib from '@/libs/sorts/DrugApplicationsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import ClassHelper from '@/services/ClassHelper';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
@@ -143,6 +130,8 @@ export default defineComponent({
     SmallDatePicker,
     Del,
     DrugApplicationFilesList,
+    ToggleCommissionsForm,
+    AdminDrugApplicationsListFilters,
   },
   setup() {
     const infoItemToggle: Ref<boolean> = ref(false);
@@ -156,11 +145,6 @@ export default defineComponent({
     const drugApplicationsStatuses: Ref<DrugApplicationStatus[]> = computed(() => Provider.store.getters['drugApplicationsStatuses/items']);
     const count: Ref<number> = computed(() => Provider.store.getters['drugApplications/count']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
-    const createStatusesOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      drugApplicationsStatuses.value.forEach((r: DrugApplicationStatus) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
-    };
 
     const updateStatus = async (drugApplication: DrugApplication, statusId: string): Promise<void> => {
       const status = drugApplicationsStatuses.value.find((s: DrugApplicationStatus) => s.id === statusId);
@@ -172,9 +156,7 @@ export default defineComponent({
       await updateDrugApplication(drugApplication);
     };
     const selectCommissionModel = ref('');
-    const editMode: Ref<boolean> = ref(false);
     const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
-    const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const loadDrugApplications = async () => {
       await Provider.loadItems();
     };
@@ -184,6 +166,7 @@ export default defineComponent({
       await Provider.store.dispatch('drugApplicationsStatuses/getAll');
       await loadDrugApplications();
       filterByStatus.value = DrugApplicationsFiltersLib.byStatus();
+      console.log(1);
       // filterByRegister.value = PatientsFiltersLib.byRegisters([]);
     };
 
@@ -198,7 +181,7 @@ export default defineComponent({
         title: 'Заявки в ДЗМ/Круг Добра',
         buttons: [{ text: 'Добавить заявку', type: 'normal-button', action: addApplication }],
       },
-      // sortsLib: PatientsSortsLib,
+      sortsLib: DrugApplicationsSortsLib,
       getAction: 'getAllWithCount',
     });
 
@@ -213,6 +196,7 @@ export default defineComponent({
         return ElMessage.warning('Выбранная заявка уже добавлена');
       }
       const item = drugApplication.addCommission(commission);
+      infoItemToggle.value = !infoItemToggle.value;
       await Provider.store.dispatch('commissionsDrugApplications/create', item);
     };
 
@@ -258,8 +242,6 @@ export default defineComponent({
       initFundContract,
       loadDrugApplications,
       drugApplicationsStatuses,
-      filterByStatus,
-      createStatusesOptions,
       updateStatus,
       removeCommission,
       commissions,

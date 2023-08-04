@@ -1,131 +1,99 @@
 <template>
-  <el-form ref="form" :model="humanCopy" style="width: 100%">
-    <InfoItem
-      title="ФИО"
-      :show-save-dialog="true"
-      icon="edit-title"
-      :with-hover="true"
-      :close="closeToggle"
-      width="100%"
-      @keyup-enter="submit"
-    >
-      <StringItem :string="human.getFullName()" />
-      <template #open-inside-content>
-        <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
-          <InfoItem
-            title="фамилия"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
-            <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname">
-              <el-input v-model="humanCopy.surname" />
-              <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
-          </InfoItem>
-          <InfoItem
-            title="имя"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
-            <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name">
-              <el-input v-model="humanCopy.name" />
-              <!-- <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
-          </InfoItem>
-          <InfoItem
-            title="отчество"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
-            <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic">
-              <el-input v-model="humanCopy.patronymic" />
-              <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
-          </InfoItem>
-          <Button button-class="save-button" text="Сохранить" @click="submit" />
+  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+    <template #visability>
+      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
+        <InfoItem
+          title="поиск и сортировка"
+          margin="0"
+          :with-open-window="false"
+          height="98px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          :with-hover="false"
+        >
+          <div :style="{ width: '100%' }">
+            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="load" />
+          </div>
+        </InfoItem>
+      </GridContainer>
+    </template>
+
+    <template #filter>
+      <GridContainer
+        max-width="900px"
+        grid-gap="70px 10px"
+        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0 0 0 10px"
+      >
+        <GridContainer
+          max-width="500px"
+          grid-gap="10px"
+          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+          margin="0px"
+          background="#F5F6F8"
+        >
         </GridContainer>
-      </template>
-    </InfoItem>
-  </el-form>
+        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+          <FiltersButtonsMultiply
+            :filter-model="filterByStatus"
+            :options="createStatusesOptions()"
+            default-label="По статусу"
+            :inverse="true"
+            @load="$emit('load')"
+          />
+        </GridContainer>
+      </GridContainer>
+    </template>
+  </RightSliderContainer>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
-import Human from '@/classes/Human';
+import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
-import Button from '@/components/Base/Button.vue';
+import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
+import SortList from '@/components/SortList.vue';
+import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
+import IOption from '@/interfaces/shared/IOption';
+import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
+import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
-import validate from '@/services/validate';
 
 export default defineComponent({
-  name: 'FioToggleForm',
+  name: 'AdminDrugApplicationsListFilters',
   components: {
-    StringItem,
+    FiltersButtonsMultiply,
+    SortList,
     InfoItem,
     GridContainer,
-    Button,
+    RightSliderContainer,
   },
-  props: {
-    human: {
-      type: Object as PropType<Human>,
-      required: true,
-    },
-  },
-  setup(props) {
-    const closeToggle: Ref<boolean> = ref(false);
-    const form = ref();
-    const humanCopy: Ref<Human> = ref(new Human(props.human));
+  emits: ['load'],
+  setup() {
+    const filterByStatus: Ref<FilterModel> = ref(DrugApplicationsFiltersLib.byStatus());
+    const drugApplicationsStatuses: Ref<DrugApplicationStatus[]> = computed(() => Provider.store.getters['drugApplicationsStatuses/items']);
+    onBeforeMount(() => {
+      console.log(drugApplicationsStatuses.value);
+    });
 
-    const updateHuman = async (): Promise<void> => {
-      props.human.setFullName(humanCopy.value);
-      await Provider.withHeadLoader(async () => {
-        await Provider.store.dispatch('humans/update', props.human);
-      });
-    };
-
-    const submit = async (): Promise<void> => {
-      if (!validate(form)) {
-        return;
-      }
-      closeToggle.value = !closeToggle.value;
-      await updateHumanName();
-    };
-
-    const updateHumanName = async (): Promise<void> => {
-      props.human.setEditNameMode(false);
-      await updateHuman();
+    const createStatusesOptions = (): IOption[] => {
+      const ids: IOption[] = [];
+      drugApplicationsStatuses.value.forEach((r: DrugApplicationStatus) => ids.push({ value: r.id as string, label: r.name }));
+      return ids;
     };
 
     return {
-      closeToggle,
-      submit,
-      updateHumanName,
-      form,
-      humanCopy,
+      createStatusesOptions,
+      filterByStatus,
     };
   },
 });
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
 .button {
   width: auto;
   height: 34px;

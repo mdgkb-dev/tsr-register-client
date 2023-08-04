@@ -1,131 +1,114 @@
 <template>
-  <el-form ref="form" :model="humanCopy" style="width: 100%">
-    <InfoItem
-      title="ФИО"
-      :show-save-dialog="true"
-      icon="edit-title"
-      :with-hover="true"
-      :close="closeToggle"
-      width="100%"
-      @keyup-enter="submit"
-    >
-      <StringItem :string="human.getFullName()" />
-      <template #open-inside-content>
-        <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
+  <InfoItem title="комиссии" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
+    <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
+      <StringItem :string="commissionDrugApplication.commission.getFullNameWithPatient() + ',&nbsp'" font-size="14px" width="100%" />
+    </div>
+
+    <template #open-inside-content>
+      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
+        <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
           <InfoItem
-            title="фамилия"
             icon="edit-title"
+            margin="0"
             :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
+            height="32px"
+            @click="select(commissionDrugApplication.commission.id)"
           >
-            <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname">
-              <el-input v-model="humanCopy.surname" />
-              <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
+            <StringItem :string="commissionDrugApplication.commission.getFullNameWithPatient()" font-size="11px" />
           </InfoItem>
-          <InfoItem
-            title="имя"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
-            <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name">
-              <el-input v-model="humanCopy.name" />
-              <!-- <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
-          </InfoItem>
-          <InfoItem
-            title="отчество"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
-            <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic">
-              <el-input v-model="humanCopy.patronymic" />
-              <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
-            </el-form-item>
-          </InfoItem>
-          <Button button-class="save-button" text="Сохранить" @click="submit" />
-        </GridContainer>
-      </template>
-    </InfoItem>
-  </el-form>
+        </div>
+
+        <div v-if="isToggle">
+          <div v-for="commission in commissions" :key="commission.id" @click="add(commission.id)">
+            {{ commission.getFullNameWithPatient() }}
+          </div>
+        </div>
+        <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggle(true)" />
+      </GridContainer>
+    </template>
+  </InfoItem>
+  <ModalWindow :show="showModal" title="Коммиссия" @close="showModal = false">
+    <CommissionCard @remove="remove" />
+  </ModalWindow>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
-import Human from '@/classes/Human';
+import Commission from '@/classes/Commission';
+import DrugApplication from '@/classes/DrugApplication';
+import CommissionCard from '@/components/admin/CommissionCard.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
-import validate from '@/services/validate';
 
 export default defineComponent({
-  name: 'FioToggleForm',
+  name: 'ToggleCommissionsForm',
   components: {
+    ModalWindow,
     StringItem,
     InfoItem,
     GridContainer,
+    CommissionCard,
     Button,
   },
   props: {
-    human: {
-      type: Object as PropType<Human>,
+    drugApplication: {
+      type: Object as PropType<DrugApplication>,
       required: true,
     },
   },
   setup(props) {
-    const closeToggle: Ref<boolean> = ref(false);
-    const form = ref();
-    const humanCopy: Ref<Human> = ref(new Human(props.human));
+    const showModal: Ref<boolean> = ref(false);
+    const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
+    const commission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
+    const isToggle: Ref<boolean> = ref(false);
 
-    const updateHuman = async (): Promise<void> => {
-      props.human.setFullName(humanCopy.value);
-      await Provider.withHeadLoader(async () => {
-        await Provider.store.dispatch('humans/update', props.human);
-      });
+    const remove = async () => {
+      // ClassHelper.RemoveFromClassById(id, props.human.documents);
+      showModal.value = false;
+      Provider.store.commit('documents/set');
     };
 
-    const submit = async (): Promise<void> => {
-      if (!validate(form)) {
-        return;
+    const toggle = async (toggle: boolean) => {
+      if (toggle) {
+        await Provider.store.dispatch('commissions/getAll');
       }
-      closeToggle.value = !closeToggle.value;
-      await updateHumanName();
+      isToggle.value = toggle;
     };
 
-    const updateHumanName = async (): Promise<void> => {
-      props.human.setEditNameMode(false);
-      await updateHuman();
+    const add = async (id: string) => {
+      await Provider.store.dispatch('commissions/get', id);
+      const item = props.drugApplication.addCommission(commission.value);
+      await Provider.store.dispatch('commissionsDrugApplications/createWithoutReset', item);
+      await select(props.drugApplication.commissionsDrugApplications[props.drugApplication.commissionsDrugApplications.length - 1].id);
+    };
+
+    const select = async (id?: string) => {
+      await Provider.store.dispatch('commissions/get', id);
+      showModal.value = true;
+      isToggle.value = false;
     };
 
     return {
-      closeToggle,
-      submit,
-      updateHumanName,
-      form,
-      humanCopy,
+      toggleDocuments: toggle,
+      add,
+      commissions,
+      remove,
+      select,
+      showModal,
+      isToggle,
+      toggle,
     };
   },
 });
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
 .button {
   width: auto;
   height: 34px;

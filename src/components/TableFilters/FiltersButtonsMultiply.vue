@@ -8,33 +8,27 @@
     border-color="#C4C4C4"
     padding="7px"
     :with-hover="false"
+    :title="defaultLabel"
   >
-    <template #title>
-      <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4"/>
-    </template>
-    <template #close-inside-content>
-      <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-        <template #grid-items>
-          <Button
-            v-for="(option, index) in options"
-            :key="index"
-            :text="option.label"
-            :with-icon="false"
-            width="auto"
-            height="34px"
-            border-radius="5px"
-            color="#006BB4"
-            :is-toggle="selectedOptions.some((s) => s === option.value)"
-            background="#ffffff"
-            background-hover="#DFF2F8"
-            :toggle-mode="true"
-            font-size="12px"
-            @click="toggleOption(option)"
-          >
-          </Button>
-        </template>
-      </GridContainer>
-    </template>
+    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+      <Button
+        v-for="(option, index) in options"
+        :key="index"
+        :text="option.label"
+        :with-icon="false"
+        width="auto"
+        height="34px"
+        border-radius="5px"
+        color="#006BB4"
+        :is-toggle="selectedOptions.some((s) => s === option.value)"
+        background="#ffffff"
+        background-hover="#DFF2F8"
+        :toggle-mode="true"
+        font-size="12px"
+        @click="toggleOption(option)"
+      >
+      </Button>
+    </GridContainer>
   </InfoItem>
 </template>
 
@@ -42,7 +36,6 @@
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import IOption from '@/interfaces/schema/IOption';
@@ -50,7 +43,7 @@ import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'FiltersButtonsMultiply',
-  components: { StringItem, Button, InfoItem, GridContainer },
+  components: { Button, InfoItem, GridContainer },
   props: {
     options: {
       type: Array as PropType<IOption[]>,

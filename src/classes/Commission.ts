@@ -85,4 +85,10 @@ export default class Commission {
   canGetProtocol(): boolean {
     return !!this.patient.id && !!this.patient.human.id && !!this.drugRecipe && !!this.patientDiagnosis?.mkbItem;
   }
+
+  getFullNameWithPatient(): string {
+    const n = `№${this.number}`;
+    const fio = this.patient.human.getShortName();
+    return `${n} (${fio})`;
+  }
 }

@@ -15,7 +15,7 @@
       :style="{
         width: width,
         position: 'relative',
-        cursor: pointer,
+        cursor: 'pointer',
       }"
       @change="changeHandler"
       @focus="open"
