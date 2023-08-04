@@ -50,4 +50,10 @@ export default class Stepper {
   getStepNumber(): number {
     return this.stepIndex;
   }
+
+  getStepName(): any {
+    if (this.steps[this.stepIndex]) {
+      return this.steps[this.stepIndex].name;
+    }
+  }
 }

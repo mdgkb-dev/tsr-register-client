@@ -31,7 +31,7 @@
       </GridContainer>
     </ModalWindow>
     <!--    :background="patientDiagnosis.mkbItemId === commission.drugId ? '#dff2f8' : ''"-->
-    <ModalWindow :show="showModalMedicine" title="Выберите лекарство" @close="showModalMedicine = false">
+    <ModalWindow :show="showModalMedicine" title="Выбор лекарства" @close="showModalMedicine = false">
       <CommissionDrugForm :commission="selectedCommission" @select="(e) => setDrugRecipe(e, selectedCommission)" />
     </ModalWindow>
 

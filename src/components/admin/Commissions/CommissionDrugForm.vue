@@ -1,4 +1,5 @@
 <template>
+  <StringItem :string="stepper.getStepName() " margin="0 0 30px 0" font-size="16px" color="#006BB4"/>
   <Button v-if="stepper.getStepNumber() > 0" button-class="change-button" text="Назад" @click="stepper.decreaseStep()" />
   <div v-if="mounted">
     <GridContainer grid-gap="5px" margin="10px 0">
@@ -30,11 +31,14 @@ import DrugFormsFiltersLib from '@/libs/filters/DrugFormsFiltersLib';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Provider from '@/services/Provider/Provider';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
+
 export default defineComponent({
   name: 'CommissionDrugForm',
   components: {
     Button,
     GridContainer,
+    StringItem,
   },
   emits: ['select'],
   setup(_, { emit }) {
@@ -60,9 +64,9 @@ export default defineComponent({
       };
 
       stepper.value = new Stepper([
-        new Step(selectDrug, 'Выберите лекарство'),
-        new Step(selectDrugForm, 'Выберите форму выпуска'),
-        new Step(selectDrugDoze, 'Выберите дозировку'),
+        new Step(selectDrug, 'Выберите препарат:'),
+        new Step(selectDrugForm, 'Выберите форму выпуска:'),
+        new Step(selectDrugDoze, 'Выберите дозировку:'),
       ]);
 
       mounted.value = true;
