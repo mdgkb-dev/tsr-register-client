@@ -89,9 +89,10 @@ export default defineComponent({
     customClass: { type: String as PropType<string>, required: false, default: '' },
     close: { type: Boolean as PropType<boolean>, required: false, default: true },
     baseBoxMargin: { type: String as PropType<string>, required: false, default: '' },
+    closeWindowOverflow: { type: String as PropType<string>, required: false, default: '' },
     showSaveDialog: { type: Boolean as PropType<boolean>, required: false, default: false },
   },
-  emits: ['click', 'keyup-enter'],
+  emits: ['click', 'keyup-enter', 'after-close'],
   setup(props, { emit }) {
     const insideClass = props.customClass !== '' ? props.customClass : 'inside-class';
 
@@ -153,6 +154,9 @@ export default defineComponent({
       } else {
         document.body.removeEventListener('keydown', keysHandler, false);
       }
+      if (isToggle.value == false) {
+        emit('after-close');
+      }
     });
 
     const changeState = () => {
@@ -172,6 +176,7 @@ export default defineComponent({
       return props.customClass === ''
         ? {
             width: props.width,
+            minHeight: '40px',
             height: '40px',
             maxWidth: props.maxWidth,
             minWidth: props.minWidth,
@@ -190,7 +195,7 @@ export default defineComponent({
         margin: props.margin,
         width: windowOpened.value ? props.openWidth : props.width,
         height: windowOpened.value ? props.openHeight : props.height,
-        minHeight: props.height,
+        minHeight: '40px',
         maxWidth: props.maxWidth,
         minWidth: props.minWidth,
         borderColor: hovering.value || isToggle.value ? props.colorSelected : props.borderColor,
@@ -204,6 +209,7 @@ export default defineComponent({
     const closeWindowStyle = computed(() => {
       return {
         height: windowOpened.value ? '0' : '',
+        overflow: props.closeWindowOverflow,
       };
     });
 
@@ -227,33 +233,7 @@ export default defineComponent({
       };
     });
 
-    const outsideClick = (e: Event) => {
-      // console.log('outsideClick');
-      // console.log('isMessageBoxOpen.value', isMessageBoxOpen.value);
-      // if (!isMessageBoxOpen.value) {
-      //   isMessageBoxOpen.value = true;
-
-      //   ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
-      //     confirmButtonText: 'OK',
-      //     cancelButtonText: 'Cancel',
-      //     type: 'warning',
-      //   })
-      //     .then(() => {
-      //       ElMessage({
-      //         type: 'success',
-      //         message: 'Delete completed',
-      //       });
-      //       isToggle.value = false;
-      //       isMessageBoxOpen.value = false;
-      //     })
-      //     .catch(() => {
-      //       ElMessage({
-      //         type: 'info',
-      //         message: 'Delete canceled',
-      //       });
-      //       isMessageBoxOpen.value = false;
-      //     });
-      // }
+    const outsideClick = () => {
       if (props.showSaveDialog) {
         isMessageBoxOpen.value = true;
       } else {
@@ -263,7 +243,9 @@ export default defineComponent({
 
     const saveClickHandler = async () => {
       await emit('keyup-enter');
-      isToggle.value = false;
+      if (props.close) {
+        isToggle.value = false;
+      }
       isMessageBoxOpen.value = false;
     };
 

@@ -1,19 +1,17 @@
 <template>
-  <InfoItem title="документы" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
-    <div v-for="document in human.documents" :key="document">
-      <StringItem :string="document.documentType.getTagName() + ',&nbsp'" font-size="14px" width="100%"/>
+  <InfoItem title="документы" margin="0 0 0 0px" close-window-overflow="hidden" :with-hover="true" :with-open-window="true">
+    <div v-for="(document, i) in human.documents" :key="document.id">
+      <StringItem
+        :string="document.documentType.getTagName() + (i === human.documents.length - 1 ? '' : ',&nbsp')"
+        font-size="14px"
+        width="100%"
+      />
     </div>
 
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
-        <div v-for="document in human.documents" :key="document">
-          <InfoItem
-            icon="edit-title"
-            margin="0"
-            :with-open-window="false"
-            height="32px"
-            @click="selectDocument(document.id)"
-          >
+        <div v-for="document in human.documents" :key="document.id">
+          <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="selectDocument(document.id)">
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />
           </InfoItem>
         </div>

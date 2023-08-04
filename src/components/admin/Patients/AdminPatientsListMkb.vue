@@ -1,12 +1,12 @@
 <template>
-  <InfoItem title="диагнозы" margin="0 0 0 0px" :with-hover="editMode" :with-open-window="editMode">
-    <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
-      <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="14px" />
+  <InfoItem title="диагнозы" margin="0 0 0 0px" :with-hover="editMode" close-window-overflow="hidden" :with-open-window="editMode">
+    <div v-for="(diagnosis, i) in patient.patientDiagnosis" :key="diagnosis.id">
+      <StringItem :string="diagnosis.mkbItem.getCode() + (i === patient.patientDiagnosis.length - 1 ? '' : ',&nbsp')" font-size="14px" />
     </div>
 
     <template #open-inside-content>
-      <GridContainer max-width="100%" grid-gap="7px" margin="0 0 10px 0" gridTemplateColumns="repeat(auto-fit, minmax(180px, 1fr))">
-        <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis">
+      <GridContainer max-width="100%" grid-gap="7px" margin="0 0 10px 0" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
+        <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis.id">
           <InfoItem
             margin="0"
             :with-open-window="false"

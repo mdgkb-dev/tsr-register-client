@@ -8,6 +8,7 @@
       :close="closeToggle"
       width="100%"
       @keyup-enter="submit"
+      @after-close="resetCopy"
     >
       <StringItem :string="human.getFullName()" />
       <template #open-inside-content>
@@ -94,6 +95,10 @@ export default defineComponent({
     const form = ref();
     const humanCopy: Ref<Human> = ref(new Human(props.human));
 
+    const resetCopy = () => {
+      humanCopy.value = new Human(props.human);
+    };
+
     const updateHuman = async (): Promise<void> => {
       props.human.setFullName(humanCopy.value);
       await Provider.withHeadLoader(async () => {
@@ -120,6 +125,7 @@ export default defineComponent({
       updateHumanName,
       form,
       humanCopy,
+      resetCopy,
     };
   },
 });

@@ -5,50 +5,57 @@
       maxWidth: maxWidth,
     }"
   >
-    <el-form>
-      <el-form-item label="Фамилия">
-        <el-input v-model="human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman"></el-input>
+    <el-form ref="surnameForm" :model="human">
+      <el-form-item label="Фамилия" prop="surname" :rules="human.getValidationRules().surname">
+        <el-input
+          v-model="human.surname"
+          placeholder="Введите фамилию"
+          formatter="firstLetterUpper"
+          @blur="updateHuman('surname')"
+        ></el-input>
       </el-form-item>
-      <el-form-item label="Имя">
-        <el-input v-model="human.name" placeholder="Введите имя" @blur="updateHuman"></el-input>
+    </el-form>
+    <el-form
+      ><el-form-item label="Имя">
+        <el-input v-model="human.name" placeholder="Введите имя" @blur="updateHuman()"></el-input>
       </el-form-item>
       <el-form-item label="Отчество">
-        <el-input v-model="human.patronymic" placeholder="Введите отчество" @blur="updateHuman"></el-input>
+        <el-input v-model="human.patronymic" placeholder="Введите отчество" @blur="updateHuman()"></el-input>
       </el-form-item>
 
       <div class="line-item">
         <div class="item-left">
           <el-form-item label="Пол">
-            <el-select v-model="human.isMale" placeholder="Выберите пол" @change="updateHuman">
+            <el-select v-model="human.isMale" placeholder="Выберите пол" @change="updateHuman()">
               <el-option label="Мужчина" :value="true"></el-option>
               <el-option label="Женщина" :value="false"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="item-right">
-          <el-form-item label="Дата рождения" @change="updateHuman">
+          <el-form-item label="Дата рождения" @change="updateHuman()">
             <DatePicker v-model="human.dateBirth" />
           </el-form-item>
         </div>
       </div>
       <el-form-item label="Адрес регистрации">
-        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman"></el-input>
-      </el-form-item>
-
-      <div class="tab-tools">
-        <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
-          <use xlink:href="#active" />
-        </svg>
-        <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
-          <use xlink:href="#non-active" />
-        </svg>
-        Адрес регистрации и адрес проживания совпадают
-      </div>
-
-      <el-form-item label="Адрес проживания">
-        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman()"></el-input>
       </el-form-item>
     </el-form>
+
+    <div class="tab-tools">
+      <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
+        <use xlink:href="#active" />
+      </svg>
+      <svg v-else class="activated-icon non-active" @click="toggleAddress(true)">
+        <use xlink:href="#non-active" />
+      </svg>
+      Адрес регистрации и адрес проживания совпадают
+    </div>
+
+    <el-form-item label="Адрес проживания">
+      <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+    </el-form-item>
   </div>
 
   <svg width="0" height="0" class="hidden">
@@ -73,6 +80,7 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import Human from '@/classes/Human';
 import DatePicker from '@/services/components/DatePicker.vue';
 import Provider from '@/services/Provider/Provider';
+import validate from '@/services/validate';
 
 export default defineComponent({
   name: 'PassportForm',
@@ -93,14 +101,28 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const surnameForm = ref();
     const form = ref();
     const human: Ref<Human> = computed(() => Provider.store.getters[`${props.storeModule}/item`].getHuman());
     const toggleAddress = async (addressesEqual: boolean): Promise<void> => {
       human.value.setResidentialAddress(addressesEqual);
       await updateHuman();
     };
+    const getForm = (value: string) => {
+      switch (value) {
+        case 'surname':
+          return surnameForm;
+        default:
+          return form;
+      }
+    };
 
-    const updateHuman = async (): Promise<void> => {
+    const updateHuman = async (form?: string): Promise<void> => {
+      if (form) {
+        if (!validate(getForm(form))) {
+          return;
+        }
+      }
       await Provider.withHeadLoader(async () => {
         if (props.editMode) {
           await Provider.store.dispatch('humans/update', human.value);
@@ -124,6 +146,7 @@ export default defineComponent({
       // human,
       toggleAddress,
       form,
+      surnameForm,
     };
   },
 });
@@ -242,7 +265,6 @@ export default defineComponent({
   :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
     width: 100%;
   }
-
 
   :deep(.el-form-item) {
     display: block;
