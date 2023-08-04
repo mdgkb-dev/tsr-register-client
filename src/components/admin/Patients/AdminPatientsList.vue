@@ -31,6 +31,7 @@
                       <SmallDatePicker
                         v-model:model-value="patient.human.dateBirth"
                         placeholder="Выбрать"
+                        :readonly="true"
                         @change="updateHuman(patient.human)"
                       />
                     </InfoItem>

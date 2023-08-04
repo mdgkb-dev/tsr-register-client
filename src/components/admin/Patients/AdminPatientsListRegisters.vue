@@ -1,13 +1,21 @@
 <template>
-  <InfoItem title="регистры" margin="0 0 0 0px" open-width="100%" :with-hover="editMode" :with-open-window="editMode">
-    <div class="block">
-      <div v-for="patientRegister in patient.patientsRegisters" :key="patientRegister.id">
-        <StringItem :string="patientRegister.register.getTagName() + ','" font-size="14px" />
-      </div>
+  <InfoItem
+    title="регистры"
+    margin="0 0 0 0px"
+    close-window-overflow="hidden"
+    open-width="100%"
+    :with-hover="editMode"
+    :with-open-window="editMode"
+  >
+    <div v-for="(patientRegister, i) in patient.patientsRegisters" :key="patientRegister.id">
+      <StringItem
+        :string="patientRegister.register.getTagName() + (i === patient.patientsRegisters.length - 1 ? '' : ',&nbsp')"
+        font-size="14px"
+      />
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" gridTemplateColumns="repeat(auto-fit, minmax(90px, 1fr))">
+      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(90px, 1fr))">
         <Button
           v-for="register in registers"
           :key="register.id"
@@ -32,10 +40,10 @@ import Register from '@/classes/Register';
 import User from '@/classes/User';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListRegisters',

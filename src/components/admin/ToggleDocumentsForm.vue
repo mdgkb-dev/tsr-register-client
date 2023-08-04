@@ -1,30 +1,28 @@
 <template>
-  <InfoItem title="документы" margin="0 0 0 0px" :with-hover="true" :with-open-window="true">
-    <div v-for="document in human.documents" :key="document">
-      <StringItem :string="document.documentType.getTagName() + ',&nbsp'" font-size="14px" width="100%" />
+  <InfoItem title="документы" margin="0 0 0 0px" close-window-overflow="hidden" :with-hover="true" :with-open-window="true">
+    <div v-for="(document, i) in human.documents" :key="document.id">
+      <StringItem
+        :string="document.documentType.getTagName() + (i === human.documents.length - 1 ? '' : ',&nbsp')"
+        font-size="14px"
+        width="100%"
+      />
     </div>
 
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
-        <div v-for="document in human.documents" :key="document">
-          <InfoItem
-            icon="edit-title"
-            margin="0"
-            :with-open-window="false"
-            height="32px"
-            @click="selectDocument(document.id)"
-          >
+        <div v-for="document in human.documents" :key="document.id">
+          <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="selectDocument(document.id)">
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />
           </InfoItem>
         </div>
 
         <div v-if="documentsIsToggle">
-          <Button 
-            v-for="docType in documentTypes" 
-            :key="docType.id" 
-            @click="addDocument(docType.id)" 
-            button-class="save-button"  
+          <Button
+            v-for="docType in documentTypes"
+            :key="docType.id"
+            button-class="save-button"
             :text="docType.name"
+            @click="addDocument(docType.id)"
           />
         </div>
         <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleDocuments(true)" />
@@ -128,10 +126,11 @@ export default defineComponent({
 }
 
 .doc-list {
-  color: #343E5C;
+  color: #343e5c;
   padding: 10px 0;
   border: 1px solid #006bb4;
-  border-radius: $normal-border-radius}
+  border-radius: $normal-border-radius;
+}
 
 .doc-list:not(:last-child) {
   margin-bottom: 10px;

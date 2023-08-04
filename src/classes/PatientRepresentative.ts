@@ -21,9 +21,9 @@ export default class PatientRepresentative {
     ClassHelper.BuildClass(this, i);
   }
 
-  getRepresentativeParentType(): string {
+  getRepresentativeParentType(full?: boolean): string {
     if (!this.representativeType.id) {
-      return 'Предста- витель';
+      return full ? 'Представитель' : 'Предста- витель';
     }
     if (this.representative?.human.isMale) {
       return this.representativeType.parentMaleType;

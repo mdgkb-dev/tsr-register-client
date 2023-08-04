@@ -7,8 +7,8 @@
     }"
   >
     <el-date-picker
-      disabled="true"
       v-model="date"
+      disabled="true"
       type="date"
       format="DD.MM.YY"
       :placeholder="placeholder"
@@ -17,14 +17,19 @@
         position: 'relative',
         cursor: 'pointer',
       }"
+      :teleported="false"
       @change="changeHandler"
       @focus="open"
+      @keydown="dateFormat"
     ></el-date-picker>
+    <!-- popper-class="disable" -->
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+
+import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
   name: 'SmallDatePicker',
@@ -35,9 +40,10 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      default: 'Выберать',
+      default: 'Выберите дату',
     },
     width: { type: String as PropType<string>, required: false, default: 'auto' },
+    readonly: { type: Boolean, required: false, default: false },
   },
   emits: ['update:modelValue', 'change'],
 
@@ -60,6 +66,7 @@ export default defineComponent({
     return {
       open,
       date,
+      dateFormat,
       changeHandler,
     };
   },
@@ -130,5 +137,8 @@ export default defineComponent({
 
 :deep(.el-input-number__decrease) {
   border-radius: 0px;
+}
+:deep(.disable) {
+  display: none;
 }
 </style>

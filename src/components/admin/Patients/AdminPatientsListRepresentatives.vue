@@ -1,9 +1,11 @@
 <template>
-  <InfoItem title="представители" margin="0" :with-hover="editMode" :with-open-window="editMode">
-    <div class="block">
-      <div v-for="rep in patient.patientsRepresentatives" :key="rep">
-        <StringItem v-if="patient.patientsRepresentatives" :string="rep.getRepresentativeParentType() + ','" font-size="14px" />
-      </div>
+  <InfoItem title="представители" close-window-overflow="hidden" margin="0" :with-hover="editMode" :with-open-window="editMode">
+    <div v-for="(rep, i) in patient.patientsRepresentatives" :key="rep.id">
+      <StringItem
+        v-if="patient.patientsRepresentatives"
+        :string="rep.getRepresentativeParentType(true) + (i === patient.patientsRepresentatives.length - 1 ? '' : ',&nbsp')"
+        font-size="14px"
+      />
     </div>
 
     <template #open-inside-content>
@@ -11,7 +13,7 @@
         <div v-for="(rep, key, index) in patient.patientsRepresentatives" :key="index">
           <InfoItem margin="0" :with-open-window="false" height="32px">
             <template #title>
-              <StringItem :string="rep.getRepresentativeParentType()" font-size="10px" padding="0 0 0 3px" color="#D42E61" />
+              <StringItem :string="rep.getRepresentativeParentType(true)" font-size="10px" padding="0 0 0 3px" color="#D42E61" />
             </template>
             <div>
               <StringItem
@@ -47,11 +49,11 @@ import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListRepresentatives',

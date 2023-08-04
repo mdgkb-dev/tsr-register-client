@@ -8,9 +8,10 @@
       :close="closeToggle"
       width="100%"
       @keyup-enter="submit"
+      @after-close="resetCopy"
     >
       <StringItem v-if="human.getFullName().length > 3" :string="human.getFullName()" />
-      <StringItem v-else string="Введите данные" color="#B0A4C0"/>
+      <StringItem v-else string="Введите данные" color="#B0A4C0" />
       <template #open-inside-content>
         <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
           <InfoItem
@@ -95,6 +96,10 @@ export default defineComponent({
     const form = ref();
     const humanCopy: Ref<Human> = ref(new Human(props.human));
 
+    const resetCopy = () => {
+      humanCopy.value = new Human(props.human);
+    };
+
     const updateHuman = async (): Promise<void> => {
       props.human.setFullName(humanCopy.value);
       await Provider.withHeadLoader(async () => {
@@ -121,6 +126,7 @@ export default defineComponent({
       updateHumanName,
       form,
       humanCopy,
+      resetCopy,
     };
   },
 });
