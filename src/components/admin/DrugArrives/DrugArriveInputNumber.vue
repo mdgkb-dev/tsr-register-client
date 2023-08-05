@@ -1,88 +1,47 @@
 <template>
-  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
-    <template #visability>
-      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem
-          title="поиск и сортировка"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          :with-hover="false"
-        >
-          <div :style="{ width: '100%' }">
-            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="load" />
-          </div>
-        </InfoItem>
-      </GridContainer>
-    </template>
-
-    <template #filter>
-      <GridContainer
-        max-width="900px"
-        grid-gap="70px 10px"
-        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-        margin="0 0 0 10px"
-      >
-        <GridContainer
-          max-width="500px"
-          grid-gap="10px"
-          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-          margin="0px"
-          background="#F5F6F8"
-        >
-        </GridContainer>
-        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-          <FiltersButtonsMultiply
-            :filter-model="filterByStatus"
-            :options="createStatusesOptions()"
-            default-label="По статусу"
-            :inverse="true"
-            @load="$emit('load')"
-          />
-        </GridContainer>
-      </GridContainer>
-    </template>
-  </RightSliderContainer>
+  <Button icon="plus" icon-class="icon-plus" :disabled="!drugArrive.canSpend()" @click="decrement" />
+  <div>{{ drugArrive.quantity }}</div>
+  <Button icon="plus" icon-class="icon-plus" @click="increment" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
-import Status from '@/classes/Status';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
-import SortList from '@/components/SortList.vue';
-import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
-import IOption from '@/interfaces/shared/IOption';
-import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
-import FilterModel from '@/services/classes/filters/FilterModel';
+import DrugArrive from '@/classes/DrugArrive';
+import Button from '@/components/Base/Button.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'AdminDrugApplicationsListFilters',
+  name: 'DrugArriveInputNumber',
   components: {
-    FiltersButtonsMultiply,
-    SortList,
-    InfoItem,
-    GridContainer,
-    RightSliderContainer,
+    Button,
   },
-  emits: ['load'],
-  setup() {
-    const filterByStatus: Ref<FilterModel> = ref(DrugApplicationsFiltersLib.byStatus());
-    const statuses: Ref<Status[]> = computed(() => Provider.store.getters['statuses/items']);
-    const createStatusesOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      statuses.value.forEach((r: Status) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
+  props: {
+    drugArrive: {
+      type: Object as PropType<DrugArrive>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const updateDrugArrive = async (): Promise<void> => {
+      await Provider.store.dispatch('drugArrives/updateWithoutReset', props.drugArrive);
+    };
+
+    const increment = async (): Promise<void> => {
+      props.drugArrive.increment();
+      await updateDrugArrive();
+    };
+
+    const decrement = async (): Promise<void> => {
+      if (!props.drugArrive.decrement()) {
+        return;
+      }
+      await updateDrugArrive();
     };
 
     return {
-      createStatusesOptions,
-      filterByStatus,
+      decrement,
+      increment,
     };
   },
 });
@@ -168,6 +127,7 @@ export default defineComponent({
   border-radius: 5px;
   color: #006bb4;
   background: #dff2f8;
+  margin-right: 10px;
 }
 
 :deep(.files-buttons) {
@@ -256,7 +216,8 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
+  width: 100%;
+  margin-right: 10px;
   padding: 0px;
 }
 
@@ -264,7 +225,8 @@ export default defineComponent({
   display: flex;
   justify-content: right;
   align-items: center;
-  width: auto;
+  width: 100%;
+  min-width: 210px;
   padding: 0px;
 }
 

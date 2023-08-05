@@ -6,7 +6,6 @@ import auth from '@/store/modules/auth';
 import { commissions } from '@/store/modules/commissions';
 import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
 import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
-import { commissionsStatuses } from '@/store/modules/commissionsStatuses';
 import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
 import { disabilities } from '@/store/modules/disabilities';
@@ -16,7 +15,6 @@ import { documentFileInfos } from '@/store/modules/documentFileInfos';
 import { documents } from '@/store/modules/documents';
 import { documentTypes } from '@/store/modules/documentTypes';
 import { drugApplications } from '@/store/modules/drugApplications';
-import { drugApplicationsStatuses } from '@/store/modules/drugApplicationsStatuses';
 import { drugArrives } from '@/store/modules/drugArrives';
 import { drugDecreases } from '@/store/modules/drugDecreases';
 import { drugDozes } from '@/store/modules/drugDozes';
@@ -48,6 +46,7 @@ import { researches } from '@/store/modules/researches';
 import { researchesPools } from '@/store/modules/researchesPools';
 import { researchesResults } from '@/store/modules/researchesResults';
 import search from '@/store/modules/search';
+import { statuses } from '@/store/modules/statuses';
 import { users } from '@/store/modules/users';
 
 import RootState from './types';
@@ -102,10 +101,9 @@ const store: StoreOptions<RootState> = {
     drugArrives,
     fundContracts,
     fundCouncils,
-    commissionsStatuses,
     drugApplications,
     commissionsDrugApplications,
-    drugApplicationsStatuses,
+    statuses,
     drugDecreases,
     drugForms,
     drugRecipes,

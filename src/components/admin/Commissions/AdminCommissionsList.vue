@@ -145,7 +145,11 @@
                       title="лекарство"
                       @click="openModalMedicine(commission)"
                     >
-                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" font-size="10px" />
+                      <StringItem
+                        :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''"
+                        custom-class="medicine"
+                        font-size="10px"
+                      />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
                       <SmallDatePicker
@@ -201,7 +205,6 @@ import InfoItem from '@/components/Lib/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import CommissionsSortsLib from '@/libs/sorts/CommissionsSortsLib';
-import FilterModel from '@/services/classes/filters/FilterModel';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -226,7 +229,6 @@ export default defineComponent({
   },
   setup() {
     const templatesOpened: Ref<boolean> = ref(false);
-    const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
     const selectedCommission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -239,7 +241,6 @@ export default defineComponent({
     const showModalDrugApplications: Ref<boolean> = ref(false);
 
     const loadCommissions = async () => {
-      await Provider.store.dispatch('commissionsStatuses/getAll');
       await Provider.loadItems();
     };
 
@@ -344,7 +345,6 @@ export default defineComponent({
       templatesOpened,
       commissionsTemplates,
       setPatient,
-      filterByStatus,
       updateCommission,
       count,
       selectSearch,

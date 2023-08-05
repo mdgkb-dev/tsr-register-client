@@ -1,10 +1,12 @@
 import ClassHelper from '@/services/ClassHelper';
 
-export default class DrugApplicationStatus {
+export default class Status {
   id?: string;
   name = '';
   color = '';
-  constructor(i?: DrugApplicationStatus) {
+  model = '';
+
+  constructor(i?: Status) {
     ClassHelper.BuildClass(this, i);
   }
 }

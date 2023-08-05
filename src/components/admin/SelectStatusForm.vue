@@ -1,88 +1,44 @@
 <template>
-  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
-    <template #visability>
-      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem
-          title="поиск и сортировка"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          :with-hover="false"
-        >
-          <div :style="{ width: '100%' }">
-            <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="load" />
-          </div>
-        </InfoItem>
-      </GridContainer>
-    </template>
-
-    <template #filter>
-      <GridContainer
-        max-width="900px"
-        grid-gap="70px 10px"
-        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-        margin="0 0 0 10px"
-      >
-        <GridContainer
-          max-width="500px"
-          grid-gap="10px"
-          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-          margin="0px"
-          background="#F5F6F8"
-        >
-        </GridContainer>
-        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-          <FiltersButtonsMultiply
-            :filter-model="filterByStatus"
-            :options="createStatusesOptions()"
-            default-label="По статусу"
-            :inverse="true"
-            @load="$emit('load')"
-          />
-        </GridContainer>
-      </GridContainer>
-    </template>
-  </RightSliderContainer>
+  <InfoItem margin="0" width="100%" :with-open-window="false" title="статус" padding="0">
+    <el-select :model-value="statusId" @change="select">
+      <el-option v-for="status in statuses" :key="status.id" :label="status.name" :value="status.id" />
+    </el-select>
+  </InfoItem>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Status from '@/classes/Status';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
-import SortList from '@/components/SortList.vue';
-import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
-import IOption from '@/interfaces/shared/IOption';
-import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
-import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'AdminDrugApplicationsListFilters',
+  name: 'SelectStatusForm',
   components: {
-    FiltersButtonsMultiply,
-    SortList,
     InfoItem,
-    GridContainer,
-    RightSliderContainer,
   },
-  emits: ['load'],
-  setup() {
-    const filterByStatus: Ref<FilterModel> = ref(DrugApplicationsFiltersLib.byStatus());
+  props: {
+    statusId: {
+      type: String as PropType<string>,
+      required: true,
+    },
+  },
+  emits: ['select'],
+  setup(props, { emit }) {
     const statuses: Ref<Status[]> = computed(() => Provider.store.getters['statuses/items']);
-    const createStatusesOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      statuses.value.forEach((r: Status) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
+
+    const select = (statusId: string) => {
+      const status = statuses.value.find((s: Status) => s.id === statusId);
+      if (!status) {
+        return;
+      }
+      emit('select', status);
     };
 
     return {
-      createStatusesOptions,
-      filterByStatus,
+      select,
+      statuses,
     };
   },
 });
@@ -102,6 +58,21 @@ export default defineComponent({
   &-download {
     background: #dff2f8;
   }
+}
+
+.doc-list {
+  color: #343e5c;
+  padding: 10px 0;
+  border: 1px solid #006bb4;
+  border-radius: $normal-border-radius;
+}
+
+.doc-list:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.doc-list:hover {
+  color: #006bb4;
 }
 
 :deep(.button-register) {
@@ -157,8 +128,12 @@ export default defineComponent({
   height: 42px;
   color: #006bb4;
   background: #dff2f8;
-  margin: 2px 10px 0 0;
+  margin: 0 0 10px 0;
   font-size: 14px;
+}
+
+.save-button:last-child {
+  margin: 0;
 }
 
 :deep(.edit-button) {

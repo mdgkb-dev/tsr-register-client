@@ -1,7 +1,7 @@
 import { ComputedRef, Ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
-type actionFunction = ((next?: NavigationGuardNext | undefined) => Promise<void>) | (() => Promise<void>) | (() => void);
+type actionFunction = ((next?: NavigationGuardNext | undefined) => Promise<void>) | (() => Promise<void>) | ((param?: any) => void);
 export type buttonAction = undefined | actionFunction | ComputedRef<actionFunction>;
 export default class AdminButtonParams {
   text?: string | ComputedRef<string> = 'Сохранить';

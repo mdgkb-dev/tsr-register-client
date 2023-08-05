@@ -3,15 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 import Commission from '@/classes/Commission';
 import CommissionDrugApplication from '@/classes/CommissionDrugApplication';
 import DrugApplicationFile from '@/classes/DrugApplicationFile';
-import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
 import FundContract from '@/classes/FundContract';
+import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
 export default class DrugApplication {
   id?: string;
   date = new Date();
-  @ClassHelper.GetClassConstructor(DrugApplicationStatus)
-  drugApplicationStatus?: DrugApplicationStatus;
-  drugApplicationStatusId?: string;
+
+  @ClassHelper.GetClassConstructor(Status)
+  status?: Status;
+  statusId?: string;
+
   number = '';
 
   @ClassHelper.GetClassConstructor(CommissionDrugApplication)

@@ -8,6 +8,7 @@ import DrugRecipe from '@/classes/DrugRecipe';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
 import DateTimeFormat from '@/services/DateFormat';
 
@@ -33,6 +34,10 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(PatientDiagnosis)
   patientDiagnosis?: PatientDiagnosis;
   patientDiagnosisId?: string;
+
+  @ClassHelper.GetClassConstructor(Status)
+  status?: Status;
+  statusId?: string;
 
   constructor(i?: Commission) {
     ClassHelper.BuildClass(this, i);

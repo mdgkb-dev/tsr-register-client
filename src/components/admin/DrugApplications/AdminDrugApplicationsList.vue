@@ -48,11 +48,7 @@
                     />
                   </div>
                   <div class="line-item-right">
-                    <InfoItem :close="infoItemToggle" margin="0" width="100%" :with-open-window="false" title="статус" padding="0">
-                      <el-select v-model="drugApplication.drugApplicationStatusId" @change="(e) => updateStatus(drugApplication, e)">
-                        <el-option v-for="status in drugApplicationsStatuses" :key="status.id" :label="status.name" :value="status.id" />
-                      </el-select>
-                    </InfoItem>
+                    <SelectStatusForm :status-id="drugApplication.statusId" @select="(e) => updateStatus(drugApplication, e)" />
                   </div>
                 </div>
                 <div class="item-flex">
@@ -91,13 +87,14 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 import Del from '@/assets/svg/Del.svg';
 import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
-import DrugApplicationStatus from '@/classes/DrugApplicationStatus';
+import Status from '@/classes/Status';
 import AdminDrugApplicationsListFilters from '@/components/admin/DrugApplications/AdminDrugApplicationsListFilters.vue';
 import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugApplicationFilesList.vue';
 import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
 import ToggleCommissionsForm from '@/components/admin/DrugApplications/ToggleCommissionsForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+import SelectStatusForm from '@/components/admin/SelectStatusForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
@@ -105,19 +102,20 @@ import ModalWindow from '@/components/Base/ModalWindow.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
+import StatusesFiltersLib from '@/libs/filters/StatusesFiltersLib';
 import DrugApplicationsSortsLib from '@/libs/sorts/DrugApplicationsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
-// import PatientsFiltersLib from '@/services/Provider/Provider/libs/filters/PatientsFiltersLib';
-// import PatientsSortsLib from '@/services/Provider/libs/sorts/PatientsSortsLib';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
+    SelectStatusForm,
     DrugArrivesList,
     ModalWindow,
     CollapseContainer,
@@ -134,6 +132,9 @@ export default defineComponent({
     AdminDrugApplicationsListFilters,
   },
   setup() {
+    const filterQuery = new FilterQuery();
+    filterQuery.setFilterModel(StatusesFiltersLib.byModel('drugApplication'));
+
     const infoItemToggle: Ref<boolean> = ref(false);
     const showDrugArrives: Ref<boolean> = ref(false);
     const showDrugApplicationFilesList: Ref<boolean> = ref(false);
@@ -142,17 +143,13 @@ export default defineComponent({
     const selectedDrugApplication: Ref<DrugApplication> = computed(() => Provider.store.getters['drugApplications/item']);
     const drugApplications: Ref<DrugApplication[]> = computed(() => Provider.store.getters['drugApplications/items']);
     const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
-    const drugApplicationsStatuses: Ref<DrugApplicationStatus[]> = computed(() => Provider.store.getters['drugApplicationsStatuses/items']);
+
     const count: Ref<number> = computed(() => Provider.store.getters['drugApplications/count']);
     const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
 
-    const updateStatus = async (drugApplication: DrugApplication, statusId: string): Promise<void> => {
-      const status = drugApplicationsStatuses.value.find((s: DrugApplicationStatus) => s.id === statusId);
-      if (!status) {
-        return;
-      }
-      drugApplication.drugApplicationStatus = status;
-      drugApplication.drugApplicationStatusId = status.id;
+    const updateStatus = async (drugApplication: DrugApplication, status: Status): Promise<void> => {
+      drugApplication.status = status;
+      drugApplication.statusId = status.id;
       await updateDrugApplication(drugApplication);
     };
     const selectCommissionModel = ref('');
@@ -162,11 +159,10 @@ export default defineComponent({
     };
 
     const load = async () => {
+      await Provider.store.dispatch('statuses/getAll', filterQuery);
       await Provider.store.dispatch('commissions/getAll');
-      await Provider.store.dispatch('drugApplicationsStatuses/getAll');
       await loadDrugApplications();
       filterByStatus.value = DrugApplicationsFiltersLib.byStatus();
-      console.log(1);
       // filterByRegister.value = PatientsFiltersLib.byRegisters([]);
     };
 
@@ -241,7 +237,7 @@ export default defineComponent({
       selectCommissionModel,
       initFundContract,
       loadDrugApplications,
-      drugApplicationsStatuses,
+
       updateStatus,
       removeCommission,
       commissions,

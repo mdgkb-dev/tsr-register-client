@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Drug from '@/classes/Drug';
 import DrugDecrease from '@/classes/DrugDecrease';
 import FundContract from '@/classes/FundContract';
+import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class DrugArrive {
@@ -14,6 +15,10 @@ export default class DrugArrive {
   @ClassHelper.GetClassConstructor(Drug)
   drug?: Drug;
   drugId?: string;
+
+  @ClassHelper.GetClassConstructor(Status)
+  status?: Status;
+  statusId?: string;
 
   date = new Date();
   arrived = false;
@@ -27,11 +32,9 @@ export default class DrugArrive {
     ClassHelper.BuildClass(this, i);
   }
 
-  static Create(fundContract: FundContract): DrugArrive {
+  static Create(): DrugArrive {
     const item = new DrugArrive();
     item.id = uuidv4();
-    item.date = fundContract.date;
-    item.drug = fundContract.drug;
     return item;
   }
 
@@ -42,7 +45,6 @@ export default class DrugArrive {
   }
 
   getRemain(): number {
-    console.log(this.quantity, this.getSpended());
     return this.quantity - this.getSpended();
   }
 
@@ -58,16 +60,16 @@ export default class DrugArrive {
     return item;
   }
 
-  setQuantity(cur: number, prev: number): boolean {
-    if (cur > prev) {
-      this.quantity++;
-      return true;
+  decrement(): boolean {
+    if (!this.canSpend()) {
+      return false;
     }
-    if (this.canSpend()) {
-      this.quantity--;
-      return true;
-    }
-    return false;
+    this.quantity--;
+    return true;
+  }
+
+  increment() {
+    this.quantity++;
   }
 
   drugMove(cur: number, prev: number, drugDecrease: DrugDecrease): boolean {

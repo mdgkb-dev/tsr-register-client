@@ -1,103 +1,60 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
-      <template #visability> </template>
-
-      <template #filter>
-        <GridContainer
-          max-width="900px"
-          grid-gap="27px 10px"
-          grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-          margin="0 0 0 10px"
-        >
-          <template #grid-items> </template>
-        </GridContainer>
-      </template>
-    </RightSliderContainer>
-
     <div class="scroll-block">
-      <div class="patient-count">Количество поставок: {{ count }}</div>
+      <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="drugArrive in drugArrives" :key="drugArrive.id">
-        <CollapseContainer>
-          <CollapseItem :is-collaps="true" padding="0 8px">
-            <template #inside-title>
-              <div class="flex-block" @click.prevent="() => undefined">
-                <div class="item-flex">
-                  <div class="line-item-left">
-                    <div>Всего: {{ drugArrive.quantity }}</div>
-                    <div>Осталось: {{ drugArrive.getRemain() }}</div>
-                    <el-input-number
-                      :model-value="drugArrive.quantity"
-                      @click.stop="() => undefined"
-                      @change="(cur, prev) => setDrugArriveQuantity(cur, prev, drugArrive)"
+        <CollapseItem :is-collaps="false" padding="0 8px">
+          <template #inside-title>
+            <div class="flex-block" @click.prevent="() => undefined">
+              <div class="item-flex">
+                <div class="line-item-left">
+                  <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="false">
+                    <SmallDatePicker
+                      v-model:model-value="drugArrive.date"
+                      placeholder="Выбрать"
+                      :readonly="true"
+                      @change="updateDrugArrive(drugArrive)"
                     />
-                    <el-date-picker v-model="drugArrive.date" />
-                  </div>
+                  </InfoItem>
+                </div>
+                <div class="line-item-right">
+                  <Button :text="'Количество:' + drugArrive.getRemain() + '/' + drugArrive.quantity" @click="openCreateDrugArrives" />
                 </div>
               </div>
-            </template>
-
-            <template #inside-content>
-              <div class="background-container">
-                <div>Расходы</div>
-                <el-button @click="addDrugDecrease(drugArrive)">Добавить расход лекарств</el-button>
-                <div v-for="drugDecrease in drugArrive.drugDecreases" :key="drugDecrease.id">
-                  <hr />
-
-                  <div class="inblock">
-                    <svg class="icon-minus" @click.stop="updateDrugDecreaseQuantity(0, 1, drugArrive, drugDecrease)">
-                      <use xlink:href="#minus"></use>
-                    </svg>
-                    <div class="text">{{ drugDecrease.quantity }}</div>
-                    <svg class="icon-plus" @click.stop="updateDrugDecreaseQuantity(1, 0, drugArrive, drugDecrease)">
-                      <use xlink:href="#plus"></use>
-                    </svg>
-                  </div>
-
-                  <el-input v-model="drugDecrease.comment" @blur="updateDrugDecrease(drugDecrease)" />
-                  <el-date-picker v-model="drugDecrease.date" @change="updateDrugDecrease(drugDecrease)" />
-                  <RemoteSearch
-                    :must-be-translated="true"
-                    key-value="patient"
-                    placeholder="Введите имя пациента"
-                    @click.stop="() => undefined"
-                    @select="(e) => setPatientToDecrease(e, drugDecrease)"
-                  />
-                  <el-button @click="removeDrugDecrease(drugArrive, drugDecrease)" />
-                </div>
-                <!--                <div v-for="drugDecrease in drugArrive.drugDecreases" :key="drugDecrease.id">-->
-                <!--                </div>-->
+              <div class="item-flex">
+                <GridContainer
+                  max-width="1920px"
+                  custom-class="grid"
+                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
+                  margin="0"
+                >
+                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
+                  </GridContainer>
+                </GridContainer>
               </div>
-            </template>
-          </CollapseItem>
-        </CollapseContainer>
+            </div>
+          </template>
+        </CollapseItem>
       </div>
     </div>
   </AdminListWrapper>
-  <Icons />
 </template>
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
 import { computed, defineComponent, Ref, ref } from 'vue';
 
-import Icons from '@/assets/svg/Button/Icons.svg';
-import Del from '@/assets/svg/Del.svg';
 import DrugArrive from '@/classes/DrugArrive';
 import DrugDecrease from '@/classes/DrugDecrease';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import FileUploader from '@/components/FileUploader.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
+import StatusesFiltersLib from '@/libs/filters/StatusesFiltersLib';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
@@ -105,25 +62,19 @@ import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
-  name: 'AdminDrugArrives',
+  name: 'AdminDrugArrivesList',
   components: {
-    Icons,
-    FileUploader,
-    CollapseContainer,
-    FiltersButtonsMultiply,
-    RemoteSearch,
-
     AdminListWrapper,
     CollapseItem,
     Button,
-    StringItem,
     InfoItem,
     GridContainer,
     SmallDatePicker,
-    Del,
-    RightSliderContainer,
   },
   setup() {
+    const filterQuery = new FilterQuery();
+    filterQuery.setFilterModel(StatusesFiltersLib.byModel('drugApplication'));
+
     const count: Ref<number> = computed(() => Provider.store.getters['drugArrives/count']);
     const createDrugArrivesOpened: Ref<boolean> = ref(false);
     const drugArrives: Ref<DrugArrive[]> = computed(() => Provider.store.getters['drugArrives/items']);
@@ -139,10 +90,16 @@ export default defineComponent({
       await loadCommissions();
     };
 
+    const createDrugArrive = async () => {
+      const item = DrugArrive.Create();
+      await Provider.store.dispatch('drugArrives/createWithoutReset', item);
+      Provider.store.commit('drugArrives/unshiftToAll', item);
+    };
+
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Склад лекарств',
-        buttons: [],
+        buttons: [{ text: 'Добавить', type: 'normal-button', action: createDrugArrive }],
       },
       // sortsLib: commissionsSortsLib,
       getAction: 'getAllWithCount',
@@ -153,17 +110,12 @@ export default defineComponent({
       await Provider.store.dispatch('fundContracts/getAll');
     };
 
-    const createDrugArrive = async (fundContract: FundContract) => {
-      const item = DrugArrive.Create(fundContract);
-      await Provider.store.dispatch('drugArrives/create', item);
-    };
-
     const selectFundContract = async (contract: FundContract): Promise<void> => {
       selectedFundContract.value = contract;
     };
     const addDrugDecrease = async (drugArrive: DrugArrive): Promise<void> => {
       const item = drugArrive.addDrugDecrease();
-      await Provider.store.dispatch('drugDecreases/create', item);
+      await Provider.store.dispatch('drugDecreases/createWithoutReset', item);
     };
 
     const updateDrugDecrease = async (item: DrugDecrease): Promise<void> => {
@@ -233,44 +185,41 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 
-.icon-plus {
-  width: 16px;
-  height: 16px;
-  fill: #ffffff;
-  cursor: pointer;
-  transition: 0, 3s;
-  opacity: 0.8;
-  padding: 9px;
+.button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  font-size: 12px;
+  &-filter {
+    background: #ffffff;
+  }
+  &-download {
+    background: #dff2f8;
+  }
 }
 
-.icon-plus:hover {
-  transform: scale(1.2, 1.2);
-  opacity: 1;
+:deep(.button-register) {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #ffffff;
+  font-size: 12px;
 }
 
-.icon-plus:active {
-  transform: scale(1.2, 1.2);
-  opacity: 0.8;
+:deep(.name-item) {
+  margin: 0px;
+  width: auto;
+  border-color: #ffffff;
+  padding: 0px;
 }
 
-.icon-minus {
-  width: 16px;
-  height: 16px;
-  fill: #ffffff;
-  cursor: pointer;
-  transition: 0, 3s;
-  opacity: 0.8;
-  padding: 9px;
-}
-
-.icon-minus:hover {
-  transform: scale(1.2, 1.2);
-  opacity: 1;
-}
-
-.icon-minus:active {
-  transform: scale(1.2, 1.2);
-  opacity: 0.8;
+.grid {
+  max-width: auto;
+  grid-gap: 10px;
+  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
 }
 
 .plus-button {
@@ -308,11 +257,13 @@ export default defineComponent({
 }
 
 :deep(.edit-button) {
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   height: 40px;
   border-radius: 5px;
   color: #006bb4;
   background: #dff2f8;
+  margin-right: 10px;
 }
 
 :deep(.files-buttons) {
@@ -339,7 +290,7 @@ export default defineComponent({
 .patient-name {
   color: #006bb4;
   font-size: 17px;
-  min-width: 240px;
+  min-width: 150px;
   width: 100%;
   padding: 0px;
 }
@@ -401,7 +352,8 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
+  width: 100%;
+  margin-right: 10px;
   padding: 0px;
 }
 
@@ -409,7 +361,8 @@ export default defineComponent({
   display: flex;
   justify-content: right;
   align-items: center;
-  width: auto;
+  width: 100%;
+  min-width: 210px;
   padding: 0px;
 }
 
@@ -487,44 +440,5 @@ export default defineComponent({
     width: 100%;
     margin: 0 0px 10px 0;
   }
-}
-
-.icon-loader {
-  width: 16px;
-  height: 16px;
-  stroke: #a1a7bd;
-  cursor: pointer;
-  transition: 0.3s;
-  padding-right: 10px;
-}
-
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  border: $normal-border;
-  cursor: pointer;
-  transition: 0.3s;
-  margin: 0 15px;
-}
-
-.inblock {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 0 13px;
-}
-
-.text {
-  max-width: 260px;
-  font-size: 14px;
-  padding: 0;
-  letter-spacing: 1px;
-  line-height: 1.1;
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
 }
 </style>

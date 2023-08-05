@@ -3,6 +3,7 @@
     class="button"
     :style="buttonStyle"
     :class="buttonClass"
+    :disabled="disabled"
     @click.prevent="changeState"
     @mouseenter="hovering = true"
     @mouseleave="hovering = false"
@@ -31,14 +32,14 @@
 import { computed, defineComponent, PropType, ref } from 'vue';
 
 import Close from '@/assets/svg/Close.svg';
+import Commission from '@/assets/svg/Commission.svg';
 import Del from '@/assets/svg/Del.svg';
 import Download from '@/assets/svg/Download.svg';
 import Edit from '@/assets/svg/Edit.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
 import Filter from '@/assets/svg/Filter.svg';
-import Plus from '@/assets/svg/Plus.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
-import Commission from '@/assets/svg/Commission.svg';
+import Plus from '@/assets/svg/Plus.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -73,6 +74,7 @@ export default defineComponent({
     icon: { type: String as PropType<string>, required: false, default: '' },
     isToggle: { type: Boolean as PropType<boolean>, required: false, default: false },
     inverse: { type: Boolean as PropType<boolean>, required: false, default: false },
+    disabled: { type: Boolean as PropType<boolean>, required: false, default: false },
   },
   emits: ['click'],
   setup(props, { emit }) {

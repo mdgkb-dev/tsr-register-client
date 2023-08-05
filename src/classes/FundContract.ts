@@ -23,7 +23,7 @@ export default class FundContract {
   }
 
   addDrugArrive(): DrugArrive {
-    const item = DrugArrive.Create(this);
+    const item = DrugArrive.Create();
     item.stage = this.drugArrives.length + 1;
     item.fundContractId = this.id;
     this.drugArrives.push(item);
