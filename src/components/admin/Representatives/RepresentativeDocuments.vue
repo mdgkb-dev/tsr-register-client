@@ -1,49 +1,92 @@
 <template>
-  <el-form v-if="document.id">
-    <Button button-class="plus-button" @click="addFile" text='Добавить скан документа'/>
-    <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id" class="background-field">
-      <FileUploader :file-info="documentFileInfo.fileInfo" />
-      <Button button-class="delete-button" icon-class="edit-icon" @click="removeFile(documentFileInfo.id)" text="Удалить файл"/>
-    </div>
-    <div v-for="value in document.documentFieldValues" :key="value.id" class="margin-field">
-      <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
-        <el-input v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
-      </el-form-item>
-      
-      <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
-        <el-input-number v-model="document.valueNumber" size="mini" @blur="updateDocumentField(value)" />
-      </el-form-item>
+  <RightTabsContainer :is-toggle="documentsIsToggle" slider-on-width="180px" @toggle="toggleDocuments">
+    <template #icon>
+      <svg class="icon-plus">
+        <use xlink:href="#plus"></use>
+      </svg>
+    </template>
+    <template #slider-body>
+      <div class="slider-body">
+        <div v-for="docType in documentTypes" :key="docType.id" class="slider-item" @click="addDocument(docType.id)">
+          {{ docType.name }}
+        </div>
+      </div>
+    </template>
+    <template #tabs>
+      <div
+        v-for="doc in representative.human.documents"
+        :key="doc.id"
+        :class="{ 'tabs-item-active': doc.id === document.id }"
+        class="tabs-item"
+        @click="selectDocument(doc.id)"
+      >
+        <div class="tab-item-text">{{ doc.documentType.name }}</div>
+      </div>
+    </template>
+    <template #body>
+      <div class="body">
+        <ResearcheContainer background="#DFF2F8" padding="0">
+          <template #header>
+            <!-- <div class="researche-title">
+              <div class="researche-name">{{ document.documentType.name }}</div>
+            </div> -->
+            <div class="line-item">
+              <InfoItem
+                margin="0"
+                :with-open-window="false"
+                :with-icon="false"
+                height="50px"
+                background="#F5F5F5"
+                border-color="#C4C4C4"
+                padding="10px"
+                :with-hover="false"
+              >
+                <template #title>
+                  <StringItem string="сохранить" font-size="10px" padding="0" color="#C4C4C4"/>
+                </template>
+                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
+                  <Button text="xlsx" :with-icon="false" background-hover:#DFF2F8; button-class="button-download"> </Button>
+                </GridContainer>
+              </InfoItem>
+            </div>
+          </template>
 
-      <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">
-        <el-date-picker
-          v-model="value.valueDate"
-          format="DD.MM.YYYY"
-          type="date"
-          placeholder="Выберите дату"
-          size="mini"
-          @blur="updateDocumentField(value)"
-          @change="updateDocumentField(value)"
-        />
-      </el-form-item>
-    </div>
-    <Button button-class="delete-document-button" @click="removeDocument" text="Удалить документ" />
-  </el-form>
+          <template #body>
+            <div class="padding-field">
+              <DocumentForm v-if="document.id" @remove="removeDocument" />
+            </div>
+          </template>
+        </ResearcheContainer>
+      </div>
+    </template>
+  </RightTabsContainer>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
-import Document from '@/classes/Document';
-import DocumentFieldValue from '@/classes/DocumentFieldValue';
+import DocumentType from '@/classes/DocumentType';
+import Representative from '@/classes/Representative';
+import DocumentForm from '@/components/admin/DocumentForm.vue';
+import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
+import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import FileUploader from '@/components/FileUploader.vue';
+import InfoItem from '@/components/Lib/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+import scroll from '@/services/Scroll';
 export default defineComponent({
-  name: 'DocumentForm',
+  name: 'RepresentativeDocuments',
   components: {
+    DocumentForm,
+    RightTabsContainer,
     Button,
-    FileUploader,
+    ResearcheContainer,
+    GridContainer,
+    InfoItem,
+    StringItem,
   },
   props: {
     storeModule: {
@@ -51,35 +94,57 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['remove'],
-  setup(_, { emit }) {
+  setup() {
+    const documentsIsToggle: Ref<boolean> = ref(false);
+
+    const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
+    const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
     const document: Ref<Document> = computed(() => Provider.store.getters['documents/item']);
 
-    const removeFile = async (id: string) => {
-      await Provider.store.dispatch('documentFileInfos/remove', id);
-      ClassHelper.RemoveFromClassById(id, document.value.documentFileInfos);
+    const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
+
+    const addDocument = async (id: string) => {
+      await Provider.store.dispatch('documentTypes/get', id);
+      const item = representative.value.human.addDocument(documentType.value);
+      await Provider.store.dispatch('documents/createWithoutReset', item);
+      selectDocument(representative.value.human.documents[representative.value.human.documents.length - 1].id);
     };
 
-    const addFile = async () => {
-      const file = document.value.addFile();
-      await Provider.store.dispatch('documentFileInfos/create', file);
+    onBeforeMount(async () => {
+      if (representative.value.human.documents.length > 0) {
+        await selectDocument(representative.value.human.documents[0].id);
+      }
+    });
+
+    const selectDocument = async (id?: string) => {
+      await Provider.store.dispatch('documents/get', id);
     };
 
-    const updateDocumentField = async (field: DocumentFieldValue) => {
-      await Provider.store.dispatch('documentFieldValues/updateWithoutReset', field);
+    const removeDocument = async (id?: string) => {
+      ClassHelper.RemoveFromClassById(id, representative.value.human.documents);
+      await Provider.store.dispatch('documents/get', id);
+      if (representative.value.human.documents.length > 0) {
+        await selectDocument(representative.value.human.documents[0].id);
+      }
     };
 
-    const removeDocument = async () => {
-      await Provider.store.dispatch('documents/remove', document.value.id);
-      emit('remove', document.value.id);
+    const toggleDocuments = async (toggle: boolean) => {
+      if (toggle) {
+        await Provider.store.dispatch('documentTypes/getAll');
+      }
+      documentsIsToggle.value = toggle;
     };
 
     return {
       removeDocument,
-      updateDocumentField,
-      addFile,
-      removeFile,
+      selectDocument,
       document,
+      representative,
+      addDocument,
+      documentTypes,
+      documentsIsToggle,
+      toggleDocuments,
+      scroll,
     };
   },
 });
@@ -89,13 +154,23 @@ export default defineComponent({
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
 
-.background-field{
-  background: $grey-background;
-  margin-top: 10px;
-  width: calc(100% - 22px);
+
+.button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  font-size: 12px;
+  &-filter {
+    background: #ffffff;
+  }
+  &-download {
+    background: #dff2f8;
+  }
+}
+
+.padding-field {
   padding: 10px;
-  border-radius: $normal-border-radius;
-  border: $normal-border;
 }
 
 .xlsx-button {
@@ -279,43 +354,18 @@ export default defineComponent({
 }
 
 .plus-button {
-  width: 100%;
+  width: calc(100% - 20px);
   border-radius: 5px;
-  height: 42px;
   color: #00bea5;
   background: #c1efeb;
-  margin: 0px 10px 0 0;
-  font-size: 14px;
+  height: 60px;
+  margin: 0 10px;
 }
 
-.delete-button {
-  width: 120px;
-  border-radius: 5px;
-  height: 42px;
-  color: #c4c4c4;
-  background: #ffffff;
-  margin: 2px 10px 0 0;
-  font-size: 14px;
-}
-
-.delete-button:hover {
-  color: #E62C21;
-  background: #eeb2af;
-}
-
-.delete-document-button {
-  width: 100%;
-  border-radius: 5px;
-  height: 42px;
-  color: #c4c4c4;
-  background: #ffffff;
-  margin: 2px 10px 0 0;
-  font-size: 14px;
-}
-
-.delete-document-button:hover {
-  color: #E62C21;
-  background: #eeb2af;
+:deep(.icon-plus) {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .patient-research {
@@ -530,25 +580,6 @@ export default defineComponent({
   margin-right: 10px;
 }
 
-.save-button {
-  width: 100%;
-  border-radius: 5px;
-  height: 42px;
-  color: #006bb4;
-  background: #dff2f8;
-  margin: 2px 10px 0 0;
-  font-size: 14px;
-}
-
-:deep(.del-button) {
-  width: 42px;
-  height: 42px;
-  border-radius: 5px;
-  background: #ffffff;
-  color: #343e5c;
-  border: none;
-}
-
 :deep(.el-timeline) {
   padding: 0 0 0 10px;
 }
@@ -564,53 +595,6 @@ export default defineComponent({
 :deep(.el-timeline-item__wrapper) {
   padding-left: 20px;
 }
-
-  .el-select {
-    width: 100%;
-  }
-  :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
-    width: 100%;
-  }
-
-
-  :deep(.el-form-item) {
-    display: block;
-    margin-bottom: 16px;
-  }
-
-  :deep(.el-input__inner) {
-    height: 40px;
-    width: 100%;
-    display: flex;
-    font-family: Comfortaa, Arial, Helvetica, sans-serif;
-    font-size: 15px;
-    color: $site_dark_gray;
-  }
-
-  :deep(.el-input__inner::placeholder) {
-    color: $site_light_pink;
-  }
-
-  :deep(.el-input__icon) {
-    color: $site_dark_gray;
-  }
-
-  :deep(.el-form-item__label) {
-    color: $site_light_pink;
-    padding: 0 !important;
-    text-transform: uppercase;
-    margin-left: 5px;
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  :deep(.el-input-number__increase) {
-    border-radius: 0px;
-  }
-
-  :deep(.el-input-number__decrease) {
-    border-radius: 0px;
-  }
 
 @media screen and (max-width: 768px) {
   .tabs-item {

@@ -6,6 +6,7 @@
         marginRight: mobileWindow ? (isToggle ? '49px' : `calc(49px - ${sliderOnWidth})`) : (isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`),
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
+        height: isToggle ? 'auto' : '100px',
       }"
     >
       <div
@@ -137,8 +138,8 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   cursor: pointer;
-  z-index: 10;
   transition: 0.3s;
+  z-index: 10;
 }
 
 .slider-icon {

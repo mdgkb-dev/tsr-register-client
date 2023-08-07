@@ -1,17 +1,7 @@
 <template>
-  <LeftRightContainer left-width="280px">
-    <template #left>
-      <UploaderSingleScan
-        :file-info="representative.human.photo"
-        :height="280"
-        :default-ratio="1"
-        :emit-crop="true"
-        @ratio="(e) => (element.ratio = e)"
-        @crop="savePhoto"
-      />
-    </template>
+  <LeftRightContainer >
     <template #right>
-      <PassportForm store-module="representatives" :edit-mode="true" />
+      <ContactForm store-module="representatives" :edit-mode="true" />
     </template>
   </LeftRightContainer>
 </template>
@@ -21,18 +11,18 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
 import LeftRightContainer from '@/components/admin/Patients/LeftRightContainer.vue';
-import PassportForm from '@/components/admin/Patients/PassportForm.vue';
+import ContactForm from '@/components/admin/Patients/ContactForm.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'RepresentativePageInfo',
+  name: 'RepresentativeContacts',
   components: {
     PopoverInfo,
     UploaderSingleScan,
     LeftRightContainer,
-    PassportForm,
+    ContactForm,
   },
   setup() {
     const checked = ref(true);

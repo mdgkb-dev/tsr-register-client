@@ -2,7 +2,7 @@
   <MenuContainer v-if="mounted" min-menu-item-width="160px" height="calc(100% - 2px)" background="#DFF2F8">
     <template #menu>
       <div v-for="menu in menus" :key="menu.id">
-        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
+        <div :class="{ 'selected-tab': activeMenu.id === menu.id, 'tab': activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
@@ -46,7 +46,6 @@ export default defineComponent({
     PatientPageInfo,
     HumanForm,
     InsuranceForm,
-    // DocumentForm,
     MkbForm,
     DisabilityForm,
     PatientRepresentatives,

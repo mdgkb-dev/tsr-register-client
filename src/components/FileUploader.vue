@@ -93,6 +93,11 @@ export default defineComponent({
 :deep(.edit-icon) {
   width: 28px;
   height: 28px;
+  fill: #c4c4c4;
+  padding: 7px;
+}
+
+:deep(.edit-icon):hover {
   fill: #E62C21;
 }
 
@@ -140,10 +145,15 @@ export default defineComponent({
   width: 42px;
   border-radius: 5px;
   height: 42px;
-  color: #E62C21;
-  background: #eeb2af;
+  color: #c4c4c4;
+  background: #ffffff;
   margin: 0;
   font-size: 14px;
+}
+
+.close-button:hover {
+  color: #E62C21;
+  background: #eeb2af;
 }
 
 @media screen and (max-width: 1280px) {

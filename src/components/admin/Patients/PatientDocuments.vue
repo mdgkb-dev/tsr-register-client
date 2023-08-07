@@ -27,25 +27,25 @@
       <div class="body">
         <ResearcheContainer background="#DFF2F8" padding="0">
           <template #header>
-            <div class="researche-title">
+            <!-- <div class="researche-title">
               <div class="researche-name">{{ document.documentType.name }}</div>
-            </div>
+            </div> -->
             <div class="line-item">
               <InfoItem
                 margin="0"
                 :with-open-window="false"
                 :with-icon="false"
-                height="45px"
+                height="50px"
                 background="#F5F5F5"
                 border-color="#C4C4C4"
-                padding="7px"
+                padding="10px"
                 :with-hover="false"
               >
                 <template #title>
-                  <StringItem string="сохранить" font-size="10px" padding="0" />
+                  <StringItem string="сохранить" font-size="10px" padding="0" color="#C4C4C4"/>
                 </template>
                 <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-                  <Button text="xlsx" :with-icon="false" background-hover:#DFF2F8; button-class="xlsx-button"> </Button>
+                  <Button text="xlsx" :with-icon="false" background-hover:#DFF2F8; button-class="button-download"> </Button>
                 </GridContainer>
               </InfoItem>
             </div>
@@ -153,6 +153,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.button {
+  width: auto;
+  height: 34px;
+  border-radius: 5px;
+  color: #006bb4;
+  font-size: 12px;
+  &-filter {
+    background: #ffffff;
+  }
+  &-download {
+    background: #dff2f8;
+  }
+}
 
 .padding-field {
   padding: 10px;

@@ -6,7 +6,7 @@ export type buttonAction = undefined | actionFunction | ComputedRef<actionFuncti
 export default class AdminButtonParams {
   text?: string | ComputedRef<string> = 'Сохранить';
   color?: string | ComputedRef<string> = '#ffffff';
-  type?: string = 'success';
+  type?: string = 'save-button';
   condition?: boolean | ComputedRef<boolean> | Ref<boolean> = true;
   action?: buttonAction;
 

@@ -182,7 +182,7 @@ h4 {
 .save-button {
   width: 100%;
   border-radius: 5px;
-  height: 42px;
+  height: 34px;
   color: #006bb4;
   background: #dff2f8;
   margin: 2px 10px 0 0;
@@ -206,6 +206,24 @@ h4 {
   .menu-title {
     margin-left: 34px;
   }
+  .menu-title {
+    font-size: 14px;
+  }
+  :deep(.el-page-header__content) {
+    font-size: 14px;
+  }
+
+  :deep(.el-page-header__left) {
+    margin-right: 0px;
+  }
+
+  :deep(.el-page-header__left)::after {
+    display: none;
+  }
+
+  :deep(.el-page-header__icon) {
+    margin-left: 30px;
+  }
 }
 
 @media ( max-width: 560px) {
@@ -227,27 +245,6 @@ h4 {
     border-radius: 5px;
     color: #F6922E;
     background: #FAE3C9;
-  }
-}
-
-@media ( max-width: 500px) {
-  .menu-title {
-    font-size: 14px;
-  }
-  :deep(.el-page-header__content) {
-    font-size: 14px;
-  }
-
-  :deep(.el-page-header__left) {
-    margin-right: 0px;
-  }
-
-  :deep(.el-page-header__left)::after {
-    display: none;
-  }
-
-  :deep(.el-page-header__icon) {
-    margin-left: 30px;
   }
 }
 
