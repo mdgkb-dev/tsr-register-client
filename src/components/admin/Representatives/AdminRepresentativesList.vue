@@ -190,7 +190,7 @@ export default defineComponent({
   height: 42px;
   color: #006bb4;
   background: #dff2f8;
-  margin: 2px 10px 0 0;
+  margin: 0;
   font-size: 18px;
 }
 
@@ -211,6 +211,7 @@ export default defineComponent({
   border-radius: 5px;
   color: #006bb4;
   background: #dff2f8;
+  margin-right: 10px;
 }
 
 :deep(.files-buttons) {
