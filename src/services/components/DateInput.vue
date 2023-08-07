@@ -6,28 +6,18 @@
       position: 'relative',
     }"
   >
-    <el-date-picker
-      v-model="date"
-      type="date"
-      format="DD.MM.YY"
-      :placeholder="placeholder"
-      :style="{
-        width: width,
-        position: 'relative',
-        cursor: 'pointer',
-      }"
-      @change="changeHandler"
-    ></el-date-picker>
+    <el-input v-model="date" :placeholder="placeholder" @change="changeHandler" @input="inputHandler" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
-  name: 'SmallDatePicker',
+  name: 'DateInput',
   props: {
     modelValue: {
       type: Date,
@@ -35,30 +25,43 @@ export default defineComponent({
     },
     placeholder: {
       type: String,
-      default: 'Выберите дату',
+      default: 'Укажите дату',
     },
     width: { type: String as PropType<string>, required: false, default: 'auto' },
-    readonly: { type: Boolean, required: false, default: false },
   },
   emits: ['update:modelValue', 'change'],
-
   setup(props, { emit }) {
-    const date: Ref<Date> = ref(new Date());
-    const changeHandler = (value: Date) => {
-      const date = new Date(value);
-      const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-      emit('update:modelValue', new Date(date.getTime() - userTimezoneOffset));
+    const modelValueString = props.modelValue.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const date: Ref<string> = ref(modelValueString);
+
+    const changeHandler = (value: string) => {
+      if (value.length < 8) {
+        date.value = modelValueString;
+        ElMessage({ type: 'error', message: 'Неверный формат даты' });
+        return;
+      }
+      const dateParts = value.split('.');
+      const dateObj = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]);
+      const newDate = new Date(dateObj);
+      const userTimezoneOffset = newDate.getTimezoneOffset() * 60000;
+      emit('update:modelValue', new Date(newDate.getTime() - userTimezoneOffset));
       emit('change');
     };
-    onBeforeMount(() => {
-      date.value = props.modelValue;
-    });
+    const inputHandler = (value: string) => {
+      date.value = value.replace(/[^0-9.]/g, '');
+      if ((date.value.length == 3 || date.value.length == 6) && date.value[date.value.length - 1] !== '.') {
+        date.value = date.value.substring(0, date.value.length - 1) + '.' + date.value.substring(date.value.length - 1);
+      }
+      if (date.value.length > 10) {
+        date.value = date.value.substring(0, date.value.length - 1);
+      }
+    };
 
     return {
-      open,
       date,
       dateFormat,
       changeHandler,
+      inputHandler,
     };
   },
 });
@@ -79,7 +82,7 @@ export default defineComponent({
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 14px;
   color: $site_dark_gray;
-  padding-left: 20px;
+  padding-left: 0;
   padding-right: 0px;
   border: none;
   width: 100%;
@@ -91,7 +94,7 @@ export default defineComponent({
 }
 
 :deep(.el-input--prefix .el-input__inner) {
-  padding-left: 23px;
+  padding-left: 0;
 }
 
 :deep(.el-input__suffix) {
@@ -101,7 +104,7 @@ export default defineComponent({
 }
 
 :deep(.el-input--suffix .el-input__inner) {
-  padding-right: 0px;
+  padding: 0px;
 }
 
 :deep(.el-input__inner::placeholder) {
