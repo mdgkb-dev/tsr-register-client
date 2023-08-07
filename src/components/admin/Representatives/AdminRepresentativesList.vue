@@ -92,10 +92,16 @@ export default defineComponent({
       await Provider.loadItems();
     };
 
+    const addRepresentative = async (): Promise<void> => {
+      const patient = Representative.Create();
+      await Provider.store.dispatch('representatives/createWithoutReset', patient);
+      Provider.store.commit('representatives/unshiftToAll', patient);
+    };
+
     Hooks.onBeforeMount(load, {
       adminHeader: {
         title: 'Представители',
-        buttons: [{ text: 'Добавить', type: 'normal-button', action: Provider.createAdmin }],
+        buttons: [{ text: 'Добавить', type: 'normal-button', action: addRepresentative }],
       },
       sortsLib: RepresentativesSortsLib,
       getAction: 'getAllWithCount',
@@ -300,7 +306,8 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
+  width: 100%;
+  margin-right: 10px;
   padding: 0px;
 }
 
