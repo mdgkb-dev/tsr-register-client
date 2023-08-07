@@ -274,6 +274,32 @@ export default defineComponent({
   margin: 8px 0 0 0;
 }
 
+:deep(.el-input__inner) {
+  border-radius: 5px;
+  padding-left: 10px;
+  height: 34px;
+  // width: 100%;
+  display: flex;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: #c4c4c4;
+}
+
+:deep(.el-select .el-input .el-select__caret) {
+  color: #4a4a4a;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.el-select {
+  width: 100%;
+}
+
+
 @media (max-width: 1915px) {
   .flex-block {
     width: 100%;

@@ -26,26 +26,13 @@
             <template #inside-title>
               <div class="flex-block" @click.prevent="() => undefined">
                 <div class="item-flex">
-                  <InfoItem :close="infoItemToggle" title="Номер заявки" min-width="200px">
-                    <StringItem :string="drugApplication.number" custom-class="patient-name" />
-                    <template #open-inside-content>
-                      <el-input v-model="drugApplication.number" @blur="updateApplicationNumber(drugApplication)" />
-                    </template>
-                  </InfoItem>
-                  <div class="line-item-left">
-                    <Button
-                      button-class="edit-button"
-                      icon="outlined"
-                      icon-class="edit-icon"
-                      @click="openDrugArrivesModal(drugApplication)"
-                    />
-                    <Button
-                      button-class="edit-button"
-                      color="#006bb4"
-                      icon="outlined"
-                      icon-class="edit-icon"
-                      @click="openDrugApplicationFilesModal(drugApplication)"
-                    />
+                  <div class="line-item1">
+                    <InfoItem :close="infoItemToggle" title="номер заявки" min-width="200px" width="100%">
+                      <StringItem :string="drugApplication.number" custom-class="patient-name" />
+                      <template #open-inside-content>
+                        <el-input v-model="drugApplication.number" @blur="updateApplicationNumber(drugApplication)" />
+                      </template>
+                    </InfoItem>
                   </div>
                   <div class="line-item-right">
                     <SelectStatusForm :status-id="drugApplication.statusId" @select="(e) => updateStatus(drugApplication, e)" />
@@ -67,7 +54,22 @@
                         @change="updateDrugApplication(drugApplication)"
                       />
                     </InfoItem>
+                    
                     <ToggleCommissionsForm :drug-application="drugApplication" />
+                    <div class="line-item1">
+                      <Button
+                        text="Поставки лекарств"
+                        button-class="medical-commission-button"
+                        color="#006bb4"
+                        @click="openDrugArrivesModal(drugApplication)"
+                      />
+                      <Button
+                        text="Файлы"
+                        button-class="medical-commission-button"
+                        color="#006bb4"
+                        @click="openDrugApplicationFilesModal(drugApplication)"
+                      />
+                    </div>
                   </GridContainer>
                 </div>
               </div>
@@ -367,6 +369,14 @@ export default defineComponent({
   color: #006bb4;
 }
 
+.item-flex-number {
+  display: flex;
+  width: calc(100% - 20px);
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10px 0 0;
+}
+
 .item-flex {
   display: flex;
   width: 100%;
@@ -383,8 +393,16 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: auto;
-  padding: 0px;
+  width: 100%;
+  padding: 0;
+}
+
+.line-item1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px 0 0;
 }
 
 .line-item-right {
@@ -432,6 +450,22 @@ export default defineComponent({
   color: $site_dark_gray;
 }
 
+:deep(.medical-commission-button) {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #dff2f8;
+}
+
+:deep(.medical-commission-button):last-child {
+  margin-left: 10px;
+}
+
+.el-select {
+  width: 100%;
+}
+
 @media (max-width: 1915px) {
   .flex-block {
     width: 100%;
@@ -446,12 +480,12 @@ export default defineComponent({
     width: 100%;
     padding: 0px;
   }
-  .item-flex {
+  .item-flex{
     display: flex;
     width: 100%;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin: 10px 10px 0 0;
   }
 
   .item-flex:last-child {
@@ -473,7 +507,8 @@ export default defineComponent({
   .item-flex:first-child {
     display: block;
     width: 100%;
-    margin: 0 0px 10px 0;
+    margin: 10px 0;
   }
+
 }
 </style>

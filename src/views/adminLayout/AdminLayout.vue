@@ -72,7 +72,6 @@ export default defineComponent({
   .el-main {
     height: inherit;
     overflow: auto;
-    padding: 0 0 0 10px;
   }
 }
 
