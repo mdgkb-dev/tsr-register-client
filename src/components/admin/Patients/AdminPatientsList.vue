@@ -28,12 +28,13 @@
                 >
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
                     <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
-                      <SmallDatePicker
+                      <!-- <SmallDatePicker
                         v-model:model-value="patient.human.dateBirth"
                         placeholder="Выбрать"
                         :readonly="true"
                         @change="updateHuman(patient.human)"
-                      />
+                      /> -->
+                      <DateInput v-model:model-value="patient.human.dateBirth" placeholder="Выбрать" @change="updateHuman(patient.human)" />
                     </InfoItem>
                     <AdminPatientsListRegisters :patient="patient" :edit-mode="editMode" />
                   </GridContainer>
@@ -69,6 +70,7 @@ import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import DateInput from '@/services/components/DateInput.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -89,7 +91,7 @@ export default defineComponent({
     AdminPatientsListMkb,
     AdminPatientsListRegisters,
     AdminPatientsListDisability,
-
+    DateInput,
     ToggleDocumentsForm,
   },
   setup() {
