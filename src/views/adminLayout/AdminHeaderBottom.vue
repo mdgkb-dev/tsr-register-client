@@ -7,20 +7,15 @@
         <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger"></el-badge>
       </h4>
       <div class="button-group">
-        <div style="margin: 0 0 0 10px;" v-for="item in headerParams.buttons" :key="item">
-          <Button
-            v-if="item.action && item.condition"
-            :text="item.text"
-            :button-class="item.type" 
-            @click="action(item.action)"
-          />
+        <div v-for="item in headerParams.buttons" :key="item" style="margin: 0 0 0 10px">
+          <Button v-if="item.action && item.condition" :text="item.text" :button-class="item.type" @click="action(item.action)" />
         </div>
-        <div class="system-message" v-if="headSpinner">
+        <div v-if="headSpinner" class="system-message">
           <StringItem string="Сохранение" font-size="20px" padding="0 10px" />
           <span class="loader-spinner"></span>
         </div>
-        <div class="system-message" v-else-if="headSuccess">
-          <StringItem string="Успешно сохранено" font-size="20px" padding="0 10px" color="green"/>
+        <div v-else-if="headSuccess" class="system-message">
+          <StringItem string="Успешно сохранено" font-size="20px" padding="0 10px" color="green" />
         </div>
       </div>
     </div>
@@ -30,10 +25,10 @@
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from 'vue';
 
-import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
-import Provider from '@/services/Provider/Provider';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'AdminHeaderBottom',
@@ -149,8 +144,8 @@ h4 {
   min-width: 150px;
   height: 34px;
   border-radius: 5px;
-  color: #379FFF;
-  background: #DFF2F8;
+  color: #379fff;
+  background: #dff2f8;
 }
 
 .warning-button {
@@ -158,8 +153,8 @@ h4 {
   min-width: 150px;
   height: 34px;
   border-radius: 5px;
-  color: #F6922E;
-  background: #FAE3C9;
+  color: #f6922e;
+  background: #fae3c9;
 }
 
 .save-picker-button {
@@ -182,7 +177,7 @@ h4 {
 .save-button {
   width: 100%;
   border-radius: 5px;
-  height: 42px;
+  height: 34px;
   color: #006bb4;
   background: #dff2f8;
   margin: 2px 10px 0 0;
@@ -202,35 +197,10 @@ h4 {
   }
 }
 
-@media ( max-width: 992px) {
+@media (max-width: 992px) {
   .menu-title {
     margin-left: 34px;
   }
-}
-
-@media ( max-width: 560px) {
-  .normal-button {
-    width: 100%;
-    min-width: 80px;
-    max-width: 80px;
-    height: 34px;
-    border-radius: 5px;
-    color: #379FFF;
-    background: #DFF2F8;
-  }
-
-  .warning-button {
-    width: 100%;
-    min-width: 80px;
-    max-width: 80px;
-    height: 34px;
-    border-radius: 5px;
-    color: #F6922E;
-    background: #FAE3C9;
-  }
-}
-
-@media ( max-width: 500px) {
   .menu-title {
     font-size: 14px;
   }
@@ -251,7 +221,29 @@ h4 {
   }
 }
 
-@media ( max-width: 360px) {
+@media (max-width: 560px) {
+  .normal-button {
+    width: 100%;
+    min-width: 80px;
+    max-width: 80px;
+    height: 34px;
+    border-radius: 5px;
+    color: #379fff;
+    background: #dff2f8;
+  }
+
+  .warning-button {
+    width: 100%;
+    min-width: 80px;
+    max-width: 80px;
+    height: 34px;
+    border-radius: 5px;
+    color: #f6922e;
+    background: #fae3c9;
+  }
+}
+
+@media (max-width: 360px) {
   .menu-title {
     font-size: 12px;
   }

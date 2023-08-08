@@ -14,7 +14,7 @@
     </template>
     <template #tabs>
       <div
-        v-for="doc in patient.human.documents"
+        v-for="doc in representative.human.documents"
         :key="doc.id"
         :class="{ 'tabs-item-active': doc.id === document.id }"
         class="tabs-item"
@@ -66,7 +66,7 @@
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import DocumentType from '@/classes/DocumentType';
-import Patient from '@/classes/Patient';
+import Representative from '@/classes/Representative';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
@@ -78,7 +78,7 @@ import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
 export default defineComponent({
-  name: 'PatientDocuments',
+  name: 'RepresentativeDocuments',
   components: {
     DocumentForm,
     RightTabsContainer,
@@ -101,18 +101,18 @@ export default defineComponent({
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
     const document: Ref<Document> = computed(() => Provider.store.getters['documents/item']);
 
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+    const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
 
     const addDocument = async (id: string) => {
       await Provider.store.dispatch('documentTypes/get', id);
-      const item = patient.value.human.addDocument(documentType.value);
+      const item = representative.value.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/createWithoutReset', item);
-      selectDocument(patient.value.human.documents[patient.value.human.documents.length - 1].id);
+      selectDocument(representative.value.human.documents[representative.value.human.documents.length - 1].id);
     };
 
     onBeforeMount(async () => {
-      if (patient.value.human.documents.length > 0) {
-        await selectDocument(patient.value.human.documents[0].id);
+      if (representative.value.human.documents.length > 0) {
+        await selectDocument(representative.value.human.documents[0].id);
       }
     });
 
@@ -121,10 +121,10 @@ export default defineComponent({
     };
 
     const removeDocument = async (id?: string) => {
-      ClassHelper.RemoveFromClassById(id, patient.value.human.documents);
+      ClassHelper.RemoveFromClassById(id, representative.value.human.documents);
       await Provider.store.dispatch('documents/get', id);
-      if (patient.value.human.documents.length > 0) {
-        await selectDocument(patient.value.human.documents[0].id);
+      if (representative.value.human.documents.length > 0) {
+        await selectDocument(representative.value.human.documents[0].id);
       }
     };
 
@@ -139,7 +139,7 @@ export default defineComponent({
       removeDocument,
       selectDocument,
       document,
-      patient,
+      representative,
       addDocument,
       documentTypes,
       documentsIsToggle,

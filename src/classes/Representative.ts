@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import PatientRepresentative from '@/classes/PatientRepresentative';
@@ -18,6 +20,7 @@ export default class Representative {
   updatedById?: string;
   createdBy?: User;
   updatedBy?: User;
+  humanId?: string;
 
   fullName?: string;
   dateBirth?: string;
@@ -48,6 +51,14 @@ export default class Representative {
     item.patient = new Patient(patient);
     item.patientId = patient.id;
     this.representativeToPatient.push(item);
+  }
+
+  static Create(): Representative {
+    const item = new Representative();
+    item.id = uuidv4();
+    item.human.id = uuidv4();
+    item.humanId = item.human.id;
+    return item;
   }
 
   patientExists(patientId: string): boolean {

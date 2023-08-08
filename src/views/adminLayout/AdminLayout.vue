@@ -68,4 +68,10 @@ export default defineComponent({
   padding: 0px;
 }
 
+@media (max-width: 992px) {
+  .el-main {
+    height: inherit;
+    overflow: auto;
+  }
+}
 </style>

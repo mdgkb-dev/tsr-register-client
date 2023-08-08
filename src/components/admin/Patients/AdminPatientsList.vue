@@ -17,12 +17,7 @@
                 <div class="line-item-right">
                   <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
                   <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
-                    <SmallDatePicker
-                      v-model:model-value="patient.human.dateBirth"
-                      placeholder="Выбрать"
-                      :readonly="true"
-                      @change="updateHuman(patient.human)"
-                    />
+                    <DateInput v-model:model-value="patient.human.dateBirth" placeholder="Выбрать" @change="updateHuman(patient.human)" />
                   </InfoItem>
                 </div>
               </div>
@@ -68,7 +63,7 @@ import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/components/Lib/InfoItem.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
-import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
+import DateInput from '@/services/components/DateInput.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
@@ -83,9 +78,9 @@ export default defineComponent({
     FioToggleForm,
     InfoItem,
     GridContainer,
-    SmallDatePicker,
     AdminPatientsListRepresentatives,
     AdminPatientsListMkb,
+    DateInput,
     ToggleDocumentsForm,
   },
   setup() {

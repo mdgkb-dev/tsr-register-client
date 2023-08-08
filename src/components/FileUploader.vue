@@ -9,7 +9,7 @@
       list-type="picture"
       accept=".pdf, .jpeg, .jpg"
     >
-      <Button button-class="save-button" @click="addFile" :text="fileInfo && fileInfo.originalName ? 'Обновить' : 'Загрузить'"/>
+      <Button button-class="save-button" :text="fileInfo && fileInfo.originalName ? 'Обновить' : 'Загрузить'" @click="addFile" />
 
       <template #tip>
         <div class="flex-block">
@@ -19,7 +19,7 @@
             </a>
           </div>
           <div v-else class="file-name">Файл не загружен</div>
-        <Button button-class="close-button" @click="removeFile" icon="close" icon-class="edit-icon"/>
+          <Button button-class="close-button" icon="close" icon-class="edit-icon" @click="removeFile" />
         </div>
       </template>
     </el-upload>
@@ -31,9 +31,9 @@ import { ElNotification } from 'element-plus';
 import { defineComponent, PropType } from 'vue';
 
 import FileInfo from '@/classes/files/FileInfo';
+import Button from '@/components/Base/Button.vue';
 import IFile from '@/interfaces/files/IFile';
 import getExtension from '@/services/GetExtension';
-import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'FileUploader',
@@ -93,7 +93,12 @@ export default defineComponent({
 :deep(.edit-icon) {
   width: 28px;
   height: 28px;
-  fill: #E62C21;
+  fill: #c4c4c4;
+  padding: 7px;
+}
+
+:deep(.edit-icon):hover {
+  fill: #e62c21;
 }
 
 .flex-block {
@@ -102,7 +107,6 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
 }
-
 
 .file-name {
   margin-left: 5px;
@@ -140,10 +144,15 @@ export default defineComponent({
   width: 42px;
   border-radius: 5px;
   height: 42px;
-  color: #E62C21;
-  background: #eeb2af;
+  color: #c4c4c4;
+  background: #ffffff;
   margin: 0;
   font-size: 14px;
+}
+
+.close-button:hover {
+  color: #e62c21;
+  background: #eeb2af;
 }
 
 @media screen and (max-width: 1280px) {
