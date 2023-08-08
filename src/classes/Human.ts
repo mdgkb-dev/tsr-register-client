@@ -8,6 +8,19 @@ import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
 import ClassHelper from '@/services/ClassHelper';
+
+interface Rule {
+  required: boolean;
+  trigger: string;
+  message: string;
+}
+interface Rules {
+  surname: Rule[];
+  name: Rule[];
+  patronymic: Rule[];
+  addressRegistration: Rule[];
+  addressResidential: Rule[];
+}
 export default class Human {
   id?: string;
   name = '';
@@ -27,6 +40,13 @@ export default class Human {
   fileInfos: IFileInfo[] = [];
   photo: IFileInfo = new FileInfo();
   photoId?: string;
+  validationRules: Rules = {
+    surname: [{ required: false, message: 'Необходимо указать фамилию', trigger: 'blur' }],
+    name: [{ required: false, message: 'Необходимо указать имя', trigger: 'blur' }],
+    patronymic: [{ required: false, message: 'Необходимо указать отчество', trigger: 'blur' }],
+    addressRegistration: [{ required: false, message: 'Необходимо указать адрес регистрации', trigger: 'blur' }],
+    addressResidential: [{ required: false, message: 'Необходимо указать адрес проживания', trigger: 'blur' }],
+  };
 
   editNameMode = false;
   constructor(i?: Human) {
@@ -113,11 +133,22 @@ export default class Human {
     this.editNameMode = value;
   }
 
-  getValidationRules(): Record<string, Array<Record<string, string | boolean>>> {
-    return {
-      surname: [{ required: true, message: 'Необходимо указать фамилию', trigger: 'blur' }],
-      name: [{ required: true, message: 'Необходимо указать имя', trigger: 'blur' }],
-      patronymic: [{ required: true, message: 'Необходимо указать отчество', trigger: 'blur' }],
-    };
+  getValidationRules(): Rules {
+    return this.validationRules;
+    // return {
+    //   surname: [{ required: true, message: 'Необходимо указать фамилию', trigger: 'blur' }],
+    //   name: [{ required: true, message: 'Необходимо указать имя', trigger: 'blur' }],
+    //   patronymic: [{ required: true, message: 'Необходимо указать отчество', trigger: 'blur' }],
+    // };
+  }
+
+  resetValidationRules(): void {
+    for (const key of Object.keys(this.validationRules)) {
+      this.validationRules[key as keyof typeof this.validationRules][0].required = false;
+    }
+  }
+
+  updateValidationRule(key: string): void {
+    this.validationRules[key as keyof typeof this.validationRules][0].required = true;
   }
 }

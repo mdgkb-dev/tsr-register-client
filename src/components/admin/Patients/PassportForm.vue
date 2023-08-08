@@ -5,8 +5,8 @@
       maxWidth: maxWidth,
     }"
   >
-    <el-form ref="surnameForm" :model="human">
-      <el-form-item label="Фамилия" prop="surname" :rules="human.getValidationRules().surname">
+    <el-form ref="form" :model="human" :rules="human.validationRules">
+      <el-form-item label="Фамилия" prop="surname">
         <el-input
           v-model="human.surname"
           placeholder="Введите фамилию"
@@ -14,13 +14,16 @@
           @blur="updateHuman('surname')"
         ></el-input>
       </el-form-item>
-    </el-form>
-    <el-form
-      ><el-form-item label="Имя">
-        <el-input v-model="human.name" placeholder="Введите имя" @blur="updateHuman()"></el-input>
+      <el-form-item label="Имя" prop="name">
+        <el-input v-model="human.name" placeholder="Введите имя" formatter="firstLetterUpper" @blur="updateHuman('name')"></el-input>
       </el-form-item>
-      <el-form-item label="Отчество">
-        <el-input v-model="human.patronymic" placeholder="Введите отчество" @blur="updateHuman()"></el-input>
+      <el-form-item label="Отчество" prop="patronymic">
+        <el-input
+          v-model="human.patronymic"
+          placeholder="Введите отчество"
+          formatter="firstLetterUpper"
+          @blur="updateHuman('patronymic')"
+        ></el-input>
       </el-form-item>
 
       <div class="line-item">
@@ -38,8 +41,8 @@
           </el-form-item>
         </div>
       </div>
-      <el-form-item label="Адрес регистрации">
-        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman()"></el-input>
+      <el-form-item label="Адрес регистрации" prop="addressRegistration">
+        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman('addressRegistration')"></el-input>
       </el-form-item>
 
       <div class="tab-tools">
@@ -52,8 +55,8 @@
         Адрес регистрации и адрес проживания совпадают
       </div>
 
-      <el-form-item label="Адрес проживания">
-        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman"></el-input>
+      <el-form-item label="Адрес проживания" prop="addressResidential">
+        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman('addressResidential')"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -108,18 +111,15 @@ export default defineComponent({
       human.value.setResidentialAddress(addressesEqual);
       await updateHuman();
     };
-    const getForm = (value: string) => {
-      switch (value) {
-        case 'surname':
-          return surnameForm;
-        default:
-          return form;
-      }
-    };
 
-    const updateHuman = async (form?: string): Promise<void> => {
-      if (form) {
-        if (!validate(getForm(form))) {
+    const updateHuman = async (field?: string): Promise<void> => {
+      console.log(field);
+      if (field) {
+        console.log('1 ====>', human.value.getValidationRules());
+        human.value.resetValidationRules();
+        console.log('2 ====>', human.value.getValidationRules());
+        human.value.updateValidationRule(field);
+        if (!validate(form)) {
           return;
         }
       }
