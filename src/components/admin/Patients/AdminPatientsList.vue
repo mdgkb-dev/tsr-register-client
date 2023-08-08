@@ -16,7 +16,14 @@
 
                 <div class="line-item-right">
                   <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
-                  <AdminPatientsListDisability :patient="patient" :edit-mode="editMode" />
+                  <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
+                    <SmallDatePicker
+                      v-model:model-value="patient.human.dateBirth"
+                      placeholder="Выбрать"
+                      :readonly="true"
+                      @change="updateHuman(patient.human)"
+                    />
+                  </InfoItem>
                 </div>
               </div>
               <div class="item-flex">
@@ -27,20 +34,14 @@
                   margin="0"
                 >
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
-                    <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
-                      <SmallDatePicker
-                        v-model:model-value="patient.human.dateBirth"
-                        placeholder="Выбрать"
-                        :readonly="true"
-                        @change="updateHuman(patient.human)"
-                      />
-                    </InfoItem>
-                    <AdminPatientsListRegisters :patient="patient" :edit-mode="editMode" />
+                    <ToggleDocumentsForm :human="patient.human" />
                   </GridContainer>
 
                   <AdminPatientsListRepresentatives :patient="patient" :edit-mode="editMode" />
                   <AdminPatientsListMkb :patient="patient" :edit-mode="editMode" />
-                  <ToggleDocumentsForm :human="patient.human" />
+                  <InfoItem title="создан" margin="0" :with-open-window="false" :with-hover="editMode">
+                    {{ patient.getLastMeta() }}
+                  </InfoItem>
                 </GridContainer>
               </div>
             </div>
@@ -57,10 +58,8 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
-import AdminPatientsListDisability from '@/components/admin/Patients/AdminPatientsListDisability.vue';
 import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
 import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
-import AdminPatientsListRegisters from '@/components/admin/Patients/AdminPatientsListRegisters.vue';
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
@@ -87,9 +86,6 @@ export default defineComponent({
     SmallDatePicker,
     AdminPatientsListRepresentatives,
     AdminPatientsListMkb,
-    AdminPatientsListRegisters,
-    AdminPatientsListDisability,
-
     ToggleDocumentsForm,
   },
   setup() {

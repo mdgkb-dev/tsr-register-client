@@ -119,7 +119,11 @@ export default class HttpClient {
   private buildUrl(query?: string): string {
     if (query) {
       const queryString = query ?? '';
-      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
+      let divider = '/';
+      if (queryString[0] == '?') {
+        divider = '';
+      }
+      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + divider + queryString;
     }
     return baseUrl + apiVersion + this.endpoint;
   }

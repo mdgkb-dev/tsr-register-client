@@ -20,6 +20,7 @@ import ResearchResult from '@/classes/ResearchResult';
 import User from '@/classes/User';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassHelper from '@/services/ClassHelper';
+import DateTimeFormat from '@/services/DateFormat';
 
 export default class Patient {
   id?: string;
@@ -94,51 +95,6 @@ export default class Patient {
     return this.disabilities[this.disabilities.length - 1];
   }
 
-  // getBmiGroup(): string {
-  //   const lastHeightWeight = this.getLastHeightWeight();
-  //   const lastWeight = lastHeightWeight?.weight;
-  //   const lastHeight = lastHeightWeight?.height;
-
-  //   if (!lastWeight || !lastHeight) {
-  //     return 'Недостаточно данных';
-  //   }
-
-  //   const bmi = Bmi.calculate(lastWeight, lastHeight);
-  //   const month = Bmi.birthDateToMonth(this.human.dateBirth);
-  //   const bmiMonth = Bmi.findBmiMonth(month, this.human.isMale);
-
-  //   if (!bmiMonth) {
-  //     return 'Данные по данной дате рождения неизвестны';
-  //   }
-
-  //   const group = Bmi.calculateGroup(bmi, bmiMonth);
-
-  //   if (!group) {
-  //     return 'Некорректные данные антропометрии';
-  //   }
-
-  //   const weightClass = Bmi.getWeightClass(group);
-  //   return `${group}, ${weightClass}`;
-  // }
-
-  // getChestCircumferenceGroup(): string {
-  //   const lastChestCircumference = this.getLastCircumference(this.chestCircumference);
-  //   if (!lastChestCircumference?.value) {
-  //     return 'Недостаточно данных';
-  //   }
-  //   const month = Bmi.birthDateToMonth(this.human.dateBirth);
-  //   const monthGroups = Circumference.findChestCircumferenceGroup(month, this.human.isMale);
-  //   if (!monthGroups) {
-  //     return 'Данные по данной дате рождения неизвестны';
-  //   }
-  //   const group = Circumference.calculateChestCircumferenceGroup(lastChestCircumference.value, monthGroups);
-  //   if (!group) {
-  //     return 'Некорректные данные окружности груди';
-  //   }
-  //   const groupRecomendation = Circumference.getCircumferenceGroupRecomendation(group);
-  //   return `${group}, ${groupRecomendation}`;
-  // }
-
   getFileInfos(): IFileInfo[] {
     return [
       ...Human.GetFileInfos(this.human),
@@ -179,27 +135,6 @@ export default class Patient {
     // registerGroupToPatient.researchId = registerGroupId;
     // this.registerGroupsToPatient.push(registerGroupToPatient);
   }
-  //
-  // removeRegisterGroupToPatient(paneName: string): void {
-  //   const i = this.registerGroupsToPatient.findIndex((r: PatientResearchSection) => r.id === paneName);
-  //   if (i > -1) {
-  //     ClassHelper.RemoveFromClassByIndex(i, this.registerGroupsToPatient, this.registerGroupsToPatientForDelete);
-  //   }
-  // }
-  //
-  // getRegisterGroupsToPatientByGroupId(groupId: string): PatientResearchSection[] {
-  //   return this.registerGroupsToPatient.filter((r: PatientResearchSection) => r.researchSectionId === groupId);
-  // }
-  //
-  // initRegisterGroupsToPatient(registerGroupId: string): void {
-  //   const groupExists = this.registerGroupsToPatient.find((r: PatientResearchSection) => r.researchSectionId === registerGroupId);
-  //   if (groupExists) {
-  //     return;
-  //   }
-  //   const newGroup = new PatientResearchSection();
-  //   newGroup.researchSectionId = registerGroupId;
-  //   this.registerGroupsToPatient.push(newGroup);
-  // }
 
   addMkbItem(mkbItem: MkbItem): void {
     const patientDiagnosis = new PatientDiagnosis();
@@ -296,5 +231,11 @@ export default class Patient {
     item.patientId = this.id;
     this.commissions.push(item);
     return item;
+  }
+
+  getLastMeta(): string {
+    const f = new DateTimeFormat();
+    const createdBy = this.createdBy?.login ?? 'Неизвестный создатель';
+    return `${f.format(this.createdAt)} (${createdBy})`;
   }
 }
