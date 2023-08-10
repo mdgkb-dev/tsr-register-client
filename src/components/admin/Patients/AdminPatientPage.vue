@@ -164,6 +164,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  text-align: center;
 
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
@@ -188,6 +189,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   cursor: pointer;
 
   -webkit-user-select: none; /* Safari */

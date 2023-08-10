@@ -27,7 +27,7 @@
 
     <template #filter>
       <GridContainer
-        max-width="900px"
+        max-width="1500px"
         grid-gap="70px 10px"
         grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
         margin="0 0 0 10px"
@@ -60,15 +60,33 @@
           />
         </GridContainer>
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-          <FiltersButtonsSelect
-            v-for="question in questions"
-            :key="question.id"
-            :filter-model="filterByRegister"
-            :models="createCustomFilterModels(question)"
-            :default-label="question.name"
-            :inverse="true"
-            @load="$emit('load')"
-          />
+          <div v-for="question in questions" :key="question.id">
+            <InfoItem
+              v-if="createCustomFilterModels(question).length === 2"
+              :title="question.name"
+              margin="0"
+              :with-open-window="false"
+              height="98px"
+              background="#F5F5F5"
+              border-color="#C4C4C4"
+              padding="7px"
+              :with-hover="false"
+            >
+              <Switch3Pos
+                :first-model="createCustomFilterModels(question)[0]"
+                :second-model="createCustomFilterModels(question)[1]"
+                :default-label="question.name"
+                @load="$emit('load')"
+              />
+            </InfoItem>
+            <FiltersButtonsSelect
+              v-else
+              :models="createCustomFilterModels(question)"
+              :default-label="question.name"
+              :inverse="true"
+              @load="$emit('load')"
+            />
+          </div>
         </GridContainer>
 
         <InfoItem
