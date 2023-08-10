@@ -35,6 +35,7 @@ import ResearchResult from '@/classes/ResearchResult';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'RadioProp',
@@ -54,6 +55,10 @@ export default defineComponent({
     const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
     const answer: Ref<Answer | undefined> = ref(undefined);
     const filledCheck = (variant: AnswerVariant): void => {
+      // TODO: временно
+      if (Provider.route().params['id'] && answer.value) {
+        answer.value.patientId = Provider.route().params['id'] as string;
+      }
       if (!answer.value) {
         return;
       }
