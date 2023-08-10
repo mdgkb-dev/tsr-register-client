@@ -3,9 +3,16 @@
     <div
       class="slider-block"
       :style="{
-        marginRight: mobileWindow ? (isToggle ? '49px' : `calc(49px - ${sliderOnWidth})`) : (isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`),
+        marginRight: mobileWindow
+          ? isToggle
+            ? '49px'
+            : `calc(49px - ${sliderOnWidth})`
+          : isToggle
+          ? sliderOffWidth
+          : `calc(${sliderOffWidth} - ${sliderOnWidth})`,
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
+        height: isToggle ? 'auto' : '100px',
       }"
     >
       <div
@@ -13,7 +20,6 @@
         :style="{
           border: isToggle ? '1px solid #379FFF' : '1px solid #00B5A4',
           background: isToggle ? '#ffffff' : '#C7ECEA',
-
         }"
         @click="toggleSlider(!isToggle)"
         @mouseenter="hovering = true"
@@ -22,7 +28,13 @@
         <div
           class="icon-block"
           :style="{
-            transform: hovering ? (isToggle ? 'rotate(-225deg) scale(1.2, 1.2)' : 'rotate(0deg) scale(1.2, 1.2)') : (isToggle ? 'rotate(-225deg)' : 'rotate(0deg)'),
+            transform: hovering
+              ? isToggle
+                ? 'rotate(-225deg) scale(1.2, 1.2)'
+                : 'rotate(0deg) scale(1.2, 1.2)'
+              : isToggle
+              ? 'rotate(-225deg)'
+              : 'rotate(0deg)',
             fill: isToggle ? '#379FFF' : '#00B5A4',
           }"
         >
@@ -30,7 +42,8 @@
         </div>
       </div>
 
-      <div class="slider-info"
+      <div
+        class="slider-info"
         :style="{
           width: `calc(${sliderOnWidth} - ${sliderOffWidth})`,
         }"
@@ -50,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, Ref, onBeforeMount, } from 'vue';
+import { defineComponent, onBeforeMount, PropType, ref } from 'vue';
 
 export default defineComponent({
   name: 'RightTabsContainer',
@@ -137,8 +150,8 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   cursor: pointer;
-  z-index: 10;
   transition: 0.3s;
+  z-index: 10;
 }
 
 .slider-icon {
@@ -177,7 +190,6 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
-
   .slider-icon {
     min-width: 42px;
     height: 42px;
@@ -206,5 +218,4 @@ export default defineComponent({
     background: $custom-background;
   }
 }
-
 </style>

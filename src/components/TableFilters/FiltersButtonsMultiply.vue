@@ -3,14 +3,14 @@
     margin="0"
     :with-open-window="false"
     :with-icon="false"
-    height="98px"
+    :height="height"
     background="#F5F5F5"
     border-color="#C4C4C4"
     padding="7px"
     :with-hover="false"
     :title="defaultLabel"
   >
-    <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+    <GridContainer max-width="100%" grid-gap="7px" :grid-template-columns="gridTemplateColumns" margin="0px">
       <Button
         v-for="(option, index) in options"
         :key="index"
@@ -57,6 +57,15 @@ export default defineComponent({
     defaultLabel: {
       type: String as PropType<string>,
       default: 'Все',
+    },
+
+    gridTemplateColumns: {
+      type: String as PropType<string>,
+      default: 'repeat(auto-fit, minmax(calc(50% - 7px), 1fr))',
+    },
+    height: {
+      type: String as PropType<string>,
+      default: '',
     },
   },
   emits: ['load'],

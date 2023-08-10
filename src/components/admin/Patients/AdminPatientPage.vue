@@ -46,7 +46,6 @@ export default defineComponent({
     PatientPageInfo,
     HumanForm,
     InsuranceForm,
-    // DocumentForm,
     MkbForm,
     DisabilityForm,
     PatientRepresentatives,

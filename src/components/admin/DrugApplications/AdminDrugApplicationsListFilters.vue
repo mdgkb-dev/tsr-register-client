@@ -25,6 +25,19 @@
         grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
         margin="0 0 0 10px"
       >
+        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+          <FiltersButtonsMultiply
+            :filter-model="filterByStatus"
+            :options="createStatusesOptions()"
+            default-label="статус"
+            :inverse="true"
+            :grid-template-columns="
+              mobileWindow ? 'repeat(auto-fit, minmax(calc(50% - 7px), 1fr))' : 'repeat(auto-fit, minmax(calc(30% - 7px), 1fr))'
+            "
+            :height="mobileWindow ? '134px' : '98px'"
+            @load="$emit('load')"
+          />
+        </GridContainer>
         <GridContainer
           max-width="500px"
           grid-gap="10px"
@@ -32,15 +45,6 @@
           margin="0px"
           background="#F5F6F8"
         >
-        </GridContainer>
-        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
-          <FiltersButtonsMultiply
-            :filter-model="filterByStatus"
-            :options="createStatusesOptions()"
-            default-label="По статусу"
-            :inverse="true"
-            @load="$emit('load')"
-          />
         </GridContainer>
       </GridContainer>
     </template>
@@ -74,6 +78,7 @@ export default defineComponent({
   setup() {
     const filterByStatus: Ref<FilterModel> = ref(DrugApplicationsFiltersLib.byStatus());
     const statuses: Ref<Status[]> = computed(() => Provider.store.getters['statuses/items']);
+    const mobileWindow = ref(window.matchMedia('(max-width: 1330px)').matches);
     const createStatusesOptions = (): IOption[] => {
       const ids: IOption[] = [];
       statuses.value.forEach((r: Status) => ids.push({ value: r.id as string, label: r.name }));
@@ -83,6 +88,7 @@ export default defineComponent({
     return {
       createStatusesOptions,
       filterByStatus,
+      mobileWindow,
     };
   },
 });

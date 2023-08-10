@@ -80,4 +80,11 @@ export default defineComponent({
   height: 74vh;
   height: 100%;
 }
+
+@media (max-width: 992px) {
+  .mainblock {
+    margin: 0 10px;
+    width: calc(100% - 22px);
+  }
+}
 </style>
