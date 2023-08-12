@@ -24,6 +24,7 @@ export default class DrugRegimen {
   addDrugRegimenBlock(): void {
     this.drugRegimenBlocks.push(new DrugRegimenBlock());
   }
+
   removeDrugRegimenBlock(index: number): void {
     const itemId = this.drugRegimenBlocks[index].id;
     if (itemId) {
@@ -31,9 +32,11 @@ export default class DrugRegimen {
     }
     this.drugRegimenBlocks.splice(index, 1);
   }
+
   copyDrugRegimenBlock(index: number): void {
     this.drugRegimenBlocks.splice(index + 1, 0, cloneDeep(this.drugRegimenBlocks[index]));
   }
+
   moveDrugRegimenBlockUp(index: number): void {
     const elementToMove = this.drugRegimenBlocks[index];
     if (elementToMove.infinitely) {
@@ -42,11 +45,13 @@ export default class DrugRegimen {
     this.drugRegimenBlocks[index] = this.drugRegimenBlocks[index - 1];
     this.drugRegimenBlocks[index - 1] = elementToMove;
   }
+
   moveDrugRegimenBlockDown(index: number): void {
     const elementToMove = this.drugRegimenBlocks[index];
     this.drugRegimenBlocks[index] = this.drugRegimenBlocks[index + 1];
     this.drugRegimenBlocks[index + 1] = elementToMove;
   }
+
   editDrugRegimen(isEdit?: boolean): void {
     this.isEdit = isEdit ?? !this.isEdit;
   }

@@ -5,9 +5,11 @@
       <use xlink:href="#menu-icon"></use>
     </svg>
   </div>
-  <div v-if="mounted" class="admin-side-menu"
+  <div
+    v-if="mounted"
+    class="admin-side-menu"
     :style="{
-      marginLeft: showMenuBar ? '0px' : ''
+      marginLeft: showMenuBar ? '0px' : '',
     }"
   >
     <el-menu :default-active="activePath" :collapse="isCollapseSideMenu" background-color="whitesmoke" unique-opened @select="closeDrawer">
@@ -15,7 +17,7 @@
         <el-sub-menu v-if="item?.children?.length" :index="item.title">
           <template #title>
             <div class="sub-menu-container">
-              <el-badge v-if="item.children.some((i) => i.count && i.count > 0)" is-dot type="danger"> </el-badge>
+              <el-badge v-if="item.children.some((i) => i.count && i.count > 0)" is-dot type="danger"></el-badge>
               <i :class="item.icon"></i>
               <span class="row-menu-title">{{ item.title }}</span>
             </div>
@@ -30,7 +32,7 @@
         </el-sub-menu>
         <div v-else @click="showMenuBar = false">
           <el-menu-item v-if="item.to !== '/'" :index="item.to" @click="$router.push(item.to)">
-            <template #title >{{ item.title }}</template>
+            <template #title>{{ item.title }}</template>
           </el-menu-item>
         </div>
       </template>
@@ -47,14 +49,14 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, onBeforeUnmount,
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Menu from '@/assets/svg/Menu.svg';
 import IAdminMenu from '@/interfaces/IAdminMenu';
 import Provider from '@/services/Provider/Provider';
-import Menu from '@/assets/svg/Menu.svg'
 
 export default defineComponent({
   name: 'AdminSideMenu',
   components: {
-    Menu
+    Menu,
   },
   props: { isCollapse: { type: Boolean } },
 
@@ -94,7 +96,6 @@ export default defineComponent({
     const openMenuBar = async () => {
       showMenuBar.value = true;
     };
-
 
     const logout = async () => {
       await Provider.store.dispatch('auth/logout');
@@ -163,24 +164,30 @@ $background-color: whitesmoke;
     font-size: unset;
   }
 }
+
 .el-menu,
 .el-menu-item {
   border: none;
 }
+
 .row-menu-title {
   margin-right: 20px;
 }
+
 .sub-menu-container {
   position: relative;
+
   .el-badge {
     position: absolute;
     top: -10px;
     left: -10px;
   }
 }
+
 .menu-item-container {
   display: flex;
   align-items: center;
+
   .el-badge {
     margin-left: 5px;
   }
@@ -189,7 +196,7 @@ $background-color: whitesmoke;
 .menu-icon-svg {
   width: 32px;
   height: 32px;
-  fill: #409EFF
+  fill: #409eff;
 }
 
 .menu-icon {
@@ -198,8 +205,8 @@ $background-color: whitesmoke;
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 4;

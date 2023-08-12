@@ -34,8 +34,8 @@ export default class FilterModel {
   toUrlQuery(): string {
     let url = '';
     Object.keys(this).forEach((el, i) => {
-      let value: any = this[el as keyof typeof this];
-      if (value && url !== '?' && value.length !== 0) {
+      let value: unknown = this[el as keyof typeof this];
+      if (value && url !== '?' && (value as Array<unknown>).length !== 0) {
         if (el == ('date1' || 'date2') && value) {
           value = String(new Date(String(value)).toISOString().split('T')[0]);
         }
@@ -72,6 +72,7 @@ export default class FilterModel {
   isBetweenFilter(): boolean {
     return this.operator === Operators.Btw;
   }
+
   isSetFilter(): boolean {
     return this.operator === Operators.In;
   }

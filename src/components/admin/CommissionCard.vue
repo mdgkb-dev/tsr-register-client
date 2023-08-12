@@ -31,32 +31,18 @@ import { computed, defineComponent, Ref } from 'vue';
 import commission from '@/classes/Commission';
 import Button from '@/components/Base/Button.vue';
 import Provider from '@/services/Provider/Provider';
+
 export default defineComponent({
   name: 'CommissionCard',
   components: {
     Button,
   },
   emits: ['remove'],
-  setup(_, { emit }) {
+  setup() {
     const commission: Ref<commission> = computed(() => Provider.store.getters['commissions/item']);
 
     const removeFile = async (id: string) => {
       await Provider.store.dispatch('commissionFileInfos/remove', id);
-      // ClassHelper.RemoveFromClassById(id, commission.value.commissionFileInfos);
-    };
-
-    // const addFile = async () => {
-    //   const file = commission.value.addFile();
-    //   await Provider.store.dispatch('commissionFileInfos/create', file);
-    // };
-
-    // const updateField = async (field: commissionFieldValue) => {
-    //   await Provider.store.dispatch('commissionFieldValues/updateWithoutReset', field);
-    // };
-
-    const remove = async () => {
-      await Provider.store.dispatch('commissions/remove', commission.value.id);
-      emit('remove', commission.value.id);
     };
 
     const fillCommissionDownload = async (): Promise<void> => {
@@ -65,9 +51,6 @@ export default defineComponent({
 
     return {
       fillCommissionDownload,
-      // removecommission,
-      // updatecommissionField,
-      // addFile,
       removeFile,
       commission,
     };
@@ -110,6 +93,7 @@ export default defineComponent({
   border-radius: 5px;
   color: #343e5c;
 }
+
 .chart-button {
   width: 63px;
   height: 42px;
@@ -126,6 +110,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -231,7 +216,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -321,8 +306,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -373,6 +358,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -406,7 +392,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -421,7 +407,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
@@ -553,6 +539,7 @@ export default defineComponent({
 .el-select {
   width: 100%;
 }
+
 :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
   width: 100%;
 }
@@ -589,11 +576,11 @@ export default defineComponent({
 }
 
 :deep(.el-input-number__increase) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 :deep(.el-input-number__decrease) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 @media screen and (max-width: 768px) {

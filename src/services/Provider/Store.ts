@@ -7,6 +7,7 @@ const Store = (() => {
   const s = store;
   let getAction = '';
   let storeModule = '';
+
   function initPagination(options?: IPaginationOptions): void {
     store.commit('filter/setStoreModule', options?.storeModule ?? getStoreModule());
     store.commit('filter/setAction', options?.action ?? getGetAction());

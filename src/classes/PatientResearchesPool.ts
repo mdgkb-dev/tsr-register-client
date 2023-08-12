@@ -11,7 +11,6 @@ export default class PatientResearchesPool {
   patientId?: string;
 
   constructor(i?: Patient) {
-    
     ClassHelper.BuildClass(this, i);
   }
 

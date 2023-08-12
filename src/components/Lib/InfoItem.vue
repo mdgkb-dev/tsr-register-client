@@ -56,12 +56,12 @@
 </template>
 
 <script lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus';
 import { computed, defineComponent, nextTick, PropType, Ref, ref, watch } from 'vue';
 
 import Del from '@/assets/svg/Del.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
 import StringItem from '@/components/admin/Patients/StringItem.vue';
+
 export default defineComponent({
   name: 'InfoItem',
   components: {
@@ -126,26 +126,6 @@ export default defineComponent({
       // }
     };
 
-    const message = async () => {
-      return await ElMessageBox.confirm('proxy will permanently delete the file. Continue?', 'Warning', {
-        confirmButtonText: 'OK',
-        cancelButtonText: 'Cancel',
-        type: 'warning',
-      })
-        .then(() => {
-          ElMessage({
-            type: 'success',
-            message: 'Delete completed',
-          });
-        })
-        .catch(() => {
-          ElMessage({
-            type: 'info',
-            message: 'Delete canceled',
-          });
-        });
-    };
-
     watch(isToggle, async () => {
       await nextTick();
       if (isToggle.value) {
@@ -154,18 +134,14 @@ export default defineComponent({
       } else {
         document.body.removeEventListener('keydown', keysHandler, false);
       }
-      if (isToggle.value == false) {
+      if (isToggle.value === false) {
         emit('after-close');
       }
     });
 
     const changeState = () => {
       emit('click');
-      if (props.withOpenWindow) {
-        isToggle.value = true;
-      } else {
-        isToggle.value = false;
-      }
+      isToggle.value = !!props.withOpenWindow;
       if (localClose.value !== props.close) {
         isToggle.value = false;
         localClose.value = !localClose.value;
@@ -336,7 +312,7 @@ export default defineComponent({
 .open-window {
   border-radius: $normal-border-radius;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
   max-height: auto;
@@ -347,7 +323,7 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
+  top: 0;
   width: 100%;
   height: 100%;
   z-index: 1;

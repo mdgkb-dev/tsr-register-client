@@ -246,8 +246,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -308,6 +308,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -345,10 +346,10 @@ export default defineComponent({
 }
 
 :deep(.el-input-number__increase) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 :deep(.el-input-number__decrease) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 </style>

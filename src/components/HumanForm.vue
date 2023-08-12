@@ -82,6 +82,7 @@ import { useStore } from 'vuex';
 import Human from '@/classes/Human';
 import IOption from '@/interfaces/shared/IOption';
 import dateFormat from '@/services/DateMask';
+
 export default defineComponent({
   name: 'HumanForm',
   props: {
@@ -96,6 +97,7 @@ export default defineComponent({
     addresses: {
       type: Array as PropType<Array<string>>,
       required: false,
+      default: () => [],
     },
   },
   setup(props) {
@@ -140,6 +142,7 @@ export default defineComponent({
   left: 10px;
   top: 3px;
 }
+
 :deep(.el-autocomplete) {
   width: 100%;
 }

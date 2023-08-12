@@ -22,9 +22,12 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     'unused-imports/no-unused-imports': 'error',
     'vue/no-v-html': 0,
-    'vue/valid-v-slot': ['error', {
-      allowModifiers: true,
-    }],
+    'vue/valid-v-slot': [
+      'error',
+      {
+        allowModifiers: true,
+      },
+    ],
   },
   overrides: [
     {

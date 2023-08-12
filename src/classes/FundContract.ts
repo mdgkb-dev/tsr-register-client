@@ -29,6 +29,7 @@ export default class FundContract {
     this.drugArrives.push(item);
     return item;
   }
+
   normalizeArrivesStages(): void {
     sort(this.drugArrives);
     this.drugArrives.forEach((d: DrugArrive) => (d.stage = d.order));

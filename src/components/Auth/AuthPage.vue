@@ -21,6 +21,7 @@ export default defineComponent({
   width: 60%;
   margin: 50px auto 65px auto;
 }
+
 .card-header {
   text-align: center;
 }
@@ -28,6 +29,7 @@ export default defineComponent({
 .reg-item {
   margin-bottom: 0;
 }
+
 .warning {
   padding: 10px;
   margin-bottom: 20px;

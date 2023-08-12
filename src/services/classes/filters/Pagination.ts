@@ -1,5 +1,3 @@
-import { LocationQuery } from 'vue-router';
-
 import Cursor from '@/services/classes/filters/Cursor';
 import { Operators } from '@/services/interfaces/Operators';
 
@@ -39,7 +37,7 @@ export default class Pagination {
     // console.log('FROM');
     let url = '';
     Object.keys(this).forEach((el, i) => {
-      const value: any = this[el as keyof typeof this];
+      const value = this[el as keyof typeof this];
       const isObj = typeof this[el as keyof typeof this] == 'object';
       // console.log(value, el);
       if (value && url !== '?' && !isObj) {
@@ -54,7 +52,7 @@ export default class Pagination {
     return url;
   }
 
-  fromUrlQuery(obj: LocationQuery): void {
+  fromUrlQuery(): void {
     const str = window.location.search;
     const sormModelString = str.substring(str.indexOf('p=') + 2, str.lastIndexOf('|'));
     const params = new URLSearchParams(decodeURIComponent(sormModelString));
@@ -65,6 +63,7 @@ export default class Pagination {
   setAllLoaded(loadedItemsLength: number): void {
     this.allLoaded = !(loadedItemsLength >= this.limit);
   }
+
   resetAllLoaded(): void {
     this.allLoaded = false;
   }

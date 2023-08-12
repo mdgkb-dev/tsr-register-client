@@ -4,7 +4,7 @@ import { Ref } from 'vue';
 import IForm from '@/interfaces/elements/IForm';
 import MessageError from '@/services/classes/messages/MessageError';
 
-export default function validate(form: Ref<IForm>, hideErrorList?: boolean, fieldsList?: string[]): boolean {
+export default function validate(form: Ref<IForm>, hideErrorList?: boolean): boolean {
   let validationResult = true;
   form.value.validate((valid: boolean, errorFields: Record<string, unknown>) => {
     if (!valid) {

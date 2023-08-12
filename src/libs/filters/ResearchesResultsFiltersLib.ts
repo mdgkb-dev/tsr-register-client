@@ -3,6 +3,7 @@ import { DataTypes } from '@/services/interfaces/DataTypes';
 
 const ResearchesResultsFiltersLib = (() => {
   const model = 'researchResult';
+
   function byResearchId(id: string): FilterModel {
     const filterModel = FilterModel.CreateFilterModelV2(model, 'researchId', DataTypes.String);
     filterModel.value1 = id;

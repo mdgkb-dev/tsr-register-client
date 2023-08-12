@@ -20,6 +20,10 @@ import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'DrugApplicationFile',
+  components: {
+    FileUploader,
+    Button,
+  },
   props: {
     drugApplicationFile: {
       type: Object as PropType<DrugApplicationFile>,
@@ -27,16 +31,12 @@ export default defineComponent({
     },
   },
   emits: ['remove', 'click'],
-  components: {
-    FileUploader,
-    Button,
-  },
   setup(props) {
     const updateDrugArrive = async () => {
       await Provider.store.dispatch('drugArrives/updateWithoutReset', props.drugApplicationFile);
     };
 
-    const updateDrugArriveDate = async (newDate: Date) => {
+    const updateDrugArriveDate = async () => {
       // props.drugApplicationFile.setDate(newDate);
       await updateDrugArrive();
     };

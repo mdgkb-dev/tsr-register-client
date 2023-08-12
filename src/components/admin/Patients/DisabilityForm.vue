@@ -13,7 +13,7 @@
         <div class="slider-item" @click="addDisability">Добавить инвалидность</div>
       </div>
     </template>
-    <template #tabs> </template>
+    <template #tabs></template>
     <template #body>
       <div class="body">
         <div v-for="disability in patient.disabilities" :key="disability.id">
@@ -354,6 +354,7 @@ export default defineComponent({
   display: flex;
   justify-content: flex-end;
 }
+
 .but {
   border-radius: 50%;
 }
@@ -472,7 +473,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -498,9 +499,11 @@ export default defineComponent({
 .diagnosis-doctorName {
   padding: 10px 0;
 }
+
 .doctor-title {
   padding: 10px 0;
 }
+
 .background-container {
   width: auto;
   padding: 10px;
@@ -519,7 +522,7 @@ export default defineComponent({
   color: #343e5c;
   display: flex;
   justify-content: right;
-  align-items: end;
+  align-items: flex-end;
   padding-bottom: 10px;
 }
 
@@ -587,7 +590,6 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
-
   .tabs-item {
     width: 40px;
     height: 100px;

@@ -85,7 +85,7 @@ export default defineComponent({
 .add-doctor {
   position: absolute;
   z-index: 1;
-  top: 0px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   border: $light-pink-border;
@@ -98,8 +98,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;

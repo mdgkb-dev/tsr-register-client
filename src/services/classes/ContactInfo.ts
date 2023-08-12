@@ -22,21 +22,27 @@ export default class ContactInfo {
   postAddressesForDelete: string[] = [];
   telephoneNumbersForDelete: string[] = [];
   websitesForDelete: string[] = [];
+
   constructor(i?: ContactInfo) {
     ClassHelper.BuildClass(this, i);
   }
+
   addEmail(): void {
     this.emails.push(new Email());
   }
+
   addPostAddress(): void {
     this.postAddresses.push(new PostAddress());
   }
+
   addTelephoneNumber(): void {
     this.telephoneNumbers.push(new TelephoneNumber());
   }
+
   addWebsite(): void {
     this.websites.push(new Website());
   }
+
   pushFirstInfo(): void {
     if (!this.emails.length) {
       this.emails.push(new Email());
@@ -45,6 +51,7 @@ export default class ContactInfo {
       this.telephoneNumbers.push(new TelephoneNumber());
     }
   }
+
   getCoords(): number[] {
     return [Number(this.latitude), Number(this.longitude)];
   }

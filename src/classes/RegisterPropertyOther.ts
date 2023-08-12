@@ -6,6 +6,7 @@ export default class RegisterPropertyOther {
   registerPropertyRadioId?: string;
   registerPropertyId?: string;
   order = 0;
+
   constructor(i?: RegisterPropertyOther) {
     ClassHelper.BuildClass(this, i);
   }

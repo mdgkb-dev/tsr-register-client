@@ -7,11 +7,13 @@ import { Operators } from '@/services/interfaces/Operators';
 
 const DrugApplicationsFiltersLib = (() => {
   const modelName = 'drugApplication';
+
   function byStatus(): FilterModel {
     const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(DrugApplication).statusId, DataTypes.Set);
     filterModel.operator = Operators.In;
     return filterModel;
   }
+
   function byCommissionsId(id: string, label: string): FilterModel {
     const filterModel = FilterModel.CreateFilterModelWithJoinV2(
       modelName,

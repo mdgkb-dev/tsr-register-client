@@ -11,6 +11,7 @@ export default class SearchModel {
   searchGroupId = '';
   searchGroups: SearchGroup[] = [];
   searchGroup: SearchGroup = new SearchGroup();
+
   // searchObjects: SearchObject[] = [];
 
   constructor(i?: SearchModel) {

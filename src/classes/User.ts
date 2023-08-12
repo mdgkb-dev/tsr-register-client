@@ -15,6 +15,7 @@ export default class User {
   @ClassHelper.GetClassConstructor(RegionUser)
   regionsUsers: RegionUser[] = [];
   regionsUsersForDelete: string[] = [];
+
   // registerPropertyToUser: RegisterPropertyToUser[] = [];
 
   constructor(i?: User) {

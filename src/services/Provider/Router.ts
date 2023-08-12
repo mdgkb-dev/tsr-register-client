@@ -28,6 +28,7 @@ const Router = (() => {
     }
     await router.push(`/admin/${safePath}`);
   }
+
   function getStringQueryParam(param: string): string {
     return String(route().query[param]);
   }

@@ -71,10 +71,12 @@ export default defineComponent({
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;
+
   &:hover {
     color: #5cb6ff;
   }
 }
+
 .set {
   color: #5cb6ff;
 }
@@ -105,6 +107,6 @@ export default defineComponent({
 }
 
 :deep(.el-form-item) {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 </style>

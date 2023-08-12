@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import User from '@/classes/User';
 import ClassHelper from '@/services/ClassHelper';
+
 export enum ChateMessageTypes {
   Ping = 'ping',
   Enter = 'enter',

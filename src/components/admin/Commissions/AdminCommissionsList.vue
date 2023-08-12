@@ -368,14 +368,14 @@ export default defineComponent({
   color: #006bb4;
   font-size: 14px;
   width: 100%;
-  padding: 0px;
+  padding: 0;
 }
 
 .medicine {
   color: $site_dark_gray;
   font-size: 17px;
   width: 100%;
-  padding: 0px;
+  padding: 0;
 }
 
 .hidden {
@@ -394,6 +394,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -435,7 +436,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -443,7 +444,7 @@ export default defineComponent({
   justify-content: right;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .icon-plus {
@@ -475,7 +476,7 @@ export default defineComponent({
   display: flex;
   z-index: 3;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
   background: #f5f5f5;
@@ -547,7 +548,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;

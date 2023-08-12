@@ -15,7 +15,7 @@
             style="margin-bottom: 0"
           >
             <el-select v-model="insuranceCompaniesOfPatient[scope.$index].insuranceCompanyId" placeholder="Выберите компанию">
-              <el-option v-for="item in insuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+              <el-option v-for="item in insuranceCompaniesOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
           <span v-else>{{ scope.row.insuranceCompany.name }}</span>

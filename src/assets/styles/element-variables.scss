@@ -127,10 +127,11 @@ body > .el-container::v-deep {
   background-color: white;
   background-clip: padding-box;
 }
+
 .card-hover:hover {
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 5px, rgba(0, 0, 0, 0.1) 0px -1px 3px, rgba(0, 0, 0, 0.1) 0px 4px 6px,
-    rgba(0, 0, 0, 0.1) 0px 2px 3px, rgba(0, 0, 0, 0.1) 0px -3px 5px;
+  rgba(0, 0, 0, 0.1) 0px 2px 3px, rgba(0, 0, 0, 0.1) 0px -3px 5px;
 }
 
 .el-button {
@@ -144,9 +145,11 @@ body > .el-container::v-deep {
   margin: 0 10px 0 0;
   color: white;
   font-size: 10px;
+
   span {
     letter-spacing: 1px;
   }
+
   &:hover {
     background-color: darken(#2754eb, 10%);
     color: white;
@@ -158,6 +161,7 @@ body > .el-container::v-deep {
 a {
   color: #2754eb;
   text-decoration: none;
+
   &:hover {
     cursor: pointer;
     color: darken(#2754eb, 30%);

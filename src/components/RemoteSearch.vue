@@ -1,5 +1,5 @@
 <template>
-  <el-form :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}`}" @submit.prevent="onEnter" >
+  <el-form :style="{ maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }" @submit.prevent="onEnter">
     <el-form-item style="margin: 0">
       <el-autocomplete
         ref="searchForm"
@@ -80,7 +80,7 @@ export default defineComponent({
     const searchForm = ref();
     const searchModel: Ref<SearchModel> = computed<SearchModel>(() => Provider.store.getters['search/searchModel']);
 
-    const find = async (query: string, resolve: (arg: any) => void): Promise<void> => {
+    const find = async (query: string, resolve: (arg: unknown) => void): Promise<void> => {
       if (query.length < 2) {
         resolve([]);
         return;
@@ -175,7 +175,7 @@ $margin: 20px 0;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 15px;
   border-radius: 5px;
-  border: 1px solid #C4C4C4;
+  border: 1px solid #c4c4c4;
 }
 
 :deep(.el-input__suffix) {

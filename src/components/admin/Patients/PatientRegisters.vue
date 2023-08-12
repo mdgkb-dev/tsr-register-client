@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer v-if="mounted" :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
+  <RightTabsContainer v-if="mounted" :is-toggle="isToggle" slider-on-width="180px" @toggle="toggle">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -143,6 +143,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -219,6 +220,7 @@ export default defineComponent({
   background: $custom-background;
   color: #343e5c;
 }
+
 .tabs-item {
   width: 101px;
   height: 51px;
@@ -254,7 +256,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -314,8 +316,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -365,6 +367,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -398,7 +401,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -413,7 +416,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
@@ -428,26 +431,25 @@ export default defineComponent({
   align-items: center;
   border: $light-pink-border;
   border-radius: $normal-border-radius;
-  border-color: #00B5A4;
+  border-color: #00b5a4;
 
-  background: #C7ECEA;
+  background: #c7ecea;
 }
 
 .patientRegister-info {
-  color: #00B5A4;
+  color: #00b5a4;
   font-size: 20px;
   text-transform: uppercase;
 }
 
 .patientRegister-user {
   margin-left: 10px;
-  color: #379FFF;
+  color: #379fff;
   font-size: 20px;
   // text-transform: uppercase;
 }
 
 @media screen and (max-width: 768px) {
-
   .tabs-item {
     width: 40px;
     height: 100px;

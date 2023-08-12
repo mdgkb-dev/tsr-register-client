@@ -11,7 +11,7 @@ const httpClient = new HttpClient('commissions');
 
 const actions: ActionTree<State, RootState> = {
   ...getBaseActions<Commission, State>(httpClient),
-  createAndSetNumber: async ({ commit, state }, item: Commission): Promise<void> => {
+  createAndSetNumber: async (_, item: Commission): Promise<void> => {
     const resp = await httpClient.post<Commission, Commission>({ payload: item, isFormData: true });
     if (resp) {
       item.number = resp.number;

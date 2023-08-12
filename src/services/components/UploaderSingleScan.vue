@@ -190,12 +190,12 @@ export default defineComponent({
   width: auto !important;
   max-height: var(--height) !important;
   height: 100% !important;
-  margin: 0px;
+  margin: 0;
 }
 
 :deep(.el-upload-list__item-thumbnail) {
   width: auto !important;
-  max-height: var(--height) !important ;
+  max-height: var(--height) !important;
   height: 100% !important;
 }
 

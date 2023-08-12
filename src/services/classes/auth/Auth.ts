@@ -19,6 +19,7 @@ export default class Auth {
   isRestore(): boolean {
     return this.status === AuthStatuses.Restore;
   }
+
   isRefresh(): boolean {
     return this.status === AuthStatuses.Refresh;
   }

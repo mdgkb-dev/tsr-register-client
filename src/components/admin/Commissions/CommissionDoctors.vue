@@ -1,5 +1,4 @@
 <template>
-
   <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="showDoctorsList(true)" />
   <div class="scroll-block">
     <draggable tag="el-collapse" :list="commission.commissionsDoctors" item-key="id" @end="sortDoctors">
@@ -21,23 +20,23 @@
       />
     </div>
   </div>
-      <!-- <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="showDoctorsList(true)" />
-      <div class="scroll-block">
-        <draggable tag="el-collapse" :list="commission.commissionsDoctors" item-key="id" @end="sortDoctors">
-          <template #item="{ element }">
-            <PersonalityItem :title="element.doctor.getNameWithPosition()" @remove="removeCommissionDoctor(element)" />
-          </template>
-        </draggable>
-      </div> -->
-      <!-- <div style="display: flex">
+  <!-- <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="showDoctorsList(true)" />
+  <div class="scroll-block">
+    <draggable tag="el-collapse" :list="commission.commissionsDoctors" item-key="id" @end="sortDoctors">
+      <template #item="{ element }">
+        <PersonalityItem :title="element.doctor.getNameWithPosition()" @remove="removeCommissionDoctor(element)" />
+      </template>
+    </draggable>
+  </div> -->
+  <!-- <div style="display: flex">
 
-          
-        <div class="doctor-name">{{ element.doctor.name }}</div>
 
-        <Button icon="del" icon-class="edit-icon" @click="removeCommissionDoctor(element)" />
-      </div> -->
-    <!-- </template>
-  </draggable> -->
+    <div class="doctor-name">{{ element.doctor.name }}</div>
+
+    <Button icon="del" icon-class="edit-icon" @click="removeCommissionDoctor(element)" />
+  </div> -->
+  <!-- </template>
+</draggable> -->
   <!-- <el-button @click="showDoctorsList(true)">Добавить члена комиссии</el-button> -->
   <!-- <template v-if="doctorsListShowed">
     <div v-for="doctor in doctors" :key="doctor.id" @click="addCommissionDoctor(doctor)">
@@ -52,33 +51,27 @@
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 import draggable from 'vuedraggable';
 
-import Move from '@/assets/svg/Move.svg';
 import Commission from '@/classes/Commission';
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import Doctor from '@/classes/Doctor';
+import PersonalityItem from '@/components/admin/Patients/PersonalityItem.vue';
 import Button from '@/components/Base/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
-import PersonalityItem from '@/components/admin/Patients/PersonalityItem.vue';
-import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 
 export default defineComponent({
   name: 'CommissionDoctors',
+  components: {
+    draggable,
+    Button,
+    PersonalityItem,
+  },
   props: {
     commission: {
       type: Object as PropType<Commission>,
       required: true,
     },
-  },
-  components: {
-    draggable,
-    Move,
-    Button,
-    PersonalityItem,
-    CollapseContainer,
-    CollapseItem,
   },
   setup(props) {
     const doctorsListShowed: Ref<boolean> = ref(false);
@@ -164,6 +157,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -205,7 +199,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -213,7 +207,7 @@ export default defineComponent({
   justify-content: right;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .icon-plus {
@@ -239,7 +233,7 @@ export default defineComponent({
   display: flex;
   z-index: 3;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
   background: #f5f5f5;
@@ -276,7 +270,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;
@@ -308,12 +302,6 @@ export default defineComponent({
     margin: 0 0px 10px 0;
   }
 }
-
-
-
-
-
-
 
 .plus-button {
   width: calc(100% - 20px);
@@ -348,8 +336,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;

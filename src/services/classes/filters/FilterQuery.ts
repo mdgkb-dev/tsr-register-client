@@ -1,5 +1,3 @@
-import { LocationQuery } from 'vue-router';
-
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Pagination from '@/services/classes/filters/Pagination';
 import { Operators } from '@/services/interfaces/Operators';
@@ -61,14 +59,14 @@ export default class FilterQuery {
     return url;
   }
 
-  async fromUrlQuery(obj: LocationQuery): Promise<void> {
-    this.pagination.fromUrlQuery(obj);
+  async fromUrlQuery(): Promise<void> {
+    this.pagination.fromUrlQuery();
     if (!this.pagination.limit || !this.pagination.offset) {
       this.pagination.limit = 25;
     }
 
     const sortModel = new SortModel();
-    await sortModel.fromUrlQuery(obj);
+    await sortModel.fromUrlQuery();
     if (sortModel.model) {
       this.setSortModel(sortModel);
     }
@@ -113,7 +111,7 @@ export default class FilterQuery {
     }
   }
 
-  setSortModel(sortModel: SortModel) {
+  setSortModel(sortModel: SortModel): void {
     if (this.sortModel) {
       return;
     }
@@ -130,7 +128,7 @@ export default class FilterQuery {
     });
   }
 
-  setFilterModel(filterModel: FilterModel) {
+  setFilterModel(filterModel: FilterModel): void {
     filterModel.isSet = true;
     let item = this.filterModels.find((i: FilterModel) => i.id === filterModel.id);
     if (item) {
@@ -140,7 +138,7 @@ export default class FilterQuery {
     }
   }
 
-  spliceFilterModel(id: string | undefined) {
+  spliceFilterModel(id: string | undefined): void {
     const index = this.filterModels.findIndex((i: FilterModel) => i.id === id);
     if (index > -1) {
       this.filterModels.splice(index, 1);

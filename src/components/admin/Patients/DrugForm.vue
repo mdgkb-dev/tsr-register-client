@@ -70,7 +70,7 @@
         :rules="{ required: true, message: 'Пожалуйста выберите лекарство', trigger: 'change' }"
       >
         <el-select v-model="newPatientDrugRegimen.drugId" filterable placeholder="Лекарство">
-          <el-option v-for="item in drugs" :key="item.id" :label="item.name" :value="item.id"> </el-option>
+          <el-option v-for="item in drugs" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
 
@@ -131,7 +131,6 @@ import Drug from '@/classes/Drug';
 import DrugRegimen from '@/classes/DrugRegimen';
 import DrugRegimenBlock from '@/classes/DrugRegimenBlock';
 import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
-import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
 import PatientDrugRegimenItem from '@/classes/PatientDrugRegimenItem';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
@@ -147,7 +146,6 @@ export default defineComponent({
     // const { formatDate } = useDateFormat();
 
     const patientDrugRegimens: ComputedRef<PatientDrugRegimen[]> = computed(() => store.getters['patients/patientDrugRegimens']);
-    const patientDiagnosis: ComputedRef<PatientDiagnosis[]> = computed(() => store.getters['patients/diagnosis']);
     const drugs: Ref<Drug[]> = computed(() => store.getters['drugs/drugs']);
     const newPatientDrugRegimen: Ref<UnwrapRef<PatientDrugRegimen>> = ref(new PatientDrugRegimen());
     const chosenDrugRegimen = ref(new DrugRegimen());

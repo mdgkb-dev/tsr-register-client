@@ -1,7 +1,9 @@
 <template>
   <el-popover placement="top-start" width="auto" trigger="hover" :content="content">
     <template #reference>
-      <el-icon ::size="20"><QuestionFilled /></el-icon>
+      <el-icon ::size="20">
+        <QuestionFilled />
+      </el-icon>
     </template>
   </el-popover>
 </template>

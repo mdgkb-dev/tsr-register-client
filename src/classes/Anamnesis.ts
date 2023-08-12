@@ -14,9 +14,11 @@ export default class Anamnesis {
   setValue(v: string): void {
     this.value = v;
   }
+
   setDoctorName(v: string): void {
     this.doctorName = v;
   }
+
   setDate(date: Date): void {
     this.date = new Date(date);
   }

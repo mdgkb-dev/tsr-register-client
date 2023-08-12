@@ -95,6 +95,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -136,7 +137,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -144,7 +145,7 @@ export default defineComponent({
   justify-content: right;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .icon-plus {
@@ -170,7 +171,7 @@ export default defineComponent({
   display: flex;
   z-index: 3;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
   background: #f5f5f5;
@@ -207,7 +208,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;
@@ -273,8 +274,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;

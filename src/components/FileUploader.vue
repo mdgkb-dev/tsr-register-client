@@ -112,9 +112,11 @@ export default defineComponent({
   margin-left: 5px;
   display: flex;
   align-items: center;
+
   a {
     line-height: 1.1;
   }
+
   .el-button {
     margin-left: 2px;
     padding: 5px;
@@ -123,6 +125,7 @@ export default defineComponent({
     border: none;
   }
 }
+
 .upload-container {
   width: 100%;
   display: flex;
@@ -136,7 +139,7 @@ export default defineComponent({
   height: 42px;
   color: #006bb4;
   background: #dff2f8;
-  margin: 0px 10px 0 0;
+  margin: 0 10px 0 0;
   font-size: 14px;
 }
 

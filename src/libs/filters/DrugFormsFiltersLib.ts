@@ -5,6 +5,7 @@ import { DataTypes } from '@/services/interfaces/DataTypes';
 
 const DrugFormsFiltersLib = (() => {
   const modelName = 'drugForm';
+
   function byDrugId(id?: string): FilterModel {
     const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(DrugForm).drugId, DataTypes.String);
     filterModel.value1 = id;

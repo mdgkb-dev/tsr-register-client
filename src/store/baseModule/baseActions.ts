@@ -69,7 +69,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       await httpClient.post<T, T>(opts);
       commit('set');
     },
-    createWithoutReset: async ({ commit, state }, item: T): Promise<void> => {
+    createWithoutReset: async ({ state }, item: T): Promise<void> => {
       if (!item) {
         item = state.item;
       }
@@ -102,7 +102,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       }
       commit('set', await httpClient.put<T, T>(opts));
     },
-    updateWithoutReset: async ({ commit, state }, item: T): Promise<void> => {
+    updateWithoutReset: async ({ state }, item: T): Promise<void> => {
       if (!item) {
         item = state.item;
       }

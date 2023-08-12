@@ -3,6 +3,7 @@ import { Orders } from '@/services/interfaces/Orders';
 
 const CommissionsSortsLib = (() => {
   const modelName = 'commission';
+
   function byNumber(order?: Orders): SortModel {
     return SortModel.CreateSortModelV2(
       modelName,

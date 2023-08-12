@@ -146,7 +146,7 @@ export default defineComponent({
 .slider-block {
   position: absolute;
   top: 8px;
-  right: 0px;
+  right: 0;
   display: flex;
   justify-content: left;
   cursor: pointer;

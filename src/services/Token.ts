@@ -36,9 +36,11 @@ const TokenService = (() => {
   function _getAccessToken() {
     return localStorage.getItem('access_token');
   }
+
   function _getRefreshToken() {
     return localStorage.getItem('refresh_token');
   }
+
   function _clearTokens() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');

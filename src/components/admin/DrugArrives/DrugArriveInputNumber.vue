@@ -55,9 +55,11 @@ export default defineComponent({
   border-radius: 5px;
   color: #006bb4;
   font-size: 12px;
+
   &-filter {
     background: #ffffff;
   }
+
   &-download {
     background: #dff2f8;
   }
@@ -73,10 +75,10 @@ export default defineComponent({
 }
 
 :deep(.name-item) {
-  margin: 0px;
+  margin: 0;
   width: auto;
   border-color: #ffffff;
-  padding: 0px;
+  padding: 0;
 }
 
 .grid {
@@ -93,6 +95,7 @@ export default defineComponent({
   color: #00bea5;
   background: #c1efeb;
 }
+
 .save-picker-button {
   width: 100%;
   height: 34px;
@@ -100,6 +103,7 @@ export default defineComponent({
   color: #006bb4;
   background: #dff2f8;
 }
+
 .gender-button {
   width: 42px;
   border-radius: 5px;
@@ -137,6 +141,7 @@ export default defineComponent({
   color: #006bb4;
   background: #dff2f8;
   font-size: 12px;
+
   &:hover {
     background: #dff2f8;
   }
@@ -146,6 +151,7 @@ export default defineComponent({
   font-size: 14px;
   padding: 0;
   margin: 0 5px 0 0;
+
   &-active {
     color: #b0a4c0;
   }
@@ -156,7 +162,7 @@ export default defineComponent({
   font-size: 17px;
   min-width: 150px;
   width: 100%;
-  padding: 0px;
+  padding: 0;
 }
 
 .hidden {
@@ -175,6 +181,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -218,7 +225,7 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   margin-right: 10px;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -227,7 +234,7 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   min-width: 210px;
-  padding: 0px;
+  padding: 0;
 }
 
 :deep(.icon-plus) {
@@ -273,7 +280,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;

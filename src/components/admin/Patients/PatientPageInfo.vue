@@ -24,17 +24,20 @@
       <div class="left-info">
         <div v-if="patient.getActuallyDisability()">
           <el-space v-if="patient.getActuallyDisability()" direction="vertical" alignment="start" ::size="20">
-            <div style="color: #a1a8bd">До {{ $dateTimeFormatter.format(patient.getActuallyDisability()?.period?.dateEnd) }}</div>
+            <div style="color: #a1a8bd">
+              До
+              {{ $dateTimeFormatter.format(patient.getActuallyDisability()?.period?.dateEnd) }}
+            </div>
             <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
-                >A</el-button
-              >
+                >A
+              </el-button>
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle
-                >B</el-button
-              >
+                >B
+              </el-button>
               <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle
-                >C</el-button
-              >
+                >C
+              </el-button>
             </el-space>
             <div v-else>Нет справок ЕДВ</div>
           </el-space>
@@ -92,6 +95,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/pageInfo.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
 .register-tag {
   &:hover {
     cursor: pointer;

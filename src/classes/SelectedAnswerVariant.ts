@@ -1,10 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import ClassHelper from '@/services/ClassHelper';
+
 export default class SelectedAnswerVariant {
   id?: string;
   answerId?: string;
   answerVariantId?: string;
+
   constructor(i?: SelectedAnswerVariant) {
     ClassHelper.BuildClass(this, i);
   }

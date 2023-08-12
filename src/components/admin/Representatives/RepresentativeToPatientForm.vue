@@ -26,7 +26,7 @@
           :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
         >
           <el-select v-model="scope.row.representativeTypeId" placeholder="Роль подопечного" :disabled="!scope.row.patientId">
-            <el-option v-for="item in representativeTypes" :key="item.id" :label="item.childMaleType" :value="item.id"> </el-option>
+            <el-option v-for="item in representativeTypes" :key="item.id" :label="item.childMaleType" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
       </template>
@@ -61,6 +61,7 @@ import RepresentativeType from '@/classes/RepresentativeType';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
+
 export default defineComponent({
   name: 'RepresentativeToPatientForm',
   components: {

@@ -5,6 +5,7 @@ import ChatMessage from '@/services/classes/ChatMessage';
 import ClassHelper from '@/services/ClassHelper';
 
 const apiHost = process.env.VUE_APP_API_HOST ?? '';
+
 export default class WebSocketClient {
   private client?: WebSocket;
   private endpoint = '';
@@ -18,7 +19,7 @@ export default class WebSocketClient {
     this.ping();
   }
 
-  send(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
+  send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
     if (!this.client || this.client.readyState !== 1) {
       return;
     }
@@ -40,7 +41,7 @@ export default class WebSocketClient {
     if (!this.client) {
       return;
     }
-    this.client.onmessage = (e: MessageEvent<any>) => {
+    this.client.onmessage = (e: MessageEvent<string>) => {
       if (!e.data) {
         return;
       }

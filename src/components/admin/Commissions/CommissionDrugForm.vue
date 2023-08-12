@@ -1,5 +1,5 @@
 <template>
-  <StringItem :string="stepper.getStepName() " margin="0 0 30px 0" font-size="16px" color="#006BB4"/>
+  <StringItem :string="stepper.getStepName()" margin="0 0 30px 0" font-size="16px" color="#006BB4" />
   <Button v-if="stepper.getStepNumber() > 0" button-class="change-button" text="Назад" @click="stepper.decreaseStep()" />
   <div v-if="mounted">
     <GridContainer grid-gap="5px" margin="10px 0">
@@ -25,13 +25,13 @@ import DrugRecipe from '@/classes/DrugRecipe';
 import Step from '@/classes/stepper/Step';
 import Stepper from '@/classes/stepper/Stepper';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import StringItem from '@/components/admin/Patients/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import DrugDozesFiltersLib from '@/libs/filters/DrugDozesFiltersLib';
 import DrugFormsFiltersLib from '@/libs/filters/DrugFormsFiltersLib';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Provider from '@/services/Provider/Provider';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
 
 export default defineComponent({
   name: 'CommissionDrugForm',
@@ -115,14 +115,14 @@ export default defineComponent({
   color: #006bb4;
   font-size: 14px;
   width: 100%;
-  padding: 0px;
+  padding: 0;
 }
 
 .medicine {
   color: $site_dark_gray;
   font-size: 17px;
   width: 100%;
-  padding: 0px;
+  padding: 0;
 }
 
 .hidden {
@@ -141,6 +141,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -182,7 +183,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -190,7 +191,7 @@ export default defineComponent({
   justify-content: right;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .icon-plus {
@@ -222,7 +223,7 @@ export default defineComponent({
   display: flex;
   z-index: 3;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
   background: #f5f5f5;
@@ -294,7 +295,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;

@@ -31,6 +31,7 @@ export default class PatientRepresentative {
       return this.representativeType.parentWomanType;
     }
   }
+
   getRepresentativeChildType(): string {
     if (!this.representativeType) return '';
     if (this.patient?.human.isMale) {

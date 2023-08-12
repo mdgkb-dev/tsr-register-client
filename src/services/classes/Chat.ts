@@ -5,6 +5,7 @@ export default class Chat {
   id?: string;
   @ClassHelper.GetClassConstructor(ChatMessage)
   chatMessages: ChatMessage[] = [];
+
   constructor(i?: Chat) {
     ClassHelper.BuildClass(this, i);
   }

@@ -33,7 +33,6 @@ export default defineComponent({
   emits: ['fill'],
   setup(props, { emit }) {
     const answer = props.researchResult.getOrCreateAnswer(props.question);
-    const ignoreVisibility = (v: boolean) => (v = true);
 
     const filledCheck = (): void => {
       answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
@@ -43,7 +42,6 @@ export default defineComponent({
 
     return {
       filledCheck,
-      ignoreVisibility,
       dateFormat,
       answer,
     };

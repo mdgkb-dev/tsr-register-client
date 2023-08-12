@@ -7,7 +7,7 @@ import TokenService from '@/services/Token';
 import State from './state';
 
 const mutations: MutationTree<State> = {
-  setUser(state, user: User) {
+  setUser(state, user: User): void {
     state.user = new User(user);
     localStorage.setItem('user', JSON.stringify(user));
   },
@@ -15,10 +15,10 @@ const mutations: MutationTree<State> = {
     localStorage.removeItem('user');
     state.user = new User();
   },
-  setTokens(state, tokens: ITokens) {
+  setTokens(state, tokens: ITokens): void {
     TokenService.setTokens(tokens);
   },
-  clearTokens(state) {
+  clearTokens() {
     TokenService.clearTokens();
   },
   setIsAuth(state, isAuth: boolean) {

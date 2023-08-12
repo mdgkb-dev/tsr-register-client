@@ -162,7 +162,7 @@ export default class Calendar {
     return activePeriod1.every((day: Day, i: number) => day.date.getDate() === activePeriod2[i].date.getDate());
   }
 
-  getDateWithOffset() {
+  getDateWithOffset(): Date {
     return new Date(this.getSelectedDay().date.getTime() - new Date().getTimezoneOffset() * 60000);
   }
 }

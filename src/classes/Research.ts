@@ -79,6 +79,7 @@ export default class Research {
   getFilteredQuestions(filterString: string, showOnlyNotFilled: boolean, researchResult: ResearchResult): Question[] {
     return this.getNotFilledQuestions(researchResult, showOnlyNotFilled, this.getQuestionsByString(filterString));
   }
+
   selectFormula(item: Formula): void {
     this.selectedFormula = item;
   }

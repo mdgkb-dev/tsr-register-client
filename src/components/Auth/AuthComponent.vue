@@ -125,6 +125,7 @@ h3 {
   word-break: break-word;
   margin: 0 0 8px 0;
 }
+
 .auth-card {
   background: white;
   padding: 30px 50px;
@@ -139,6 +140,7 @@ h3 {
     margin: 10px 0 10px;
   }
 }
+
 .auth-card-header {
   margin-bottom: 15px;
 }
@@ -176,6 +178,7 @@ h3 {
   justify-content: center;
   flex-wrap: wrap;
 }
+
 .auth-btn {
   color: white;
   background-color: #224af2;
@@ -192,6 +195,7 @@ h3 {
     width: auto;
   }
 }
+
 @media screen and (max-width: 800px) {
   h3 {
     font-size: 18px;

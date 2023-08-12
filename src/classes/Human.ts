@@ -14,6 +14,7 @@ interface Rule {
   trigger: string;
   message: string;
 }
+
 interface Rules {
   surname: Rule[];
   name: Rule[];
@@ -21,6 +22,7 @@ interface Rules {
   addressRegistration: Rule[];
   addressResidential: Rule[];
 }
+
 export default class Human {
   id?: string;
   name = '';
@@ -49,6 +51,7 @@ export default class Human {
   };
 
   editNameMode = false;
+
   constructor(i?: Human) {
     ClassHelper.BuildClass(this, i);
   }
@@ -106,6 +109,7 @@ export default class Human {
   addressesEqual(): boolean {
     return this.addressRegistration === this.addressResidential;
   }
+
   setResidentialAddress(addressesEqual: boolean): void {
     addressesEqual ? (this.addressResidential = this.addressRegistration) : (this.addressResidential = '');
   }

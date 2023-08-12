@@ -27,7 +27,7 @@ export default defineComponent({
       default: '',
     },
   },
-  setup(props) {
+  setup() {
     const store = useStore();
     const storeModule: string = store.getters['filter/storeModule'];
     const storeAction: string = store.getters['filter/storeAction'];
@@ -77,10 +77,12 @@ export default defineComponent({
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;
+
   &:hover {
     color: #5cb6ff;
   }
 }
+
 .set {
   color: #5cb6ff;
 }

@@ -10,11 +10,16 @@ import State from './state';
 const httpClient = new HttpClient('search');
 
 const actions: ActionTree<State, RootState> = {
-  search: async ({ commit }, searchModel: SearchModel): Promise<void> => {
+  search: async (_, searchModel: SearchModel): Promise<void> => {
     const item = await httpClient.get<SearchModel>({ query: `?searchModel=${searchModel.toUrl()}` });
     if (item) {
       item.searchGroup.options.forEach((opt: SearchElement) => {
-        searchModel.searchObjects.push({ id: opt.id, value: opt.value, label: opt.label, description: opt.description });
+        searchModel.searchObjects.push({
+          id: opt.id,
+          value: opt.value,
+          label: opt.label,
+          description: opt.description,
+        });
       });
     }
   },

@@ -5,8 +5,8 @@
       maxWidth: maxWidth,
     }"
   >
-    <el-form
-      ><el-form-item label="Телефон">
+    <el-form>
+      <el-form-item label="Телефон">
         <el-input v-model="human.contact.phone" placeholder="Введите номер" @blur="updateHuman()"></el-input>
       </el-form-item>
       <el-form-item label="Email">
@@ -56,7 +56,7 @@ export default defineComponent({
       default: false,
     },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const surnameForm = ref();
     const form = ref();
     const human: Ref<Human> = computed(() => Provider.store.getters[`${props.storeModule}/item`].getHuman());
@@ -151,6 +151,7 @@ export default defineComponent({
   .el-select {
     width: 100%;
   }
+
   :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
     width: 100%;
   }
@@ -187,11 +188,11 @@ export default defineComponent({
   }
 
   :deep(.el-input-number__increase) {
-    border-radius: 0px;
+    border-radius: 0;
   }
 
   :deep(.el-input-number__decrease) {
-    border-radius: 0px;
+    border-radius: 0;
   }
 
   @media screen and (max-width: 730px) {
@@ -209,12 +210,12 @@ export default defineComponent({
 
     .item-left {
       width: 100%;
-      margin-right: 0px;
+      margin-right: 0;
     }
 
     .item-right {
       width: 100%;
-      margin-left: 0px;
+      margin-left: 0;
     }
 
     .activated-icon {

@@ -47,7 +47,7 @@ export default defineComponent({
     },
     customClass: { type: String as PropType<string>, required: false, default: '' },
   },
-  setup(props, { emit }) {
+  setup(props) {
     const style = computed(() => {
       return {
         maxWidth: props.maxWidth,

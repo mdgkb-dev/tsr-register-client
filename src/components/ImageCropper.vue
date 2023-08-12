@@ -49,7 +49,10 @@ export default defineComponent({
       const canvas = cropperRef.value.getResult();
       if (canvas) {
         canvas.canvas.toBlob((blob: Blob) => {
-          store.commit(`${cropper.value.store}/${cropper.value.mutation}`, { blob: blob, src: canvas.canvas.toDataURL() });
+          store.commit(`${cropper.value.store}/${cropper.value.mutation}`, {
+            blob: blob,
+            src: canvas.canvas.toDataURL(),
+          });
         });
       }
       loading.value = false;

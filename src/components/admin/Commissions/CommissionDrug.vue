@@ -1,14 +1,7 @@
 <template>
-      <GridContainer grid-gap="5px" margin="10px 0">
-        <Button
-          v-for="drug in drugs"
-          :key="drug.id"
-          button-class="change-button"
-          :text="drug.name"
-
-          @click="selectDrug(drug)"
-        />
-      </GridContainer>
+  <GridContainer grid-gap="5px" margin="10px 0">
+    <Button v-for="drug in drugs" :key="drug.id" button-class="change-button" :text="drug.name" @click="selectDrug(drug)" />
+  </GridContainer>
   <div v-if="commission.drug">{{ commission.drug.name }}</div>
   <el-button @click="showDrugsList(true)">Выбрать лекарство</el-button>
   <!-- <template v-if="drugsListShowed">
@@ -23,19 +16,19 @@ import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
 
 import Commission from '@/classes/Commission';
 import Drug from '@/classes/Drug';
-import Provider from '@/services/Provider/Provider';
 import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'CommissionDrug',
+  components: {
+    GridContainer,
+  },
   props: {
     commission: {
       type: Object as PropType<Commission>,
       required: true,
     },
-  },
-  components: {
-    GridContainer,
   },
   emits: ['select'],
   setup(props, { emit }) {
@@ -83,6 +76,7 @@ export default defineComponent({
     cursor: pointer;
   }
 }
+
 .patient-link {
   &:hover {
     cursor: pointer;
@@ -124,7 +118,7 @@ export default defineComponent({
   justify-content: space-between;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .line-item-right {
@@ -132,7 +126,7 @@ export default defineComponent({
   justify-content: right;
   align-items: center;
   width: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 .icon-plus {
@@ -158,7 +152,7 @@ export default defineComponent({
   display: flex;
   z-index: 3;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
   width: calc(100% - 20px);
   padding: 10px 10px 24px 10px;
   background: #f5f5f5;
@@ -195,7 +189,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 0px;
+    padding: 0;
   }
   .item-flex {
     display: flex;

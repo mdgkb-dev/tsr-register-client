@@ -20,7 +20,7 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'PatientHistories',
   components: {},
-  setup(props) {
+  setup() {
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     return {
       patient,
@@ -33,21 +33,26 @@ export default defineComponent({
 :deep(.el-timeline) {
   margin-right: 20px;
 }
+
 .selects {
   display: flex;
   flex-direction: column;
   width: 100%;
+
   &-item {
     width: 100%;
     margin: 10px 10px 0 10px;
     padding-right: 10px;
+
     :deep(.el-input__wrapper) {
       border-radius: 20px;
     }
+
     :deep(.el-select) {
       width: 100%;
     }
   }
+
   &-item:empty {
     display: none;
   }

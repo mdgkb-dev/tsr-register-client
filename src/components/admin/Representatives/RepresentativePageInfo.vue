@@ -57,6 +57,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/pageInfo.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
 .register-tag {
   &:hover {
     cursor: pointer;

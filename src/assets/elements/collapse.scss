@@ -2,6 +2,7 @@
   width: 100%;
   margin-bottom: 20px;
 }
+
 :deep(.el-collapse-item) {
   background-color: white;
   margin-bottom: 20px;
@@ -12,6 +13,7 @@
   position: relative;
   transition: 0;
 }
+
 :deep(.el-collapse-item__header), :deep(.el-collapse-item__wrap) {
   border: none;
 }

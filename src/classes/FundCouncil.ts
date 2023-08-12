@@ -9,6 +9,7 @@ export default class FundCouncil {
   @ClassHelper.GetClassConstructor(Drug)
   drug?: Drug;
   drugId?: string;
+
   constructor(i?: FundCouncil) {
     ClassHelper.BuildClass(this, i);
   }

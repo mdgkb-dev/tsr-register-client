@@ -58,14 +58,16 @@ export default defineComponent({
 .admin-main-container {
   height: calc(100vh);
 }
+
 .admin-container {
   height: calc(100vh - 61px);
   width: 100%;
 }
+
 .el-main {
   height: inherit;
   overflow: auto;
-  padding: 0px;
+  padding: 0;
 }
 
 @media (max-width: 992px) {

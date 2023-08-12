@@ -138,9 +138,7 @@ export default defineComponent({
     const mount = ref(false);
     const rules = RepresentativeToPatientRules;
     const showModal: Ref<boolean> = ref(false);
-    const representatives: ComputedRef<Representative[]> = computed(() => store.getters['representatives/items']);
     const patient: ComputedRef<Patient> = computed(() => store.getters['patients/item']);
-    const lastInsertedId: ComputedRef<string> = computed(() => store.getters['representatives/lastInsertedId']);
     const representative: ComputedRef<Representative> = computed(() => store.getters['representatives/item']);
     const creatingIndex: Ref<number | undefined> = ref(undefined);
     const representativeTypes: ComputedRef<RepresentativeType[]> = computed(() => store.getters['representativeTypes/items']);
@@ -261,6 +259,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -373,7 +372,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -433,8 +432,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -484,6 +483,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -517,7 +517,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -532,7 +532,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
@@ -583,11 +583,10 @@ export default defineComponent({
 }
 
 :deep(.el-timeline) {
-  padding: 0px;
+  padding: 0;
 }
 
 @media screen and (max-width: 768px) {
-
   .tabs-item {
     width: 40px;
     height: 100px;

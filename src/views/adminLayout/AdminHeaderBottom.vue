@@ -66,6 +66,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
 $header-bottom-height: 20px;
 $header-bottom-background-color: whitesmoke;
 // $header-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
@@ -84,16 +85,19 @@ h4 {
   font-weight: normal;
   font-size: 18px;
 }
+
 .flex-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 0 0px;
+  margin: 00;
 }
+
 .button-group {
   display: flex;
   flex-wrap: wrap;
+
   .el-button {
     margin-left: 5px;
   }
@@ -124,8 +128,8 @@ h4 {
   align-items: center;
   height: 60px;
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   z-index: 5;
   background: #ffffff;
 }
@@ -164,6 +168,7 @@ h4 {
   color: #006bb4;
   background: #dff2f8;
 }
+
 .gender-button {
   width: 42px;
   border-radius: 5px;
@@ -185,7 +190,7 @@ h4 {
 }
 
 .menu-title {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 @keyframes rotation {
@@ -209,7 +214,7 @@ h4 {
   }
 
   :deep(.el-page-header__left) {
-    margin-right: 0px;
+    margin-right: 0;
   }
 
   :deep(.el-page-header__left)::after {

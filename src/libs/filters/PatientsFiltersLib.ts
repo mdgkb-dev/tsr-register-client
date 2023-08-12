@@ -4,6 +4,7 @@ import { Operators } from '@/services/interfaces/Operators';
 
 const PatientsFiltersLib = (() => {
   const table = 'patients_view';
+
   function onlyFemale(): FilterModel {
     const filterModel = FilterModel.CreateFilterModel('patients_view', 'is_male', DataTypes.Boolean);
     filterModel.boolean = false;

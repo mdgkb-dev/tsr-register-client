@@ -3,6 +3,7 @@ import { Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
 declare type SubmitCallback = () => void;
+
 interface IReturn {
   confirmLeave: Ref<boolean>;
   saveButtonClick: Ref<boolean>;

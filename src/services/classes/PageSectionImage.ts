@@ -7,6 +7,7 @@ export default class PageSectionImage {
   documentType: PageSection = new PageSection();
   documentTypeId?: string;
   order = 0;
+
   constructor(i?: PageSectionImage) {
     ClassHelper.BuildClass(this, i);
   }

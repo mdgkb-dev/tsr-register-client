@@ -10,6 +10,7 @@
 import { defineComponent, PropType } from 'vue';
 
 import IColorPercentile from '@/interfaces/shared/IColorPercentile';
+
 export default defineComponent({
   name: 'ColoredGroupTag',
   props: {

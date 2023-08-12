@@ -4,6 +4,7 @@ import Commission from '@/classes/Commission';
 import CommissionDoctorTemplate from '@/classes/CommissionDoctorTemplate';
 import Doctor from '@/classes/Doctor';
 import ClassHelper from '@/services/ClassHelper';
+
 export default class CommissionDoctor {
   id?: string;
   @ClassHelper.GetClassConstructor(Doctor)

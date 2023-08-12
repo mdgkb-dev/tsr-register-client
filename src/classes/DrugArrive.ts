@@ -28,6 +28,7 @@ export default class DrugArrive {
 
   @ClassHelper.GetClassConstructor(DrugDecrease)
   drugDecreases: DrugDecrease[] = [];
+
   constructor(i?: DrugArrive) {
     ClassHelper.BuildClass(this, i);
   }
@@ -68,7 +69,7 @@ export default class DrugArrive {
     return true;
   }
 
-  increment() {
+  increment(): void {
     this.quantity++;
   }
 

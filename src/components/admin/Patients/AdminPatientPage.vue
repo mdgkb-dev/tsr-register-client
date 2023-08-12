@@ -19,7 +19,6 @@ import { computed, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
-import User from '@/classes/User';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
@@ -76,7 +75,6 @@ export default defineComponent({
     const activeMenu: Ref<CustomSection> = ref(menus[0]);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const user: Ref<User> = computed(() => Provider.store.getters['auth/user']);
     const menusProperties = computed(() => {
       if (activeMenu.value.component === 'PatientDiagnosis') {
         return { 'mkb-linker': patient.value };

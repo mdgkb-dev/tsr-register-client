@@ -11,6 +11,7 @@ export default class SearchElement {
   route = '';
   searchGroup: SearchGroup = new SearchGroup();
   searchElementMetas: SearchElementMeta[] = [];
+
   constructor(i?: SearchElement) {
     ClassHelper.BuildClass(this, i);
   }

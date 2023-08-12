@@ -14,8 +14,8 @@ export default class Cursor {
   toUrlQuery(): string {
     let url = '';
     Object.keys(this).forEach((el, i) => {
-      const value: any = this[el as keyof typeof this];
-      if (value && url !== '?' && value.length !== 0) {
+      const value: unknown = this[el as keyof typeof this];
+      if (value && url !== '?' && (value as Array<unknown>).length !== 0) {
         if (i !== 0) {
           url += '&';
         }
@@ -25,7 +25,6 @@ export default class Cursor {
 
     return url;
   }
-
   fromUrlQuery(obj: LocationQuery): void {
     if (obj.cursvalue) {
       this.value = obj.cursvalue;

@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="isToggle" @toggle="toggle" sliderOnWidth="180px">
+  <RightTabsContainer :is-toggle="isToggle" slider-on-width="180px" @toggle="toggle">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -8,7 +8,12 @@
     <template #slider-body>
       <div class="slider-body">
         <div class="slider-item-search">
-          <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
+          <RemoteSearch
+            :must-be-translated="true"
+            key-value="mkbItem"
+            placeholder="Начните вводить название диагноза"
+            @select="addMkbItem"
+          />
         </div>
       </div>
     </template>
@@ -41,39 +46,29 @@
               </div>
             </template>
             <template #body>
-              <Button 
-                text="Добавить анамнез" 
-                :withIcon="false" 
-                width="100%" 
-                height="60px" 
-                font-size="16px" 
-                border-radius="5px" 
-                color="#00B5A4" 
+              <Button
+                text="Добавить анамнез"
+                :with-icon="false"
+                width="100%"
+                height="60px"
+                font-size="16px"
+                border-radius="5px"
+                color="#00B5A4"
                 background="#C7ECEA"
-                backgroundHover="#C7ECEA"
+                background-hover="#C7ECEA"
+                :color-swap="false"
                 @click="addAnamnesis(selectedPatientDiagnosis)"
-                :colorSwap="false"
-                >
+              >
               </Button>
               <el-timeline style="margin-top: 20px">
-                <el-timeline-item
-                  v-for="anamnesis in selectedPatientDiagnosis.anamneses"
-                  :key="anamnesis.id"
-                  placement="top"
-                  center
-                >
-                <CollapseItem
-                  :title="$dateTimeFormatter.format(anamnesis.date)"
-                  :is-collaps="true"
-                  background="#DFF2F8"
-                  margin-top="0px"
-                >
-                  <template #inside-content>
-                    <div class="background-container">
-                      <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
-                    </div>
-                  </template>
-                </CollapseItem>
+                <el-timeline-item v-for="anamnesis in selectedPatientDiagnosis.anamneses" :key="anamnesis.id" placement="top" center>
+                  <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
+                    <template #inside-content>
+                      <div class="background-container">
+                        <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
+                      </div>
+                    </template>
+                  </CollapseItem>
                 </el-timeline-item>
               </el-timeline>
             </template>
@@ -109,12 +104,12 @@ import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import AnamnesisForm from '@/components/admin/Patients/AnamnesisForm.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import Button from '@/components/Base/Button.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 
 export default defineComponent({
   name: 'PaCollapseItemtientDiagnosis',
@@ -127,7 +122,7 @@ export default defineComponent({
     CollapseItem,
   },
 
-  setup(props) {
+  setup() {
     const mounted = ref(false);
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -206,6 +201,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -306,7 +302,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -366,8 +362,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -417,6 +413,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -450,7 +447,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -465,7 +462,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
@@ -482,16 +479,16 @@ export default defineComponent({
 :deep(.el-timeline-item) {
   padding-bottom: 8px;
 }
+
 :deep(.el-timeline) {
   padding: 0 0 0 10px;
 }
 
 :deep(.el-timeline-item__node) {
-  background: #B0A4C0;
+  background: #b0a4c0;
 }
 
 @media screen and (max-width: 768px) {
-
   .tabs-item {
     width: 40px;
     height: 100px;

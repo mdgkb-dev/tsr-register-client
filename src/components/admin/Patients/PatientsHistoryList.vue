@@ -44,7 +44,6 @@ export default defineComponent({
     const mount: Ref<boolean> = ref(false);
 
     const patientsHistory: Ref<Patient[]> = computed(() => store.getters['patients/patientsHistory']);
-    const patient: Ref<Patient> = computed(() => store.getters['patients/patient']);
 
     onBeforeMount(async () => {
       const loading = ElLoading.service({

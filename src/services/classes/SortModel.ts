@@ -1,5 +1,3 @@
-import { LocationQuery } from 'vue-router';
-
 import { Orders } from '@/services/interfaces/Orders';
 
 export default class SortModel {
@@ -12,7 +10,7 @@ export default class SortModel {
   version = '';
   selected = false;
 
-  static CreateSortModel(table: string, col: string, order?: Orders, label?: string, defaultModel?: boolean, code?: string): SortModel {
+  static CreateSortModel(table: string, col: string, order?: Orders, label?: string, defaultModel?: boolean): SortModel {
     const model = new SortModel();
     model.table = table;
     model.col = col;
@@ -56,7 +54,8 @@ export default class SortModel {
     url += '|';
     return url;
   }
-  async fromUrlQuery(obj: LocationQuery): Promise<void> {
+
+  async fromUrlQuery(): Promise<void> {
     const str = window.location.search;
     const sormModelString = str.substring(str.indexOf('s=') + 2, str.indexOf('|'));
     const params = new URLSearchParams(decodeURIComponent(sormModelString));

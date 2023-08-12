@@ -9,6 +9,7 @@ export default class PatientAnswer {
   answerId?: string;
   patientResearchSection?: ResearchResult;
   patientResearchSectionId?: string;
+
   constructor(i?: PatientAnswer) {
     ClassHelper.BuildClass(this, i);
   }

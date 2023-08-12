@@ -20,6 +20,12 @@ import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'DrugArriveItem',
+  components: {
+    InfoItem,
+    SmallDatePicker,
+    StringItem,
+    Button,
+  },
   props: {
     drugArrive: {
       type: Object as PropType<DrugArrive>,
@@ -27,12 +33,6 @@ export default defineComponent({
     },
   },
   emits: ['remove', 'click'],
-  components: {
-    InfoItem,
-    SmallDatePicker,
-    StringItem,
-    Button,
-  },
   setup(props) {
     const updateDrugArrive = async () => {
       await Provider.store.dispatch('drugArrives/updateWithoutReset', props.drugArrive);

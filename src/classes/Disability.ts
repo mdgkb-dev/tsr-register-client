@@ -16,6 +16,7 @@ export default class Disability {
   edvs: Edv[] = [];
   series = '';
   number = '';
+
   constructor(i?: Disability) {
     ClassHelper.BuildClass(this, i);
   }
@@ -46,7 +47,7 @@ export default class Disability {
     return edv;
   }
 
-  removeEdv(id: string) {
+  removeEdv(id: string): void {
     ClassHelper.RemoveFromClassById(id, this.edvs, []);
   }
 }

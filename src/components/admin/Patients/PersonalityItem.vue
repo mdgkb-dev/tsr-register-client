@@ -13,6 +13,10 @@ import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'PersonalityItem',
+  components: {
+    StringItem,
+    Button,
+  },
   props: {
     withIcon: {
       type: Boolean as PropType<boolean>,
@@ -22,10 +26,6 @@ export default defineComponent({
     title: { type: String as PropType<string>, required: true, default: '' },
   },
   emits: ['remove', 'click'],
-  components: {
-    StringItem,
-    Button,
-  },
 });
 </script>
 

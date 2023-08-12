@@ -6,6 +6,7 @@ import DrugApplicationFile from '@/classes/DrugApplicationFile';
 import FundContract from '@/classes/FundContract';
 import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
+
 export default class DrugApplication {
   id?: string;
   date = new Date();

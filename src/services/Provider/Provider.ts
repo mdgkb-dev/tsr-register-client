@@ -93,6 +93,7 @@ const Provider = (() => {
   }
 
   type func = () => Promise<void> | void;
+
   async function withHeadLoader(f: func) {
     Store.store.commit(`admin/setHeadSpinner`, true);
     await f();

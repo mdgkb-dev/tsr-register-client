@@ -1,10 +1,6 @@
 import Step from '@/classes/stepper/Step';
 
-type StepFunction = (item: any | undefined) => unknown | void | Promise<void>;
-
-interface IActionFunctionsGetter {
-  getStepsFunctions(): StepFunction[];
-}
+type StepFunction = (item: never) => unknown | void | Promise<void>;
 
 export default class Stepper {
   stepIndex = 0;
@@ -42,7 +38,7 @@ export default class Stepper {
     return this.getStep().action;
   }
 
-  actStepFunc(arg: unknown): void {
+  actStepFunc(arg: never): void {
     this.getStepFunc()(arg);
     this.increaseStep();
   }
@@ -51,9 +47,10 @@ export default class Stepper {
     return this.stepIndex;
   }
 
-  getStepName(): any {
+  getStepName(): string {
     if (this.steps[this.stepIndex]) {
       return this.steps[this.stepIndex].name;
     }
+    return '';
   }
 }

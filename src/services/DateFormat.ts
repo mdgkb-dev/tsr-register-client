@@ -27,7 +27,13 @@ export default class DateTimeFormat {
     if (!date) {
       return '';
     }
-    const opt: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit', hour: undefined, minute: undefined };
+    const opt: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: undefined,
+      minute: undefined,
+    };
     if (options) {
       opt.year = options.year || options.year == undefined ? options.year : opt.year;
       opt.month = options.month || options.month == undefined ? options.month : opt.month;
@@ -53,7 +59,17 @@ export default class DateTimeFormat {
     const now = new Date();
     const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 1);
     const endOfWeek = new Date(now.getFullYear(), now.getMonth(), startOfWeek.getDate() + 7);
-    return this.getPeriod(startOfWeek, endOfWeek, options ? options : { month: '2-digit', day: 'numeric', year: undefined });
+    return this.getPeriod(
+      startOfWeek,
+      endOfWeek,
+      options
+        ? options
+        : {
+            month: '2-digit',
+            day: 'numeric',
+            year: undefined,
+          }
+    );
   }
 
   getMonthsDiff(dateFrom: Date, dateTo: Date): number {

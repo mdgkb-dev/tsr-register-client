@@ -239,181 +239,182 @@ describe('Class Patient', () => {
   });
 
   /*   test('getBmiGroup() возвращает строку "Недостаточно данных" когда рост или вес не заполнены в записи с наиболее поздней датой в heightWeight[]', () => {
-    // Arrange
-    const message = 'Недостаточно данных';
-    const heightWeights1: IHeightWeight[] = [
-      new HeightWeight({
-        height: 0,
-        weight: 50,
-        date: '2000-01-03',
-      }),
-    ];
+      // Arrange
+      const message = 'Недостаточно данных';
+      const heightWeights1: IHeightWeight[] = [
+        new HeightWeight({
+          height: 0,
+          weight: 50,
+          date: '2000-01-03',
+        }),
+      ];
 
-    patient = new Patient();
-    patient.heightWeight = heightWeights1;
+      patient = new Patient();
+      patient.heightWeight = heightWeights1;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
 
-    // Arrange
-    const heightWeights2: IHeightWeight[] = [
-      new HeightWeight({
-        height: 50,
-        weight: 0,
-        date: '2000-01-03',
-      }),
-    ];
+      // Arrange
+      const heightWeights2: IHeightWeight[] = [
+        new HeightWeight({
+          height: 50,
+          weight: 0,
+          date: '2000-01-03',
+        }),
+      ];
 
-    patient = new Patient();
-    patient.heightWeight = heightWeights2;
+      patient = new Patient();
+      patient.heightWeight = heightWeights2;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные по дате рождения или дате изменения" когда пациент старше 230 месяцев', () => {
-    // Arrange
-    const message = 'Некорректные данные по дате рождения или дате изменения';
-    patient = new Patient();
-    const today = new Date();
-    const twentyYearsBeforeToday = new Date().setFullYear(today.getFullYear() - 20);
-    patient.human.dateBirth = twentyYearsBeforeToday.toString();
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные по дате рождения или дате изменения" когда пациент старше 230 месяцев', () => {
+      // Arrange
+      const message = 'Некорректные данные по дате рождения или дате изменения';
+      patient = new Patient();
+      const today = new Date();
+      const twentyYearsBeforeToday = new Date().setFullYear(today.getFullYear() - 20);
+      patient.human.dateBirth = twentyYearsBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: 50,
-        weight: 50,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: 50,
+          weight: 50,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные антропометрии" когда параметры роста и веса за пределами допустимых значений', () => {
-    // TODO: Возможно стоит проверить больше пограничных значений.
-    // Arrange
-    const message = 'Некорректные данные антропометрии';
-    patient = new Patient();
-    const today = new Date();
-    const tenYearsBeforeToday = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
-    patient.human.dateBirth = tenYearsBeforeToday.toString();
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные антропометрии" когда параметры роста и веса за пределами допустимых значений', () => {
+      // TODO: Возможно стоит проверить больше пограничных значений.
+      // Arrange
+      const message = 'Некорректные данные антропометрии';
+      patient = new Patient();
+      const today = new Date();
+      const tenYearsBeforeToday = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+      patient.human.dateBirth = tenYearsBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: 50,
-        weight: 50,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: 50,
+          weight: 50,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает группу ИМТ и класс веса для пациента мужского пола', () => {
-    // Arrange
-    const pathalogicClass = 'есть вероятность патологии развития';
-    const possibilityClass = 'возможно потребуются дополнительные обследования и консультации специалистов';
-    const observationClass = 'требуются дополнительные обследования и консультации специалистов';
-    const normalClass = 'нормальный вес';
-    const perfectClass = 'эталон';
-    const group1 = '1st';
-    const group3 = '3rd';
-    const group5 = '5th';
-    const group15 = '15th';
-    const group25 = '25th';
-    const group50 = '50th';
-    const group75 = '75th';
-    const group85 = '85th';
-    const group95 = '95th';
-    const group97 = '97th';
-    const group99 = '99th';
-    const height = 50;
-    const pathalogicWeight1 = 2.7;
-    const pathalogicWeight99 = 4.4;
-    const possibilityWeight3 = 3;
-    const possibilityWeight5 = 3.15;
-    const possibilityWeight95 = 4.2;
-    const possibilityWeight97 = 4.35;
-    const observationWeight15 = 3.2;
-    const observationWeight85 = 4;
-    const normalWeight25 = 3.4;
-    const normalWeight75 = 3.8;
-    const perfectWeight50 = 3.6;
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает группу ИМТ и класс веса для пациента мужского пола', () => {
+      // Arrange
+      const pathalogicClass = 'есть вероятность патологии развития';
+      const possibilityClass = 'возможно потребуются дополнительные обследования и консультации специалистов';
+      const observationClass = 'требуются дополнительные обследования и консультации специалистов';
+      const normalClass = 'нормальный вес';
+      const perfectClass = 'эталон';
+      const group1 = '1st';
+      const group3 = '3rd';
+      const group5 = '5th';
+      const group15 = '15th';
+      const group25 = '25th';
+      const group50 = '50th';
+      const group75 = '75th';
+      const group85 = '85th';
+      const group95 = '95th';
+      const group97 = '97th';
+      const group99 = '99th';
+      const height = 50;
+      const pathalogicWeight1 = 2.7;
+      const pathalogicWeight99 = 4.4;
+      const possibilityWeight3 = 3;
+      const possibilityWeight5 = 3.15;
+      const possibilityWeight95 = 4.2;
+      const possibilityWeight97 = 4.35;
+      const observationWeight15 = 3.2;
+      const observationWeight85 = 4;
+      const normalWeight25 = 3.4;
+      const normalWeight75 = 3.8;
+      const perfectWeight50 = 3.6;
 
-    patient = new Patient();
-    const today = new Date();
-    const oneMonthBeforeToday = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-    patient.human.dateBirth = oneMonthBeforeToday.toString();
+      patient = new Patient();
+      const today = new Date();
+      const oneMonthBeforeToday = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+      patient.human.dateBirth = oneMonthBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: height,
-        weight: pathalogicWeight1,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: height,
+          weight: pathalogicWeight1,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group1}, ${pathalogicClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group1}, ${pathalogicClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = pathalogicWeight99;
+      // Arrange
+      patient.heightWeight[0].weight = pathalogicWeight99;
 
-    // Arrange
-    patient.heightWeight[0].weight = possibilityWeight95;
+      // Arrange
+      patient.heightWeight[0].weight = possibilityWeight95;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group95}, ${possibilityClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group95}, ${possibilityClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = possibilityWeight97;
+      // Arrange
+      patient.heightWeight[0].weight = possibilityWeight97;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group97}, ${possibilityClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group97}, ${possibilityClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = observationWeight15;
+      // Arrange
+      patient.heightWeight[0].weight = observationWeight15;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group15}, ${observationClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group15}, ${observationClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = observationWeight85;
+      // Arrange
+      patient.heightWeight[0].weight = observationWeight85;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group85}, ${observationClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group85}, ${observationClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = normalWeight25;
+      // Arrange
+      patient.heightWeight[0].weight = normalWeight25;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group25}, ${normalClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group25}, ${normalClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = normalWeight75;
+      // Arrange
+      patient.heightWeight[0].weight = normalWeight75;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group75}, ${normalClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group75}, ${normalClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = perfectWeight50;
+      // Arrange
+      patient.heightWeight[0].weight = perfectWeight50;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group50}, ${perfectClass}`);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group50}, ${perfectClass}`);
+    });
 
- */ test('findProperty() возвращает undefined когда в registerPropertyToPatient[] отсутствует запись с переданным propertyId', () => {
+   */
+  test('findProperty() возвращает undefined когда в registerPropertyToPatient[] отсутствует запись с переданным propertyId', () => {
     // Arrange
     patient = new Patient();
     const propertyId1 = 'd06fa531-aad1-45b8-a581-0da077666797';

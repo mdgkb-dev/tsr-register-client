@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Register from '@/classes/Register';
 import User from '@/classes/User';
 import ClassHelper from '@/services/ClassHelper';
+
 export default class PatientRegister {
   id?: string;
   registerId?: string;

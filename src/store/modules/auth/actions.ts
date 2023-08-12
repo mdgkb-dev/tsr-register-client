@@ -15,7 +15,10 @@ const httpClient = new HttpClient('auth');
 
 const actions: ActionTree<State, RootState> = {
   register: async ({ commit, state }): Promise<void> => {
-    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({ query: 'register', payload: state.auth.profile });
+    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({
+      query: 'register',
+      payload: state.auth.profile,
+    });
     if (!res) {
       return;
     }
@@ -25,7 +28,10 @@ const actions: ActionTree<State, RootState> = {
     commit('setIsAuth', true);
   },
   login: async ({ commit, state }): Promise<void> => {
-    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({ query: 'login', payload: state.auth.profile });
+    const res = await httpClient.post<Profile, { user: IUser; tokens: ITokens }>({
+      query: 'login',
+      payload: state.auth.profile,
+    });
     if (!res) {
       return;
     }
@@ -37,7 +43,7 @@ const actions: ActionTree<State, RootState> = {
   getMe: async ({ commit }): Promise<void> => {
     commit('setUser', await httpClient.get<IUserAuthorized>({ query: 'me' }));
   },
-  logout: async ({ commit, state }): Promise<void> => {
+  logout: async ({ commit }): Promise<void> => {
     commit('setIsAuth', false);
     commit('clearUser');
     commit('clearTokens');
@@ -46,19 +52,19 @@ const actions: ActionTree<State, RootState> = {
     const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });
     commit('setUser', newUser);
   },
-  checkPathPermissions: async ({ commit }, path: string): Promise<void> => {
+  checkPathPermissions: async (_, path: string): Promise<void> => {
     await httpClient.post<string, string>({ query: `check-path-permissions`, payload: path });
   },
   refreshToken: async ({ commit }): Promise<void> => {
     commit(
       'setTokens',
-      await httpClient.post<any, { user: IUser; token: ITokens }>({
+      await httpClient.post<{ refreshToken: string | null }, { user: IUser; token: ITokens }>({
         query: 'refresh-token',
         payload: { refreshToken: TokenService.getRefreshToken() },
       })
     );
   },
-  setAuth: async ({ state, commit }): Promise<void> => {
+  setAuth: async ({ commit }): Promise<void> => {
     const user = TokenService.getUser();
     const token = TokenService.getAccessToken();
     if (user && token) {

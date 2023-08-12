@@ -36,9 +36,11 @@ $header-background-color: whitesmoke;
 .drawer-container {
   height: 100%;
 }
+
 :deep(.el-drawer__body) {
   overflow-y: scroll;
   padding: 0;
+
   &::-webkit-scrollbar {
     display: block;
     width: 8px;

@@ -197,7 +197,7 @@ export default defineComponent({
   z-index: 5;
   border-radius: $normal-border-radius;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
   max-height: 130px;

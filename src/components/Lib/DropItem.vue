@@ -214,7 +214,7 @@ export default defineComponent({
   z-index: 5;
   border-radius: $normal-border-radius;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
   max-height: auto;
@@ -225,7 +225,7 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
+  top: 0;
   width: 100%;
   height: 100%;
   z-index: 1;

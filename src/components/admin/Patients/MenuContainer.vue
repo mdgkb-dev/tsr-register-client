@@ -65,7 +65,7 @@ export default defineComponent({
 .top-menu {
   margin: -1px;
   display: grid;
-  grid-gap: 0px;
+  grid-gap: 0;
   grid-template-rows: repeat(0 0px);
 }
 

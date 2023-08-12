@@ -72,6 +72,7 @@ export default class Human {
     this.photo = new FileInfo();
     this.photoId = undefined;
   }
+
   removePhotoMini(): void {
     this.photoMini = new FileInfo();
     this.photoMiniId = undefined;

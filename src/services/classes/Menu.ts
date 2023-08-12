@@ -93,6 +93,7 @@ export default class Menu {
       i === colors.length - 1 ? (i = 0) : i++;
     });
   }
+
   containPath(path: string): boolean {
     return this.getLink() === path || !!this.subMenus.find((subMenu: SubMenu) => subMenu.getLink() === path);
   }

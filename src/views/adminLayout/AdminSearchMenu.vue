@@ -18,6 +18,7 @@ import { useStore } from 'vuex';
 
 import ISearchQuery from '@/services/interfaces/ISearchQuery';
 import StringsService from '@/services/Strings';
+
 export default defineComponent({
   name: 'AdminSearchMenu',
 

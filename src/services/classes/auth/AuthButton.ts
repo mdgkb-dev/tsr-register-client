@@ -34,6 +34,7 @@ export default class AuthButton {
   static RegisterButtons(): AuthButton[] {
     return [AuthButton.Register(true), AuthButton.Login(), AuthButton.Restore()];
   }
+
   static RestoreButtons(): AuthButton[] {
     return [AuthButton.Restore(true), AuthButton.Login(), AuthButton.Register()];
   }

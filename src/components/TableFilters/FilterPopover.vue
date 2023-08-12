@@ -77,13 +77,16 @@ export default defineComponent({
 .cursor {
   cursor: pointer;
 }
+
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;
+
   &:hover {
     color: #5cb6ff;
   }
 }
+
 .set {
   color: #5cb6ff;
 }

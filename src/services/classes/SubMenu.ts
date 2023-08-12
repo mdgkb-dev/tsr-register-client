@@ -46,6 +46,7 @@ export default class SubMenu {
   isPageLink(): boolean {
     return this.pageId !== undefined && this.pageId !== '';
   }
+
   addFile(file: IElementPlusFile): void {
     if (!this.icon.id) {
       this.icon.id = uuidv4();

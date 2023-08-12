@@ -37,6 +37,7 @@ import Button from '@/components/Base/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
+
 export default defineComponent({
   name: 'PatientDocumentForm',
   components: {
@@ -97,6 +98,7 @@ export default defineComponent({
   border-radius: 5px;
   color: #343e5c;
 }
+
 .chart-button {
   width: 63px;
   height: 42px;
@@ -113,6 +115,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -218,7 +221,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -293,8 +296,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -345,6 +348,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -378,7 +382,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -393,7 +397,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;

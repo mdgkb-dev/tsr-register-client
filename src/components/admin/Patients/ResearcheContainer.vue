@@ -1,11 +1,13 @@
 <template>
-  <div class="mainblock"
+  <div
+    class="mainblock"
     :style="{
       background: background,
       padding: padding,
     }"
   >
-    <div class="mainblock-header"
+    <div
+      class="mainblock-header"
       :style="{
         background: background,
       }"

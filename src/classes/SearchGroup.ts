@@ -18,6 +18,7 @@ export default class SearchGroup {
   options: SearchElement[] = [];
   @ClassHelper.GetClassConstructor(SearchGroupMetaColumn)
   searchGroupMetaColumns: SearchGroupMetaColumn[] = [];
+
   constructor(i?: SearchGroup) {
     ClassHelper.BuildClass(this, i);
   }

@@ -11,7 +11,6 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
-import { NavigationGuardNext } from 'vue-router';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
@@ -32,7 +31,6 @@ export default defineComponent({
   },
   emits: ['save', 'close'],
   setup(_, { emit }) {
-    const mount = ref(false);
     const form = ref();
     const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
     const rules = RepresentativeRules;
@@ -41,7 +39,7 @@ export default defineComponent({
       Provider.store.commit('representatives/resetItem');
     });
 
-    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
+    const submitForm = async (): Promise<void> => {
       // saveButtonClick.value = true;
       // if (!validate(form.value)) {
       //   return;
@@ -65,7 +63,7 @@ export default defineComponent({
           });
           done();
         })
-        .catch((action: string) => null);
+        .catch(() => null);
     };
 
     const close = () => {
@@ -81,7 +79,7 @@ export default defineComponent({
           });
           emit('close');
         })
-        .catch((action: string) => null);
+        .catch(() => null);
     };
 
     return {
@@ -127,10 +125,12 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
 }
+
 :deep(.el-dialog__body) {
   padding-top: 0;
   overflow: auto;
 }
+
 :deep(.el-dialog__header) {
   padding-top: 0;
   font-size: 20px;

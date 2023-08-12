@@ -25,7 +25,9 @@
         <div class="inside-icon">
           <slot name="icon" />
         </div>
-        <div v-if="title" class="title-in"
+        <div
+          v-if="title"
+          class="title-in"
           :style="{
             marginRight: isCollaps ? '50px' : '0',
             width: isCollaps ? 'calc(100% - 50px)' : '100%',
@@ -33,7 +35,9 @@
         >
           {{ title }}
         </div>
-        <div v-else class="title-in"
+        <div
+          v-else
+          class="title-in"
           :style="{
             marginRight: isCollaps ? '50px' : '0',
             width: isCollaps ? 'calc(100% - 50px)' : '100%',
@@ -74,7 +78,7 @@ export default defineComponent({
   name: 'CollapseItem',
   // components: { Arrows },
   props: {
-    tabId: { type: Number as PropType<number>, required: false },
+    tabId: { type: Number as PropType<number>, required: false, default: 0 },
     activeId: { type: Number as PropType<number>, default: 0 },
     isCollaps: { type: Boolean as PropType<boolean>, default: true },
     title: { type: String as PropType<string>, default: '' },
@@ -219,12 +223,14 @@ export default defineComponent({
   fill: $site_dark_gray;
   z-index: 2;
 }
+
 :deep(.el-carousel__item) {
   display: flex;
   align-items: flex-start;
   justify-content: space-evenly;
   flex-wrap: wrap;
 }
+
 :deep(.el-carousel__container) {
   max-height: auto;
 }
@@ -247,7 +253,7 @@ export default defineComponent({
   display: flex;
   position: absolute;
   top: 20px;
-  left: 0px;
+  left: 0;
   align-items: center;
   padding-left: 4px;
 }

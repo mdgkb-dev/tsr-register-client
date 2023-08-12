@@ -1,8 +1,4 @@
-type StepFunction = (item: any | undefined) => unknown | void | Promise<void>;
-
-interface IActionFunctionsGetter {
-  getStepsFunctions(): StepFunction[];
-}
+type StepFunction = (item: never) => unknown | void | Promise<void>;
 
 export default class Step {
   action: StepFunction = () => undefined;

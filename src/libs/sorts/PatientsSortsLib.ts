@@ -5,6 +5,7 @@ import { Orders } from '@/services/interfaces/Orders';
 
 const PatientsSortsLib = (() => {
   const modelName = 'patient';
+
   function byFullName(order?: Orders): SortModel {
     return SortModel.CreateSortModelV2(
       modelName,

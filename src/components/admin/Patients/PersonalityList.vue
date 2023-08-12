@@ -44,14 +44,13 @@ export default defineComponent({
     Button,
     draggable,
   },
-  setup(props) {
+  setup() {
     const showAddDoctor: Ref<boolean> = ref(false);
     const commission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const doctors: ComputedRef<Doctor[]> = computed(() => Provider.store.getters['doctors/items']);
-    const openAddDoctor = async (index?: number) => {
+    const openAddDoctor = async () => {
       await Provider.store.dispatch('doctors/getAll');
       showAddDoctor.value = true;
-      // store.commit('representatives/resetRepresentative');
     };
 
     const removeCommissionDoctor = async (commissionDoctor: CommissionDoctor): Promise<void> => {
@@ -76,7 +75,15 @@ export default defineComponent({
       await Provider.store.dispatch('commissionsDoctors/create', item);
     };
 
-    return { openAddDoctor, showAddDoctor, commission, removeCommissionDoctor, sortDoctors, addCommissionDoctor, doctors };
+    return {
+      openAddDoctor,
+      showAddDoctor,
+      commission,
+      removeCommissionDoctor,
+      sortDoctors,
+      addCommissionDoctor,
+      doctors,
+    };
   },
 });
 </script>
@@ -114,7 +121,7 @@ export default defineComponent({
 .add-doctor {
   position: absolute;
   z-index: 1;
-  top: 0px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   border: $light-pink-border;
@@ -127,8 +134,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;

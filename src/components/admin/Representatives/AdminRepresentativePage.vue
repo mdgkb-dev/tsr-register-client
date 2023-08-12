@@ -15,7 +15,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from 'vue';
-import { NavigationGuardNext } from 'vue-router';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
@@ -81,14 +80,6 @@ export default defineComponent({
     });
     Hooks.onBeforeRouteLeave();
 
-    const submitForm = async (next?: NavigationGuardNext): Promise<void> => {
-      // saveButtonClick.value = true;
-      // if (!(await validate(form.value))) {
-      //   return;
-      // }
-      // await submitHandling('representatives', representative.value, next);
-    };
-
     return {
       representative,
       form,
@@ -96,7 +87,6 @@ export default defineComponent({
       // links,
       mounted: Provider.mounted,
       rules,
-      submitForm,
       changeMenu,
       activeMenu,
       menus,

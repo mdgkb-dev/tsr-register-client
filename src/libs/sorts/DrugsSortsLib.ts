@@ -3,6 +3,7 @@ import { Orders } from '@/services/interfaces/Orders';
 
 const DrugsSortsLib = (() => {
   const modelName = 'drug';
+
   function byNameINN(order?: Orders): SortModel {
     return SortModel.CreateSortModelV2(
       modelName,
@@ -12,6 +13,7 @@ const DrugsSortsLib = (() => {
       order === Orders.Desc ? false : true
     );
   }
+
   return {
     byNameINN,
   };

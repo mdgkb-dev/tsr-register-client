@@ -80,13 +80,13 @@ export default defineComponent({
   font-size: 14px;
   color: $site_dark_gray;
   padding-left: 20px;
-  padding-right: 0px;
+  padding-right: 0;
   border: none;
   width: 100%;
 }
 
 :deep(.el-input__prefix) {
-  left: 0px;
+  left: 0;
   top: -3px;
 }
 
@@ -96,12 +96,12 @@ export default defineComponent({
 
 :deep(.el-input__suffix) {
   top: -3px;
-  right: 0px;
+  right: 0;
   display: none;
 }
 
 :deep(.el-input--suffix .el-input__inner) {
-  padding-right: 0px;
+  padding-right: 0;
 }
 
 :deep(.el-input__inner::placeholder) {
@@ -123,12 +123,13 @@ export default defineComponent({
 }
 
 :deep(.el-input-number__increase) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 :deep(.el-input-number__decrease) {
-  border-radius: 0px;
+  border-radius: 0;
 }
+
 :deep(.disable) {
   display: none;
 }

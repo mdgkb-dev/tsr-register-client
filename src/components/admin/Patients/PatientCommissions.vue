@@ -25,9 +25,7 @@
         class="tabs-item"
         @click="selectCommission(commission)"
       >
-        <div class="tab-item-text">
-          №{{ commission.number }}
-        </div>
+        <div class="tab-item-text">№{{ commission.number }}</div>
       </div>
     </template>
     <template #body>
@@ -220,7 +218,7 @@ export default defineComponent({
     ModalWindow,
   },
 
-  setup(props) {
+  setup() {
     const mounted = ref(false);
     const statuses: string[] = ['Собрана врачебная комиссия', 'Заявка отправлена в Фонд', 'Заявка подтверждена'];
     const status: Ref<string> = ref('');
@@ -228,7 +226,6 @@ export default defineComponent({
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
-    const commission: ComputedRef<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const showModalDiagnosis: Ref<boolean> = ref(false);
     const showModalMedicine: Ref<boolean> = ref(false);
     const showModalDoctorList: Ref<boolean> = ref(false);
@@ -358,6 +355,7 @@ export default defineComponent({
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }
@@ -429,7 +427,7 @@ export default defineComponent({
   border: 1px solid #b0a4c0;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
-  border-left: #DFF2F8;
+  border-left: #dff2f8;
   background: $base-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
@@ -448,7 +446,7 @@ export default defineComponent({
   border: 1px solid #379fff;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
-  border-left: #DFF2F8;
+  border-left: #dff2f8;
   background: $custom-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
@@ -458,7 +456,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-left: 0px;
+  margin-left: 0;
   z-index: 2;
 }
 
@@ -518,8 +516,8 @@ export default defineComponent({
 
 .blur {
   position: fixed;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: #000000;
@@ -569,6 +567,7 @@ export default defineComponent({
   margin-bottom: 10px;
   background: #ffffff;
 }
+
 .question-name {
   width: 100%;
   height: 40px;
@@ -602,7 +601,7 @@ export default defineComponent({
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .researche-title-name {
@@ -617,7 +616,7 @@ export default defineComponent({
   color: #379fff;
   display: flex;
   justify-content: right;
-  align-items: start;
+  align-items: flex-start;
   text-transform: uppercase;
   white-space: nowrap;
   height: 100%;
@@ -638,6 +637,7 @@ export default defineComponent({
 .el-select {
   width: 100%;
 }
+
 :deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
   width: 100%;
 }
@@ -674,11 +674,11 @@ export default defineComponent({
 }
 
 :deep(.el-input-number__increase) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 :deep(.el-input-number__decrease) {
-  border-radius: 0px;
+  border-radius: 0;
 }
 
 .item-left {
@@ -753,7 +753,6 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 768px) {
-
   .tabs-item {
     width: 40px;
     height: 100px;

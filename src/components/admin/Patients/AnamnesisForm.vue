@@ -1,44 +1,44 @@
 <template>
   <div class="card-wrapper">
-      <el-form>
-        <el-form-item label="Дата">
-          <el-date-picker
-            :model-value="anamnesis.date"
-            type="date"
-            format="DD.MM.YYYY"
-            placeholder="Выберите дату"
-            @change="(e) => anamnesis.setDate(e)"
-            @keydown="dateFormat"
-          />
-        </el-form-item>
-        <el-form-item label="ФИО врача">
-          <el-input placeholder="ФИО врача" :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            type="textarea"
-            class="textarea"
-            :autosize="{ minRows: 3, maxRows: 7 }"
-            :model-value="anamnesis.value"
-            @input="(e) => anamnesis.setValue(e)"
-            @blur="update"
-          >
-          </el-input>
-        </el-form-item>
-        <Button
-          text="Удалить"
-          background="#ffffff"
-          margin="0 10px 0 0"
-          height="42px"
-          font-size="16px"
-          border-radius="5px"
-          color="#343e5c"
-          :color-swap="true"
-          :with-icon="false"
-          @click="remove"
+    <el-form>
+      <el-form-item label="Дата">
+        <el-date-picker
+          :model-value="anamnesis.date"
+          type="date"
+          format="DD.MM.YYYY"
+          placeholder="Выберите дату"
+          @change="(e) => anamnesis.setDate(e)"
+          @keydown="dateFormat"
+        />
+      </el-form-item>
+      <el-form-item label="ФИО врача">
+        <el-input placeholder="ФИО врача" :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          type="textarea"
+          class="textarea"
+          :autosize="{ minRows: 3, maxRows: 7 }"
+          :model-value="anamnesis.value"
+          @input="(e) => anamnesis.setValue(e)"
+          @blur="update"
         >
-        </Button>
-      </el-form>
+        </el-input>
+      </el-form-item>
+      <Button
+        text="Удалить"
+        background="#ffffff"
+        margin="0 10px 0 0"
+        height="42px"
+        font-size="16px"
+        border-radius="5px"
+        color="#343e5c"
+        :color-swap="true"
+        :with-icon="false"
+        @click="remove"
+      >
+      </Button>
+    </el-form>
   </div>
 </template>
 
@@ -47,9 +47,10 @@ import { Delete, Edit, FolderChecked } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
 import Anamnesis from '@/classes/Anamnesis';
+import Button from '@/components/Base/Button.vue';
 import dateFormat from '@/services/DateMask';
 import Provider from '@/services/Provider/Provider';
-import Button from '@/components/Base/Button.vue';
+
 export default defineComponent({
   name: 'AnamnesisForm',
   components: {
@@ -92,9 +93,11 @@ export default defineComponent({
 article {
   width: calc(100% - 75px);
 }
+
 :deep(.el-card__body) {
   min-height: 100px;
 }
+
 .card-button-group {
   position: absolute;
   top: 10px;
@@ -108,6 +111,7 @@ article {
 .el-form-item {
   margin: 0;
 }
+
 .el-divider {
   margin: 10px 0;
 }

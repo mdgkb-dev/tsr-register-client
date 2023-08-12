@@ -3,15 +3,17 @@ import Day from '@/services/classes/calendar/Day';
 export default class Week {
   days: Day[] = [];
   active = false;
+
   constructor() {
     return;
   }
 
-  getDays(fullWeek?: boolean) {
+  getDays(fullWeek?: boolean): Day[] | void {
     if (!fullWeek) {
       return this.days;
     }
   }
+
   getSelectedDay(): Day | undefined {
     return this.days.find((d: Day) => d.selected);
   }

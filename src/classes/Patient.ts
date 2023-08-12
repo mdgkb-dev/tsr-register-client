@@ -77,6 +77,7 @@ export default class Patient {
 
   fullName?: string;
   dateBirth?: string;
+
   constructor(i?: Patient) {
     ClassHelper.BuildClass(this, i);
     if (!i) {
@@ -138,7 +139,7 @@ export default class Patient {
     return [...new Set(Array.from(new Set(addresses)))];
   }
 
-  addRegisterGroupToPatient(registerGroupId: string): void {
+  addRegisterGroupToPatient(): void {
     const registerGroupToPatient = new ResearchResult();
     registerGroupToPatient.id = uuidv4();
     // registerGroupToPatient.researchId = registerGroupId;
@@ -227,7 +228,7 @@ export default class Patient {
     return item;
   }
 
-  removeDisability(id: string) {
+  removeDisability(id: string): void {
     ClassHelper.RemoveFromClassById(id, this.disabilities, this.disabilitiesForDelete);
   }
 

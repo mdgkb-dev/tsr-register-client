@@ -54,7 +54,7 @@ const mutations: MutationTree<State> = {
     //   state.filterQuery.sortModels.push(sortModel);
     // }
   },
-  spliceSortModel(state, id: string) {
+  spliceSortModel(state) {
     state.filterQuery.sortModel = undefined;
     // const index = state.filterQuery.sortModels.findIndex((i: SortModel) => i.id === id);
     // if (index > -1) state.filterQuery.sortModels.splice(index, 1);

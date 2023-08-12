@@ -65,13 +65,13 @@ export default defineComponent({
   position: relative;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .mainblock-right {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   justify-content: right;
   width: calc(100% - 10px);
   padding-left: 10px;
@@ -87,7 +87,7 @@ export default defineComponent({
 
   .mainblock-right {
     margin-top: 20px;
-    padding-left: 0px;
+    padding-left: 0;
   }
 }
 </style>

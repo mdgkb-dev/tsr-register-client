@@ -12,6 +12,7 @@ export default class CommissionDoctorTemplate {
   commissionId?: string;
   role = '';
   order = 0;
+
   constructor(i?: CommissionDoctorTemplate) {
     ClassHelper.BuildClass(this, i);
   }
