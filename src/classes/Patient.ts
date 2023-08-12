@@ -64,7 +64,9 @@ export default class Patient {
   // @ClassHelper.GetClassConstructor(Commission)
   commissions: Commission[] = [];
 
+  @ClassHelper.GetClassConstructor(Date)
   createdAt?: Date;
+  @ClassHelper.GetClassConstructor(Date)
   updatedAt?: Date;
   createdById?: string;
   updatedById?: string;
@@ -83,11 +85,18 @@ export default class Patient {
     this.commissions = i.commissions ? i.commissions.map((i: Commission) => new Commission(i)) : [];
   }
 
-  static Create(): Patient {
+  static Create(user: User): Patient {
     const item = new Patient();
     item.id = uuidv4();
     item.human.id = uuidv4();
     item.humanId = item.human.id;
+
+    item.createdBy = user;
+    item.createdById = user.id;
+
+    item.createdAt = new Date();
+    item.updatedAt = new Date();
+
     return item;
   }
 

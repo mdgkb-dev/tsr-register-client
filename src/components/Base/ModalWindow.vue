@@ -1,13 +1,5 @@
 <template>
-  <el-dialog
-    v-if="show"
-    top="10vh"
-    :model-value="show"
-    width="60%"
-    :show-close="true"
-    :before-close="beforeClose"
-    @close="$emit('close')"
-  >
+  <el-dialog v-if="show" top="10vh" :model-value="show" width="60%" :show-close="true" :before-close="beforeClose" @close="$emit('close')">
     <template #title>
       {{ title }}
     </template>
@@ -23,7 +15,6 @@ import { NavigationGuardNext } from 'vue-router';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
-import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 // import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
 import Provider from '@/services/Provider/Provider';
 
@@ -36,8 +27,8 @@ export default defineComponent({
     },
     title: {
       type: String as PropType<string>,
-      default: "",
-    }
+      default: '',
+    },
   },
   emits: ['save', 'close'],
   setup(_, { emit }) {

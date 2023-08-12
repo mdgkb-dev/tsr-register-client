@@ -139,6 +139,6 @@ export default class Question {
   // }
 
   getIdWithoutDashes(): string {
-    return this.id ? this.name.replaceAll(/\s+/g, '') : '';
+    return this.id ? this.id.replaceAll(/[^a-zA-Z]+/g, '') : '';
   }
 }

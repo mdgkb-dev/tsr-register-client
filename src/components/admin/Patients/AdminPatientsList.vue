@@ -66,6 +66,7 @@ import FilterModel from '@/services/classes/filters/FilterModel';
 import DateInput from '@/services/components/DateInput.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
+import TokenService from '@/services/Token';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
@@ -104,7 +105,7 @@ export default defineComponent({
     };
 
     const addPatient = async (): Promise<void> => {
-      const patient = Patient.Create();
+      const patient = Patient.Create(TokenService.getUser());
       await Provider.store.dispatch('patients/createWithoutReset', patient);
       Provider.store.commit('patients/unshiftToAll', patient);
     };
