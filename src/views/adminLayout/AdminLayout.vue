@@ -10,14 +10,14 @@
             <div v-if="$route.meta.adminLayout === AdminLayout.TableList" style="height: inherit">
               <slot />
             </div>
-            <el-main v-else>
-              <template #default>
+            <div v-else>
+              <!-- <template #default> -->
                 <slot />
-              </template>
-              <template #fallback>
+              <!-- </template> -->
+              <!-- <template #fallback>
                 <div>Loading...</div>
-              </template>
-            </el-main>
+              </template> -->
+            </div>
           </div>
         </div>
         <AdminMenuDrawer />
