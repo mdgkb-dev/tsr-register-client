@@ -156,6 +156,9 @@ $background-color: whitesmoke;
   border-right: 1px solid #c4c4c4;
   z-index: 10;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .el-menu,
@@ -216,6 +219,7 @@ $background-color: whitesmoke;
   width: calc(100% - 20px);
   height: 60px;
   border-bottom: 1px solid #c4c4c4;
+  cursor: pointer;
 }
 
 .selected-menu-item {  display: flex;
