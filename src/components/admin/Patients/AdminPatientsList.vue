@@ -101,7 +101,7 @@ export default defineComponent({
     };
 
     const load = async () => {
-      await Promise.all([Provider.store.dispatch('registers/getAll'), loadPatients(), loadQuestions()]);
+      await Promise.all([loadPatients()]);
     };
 
     const addPatient = async (): Promise<void> => {
