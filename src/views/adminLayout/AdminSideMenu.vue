@@ -12,33 +12,20 @@
       marginLeft: showMenuBar ? '0px' : '',
     }"
   >
-    <el-menu :default-active="activePath" :collapse="isCollapseSideMenu" background-color="whitesmoke" unique-opened @select="closeDrawer">
+  <div class="menu-body" >
+    <div @select="closeDrawer">
       <template v-for="item in menus" :key="item.title">
-        <el-sub-menu v-if="item?.children?.length" :index="item.title">
-          <template #title>
-            <div class="sub-menu-container">
-              <el-badge v-if="item.children.some((i) => i.count && i.count > 0)" is-dot type="danger"></el-badge>
-              <i :class="item.icon"></i>
-              <span class="row-menu-title">{{ item.title }}</span>
-            </div>
-          </template>
-
-          <el-menu-item v-for="children in item.children" :key="children.to" :index="children.to" @click="$router.push(children.to)">
-            <div class="menu-item-container">
-              {{ children.title }}
-              <el-badge v-if="children.count && children.count > 0" :value="children.count" type="danger"></el-badge>
-            </div>
-          </el-menu-item>
-        </el-sub-menu>
-        <div v-else @click="showMenuBar = false">
-          <el-menu-item v-if="item.to !== '/'" :index="item.to" @click="$router.push(item.to)">
-            <template #title>{{ item.title }}</template>
-          </el-menu-item>
+        <div @click="showMenuBar = false">
+          <div :class="{ 'selected-menu-item': item.to === activePath, 'menu-item': item.to !== activePath}" v-if="item.to !== '/'" :index="item.to" @click="$router.push(item.to)">
+              {{ item.title }}
+          </div>
         </div>
       </template>
-    </el-menu>
+    </div>
+
+    </div>
     <div class="exit-button-container">
-      <el-button @click="logout">Выйти</el-button>
+       <Button button-class="save-button" text="Выйти" @click="logout" />
     </div>
   </div>
   <Menu />
@@ -52,11 +39,13 @@ import { useStore } from 'vuex';
 import Menu from '@/assets/svg/Menu.svg';
 import IAdminMenu from '@/interfaces/IAdminMenu';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/components/Base/Button.vue';
 
 export default defineComponent({
   name: 'AdminSideMenu',
   components: {
     Menu,
+    Button,
   },
   props: { isCollapse: { type: Boolean } },
 
@@ -109,16 +98,28 @@ export default defineComponent({
 <style lang="scss" scoped>
 $background-color: whitesmoke;
 
+.save-button {
+  width: calc(100% - 20px);
+  border-radius: 5px;
+  height: 34px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 10px;
+  font-size: 14px;
+}
+
+
 .hidden {
   display: none;
 }
 
 .exit-button-container {
+  margin: 0;
+  width: 100%;
   display: flex;
   justify-content: left;
   position: absolute;
   bottom: 50px;
-  left: 25%;
 }
 
 ::-webkit-scrollbar {
@@ -142,27 +143,22 @@ $background-color: whitesmoke;
 }
 
 .admin-side-menu {
+  width: 240px;
   position: relative;
   min-height: inherit;
   height: inherit;
   float: left;
   background-color: $background-color;
   border-right: 1px solid #e6e6e6;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 0;
-
-  :deep(.el-sub-menu__icon-arrow) {
-    margin-left: 10px;
-  }
-
-  :deep(i) {
-    font-size: 24px;
-  }
-
-  :deep(.el-sub-menu__icon-arrow) {
-    font-size: unset;
-  }
+  padding: 0;
+  border-right: 1px solid #c4c4c4;
+  z-index: 10;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .el-menu,
@@ -210,6 +206,34 @@ $background-color: whitesmoke;
   width: 100%;
   height: 100%;
   z-index: 4;
+}
+
+// .menu-body {
+// }
+
+.menu-item {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  border-bottom: 1px solid #c4c4c4;
+  cursor: pointer;
+}
+
+.selected-menu-item {  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0 10px;
+  width: calc(100% - 20px);
+  height: 60px;
+  background: #DFF2F8;
+  border-bottom: 1px solid #c4c4c4;
+}
+
+.menu-item:hover {
+  background: #ffffff;
 }
 
 @media screen and (max-width: 992px) {
