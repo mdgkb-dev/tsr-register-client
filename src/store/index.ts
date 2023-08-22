@@ -28,6 +28,7 @@ import { fundContracts } from '@/store/modules/fundContracts';
 import { fundCouncils } from '@/store/modules/fundCouncils';
 import { humans } from '@/store/modules/humans';
 import { main } from '@/store/modules/main';
+import { menus } from '@/store/modules/menus';
 import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
@@ -114,6 +115,7 @@ const store: StoreOptions<RootState> = {
     documentFileInfos,
     drugDozes,
     fileInfos,
+    menus,
   },
 };
 

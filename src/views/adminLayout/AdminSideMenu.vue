@@ -12,23 +12,27 @@
       marginLeft: showMenuBar ? '0px' : '',
     }"
   >
-  <div class="menu-body" >
-    <div @select="closeDrawer">
-      <template v-for="item in menus" :key="item.title">
-        <div @click="showMenuBar = false">
-          <div :class="{ 'selected-menu-item': item.to === activePath, 'menu-item': item.to !== activePath}" v-if="item.to !== '/'" :index="item.to" @click="$router.push(item.to)">
-              {{ item.title }}
+    <div class="menu-body">
+      <div @select="closeDrawer">
+        <template v-for="item in menus" :key="item.name">
+          <div @click="showMenuBar = false">
+            <div
+              v-if="item.link !== '/'"
+              :class="{ 'selected-menu-item': item.link === activePath, 'menu-item': item.to !== activePath }"
+              :index="item.link"
+              @click="$router.push(item.link)"
+            >
+              {{ item.name }}
+            </div>
           </div>
-        </div>
-      </template>
-    </div>
-
+        </template>
+      </div>
     </div>
     <div class="exit-button-container">
-       <Button button-class="save-button" text="Выйти" @click="logout" />
+      <Button button-class="save-button" text="Выйти" @click="logout" />
     </div>
   </div>
-  <Menu />
+  <MenuIcon />
 </template>
 
 <script lang="ts">
@@ -36,15 +40,15 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, onBeforeUnmount,
 import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
-import Menu from '@/assets/svg/Menu.svg';
-import IAdminMenu from '@/interfaces/IAdminMenu';
-import Provider from '@/services/Provider/Provider';
+import MenuIcon from '@/assets/svg/Menu.svg';
 import Button from '@/components/Base/Button.vue';
+import Menu from '@/services/classes/Menu';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'AdminSideMenu',
   components: {
-    Menu,
+    MenuIcon,
     Button,
   },
   props: { isCollapse: { type: Boolean } },
@@ -59,7 +63,7 @@ export default defineComponent({
     const mounted = ref(false);
     const showMenuBar: Ref<boolean> = ref(false);
     // const userPermissions: ComputedRef<IPathPermission[]> = computed(() => store.getters['auth/userPathPermissions']);
-    const menus: ComputedRef<IAdminMenu[]> = computed<IAdminMenu[]>(() => store.getters['admin/menus']);
+    const menus: ComputedRef<Menu[]> = computed<Menu[]>(() => store.getters['menus/items' + '']);
     watch(
       () => route.path,
       () => {
@@ -68,9 +72,7 @@ export default defineComponent({
     );
 
     onBeforeMount(async () => {
-      // await store.dispatch('auth/getUserPathPermissions');
-      // store.commit('admin/filterMenus', userPermissions.value);
-      // await store.dispatch('admin/updateApplicationsCounts');
+      await store.dispatch('menus/getAll');
       // await store.dispatch('meta/getApplicationsCounts');
       // store.commit('admin/setApplicationsCounts', applicationsCounts.value);
       // await store.dispatch('admin/subscribeApplicationsCountsGet');
@@ -107,7 +109,6 @@ $background-color: whitesmoke;
   margin: 0 10px;
   font-size: 14px;
 }
-
 
 .hidden {
   display: none;
@@ -222,13 +223,14 @@ $background-color: whitesmoke;
   cursor: pointer;
 }
 
-.selected-menu-item {  display: flex;
+.selected-menu-item {
+  display: flex;
   justify-content: left;
   align-items: center;
   padding: 0 10px;
   width: calc(100% - 20px);
   height: 60px;
-  background: #DFF2F8;
+  background: #dff2f8;
   border-bottom: 1px solid #c4c4c4;
 }
 
