@@ -22,7 +22,7 @@ import Patient from '@/classes/Patient';
 import DisabilityForm from '@/components/admin/Patients/DisabilityForm.vue';
 import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
-import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
+import MenuContainer from '@/services/components/MenuContainer.vue';
 import PatientCommissions from '@/components/admin/Patients/PatientCommissions.vue';
 import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';

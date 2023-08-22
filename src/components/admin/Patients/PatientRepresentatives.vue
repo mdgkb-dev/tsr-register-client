@@ -110,8 +110,8 @@ import RepresentativeToPatientRules from '@/classes/RepresentativeToPatientRules
 import RepresentativeType from '@/classes/RepresentativeType';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import RepresentativeModal from '@/components/admin/Patients/RepresentativeModal.vue';
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Button from '@/components/Base/Button.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';

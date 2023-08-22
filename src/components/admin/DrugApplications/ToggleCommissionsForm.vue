@@ -38,11 +38,11 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import Commission from '@/classes/Commission';
 import DrugApplication from '@/classes/DrugApplication';
 import CommissionCard from '@/components/admin/CommissionCard.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

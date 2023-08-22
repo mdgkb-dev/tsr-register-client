@@ -32,8 +32,8 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
-import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import GeneralItem from '@/services/components/GeneralItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Provider from '@/services/Provider/Provider';
 

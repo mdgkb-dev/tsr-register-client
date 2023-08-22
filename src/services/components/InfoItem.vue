@@ -60,7 +60,7 @@ import { computed, defineComponent, nextTick, PropType, Ref, ref, watch } from '
 
 import Del from '@/assets/svg/Del.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({
   name: 'InfoItem',

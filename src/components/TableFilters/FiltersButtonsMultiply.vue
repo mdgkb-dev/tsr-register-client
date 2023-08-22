@@ -35,9 +35,9 @@
 <script lang="ts">
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import Button from '@/components/Base/Button.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import IOption from '@/interfaces/schema/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';

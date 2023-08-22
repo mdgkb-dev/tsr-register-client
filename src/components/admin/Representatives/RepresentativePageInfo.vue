@@ -20,7 +20,7 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
-import LeftRightContainer from '@/components/admin/Patients/LeftRightContainer.vue';
+import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import Provider from '@/services/Provider/Provider';

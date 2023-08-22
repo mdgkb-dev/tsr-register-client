@@ -55,7 +55,7 @@
 <script lang="ts">
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 

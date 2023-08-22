@@ -27,8 +27,8 @@
 import { defineComponent, PropType } from 'vue';
 
 import Patient from '@/classes/Patient';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 
 export default defineComponent({
   name: 'AdminPatientsListDisability',

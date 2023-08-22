@@ -94,14 +94,14 @@ import AdminDrugApplicationsListFilters from '@/components/admin/DrugApplication
 import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugApplicationFilesList.vue';
 import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
 import ToggleCommissionsForm from '@/components/admin/DrugApplications/ToggleCommissionsForm.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import SelectStatusForm from '@/components/admin/SelectStatusForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
 import StatusesFiltersLib from '@/libs/filters/StatusesFiltersLib';

@@ -80,7 +80,7 @@ import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';

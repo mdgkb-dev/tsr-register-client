@@ -25,7 +25,7 @@
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from 'vue';
 
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
 import Provider from '@/services/Provider/Provider';
