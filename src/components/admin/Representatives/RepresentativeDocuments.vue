@@ -68,12 +68,12 @@ import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vu
 import DocumentType from '@/classes/DocumentType';
 import Representative from '@/classes/Representative';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
 import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';

@@ -16,7 +16,7 @@ import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
 
 import Commission from '@/classes/Commission';
 import Drug from '@/classes/Drug';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

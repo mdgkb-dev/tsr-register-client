@@ -47,10 +47,10 @@ import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import Provider from '@/services/Provider/Provider';

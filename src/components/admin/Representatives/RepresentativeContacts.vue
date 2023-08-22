@@ -11,7 +11,7 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
 import ContactForm from '@/components/admin/Patients/ContactForm.vue';
-import LeftRightContainer from '@/components/admin/Patients/LeftRightContainer.vue';
+import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

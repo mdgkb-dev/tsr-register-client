@@ -40,11 +40,11 @@ import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import DocumentType from '@/classes/DocumentType';
 import Human from '@/classes/Human';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 

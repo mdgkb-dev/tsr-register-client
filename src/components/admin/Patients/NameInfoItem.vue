@@ -33,7 +33,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
-import StringItem from '@/components/admin/Patients/StringItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({
   name: 'NameInfoItem',

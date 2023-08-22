@@ -17,8 +17,8 @@ import { computed, defineComponent, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import ResearchesPool from '@/classes/ResearchesPool';
-import GeneralItem from '@/components/admin/Patients/GeneralItem.vue';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GeneralItem from '@/services/components/GeneralItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

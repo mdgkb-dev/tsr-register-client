@@ -10,7 +10,7 @@
 import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Status from '@/classes/Status';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

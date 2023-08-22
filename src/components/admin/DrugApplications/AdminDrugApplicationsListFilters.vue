@@ -55,9 +55,9 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Status from '@/classes/Status';
-import GridContainer from '@/components/admin/Patients/GridContainer.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import InfoItem from '@/components/Lib/InfoItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import IOption from '@/interfaces/shared/IOption';
