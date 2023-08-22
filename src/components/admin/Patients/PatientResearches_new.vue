@@ -127,7 +127,7 @@ import PatientResearch from '@/classes/PatientResearch';
 import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Research from '@/classes/Research';
 import ResearchesPool from '@/classes/ResearchesPool';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

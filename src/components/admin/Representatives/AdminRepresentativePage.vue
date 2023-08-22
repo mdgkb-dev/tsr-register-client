@@ -18,7 +18,7 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
-import MenuContainer from '@/components/admin/Patients/MenuContainer.vue';
+import MenuContainer from '@/services/components/MenuContainer.vue';
 import RepresentativeContacts from '@/components/admin/Representatives/RepresentativeContacts.vue';
 import RepresentativeDocuments from '@/components/admin/Representatives/RepresentativeDocuments.vue';
 import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';

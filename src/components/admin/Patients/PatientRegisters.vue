@@ -64,8 +64,8 @@ import Patient from '@/classes/Patient';
 import PatientRegister from '@/classes/PatientRegister';
 import Register from '@/classes/Register';
 import User from '@/classes/User';
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

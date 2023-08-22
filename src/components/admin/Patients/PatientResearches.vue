@@ -105,8 +105,8 @@ import PatientResearchChart from '@/components/admin/Patients/PatientResearchCha
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
-import ResearcheContainer from '@/components/admin/Patients/ResearcheContainer.vue';
-import RightTabsContainer from '@/components/admin/Patients/RightTabsContainer.vue';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
