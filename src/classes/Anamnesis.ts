@@ -1,10 +1,14 @@
+import MkbItem from '@/classes/MkbItem';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Anamnesis {
   id?: string;
   value = '';
   date: Date = new Date();
-  patientDiagnosisId?: string;
+  @ClassHelper.GetClassConstructor(MkbItem)
+  mkbItem?: MkbItem;
+  mkbItemId?: string;
+  patientId?: string;
   doctorName = '';
 
   constructor(i?: Anamnesis) {

@@ -63,6 +63,8 @@ export default class Patient {
 
   // @ClassHelper.GetClassConstructor(Commission)
   commissions: Commission[] = [];
+  @ClassHelper.GetClassConstructor(Anamnesis)
+  anamneses: Anamnesis[] = [];
 
   @ClassHelper.GetClassConstructor(Date)
   createdAt?: Date;
@@ -111,16 +113,6 @@ export default class Patient {
       ...Disability.GetFileInfos(this.disabilities),
       // ...PatientResearchSection.GetFileInfos(this.registerGroupsToPatient),
     ];
-  }
-
-  getAnamnesis(id: string): Anamnesis {
-    for (const diagnosis of this.patientDiagnosis) {
-      const anamnesis = diagnosis.anamneses.find((i: Anamnesis) => i.id === id);
-      if (anamnesis) {
-        return anamnesis;
-      }
-    }
-    return new Anamnesis();
   }
 
   getParentsAddresses(): string[] {
@@ -259,5 +251,20 @@ export default class Patient {
       return new ResearchResult();
     }
     return pr.researchResults[0];
+  }
+
+  addAnamnesis(): Anamnesis {
+    const item = new Anamnesis();
+    item.id = uuidv4();
+    item.patientId = this.id;
+    this.anamneses.push(item);
+    return item;
+  }
+
+  getAnamnesesByMkbItemId(mkbItemId?: string): Anamnesis[] {
+    if (!mkbItemId) {
+      return this.anamneses;
+    }
+    return this.anamneses.filter((i: Anamnesis) => i.mkbItemId === mkbItemId);
   }
 }

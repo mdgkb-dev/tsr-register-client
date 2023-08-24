@@ -1,6 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
-import Anamnesis from '@/classes/Anamnesis';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import ClassHelper from '@/services/ClassHelper';
@@ -13,8 +10,6 @@ export default class PatientDiagnosis {
   patientId?: string;
   patient?: Patient;
   doctorName = '';
-  @ClassHelper.GetClassConstructor(Anamnesis)
-  anamneses: Anamnesis[] = [];
   @ClassHelper.GetClassConstructor(MkbItem)
   mkbItem?: MkbItem;
   mkbItemId?: string;
@@ -27,14 +22,6 @@ export default class PatientDiagnosis {
     const item = new PatientDiagnosis();
     item.mkbItem = new MkbItem(mkbItem);
     item.mkbItemId = mkbItem.id;
-    return item;
-  }
-
-  addAnamnesis(): Anamnesis {
-    const item = new Anamnesis();
-    item.id = uuidv4();
-    item.patientDiagnosisId = this.id;
-    this.anamneses.push(item);
     return item;
   }
 }

@@ -56,31 +56,7 @@
                   />
                 </div>
               </div>
-              <Button
-                text="Добавить анамнез"
-                :with-icon="false"
-                width="100%"
-                height="60px"
-                font-size="16px"
-                border-radius="5px"
-                color="#00B5A4"
-                background="#C7ECEA"
-                background-hover="#C7ECEA"
-                :color-swap="false"
-                @click="addAnamnesis(selectedPatientDiagnosis)"
-              >
-              </Button>
-              <el-timeline style="margin-top: 20px">
-                <el-timeline-item v-for="anamnesis in selectedPatientDiagnosis.anamneses" :key="anamnesis.id" placement="top" center>
-                  <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
-                    <template #inside-content>
-                      <div class="background-container">
-                        <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(selectedPatientDiagnosis, anamnesis.id)" />
-                      </div>
-                    </template>
-                  </CollapseItem>
-                </el-timeline-item>
-              </el-timeline>
+              <AnamnesesList :mkb-item="selectedPatientDiagnosis.mkbItem" :patient="patient" />
             </template>
           </ResearcheContainer>
         </div>
@@ -107,17 +83,14 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
-import Anamnesis from '@/classes/Anamnesis';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
-import AnamnesisForm from '@/components/admin/Patients/AnamnesisForm.vue';
+import AnamnesesList from '@/components/admin/Patients/Anamnesis/AnamnesesList.vue';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
@@ -130,12 +103,10 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'PaCollapseItemtientDiagnosis',
   components: {
+    AnamnesesList,
     RemoteSearch,
-    AnamnesisForm,
     RightTabsContainer,
     ResearcheContainer,
-    Button,
-    CollapseItem,
     QuestionComponent,
   },
 
@@ -187,20 +158,11 @@ export default defineComponent({
       selectPatientDiagnosis(diagnosisLinks[diagnosisLinks.length - 1].id as string);
     };
 
-    const addAnamnesis = async (patientDiagnosis: PatientDiagnosis): Promise<void> => {
-      const anamnesis = patientDiagnosis.addAnamnesis();
-      await Provider.store.dispatch('anamneses/create', new Anamnesis(anamnesis));
-    };
-
     const removePatientDiagnosis = async (id: string): Promise<void> => {
       ClassHelper.RemoveFromClassById(id, patient.value.patientDiagnosis, []);
       await Provider.store.dispatch('patientDiagnosis/remove', id);
     };
 
-    const removeAnamnesis = async (patientDiagnosis: PatientDiagnosis, id: string): Promise<void> => {
-      ClassHelper.RemoveFromClassById(id, patientDiagnosis.anamneses, []);
-      await Provider.store.dispatch('anamneses/remove', id);
-    };
     const updatePatientDiagnosis = async (patientDiagnosis: PatientDiagnosis) => {
       await Provider.store.dispatch('patientDiagnosis/update', patientDiagnosis);
     };
@@ -222,8 +184,6 @@ export default defineComponent({
       toggle,
       mounted,
       updatePatientDiagnosis,
-      addAnamnesis,
-      removeAnamnesis,
       removePatientDiagnosis,
       searchFormRef,
       expandRowKeys,

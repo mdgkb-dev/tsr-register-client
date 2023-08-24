@@ -45,4 +45,9 @@ export default class PatientResearch {
   getResult(resultId: string): ResearchResult | undefined {
     return this.researchResults.find((r: ResearchResult) => r.id === resultId);
   }
+  addResult(research: Research, patientResearchId?: string): ResearchResult {
+    const item = ResearchResult.Create(research, patientResearchId);
+    this.researchResults.push(item);
+    return item;
+  }
 }

@@ -1,78 +1,77 @@
 <template>
+  <Button
+    text="Добавить анамнез"
+    :with-icon="false"
+    width="100%"
+    height="60px"
+    font-size="16px"
+    border-radius="5px"
+    color="#00B5A4"
+    background="#C7ECEA"
+    background-hover="#C7ECEA"
+    :color-swap="false"
+    @click="addAnamnesis()"
+  >
+  </Button>
   <el-timeline style="margin-top: 20px">
-    <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
-      <GeneralItem
-        :ready="`${result.fillingPercentage}%`"
-        margin="0 10px 0 0"
-        :scale="false"
-        :with-icon="true"
-        @click="$emit('select', result.id)"
-      >
-        <template #general-item>
-          <div class="flex-line">
-            <StringItem string="Исследование&nbsp;от&nbsp;" font-size="14px" padding="0" />
-
-            <SmallDatePicker
-              v-model:model-value="result.date"
-              placeholder="Выбрать"
-              width="100px"
-              height="34px"
-              @change="updateHuman"
-              @click.stop="() => undefined"
-            />
+    <el-timeline-item v-for="anamnesis in patient.getAnamnesesByMkbItemId(mkbItem?.id)" :key="anamnesis.id" placement="top" center>
+      <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
+        <template #inside-content>
+          <div class="background-container">
+            <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(anamnesis.id)" />
           </div>
         </template>
-      </GeneralItem>
+      </CollapseItem>
     </el-timeline-item>
   </el-timeline>
-  <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
+import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
-import PatientResearch from '@/classes/PatientResearch';
-import Research from '@/classes/Research';
+import AnamnesisForm from '@/components/admin/Patients/Anamnesis/AnamnesisForm.vue';
 import Button from '@/components/Base/Button.vue';
-import GeneralItem from '@/services/components/GeneralItem.vue';
-import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
-import StringItem from '@/services/components/StringItem.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'PatientResearchesResultsList',
+  name: 'AnamnesesList',
   components: {
-    StringItem,
-    SmallDatePicker,
-    GeneralItem,
+    AnamnesisForm,
     Button,
+    CollapseItem,
   },
   props: {
-    patientResearch: {
-      type: Object as PropType<PatientResearch>,
+    patient: {
+      type: Object as PropType<Patient>,
       required: true,
     },
-    research: {
-      type: Object as PropType<Research>,
-      required: true,
+    mkbItem: {
+      type: Object as PropType<MkbItem | undefined>,
     },
   },
-  emits: ['select', 'update'],
+  emits: ['add', 'remove'],
   setup(props) {
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const updateHuman = async (): Promise<void> => {
-      await Provider.store.dispatch('humans/update', patient.value.human);
+    const addAnamnesis = async (): Promise<void> => {
+      const anamnesis = props.patient.addAnamnesis();
+      if (props.mkbItem) {
+        anamnesis.mkbItem = props.mkbItem;
+        anamnesis.mkbItemId = props.mkbItem.id;
+      }
+      await Provider.store.dispatch('anamneses/createWithoutReset', anamnesis);
     };
 
-    const addResult = async (): Promise<void> => {
-      const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
-      await Provider.store.dispatch('researchesResults/createWithoutReset', item);
+    const removeAnamnesis = async (id: string): Promise<void> => {
+      ClassHelper.RemoveFromClassById(id, props.patient.anamneses);
+      await Provider.store.dispatch('anamneses/remove', id);
     };
 
     return {
-      addResult,
-      updateHuman,
+      addAnamnesis,
+      removeAnamnesis,
     };
   },
 });
@@ -81,33 +80,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
-
-.xlsx-button {
-  width: auto;
-  height: 34px;
-  border-radius: 5px;
-  color: #006bb4;
-  background: #dff2f8;
-  font-size: 12px;
-}
-
-.back-button {
-  background: #ffffff;
-  margin: 0 10px 0 0;
-  height: 42px;
-  font-size: 16px;
-  border-radius: 5px;
-  color: #343e5c;
-}
-
-.chart-button {
-  width: 63px;
-  height: 42px;
-  border-radius: 5px;
-  color: #343e5c;
-  background: #ffffff;
-  font-size: 16px;
-}
 
 .hidden {
   display: none;
@@ -132,12 +104,24 @@ export default defineComponent({
   display: grid;
   grid-gap: 6px;
   grid-template-rows: repeat(0 0px);
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   padding: 6px;
 }
 
 .slider-body > div {
   object-fit: cover;
+}
+
+.slider-item-search {
+  width: 164px;
+  height: 40px;
+  border-radius: $normal-border-radius;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .slider-item {
@@ -155,12 +139,6 @@ export default defineComponent({
   text-align: center;
 }
 
-.slider-item:hover {
-  border: 1px solid #379fff;
-  background: $base-background;
-  color: #379fff;
-}
-
 .slider-item-active {
   width: 163px;
   height: 40px;
@@ -174,12 +152,6 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.slider-item:active {
-  border: 1px solid #379fff;
-  background: $custom-background;
-  color: #343e5c;
 }
 
 .tabs-item {
@@ -198,11 +170,6 @@ export default defineComponent({
   align-items: center;
   text-align: center;
   margin-top: 5px;
-  transition: 0.3s;
-}
-
-.tabs-item:hover {
-  width: 105px;
 }
 
 .tabs-item-active {
@@ -226,10 +193,6 @@ export default defineComponent({
   z-index: 2;
 }
 
-.tabs-item-active:hover {
-  width: 106px;
-}
-
 .icon-plus {
   width: 40px;
   height: 40px;
@@ -245,12 +208,11 @@ export default defineComponent({
 }
 
 .researche-title {
-  width: calc(100% - 22px);
+  width: calc(100% - 2px);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 60px;
-  margin: 0 10px;
 }
 
 .researche-name {
@@ -264,19 +226,9 @@ export default defineComponent({
   text-transform: uppercase;
 }
 
-.plus-button {
-  width: calc(100% - 20px);
-  border-radius: 5px;
-  color: #00bea5;
-  background: #c1efeb;
-  height: 60px;
-  margin: 0 10px;
-}
-
-:deep(.icon-plus) {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+.icon-back {
+  width: 24px;
+  height: 24px;
 }
 
 .patient-research {
@@ -325,7 +277,6 @@ export default defineComponent({
 
 .tools {
   display: flex;
-  flex-direction: column;
   justify-content: left;
   align-items: center;
   height: auto;
@@ -404,112 +355,24 @@ export default defineComponent({
   height: 100%;
 }
 
-.control-buttons {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  // padding-bottom: 10px;
-}
-
-.left {
-  min-width: 300px;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.right {
-  max-width: 300px;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-}
-
-.search {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.icon-xlsx {
-  width: 40px;
-  height: 40px;
-  fill: #343e5c;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 10px;
-}
-
-.icon-xlsx:hover {
-  fill: #379fff;
-}
-
-.line-item {
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  width: calc(100% - 20px);
-  margin: 10px 0;
-  max-width: 100%;
-  height: 54px;
-}
-
-.flex-line {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.flex-line2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.flex-line3 {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  width: 100%;
-  height: 60px;
-}
-
-.flex-line4 {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  width: 100%;
-  height: auto;
+.diagnosis-doctorName {
   padding: 10px 0;
-  color: #00b5a4;
-  font-size: 18px;
 }
 
-.res-name {
-  margin-right: 10px;
-}
-
-:deep(.el-input__inner) {
-  background: inherit;
-}
-
-:deep(.el-timeline) {
-  padding: 0 0 0 10px;
+.doctor-title {
+  padding: 10px 0;
 }
 
 :deep(.el-timeline-item) {
   padding-bottom: 8px;
 }
 
-:deep(.el-timeline-item__node) {
-  background: #b0a4c0;
+:deep(.el-timeline) {
+  padding: 0 0 0 10px;
 }
 
-:deep(.el-timeline-item__wrapper) {
-  padding-left: 20px;
+:deep(.el-timeline-item__node) {
+  background: #b0a4c0;
 }
 
 @media screen and (max-width: 768px) {

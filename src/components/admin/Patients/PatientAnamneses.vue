@@ -51,6 +51,9 @@
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
               <PatientResearchesResultsList :patient-research="patientResearch" @select="selectResult" />
             </template>
+            <template v-else>
+              <AnamnesesList :patient="patient" />
+            </template>
           </template>
 
           <template #footer>
@@ -81,6 +84,7 @@ import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
+import AnamnesesList from '@/components/admin/Patients/Anamnesis/AnamnesesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
 import Button from '@/components/Base/Button.vue';
@@ -97,6 +101,7 @@ import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'PatientAnamneses',
   components: {
+    AnamnesesList,
     PatientResearchesResultsList,
     Plus,
     Xlsx,

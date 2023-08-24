@@ -61,21 +61,11 @@
 
           <template #body>
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-              <PatientResearchesResultsList :patient-research="patientResearch" @select="selectResult" />
+              <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
             </template>
             <template v-else>
               <PatientResearchesList @select="selectResearch" />
             </template>
-          </template>
-
-          <template #footer>
-            <Button
-              v-if="research.id && patientResearch"
-              button-class="plus-button"
-              icon="plus"
-              icon-class="icon-plus"
-              @click="addResult(research, patientResearch.id)"
-            />
           </template>
         </ResearcheContainer>
       </div>
@@ -160,16 +150,6 @@ export default defineComponent({
       }
     });
 
-    const selectOrAddResult = async (research: Research) => {
-      if (!research.withDates && patientResearch.value) {
-        if (patientResearch.value.researchResults.length > 0) {
-          await selectResult(patientResearch.value.researchResults[0].id as string);
-        } else {
-          await addResult(research, patientResearch.value.id);
-        }
-      }
-    };
-
     const createPatientResearch = async (research: Research) => {
       if (!patient.value.getPatientResearch(research.id)) {
         const item = PatientResearch.Create(patient.value.id, research);
@@ -177,7 +157,6 @@ export default defineComponent({
         await Provider.store.dispatch('patientsResearches/create', item);
       }
       await Provider.store.dispatch('researches/get', research.id);
-      await selectOrAddResult(research);
     };
 
     const selectResearchesPool = async (id: string) => {
@@ -191,20 +170,12 @@ export default defineComponent({
       }
       Provider.store.commit('researches/set');
       Provider.store.commit('researchesResults/set');
-      await selectOrAddResult(research.value);
 
       await Provider.store.dispatch('researches/get', item.id);
     };
 
     const selectResult = async (id: string) => {
       await Provider.store.dispatch('researchesResults/get', id);
-    };
-
-    const addResult = async (research: Research, patientResearchId?: string): Promise<void> => {
-      const item = ResearchResult.Create(research, patientResearchId);
-      patientResearch.value?.researchResults.push(item);
-      await Provider.store.dispatch('researchesResults/createWithoutReset', item);
-      Provider.store.commit('researchesResults/set', item);
     };
 
     const saveResult = async (result: ResearchResult): Promise<void> => {
@@ -250,7 +221,6 @@ export default defineComponent({
       toggleResearchesPools,
       researchesPoolsIsToggle,
       saveResult,
-      addResult,
       researchResult,
       selectResult,
       patientResearch,
