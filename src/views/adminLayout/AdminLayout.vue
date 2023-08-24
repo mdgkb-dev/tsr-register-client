@@ -7,16 +7,11 @@
           <AdminSideMenu />
           <div class="admin-container">
             <AdminHeaderBottom style="position: sticky; z-index: 2" />
-            <div v-if="$route.meta.adminLayout === AdminLayout.TableList" style="height: inherit">
+            <div class="field" v-if="$route.meta.adminLayout === AdminLayout.TableList" style="height: inherit">
               <slot />
             </div>
-            <div v-else>
-              <!-- <template #default> -->
+            <div class="field" v-else>
                 <slot />
-              <!-- </template> -->
-              <!-- <template #fallback>
-                <div>Loading...</div>
-              </template> -->
             </div>
           </div>
         </div>
@@ -68,6 +63,10 @@ export default defineComponent({
   height: inherit;
   overflow: auto;
   padding: 0;
+}
+
+.field {
+  height: calc(100% - 10px);
 }
 
 @media (max-width: 992px) {
