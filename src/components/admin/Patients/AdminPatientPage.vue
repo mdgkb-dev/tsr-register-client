@@ -1,8 +1,8 @@
 <template>
-  <MenuContainer v-if="mounted" min-menu-item-width="160px" height="calc(100% - 2px)" background="#DFF2F8">
+  <MenuContainer v-if="mounted" min-menu-item-width="160px" background="#DFF2F8" height="100%">
     <template #menu>
       <div v-for="menu in menus" :key="menu.id">
-        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
+        <div :class="{ 'selected-tab': activeMenu.id === menu.id, 'tab': activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
@@ -153,6 +153,13 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.field {
+  width: 100%;
+  height: 100%;
+  background: red;
+  padding: 10px;
+}
 
 .tab {
   font-size: 12px;

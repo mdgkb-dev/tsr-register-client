@@ -2,7 +2,7 @@
   <div
     class="mainblock"
     :style="{
-      height: height,
+      height: height
     }"
   >
     <div
@@ -16,7 +16,7 @@
     <div
       class="body"
       :style="{
-        background: background,
+        background: background
       }"
     >
       <slot name="body" />
@@ -53,13 +53,12 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 
 .mainblock {
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 12px);
+  display: block;
   border-radius: $big-border-radius;
   border: $custom-border;
   overflow: hidden;
   margin: 0 10px 0 0;
+  height: 100%;
 }
 
 .top-menu {
@@ -77,7 +76,6 @@ export default defineComponent({
   margin-top: 1px;
   border-top: 0.5px solid #343d5c;
   overflow-y: auto;
-  height: 74vh;
   height: 100%;
 }
 
