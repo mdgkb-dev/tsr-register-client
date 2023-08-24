@@ -2,9 +2,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 import AnswerFile from '@/classes/AnswerFile';
 import AnswerVariant from '@/classes/AnswerVariant';
-import DocumentFileInfo from '@/classes/DocumentFileInfo';
 import Question from '@/classes/Question';
 import SelectedAnswerVariant from '@/classes/SelectedAnswerVariant';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Answer {
@@ -49,12 +49,18 @@ export default class Answer {
     return questions.map((q: Question) => Answer.Create(q));
   }
 
-  addFile(): DocumentFileInfo {
+  addFile(): AnswerFile {
     const file = new AnswerFile();
     file.id = uuidv4();
     file.answerId = this.id;
     this.answerFiles.push(file);
     return file;
+  }
+
+  getFileInfos(): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    this.answerFiles.forEach((af: AnswerFile) => fileInfos.push(af.fileInfo));
+    return fileInfos;
   }
 
   getSelectedAnswerVariant(answerVariantId?: string): boolean {

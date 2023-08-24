@@ -4,6 +4,7 @@ import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import Research from '@/classes/Research';
+import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class ResearchResult {
@@ -58,6 +59,12 @@ export default class ResearchResult {
       this.addAnswer(answer);
     }
     return answer;
+  }
+
+  getFileInfos(): IFileInfo[] {
+    const fileInfos: IFileInfo[] = [];
+    this.answers.forEach((i: Answer) => fileInfos.push(...i.getFileInfos()));
+    return fileInfos;
   }
 
   calculateFilling(): void {
