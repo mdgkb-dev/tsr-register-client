@@ -46,6 +46,16 @@
               </div>
             </template>
             <template #body>
+              <div v-for="research in researches" :key="research.id">
+                <div v-for="question in research.questions" :key="question.id">
+                  <div>{{ question.name }}</div>
+                  <QuestionComponent
+                    :question="question"
+                    :research-result="patient.getResearchResult(research.id)"
+                    @fill="saveResearchResult(patient.getResearchResult(research.id))"
+                  />
+                </div>
+              </div>
               <Button
                 text="Добавить анамнез"
                 :with-icon="false"
@@ -95,20 +105,26 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
 import Anamnesis from '@/classes/Anamnesis';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import PatientResearch from '@/classes/PatientResearch';
+import Research from '@/classes/Research';
+import ResearchResult from '@/classes/ResearchResult';
 import AnamnesisForm from '@/components/admin/Patients/AnamnesisForm.vue';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
+import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
+import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -120,12 +136,14 @@ export default defineComponent({
     ResearcheContainer,
     Button,
     CollapseItem,
+    QuestionComponent,
   },
 
   setup() {
     const mounted = ref(false);
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
+    const researches: ComputedRef<Research[]> = computed(() => Provider.store.getters['researches/items']);
     const selectedPatientDiagnosis: Ref<PatientDiagnosis | undefined> = ref(
       patient.value.patientDiagnosis.length > 0 ? patient.value.patientDiagnosis[0] : undefined
     );
@@ -138,6 +156,28 @@ export default defineComponent({
     // const { formatDate } = useDateFormat();
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
     const mkbItem: ComputedRef<MkbItem> = computed<MkbItem>(() => Provider.store.getters['mkbItems/item']);
+
+    onBeforeMount(async () => {
+      const fq = new FilterQuery();
+      fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
+      await Provider.store.dispatch('researches/getAll', fq);
+
+      for (const r of researches.value) {
+        await createPatientResearch(r);
+      }
+    });
+
+    const createPatientResearch = async (research: Research) => {
+      if (!patient.value.getPatientResearch(research.id)) {
+        const item = PatientResearch.Create(patient.value.id, research);
+        patient.value.patientsResearches.push(item);
+        await Provider.store.dispatch('patientsResearches/create', item);
+
+        const researchResult = ResearchResult.Create(research, item.id);
+        item.researchResults.push(researchResult);
+        await Provider.store.dispatch('researchesResults/createWithoutReset', researchResult);
+      }
+    };
 
     const addMkbItem = async (event: ISearchObject): Promise<void> => {
       await Provider.store.dispatch('mkbItems/get', event.value);
@@ -169,7 +209,13 @@ export default defineComponent({
       selectedPatientDiagnosis.value = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
     };
 
+    const saveResearchResult = async (result: ResearchResult): Promise<void> => {
+      await Provider.store.dispatch('researchesResults/update', result);
+    };
+
     return {
+      saveResearchResult,
+      researches,
       isToggle,
       selectPatientDiagnosis,
       selectedPatientDiagnosis,

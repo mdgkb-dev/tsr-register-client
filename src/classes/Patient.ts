@@ -248,4 +248,16 @@ export default class Patient {
     const createdBy = this.createdBy?.login ?? 'Неизвестный создатель';
     return `${f.format(this.createdAt)} (${createdBy})`;
   }
+
+  getResearchResult(researchId?: string): ResearchResult {
+    if (!researchId) {
+      return new ResearchResult();
+    }
+
+    const pr = this.patientsResearches.find((pr: PatientResearch) => (pr.researchId = researchId));
+    if (!pr) {
+      return new ResearchResult();
+    }
+    return pr.researchResults[0];
+  }
 }
