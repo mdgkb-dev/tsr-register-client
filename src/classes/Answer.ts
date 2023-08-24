@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import AnswerFile from '@/classes/AnswerFile';
 import AnswerVariant from '@/classes/AnswerVariant';
+import DocumentFileInfo from '@/classes/DocumentFileInfo';
 import Question from '@/classes/Question';
 import SelectedAnswerVariant from '@/classes/SelectedAnswerVariant';
 import ClassHelper from '@/services/ClassHelper';
@@ -22,17 +24,11 @@ export default class Answer {
   questionVariantId?: string;
   filled = false;
 
-  // researchResult?: ResearchResult;
   researchResultId?: string;
 
-  // questionVariant = new QuestionVariant();
-  // questionVariantId?: string;
-
-  // questionMeasure = new QuestionMeasure();
-  // questionMeasureId?: string;
-  // @ClassHelper.GetClassConstructor(RegisterPropertyToPatientToFile)
-  // registerPropertiesToPatientsToFileInfos: RegisterPropertyToPatientToFile[] = [];
-  // registerPropertiesToPatientsToFileInfosForDelete: string[] = [];
+  @ClassHelper.GetClassConstructor(AnswerFile)
+  answerFiles: AnswerFile[] = [];
+  answerFilesForDelete: string[] = [];
 
   constructor(i?: Answer) {
     ClassHelper.BuildClass(this, i);
@@ -53,11 +49,13 @@ export default class Answer {
     return questions.map((q: Question) => Answer.Create(q));
   }
 
-  // addPropertyToFile(): void {
-  //   const f = new RegisterPropertyToPatientToFile();
-  //   f.id = uuidv4();
-  //   this.registerPropertiesToPatientsToFileInfos.push(f);
-  // }
+  addFile(): DocumentFileInfo {
+    const file = new AnswerFile();
+    file.id = uuidv4();
+    file.answerId = this.id;
+    this.answerFiles.push(file);
+    return file;
+  }
 
   getSelectedAnswerVariant(answerVariantId?: string): boolean {
     // if (registerPropWithDateId) {

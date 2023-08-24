@@ -46,8 +46,8 @@ export default defineComponent({
       required: true,
     },
   },
-
-  setup(props) {
+  emits: ['remove'],
+  setup(props, { emit }) {
     const changeFileHandler = (file: IFile) => {
       if (!isAcceptedFormat(file.name)) {
         ElNotification.error({
@@ -59,6 +59,7 @@ export default defineComponent({
     };
     const removeFile = () => {
       props.fileInfo.clearFile();
+      emit('remove');
     };
 
     function isAcceptedFormat(filename: string): boolean {

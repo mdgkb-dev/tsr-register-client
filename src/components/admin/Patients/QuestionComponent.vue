@@ -5,6 +5,7 @@
     :question="question"
     @fill="$emit('fill')"
   />
+  <FilesProp v-if="question.valueType.isFiles()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
@@ -23,6 +24,7 @@ import { defineComponent, PropType } from 'vue';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
+import FilesProp from '@/components/admin/Research/FilesProp.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RadioProp from '@/components/admin/Research/RadioProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
@@ -38,7 +40,9 @@ export default defineComponent({
     DataComponentComputed,
     StringProp,
     SetSelect,
+    FilesProp,
   },
+
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
