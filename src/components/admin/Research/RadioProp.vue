@@ -14,12 +14,19 @@
         v-if="additionalQuestion.valueType.isString() || additionalQuestion.valueType.isText()"
         :research-result="researchResult"
         :question="additionalQuestion"
+        @fill="$emit('fill')"
       />
-      <NumberProp v-if="additionalQuestion.valueType.isNumber()" :research-result="researchResult" :question="additionalQuestion" />
+      <NumberProp
+        v-if="additionalQuestion.valueType.isNumber()"
+        :research-result="researchResult"
+        :question="additionalQuestion"
+        @fill="$emit('fill')"
+      />
       <DataComponentComputed
         v-if="additionalQuestion.valueType.isDate()"
         :research-result="researchResult"
         :question="additionalQuestion"
+        @fill="$emit('fill')"
       />
     </el-form-item>
   </el-form>
@@ -73,6 +80,7 @@ export default defineComponent({
     };
 
     onBeforeMount(() => {
+      console.log(props.researchResult);
       answer.value = props.researchResult.getOrCreateAnswer(props.question);
       selectVariant(props.question.answerVariants.find((a: AnswerVariant) => a.id === answer.value?.answerVariantId));
     });

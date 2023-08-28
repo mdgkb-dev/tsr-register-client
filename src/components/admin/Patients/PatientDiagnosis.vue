@@ -31,7 +31,7 @@
       </div>
     </template>
     <template #body>
-      <div class="body">
+      <div v-if="mounted" class="body">
         <div v-if="selectedPatientDiagnosis">
           <ResearcheContainer background="#DFF2F8">
             <template #header>
@@ -136,9 +136,11 @@ export default defineComponent({
       for (const r of researches.value) {
         await createPatientResearch(r);
       }
+      mounted.value = true;
     });
 
     const createPatientResearch = async (research: Research) => {
+      console.log(research);
       if (!patient.value.getPatientResearch(research.id)) {
         const item = PatientResearch.Create(patient.value.id, research);
         patient.value.patientsResearches.push(item);
@@ -147,6 +149,7 @@ export default defineComponent({
         const researchResult = ResearchResult.Create(research, item.id);
         item.researchResults.push(researchResult);
         await Provider.store.dispatch('researchesResults/createWithoutReset', researchResult);
+        console.log(patient);
       }
     };
 

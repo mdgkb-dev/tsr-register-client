@@ -49,21 +49,11 @@
 
           <template #body>
             <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-              <PatientResearchesResultsList :patient-research="patientResearch" @select="selectResult" />
+              <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
             </template>
             <template v-else>
               <AnamnesesList :patient="patient" />
             </template>
-          </template>
-
-          <template #footer>
-            <Button
-              v-if="research.id && patientResearch"
-              button-class="plus-button"
-              icon="plus"
-              icon-class="icon-plus"
-              @click="addResult(research, patientResearch.id)"
-            />
           </template>
         </ResearcheContainer>
       </div>
@@ -127,6 +117,7 @@ export default defineComponent({
 
     onBeforeMount(async () => {
       const fq = new FilterQuery();
+      Provider.store.commit('researches/set');
       fq.setFilterModel(ResearchesFiltersLib.onlyAnamneses());
       await Provider.store.dispatch('researches/getAll', fq);
     });
@@ -167,6 +158,8 @@ export default defineComponent({
     };
 
     const addResult = async (research: Research, patientResearchId?: string): Promise<void> => {
+      console.log('addResult');
+      console.log(research);
       const item = ResearchResult.Create(research, patientResearchId);
       patientResearch.value?.researchResults.push(item);
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);

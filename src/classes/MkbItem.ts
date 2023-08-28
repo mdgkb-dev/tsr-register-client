@@ -26,6 +26,6 @@ export default class MkbItem {
   }
 
   getCode(): string {
-    return this.code;
+    return this.code !== '' && this.code !== '-' ? this.code : '';
   }
 }
