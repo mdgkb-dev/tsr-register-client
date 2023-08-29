@@ -1,5 +1,5 @@
 <template>
-  <RightTabsContainer :is-toggle="researchesPoolsIsToggle" slider-on-width="180px" @toggle="toggleResearchesPools">
+  <!-- <RightTabsContainer :is-toggle="researchesPoolsIsToggle" slider-on-width="180px" @toggle="toggleResearchesPools">
     <template #icon>
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -23,23 +23,23 @@
         <div class="tab-item-text">{{ patientResearchesPool.researchesPool.name }}</div>
       </div>
     </template>
-    <template #body>
+    <template #body> -->
       <div class="body">
         <ResearcheContainer background="#DFF2F8" padding="0">
           <template #header>
             <div v-if="research.id && patientResearch" class="researche-title">
-              <Button
+              <!-- <Button
                 text="Назад"
                 button-class="back-button"
                 :color-swap="true"
                 :with-icon="false"
                 @click="cancelResearchResultsFilling(true)"
-              />
+              /> -->
               <div class="researche-name">{{ research.name }}</div>
-              <Button text="График" :with-icon="false" button-class="chart-button" :color-swap="true" @click="toggleChart" />
+              <!-- <Button text="График" :with-icon="false" button-class="chart-button" :color-swap="true" @click="toggleChart" /> -->
             </div>
             <div v-else class="line-item">
-              <InfoItem
+              <!-- <InfoItem
                 margin="0"
                 :with-open-window="false"
                 :with-icon="false"
@@ -55,7 +55,7 @@
                 <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
                   <Button text="xlsx" :with-icon="false" background-hover="#DFF2F8" ; button-class="button-download"></Button>
                 </GridContainer>
-              </InfoItem>
+              </InfoItem> -->
             </div>
           </template>
 
@@ -69,8 +69,8 @@
           </template>
         </ResearcheContainer>
       </div>
-    </template>
-  </RightTabsContainer>
+    <!-- </template>
+  </RightTabsContainer> -->
   <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
   <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
   <Plus />
@@ -426,9 +426,10 @@ export default defineComponent({
 
 .researche-name {
   min-height: 40px;
-  width: 100%;
+  padding-right: 30px;
+  width: calc(100% - 30px);
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   color: #343e5c;
   font-size: 14px;

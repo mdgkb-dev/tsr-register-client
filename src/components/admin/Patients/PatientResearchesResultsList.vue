@@ -1,7 +1,56 @@
 <template>
-  <el-timeline style="margin-top: 20px">
-    <el-timeline-item v-for="result in patientResearch.researchResults" :key="result.id" placement="top" center>
-      <GeneralItem
+<RightSliderContainer>
+  <div v-for="result in patientResearch.researchResults" :key="result.id">
+    <CollapseItem :is-collaps="false" padding="0 8px" @click="$emit('select', result.id)" >
+      <template #inside-title>
+        <div class="flex-block" @click.prevent="() => undefined">
+          <div class="item-flex">
+            <div class="line-item-left">
+              <!-- <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" /> -->
+              <!-- <FioToggleForm :human="patient.human" /> -->
+            </div>
+
+            <div class="line-item-right">
+              <!-- <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" /> -->
+              <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="editMode" width="100px">
+                <SmallDatePicker
+                  v-model:model-value="result.date"
+                  placeholder="Выбрать"
+                  width="100px"
+                  height="34px"
+                  @change="updateHuman"
+                  @click.stop="() => undefined"
+                />
+                <!-- <DateInput v-model:model-value="patient.human.dateBirth" placeholder="Выбрать" @change="updateHuman(patient.human)" /> -->
+              </InfoItem>
+            </div>
+          </div>
+          <div class="item-flex">
+            <!-- <GridContainer
+              max-width="1920px"
+              custom-class="grid"
+              grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
+              margin="0"
+            > -->
+              <!-- <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px"> -->
+                <!-- <ToggleDocumentsForm :human="patient.human" /> -->
+              <!-- </GridContainer> -->
+
+              <!-- <AdminPatientsListRepresentatives :patient="patient" :edit-mode="editMode" /> -->
+              <!-- <AdminPatientsListMkb :patient="patient" :edit-mode="editMode" /> -->
+              <!-- <InfoItem title="создан" margin="0" :with-open-window="false" :with-hover="editMode">
+                {{ patient.getLastMeta() }}
+              </InfoItem> -->
+            <!-- </GridContainer> -->
+          </div>
+        </div>
+      </template>
+    </CollapseItem>
+  </div>
+  <!-- <el-timeline style="margin-top: 20px">
+    <el-timeline-item  placement="top" center> -->
+      <!-- <GeneralItem
+        v-for="result in patientResearch.researchResults" :key="result.id"
         :ready="`${result.fillingPercentage}%`"
         margin="0 10px 0 0"
         :scale="false"
@@ -22,10 +71,14 @@
             />
           </div>
         </template>
-      </GeneralItem>
-    </el-timeline-item>
-  </el-timeline>
-  <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
+      </GeneralItem> -->
+    <!-- </el-timeline-item>
+  </el-timeline> -->
+  <template #button>
+    <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
+  </template>
+</RightSliderContainer>
+  <!-- <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" /> -->
 </template>
 
 <script lang="ts">
@@ -39,6 +92,10 @@ import GeneralItem from '@/services/components/GeneralItem.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
+import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 
 export default defineComponent({
   name: 'PatientResearchesResultsList',
@@ -47,6 +104,10 @@ export default defineComponent({
     SmallDatePicker,
     GeneralItem,
     Button,
+    RightSliderContainer,
+    GridContainer,
+    CollapseItem,
+    InfoItem,
   },
   props: {
     patientResearch: {
@@ -81,6 +142,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.line-item-right {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: auto;
+  padding: 0;
+}
 
 .xlsx-button {
   width: auto;
@@ -230,12 +299,6 @@ export default defineComponent({
   width: 106px;
 }
 
-.icon-plus {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-}
-
 .body {
   width: 100%;
   height: 100%;
@@ -273,11 +336,6 @@ export default defineComponent({
   margin: 0 10px;
 }
 
-:deep(.icon-plus) {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-}
 
 .patient-research {
   position: relative;
