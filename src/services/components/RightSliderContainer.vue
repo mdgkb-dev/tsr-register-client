@@ -77,7 +77,7 @@ export default defineComponent({
   top: 10px;
   right: 0px;
   background: #f5f5f5;
-  z-index: 2;
+  z-index: 3;
   height: calc(100% - 80px);
   border: $dark-border;
   border-top-left-radius: 5px;

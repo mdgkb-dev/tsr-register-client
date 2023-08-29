@@ -66,12 +66,13 @@
             <template v-else>
               <PatientResearchesList @select="selectResearch" />
             </template>
+            <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
           </template>
         </ResearcheContainer>
       </div>
     <!-- </template>
   </RightTabsContainer> -->
-  <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
+  
   <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
   <Plus />
   <Xlsx />
@@ -420,7 +421,7 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;
+  height: 50px;
   margin: 0 10px;
 }
 
@@ -479,22 +480,22 @@ export default defineComponent({
   z-index: 20;
 }
 
-.research-info {
-  position: fixed;
-  top: 49%;
-  left: 50%;
-  width: calc(99% - 22px);
-  height: calc(98% - 22px);
-  transform: translate(-50%, -50%);
-  background: #dff2f8;
-  border: $light-pink-border;
-  border-radius: $normal-border-radius;
-  margin: 10px 10px 0 0;
-  padding: 10px 10px 10px 10px;
-  overflow: hidden;
-  overflow-y: auto;
-  z-index: 21;
-}
+// .research-info {
+//   position: fixed;
+//   top: 49%;
+//   left: 50%;
+//   width: calc(99% - 22px);
+//   height: calc(98% - 22px);
+//   transform: translate(-50%, -50%);
+//   background: #dff2f8;
+//   border: $light-pink-border;
+//   border-radius: $normal-border-radius;
+//   margin: 10px 10px 0 0;
+//   padding: 10px 10px 10px 10px;
+//   overflow: hidden;
+//   overflow-y: auto;
+//   z-index: 21;
+// }
 
 .tools {
   display: flex;

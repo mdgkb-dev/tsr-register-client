@@ -1,13 +1,13 @@
 <template>
-  <div class="blur"></div>
+  <!-- <div class="blur"></div> -->
   <div class="research-info">
-    <div class="patient-name">{{ patient.human.getFullName() }}</div>
+    <!-- <div class="patient-name">{{ patient.human.getFullName() }}</div> -->
     <div class="header-container">
-      <div class="researche-title-name">{{ research.name }}</div>
-      <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div>
-      <div v-if="research.withScores" class="researche-counter">
+      <!-- <div class="researche-title-name">{{ research.name }}</div> -->
+      <!-- <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div> -->
+      <!-- <div v-if="research.withScores" class="researche-counter">
         Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
-      </div>
+      </div> -->
     </div>
     <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
       <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
@@ -16,22 +16,21 @@
     </div>
     <div class="tools">
       <div class="control-buttons">
-        <div class="left">
-          <Button text="Назад" button-class="back-button" :color-swap="true" :with-icon="false" @click="$emit('cancel', false)"></Button>
-        </div>
-        <div class="right">
-          <div class="flex-line2">
-            <div class="search">
-              <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
-            </div>
+        <!-- <div class="left"> -->
+          <div class="search">
+            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
           </div>
-        </div>
+          <div class="flex-line">
+            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
+            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+          </div>
+          <Button button-class="save-button" text="Сохранить" @click="$emit('save', researchResult)" />
       </div>
-      <div class="flex-line3">
+      <!-- <div class="flex-line3">
         <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />
         <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-      </div>
-      <Button
+      </div> -->
+      <!-- <Button
         text="Сохранить"
         :color-swap="false"
         width="100%"
@@ -43,7 +42,7 @@
         background-hover="#C7ECEA"
         :with-icon="false"
         @click="$emit('save', researchResult)"
-      ></Button>
+      ></Button> -->
     </div>
     <div class="scroll-block">
       <CollapseContainer>
@@ -149,6 +148,25 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.plus-button {
+  width: calc(100% - 20px);
+  border-radius: 5px;
+  color: #00bea5;
+  background: #c1efeb;
+  height: 38px;
+  margin: 0 10px;
+}
+
+.save-button {
+  width: 120px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 10px 0 0;
+  font-size: 14px;
+}
 
 .xlsx-button {
   width: auto;
@@ -375,20 +393,20 @@ export default defineComponent({
 }
 
 .research-info {
-  position: fixed;
-  top: 49%;
-  left: 50%;
-  width: calc(99% - 22px);
-  height: calc(98% - 22px);
-  transform: translate(-50%, -50%);
+  // position: fixed;
+  // top: 49%;
+  // left: 50%;
+  width: calc(100% - 42px);
+  height: calc(100% - 22px);
+  // transform: translate(-50%, -50%);
   background: #dff2f8;
-  border: $light-pink-border;
-  border-radius: $normal-border-radius;
-  margin: 10px 10px 0 0;
-  padding: 10px 10px 10px 10px;
+  // border: $light-pink-border;
+  // border-radius: $normal-border-radius;
+  margin: 0px 0px 10px 0;
+  padding: 0px 30px 10px 10px;
   overflow: hidden;
   overflow-y: auto;
-  z-index: 21;
+  // z-index: 21;
 }
 
 .tools {
@@ -397,14 +415,14 @@ export default defineComponent({
   justify-content: left;
   align-items: center;
   height: auto;
-  padding: 10px 0;
+  padding: 0;
   width: calc(100% - 2px);
   background: #dff2f8;
 }
 
 .scroll-block {
   width: 100%;
-  height: calc(100% - 220px);
+  height: calc(100% - 60px);
   overflow: hidden;
   overflow-y: auto;
 }
@@ -477,18 +495,18 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .left {
-  min-width: 300px;
+  width: 300px;
   display: flex;
   justify-content: left;
   align-items: center;
 }
 
 .right {
-  max-width: 300px;
+  max-width: 280px;
   display: flex;
   justify-content: right;
   align-items: center;
@@ -524,10 +542,11 @@ export default defineComponent({
 }
 
 .flex-line {
+  height: 42px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 190px;
 }
 
 .flex-line2 {
@@ -541,8 +560,8 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   align-items: center;
-  width: 100%;
-  height: 60px;
+  width: 190px;
+  height: 40px;
 }
 
 .flex-line4 {
@@ -576,28 +595,9 @@ export default defineComponent({
   padding-left: 20px;
 }
 
-@media screen and (max-width: 768px) {
-  .tabs-item {
-    width: 40px;
-    height: 100px;
-  }
-
-  .tabs-item:hover {
-    width: 44px;
-  }
-
-  .tabs-item-active {
-    position: relative;
-    width: 45px;
-    height: 100px;
-  }
-
-  .tabs-item-active:hover {
-    width: 45px;
-  }
-
-  .tab-item-text {
-    transform: rotate(90deg);
+@media screen and (max-width: 630px) {
+  .control-buttons {
+    display: block;
   }
 }
 </style>

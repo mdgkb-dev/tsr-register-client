@@ -1,14 +1,14 @@
 <template>
 <RightSliderContainer>
-  <div v-for="result in patientResearch.researchResults" :key="result.id">
-    <CollapseItem :is-collaps="false" padding="0 8px" @click="$emit('select', result.id)" >
+  <div v-for="result in patientResearch.researchResults" :key="result.id" @click="$emit('select', result.id)">
+    <CollapseItem :is-collaps="false" padding="0 8px" >
       <template #inside-title>
         <div @click.prevent="() => undefined">
           <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="editMode" width="100px">
             <SmallDatePicker
               v-model:model-value="result.date"
               placeholder="Выбрать"
-              width="100px"
+              width="85px"
               height="34px"
               @change="updateHuman"
               @click.stop="() => undefined"
