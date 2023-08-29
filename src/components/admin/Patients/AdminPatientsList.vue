@@ -56,14 +56,14 @@ import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
 import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import DateInput from '@/services/components/DateInput.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import TokenService from '@/services/Token';
@@ -101,7 +101,7 @@ export default defineComponent({
     };
 
     const load = async () => {
-      await Promise.all([loadPatients()]);
+      await Promise.all([loadPatients(), loadQuestions()]);
     };
 
     const addPatient = async (): Promise<void> => {
