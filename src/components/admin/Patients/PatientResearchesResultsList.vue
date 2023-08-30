@@ -1,44 +1,44 @@
 <template>
-<RightSliderContainer>
-  <div v-for="result in patientResearch.researchResults" :key="result.id" @click="$emit('select', result.id)">
-    <CollapseItem :is-collaps="false" padding="0 8px" >
-      <template #inside-title>
-        <div @click.prevent="() => undefined">
-          <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="editMode" width="100px">
-            <SmallDatePicker
-              v-model:model-value="result.date"
-              placeholder="Выбрать"
-              width="85px"
-              height="34px"
-              @change="updateHuman"
-              @click.stop="() => undefined"
-            />
-          </InfoItem>
-        </div>
-      </template>
-    </CollapseItem>
-  </div>
-  <template #button>
-    <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
-  </template>
-</RightSliderContainer>
+  <RightSliderContainer :toggle="toggle">
+    <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
+      <CollapseItem :is-collaps="false" padding="0 8px">
+        <template #inside-title>
+          <div @click.prevent="() => undefined">
+            <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
+              <SmallDatePicker
+                v-model:model-value="result.date"
+                placeholder="Выбрать"
+                width="85px"
+                height="34px"
+                @change="update(result)"
+                @click.stop="() => undefined"
+              />
+            </InfoItem>
+          </div>
+        </template>
+      </CollapseItem>
+    </div>
+    <template #button>
+      <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
+    </template>
+  </RightSliderContainer>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 
-import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
+import ResearchResult from '@/classes/ResearchResult';
 import Button from '@/components/Base/Button.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import GeneralItem from '@/services/components/GeneralItem.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
+import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
-import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 
 export default defineComponent({
   name: 'PatientResearchesResultsList',
@@ -63,20 +63,26 @@ export default defineComponent({
     },
   },
   emits: ['select', 'update'],
-  setup(props) {
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const updateHuman = async (): Promise<void> => {
-      await Provider.store.dispatch('humans/update', patient.value.human);
+  setup(props, { emit }) {
+    const toggle = ref(false);
+    const update = async (item: ResearchResult): Promise<void> => {
+      await Provider.store.dispatch('researchesResults/update', item);
     };
 
     const addResult = async (): Promise<void> => {
       const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);
     };
+    const selectResult = async (id: string): Promise<void> => {
+      emit('select', id);
+      toggle.value = !toggle.value;
+    };
 
     return {
+      selectResult,
+      toggle,
       addResult,
-      updateHuman,
+      update,
     };
   },
 });
@@ -100,5 +106,4 @@ export default defineComponent({
   height: 60px;
   margin: 0 10px;
 }
-
 </style>

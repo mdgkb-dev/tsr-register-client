@@ -1,7 +1,8 @@
 <template>
-  <div class="right-slider"
+  <div
+    class="right-slider"
     :style="{
-      marginRight: isToggle ? `calc(${sliderOffWidth} - ${sliderOnWidth})`  : `0`,
+      marginRight: isToggle ? `calc(${sliderOffWidth} - ${sliderOnWidth})` : `0`,
       width: sliderOnWidth,
     }"
   >
@@ -19,16 +20,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, ref } from 'vue';
+import { watch } from '@vue/runtime-core';
+import { defineComponent, PropType, ref } from 'vue';
 
 import StringItem from '@/services/components/StringItem.vue';
-import Button from '@/components/Base/Button.vue'
 
 export default defineComponent({
   name: 'RightSliderContainer',
   components: {
     StringItem,
-    Button,
   },
   props: {
     sliderOffWidth: {
@@ -46,11 +46,21 @@ export default defineComponent({
       required: false,
       default: 'inherit',
     },
+    toggle: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
   },
   emits: ['toggle'],
   setup(props, { emit }) {
-    const mounted = ref(false);
     const isToggle = ref(false);
+    watch(
+      () => props.toggle,
+      () => {
+        isToggle.value = !isToggle.value;
+      }
+    );
+
     const mobileWindow = ref(window.matchMedia('(max-width: 768px)').matches);
     const toggleSlider = (toggle: boolean) => {
       isToggle.value = !isToggle.value;
@@ -94,7 +104,7 @@ export default defineComponent({
   width: 35px;
   height: 100%;
   writing-mode: vertical-lr;
-  background: #C1EFEB;
+  background: #c1efeb;
   cursor: pointer;
   border-right: $normal-darker-border;
 }
@@ -117,5 +127,4 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
 }
-
 </style>
