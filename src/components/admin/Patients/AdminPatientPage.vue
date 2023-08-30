@@ -2,13 +2,13 @@
   <MenuContainer v-if="mounted" min-menu-item-width="160px" background="#DFF2F8" height="100%">
     <template #menu>
       <div v-for="menu in menus" :key="menu.id">
-        <div :class="{ 'selected-tab': activeMenu.id === menu.id, 'tab': activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
+        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
     </template>
     <template #body>
-      <component v-bind="menusProperties" :is="activeMenu.component" />
+      <component v-bind="menusProperties" :is="activeMenu.component" :key="componentKey" />
     </template>
   </MenuContainer>
 </template>
@@ -61,6 +61,7 @@ export default defineComponent({
     PatientAnamneses,
   },
   setup() {
+    const componentKey = ref(0);
     const menus: CustomSection[] = [
       CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
       CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
@@ -105,6 +106,7 @@ export default defineComponent({
       }
       activeMenu.value = section;
       Provider.router.replace({ query: { menu: section.id as string } });
+      componentKey.value += 1;
     };
 
     const load = async () => {
@@ -137,6 +139,7 @@ export default defineComponent({
     Hooks.onBeforeRouteLeave();
 
     return {
+      componentKey,
       changeMenu,
       menusProperties,
       activeMenu,

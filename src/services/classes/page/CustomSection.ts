@@ -6,6 +6,7 @@ export default class CustomSection {
   component = '';
   order?: number;
   active = false;
+  key = 0;
 
   constructor(i?: CustomSection) {
     ClassHelper.BuildClass(this, i);
