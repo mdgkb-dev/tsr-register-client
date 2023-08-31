@@ -16,6 +16,9 @@ const getters: GetterTree<State, RootState> = {
   setHuman(state, human: Human) {
     state.item.human = cloneDeep(human);
   },
+  existsInDomain(state): boolean {
+    return state.existsInDomain;
+  },
 };
 
 export default getters;

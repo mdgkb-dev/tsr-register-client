@@ -7,16 +7,20 @@
     <template #open-inside-content>
       <GridContainer max-width="100%" grid-gap="7px" margin="0 0 10px 0" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
         <div v-for="diagnosis in patient.patientDiagnosis" :key="diagnosis.id">
-          <InfoItem
-            margin="0"
-            :with-open-window="false"
-            height="32px"
-            icon="del"
-            color-selected="#E46862"
-            @click="removeMkbItem(diagnosis.id, patient)"
-          >
-            <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="11px" />
+          <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="selectPatientDiagnosis(diagnosis.id)">
+            <StringItem :string="diagnosis.mkbItem.getCode()" font-size="11px" />
           </InfoItem>
+          <!--          -->
+          <!--          <InfoItem-->
+          <!--            margin="0"-->
+          <!--            :with-open-window="false"-->
+          <!--            height="32px"-->
+          <!--            icon="del"-->
+          <!--            color-selected="#E46862"-->
+          <!--            @click="removeMkbItem(diagnosis.id, patient)"-->
+          <!--          >-->
+          <!--            <StringItem :string="diagnosis.mkbItem.getCode() + ',&nbsp'" font-size="11px" />-->
+          <!--          </InfoItem>-->
         </div>
       </GridContainer>
 
@@ -29,21 +33,26 @@
       />
     </template>
   </InfoItem>
+  <ModalWindow :show="showModal" title="Диагноз" @close="showModal = false">
+    123
+    <PatientDiagnosisForm />
+  </ModalWindow>
 </template>
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, PropType } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
-import GridContainer from '@/services/components/GridContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
+import PatientDiagnosisForm from '@/components/admin/Patients/PatientDiagnosis/PatientDiagnosisForm.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import ClassHelper from '@/services/ClassHelper';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -53,6 +62,8 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
+    PatientDiagnosisForm,
+    ModalWindow,
   },
   props: {
     patient: {
@@ -64,8 +75,9 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const mkbItem: ComputedRef<MkbItem> = computed<MkbItem>(() => Provider.store.getters['mkbItems/item']);
+    const showModal: Ref<boolean> = ref(false);
     const addMkbItem = async (event: ISearchObject, patient: Patient): Promise<void> => {
       const patientDiagnosis = patient.getMkbItems().find((pd: PatientDiagnosis) => pd.mkbItemId === event.value);
       if (patientDiagnosis) {
@@ -78,13 +90,21 @@ export default defineComponent({
       await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
     };
 
-    const removeMkbItem = async (id: string, patient: Patient): Promise<void> => {
-      ClassHelper.RemoveFromClassById(id, patient.patientDiagnosis, []);
-      return await Provider.store.dispatch('patientDiagnosis/remove', id);
+    // const removeMkbItem = async (id: string, patient: Patient): Promise<void> => {
+    //   ClassHelper.RemoveFromClassById(id, patient.patientDiagnosis, []);
+    //   return await Provider.store.dispatch('patientDiagnosis/remove', id);
+    // };
+
+    const selectPatientDiagnosis = async (patientDiagnosisId: string): Promise<void> => {
+      const findDiagnosis = props.patient.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
+      Provider.store.commit('patientDiagnosis/set', findDiagnosis);
+      await Provider.store.dispatch('patients/get', props.patient.id);
+      showModal.value = !showModal.value;
     };
 
     return {
-      removeMkbItem,
+      showModal,
+      selectPatientDiagnosis,
       addMkbItem,
       ...Provider.getAdminLib(),
     };

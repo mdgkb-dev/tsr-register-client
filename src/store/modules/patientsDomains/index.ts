@@ -9,20 +9,17 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
-export interface State extends IBasicState<Patient> {
-  existsInDomain: boolean;
-}
+export type State = IBasicState<Patient>;
 
 export const getDefaultState = (): State => {
   return {
     ...getBaseDefaultState(Patient),
-    existsInDomain: false,
   };
 };
 
 const state = getDefaultState();
 const namespaced = true;
-export const patients: Module<State, RootState> = {
+export const patientsDomains: Module<State, RootState> = {
   namespaced,
   state,
   getters,

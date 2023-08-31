@@ -24,7 +24,7 @@ import DrugForm from '@/components/admin/Patients/DrugForm.vue';
 import InsuranceForm from '@/components/admin/Patients/InsuranceForm.vue';
 import PatientAnamneses from '@/components/admin/Patients/PatientAnamneses.vue';
 import PatientCommissions from '@/components/admin/Patients/PatientCommissions.vue';
-import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis.vue';
+import PatientDiagnosis from '@/components/admin/Patients/PatientDiagnosis/PatientDiagnosis.vue';
 import PatientDocuments from '@/components/admin/Patients/PatientDocuments.vue';
 import PatientHistories from '@/components/admin/Patients/PatientHistories.vue';
 import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
