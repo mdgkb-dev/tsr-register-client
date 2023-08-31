@@ -12,10 +12,10 @@
           padding="0"
           width="100%"
         >
-          <el-input v-model="value.valueString" size="mini" />
+          <el-input v-model="value.valueString"  />
         </InfoItem>
       </div>
-      <Button text="Проверить наличие СНИЛС в системе" @click="toNameStep" />
+      <Button button-class="save-button" text="Проверить наличие СНИЛС в системе" @click="toNameStep" />
     </div>
     <div v-else>
       <InfoItem
@@ -61,7 +61,7 @@
           <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
         </el-form-item>
       </InfoItem>
-      <Button text="Создать пациента" @click="createPatient" />
+      <Button button-class="save-button" text="Создать пациента" @click="createPatient" />
     </div>
   </el-form>
 </template>
@@ -163,4 +163,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.save-button {
+  width: 300px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 auto;
+  font-size: 14px;
+}
 </style>
