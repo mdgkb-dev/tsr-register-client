@@ -427,8 +427,7 @@ export default defineComponent({
 
 .researche-name {
   min-height: 40px;
-  padding-right: 30px;
-  width: calc(100% - 30px);
+  width: 100%;
   display: flex;
   justify-content: left;
   align-items: center;

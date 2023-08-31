@@ -393,11 +393,11 @@ export default defineComponent({
 }
 
 .research-info {
-  width: calc(100% - 42px);
+  width: calc(100% - 32px);
   height: calc(100% - 22px);
   background: #dff2f8;
   margin: 0px 0px 10px 0;
-  padding: 0px 30px 10px 10px;
+  padding: 0px 10px 10px 10px;
   overflow: hidden;
   overflow-y: auto;
 }
