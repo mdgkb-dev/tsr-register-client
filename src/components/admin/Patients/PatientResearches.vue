@@ -38,7 +38,7 @@
               <div class="researche-name">{{ research.name }}</div>
               <!-- <Button text="График" :with-icon="false" button-class="chart-button" :color-swap="true" @click="toggleChart" /> -->
             </div>
-            <div v-else class="line-item">
+            <!-- <div v-else class="line-item"> -->
               <!-- <InfoItem
                 margin="0"
                 :with-open-window="false"
@@ -56,7 +56,7 @@
                   <Button text="xlsx" :with-icon="false" background-hover="#DFF2F8" ; button-class="button-download"></Button>
                 </GridContainer>
               </InfoItem> -->
-            </div>
+            <!-- </div> -->
           </template>
 
           <template #body>
