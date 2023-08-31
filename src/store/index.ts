@@ -35,6 +35,7 @@ import { pagination } from '@/store/modules/pagination';
 import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
 import { patientHistories } from '@/store/modules/patientHistories';
 import { patients } from '@/store/modules/patients';
+import { patientsDomains } from '@/store/modules/patientsDomains';
 import { patientsRegisters } from '@/store/modules/patientsRegisters';
 import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
 import { patientsResearches } from '@/store/modules/patientsResearches';
@@ -116,6 +117,7 @@ const store: StoreOptions<RootState> = {
     drugDozes,
     fileInfos,
     menus,
+    patientsDomains,
   },
 };
 

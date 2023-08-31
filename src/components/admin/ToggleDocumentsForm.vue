@@ -1,12 +1,8 @@
 <template>
   <InfoItem title="документы" margin="0 0 0 0px" close-window-overflow="hidden" :with-hover="true" :with-open-window="true">
-    <div v-for="(document, i) in human.documents" :key="document.id">
-      <StringItem
-        :string="document.documentType.getTagName() + (i === human.documents.length - 1 ? '' : ',&nbsp')"
-        font-size="14px"
-        width="100%"
-      />
-    </div>
+    <!--    <div v-for="(document, i) in human.documents" :key="document.id">-->
+    <StringItem :string="documentsShortList" font-size="14px" width="100%" />
+    <!--    </div>-->
 
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
@@ -37,15 +33,16 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
+import Document from '@/classes/Document';
 import DocumentType from '@/classes/DocumentType';
 import Human from '@/classes/Human';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import ClassHelper from '@/services/ClassHelper';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -69,7 +66,19 @@ export default defineComponent({
     const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
     const documentsIsToggle: Ref<boolean> = ref(false);
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
-
+    const documentsShortList = computed(() => {
+      let list = '';
+      props.human.documents.forEach((d: Document, i: number) => {
+        list += d.documentType.name;
+        if (i < props.human.documents.length - 1) {
+          list += ', ';
+        }
+      });
+      if (list.length > 30) {
+        return list.slice(0, 30) + '...';
+      }
+      return list;
+    });
     const removeDocument = async (id?: string) => {
       ClassHelper.RemoveFromClassById(id, props.human.documents);
       showDocumentModal.value = false;
@@ -97,6 +106,7 @@ export default defineComponent({
     };
 
     return {
+      documentsShortList,
       toggleDocuments,
       addDocument,
       documentTypes,

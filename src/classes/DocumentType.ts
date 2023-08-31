@@ -6,14 +6,17 @@ export default class DocumentType {
   name = '';
   @ClassHelper.GetClassConstructor(DocumentTypeField)
   documentTypeFields: DocumentTypeField[] = [];
-  documentTypeFieldsForDelete: string[] = [];
-
+  required = false;
+  code = '';
   constructor(i?: DocumentType) {
     ClassHelper.BuildClass(this, i);
   }
 
   getTagName(): string {
-    if (this.name.length > 10) return this.name.replace(/(?<=.{9}).+/g, '...');
     return this.name;
+  }
+
+  getFieldByCode(code: string): DocumentTypeField | undefined {
+    return this.documentTypeFields.find((d: DocumentTypeField) => d.code === code);
   }
 }

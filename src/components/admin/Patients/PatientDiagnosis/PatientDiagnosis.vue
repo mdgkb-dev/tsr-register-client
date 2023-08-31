@@ -21,7 +21,7 @@
       <div
         v-for="patientDiagnosis in patient.patientDiagnosis"
         :key="patientDiagnosis.id"
-        :class="{ 'tabs-item-active': selectedPatientDiagnosis && selectedPatientDiagnosis.id === patientDiagnosis.id }"
+        :class="{ 'tabs-item-active': selectedPatientDiagnosisId === patientDiagnosis.id }"
         class="tabs-item"
         @click="selectPatientDiagnosis(patientDiagnosis.id)"
       >
@@ -31,35 +31,8 @@
       </div>
     </template>
     <template #body>
-      <div v-if="mounted" class="body">
-        <div v-if="selectedPatientDiagnosis">
-          <ResearcheContainer background="#DFF2F8">
-            <template #header>
-              <div class="researche-name">{{ selectedPatientDiagnosis.mkbItem.getFullName() }}</div>
-              <div class="diagnosis-doctorName">
-                <div class="doctor-title">Диагноз поставил врач:</div>
-                <el-input
-                  v-model="selectedPatientDiagnosis.doctorName"
-                  placeholder="ФИО врача, поставившего диагноз"
-                  @blur="updatePatientDiagnosis(selectedPatientDiagnosis)"
-                ></el-input>
-              </div>
-            </template>
-            <template #body>
-              <div v-for="research in researches" :key="research.id">
-                <div v-for="question in research.questions" :key="question.id">
-                  <div>{{ question.name }}</div>
-                  <QuestionComponent
-                    :question="question"
-                    :research-result="patient.getResearchResult(research.id)"
-                    @fill="saveResearchResult(patient.getResearchResult(research.id))"
-                  />
-                </div>
-              </div>
-              <AnamnesesList :mkb-item="selectedPatientDiagnosis.mkbItem" :patient="patient" />
-            </template>
-          </ResearcheContainer>
-        </div>
+      <div class="body">
+        <PatientDiagnosisForm />
       </div>
     </template>
   </RightTabsContainer>
@@ -86,72 +59,38 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
-import PatientResearch from '@/classes/PatientResearch';
-import Research from '@/classes/Research';
-import ResearchResult from '@/classes/ResearchResult';
-import AnamnesesList from '@/components/admin/Patients/Anamnesis/AnamnesesList.vue';
-import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
+import PatientDiagnosisForm from '@/components/admin/Patients/PatientDiagnosis/PatientDiagnosisForm.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
-import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'PaCollapseItemtientDiagnosis',
+  name: 'PatientDiagnosis',
   components: {
-    AnamnesesList,
     RemoteSearch,
     RightTabsContainer,
-    ResearcheContainer,
-    QuestionComponent,
+    PatientDiagnosisForm,
   },
 
   setup() {
-    const mounted = ref(false);
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const researches: ComputedRef<Research[]> = computed(() => Provider.store.getters['researches/items']);
-    const selectedPatientDiagnosis: Ref<PatientDiagnosis | undefined> = ref(
-      patient.value.patientDiagnosis.length > 0 ? patient.value.patientDiagnosis[0] : undefined
-    );
+    const selectedPatientDiagnosisId: Ref<string> = ref('');
     const toggle = async (toggle: boolean) => {
       isToggle.value = toggle;
     };
 
     let expandRowKeys: Ref<(string | undefined)[]> = ref([]);
     const searchFormRef = ref();
-    // const { formatDate } = useDateFormat();
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
     const mkbItem: ComputedRef<MkbItem> = computed<MkbItem>(() => Provider.store.getters['mkbItems/item']);
 
-    onBeforeMount(async () => {
-      const fq = new FilterQuery();
-      fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
-      await Provider.store.dispatch('researches/getAll', fq);
-
-      for (const r of researches.value) {
-        await createPatientResearch(r);
-      }
-      mounted.value = true;
+    onBeforeMount(() => {
+      const diagnosis = patient.value.getMkbItems();
+      selectPatientDiagnosis(diagnosis[diagnosis.length - 1].id as string);
     });
-
-    const createPatientResearch = async (research: Research) => {
-      console.log(research);
-      if (!patient.value.getPatientResearch(research.id)) {
-        const item = PatientResearch.Create(patient.value.id, research);
-        patient.value.patientsResearches.push(item);
-        await Provider.store.dispatch('patientsResearches/create', item);
-
-        const researchResult = ResearchResult.Create(research, item.id);
-        item.researchResults.push(researchResult);
-        await Provider.store.dispatch('researchesResults/createWithoutReset', researchResult);
-        console.log(patient);
-      }
-    };
 
     const addMkbItem = async (event: ISearchObject): Promise<void> => {
       await Provider.store.dispatch('mkbItems/get', event.value);
@@ -171,21 +110,16 @@ export default defineComponent({
     };
 
     const selectPatientDiagnosis = (patientDiagnosisId: string): void => {
-      selectedPatientDiagnosis.value = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
-    };
-
-    const saveResearchResult = async (result: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/update', result);
+      const findDiagnosis = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
+      selectedPatientDiagnosisId.value = findDiagnosis?.id ?? '';
+      Provider.store.commit('patientDiagnosis/set', findDiagnosis);
     };
 
     return {
-      saveResearchResult,
-      researches,
       isToggle,
       selectPatientDiagnosis,
-      selectedPatientDiagnosis,
+      selectedPatientDiagnosisId,
       toggle,
-      mounted,
       updatePatientDiagnosis,
       removePatientDiagnosis,
       searchFormRef,

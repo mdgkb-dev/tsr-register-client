@@ -80,7 +80,6 @@ export default defineComponent({
     };
 
     onBeforeMount(() => {
-      console.log(props.researchResult);
       answer.value = props.researchResult.getOrCreateAnswer(props.question);
       selectVariant(props.question.answerVariants.find((a: AnswerVariant) => a.id === answer.value?.answerVariantId));
     });

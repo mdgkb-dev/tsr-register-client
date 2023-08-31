@@ -126,7 +126,7 @@ export default class Human {
     this.patronymic = item;
   }
 
-  addDocument(docType: DocumentType): Document | undefined {
+  addDocument(docType: DocumentType): Document {
     const doc = Document.CreateFromType(docType, this.id);
     doc.id = uuidv4();
     this.documents.push(doc);
@@ -154,5 +154,14 @@ export default class Human {
 
   updateValidationRule(key: string): void {
     this.validationRules[key as keyof typeof this.validationRules][0].required = true;
+  }
+
+  getOrCreateDocument(documentType: DocumentType): Document {
+    const foundDoc = this.documents.find((d: Document) => d.documentTypeId === documentType.id);
+    if (foundDoc) {
+      return foundDoc;
+    }
+    const newDoc = this.addDocument(documentType);
+    return newDoc;
   }
 }

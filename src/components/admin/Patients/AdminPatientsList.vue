@@ -45,6 +45,9 @@
       </div>
     </div>
   </AdminListWrapper>
+  <ModalWindow :show="showAddModal" title="Добавить пациента" @close="showAddModal = false">
+    <CreatePatientForm @add="showAddModal = false" />
+  </ModalWindow>
 </template>
 
 <script lang="ts">
@@ -56,9 +59,11 @@ import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
 import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
+import CreatePatientForm from '@/components/admin/Patients/CreatePatientForm.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import DateInput from '@/services/components/DateInput.vue';
@@ -66,12 +71,12 @@ import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
-import TokenService from '@/services/Token';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
   name: 'AdminPatientsList',
   components: {
+    CreatePatientForm,
     AdminPatientsListFilters,
     AdminListWrapper,
     CollapseItem,
@@ -83,8 +88,10 @@ export default defineComponent({
     AdminPatientsListMkb,
     DateInput,
     ToggleDocumentsForm,
+    ModalWindow,
   },
   setup() {
+    const showAddModal: Ref<boolean> = ref(false);
     const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
     const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
 
@@ -105,9 +112,7 @@ export default defineComponent({
     };
 
     const addPatient = async (): Promise<void> => {
-      const patient = Patient.Create(TokenService.getUser());
-      await Provider.store.dispatch('patients/createWithoutReset', patient);
-      Provider.store.commit('patients/unshiftToAll', patient);
+      showAddModal.value = !showAddModal.value;
     };
 
     Hooks.onBeforeMount(load, {
@@ -138,6 +143,7 @@ export default defineComponent({
     };
 
     return {
+      showAddModal,
       updateIsMale,
       updateHuman,
       count,

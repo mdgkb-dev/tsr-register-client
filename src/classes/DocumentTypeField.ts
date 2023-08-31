@@ -7,7 +7,7 @@ export default class DocumentTypeField {
   order = 0;
   valueType: ValueType = new ValueType();
   valueTypeId?: string;
-
+  code = '';
   constructor(i?: DocumentTypeField) {
     ClassHelper.BuildClass(this, i);
   }
