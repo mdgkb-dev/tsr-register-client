@@ -1,5 +1,8 @@
 <template>
   <RightSliderContainer :toggle="toggle">
+    <template #header>
+      <Button button-class="save-button" text="Построить график" @click="addResult" />
+    </template>
     <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
       <CollapseItem :is-collaps="false" padding="0 8px">
         <template #inside-title>
@@ -19,7 +22,7 @@
       </CollapseItem>
     </div>
     <template #button>
-      <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="addResult" />
+      <Button button-class="plus-button" text="Добавить" @click="addResult" />
     </template>
   </RightSliderContainer>
 </template>
@@ -99,11 +102,22 @@ export default defineComponent({
 }
 
 .plus-button {
-  width: calc(100% - 20px);
+  width: calc(100% - 25px);
   border-radius: 5px;
   color: #00bea5;
   background: #c1efeb;
-  height: 60px;
-  margin: 0 10px;
+  height: 42px;
+  font-size: 14px;
+  margin: 0 25px 0 0px;
+}
+
+.save-button {
+  width: calc(100% - 25px);
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 0 25px 0 0px;
+  font-size: 14px;
 }
 </style>
