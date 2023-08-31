@@ -97,7 +97,7 @@ export default defineComponent({
   right: 0px;
   background: #f5f5f5;
   z-index: 3;
-  height: calc(100% - 80px);
+  height: 80vh;
   border: $dark-border;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -157,5 +157,17 @@ export default defineComponent({
   align-items: center;
   margin-left: -1px;
   background: #f5f5f5;
+}
+
+@media screen and (max-width: 820px) {
+  .right-slider {
+    height: 55vh;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .right-slider {
+    height: 40vh;
+  }
 }
 </style>
