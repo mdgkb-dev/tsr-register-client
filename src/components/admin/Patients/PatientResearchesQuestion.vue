@@ -393,20 +393,13 @@ export default defineComponent({
 }
 
 .research-info {
-  // position: fixed;
-  // top: 49%;
-  // left: 50%;
   width: calc(100% - 42px);
   height: calc(100% - 22px);
-  // transform: translate(-50%, -50%);
   background: #dff2f8;
-  // border: $light-pink-border;
-  // border-radius: $normal-border-radius;
   margin: 0px 0px 10px 0;
   padding: 0px 30px 10px 10px;
   overflow: hidden;
   overflow-y: auto;
-  // z-index: 21;
 }
 
 .tools {
@@ -598,6 +591,15 @@ export default defineComponent({
 @media screen and (max-width: 630px) {
   .control-buttons {
     display: block;
+  }
+  .research-info {
+    width: calc(100% - 22px);
+    height: calc(100% - 22px);
+    background: #dff2f8;
+    margin: 0px 0px 10px 0;
+    padding: 0px 10px 10px 10px;
+    overflow: hidden;
+    overflow-y: auto;
   }
 }
 </style>
