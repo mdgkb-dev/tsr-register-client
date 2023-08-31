@@ -93,11 +93,11 @@ export default defineComponent({
 .right-slider {
   position: absolute;
   display: flex;
-  top: 10px;
+  top: 60px;
   right: 0px;
   background: #f5f5f5;
   z-index: 3;
-  height: 80vh;
+  height: 73vh;
   border: $dark-border;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -161,13 +161,19 @@ export default defineComponent({
 
 @media screen and (max-width: 820px) {
   .right-slider {
+    height: 65vh;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .right-slider {
     height: 55vh;
   }
 }
 
-@media screen and (max-width: 340px) {
+@media screen and (max-width: 339px) {
   .right-slider {
-    height: 40vh;
+    height: 35vh;
   }
 }
 </style>
