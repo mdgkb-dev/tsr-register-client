@@ -7,11 +7,16 @@
     }"
   >
     <div class="green-line" @click="toggleSlider(!isToggle)">
-      <StringItem v-if="isToggle" string="Показать список исследований" font-size="14px" padding="0" color="#00bea5" />
-      <StringItem v-if="!isToggle" string="Скрыть список исследований" font-size="14px" padding="0" color="#00bea5" />
+      <StringItem v-if="isToggle" string="Показать список исследований" font-size="16px" padding="0" color="#343E5C" />
+      <StringItem v-if="!isToggle" string="Скрыть список исследований" font-size="16px" padding="0" color="#343E5C" />
     </div>
     <div class="right-slider-content">
-      <slot />
+      <div class="right-slider-content-header">
+        <slot name="header" />
+      </div>
+      <div class="right-slider-content-box">
+        <slot />
+      </div>
     </div>
     <div class="right-slider-button">
       <slot name="button" />
@@ -81,6 +86,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 
+* {
+  box-sizing: border-box;
+}
+
 .right-slider {
   position: absolute;
   display: flex;
@@ -88,7 +97,7 @@ export default defineComponent({
   right: 0px;
   background: #f5f5f5;
   z-index: 3;
-  height: calc(100% - 80px);
+  height: 80vh;
   border: $dark-border;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -105,26 +114,60 @@ export default defineComponent({
   height: 100%;
   writing-mode: vertical-lr;
   background: #c1efeb;
+  background: #f5f5f5;
   cursor: pointer;
   border-right: $normal-darker-border;
 }
 
 .right-slider-content {
-  margin: 10px 3px 60px 7px;
-  overflow: hidden;
-  overflow-y: auto;
   width: 100%;
   height: calc(100% - 90px);
+}
+
+.right-slider-content-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 62px;
+  border-bottom: $normal-darker-border;
+  margin-left: -1px;
+  background: #f5f5f5;
+}
+
+.right-slider-content-box {
+  width: 100%;
+  height: calc(100% - 33px);
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 0px 3px 10px 7px;
+  border-bottom: $normal-darker-border;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: #f5f5f5;
 }
 
 .right-slider-button {
   position: absolute;
   bottom: 0;
   right: 0;
-  height: 80px;
+  height: 62px;
   width: calc(100% - 30px);
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: -1px;
+  background: #f5f5f5;
+}
+
+@media screen and (max-width: 820px) {
+  .right-slider {
+    height: 55vh;
+  }
+}
+
+@media screen and (max-width: 340px) {
+  .right-slider {
+    height: 40vh;
+  }
 }
 </style>

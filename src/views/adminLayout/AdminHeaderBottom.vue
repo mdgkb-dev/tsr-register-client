@@ -1,8 +1,7 @@
 <template>
   <div :key="headerParams" class="admin-header-bottom">
     <div class="flex-between">
-      <el-page-header v-if="headerParams.showBackButton" title=" " :content="headerParams.title" @back="goBack" />
-      <h4 v-else class="menu-title">
+      <h4 class="menu-title">
         {{ headerParams.title }}
         <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger"></el-badge>
       </h4>
@@ -190,7 +189,7 @@ h4 {
 }
 
 .menu-title {
-  margin-left: 0;
+  margin-left: 5px;
 }
 
 @keyframes rotation {

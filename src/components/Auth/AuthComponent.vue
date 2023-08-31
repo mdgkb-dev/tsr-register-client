@@ -119,6 +119,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@import '@/assets/styles/elements/base-style.scss';
+
 h3 {
   font-size: 24px;
   font-weight: bold;
@@ -131,7 +133,7 @@ h3 {
   padding: 30px 50px;
   text-align: center;
   margin: auto;
-  border-radius: 20px;
+  border-radius: $normal-border-radius;
   max-width: 700px;
 
   &-header {
@@ -201,7 +203,7 @@ h3 {
     font-size: 18px;
   }
   .auth-card {
-    padding: 0;
+    padding: 20px;
   }
   .save-button {
     width: 100%;
