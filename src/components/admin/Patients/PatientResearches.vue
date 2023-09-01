@@ -16,24 +16,21 @@
 
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
-import { ElMessage } from 'element-plus';
-import { computed, defineComponent, onBeforeMount, Ref, ref, WritableComputedRef } from 'vue';
+import { computed, defineComponent, Ref, ref, WritableComputedRef } from 'vue';
 
 import Plus from '@/assets/svg/Plus.svg';
 import Xlsx from '@/assets/svg/Xlsx.svg';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
-import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Research from '@/classes/Research';
-import ResearchesPool from '@/classes/ResearchesPool';
 import ResearchResult from '@/classes/ResearchResult';
 import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
+import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
-import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -49,33 +46,13 @@ export default defineComponent({
   setup() {
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
 
-    const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
-    const researchesPools: Ref<ResearchesPool[]> = computed(() => Provider.store.getters['researchesPools/items']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
       patient.value.getPatientResearch(research.value.id)
     );
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
-    // const researches: Ref<Register> = computed(() => Provider.store.getters['researches/items']);
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    // const activeCollapseName: Ref<string> = ref('');
-    const addResearchesPool = async (id: string) => {
-      if (patient.value.hasResearchesPool(id)) {
-        return ElMessage.warning('Выбранный набор исследований уже есть у пациента');
-      }
-      await Provider.store.dispatch('researchesPools/get', id);
-      const item = PatientResearchesPool.Create(patient.value.id, researchesPool.value);
-      patient.value.patientsResearchesPools.push(item);
-      await Provider.store.dispatch('patientsResearchesPools/create', item);
-      await toggleResearchesPools(false);
-    };
-
-    onBeforeMount(async () => {
-      if (patient.value.patientsResearchesPools[0]) {
-        await selectResearchesPool(patient.value.patientsResearchesPools[0].researchesPoolId as string);
-      }
-    });
 
     const createPatientResearch = async (research: Research) => {
       if (!patient.value.getPatientResearch(research.id)) {
@@ -86,19 +63,17 @@ export default defineComponent({
       await Provider.store.dispatch('researches/get', research.id);
     };
 
-    const selectResearchesPool = async (id: string) => {
-      Provider.store.commit('researches/set');
-      await Provider.store.dispatch('researchesPools/get', id);
-    };
-
     const selectResearch = async (item: Research) => {
+      await Provider.store.dispatch('researches/get', item.id);
       if (!patientResearch.value) {
         return await createPatientResearch(item);
       }
-      Provider.store.commit('researches/set');
       Provider.store.commit('researchesResults/set');
-
-      await Provider.store.dispatch('researches/get', item.id);
+      if (patientResearch.value?.researchResults.length === 0) {
+        return;
+      }
+      console.log(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id);
+      await selectResult(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id as string);
     };
 
     const selectResult = async (id: string) => {
@@ -152,12 +127,8 @@ export default defineComponent({
       selectResult,
       patientResearch,
       selectResearch,
-      selectResearchesPool,
-      researchesPool,
-      researchesPools,
       research,
       createPatientResearch,
-      addResearchesPool,
       Delete,
       patient,
 

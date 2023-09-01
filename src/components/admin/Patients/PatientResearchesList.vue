@@ -1,22 +1,22 @@
 <template>
   <GridContainer grid-gap="5px" margin="10px" width="calc(100% - 20px)" grid-template-columns="repeat(auto-fit, minmax(280px, 1fr))">
     <GeneralItem
-      v-for="(researchesPoolResearch, i) in researchesPool.researchesPoolsResearches"
-      :key="researchesPoolResearch.id"
-      :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(researchesPoolResearch.research.id))"
+      v-for="(research, i) in researches"
+      :key="research.id"
+      :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(research.id))"
       height="60px"
-      @click="$emit('select', researchesPoolResearch.research)"
+      @click="$emit('select', research)"
     >
-      <template #general-item> {{ i + 1 }}. {{ researchesPoolResearch.research.name }}</template>
+      <template #general-item> {{ i + 1 }}. {{ research.name }}</template>
     </GeneralItem>
   </GridContainer>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
-import ResearchesPool from '@/classes/ResearchesPool';
+import Research from '@/classes/Research';
 import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import Provider from '@/services/Provider/Provider';
@@ -30,10 +30,13 @@ export default defineComponent({
   emits: ['select'],
   setup() {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const researchesPool: Ref<ResearchesPool> = computed(() => Provider.store.getters['researchesPools/item']);
+    const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
+    onBeforeMount(async () => {
+      await Provider.store.dispatch('researches/getAll');
+    });
     return {
       patient,
-      researchesPool,
+      researches,
     };
   },
 });
