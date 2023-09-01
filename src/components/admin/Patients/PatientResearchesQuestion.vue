@@ -1,6 +1,6 @@
 <template>
   <div class="research-info">
-    <div class="header-container">
+    <!-- <div class="header-container">
       <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
       <TopSliderContainer>
         <template #title>
@@ -20,7 +20,7 @@
         
       </TopSliderContainer>
       <Button button-class="grey-button" text="Сохранить" @click="$emit('save', researchResult)" />
-    </div>
+    </div> -->
     <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
       <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
       <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>

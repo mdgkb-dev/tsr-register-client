@@ -1,5 +1,26 @@
 <template>
   <div class="body">
+    <div class="header-container">
+      <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
+      <TopSliderContainer>
+        <template #title>
+          {{ research.name }}
+        </template>
+          <div v-if="research.withScores" class="flex-line">
+            <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
+            <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
+          </div>
+          <div class="flex-line">
+            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
+            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+          </div>
+          <div class="search">
+            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+          </div>
+        
+      </TopSliderContainer>
+      <Button button-class="grey-button" text="Сохранить" @click="$emit('save', researchResult)" />
+    </div>
     <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
       <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
     </template>
@@ -31,6 +52,8 @@ import PatientResearchesResultsList from '@/components/admin/Patients/PatientRes
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
+import Button from '@/components/Base/Button.vue';
+import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -42,6 +65,8 @@ export default defineComponent({
     PatientResearchesList,
     PatientResearchChart,
     TopSliderContainer,
+    Button,
+    StringItem,
   },
   setup() {
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
@@ -160,6 +185,31 @@ export default defineComponent({
   }
 }
 
+
+.grey-button {
+  width: 120px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #f5f5f5;
+  margin: 0;
+  font-size: 14px;
+}
+.flex-line {
+  height: 42px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+
+.header-container {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .back-button {
   background: #ffffff;
   margin: 0 10px 0 0;
