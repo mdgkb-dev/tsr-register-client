@@ -62,23 +62,23 @@
                   <Button text="xlsx" :with-icon="false" background-hover="#DFF2F8" ; button-class="button-download"></Button>
                 </GridContainer>
               </InfoItem> -->
-            <!-- </div> -->
-          </template>
+        <!-- </div> -->
+      </template>
 
-          <template #body>
-            <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-              <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
-            </template>
-            <template v-else>
-              <PatientResearchesList @select="selectResearch" />
-            </template>
-            <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
-          </template>
-        </ResearcheContainer>
-      </div>
-    <!-- </template>
+      <template #body>
+        <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
+          <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
+        </template>
+        <template v-else>
+          <PatientResearchesList @select="selectResearch" />
+        </template>
+        <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
+      </template>
+    </ResearcheContainer>
+  </div>
+  <!-- </template>
   </RightTabsContainer> -->
-  
+
   <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
   <Plus />
   <Xlsx />
@@ -101,12 +101,7 @@ import PatientResearchChart from '@/components/admin/Patients/PatientResearchCha
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
-import Button from '@/components/Base/Button.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -120,8 +115,6 @@ export default defineComponent({
     PatientResearchesQuestion,
     PatientResearchesList,
     PatientResearchChart,
-    RightTabsContainer,
-    Button,
     ResearcheContainer,
     GridContainer,
     InfoItem,

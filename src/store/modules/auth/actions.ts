@@ -7,6 +7,7 @@ import IUserResponse from '@/interfaces/IUserResponse';
 import Profile from '@/services/classes/auth/Profile';
 import HttpClient from '@/services/HttpClient';
 import TokenService from '@/services/Token';
+import UserService from '@/services/User';
 import RootState from '@/store/types';
 
 import State from './state';
@@ -58,9 +59,12 @@ const actions: ActionTree<State, RootState> = {
   refreshToken: async ({ commit }): Promise<void> => {
     commit(
       'setTokens',
-      await httpClient.post<{ refreshToken: string | null }, { user: IUser; token: ITokens }>({
+      await httpClient.post<{ refreshToken: string | null; userId: string | null }, { user: IUser; token: ITokens }>({
         query: 'refresh-token',
-        payload: { refreshToken: TokenService.getRefreshToken() },
+        payload: {
+          refreshToken: TokenService.getRefreshToken(),
+          userId: UserService.getUserId(),
+        },
       })
     );
   },
