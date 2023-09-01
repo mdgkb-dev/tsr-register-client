@@ -1,4 +1,5 @@
 <template>
+<div v-if="!isToggle" class="blur" @click="isToggle = true"></div>
   <div
     class="top-slider"
     :style="{
@@ -87,13 +88,22 @@ export default defineComponent({
   box-sizing: border-box;
 }
 
+.blur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+}
+
 .top-slider {
   position: absolute;
   top: 0px;
   left: 50%;
   transform: translateX(-50%);
   background: #f5f5f5;
-  z-index: 3;
+  z-index: 4;
   border: $dark-border;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;

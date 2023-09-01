@@ -1,83 +1,13 @@
 <template>
-  <!-- <RightTabsContainer :is-toggle="researchesPoolsIsToggle" slider-on-width="180px" @toggle="toggleResearchesPools">
-    <template #icon>
-      <svg class="icon-plus">
-        <use xlink:href="#plus"></use>
-      </svg>
+  <div class="body">
+    <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
+      <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
     </template>
-    <template #slider-body>
-      <div class="slider-body">
-        <div v-for="pool in researchesPools" :key="pool.id" class="slider-item" @click="addResearchesPool(pool.id)">
-          {{ pool.name }}
-        </div>
-      </div>
+    <template v-else>
+      <PatientResearchesList @select="selectResearch" />
     </template>
-    <template #tabs>
-      <div
-        v-for="patientResearchesPool in patient.patientsResearchesPools"
-        :key="patientResearchesPool.id"
-        :class="{ 'tabs-item-active': researchesPool.id === patientResearchesPool.researchesPoolId }"
-        class="tabs-item"
-        @click="selectResearchesPool(patientResearchesPool.researchesPoolId)"
-      >
-        <div class="tab-item-text">{{ patientResearchesPool.researchesPool.name }}</div>
-      </div>
-    </template>
-    <template #body> -->
-      <div class="body">
-        <ResearcheContainer background="#DFF2F8" padding="0">
-          <template #header>
-            <!-- <div v-if="research.id && patientResearch" class="researche-title"> -->
-              <!-- <TopSliderContainer>
-                <template #title>
-                  {{ research.name }}
-                </template>
-
-              </TopSliderContainer> -->
-              <!-- <Button
-                text="Назад"
-                button-class="back-button"
-                :color-swap="true"
-                :with-icon="false"
-                @click="cancelResearchResultsFilling(true)"
-              /> -->
-              <!-- <div class="researche-name">{{ research.name }}</div> -->
-              <!-- <Button text="График" :with-icon="false" button-class="chart-button" :color-swap="true" @click="toggleChart" /> -->
-            <!-- </div> -->
-            <!-- <div v-else class="line-item"> -->
-              <!-- <InfoItem
-                margin="0"
-                :with-open-window="false"
-                :with-icon="false"
-                height="50px"
-                background="#F5F5F5"
-                border-color="#C4C4C4"
-                padding="10px"
-                :with-hover="false"
-              >
-                <template #title>
-                  <StringItem string="сохранить" font-size="10px" padding="0" color="#C4C4C4" />
-                </template>
-                <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-                  <Button text="xlsx" :with-icon="false" background-hover="#DFF2F8" ; button-class="button-download"></Button>
-                </GridContainer>
-              </InfoItem> -->
-        <!-- </div> -->
-      </template>
-
-      <template #body>
-        <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-          <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
-        </template>
-        <template v-else>
-          <PatientResearchesList @select="selectResearch" />
-        </template>
-        <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
-      </template>
-    </ResearcheContainer>
+    <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
   </div>
-  <!-- </template>
-  </RightTabsContainer> -->
 
   <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
   <Plus />
@@ -101,7 +31,6 @@ import PatientResearchChart from '@/components/admin/Patients/PatientResearchCha
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -115,10 +44,6 @@ export default defineComponent({
     PatientResearchesQuestion,
     PatientResearchesList,
     PatientResearchChart,
-    ResearcheContainer,
-    GridContainer,
-    InfoItem,
-    StringItem,
     TopSliderContainer,
   },
   setup() {
@@ -410,6 +335,7 @@ export default defineComponent({
 }
 
 .body {
+  position: relative;
   width: 100%;
   height: 100%;
   border-right: 1px solid #379fff;
