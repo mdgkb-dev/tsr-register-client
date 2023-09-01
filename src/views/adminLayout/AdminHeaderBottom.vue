@@ -24,9 +24,9 @@
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from 'vue';
 
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

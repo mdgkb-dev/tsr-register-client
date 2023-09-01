@@ -17,14 +17,14 @@
     <div class="tools">
       <div class="control-buttons">
         <!-- <div class="left"> -->
-          <div class="search">
-            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
-          </div>
-          <div class="flex-line">
-            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
-            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-          </div>
-          <Button button-class="save-button" text="Сохранить" @click="$emit('save', researchResult)" />
+        <div class="search">
+          <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+        </div>
+        <div class="flex-line">
+          <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
+          <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+        </div>
+        <Button button-class="save-button" text="Сохранить" @click="$emit('save', researchResult)" />
       </div>
       <!-- <div class="flex-line3">
         <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />

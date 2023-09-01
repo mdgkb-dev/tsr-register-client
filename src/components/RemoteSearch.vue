@@ -22,6 +22,7 @@
 </template>
 
 <script lang="ts">
+import { watch } from '@vue/runtime-core';
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import SearchGroup from '@/classes/SearchGroup';
@@ -73,12 +74,23 @@ export default defineComponent({
       type: [Number, String],
       default: 350,
     },
+    focus: {
+      type: Boolean as PropType<boolean>,
+      default: false,
+    },
   },
   emits: ['select', 'load', 'input'],
   setup(props, { emit }) {
     const queryString: Ref<string> = ref(props.modelValue);
     const searchForm = ref();
     const searchModel: Ref<SearchModel> = computed<SearchModel>(() => Provider.store.getters['search/searchModel']);
+
+    watch(
+      () => props.focus,
+      () => {
+        searchForm.value.focus();
+      }
+    );
 
     const find = async (query: string, resolve: (arg: unknown) => void): Promise<void> => {
       if (query.length < 2) {

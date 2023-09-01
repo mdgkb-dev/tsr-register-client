@@ -8,8 +8,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({
   name: 'PersonalityItem',

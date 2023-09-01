@@ -38,11 +38,11 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref, WritableComputedRef } from 'vue';
 
-import GridContainer from '@/services/components/GridContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

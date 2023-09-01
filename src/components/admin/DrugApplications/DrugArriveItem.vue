@@ -12,10 +12,10 @@
 import { defineComponent, PropType } from 'vue';
 
 import DrugArrive from '@/classes/DrugArrive';
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

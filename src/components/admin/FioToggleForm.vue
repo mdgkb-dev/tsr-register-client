@@ -70,10 +70,10 @@
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
-import GridContainer from '@/services/components/GridContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 import validate from '@/services/validate';
 

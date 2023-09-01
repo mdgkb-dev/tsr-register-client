@@ -12,7 +12,7 @@
           padding="0"
           width="100%"
         >
-          <el-input v-model="value.valueString"  />
+          <el-input v-model="value.valueString" />
         </InfoItem>
       </div>
       <Button button-class="save-button" text="Проверить наличие СНИЛС в системе" @click="toNameStep" />

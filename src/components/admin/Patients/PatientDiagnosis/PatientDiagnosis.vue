@@ -12,6 +12,7 @@
             :must-be-translated="true"
             key-value="mkbItem"
             placeholder="Начните вводить название диагноза"
+            :focus="isToggle"
             @select="addMkbItem"
           />
         </div>
@@ -100,6 +101,7 @@ export default defineComponent({
       const diagnosisLinks = patient.value.getMkbItems();
       await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
       selectPatientDiagnosis(diagnosisLinks[diagnosisLinks.length - 1].id as string);
+      isToggle.value = false;
     };
 
     const removePatientDiagnosis = async (id: string): Promise<void> => {
