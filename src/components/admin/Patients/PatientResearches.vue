@@ -27,7 +27,13 @@
       <div class="body">
         <ResearcheContainer background="#DFF2F8" padding="0">
           <template #header>
-            <div v-if="research.id && patientResearch" class="researche-title">
+            <!-- <div v-if="research.id && patientResearch" class="researche-title"> -->
+              <!-- <TopSliderContainer>
+                <template #title>
+                  {{ research.name }}
+                </template>
+
+              </TopSliderContainer> -->
               <!-- <Button
                 text="Назад"
                 button-class="back-button"
@@ -35,9 +41,9 @@
                 :with-icon="false"
                 @click="cancelResearchResultsFilling(true)"
               /> -->
-              <div class="researche-name">{{ research.name }}</div>
+              <!-- <div class="researche-name">{{ research.name }}</div> -->
               <!-- <Button text="График" :with-icon="false" button-class="chart-button" :color-swap="true" @click="toggleChart" /> -->
-            </div>
+            <!-- </div> -->
             <!-- <div v-else class="line-item"> -->
               <!-- <InfoItem
                 margin="0"
@@ -103,6 +109,7 @@ import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
+import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -119,6 +126,7 @@ export default defineComponent({
     GridContainer,
     InfoItem,
     StringItem,
+    TopSliderContainer,
   },
   setup() {
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
@@ -423,17 +431,6 @@ export default defineComponent({
   align-items: center;
   height: 50px;
   margin: 0 10px;
-}
-
-.researche-name {
-  min-height: 40px;
-  width: 100%;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  color: #343e5c;
-  font-size: 14px;
-  text-transform: uppercase;
 }
 
 .plus-button {

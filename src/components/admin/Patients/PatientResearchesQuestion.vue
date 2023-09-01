@@ -1,49 +1,31 @@
 <template>
-  <!-- <div class="blur"></div> -->
   <div class="research-info">
-    <!-- <div class="patient-name">{{ patient.human.getFullName() }}</div> -->
     <div class="header-container">
-      <!-- <div class="researche-title-name">{{ research.name }}</div> -->
-      <!-- <div class="researche-counter">Заполнено: {{ researchResult.fillingPercentage }}%</div> -->
-      <!-- <div v-if="research.withScores" class="researche-counter">
-        Кол-во баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }}
-      </div> -->
-    </div>
-    <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
-      <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
-      <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
-      <div :style="{ color: res.color }">{{ res.result }}</div>
-    </div>
-    <div class="tools">
-      <div class="control-buttons">
-        <!-- <div class="left"> -->
-          <div class="search">
-            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+      <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
+      <TopSliderContainer>
+        <template #title>
+          {{ research.name }}
+        </template>
+          <div v-if="research.withScores" class="flex-line">
+            <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
+            <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
           </div>
           <div class="flex-line">
             <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
             <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
           </div>
-          <Button button-class="save-button" text="Сохранить" @click="$emit('save', researchResult)" />
-      </div>
-      <!-- <div class="flex-line3">
-        <StringItem string="Отобразить&nbsp;только&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />
-        <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-      </div> -->
-      <!-- <Button
-        text="Сохранить"
-        :color-swap="false"
-        width="100%"
-        height="60px"
-        font-size="16px"
-        border-radius="5px"
-        color="#00B5A4"
-        background="#C7ECEA"
-        background-hover="#C7ECEA"
-        :with-icon="false"
-        @click="$emit('save', researchResult)"
-      ></Button> -->
+          <div class="search">
+            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+          </div>
+        
+      </TopSliderContainer>
+      <Button button-class="grey-button" text="Сохранить" @click="$emit('save', researchResult)" />
     </div>
+    <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
+      <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
+      <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
+      <div :style="{ color: res.color }">{{ res.result }}</div>
+    </div> -->
     <div class="scroll-block">
       <CollapseContainer>
         <CollapseItem
@@ -85,6 +67,7 @@ import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
+import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearchesQuestion',
@@ -94,6 +77,7 @@ export default defineComponent({
     QuestionComponent,
     Button,
     StringItem,
+    TopSliderContainer,
   },
   emits: ['save', 'cancel'],
   setup() {
@@ -164,7 +148,17 @@ export default defineComponent({
   height: 42px;
   color: #006bb4;
   background: #dff2f8;
-  margin: 0 10px 0 0;
+  margin: 0;
+  font-size: 14px;
+}
+
+.grey-button {
+  width: 120px;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #f5f5f5;
+  margin: 0;
   font-size: 14px;
 }
 
@@ -393,13 +387,11 @@ export default defineComponent({
 }
 
 .research-info {
-  width: calc(100% - 32px);
+  width: calc(100% - 22px);
   height: calc(100% - 22px);
   background: #dff2f8;
-  margin: 0px 0px 10px 0;
+  margin: 0px 0px 0px 0;
   padding: 0px 10px 10px 10px;
-  overflow: hidden;
-  overflow-y: auto;
 }
 
 .tools {
@@ -460,9 +452,10 @@ export default defineComponent({
 }
 
 .header-container {
+  padding: 10px 0;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .researche-title-name {
@@ -537,9 +530,9 @@ export default defineComponent({
 .flex-line {
   height: 42px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  width: 190px;
+  width: 100%;
 }
 
 .flex-line2 {
