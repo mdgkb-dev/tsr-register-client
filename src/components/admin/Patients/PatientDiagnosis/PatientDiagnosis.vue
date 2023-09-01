@@ -89,7 +89,9 @@ export default defineComponent({
 
     onBeforeMount(() => {
       const diagnosis = patient.value.getMkbItems();
-      selectPatientDiagnosis(diagnosis[diagnosis.length - 1].id as string);
+      if (diagnosis.length > 0) {
+        selectPatientDiagnosis(diagnosis[diagnosis.length - 1].id as string);
+      }
     });
 
     const addMkbItem = async (event: ISearchObject): Promise<void> => {
