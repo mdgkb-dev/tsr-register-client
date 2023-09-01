@@ -1,5 +1,8 @@
 <template>
-  <ResearcheContainer v-if="mounted && patientDiagnosis" background="#DFF2F8">
+  <ResearcheContainer v-if="mounted && !patientDiagnosis.id">
+    <template #body> Дигнозов нет</template>
+  </ResearcheContainer>
+  <ResearcheContainer v-if="mounted && patientDiagnosis.id" background="#DFF2F8">
     <template #header>
       <div class="researche-name">{{ patientDiagnosis?.mkbItem?.getFullName() }}</div>
       <div class="diagnosis-doctorName">

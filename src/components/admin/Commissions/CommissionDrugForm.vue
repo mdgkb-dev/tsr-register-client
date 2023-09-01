@@ -24,13 +24,13 @@ import DrugForm from '@/classes/DrugForm';
 import DrugRecipe from '@/classes/DrugRecipe';
 import Step from '@/classes/stepper/Step';
 import Stepper from '@/classes/stepper/Stepper';
-import GridContainer from '@/services/components/GridContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Button from '@/components/Base/Button.vue';
 import DrugDozesFiltersLib from '@/libs/filters/DrugDozesFiltersLib';
 import DrugFormsFiltersLib from '@/libs/filters/DrugFormsFiltersLib';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import GridContainer from '@/services/components/GridContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

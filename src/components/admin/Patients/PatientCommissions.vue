@@ -199,12 +199,12 @@ import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
 import ClassHelper from '@/services/ClassHelper';
 import DatePicker from '@/services/components/DatePicker.vue';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

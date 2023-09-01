@@ -55,9 +55,9 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
-import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
+import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import Provider from '@/services/Provider/Provider';
 

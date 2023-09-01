@@ -146,10 +146,8 @@ import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import Register from '@/classes/Register';
-import GridContainer from '@/services/components/GridContainer.vue';
 import Button from '@/components/Base/Button.vue';
 import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
@@ -158,6 +156,8 @@ import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import GridContainer from '@/services/components/GridContainer.vue';
+import InfoItem from '@/services/components/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

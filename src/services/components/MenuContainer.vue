@@ -2,7 +2,7 @@
   <div
     class="mainblock"
     :style="{
-      height: height
+      height: height,
     }"
   >
     <div
@@ -16,7 +16,7 @@
     <div
       class="body"
       :style="{
-        background: background
+        background: background,
       }"
     >
       <slot name="body" />

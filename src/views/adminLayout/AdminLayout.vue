@@ -7,11 +7,11 @@
           <AdminSideMenu />
           <div class="admin-container">
             <AdminHeaderBottom style="position: sticky; z-index: 2" />
-            <div class="field" v-if="$route.meta.adminLayout === AdminLayout.TableList" style="height: inherit">
+            <div v-if="$route.meta.adminLayout === AdminLayout.TableList" class="field" style="height: inherit">
               <slot />
             </div>
-            <div class="field" v-else>
-                <slot />
+            <div v-else class="field">
+              <slot />
             </div>
           </div>
         </div>

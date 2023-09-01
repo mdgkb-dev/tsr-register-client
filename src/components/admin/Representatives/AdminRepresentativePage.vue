@@ -18,13 +18,13 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
 import RepresentativeRules from '@/classes/RepresentativeRules';
-import MenuContainer from '@/services/components/MenuContainer.vue';
 import RepresentativeContacts from '@/components/admin/Representatives/RepresentativeContacts.vue';
 import RepresentativeDocuments from '@/components/admin/Representatives/RepresentativeDocuments.vue';
 import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
 import RepresentativeToPatientForm from '@/components/admin/Representatives/RepresentativeToPatientForm.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import CustomSection from '@/services/classes/page/CustomSection';
+import MenuContainer from '@/services/components/MenuContainer.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 
