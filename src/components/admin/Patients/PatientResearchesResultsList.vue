@@ -35,23 +35,17 @@ import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import GeneralItem from '@/services/components/GeneralItem.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'PatientResearchesResultsList',
   components: {
-    StringItem,
     SmallDatePicker,
-    GeneralItem,
     Button,
     RightSliderContainer,
-    GridContainer,
     CollapseItem,
     InfoItem,
   },
