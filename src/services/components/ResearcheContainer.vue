@@ -54,7 +54,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: space-between;
   width: auto;
-  height: calc(100% - 20px);
 }
 
 .mainblock-header {
@@ -63,15 +62,13 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: auto;
+  max-height: 80px;
   z-index: 2;
 }
 
 .mainblock-body {
   width: 100%;
-  height: 89vh;
-
-  // overflow: hidden;
-  // overflow-y: auto;
+  height: auto;
 }
 
 .mainblock-footer {

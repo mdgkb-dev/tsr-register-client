@@ -50,23 +50,29 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+
 .admin-main-container {
   height: calc(100vh);
+  box-sizing: border-box;
 }
 
 .admin-container {
   height: calc(100vh - 61px);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .el-main {
   height: inherit;
   overflow: auto;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .field {
   height: calc(100% - 10px);
+  box-sizing: border-box;
+      height: inherit;
 }
 
 @media (max-width: 992px) {

@@ -14,7 +14,7 @@
       <slot name="menu" />
     </div>
     <div
-      class="body"
+      class="body-container"
       :style="{
         background: background,
       }"
@@ -59,30 +59,68 @@ export default defineComponent({
   overflow: hidden;
   margin: 0 10px 0 0;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .top-menu {
+  position: relative;
   margin: -1px;
   display: grid;
   grid-gap: 0;
   grid-template-rows: repeat(0 0px);
+  z-index: 6;
 }
 
 .top-menu > div {
   object-fit: cover;
 }
 
-.body {
+.body-container {
   margin-top: 1px;
   border-top: 0.5px solid #343d5c;
-  overflow-y: auto;
+  box-sizing: border-box;
+  overflow: auto;
+  background: blue;
   height: 100%;
+}
+
+@media (max-width: 1436px) {
+  .body-container {
+    height: calc(100% - 55px);
+  }
+}
+
+@media (max-width: 1050px) {
+  .body-container {
+    height: calc(100% - 95px);
+  }
 }
 
 @media (max-width: 992px) {
   .mainblock {
     margin: 0 10px;
     width: calc(100% - 22px);
+  }
+  .body-container {
+    height: calc(100% - 55px);
+  }
+}
+
+@media (max-width: 822px) {
+  .body-container {
+    height: calc(100% - 95px);
+  }
+}
+
+@media (max-width: 502px) {
+  .body-container {
+    height: calc(100% - 180px);
+  }
+}
+
+@media (max-width: 342px) {
+  .body-container {
+    height: calc(100% - 345px);
   }
 }
 </style>
