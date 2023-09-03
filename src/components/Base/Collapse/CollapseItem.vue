@@ -89,7 +89,7 @@ export default defineComponent({
     changeColor: { type: Boolean as PropType<boolean>, default: false },
     marginTop: { type: String as PropType<string>, default: '10px' },
     padding: { type: String as PropType<string>, default: '0 10px' },
-    selectable: { type: Boolean as PropType<boolean>, default: true },
+    selectable: { type: Boolean as PropType<boolean>, default: false },
   },
   emits: ['changeActiveId'],
 

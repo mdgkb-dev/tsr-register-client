@@ -17,6 +17,8 @@ import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
+import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import Provider from '@/services/Provider/Provider';
@@ -32,7 +34,9 @@ export default defineComponent({
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     onBeforeMount(async () => {
-      await Provider.store.dispatch('researches/getAll');
+      const fq = new FilterQuery();
+      fq.setFilterModel(ResearchesFiltersLib.onlyLaboratory());
+      await Provider.store.dispatch('researches/getAll', fq);
     });
     return {
       patient,

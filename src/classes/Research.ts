@@ -12,7 +12,7 @@ export default class Research {
   id?: string;
   name = '';
   order = 0;
-
+  isLaboratory = false;
   @ClassHelper.GetClassConstructor(Question)
   questions: Question[] = [];
   questionsForDelete: string[] = [];
