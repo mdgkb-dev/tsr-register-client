@@ -49,7 +49,6 @@
         @cancel="cancelResearchResultsFilling"
       />
       <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
-      <Plus />
       <Xlsx />
     </template>
   </ResearcheContainer>
@@ -198,17 +197,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
-
-.body {
-  position: relative;
-  width: 100%;
-  height: calc(100% - 80px);
-  overflow: hidden;
-  overflow-y: auto;
-  border-right: 1px solid #379fff;
-  z-index: 5;
-  box-sizing: border-box;
-}
 
 .header-container {
   padding: 10px 0;
