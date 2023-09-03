@@ -5,7 +5,8 @@
         <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
         <TopSliderContainer>
           <template #title>
-            {{ research.name }}
+            <span>{{ research.name }}</span>
+            <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
           </template>
           <div v-if="research.withScores" class="flex-line">
             <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
@@ -56,7 +57,7 @@
 
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
-import { computed, defineComponent, Ref, ref, WritableComputedRef } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
 import Plus from '@/assets/svg/Plus.svg';
 import Xlsx from '@/assets/svg/Xlsx.svg';
@@ -150,11 +151,17 @@ export default defineComponent({
     };
 
     const cancelResearchResultsFilling = (s: boolean) => {
+      chartOpened.value = false;
       Provider.store.commit('researchesResults/set');
       if (s || !research.value.withDates) {
         Provider.store.commit('researches/set');
       }
     };
+
+    onBeforeUnmount(() => {
+      Provider.store.commit('researches/set');
+      Provider.store.commit('researchesResults/set');
+    });
 
     const chartOpened: Ref<boolean> = ref(false);
     const toggleChart = () => {

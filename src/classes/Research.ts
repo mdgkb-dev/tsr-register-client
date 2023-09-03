@@ -89,6 +89,17 @@ export default class Research {
     const data = new ChartData();
     data.labels = researchResults.map((rr: ResearchResult) => dateFormatter.format(rr.date));
 
+    if (this.withScores) {
+      const dataSet = new ChartDataSet();
+      dataSet.label = 'Баллы';
+      researchResults.forEach((rr: ResearchResult) => {
+        dataSet.data.push(rr.calculateScores(this.getAnswerVariants()));
+        dataSet.results.push(rr.date.toString());
+      });
+      data.datasets.push(dataSet);
+      return data;
+    }
+
     this.formulas.forEach((f: Formula) => {
       const dataSet = new ChartDataSet();
       dataSet.label = f.name;
