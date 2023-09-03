@@ -1,7 +1,7 @@
 <template>
   <RightSliderContainer :toggle="toggle">
     <template #header>
-      <Button button-class="save-button" text="Построить график" @click="addResult" />
+      <Button button-class="save-button" text="Построить график" @click="toggleChart" />
     </template>
     <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
       <CollapseItem :is-collaps="false" padding="0 8px">
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { defineComponent, PropType, ref, Ref } from 'vue';
 
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
@@ -59,7 +59,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['select', 'update'],
+  emits: ['select', 'update', 'showChart'],
   setup(props, { emit }) {
     const toggle = ref(false);
     const update = async (item: ResearchResult): Promise<void> => {
@@ -75,7 +75,16 @@ export default defineComponent({
       toggle.value = !toggle.value;
     };
 
+    const chartOpened: Ref<boolean> = ref(false);
+    const toggleChart = () => {
+      emit('showChart');
+      // chartOpened.value = !chartOpened.value;
+
+    };
+
     return {
+      chartOpened,
+      toggleChart,
       selectResult,
       toggle,
       addResult,

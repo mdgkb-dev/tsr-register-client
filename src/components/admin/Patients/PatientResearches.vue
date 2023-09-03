@@ -30,7 +30,7 @@
     </template>
     <template #body>
       <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
+        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" @show-chart="toggleChart" />
       </template>
       <template v-else>
         <PatientResearchesList @select="selectResearch" />
