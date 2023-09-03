@@ -168,18 +168,14 @@ export default class FilterModel {
     return filterModel;
   }
 
-  static CreateJoin(firstClass: ClassNameGetter, joinClass: ClassNameGetter): IFilterModel {
+  static CreateOnlyWith(firstClass: ClassNameGetter, secondClass: ClassNameGetter): FilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
 
-    const firstClassModel = StringsService.toCamelCase(firstClass.GetClassName());
-    filterModel.model = firstClassModel;
-    filterModel.joinTableModel = StringsService.toCamelCase(joinClass.GetClassName());
-    filterModel.joinTablePk = 'id';
-    filterModel.joinTableFk = firstClassModel + 'Id';
-    filterModel.col = 'id';
+    filterModel.model = StringsService.toCamelCase(firstClass.GetClassName());
+    filterModel.joinTableModel = StringsService.toCamelCase(secondClass.GetClassName());
     filterModel.type = DataTypes.Join;
-    filterModel.version = 'v2';
+    filterModel.version = 'v3';
     return filterModel;
   }
 

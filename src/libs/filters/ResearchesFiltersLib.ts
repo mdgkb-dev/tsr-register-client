@@ -1,3 +1,5 @@
+import AnamnesisResearch from '@/classes/AnamnesisResearch';
+import Research from '@/classes/Research';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import { DataTypes } from '@/services/interfaces/DataTypes';
 
@@ -14,7 +16,7 @@ const ResearchesFiltersLib = (() => {
   }
 
   function onlyAnamneses(): FilterModel {
-    return FilterModel.CreateFilterModelWithJoinV2(modelName, 'id', 'anamnesisResearch', 'id', 'researchId');
+    return FilterModel.CreateOnlyWith(Research, AnamnesisResearch);
   }
 
   return {

@@ -30,6 +30,10 @@ export default class Research {
     ClassHelper.BuildClass(this, i);
   }
 
+  static GetClassName(): string {
+    return 'research';
+  }
+
   editRegisterGroup(isEdit?: boolean): void {
     this.isEdit = isEdit ?? !this.isEdit;
   }
