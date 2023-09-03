@@ -4,26 +4,35 @@
       <Button button-class="save-button" text="График" @click="toggleChart" />
       <Button button-class="save-button" text="Xlsx" @click="getXlsx" />
     </template>
-    <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
-      <CollapseItem :is-collaps="false" padding="0 8px">
-        <template #inside-title>
-          <div @click.prevent="() => undefined">
-            <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
-              <SmallDatePicker
-                v-model:model-value="result.date"
-                placeholder="Выбрать"
-                width="85px"
-                height="34px"
-                @change="update(result)"
-                @click.stop="() => undefined"
-              />
-            </InfoItem>
-          </div>
-        </template>
-      </CollapseItem>
-    </div>
-    <!--      </template>-->
-    <!--    </CollapseContainer>-->
+    <CollapseContainer>
+      <template #default="scope">
+        <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
+          <CollapseItem
+            :is-collaps="false"
+            padding="0 8px"
+            :active-id="scope.activeId"
+            :tab-id="i"
+            :selectable="true"
+            @changeActiveId="scope.changeActiveId"
+          >
+            <template #inside-title>
+              <div @click.prevent="() => undefined">
+                <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
+                  <SmallDatePicker
+                    v-model:model-value="result.date"
+                    placeholder="Выбрать"
+                    width="85px"
+                    height="34px"
+                    @change="update(result)"
+                    @click.stop="() => undefined"
+                  />
+                </InfoItem>
+              </div>
+            </template>
+          </CollapseItem>
+        </div>
+      </template>
+    </CollapseContainer>
 
     <template #button>
       <Button button-class="plus-button" text="Добавить" @click="addResult" />
@@ -39,6 +48,7 @@ import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import Button from '@/components/Base/Button.vue';
+import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
@@ -48,6 +58,7 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'PatientResearchesResultsList',
   components: {
+    CollapseContainer,
     SmallDatePicker,
     Button,
     RightSliderContainer,

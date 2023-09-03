@@ -4,7 +4,7 @@
     :style="{
       marginTop: marginTop,
       height: isCollaps && collapsed ? '60px' : '',
-      'box-shadow': activeId === tabId ? '0px 0px 1px 2px #1979cf' : '',
+      'box-shadow': selectable && activeId === tabId ? '0px 0px 1px 2px #1979cf' : '',
     }"
   >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
@@ -89,6 +89,7 @@ export default defineComponent({
     changeColor: { type: Boolean as PropType<boolean>, default: false },
     marginTop: { type: String as PropType<string>, default: '10px' },
     padding: { type: String as PropType<string>, default: '0 10px' },
+    selectable: { type: Boolean as PropType<boolean>, default: true },
   },
   emits: ['changeActiveId'],
 
