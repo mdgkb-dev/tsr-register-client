@@ -14,7 +14,7 @@
 
         <div v-if="documentsIsToggle">
           <Button
-            v-for="docType in documentTypes"
+            v-for="docType in notExistingDocumentTypes"
             :key="docType.id"
             button-class="save-button"
             :text="docType.name"
@@ -31,6 +31,7 @@
 </template>
 
 <script lang="ts">
+import { ElMessage } from 'element-plus';
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Document from '@/classes/Document';
@@ -66,6 +67,9 @@ export default defineComponent({
     const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
     const documentsIsToggle: Ref<boolean> = ref(false);
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
+    const notExistingDocumentTypes: Ref<DocumentType[]> = computed(() =>
+      documentTypes.value.filter((dt: DocumentType) => !props.human.documentTypeExists(dt.id))
+    );
     const documentsShortList = computed(() => {
       let list = '';
       props.human.documents.forEach((d: Document, i: number) => {
@@ -92,7 +96,14 @@ export default defineComponent({
       documentsIsToggle.value = toggle;
     };
 
-    const addDocument = async (id: string) => {
+    const addDocument = async (id: string): Promise<void> => {
+      if (props.human.documentTypeExists(id)) {
+        ElMessage({
+          type: 'warning',
+          message: 'Документ уже добавлен',
+        });
+        return;
+      }
       await Provider.store.dispatch('documentTypes/get', id);
       const item = props.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/createWithoutReset', item);
@@ -106,6 +117,7 @@ export default defineComponent({
     };
 
     return {
+      notExistingDocumentTypes,
       documentsShortList,
       toggleDocuments,
       addDocument,

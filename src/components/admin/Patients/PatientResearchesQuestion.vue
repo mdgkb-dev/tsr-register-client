@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, Ref } from 'vue';
 
 import Formula from '@/classes/Formula';
 import FormulaResult from '@/classes/FormulaResult';
@@ -61,13 +61,10 @@ import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
-import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
-import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearchesQuestion',
@@ -75,20 +72,27 @@ export default defineComponent({
     CollapseItem,
     CollapseContainer,
     QuestionComponent,
-    Button,
-    StringItem,
-    TopSliderContainer,
+  },
+  props: {
+    showOnlyNotFilled: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      default: false,
+    },
+    questionsFilterString: {
+      type: String as PropType<string>,
+      required: true,
+      default: '',
+    },
   },
   emits: ['save', 'cancel'],
-  setup() {
-    const questionsFilterString: Ref<string> = ref('');
-    const showOnlyNotFilled: Ref<boolean> = ref(false);
+  setup(props) {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const filteredQuestions: ComputedRef<Question[]> = computed(() => {
-      return research.value.getFilteredQuestions(questionsFilterString.value, showOnlyNotFilled.value, researchResult.value);
+      return research.value.getFilteredQuestions(props.questionsFilterString, props.showOnlyNotFilled, researchResult.value);
     });
 
     const birthDateToMonth = (birthDate: string): number => {
@@ -117,9 +121,7 @@ export default defineComponent({
 
     return {
       getCalculationsResults,
-      questionsFilterString,
       filteredQuestions,
-      showOnlyNotFilled,
       researchResult,
       patient,
       research,

@@ -9,12 +9,7 @@
   <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <NumberProp
-    v-if="question.valueType.isNumber() & (question.name !== 'Аллергены')"
-    :research-result="researchResult"
-    :question="question"
-    @fill="$emit('fill')"
-  />
+  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
 </template>
 

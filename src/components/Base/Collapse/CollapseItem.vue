@@ -4,6 +4,7 @@
     :style="{
       marginTop: marginTop,
       height: isCollaps && collapsed ? '60px' : '',
+      'box-shadow': activeId === tabId ? '0px 0px 1px 2px #1979cf' : '',
     }"
   >
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">

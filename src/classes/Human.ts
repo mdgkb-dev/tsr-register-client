@@ -102,10 +102,6 @@ export default class Human {
     ];
   }
 
-  documentExists(documentTypeId: string): boolean {
-    return !!this.documents.find((doc: Document) => doc.documentTypeId === documentTypeId);
-  }
-
   addressesEqual(): boolean {
     return this.addressRegistration === this.addressResidential;
   }
@@ -163,5 +159,9 @@ export default class Human {
     }
     const newDoc = this.addDocument(documentType);
     return newDoc;
+  }
+
+  documentTypeExists(id?: string): boolean {
+    return this.documents.some((d: Document) => d.documentTypeId === id);
   }
 }

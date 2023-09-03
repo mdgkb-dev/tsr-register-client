@@ -1,8 +1,12 @@
 <template>
   <RightSliderContainer :toggle="toggle">
     <template #header>
-      <Button button-class="save-button" text="Построить график" @click="addResult" />
+      <Button button-class="save-button" text="График" @click="getXlsx" />
+      <Button button-class="save-button" text="Xlsx" @click="getXlsx" />
     </template>
+
+    <!--    <CollapseContainer>-->
+    <!--      <template #default="scope">-->
     <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
       <CollapseItem :is-collaps="false" padding="0 8px">
         <template #inside-title>
@@ -21,6 +25,9 @@
         </template>
       </CollapseItem>
     </div>
+    <!--      </template>-->
+    <!--    </CollapseContainer>-->
+
     <template #button>
       <Button button-class="plus-button" text="Добавить" @click="addResult" />
     </template>
@@ -28,8 +35,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
+import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
@@ -62,6 +70,8 @@ export default defineComponent({
   emits: ['select', 'update'],
   setup(props, { emit }) {
     const toggle = ref(false);
+    const selectedId: Ref<string> = ref('');
+    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const update = async (item: ResearchResult): Promise<void> => {
       await Provider.store.dispatch('researchesResults/update', item);
     };
@@ -71,11 +81,17 @@ export default defineComponent({
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);
     };
     const selectResult = async (id: string): Promise<void> => {
+      selectedId.value = id;
       emit('select', id);
-      toggle.value = !toggle.value;
+    };
+
+    const getXlsx = async (): Promise<void> => {
+      await Provider.store.dispatch('researches/xlsx', { researchId: props.research.id, patientId: patient.value.id });
     };
 
     return {
+      getXlsx,
+      selectedId,
       selectResult,
       toggle,
       addResult,

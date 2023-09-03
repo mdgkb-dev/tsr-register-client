@@ -1,15 +1,8 @@
 <template>
   <div class="card-wrapper">
     <el-form>
-      <el-form-item label="Дата">
-        <el-date-picker
-          :model-value="anamnesis.date"
-          type="date"
-          format="DD.MM.YYYY"
-          placeholder="Выберите дату"
-          @change="(e) => anamnesis.setDate(e)"
-          @keydown="dateFormat"
-        />
+      <el-form-item label="Дата записи">
+        <SmallDatePicker v-model:model-value="anamnesisDate" placeholder="Выбрать" @change="anamnesis.setDate(anamnesisDate)" />
       </el-form-item>
       <el-form-item label="ФИО врача">
         <el-input placeholder="ФИО врача" :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
@@ -44,10 +37,11 @@
 
 <script lang="ts">
 import { Delete, Edit, FolderChecked } from '@element-plus/icons-vue';
-import { computed, ComputedRef, defineComponent, PropType } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Anamnesis from '@/classes/Anamnesis';
 import Button from '@/components/Base/Button.vue';
+import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import dateFormat from '@/services/DateMask';
 import Provider from '@/services/Provider/Provider';
 
@@ -55,6 +49,7 @@ export default defineComponent({
   name: 'AnamnesisForm',
   components: {
     Button,
+    SmallDatePicker,
   },
   props: {
     anamnesis: {
@@ -64,7 +59,7 @@ export default defineComponent({
   },
   emits: ['remove'],
   setup(props, { emit }) {
-    // const { anamnesisId } = toRefs(props);
+    const anamnesisDate: Ref<Date> = ref(new Date());
     const isEditMode: ComputedRef<boolean> = computed<boolean>(() => Provider.store.getters['patients/isEditMode']);
     // const anamnesis: ComputedRef<IPatientDiagnosisAnamnesis> = computed(() =>
     //   store.getters['patients/patient'].getAnamnesis(anamnesisId.value)
@@ -75,6 +70,7 @@ export default defineComponent({
       await Provider.store.dispatch('anamneses/update', props.anamnesis);
     };
     return {
+      anamnesisDate,
       dateFormat,
       remove,
       isEditMode,

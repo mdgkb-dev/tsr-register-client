@@ -7,25 +7,24 @@
           <template #title>
             {{ research.name }}
           </template>
-            <div v-if="research.withScores" class="flex-line">
-              <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
-              <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
-            </div>
-            <div class="flex-line">
-              <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
-              <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-            </div>
-            <div class="search">
-              <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
-            </div>
-            <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
+          <div v-if="research.withScores" class="flex-line">
+            <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
+            <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
+          </div>
+          <div class="flex-line">
+            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
+            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+          </div>
+          <div class="search">
+            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+          </div>
+          <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
               <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
               <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
               <div :style="{ color: res.color }">{{ res.result }}</div>
             </div> -->
-          
         </TopSliderContainer>
-        <Button button-class="grey-button" text="Сохранить" @click="$emit('save', researchResult)" />
+        <Button button-class="grey-button" text="Сохранить" @click="saveResult(researchResult)" />
       </div>
     </template>
     <template #body>
@@ -35,13 +34,19 @@
       <template v-else>
         <PatientResearchesList @select="selectResearch" />
       </template>
-      <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" />
+      <PatientResearchesQuestion
+        v-if="researchResult.id"
+        :key="researchResult.id"
+        :questions-filter-string="questionsFilterString"
+        :show-only-not-filled="showOnlyNotFilled"
+        @save="saveResult"
+        @cancel="cancelResearchResultsFilling"
+      />
       <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
       <Plus />
       <Xlsx />
     </template>
   </ResearcheContainer>
-
 </template>
 
 <script lang="ts">
@@ -58,12 +63,12 @@ import PatientResearchChart from '@/components/admin/Patients/PatientResearchCha
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
+import Button from '@/components/Base/Button.vue';
+import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
-import Button from '@/components/Base/Button.vue';
-import StringItem from '@/services/components/StringItem.vue';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -81,7 +86,8 @@ export default defineComponent({
   },
   setup() {
     const researchesPoolsIsToggle: Ref<boolean> = ref(false);
-
+    const showOnlyNotFilled: Ref<boolean> = ref(false);
+    const questionsFilterString: Ref<string> = ref('');
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
       patient.value.getPatientResearch(research.value.id)
@@ -108,7 +114,6 @@ export default defineComponent({
       if (patientResearch.value?.researchResults.length === 0) {
         return;
       }
-      console.log(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id);
       await selectResult(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id as string);
     };
 
@@ -152,6 +157,8 @@ export default defineComponent({
     };
 
     return {
+      questionsFilterString,
+      showOnlyNotFilled,
       chartOpened,
       toggleChart,
       cancelResearchFilling,
@@ -221,5 +228,4 @@ export default defineComponent({
   justify-content: left;
   align-items: center;
 }
-
 </style>

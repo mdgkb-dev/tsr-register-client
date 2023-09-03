@@ -24,6 +24,7 @@ export default class Anamnesis {
   }
 
   setDate(date: Date): void {
+    console.log(date);
     this.date = new Date(date);
   }
 }
