@@ -93,11 +93,11 @@ export default defineComponent({
 .right-slider {
   position: fixed;
   display: flex;
-  top: 205px;
+  top: 165px;
   right: 0px;
   background: #f5f5f5;
   z-index: 3;
-  height: 73vh;
+  height: 75vh;
   border: $dark-border;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -159,21 +159,49 @@ export default defineComponent({
   background: #f5f5f5;
 }
 
-@media screen and (max-width: 820px) {
+@media (max-width: 1690px) {
   .right-slider {
     height: 65vh;
+    top: 205px;
   }
 }
 
-@media screen and (max-width: 500px) {
+@media (max-width: 1436px) {
+  .right-slider {
+    top: 205px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .right-slider {
+    top: 245px;
+  }
+}
+
+@media (max-width: 992px) {
+  .right-slider {
+    top: 205px;
+  }
+
+}
+
+@media screen and (max-width: 822px) {
+  .right-slider {
+    top: 245px;
+  }
+}
+
+@media screen and (max-width: 502px) {
   .right-slider {
     height: 55vh;
+    top: 327px;
   }
 }
 
-@media screen and (max-width: 339px) {
+@media screen and (max-width: 342px) {
   .right-slider {
     height: 35vh;
+    top: 490px;
   }
 }
 </style>

@@ -100,11 +100,11 @@ export default defineComponent({
 
 .research-info {
   position: fixed;
-  width: 80%;
+  width: calc(80% - 130px);
   height: 70vh;
   background: #ffffff;
   top: 170px;
-  left: 56%;
+  left: calc(50% + 120px);
   transform: translateX(-50%);
   margin: 0;
   padding: 0px 10px 10px 10px;
@@ -114,20 +114,56 @@ export default defineComponent({
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
 }
 
-.blur {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  // background: #000000;
-  // opacity: 0.3;
-  z-index: 1;
-}
-
-@media screen and (max-width: 630px) {
+@media (max-width: 1690px) {
   .research-info {
-    margin: 0 0 10px 0;
+    height: 65vh;
+    top: 205px;
   }
 }
+
+@media (max-width: 1436px) {
+  .research-info {
+    top: 205px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .research-info{
+    top: 246px;
+  }
+}
+
+@media (max-width: 992px) {
+  .research-info{
+    top: 205px;
+    margin: 0 10px 0 0;
+    width: calc(90% - 20px);
+    height: 65vh;
+    background: #ffffff;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+}
+
+@media screen and (max-width: 822px) {
+  .research-info {
+    top: 246px;
+  }
+}
+
+@media screen and (max-width: 502px) {
+  .research-info{
+    height: 55vh;
+    top: 328px;
+  }
+}
+
+@media screen and (max-width: 342px) {
+  .research-info{
+    height: 35vh;
+    top: 492px;
+  }
+}
+
 </style>
