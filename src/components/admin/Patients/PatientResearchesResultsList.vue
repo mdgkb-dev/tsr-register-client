@@ -1,12 +1,9 @@
 <template>
   <RightSliderContainer :toggle="toggle">
     <template #header>
-      <Button button-class="save-button" text="График" @click="getXlsx" />
+      <Button button-class="save-button" text="График" @click="toggleChart" />
       <Button button-class="save-button" text="Xlsx" @click="getXlsx" />
     </template>
-
-    <!--    <CollapseContainer>-->
-    <!--      <template #default="scope">-->
     <div v-for="result in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
       <CollapseItem :is-collaps="false" padding="0 8px">
         <template #inside-title>
@@ -67,7 +64,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['select', 'update'],
+  emits: ['select', 'update', 'showChart'],
   setup(props, { emit }) {
     const toggle = ref(false);
     const selectedId: Ref<string> = ref('');
@@ -89,7 +86,15 @@ export default defineComponent({
       await Provider.store.dispatch('researches/xlsx', { researchId: props.research.id, patientId: patient.value.id });
     };
 
+    const chartOpened: Ref<boolean> = ref(false);
+    const toggleChart = () => {
+      emit('showChart');
+      // chartOpened.value = !chartOpened.value;
+    };
+
     return {
+      chartOpened,
+      toggleChart,
       getXlsx,
       selectedId,
       selectResult,

@@ -63,7 +63,7 @@ export default defineComponent({
   width: 100%;
   height: auto;
   max-height: 80px;
-  z-index: 2;
+  z-index: 3;
 }
 
 .mainblock-body {
