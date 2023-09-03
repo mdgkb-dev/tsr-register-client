@@ -39,7 +39,7 @@
         />
       </template>
       <template v-else>
-        <PatientResearchesList @select="selectResearch" />
+        <PatientResearchesList :filter-model="researchesFilter" @select="selectResearch" />
       </template>
       <PatientResearchesQuestion
         v-if="researchResult.id"
@@ -61,8 +61,8 @@
       <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
     </template>
   </ResearcheContainer>
-      <!-- </div> -->
-    <!-- </template>
+  <!-- </div> -->
+  <!-- </template>
   </RightTabsContainer> -->
 
   <Xlsx />
@@ -70,45 +70,33 @@
 
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
-import { computed, defineComponent, onBeforeMount, Ref, ref, WritableComputedRef } from 'vue';
+import { computed, defineComponent, onBeforeMount, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
-import Plus from '@/assets/svg/Plus.svg';
 import Xlsx from '@/assets/svg/Xlsx.svg';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
-import AnamnesesList from '@/components/admin/Patients/Anamnesis/AnamnesesList.vue';
+import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
+import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
-import FilterQuery from '@/services/classes/filters/FilterQuery';
-import GridContainer from '@/services/components/GridContainer.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
+import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
-import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
-import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
-import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
-
 
 export default defineComponent({
   name: 'PatientAnamneses',
   components: {
-    AnamnesesList,
     PatientResearchesResultsList,
-    Plus,
     Xlsx,
     PatientResearchesQuestion,
-    RightTabsContainer,
     Button,
     ResearcheContainer,
-    GridContainer,
-    InfoItem,
     StringItem,
     PatientResearchesList,
     TopSliderContainer,
@@ -129,10 +117,7 @@ export default defineComponent({
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
 
     onBeforeMount(async () => {
-      const fq = new FilterQuery();
       Provider.store.commit('researches/set');
-      fq.setFilterModel(ResearchesFiltersLib.onlyAnamneses());
-      await Provider.store.dispatch('researches/getAll', fq);
     });
 
     const selectOrAddResult = async (research: Research) => {
@@ -154,7 +139,6 @@ export default defineComponent({
       await Provider.store.dispatch('researches/get', research.id);
       await selectOrAddResult(research);
     };
-    
 
     const selectResearch = async (item: Research) => {
       if (!patientResearch.value) {
@@ -172,8 +156,6 @@ export default defineComponent({
     };
 
     const addResult = async (research: Research, patientResearchId?: string): Promise<void> => {
-      console.log('addResult');
-      console.log(research);
       const item = ResearchResult.Create(research, patientResearchId);
       patientResearch.value?.researchResults.push(item);
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);
@@ -215,7 +197,13 @@ export default defineComponent({
       chartOpened.value = !chartOpened.value;
     };
 
+    onBeforeUnmount(() => {
+      Provider.store.commit('researches/set');
+      Provider.store.commit('researchesResults/set');
+    });
+
     return {
+      researchesFilter: ResearchesFiltersLib.onlyAnamneses(),
       questionsFilterString,
       showOnlyNotFilled,
       cancelResearchFilling,

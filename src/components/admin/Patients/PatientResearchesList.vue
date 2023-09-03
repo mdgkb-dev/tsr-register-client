@@ -13,11 +13,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
-import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
@@ -29,13 +29,19 @@ export default defineComponent({
     GridContainer,
     GeneralItem,
   },
+  props: {
+    filterModel: {
+      type: Object as PropType<FilterModel>,
+      required: true,
+    },
+  },
   emits: ['select'],
-  setup() {
+  setup(props) {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     onBeforeMount(async () => {
       const fq = new FilterQuery();
-      fq.setFilterModel(ResearchesFiltersLib.onlyLaboratory());
+      fq.setFilterModel(props.filterModel);
       await Provider.store.dispatch('researches/getAll', fq);
     });
     return {

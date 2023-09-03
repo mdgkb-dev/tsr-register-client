@@ -38,7 +38,7 @@
         />
       </template>
       <template v-else>
-        <PatientResearchesList @select="selectResearch" />
+        <PatientResearchesList :filter-model="researchesFilter" @select="selectResearch" />
       </template>
       <PatientResearchesQuestion
         v-if="researchResult.id"
@@ -58,7 +58,6 @@
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
-import Plus from '@/assets/svg/Plus.svg';
 import Xlsx from '@/assets/svg/Xlsx.svg';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
@@ -69,6 +68,7 @@ import PatientResearchesList from '@/components/admin/Patients/PatientResearches
 import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
 import Button from '@/components/Base/Button.vue';
+import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -79,7 +79,6 @@ export default defineComponent({
   name: 'PatientResearches',
   components: {
     PatientResearchesResultsList,
-    Plus,
     Xlsx,
     PatientResearchesQuestion,
     PatientResearchesList,
@@ -168,6 +167,7 @@ export default defineComponent({
     };
 
     return {
+      researchesFilter: ResearchesFiltersLib.onlyLaboratory(),
       questionsFilterString,
       showOnlyNotFilled,
       chartOpened,
