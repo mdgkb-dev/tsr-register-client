@@ -1,31 +1,5 @@
 <template>
   <div class="research-info">
-    <!-- <div class="header-container">
-      <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
-      <TopSliderContainer>
-        <template #title>
-          {{ research.name }}
-        </template>
-          <div v-if="research.withScores" class="flex-line">
-            <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
-            <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
-          </div>
-          <div class="flex-line">
-            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
-            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-          </div>
-          <div class="search">
-            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
-          </div>
-        
-      </TopSliderContainer>
-      <Button button-class="grey-button" text="Сохранить" @click="$emit('save', researchResult)" />
-    </div> -->
-    <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
-      <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
-      <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
-      <div :style="{ color: res.color }">{{ res.result }}</div>
-    </div> -->
     <div class="scroll-block">
       <CollapseContainer>
         <CollapseItem

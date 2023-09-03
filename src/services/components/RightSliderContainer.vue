@@ -91,9 +91,9 @@ export default defineComponent({
 }
 
 .right-slider {
-  position: absolute;
+  position: fixed;
   display: flex;
-  top: 60px;
+  top: 205px;
   right: 0px;
   background: #f5f5f5;
   z-index: 3;
