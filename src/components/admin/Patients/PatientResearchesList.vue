@@ -18,6 +18,7 @@ import { computed, defineComponent, onBeforeMount, PropType, Ref } from 'vue';
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GeneralItem from '@/services/components/GeneralItem.vue';
@@ -55,6 +56,7 @@ export default defineComponent({
       if (props.type === 'diagnosis') {
         fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
       }
+      fq.setSortModel(ResearchesSortsLib.byOrder());
       await Provider.store.dispatch('researches/getAll', fq);
     });
     return {

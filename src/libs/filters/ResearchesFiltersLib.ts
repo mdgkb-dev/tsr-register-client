@@ -1,22 +1,23 @@
 import AnamnesisResearch from '@/classes/AnamnesisResearch';
+import MkbResearch from '@/classes/MkbResearch';
 import Research from '@/classes/Research';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import ClassHelper from '@/services/ClassHelper';
 import { DataTypes } from '@/services/interfaces/DataTypes';
 
 const ResearchesFiltersLib = (() => {
-  const modelName = 'research';
   function onlyMkb(): FilterModel {
-    return FilterModel.CreateFilterModelWithJoinV2(modelName, 'id', 'mkbResearch', 'id', 'researchId');
+    return FilterModel.OnlyIfSecondModelExists(Research, MkbResearch);
   }
 
   function onlyLaboratory(): FilterModel {
-    const fm = FilterModel.CreateFilterModelV2(modelName, 'isLaboratory', DataTypes.Boolean);
+    const fm = FilterModel.CreateFilterModelV2(Research, String(ClassHelper.GetPropertyName(Research).isLaboratory), DataTypes.Boolean);
     fm.boolean = true;
     return fm;
   }
 
   function onlyAnamneses(): FilterModel {
-    return FilterModel.CreateOnlyWith(Research, AnamnesisResearch);
+    return FilterModel.OnlyIfSecondModelExists(Research, AnamnesisResearch);
   }
 
   return {
