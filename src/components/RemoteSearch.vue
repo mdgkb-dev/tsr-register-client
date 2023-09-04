@@ -88,7 +88,12 @@ export default defineComponent({
     watch(
       () => props.focus,
       () => {
-        searchForm.value.focus();
+        if (props.focus) {
+          setTimeout(() => {
+            searchForm.value.focus();
+            queryString.value = '';
+          }, 500);
+        }
       }
     );
 

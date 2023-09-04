@@ -12,8 +12,8 @@
             :must-be-translated="true"
             key-value="mkbItem"
             placeholder="Начните вводить название диагноза"
-            :focus="isToggle"
             @select="addMkbItem"
+            :focus="isToggle"
           />
         </div>
       </div>
