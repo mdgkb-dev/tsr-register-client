@@ -13,6 +13,7 @@
     @click="addAnamnesis()"
   >
   </Button>
+  <div class="scroll-feild">
   <el-timeline style="margin-top: 20px">
     <el-timeline-item v-for="anamnesis in patient.getAnamnesesByMkbItemId(mkbItem?.id)" :key="anamnesis.id" placement="top" center>
       <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
@@ -24,6 +25,7 @@
       </CollapseItem>
     </el-timeline-item>
   </el-timeline>
+  </div>
 </template>
 
 <script lang="ts">
@@ -80,6 +82,23 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.scroll-feild {
+  margin-top: 10px;
+  height: 47vh;
+  overflow-y: auto;
+}
+
+.background-container {
+  width: auto;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  background: #dff2f8;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 1px solid #c3c3c3;
+}
+
 
 .hidden {
   display: none;
@@ -312,15 +331,6 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 
-.background-container {
-  width: auto;
-  padding: 10px;
-  margin: 0 10px 10px 10px;
-  background: #dff2f8;
-  background: #ffffff;
-  border-radius: 5px;
-  border: 1px solid #c3c3c3;
-}
 
 .patient-name {
   display: flex;

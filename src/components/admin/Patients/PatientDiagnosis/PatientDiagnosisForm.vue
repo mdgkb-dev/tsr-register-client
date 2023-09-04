@@ -1,10 +1,13 @@
 <template>
   <ResearcheContainer v-if="mounted && !patientDiagnosis.id">
-    <template #body> Дигнозов нет</template>
+    <template #body> 
+      <div class="diag-title">Диагнозов нет</div></template>
   </ResearcheContainer>
   <ResearcheContainer v-if="mounted && patientDiagnosis.id" background="#DFF2F8">
     <template #header>
       <div class="researche-name">{{ patientDiagnosis?.mkbItem?.getFullName() }}</div>
+    </template>
+    <template #body>
       <div class="diagnosis-doctorName">
         <div class="doctor-title">Диагноз поставил врач:</div>
         <el-input
@@ -13,11 +16,9 @@
           @blur="updatePatientDiagnosis(patientDiagnosis)"
         ></el-input>
       </div>
-    </template>
-    <template #body>
       <div v-for="research in researches" :key="research.id">
         <div v-for="question in research.questions" :key="question.id">
-          <div>{{ question.name }}</div>
+          <div class="margin-class">{{ question.name }}</div>
           <QuestionComponent
             :question="question"
             :research-result="patient.getResearchResult(research.id)"
@@ -25,7 +26,9 @@
           />
         </div>
       </div>
-      <AnamnesesList :mkb-item="patientDiagnosis.mkbItem" :patient="patient" />
+      <div class="margin-class">
+        <AnamnesesList :mkb-item="patientDiagnosis.mkbItem" :patient="patient" />
+      </div>
     </template>
   </ResearcheContainer>
 </template>
@@ -106,6 +109,26 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.diag-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px auto;
+  width: 50%;
+  min-width: 220px;
+  height: 100px;
+  background: #f5f5f5;
+  color: #B0A4C0;
+  text-transform: uppercase;
+  border: $normal-darker-border;
+  border-radius: $normal-border-radius;
+}
+
+
+.margin-class {
+  margin-top: 10px;
+}
 
 .hidden {
   display: none;
