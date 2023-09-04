@@ -95,10 +95,10 @@ export default class FilterModel {
     return filterModel;
   }
 
-  static CreateFilterModelV2(model: string, col: string | undefined, type: DataTypes): IFilterModel {
+  static CreateFilterModelV2(model: string | ClassNameGetter, col: string | undefined, type: DataTypes): IFilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
-    filterModel.model = model;
+    filterModel.model = typeof model === 'string' ? model : model.GetClassName();
     filterModel.col = col ?? '';
     filterModel.type = type;
     if (filterModel.type === DataTypes.Number) {
@@ -168,7 +168,7 @@ export default class FilterModel {
     return filterModel;
   }
 
-  static CreateOnlyWith(firstClass: ClassNameGetter, secondClass: ClassNameGetter): FilterModel {
+  static OnlyIfSecondModelExists(firstClass: ClassNameGetter, secondClass: ClassNameGetter): FilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
 
