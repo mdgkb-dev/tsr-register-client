@@ -39,7 +39,7 @@
         />
       </template>
       <template v-else>
-        <PatientResearchesList :filter-model="researchesFilter" @select="selectResearch" />
+        <PatientResearchesList type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
       </template>
       <PatientResearchesQuestion
         v-if="researchResult.id"
@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
-import { computed, defineComponent, onBeforeMount, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
+import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
 import Xlsx from '@/assets/svg/Xlsx.svg';
 import Patient from '@/classes/Patient';
@@ -115,10 +115,6 @@ export default defineComponent({
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-
-    onBeforeMount(async () => {
-      Provider.store.commit('researches/set');
-    });
 
     const selectOrAddResult = async (research: Research) => {
       if (!research.withDates && patientResearch.value) {

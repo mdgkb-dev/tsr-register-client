@@ -38,7 +38,7 @@
         />
       </template>
       <template v-else>
-        <PatientResearchesList :filter-model="researchesFilter" @select="selectResearch" />
+        <PatientResearchesList type="researches" :filter-model="researchesFilter" @select="selectResearch" />
       </template>
       <PatientResearchesQuestion
         v-if="researchResult.id"

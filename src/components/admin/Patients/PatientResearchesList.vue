@@ -17,6 +17,7 @@ import { computed, defineComponent, onBeforeMount, PropType, Ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
+import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GeneralItem from '@/services/components/GeneralItem.vue';
@@ -34,6 +35,10 @@ export default defineComponent({
       type: Object as PropType<FilterModel>,
       required: true,
     },
+    type: {
+      type: String as PropType<string>,
+      required: true,
+    },
   },
   emits: ['select'],
   setup(props) {
@@ -41,7 +46,15 @@ export default defineComponent({
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     onBeforeMount(async () => {
       const fq = new FilterQuery();
-      fq.setFilterModel(props.filterModel);
+      if (props.type === 'anamnesis') {
+        fq.setFilterModel(ResearchesFiltersLib.onlyAnamneses());
+      }
+      if (props.type === 'researches') {
+        fq.setFilterModel(ResearchesFiltersLib.onlyLaboratory());
+      }
+      if (props.type === 'diagnosis') {
+        fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
+      }
       await Provider.store.dispatch('researches/getAll', fq);
     });
     return {
