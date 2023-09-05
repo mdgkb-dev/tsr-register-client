@@ -1,6 +1,12 @@
 <template>
-  <component :is="question.valueType.getComponentType()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
+  <component
+    :is="question.valueType.getComponentType()"
+    v-else
+    :research-result="researchResult"
+    :question="question"
+    @fill="$emit('fill')"
+  />
 </template>
 
 <script lang="ts">

@@ -1,12 +1,6 @@
 <template>
   <div class="select-block">
-    <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleAddAllergen">
-      <template #icon>
-        <svg class="icon-plus">
-          <use xlink:href="#plus"></use>
-        </svg>
-      </template>
-    </Button>
+    <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleAddAllergen" />
     <div class="item-list">
       <div
         v-for="variant in question.questionVariants.filter((q) => !!researchResult.getQuestionVariantAnswer(q.id))"
@@ -77,34 +71,27 @@
         <template #body>
           <div class="body">
             <GridContainer grid-gap="5px" margin="10px 0">
-              <template #grid-items>
-                <Button
-                  v-for="variant in filteredVariants"
-                  :key="variant.id"
-                  :text="variant.name"
-                  :background="researchResult.getQuestionVariantAnswer(variant.id) ? '#DFF2F8' : '#ffffff'"
-                  margin-right="10px"
-                  height="42px"
-                  width="100%"
-                  font-size="16px"
-                  border-radius="5px"
-                  color="#343e5c"
-                  :with-icon="false"
-                  @click="addAnswerToQuestionVariant(variant)"
-                >
-                </Button>
-              </template>
+              <Button
+                v-for="variant in filteredVariants"
+                :key="variant.id"
+                :text="variant.name"
+                :background="researchResult.getQuestionVariantAnswer(variant.id) ? '#DFF2F8' : '#ffffff'"
+                margin-right="10px"
+                height="42px"
+                width="100%"
+                font-size="16px"
+                border-radius="5px"
+                color="#343e5c"
+                :with-icon="false"
+                @click="addAnswerToQuestionVariant(variant)"
+              >
+              </Button>
             </GridContainer>
           </div>
         </template>
       </ResearcheContainer>
     </div>
   </div>
-  <svg width="0" height="0" class="hidden">
-    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
-    </symbol>
-  </svg>
 </template>
 
 <script lang="ts">
