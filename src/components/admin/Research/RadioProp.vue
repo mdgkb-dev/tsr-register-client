@@ -10,20 +10,8 @@
   </el-radio>
   <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
-      <StringProp
-        v-if="additionalQuestion.valueType.isString() || additionalQuestion.valueType.isText()"
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
-      <NumberProp
-        v-if="additionalQuestion.valueType.isNumber()"
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
-      <DataComponentComputed
-        v-if="additionalQuestion.valueType.isDate()"
+      <component
+        :is="additionalQuestion.valueType.getComponentType()"
         :research-result="researchResult"
         :question="additionalQuestion"
         @fill="$emit('fill')"
@@ -41,12 +29,13 @@ import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
+import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'RadioProp',
-  components: { NumberProp, StringProp, DataComponentComputed },
+  components: { NumberProp, StringProp, DataComponentComputed, SetProp },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,

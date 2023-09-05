@@ -10,30 +10,10 @@
   </el-checkbox>
   <el-form v-if="showOthers" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
-      <StringProp
-        v-if="additionalQuestion.valueType.isString() || additionalQuestion.valueType.isText()"
+      <component
+        :is="additionalQuestion.valueType.getComponentType()"
         :research-result="researchResult"
         :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
-      <NumberProp
-        v-if="additionalQuestion.valueType.isNumber()"
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
-      <DataComponentComputed
-        v-if="additionalQuestion.valueType.isDate()"
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
-      <!--      <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />-->
-      <SetProp
-        v-if="question.valueType.isSet()"
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        :restrict-others="true"
         @fill="$emit('fill')"
       />
     </el-form-item>
@@ -92,6 +72,7 @@ export default defineComponent({
       answer.setSelectedAnswerVariant(selected, variantId);
       filledCheck();
     };
+
     return {
       selectVariant,
       filledCheck,

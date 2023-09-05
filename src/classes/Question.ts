@@ -8,12 +8,9 @@ import ClassHelper from '@/services/ClassHelper';
 export default class Question {
   id?: string;
   name = '';
-  shortName = '';
   code = '';
-  colWidth = 150;
   valueTypeId?: string;
   order = 0;
-  setFilterString = '';
   ageCompare = false;
   @ClassHelper.GetClassConstructor(AnswerVariant)
   answerVariants: AnswerVariant[] = [];
@@ -28,10 +25,8 @@ export default class Question {
   questionVariantsForDelete: string[] = [];
 
   valueType: ValueType = new ValueType();
-  withOther = false;
   @ClassHelper.GetClassConstructor(QuestionMeasure)
   questionMeasures: QuestionMeasure[] = [];
-  questionMeasuresForDelete: string[] = [];
   tag = '';
   showSet = false;
   showRadio = false;

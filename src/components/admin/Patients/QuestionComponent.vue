@@ -1,15 +1,5 @@
 <template>
-  <StringProp
-    v-if="question.valueType.isString() || question.valueType.isText()"
-    :research-result="researchResult"
-    :question="question"
-    @fill="$emit('fill')"
-  />
-  <FilesProp v-if="question.valueType.isFiles()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <DataComponentComputed v-if="question.valueType.isDate()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <RadioProp v-if="question.valueType.isRadio()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <SetProp v-if="question.valueType.isSet()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
+  <component :is="question.valueType.getComponentType()" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
   <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
 </template>
 

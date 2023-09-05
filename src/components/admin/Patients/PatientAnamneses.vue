@@ -30,17 +30,14 @@
     </template>
 
     <template #body>
-      <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList
-          :research="research"
-          :patient-research="patientResearch"
-          @select="selectResult"
-          @show-chart="toggleChart"
-        />
-      </template>
-      <template v-else>
-        <PatientResearchesList type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
-      </template>
+      <PatientResearchesResultsList
+        v-if="research.id && patientResearch && patientResearch.researchId === research.id"
+        :research="research"
+        :patient-research="patientResearch"
+        @select="selectResult"
+        @show-chart="toggleChart"
+      />
+      <PatientResearchesList v-else type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
       <PatientResearchesQuestion
         v-if="researchResult.id"
         :key="researchResult.id"
@@ -49,15 +46,6 @@
         @save="saveResult"
         @cancel="cancelResearchResultsFilling"
       />
-      <!-- <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" /> -->
-
-      <!-- <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" />
-      </template>
-      <template v-else>
-        <AnamnesesList :patient="patient" />
-      </template> -->
-      <!-- <PatientResearchesQuestion v-if="researchResult.id" @save="saveResult" @cancel="cancelResearchResultsFilling" /> -->
       <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
     </template>
   </ResearcheContainer>

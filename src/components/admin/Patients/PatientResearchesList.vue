@@ -7,7 +7,7 @@
       height="60px"
       @click="$emit('select', research)"
     >
-      <template #general-item> {{ i + 1 }}. {{ research.name }}</template>
+      <template #general-item> {{ i + 1 }}. {{ research.name }} </template>
     </GeneralItem>
   </GridContainer>
 </template>

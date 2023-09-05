@@ -1,14 +1,5 @@
 <template>
   <el-input-number v-model="answer.valueNumber" @change="filledCheck" />
-
-  <!--  <el-radio-group-->
-  <!--    :model-value="registerGroupToPatient.getMeasureId(prop.id)"-->
-  <!--    @change="(measureId) => registerGroupToPatient.setMeasureId(measureId, prop.id)"-->
-  <!--  >-->
-  <!--    <el-radio v-for="measure in prop.registerPropertyMeasures" :key="measure.id" :label="measure.id">-->
-  <!--      {{ measure.name }}-->
-  <!--    </el-radio>-->
-  <!--  </el-radio-group>-->
 </template>
 
 <script lang="ts">
@@ -38,10 +29,13 @@ export default defineComponent({
     const answer = props.variantId
       ? props.researchResult.getQuestionVariantAnswer(props.variantId)
       : props.researchResult.getOrCreateAnswer(props.question);
-    const filledCheck = (): void => {
+    const filledCheck = (v: number): void => {
+      console.log(v);
       if (!answer) {
         return;
       }
+      console.log(v);
+      // answer.valueNumber = v;
       answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');

@@ -1,5 +1,5 @@
 <template>
-  <RightSliderContainer :toggle="toggle">
+  <RightSliderContainer v-if="research.withDates" :toggle="toggle">
     <template #header>
       <Button button-class="save-button" text="График" @click="toggleChart" />
       <Button button-class="save-button" text="Xlsx" @click="getXlsx" />
@@ -34,14 +34,14 @@
       </template>
     </CollapseContainer>
 
-    <template #button>
+    <template v-if="research.withDates" #button>
       <Button button-class="plus-button" text="Добавить" @click="addResult" />
     </template>
   </RightSliderContainer>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
@@ -77,12 +77,19 @@ export default defineComponent({
   },
   emits: ['select', 'update', 'showChart'],
   setup(props, { emit }) {
-    const toggle = ref(false);
+    const toggle = ref(props.research.withDates);
     const selectedId: Ref<string> = ref('');
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const update = async (item: ResearchResult): Promise<void> => {
       await Provider.store.dispatch('researchesResults/update', item);
     };
+
+    onBeforeMount(async () => {
+      const lastResult = props.patientResearch.getLastResult();
+      if (lastResult && lastResult.id) {
+        await selectResult(lastResult.id);
+      }
+    });
 
     const addResult = async (): Promise<void> => {
       const item = props.patientResearch.addResult(props.research, props.patientResearch.id);

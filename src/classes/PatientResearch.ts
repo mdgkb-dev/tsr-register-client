@@ -50,4 +50,11 @@ export default class PatientResearch {
     this.researchResults.push(item);
     return item;
   }
+
+  getLastResult(): ResearchResult | undefined {
+    if (this.researchResults.length === 0) {
+      return;
+    }
+    return this.researchResults[this.researchResults.length - 1];
+  }
 }
