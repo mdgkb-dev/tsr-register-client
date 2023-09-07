@@ -1,6 +1,6 @@
 import { Component } from 'vue';
 
-import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
+import DateQuestion from '@/components/admin/Research/DateQuestion.vue';
 import FilesProp from '@/components/admin/Research/FilesProp.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RadioProp from '@/components/admin/Research/RadioProp.vue';
@@ -12,7 +12,7 @@ const ValueTypesComponentsMap: Record<ValueTypes, Component> = {
   string: StringProp,
   text: StringProp,
   number: NumberProp,
-  date: DataComponentComputed,
+  date: DateQuestion,
   radio: RadioProp,
   set: SetProp,
   boolean: SetProp,

@@ -247,7 +247,7 @@ export default class Patient {
     }
 
     const pr = this.patientsResearches.find((pr: PatientResearch) => pr.researchId === researchId);
-    if (!pr) {
+    if (!pr || pr.researchResults.length === 0) {
       return new ResearchResult();
     }
     return pr.researchResults[0];

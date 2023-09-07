@@ -19,7 +19,7 @@ import ResearchResult from '@/classes/ResearchResult';
 import dateFormat from '@/services/DateMask';
 
 export default defineComponent({
-  name: 'DataComponentComputed',
+  name: 'DateQuestion',
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,

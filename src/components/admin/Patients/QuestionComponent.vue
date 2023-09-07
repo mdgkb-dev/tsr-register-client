@@ -14,7 +14,7 @@ import { defineComponent, PropType } from 'vue';
 
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
+import DateQuestion from '@/components/admin/Research/DateQuestion.vue';
 import FilesProp from '@/components/admin/Research/FilesProp.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import RadioProp from '@/components/admin/Research/RadioProp.vue';
@@ -28,7 +28,7 @@ export default defineComponent({
     SetProp,
     RadioProp,
     NumberProp,
-    DataComponentComputed,
+    DateQuestion,
     StringProp,
     SetSelect,
     FilesProp,

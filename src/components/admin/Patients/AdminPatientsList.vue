@@ -104,7 +104,7 @@ export default defineComponent({
     };
 
     const loadQuestions = async () => {
-      await Provider.store.dispatch('questions/getAll');
+      // await Provider.store.dispatch('questions/getAll');
     };
 
     const load = async () => {

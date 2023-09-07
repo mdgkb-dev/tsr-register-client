@@ -27,7 +27,7 @@ import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import DataComponentComputed from '@/components/admin/Research/DataComponentComputed.vue';
+import DateQuestion from '@/components/admin/Research/DateQuestion.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
@@ -35,7 +35,7 @@ import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'RadioProp',
-  components: { NumberProp, StringProp, DataComponentComputed, SetProp },
+  components: { NumberProp, StringProp, DateQuestion, SetProp },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
