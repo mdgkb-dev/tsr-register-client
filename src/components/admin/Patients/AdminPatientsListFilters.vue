@@ -14,7 +14,7 @@
           <div :style="{ width: '100%' }">
             <RemoteSearch
               :must-be-translated="true"
-              :key-value="schema.patient.key"
+              key-value="patient"
               placeholder="Начните вводить ФИО"
               max-width="100%"
               @select="selectSearch"

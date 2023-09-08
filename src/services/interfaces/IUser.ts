@@ -11,7 +11,7 @@ import IQuestion from '@/interfaces/IQuestion';
 import Human from '@/services/classes/Human';
 
 import ICandidateApplication from '../../interfaces/ICandidateApplication';
-import IOption from '../../interfaces/schema/IOption';
+import IOption from '../../interfaces/shared/IOption';
 
 export default interface IUser {
   id?: string;

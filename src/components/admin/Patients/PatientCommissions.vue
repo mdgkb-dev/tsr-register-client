@@ -323,7 +323,6 @@ export default defineComponent({
       isToggle,
       toggle,
       mounted,
-      schema: Provider.schema,
       patient,
       openModalDiagnosis,
       showModalDiagnosis,

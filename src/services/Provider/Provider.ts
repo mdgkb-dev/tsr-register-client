@@ -1,7 +1,6 @@
-import { computed, Ref, ref, watch } from 'vue';
+import { Ref, ref, watch } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
-import ISchema from '@/interfaces/schema/ISchema';
 import router from '@/router';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Pagination from '@/services/classes/filters/Pagination';
@@ -16,7 +15,6 @@ import Store from './Store';
 const Provider = (() => {
   const mounted: Ref<boolean> = ref(false);
   const form = ref();
-  const schema: Ref<ISchema> = computed(() => Store.store.getters['meta/schema']);
   const r = router;
   const s = store;
   const saveButtonClicked: Ref<boolean> = ref(false);
@@ -87,7 +85,6 @@ const Provider = (() => {
       edit: editAdmin,
       remove: Store.remove,
       mounted: mounted,
-      schema: schema,
       sortList: Filter.sortList,
     };
   }
@@ -107,7 +104,6 @@ const Provider = (() => {
     dropPagination,
     saveButtonClicked,
     mounted,
-    schema,
     form,
     getAll,
     setStoreModule,

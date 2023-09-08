@@ -36,7 +36,6 @@ export default defineComponent({
 
     onBeforeMount(async (): Promise<void> => {
       changeDocumentTitle();
-      await store.dispatch('meta/getSchema');
       await store.dispatch('search/searchGroups');
       await store.dispatch('auth/setAuth');
       mounted.value = true;

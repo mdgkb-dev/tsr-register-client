@@ -121,7 +121,6 @@ export default defineComponent({
       searchFormRef,
       expandRowKeys,
       isEditMode,
-      schema: Provider.schema,
       addMkbItem,
       patient,
     };
