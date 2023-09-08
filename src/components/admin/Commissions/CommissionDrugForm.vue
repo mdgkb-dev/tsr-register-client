@@ -55,7 +55,7 @@ export default defineComponent({
       const filterQuery = new FilterQuery();
       filterQuery.pagination.limit = 0;
       filterQuery.setSortModel(DrugsSortsLib.byNameINN());
-      await Provider.store.dispatch('drugs/getAll', filterQuery);
+      await Provider.store.dispatch('drugs/getAll', { filterQuery });
 
       stepsArrays.value = {
         0: drugs,
@@ -76,7 +76,7 @@ export default defineComponent({
       const filterQuery = new FilterQuery();
       filterQuery.setFilterModel(DrugFormsFiltersLib.byDrugId(item.id));
       filterQuery.pagination.limit = 0;
-      await Provider.store.dispatch('drugForms/getAll', filterQuery);
+      await Provider.store.dispatch('drugForms/getAll', { filterQuery });
       drugRecipe.value.setDrug(item);
     };
 
@@ -84,7 +84,7 @@ export default defineComponent({
       const filterQuery = new FilterQuery();
       filterQuery.setFilterModel(DrugDozesFiltersLib.byDrugFormId(item.id));
       filterQuery.pagination.limit = 0;
-      await Provider.store.dispatch('drugDozes/getAll', filterQuery);
+      await Provider.store.dispatch('drugDozes/getAll', { filterQuery });
       drugRecipe.value.setDrugForm(item);
     };
 

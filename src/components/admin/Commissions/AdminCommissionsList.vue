@@ -260,7 +260,7 @@ export default defineComponent({
         buttons: [{ text: 'Создать комиссию', type: 'normal-button', action: openCreateCommissionModal }],
       },
       sortsLib: CommissionsSortsLib,
-      getAction: 'getAllWithCount',
+      getAction: 'getAll',
     });
 
     const selectSearch = async (event: ISearchObject): Promise<void> => {
