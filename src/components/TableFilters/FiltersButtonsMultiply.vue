@@ -36,7 +36,7 @@
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import Button from '@/components/Base/Button.vue';
-import IOption from '@/interfaces/schema/IOption';
+import IOption from '@/interfaces/shared/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';

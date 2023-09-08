@@ -7,12 +7,7 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-          <RemoteSearch
-            :must-be-translated="true"
-            key-value="mkbItem"
-            placeholder="Начните вводить название диагноза"
-            @select="addMkbItem"
-          />
+        <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
       </div>
     </template>
     <template #tabs>
@@ -126,7 +121,6 @@ export default defineComponent({
       searchFormRef,
       expandRowKeys,
       isEditMode,
-      schema: Provider.schema,
       addMkbItem,
       patient,
     };
@@ -213,7 +207,6 @@ export default defineComponent({
 .hidden {
   display: none;
 }
-
 
 @media screen and (max-width: 768px) {
   .tabs-item {
