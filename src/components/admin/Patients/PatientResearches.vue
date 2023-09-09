@@ -6,6 +6,7 @@
         <TopSliderContainer>
           <template #title>
             <span>{{ research.name }}</span>
+            <span v-if="researchResult">&nbsp;Дата: {{ $dateTimeFormatter.format(researchResult.date) }}</span>
             <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
           </template>
           <div v-if="research.withScores" class="flex-line">

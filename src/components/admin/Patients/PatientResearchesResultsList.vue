@@ -4,13 +4,13 @@
       <Button button-class="save-button" text="График" @click="toggleChart" />
       <Button button-class="save-button" text="Xlsx" @click="getXlsx" />
     </template>
-    <CollapseContainer>
+    <CollapseContainer :init-active-idx="patientResearch.researchResults.length - 1">
       <template #default="scope">
         <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
           <CollapseItem
             :is-collaps="false"
             padding="0 8px"
-            :active-id="scope.activeId"
+            :active-id="scope.activeIdx"
             :tab-id="i"
             :selectable="true"
             @changeActiveId="scope.changeActiveId"
@@ -81,7 +81,7 @@ export default defineComponent({
     const selectedId: Ref<string> = ref('');
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const update = async (item: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/update', item);
+      await Provider.store.dispatch('researchesResults/updateWithoutReset', item);
     };
 
     onBeforeMount(async () => {

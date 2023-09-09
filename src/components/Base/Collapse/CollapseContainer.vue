@@ -1,24 +1,26 @@
 <template>
   <div>
-    <slot :activeId="activeId" :changeActiveId="changeActiveId" />
+    <slot :activeIdx="activeIdx" :changeActiveId="changeActiveId" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, PropType, ref } from 'vue';
 
 export default defineComponent({
   name: 'CollapseContainer',
-
-  setup() {
-    const activeId = ref(0);
-    const changeActiveId = (id: number) => {
-      activeId.value = id;
+  props: {
+    initActiveIdx: { type: Number as PropType<number>, default: 0 },
+  },
+  setup(props) {
+    const activeIdx = ref(props.initActiveIdx);
+    const changeActiveId = (idx: number) => {
+      activeIdx.value = idx;
     };
 
     return {
       changeActiveId,
-      activeId,
+      activeIdx,
     };
   },
 });
