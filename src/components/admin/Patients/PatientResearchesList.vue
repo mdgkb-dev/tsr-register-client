@@ -57,7 +57,7 @@ export default defineComponent({
         fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
       }
       fq.setSortModel(ResearchesSortsLib.byOrder());
-      await Provider.store.dispatch('researches/getAll', fq);
+      await Provider.store.dispatch('researches/getAll', { filterQuery: fq });
     });
     return {
       patient,

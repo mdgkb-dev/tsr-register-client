@@ -161,7 +161,7 @@ export default defineComponent({
     };
 
     const load = async () => {
-      await Provider.store.dispatch('statuses/getAll', filterQuery);
+      await Provider.store.dispatch('statuses/getAll', { filterQuery });
       await Provider.store.dispatch('commissions/getAll');
       await loadDrugApplications();
       filterByStatus.value = DrugApplicationsFiltersLib.byStatus();
@@ -180,7 +180,7 @@ export default defineComponent({
         buttons: [{ text: 'Добавить заявку', type: 'normal-button', action: addApplication }],
       },
       sortsLib: DrugApplicationsSortsLib,
-      getAction: 'getAllWithCount',
+      getAction: 'getAll',
     });
 
     const updateDrugApplication = async (drugApplication: DrugApplication): Promise<void> => {

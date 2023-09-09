@@ -1,11 +1,15 @@
 import { ActionTree } from 'vuex';
 
 import SearchElement from '@/classes/SearchElement';
+import Cache from '@/services/Cache';
 import SearchModel from '@/services/classes/SearchModel';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
 import State from './state';
+
+const cache = new Cache();
+cache.name = 'searchGroups';
 
 const httpClient = new HttpClient('search');
 
@@ -33,7 +37,10 @@ const actions: ActionTree<State, RootState> = {
     if (state.searchModel.searchGroups.length > 0) {
       return;
     }
-    commit('setSearchGroups', await httpClient.get<SearchModel>({ query: `search-groups` }));
+    const get = async () => {
+      return await httpClient.get<SearchModel>({ query: `search-groups` });
+    };
+    commit('setSearchGroups', await cache.storeGetWithCache<SearchModel>(get));
   },
 };
 

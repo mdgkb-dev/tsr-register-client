@@ -128,7 +128,7 @@ export default defineComponent({
         ],
       },
       sortsLib: PatientsSortsLib,
-      getAction: 'getAllWithCount',
+      getAction: 'getAll',
     });
 
     const updateHuman = async (human: Human): Promise<void> => {

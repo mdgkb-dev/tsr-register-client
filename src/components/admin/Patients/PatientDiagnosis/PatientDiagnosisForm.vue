@@ -1,7 +1,6 @@
 <template>
   <ResearcheContainer v-if="mounted && !patientDiagnosis.id">
-    <template #body> 
-      <div class="diag-title">Диагнозов нет</div></template>
+    <template #body> <div class="diag-title">Диагнозов нет</div></template>
   </ResearcheContainer>
   <ResearcheContainer v-if="mounted && patientDiagnosis.id" background="#DFF2F8">
     <template #header>
@@ -69,7 +68,7 @@ export default defineComponent({
     onBeforeMount(async () => {
       const fq = new FilterQuery();
       fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
-      await Provider.store.dispatch('researches/getAll', fq);
+      await Provider.store.dispatch('researches/getAll', { filterQuery: fq });
 
       for (const r of researches.value) {
         await createPatientResearch(r);
@@ -119,12 +118,11 @@ export default defineComponent({
   min-width: 220px;
   height: 100px;
   background: #f5f5f5;
-  color: #B0A4C0;
+  color: #b0a4c0;
   text-transform: uppercase;
   border: $normal-darker-border;
   border-radius: $normal-border-radius;
 }
-
 
 .margin-class {
   margin-top: 10px;

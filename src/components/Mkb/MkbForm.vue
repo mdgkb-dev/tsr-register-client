@@ -112,7 +112,6 @@ export default defineComponent({
       // clearForm,
       isEditMode,
       // filteredSubDiagnosis,
-      schema: Provider.schema,
       // selectedElement,
       // RemoveFromClass,
       addMkbItem,

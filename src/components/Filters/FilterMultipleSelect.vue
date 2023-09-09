@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import IOption from '@/interfaces/schema/IOption';
+import IOption from '@/interfaces/shared/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
 

@@ -84,7 +84,7 @@ export default defineComponent({
     const queryStringsRepresentative: Ref<string> = ref('');
 
     const loadRepresentatives = async () => {
-      await Provider.store.dispatch('representatives/getAll', Provider.filterQuery.value);
+      await Provider.store.dispatch('representatives/getAll', { filterQuery: Provider.filterQuery.value });
     };
 
     const load = async () => {
@@ -104,7 +104,7 @@ export default defineComponent({
         buttons: [{ text: 'Добавить', type: 'normal-button', action: addRepresentative }],
       },
       sortsLib: RepresentativesSortsLib,
-      getAction: 'getAllWithCount',
+      getAction: 'getAll',
     });
 
     const selectSearch = async (event: ISearchObject): Promise<void> => {

@@ -72,7 +72,7 @@ export default defineComponent({
     );
 
     onBeforeMount(async () => {
-      await store.dispatch('menus/getAll');
+      await store.dispatch('menus/getAll', { withCache: true });
       // await store.dispatch('meta/getApplicationsCounts');
       // store.commit('admin/setApplicationsCounts', applicationsCounts.value);
       // await store.dispatch('admin/subscribeApplicationsCountsGet');

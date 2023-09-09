@@ -43,7 +43,7 @@ export default defineComponent({
     const filterQuery = new FilterQuery();
     filterQuery.setFilterModel(filterByCommissionId);
     onBeforeMount(async () => {
-      await Provider.store.dispatch('drugApplications/getAll', filterQuery);
+      await Provider.store.dispatch('drugApplications/getAll', { filterQuery });
     });
 
     return {

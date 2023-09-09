@@ -100,7 +100,7 @@ export default defineComponent({
     const getSnils = async (): Promise<void> => {
       const fq = new FilterQuery();
       fq.setFilterModel(DocumentTypesFiltersLib.byCode(DocumentTypesCodes.Snils));
-      await Provider.store.dispatch('documentTypes/getAll', fq);
+      await Provider.store.dispatch('documentTypes/getAll', { filterQuery: fq });
       snils.value = documentTypes.value.find((d: DocumentType) => d.code === DocumentTypesCodes.Snils) ?? snils.value;
     };
 

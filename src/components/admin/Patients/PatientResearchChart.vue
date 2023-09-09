@@ -61,7 +61,7 @@ export default defineComponent({
       }
       fq.filterModels.push(ResearchesResultsFiltersLib.byPatientResearchId(props.patientResearch.id));
       fq.sortModels.push(ResearchesResultsSortsLib.byDate());
-      await Provider.store.dispatch('researchesResults/getAll', fq);
+      await Provider.store.dispatch('researchesResults/getAll', { filterQuery: fq });
       data.value = props.research.getChartDataSets(researchResults.value, patient.value.human.dateBirth, patient.value.human.isMale);
       mounted.value = true;
     });
@@ -128,13 +128,13 @@ export default defineComponent({
 }
 
 @media (max-width: 1050px) {
-  .research-info{
+  .research-info {
     top: 246px;
   }
 }
 
 @media (max-width: 992px) {
-  .research-info{
+  .research-info {
     top: 205px;
     margin: 0 10px 0 0;
     width: calc(90% - 20px);
@@ -143,7 +143,6 @@ export default defineComponent({
     left: 50%;
     transform: translateX(-50%);
   }
-
 }
 
 @media screen and (max-width: 822px) {
@@ -153,17 +152,16 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 502px) {
-  .research-info{
+  .research-info {
     height: 55vh;
     top: 328px;
   }
 }
 
 @media screen and (max-width: 342px) {
-  .research-info{
+  .research-info {
     height: 35vh;
     top: 492px;
   }
 }
-
 </style>

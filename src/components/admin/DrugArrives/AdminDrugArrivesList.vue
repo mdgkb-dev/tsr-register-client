@@ -113,7 +113,7 @@ export default defineComponent({
         buttons: [{ text: 'Добавить', type: 'normal-button', action: createDrugArrive }],
       },
       // sortsLib: commissionsSortsLib,
-      getAction: 'getAllWithCount',
+      getAction: 'getAll',
     });
 
     const openDrugArriveDecreases = async (item: DrugArrive): Promise<void> => {
