@@ -93,6 +93,7 @@ export default class ResearchResult {
   }
 
   getQuestionsAnswersMap(questions: Question[]): { [key: string]: number } {
+    console.log(questions);
     const map: { [key: string]: number } = {};
     questions.forEach((q: Question) => {
       if (q.code) {

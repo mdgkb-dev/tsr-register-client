@@ -27,7 +27,6 @@ export default class Question {
   valueType: ValueType = new ValueType();
   @ClassHelper.GetClassConstructor(QuestionMeasure)
   questionMeasures: QuestionMeasure[] = [];
-  tag = '';
   showSet = false;
   showRadio = false;
   isEdit = false;

@@ -38,7 +38,7 @@ const Store = (() => {
   }
 
   async function loadItems(): Promise<void> {
-    return await Store.store.dispatch(`${Store.getStoreModule()}/${getGetAction()}`, s.getters['filter/filterQuery']);
+    return await Store.store.dispatch(`${Store.getStoreModule()}/${getGetAction()}`, { filterQuery: s.getters['filter/filterQuery'] });
   }
 
   async function create(): Promise<void> {
@@ -46,7 +46,6 @@ const Store = (() => {
   }
 
   async function update(): Promise<void> {
-    console.log(store.getters[storeModule + '/item']);
     return store.dispatch(`${storeModule}/update`, store.getters[storeModule + '/item']);
   }
 

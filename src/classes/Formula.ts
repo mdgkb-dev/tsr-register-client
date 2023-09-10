@@ -25,6 +25,7 @@ export default class Formula {
   calculate(variables: { [key: string]: number }): number {
     const mexp = new Mexp();
     let parsedFormula = this.formula;
+    console.log(parsedFormula, variables);
     for (const [key, value] of Object.entries(variables)) {
       parsedFormula = parsedFormula.replaceAll(key, value.toString());
     }
@@ -41,6 +42,7 @@ export default class Formula {
 
   getResult(variables: { [key: string]: number }, isMale?: boolean, monthAge?: number): FormulaResult {
     const result = this.calculate(variables);
+
     const formulaResult = this.filterResults(isMale, monthAge).find((fr: FormulaResult) => {
       return fr.checkValueInRange(result);
     });
