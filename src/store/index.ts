@@ -8,6 +8,7 @@ import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
 import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
 import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
+import dataExport from '@/store/modules/dataExport';
 import { disabilities } from '@/store/modules/disabilities';
 import { doctors } from '@/store/modules/doctors';
 import { documentFieldValues } from '@/store/modules/documentFieldValues';
@@ -118,6 +119,7 @@ const store: StoreOptions<RootState> = {
     fileInfos,
     menus,
     patientsDomains,
+    dataExport,
   },
 };
 
