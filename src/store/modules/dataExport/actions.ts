@@ -6,14 +6,12 @@ import SearchModel from '@/services/classes/SearchModel';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/store/types';
 
-import State from './state';
-
 const cache = new Cache();
 cache.name = 'searchGroups';
 
 const httpClient = new HttpClient('data-export');
 
-const actions: ActionTree<State, RootState> = {
+const actions: ActionTree<RootState, RootState> = {
   export: async (_, exportOptions: ExportOptions): Promise<void> => {
     const item = await httpClient.get<SearchModel>({ query: `?exportOptions=${JSON.stringify(exportOptions)}`, isBlob: true });
   },

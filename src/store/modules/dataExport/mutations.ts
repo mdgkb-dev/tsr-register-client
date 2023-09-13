@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 
-import State from './state';
+import RootState from '@/store/types';
 
-const mutations: MutationTree<State> = {};
+const mutations: MutationTree<RootState> = {};
 
 export default mutations;
