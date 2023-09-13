@@ -1,5 +1,5 @@
 <template>
-<div v-if="!isToggle" class="blur" @click="isToggle = true"></div>
+  <div v-if="!isToggle" class="blur" @click="isToggle = true"></div>
   <div
     class="top-slider"
     :style="{
@@ -12,10 +12,12 @@
         <slot />
       </div>
     </div>
-    <div class="click-line" @click="toggleSlider(!isToggle)"
+    <div
+      class="click-line"
       :style="{
         height: sliderOffHeight,
       }"
+      @click="toggleSlider(!isToggle)"
     >
       <slot name="title" />
     </div>
@@ -26,13 +28,8 @@
 import { watch } from '@vue/runtime-core';
 import { defineComponent, PropType, ref } from 'vue';
 
-import StringItem from '@/services/components/StringItem.vue';
-
 export default defineComponent({
   name: 'TopSliderContainer',
-  components: {
-    StringItem,
-  },
   props: {
     sliderOffHeight: {
       type: String as PropType<string>,
@@ -111,16 +108,17 @@ export default defineComponent({
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
   transition: 0.3s;
   width: calc(100% - 300px);
-  max-width: 500px;
+  max-width: 800px;
 }
 
 .top-slider-content {
-  max-width: 300px;
+  max-width: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(100% - 53px);
   margin: auto;
+  padding: 20px;
 }
 
 .center {
@@ -134,33 +132,49 @@ export default defineComponent({
   right: 0;
   height: 55px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background: #f5f5f5;
   min-height: 40px;
   color: #343e5c;
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
   border-top: $normal-darker-border;
   cursor: pointer;
   padding: 0 10px;
 }
 
-@media screen and (max-width: 820px) {
-  .top-slider {
-    height: 65vh;
+@media screen and (max-width: 1024px) {
+  .click-line {
+    font-size: 12px;
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
+  .click-line {
+    font-size: 11px;
+  }
   .top-slider {
-    height: 55vh;
+    width: calc(100% - 100px);
+  }
+  .top-slider-content {
+    padding: 10px;
   }
 }
 
-@media screen and (max-width: 339px) {
-  .top-slider {
-    height: 35vh;
+@media screen and (max-width: 450px) {
+  .click-line {
+    line-height: 12px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .click-line {
+    font-size: 10px;
+    line-height: 10px;
+  }
+  .top-slider-content {
+    padding: 8px;
   }
 }
 </style>

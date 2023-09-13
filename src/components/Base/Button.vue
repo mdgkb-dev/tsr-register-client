@@ -25,6 +25,8 @@
     <Close />
     <Outlined />
     <Commission />
+    <Back />
+    <Save />
   </button>
 </template>
 
@@ -40,6 +42,8 @@ import EditTitle from '@/assets/svg/EditTitle.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
 import Plus from '@/assets/svg/Plus.svg';
+import Back from '@/assets/svg/Back.svg';
+import Save from '@/assets/svg/Save.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -53,6 +57,8 @@ export default defineComponent({
     Close,
     Outlined,
     Commission,
+    Back,
+    Save,
   },
   inheritAttrs: false,
   props: {

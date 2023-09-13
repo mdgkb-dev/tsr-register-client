@@ -182,26 +182,11 @@ export default defineComponent({
   .right-slider {
     top: 205px;
   }
-
 }
 
 @media screen and (max-width: 822px) {
   .right-slider {
     top: 245px;
-  }
-}
-
-@media screen and (max-width: 502px) {
-  .right-slider {
-    height: 55vh;
-    top: 327px;
-  }
-}
-
-@media screen and (max-width: 342px) {
-  .right-slider {
-    height: 35vh;
-    top: 490px;
   }
 }
 </style>

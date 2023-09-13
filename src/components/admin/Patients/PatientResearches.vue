@@ -3,6 +3,7 @@
     <template #header>
       <div v-if="research.id && patientResearch" class="header-container">
         <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
+        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling(true)" />
         <TopSliderContainer>
           <template #title>
             <span>{{ research.name }}</span>
@@ -27,6 +28,7 @@
             </div> -->
         </TopSliderContainer>
         <Button button-class="grey-button" text="Сохранить" @click="saveResult(researchResult)" />
+        <Button icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult(researchResult)" />
       </div>
     </template>
     <template #body>
@@ -216,6 +218,16 @@ export default defineComponent({
   font-size: 14px;
 }
 
+.edit-button {
+  display: none;
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #f5f5f5;
+}
+
 .flex-line {
   height: 42px;
   display: flex;
@@ -228,5 +240,21 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+:deep(.edit-icon) {
+  width: 28px;
+  height: 28px;
+  fill: #006bb4;
+}
+
+@media screen and (max-width: 768px) {
+  .grey-button {
+    display: none;
+  }
+
+  .edit-button {
+    display: flex;
+  }
 }
 </style>
