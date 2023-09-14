@@ -16,7 +16,7 @@
         >
           <template #inside-content>
             <div :id="question.getIdWithoutDashes()" class="background-container">
-              <QuestionComponent :question="question" :research-result="researchResult" @fill="scroll(question.getIdWithoutDashes())" />
+              <QuestionComponent :question="question" :research-result="researchResult" @fill="fill(question)" />
             </div>
           </template>
         </CollapseItem>
@@ -59,8 +59,8 @@ export default defineComponent({
       default: '',
     },
   },
-  emits: ['save', 'cancel'],
-  setup(props) {
+  emits: ['save', 'cancel', 'fill'],
+  setup(props, { emit }) {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
@@ -93,13 +93,18 @@ export default defineComponent({
       return results;
     };
 
+    const fill = (question: Question) => {
+      emit('fill');
+      scroll(question.getIdWithoutDashes());
+    };
+
     return {
       getCalculationsResults,
       filteredQuestions,
       researchResult,
       patient,
       research,
-      scroll,
+      fill,
     };
   },
 });

@@ -20,6 +20,7 @@ import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'ModalWindow',
   props: {
+    showCloseDialog: { type: Boolean as PropType<boolean>, required: false, default: false },
     show: {
       type: Boolean as PropType<boolean>,
       default: false,
@@ -30,7 +31,8 @@ export default defineComponent({
     },
   },
   emits: ['save', 'close'],
-  setup(_, { emit }) {
+
+  setup(props, { emit }) {
     const form = ref();
     const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
     const rules = RepresentativeRules;
@@ -50,20 +52,24 @@ export default defineComponent({
     };
 
     const beforeClose = (done: () => void) => {
-      ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите закрыть окно?', {
-        distinguishCancelAndClose: true,
-        confirmButtonText: 'Закрыть',
-        cancelButtonText: 'Не закрывать',
-      })
-        .then(() => {
-          // Вызывается при сохранении
-          ElMessage({
-            type: 'warning',
-            message: 'Данные не были сохранёны',
-          });
-          done();
+      if (props.showCloseDialog) {
+        ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите закрыть окно?', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: 'Закрыть',
+          cancelButtonText: 'Не закрывать',
         })
-        .catch(() => null);
+          .then(() => {
+            // Вызывается при сохранении
+            ElMessage({
+              type: 'warning',
+              message: 'Данные не были сохранёны',
+            });
+            done();
+          })
+          .catch(() => null);
+      } else {
+        done();
+      }
     };
 
     const close = () => {
