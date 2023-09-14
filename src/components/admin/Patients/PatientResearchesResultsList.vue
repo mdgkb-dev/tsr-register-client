@@ -6,7 +6,7 @@
     </template>
     <CollapseContainer>
       <template #default="scope">
-        <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
+        <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id, true)">
           <CollapseItem
             :is-collaps="false"
             padding="0 8px"
@@ -75,7 +75,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['select', 'update', 'showChart'],
+  emits: ['select', 'update', 'showChart', 'beforeLeave'],
   setup(props, { emit }) {
     const toggle = ref(props.research.withDates);
     const selectedId: Ref<string> = ref('');
@@ -95,9 +95,13 @@ export default defineComponent({
       const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);
     };
-    const selectResult = async (id: string): Promise<void> => {
+    const selectResult = async (id: string, beforeLeave?: boolean): Promise<void> => {
       selectedId.value = id;
-      emit('select', id);
+      if (beforeLeave) {
+        await emit('beforeLeave', emit('select', id));
+      } else {
+        emit('select', id);
+      }
     };
 
     const getXlsx = async (): Promise<void> => {

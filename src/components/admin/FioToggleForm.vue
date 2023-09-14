@@ -2,7 +2,7 @@
   <el-form ref="form" :model="humanCopy" style="width: 100%">
     <InfoItem
       title="ФИО"
-      :show-save-dialog="true"
+      :show-save-dialog="showSaveDialog"
       icon="edit-title"
       :with-hover="true"
       :close="closeToggle"
@@ -24,7 +24,7 @@
             padding="0"
             width="100%"
           >
-            <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname">
+            <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname" @change="setFilled">
               <el-input v-model="humanCopy.surname" />
               <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
             </el-form-item>
@@ -39,7 +39,7 @@
             padding="0"
             width="100%"
           >
-            <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name">
+            <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name" @change="setFilled">
               <el-input v-model="humanCopy.name" />
               <!-- <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" /> -->
             </el-form-item>
@@ -54,7 +54,7 @@
             padding="0"
             width="100%"
           >
-            <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic">
+            <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic" @change="setFilled">
               <el-input v-model="humanCopy.patronymic" />
               <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
             </el-form-item>
@@ -95,9 +95,11 @@ export default defineComponent({
     const closeToggle: Ref<boolean> = ref(false);
     const form = ref();
     const humanCopy: Ref<Human> = ref(new Human(props.human));
+    const showSaveDialog: Ref<boolean> = ref(false);
 
     const resetCopy = () => {
       humanCopy.value = new Human(props.human);
+      showSaveDialog.value = false;
     };
 
     const updateHuman = async (): Promise<void> => {
@@ -120,6 +122,10 @@ export default defineComponent({
       await updateHuman();
     };
 
+    const setFilled = () => {
+      showSaveDialog.value = true;
+    };
+
     return {
       closeToggle,
       submit,
@@ -127,6 +133,8 @@ export default defineComponent({
       form,
       humanCopy,
       resetCopy,
+      setFilled,
+      showSaveDialog,
     };
   },
 });
