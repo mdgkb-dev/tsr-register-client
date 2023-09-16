@@ -48,12 +48,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
 import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
-import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
@@ -88,10 +87,18 @@ export default defineComponent({
   setup(props, { emit }) {
     const toggle = ref(props.research.withDates);
     const selectedId: Ref<string> = ref('');
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+
     const exports: ExportOptions[] = [
-      ExportOptions.XLSX(PatientsExportOptionLib.onePatient(patient.value.id), ResearchesExportOptionLib.oneResearch(props.research?.id)),
+      ExportOptions.XLSX(
+        PatientsExportOptionLib.onePatient(props.patientResearch.patientId),
+        ResearchesExportOptionLib.oneResearch(props.research.id)
+      ),
+      ExportOptions.PDF(
+        PatientsExportOptionLib.onePatient(props.patientResearch.patientId),
+        ResearchesExportOptionLib.oneResearch(props.research.id)
+      ),
     ];
+
     const update = async (item: ResearchResult): Promise<void> => {
       await Provider.store.dispatch('researchesResults/updateWithoutReset', item);
     };

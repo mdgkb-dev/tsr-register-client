@@ -13,13 +13,23 @@ export default class ExportOptions {
     this.exportType = exportType;
   }
 
-  static XLSX(...options: ExportOptionsObject[]): ExportOptions {
-    const rootOptions = new ExportOptions(ExportTypes.XLSX);
+  private setOptions(...options: ExportOptionsObject[]) {
     options.forEach((o: ExportOptionsObject) => {
       for (const i in o) {
-        rootOptions.options[i] = o;
+        this.options[i] = o;
       }
     });
+  }
+
+  static XLSX(...options: ExportOptionsObject[]): ExportOptions {
+    const rootOptions = new ExportOptions(ExportTypes.XLSX);
+    rootOptions.setOptions(...options);
+    return rootOptions;
+  }
+
+  static PDF(...options: ExportOptionsObject[]): ExportOptions {
+    const rootOptions = new ExportOptions(ExportTypes.PDF);
+    rootOptions.setOptions(...options);
     return rootOptions;
   }
 }

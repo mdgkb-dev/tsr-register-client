@@ -11,6 +11,13 @@ const PatientsExportOptionLib = (() => {
     return { [ExportOptionsKey.Patient]: option };
   }
 
+  function manyPatients(ids: (string | undefined)[]): ExportOptionsObject {
+    const option = {
+      ids: ids,
+    };
+    return { [ExportOptionsKey.Patient]: option };
+  }
+
   function onePatient(id?: string): ExportOptionsObject {
     const option = {
       ids: [id],
@@ -22,6 +29,7 @@ const PatientsExportOptionLib = (() => {
 
   return {
     onePatient,
+    manyPatients,
     allPatients,
   };
 })();
