@@ -59,7 +59,6 @@ export default defineComponent({
   overflow: hidden;
   margin: 0 10px 0 0;
   height: 100%;
-  box-sizing: border-box;
 }
 
 .top-menu {
@@ -82,6 +81,7 @@ export default defineComponent({
   overflow: auto;
   background: blue;
   height: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1436px) {
@@ -113,14 +113,10 @@ export default defineComponent({
 }
 
 @media (max-width: 502px) {
-  .body-container {
-    height: calc(100% - 180px);
-  }
-}
-
-@media (max-width: 342px) {
-  .body-container {
-    height: calc(100% - 345px);
+  .top-menu {
+    max-height: 123px;
+    overflow: hidden;
+    overflow-y: auto;
   }
 }
 </style>

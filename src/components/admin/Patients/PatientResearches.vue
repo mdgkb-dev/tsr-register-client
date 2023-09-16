@@ -2,7 +2,8 @@
   <ResearcheContainer>
     <template #header>
       <div v-if="research.id && patientResearch" class="header-container">
-        <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
+        <Button button-class="grey-button" text="Назад" @click="beforeLeave('', true)" />
+        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling(true)" />
         <TopSliderContainer>
           <template #title>
             <span>{{ research.name }}</span>
@@ -26,7 +27,8 @@
               <div :style="{ color: res.color }">{{ res.result }}</div>
             </div> -->
         </TopSliderContainer>
-        <Button button-class="grey-button" text="Сохранить" @click="saveResult(researchResult)" />
+        <Button v-show="confirmLeave" button-class="grey-button" text="Сохранить" @click="saveResult()" />
+        <Button icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult()" />
       </div>
     </template>
     <template #body>
@@ -36,6 +38,7 @@
           :patient-research="patientResearch"
           @select="selectResult"
           @show-chart="toggleChart"
+          @before-leave="beforeLeave"
         />
       </template>
       <template v-else>
@@ -48,6 +51,7 @@
         :show-only-not-filled="showOnlyNotFilled"
         @save="saveResult"
         @cancel="cancelResearchResultsFilling"
+        @fill="formUpdated"
       />
       <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
       <Xlsx />
@@ -57,6 +61,7 @@
 
 <script lang="ts">
 import { Delete, Document, Edit } from '@element-plus/icons-vue';
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
 import Xlsx from '@/assets/svg/Xlsx.svg';
@@ -70,6 +75,7 @@ import PatientResearchesQuestion from '@/components/admin/Patients/PatientResear
 import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import MessageSuccess from '@/services/classes/messages/MessageSuccess';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -100,6 +106,11 @@ export default defineComponent({
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+    const confirmLeave: Ref<boolean> = ref(false);
+
+    const formUpdated = () => {
+      confirmLeave.value = true;
+    };
 
     const createPatientResearch = async (research: Research) => {
       if (!patient.value.getPatientResearch(research.id)) {
@@ -124,18 +135,55 @@ export default defineComponent({
 
     const selectResult = async (id: string) => {
       await Provider.store.dispatch('researchesResults/get', id);
+      confirmLeave.value = false;
     };
 
-    const saveResult = async (result: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/update', result);
+    const updateReserchResults = async () => {
+      await Provider.store.dispatch('researchesResults/updateWithoutReset', researchResult.value);
+    };
+
+    const updatePatientsResearches = async () => {
       if (patientResearch.value) {
-        patientResearch.value.recalculate(result);
-        await Provider.store.dispatch('patientsResearches/update', patientResearch.value);
+        patientResearch.value.recalculate(researchResult.value);
+        await Provider.store.dispatch('patientsResearches/updateWithoutReset', patientResearch.value);
       }
       if (!research.value.withDates) {
         Provider.store.commit('researchesResults/set');
         Provider.store.commit('researches/set');
       }
+    };
+
+    const beforeLeave = async (id: string, back: boolean) => {
+      if (confirmLeave.value) {
+        await ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
+          distinguishCancelAndClose: true,
+          confirmButtonText: 'Сохранить',
+          cancelButtonText: 'Не сохранять',
+        })
+          .then(() => {
+            // Вызывается при сохранении
+            Promise.resolve(saveResult()).then(() => {
+              back ? cancelResearchResultsFilling(true) : selectResult(id);
+            });
+          })
+          .catch((action: string) => {
+            if (action === 'cancel') {
+              ElMessage({
+                type: 'warning',
+                message: 'Изменения не были сохранены',
+              });
+              back ? cancelResearchResultsFilling(true) : selectResult(id);
+            }
+          });
+      } else {
+        back ? cancelResearchResultsFilling(true) : selectResult(id);
+      }
+    };
+
+    const saveResult = async (): Promise<void> => {
+      Promise.all([updateReserchResults(), updatePatientsResearches()]).then(() => {
+        ElNotification.success(new MessageSuccess());
+      });
     };
 
     const toggleResearchesPools = async (toggle: boolean) => {
@@ -190,6 +238,9 @@ export default defineComponent({
       Edit,
       Document,
       scroll,
+      beforeLeave,
+      confirmLeave,
+      formUpdated,
     };
   },
 });
@@ -216,6 +267,16 @@ export default defineComponent({
   font-size: 14px;
 }
 
+.edit-button {
+  display: none;
+  min-width: 40px;
+  max-width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #f5f5f5;
+}
+
 .flex-line {
   height: 42px;
   display: flex;
@@ -228,5 +289,21 @@ export default defineComponent({
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+:deep(.edit-icon) {
+  width: 28px;
+  height: 28px;
+  fill: #006bb4;
+}
+
+@media screen and (max-width: 768px) {
+  .grey-button {
+    display: none;
+  }
+
+  .edit-button {
+    display: flex;
+  }
 }
 </style>
