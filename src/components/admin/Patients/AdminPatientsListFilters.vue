@@ -131,8 +131,14 @@
           :with-hover="false"
         >
           <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <Button text="xlsx" button-class="button-download" background-hover="#DFF2F8"></Button>
-            <Button text="pdf" button-class="button-download" background-hover="#DFF2F8"></Button>
+            <Button
+              v-for="exportObj in exports"
+              :key="exportObj.exportType"
+              button-class="button-download"
+              background-hover="#DFF2F8"
+              :text="exportObj.exportType"
+              @click="exportData(exportObj)"
+            />
           </GridContainer>
         </InfoItem>
       </GridContainer>
@@ -144,6 +150,9 @@
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
 import AnswerVariant from '@/classes/AnswerVariant';
+import ExportOptions from '@/classes/exportOptions/ExportOptions';
+import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
+import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Question from '@/classes/Question';
 import Register from '@/classes/Register';
 import Button from '@/components/Base/Button.vue';
@@ -174,6 +183,8 @@ export default defineComponent({
   },
   emits: ['load'],
   setup() {
+    const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
+
     const questions: Ref<Question[]> = computed(() => Provider.store.getters['questions/items']);
     const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
     const filterByDisabilities: Ref<FilterModel> = ref(new FilterModel());
@@ -206,7 +217,13 @@ export default defineComponent({
       return filterModels;
     };
 
+    const exportData = async (exportOptions: ExportOptions): Promise<void> => {
+      await Provider.store.dispatch('dataExport/export', exportOptions);
+    };
+
     return {
+      exportData,
+      exports,
       createCustomFilterModels,
       questions,
       registers,
@@ -448,6 +465,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -455,6 +473,7 @@ export default defineComponent({
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

@@ -132,6 +132,7 @@ export default defineComponent({
 
     const toNameStep = async (): Promise<void> => {
       await findExistingPatient();
+      console.log(existsInDomain.value);
       if (existsInDomain.value) {
         ElMessage.warning({ message: 'Пациент с данным СНИЛС уже добавлен' });
         return;

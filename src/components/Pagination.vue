@@ -1,13 +1,7 @@
 <template>
   <div :key="count" style="text-align: center; width: 100%; background: #f5f5f5">
-    <el-pagination
-      style="padding: 10px 0"
-      :current-page="curPage"
-      background
-      layout="prev, pager, next"
-      :page-count="pageCount"
-      @current-change="currentChange"
-    >
+    <el-pagination style="padding: 10px 0" :current-page="curPage" background layout="prev, pager, next"
+      :page-count="pageCount" @current-change="currentChange">
     </el-pagination>
   </div>
 </template>
@@ -74,7 +68,7 @@ export default defineComponent({
       Provider.store.commit('filter/setOffset', pageNum - 1);
       await Provider.router.replace({ query: { q: Provider.filterQuery.value.toUrlQuery() } });
       if (load) {
-        await Provider.store.dispatch(`${storeModule}/${action}`, Provider.filterQuery.value);
+        await Provider.store.dispatch(`${storeModule}/${action}`, { filterQuery: Provider.filterQuery.value });
       }
       const table = document.querySelector('.el-table__body-wrapper');
       const list = document.querySelector('#list');

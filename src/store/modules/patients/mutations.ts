@@ -13,8 +13,9 @@ interface existsObject {
 const mutations: MutationTree<State> = {
   ...getBaseMutations<Patient, State>(Patient),
   setExists(state, data: existsObject) {
+    console.log(data);
     state.existsInDomain = data.existsInDomain;
-    state.item = data.item ?? state.item;
+    state.item = new Patient(data.item);
   },
 };
 

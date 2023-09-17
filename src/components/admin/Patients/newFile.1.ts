@@ -1,86 +1,13 @@
-<template>
-  <ResearcheContainer>
-    <template #header>
-      <div v-if="research.id && patientResearch" class="header-container">
-        <Button button-class="grey-button" text="Назад" @click="beforeLeave('', true)" />
-        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling(true)" />
-        <TopSliderContainer>
-          <template #title>
-            <span>{{ research.name }}</span>
-            <span v-if="researchResult">&nbsp;Дата: {{ $dateTimeFormatter.format(researchResult.date) }}</span>
-            <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
-          </template>
-          <div v-if="research.withScores" class="flex-line">
-            <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
-            <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
-          </div>
-          <div class="flex-line">
-            <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
-            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
-          </div>
-          <div class="search">
-            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
-          </div>
-          <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
-              <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
-              <div v-if="Number.isFinite(res.value)">{{ res.value.toFixed(2) }}</div>
-              <div :style="{ color: res.color }">{{ res.result }}</div>
-            </div> -->
-        </TopSliderContainer>
-        <Button v-show="confirmLeave" button-class="grey-button" text="Сохранить" @click="saveResult()" />
-        <Button icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult()" />
-      </div>
-    </template>
-    <template #body>
-      <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList
-          :research="research"
-          :patient-research="patientResearch"
-          @select="selectResult"
-          @show-chart="toggleChart"
-          @before-leave="beforeLeave"
-        />
-      </template>
-      <template v-else>
-        <PatientResearchesList type="researches" :filter-model="researchesFilter" @select="selectResearch" />
-      </template>
-      <PatientResearchesQuestion
-        v-if="researchResult.id"
-        :key="researchResult.id"
-        :questions-filter-string="questionsFilterString"
-        :show-only-not-filled="showOnlyNotFilled"
-        @save="saveResult"
-        @cancel="cancelResearchResultsFilling"
-        @fill="formUpdated"
-      />
-      <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
-      <Xlsx />
-    </template>
-  </ResearcheContainer>
-</template>
-
-<script lang="ts">
-import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
-import Xlsx from '@/assets/svg/Xlsx.svg';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
-import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
-import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
-import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
-import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
-import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import MessageSuccess from '@/services/classes/messages/MessageSuccess';
-import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import StringItem from '@/services/components/StringItem.vue';
-import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
-import scroll from '@/services/Scroll';
 
 export default defineComponent({
   name: 'PatientResearches',
@@ -129,12 +56,10 @@ export default defineComponent({
         return await createPatientResearch(item);
       }
       Provider.store.commit('researchesResults/set');
-      console.log(patientResearch.value?.researchResults);
       if (patientResearch.value?.researchResults.length === 0) {
-        console.log('addResearchResul');
-        const item = patientResearch.value?.addResult(research.value, patientResearch.value?.id);
-        await Provider.store.dispatch('researchesResults/createWithoutReset', item);
-        // return;
+        return;
+        // const item = patientResearch.value?.addResult(research.value, patientResearch.value?.id)
+        // await Provider.store.dispatch('researchesResults/createWithoutReset', item);
       }
       await selectResult(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id as string);
     };
@@ -250,66 +175,3 @@ export default defineComponent({
     };
   },
 });
-</script>
-
-<style lang="scss" scoped>
-@import '@/assets/elements/collapse.scss';
-@import '@/assets/styles/elements/base-style.scss';
-
-.header-container {
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.grey-button {
-  width: 120px;
-  border-radius: 5px;
-  height: 42px;
-  color: #006bb4;
-  background: #f5f5f5;
-  margin: 0 10px;
-  font-size: 14px;
-}
-
-.edit-button {
-  display: none;
-  min-width: 40px;
-  max-width: 40px;
-  height: 40px;
-  border-radius: 5px;
-  color: #006bb4;
-  background: #f5f5f5;
-}
-
-.flex-line {
-  height: 42px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.search {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-:deep(.edit-icon) {
-  width: 28px;
-  height: 28px;
-  fill: #006bb4;
-}
-
-@media screen and (max-width: 768px) {
-  .grey-button {
-    display: none;
-  }
-
-  .edit-button {
-    display: flex;
-  }
-}
-</style>
