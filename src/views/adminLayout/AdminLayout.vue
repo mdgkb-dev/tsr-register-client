@@ -50,7 +50,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 .admin-main-container {
   height: calc(100vh);
   box-sizing: border-box;
@@ -72,7 +71,7 @@ export default defineComponent({
 .field {
   height: calc(100% - 10px);
   box-sizing: border-box;
-      height: inherit;
+  height: inherit;
 }
 
 @media (max-width: 992px) {

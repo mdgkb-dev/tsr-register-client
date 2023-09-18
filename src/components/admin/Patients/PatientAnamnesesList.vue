@@ -1,6 +1,6 @@
 <template>
   <GridContainer grid-gap="5px" margin="10px" width="calc(100% - 20px)" grid-template-columns="repeat(auto-fit, minmax(280px, 1fr))">
-          <!-- <div
+    <!-- <div
         v-for="researchItem in researches"
         :key="researchItem.id"
         :class="{ 'tabs-item-active': researchItem.id === research.id }"

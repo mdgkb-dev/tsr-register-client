@@ -14,17 +14,17 @@
   >
   </Button>
   <div class="scroll-feild">
-  <el-timeline style="margin-top: 20px">
-    <el-timeline-item v-for="anamnesis in patient.getAnamnesesByMkbItemId(mkbItem?.id)" :key="anamnesis.id" placement="top" center>
-      <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
-        <template #inside-content>
-          <div class="background-container">
-            <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(anamnesis.id)" />
-          </div>
-        </template>
-      </CollapseItem>
-    </el-timeline-item>
-  </el-timeline>
+    <el-timeline style="margin-top: 20px">
+      <el-timeline-item v-for="anamnesis in patient.getAnamnesesByMkbItemId(mkbItem?.id)" :key="anamnesis.id" placement="top" center>
+        <CollapseItem :title="$dateTimeFormatter.format(anamnesis.date)" :is-collaps="true" background="#DFF2F8" margin-top="0px">
+          <template #inside-content>
+            <div class="background-container">
+              <AnamnesisForm :anamnesis="anamnesis" @remove="removeAnamnesis(anamnesis.id)" />
+            </div>
+          </template>
+        </CollapseItem>
+      </el-timeline-item>
+    </el-timeline>
   </div>
 </template>
 
@@ -98,7 +98,6 @@ export default defineComponent({
   border-radius: 5px;
   border: 1px solid #c3c3c3;
 }
-
 
 @media screen and (max-width: 822px) {
   .scroll-feild {
