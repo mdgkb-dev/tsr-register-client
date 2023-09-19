@@ -1,11 +1,25 @@
 <template>
+  <div>
+    <Button text="Выбрать исследования" @click="toggleSelectMod"></Button>
+    <div v-if="selectResearchesMod">
+      <Button
+        v-for="exportObj in exports"
+        :key="exportObj.exportType"
+        button-class="save-button"
+        :text="exportObj.exportType"
+        @click="exportData(exportObj)"
+      />
+    </div>
+  </div>
+
   <GridContainer grid-gap="5px" margin="10px" width="calc(100% - 20px)" grid-template-columns="repeat(auto-fit, minmax(280px, 1fr))">
     <GeneralItem
       v-for="(research, i) in researches"
       :key="research.id"
       :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(research.id))"
       height="60px"
-      @click="$emit('select', research)"
+      :border-color="research.selectedForExport ? 'red' : ''"
+      @click="selectResearch(research)"
     >
       <template #general-item> {{ i + 1 }}. {{ research.name }} </template>
     </GeneralItem>
@@ -13,10 +27,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, PropType, Ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
+import ExportOptions from '@/classes/exportOptions/ExportOptions';
+import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
+import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
+import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
@@ -30,6 +48,7 @@ export default defineComponent({
   components: {
     GridContainer,
     GeneralItem,
+    Button,
   },
   props: {
     filterModel: {
@@ -42,9 +61,19 @@ export default defineComponent({
     },
   },
   emits: ['select'],
-  setup(props) {
+  setup(props, { emit }) {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
+    const selectResearchesMod = ref(false);
+    const selectedResearchesIds: Ref<Set<string>> = ref(new Set());
+
+    const exports: Ref<ExportOptions[]> = ref([
+      ExportOptions.XLSX(
+        PatientsExportOptionLib.onePatient(patient.value.id),
+        ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
+      ),
+    ]);
+
     onBeforeMount(async () => {
       const fq = new FilterQuery();
       if (props.type === 'anamnesis') {
@@ -59,7 +88,48 @@ export default defineComponent({
       fq.setSortModel(ResearchesSortsLib.byOrder());
       await Provider.store.dispatch('researches/getAll', { filterQuery: fq });
     });
+
+    const selectResearch = (research: Research) => {
+      if (!research.id) {
+        return;
+      }
+      if (!selectResearchesMod.value) {
+        emit('select', research);
+        return;
+      }
+      const findedResearch = researches.value.find((r: Research) => r.id === research.id);
+      if (findedResearch && findedResearch.id) {
+        findedResearch.selectedForExport = !findedResearch.selectedForExport;
+
+        if (selectedResearchesIds.value.has(findedResearch.id)) {
+          selectedResearchesIds.value.delete(findedResearch.id);
+        } else {
+          selectedResearchesIds.value.add(findedResearch.id);
+        }
+        exports.value = [
+          ExportOptions.XLSX(
+            PatientsExportOptionLib.onePatient(patient.value.id),
+            ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
+          ),
+        ];
+      }
+    };
+
+    const toggleSelectMod = () => {
+      selectResearchesMod.value = !selectResearchesMod.value;
+    };
+
+    const exportData = async (exportOptions: ExportOptions): Promise<void> => {
+      await Provider.store.dispatch('dataExport/export', exportOptions);
+    };
+
     return {
+      selectedResearchesIds,
+      exportData,
+      selectResearchesMod,
+      exports,
+      toggleSelectMod,
+      selectResearch,
       patient,
       researches,
     };

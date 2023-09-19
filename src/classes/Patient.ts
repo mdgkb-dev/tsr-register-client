@@ -207,7 +207,7 @@ export default class Patient {
     return this.patientsRegisters.some((p: PatientRegister) => p.registerId === id);
   }
 
-  getResearchFillingPercentage(researchId: string): number {
+  getResearchFillingPercentage(researchId?: string): number {
     const patientResearch = this.getPatientResearch(researchId);
     return patientResearch ? patientResearch.fillingPercentage : 0;
   }

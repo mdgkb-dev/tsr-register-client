@@ -9,9 +9,9 @@ const ResearchesExportOptionLib = (() => {
     return { [ExportOptionsKey.Research]: option };
   }
 
-  function manyResearches(ids: (string | undefined)[]): ExportOptionsObject {
+  function manyResearches(ids: Set<string>): ExportOptionsObject {
     const option = {
-      ids: ids,
+      ids: Array.from(ids),
     };
     return { [ExportOptionsKey.Research]: option };
   }

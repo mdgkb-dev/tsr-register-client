@@ -13,7 +13,7 @@ export default class ExportOptions {
     this.exportType = exportType;
   }
 
-  private setOptions(...options: ExportOptionsObject[]) {
+  setOptions(...options: ExportOptionsObject[]) {
     options.forEach((o: ExportOptionsObject) => {
       for (const i in o) {
         this.options[i] = o;

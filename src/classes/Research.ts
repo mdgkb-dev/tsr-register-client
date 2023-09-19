@@ -25,6 +25,7 @@ export default class Research {
   formulasForDelete: string[] = [];
   //
   selectedFormula?: Formula;
+  selectedForExport = false;
 
   constructor(i?: Research) {
     ClassHelper.BuildClass(this, i);
