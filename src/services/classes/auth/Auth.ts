@@ -63,4 +63,8 @@ export default class Auth {
   showPasswordField(): boolean {
     return this.isLogin() || this.isRegister() || this.isRefresh();
   }
+
+  dropProfile(): void {
+    this.profile = new Profile();
+  }
 }

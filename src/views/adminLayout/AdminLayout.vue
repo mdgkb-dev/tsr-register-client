@@ -22,10 +22,10 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent } from 'vue';
-import { useStore } from 'vuex';
+import { computed, ComputedRef, defineComponent, onBeforeMount } from 'vue';
 
 import { AdminLayout } from '@/services/interfaces/AdminLayout';
+import Provider from '@/services/Provider/Provider';
 import AdminHeaderBottom from '@/views/adminLayout/AdminHeaderBottom.vue';
 import AdminHeaderTop from '@/views/adminLayout/AdminHeaderTop.vue';
 import AdminMenuDrawer from '@/views/adminLayout/AdminMenuDrawer.vue';
@@ -40,17 +40,20 @@ export default defineComponent({
     AdminMenuDrawer,
   },
   setup() {
-    const store = useStore();
-    const isDrawerOpen: ComputedRef<boolean> = computed(() => store.getters['admin/isDrawerOpen']);
-    const closeDrawer = () => store.commit('admin/closeDrawer');
+    const isDrawerOpen: ComputedRef<boolean> = computed(() => Provider.store.getters['admin/isDrawerOpen']);
+    const closeDrawer = () => Provider.store.commit('admin/closeDrawer');
     const showTopHeader = false;
+
+    onBeforeMount(async () => {
+      await Provider.store.dispatch('search/searchGroups');
+    });
+
     return { isDrawerOpen, closeDrawer, AdminLayout, showTopHeader };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-
 .admin-main-container {
   height: calc(100vh);
   box-sizing: border-box;
@@ -72,7 +75,7 @@ export default defineComponent({
 .field {
   height: calc(100% - 10px);
   box-sizing: border-box;
-      height: inherit;
+  height: inherit;
 }
 
 @media (max-width: 992px) {

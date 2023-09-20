@@ -14,6 +14,7 @@ import { useStore } from 'vuex';
 
 import AdminLayout from '@/views/adminLayout/AdminLayout.vue';
 import LoginLayout from '@/views/loginLayout/LoginLayout.vue';
+import Provider from './services/Provider/Provider';
 
 export default defineComponent({
   name: 'App',
@@ -22,22 +23,19 @@ export default defineComponent({
     LoginLayout,
   },
   setup() {
-    const store = useStore();
-    const route = useRoute();
     const mounted: Ref<boolean> = ref(false);
-    watch(route, () => {
+    watch(Provider.route(), () => {
       changeDocumentTitle();
     });
 
     const changeDocumentTitle = () => {
       const defaultTitle = 'ТСР';
-      document.title = route.meta.title ? `${route.meta.title} | ТСР` : defaultTitle;
+      document.title = Provider.route().meta.title ? `${Provider.route().meta.title} | ТСР` : defaultTitle;
     };
 
     onBeforeMount(async (): Promise<void> => {
       changeDocumentTitle();
-      await store.dispatch('search/searchGroups');
-      await store.dispatch('auth/setAuth');
+      await Provider.store.dispatch('auth/setAuth');
       mounted.value = true;
     });
 

@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { ElMessage } from 'element-plus';
-import { computed, ComputedRef, defineComponent, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, onBeforeMount, ref } from 'vue';
 
 import Button from '@/components/Base/Button.vue';
 import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
@@ -66,6 +66,10 @@ export default defineComponent({
       callback();
       return;
     };
+
+    onBeforeMount(() => {
+      auth.value.dropProfile();
+    });
 
     const passwordRule = async (_: unknown, value: string, callback: MyCallbackWithOptParam) => {
       if (!value) {
@@ -190,9 +194,11 @@ h3 {
   h3 {
     font-size: 20px;
   }
+
   h2 {
     font-size: 18px;
   }
+
   .auth-card {
     width: auto;
   }
@@ -202,9 +208,11 @@ h3 {
   h3 {
     font-size: 18px;
   }
+
   .auth-card {
     padding: 20px;
   }
+
   .save-button {
     width: 100%;
     max-width: 100%;
