@@ -1,21 +1,22 @@
 <template>
-  <ArrowUpOutlined v-if="sortModel.isAsc()" class="set" @click="setSort(Desc)" />
-  <ArrowDownOutlined v-else-if="sortModel.isDesc()" class="set" @click="setSort(undefined)" />
-  <ArrowUpOutlined v-else @click="setSort(Asc)" />
+  <ArrowUp v-if="sortModel.isAsc()" class="set" @click="setSort(Desc)" />
+  <ArrowDown v-else-if="sortModel.isDesc()" class="set" @click="setSort(undefined)" />
+  <ArrowUp v-else @click="setSort(Asc)" />
 </template>
 
 <script lang="ts">
-import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons-vue';
 import { defineComponent, PropType, ref } from 'vue';
 import { useStore } from 'vuex';
 
+import ArrowDown from '@/assets/svg/ArrowDown.svg';
+import ArrowUp from '@/assets/svg/ArrowUp.svg';
 import { Orders } from '@/services/interfaces/Orders';
 
 export default defineComponent({
   name: 'SortButton',
   components: {
-    ArrowUpOutlined,
-    ArrowDownOutlined,
+    ArrowUp,
+    ArrowDown,
   },
   props: {
     table: {

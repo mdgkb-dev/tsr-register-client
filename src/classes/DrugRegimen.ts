@@ -1,5 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep';
-
 import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
 import ClassHelper from '@/services/ClassHelper';
 
@@ -31,10 +29,6 @@ export default class DrugRegimen {
       this.drugRegimenBlocksForDelete.push(itemId);
     }
     this.drugRegimenBlocks.splice(index, 1);
-  }
-
-  copyDrugRegimenBlock(index: number): void {
-    this.drugRegimenBlocks.splice(index + 1, 0, cloneDeep(this.drugRegimenBlocks[index]));
   }
 
   moveDrugRegimenBlockUp(index: number): void {

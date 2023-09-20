@@ -33,6 +33,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue';
 
+import Back from '@/assets/svg/Back.svg';
 import Close from '@/assets/svg/Close.svg';
 import Commission from '@/assets/svg/Commission.svg';
 import Del from '@/assets/svg/Del.svg';
@@ -42,7 +43,6 @@ import EditTitle from '@/assets/svg/EditTitle.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
 import Plus from '@/assets/svg/Plus.svg';
-import Back from '@/assets/svg/Back.svg';
 import Save from '@/assets/svg/Save.svg';
 
 export default defineComponent({

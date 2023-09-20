@@ -9,8 +9,9 @@
 </template>
 
 <script lang="ts">
-import { QuestionFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
+
+import QuestionFilled from '@/assets/svg/QuestionFilled.svg';
 
 export default defineComponent({
   name: 'PopoverInfo',

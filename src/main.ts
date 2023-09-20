@@ -15,7 +15,6 @@ import Provider from '@/services/Provider/Provider';
 import './assets/styles/element-variables.scss';
 import Maska from 'maska';
 import DateTimeFormatter from '@/services/DateFormat';
-import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import ru from 'element-plus/es/locale/lang/ru';
 
 import { setupElementPlusComponents, setupElementPlusPlugins } from '@/plugins/ElementPlus';
@@ -51,10 +50,6 @@ app.directive('click-outside', {
     document.body.removeEventListener('click', el.clickOutsideEvent);
   },
 });
-
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component);
-}
 
 router.isReady().then(() => {
   app.mount('#app');

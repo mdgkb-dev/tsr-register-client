@@ -138,7 +138,6 @@
 </template>
 
 <script lang="ts">
-import { Delete, DocumentAdd, DocumentChecked, DocumentDelete, Download, Paperclip } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, Ref, ref } from 'vue';
 
 import Disability from '@/classes/Disability';
@@ -332,12 +331,6 @@ export default defineComponent({
       // edvDateStartChangeHandler,
       isToggle,
       toggle,
-      DocumentAdd,
-      Delete,
-      Paperclip,
-      DocumentChecked,
-      Download,
-      DocumentDelete,
     };
   },
 });

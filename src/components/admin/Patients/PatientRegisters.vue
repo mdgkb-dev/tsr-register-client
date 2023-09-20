@@ -56,7 +56,6 @@
 </template>
 
 <script lang="ts">
-import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
@@ -122,11 +121,7 @@ export default defineComponent({
       registers,
       register,
       mounted,
-      Delete,
       patient,
-
-      Edit,
-      Document,
     };
   },
 });
