@@ -1,7 +1,7 @@
 <template>
-  <MenuContainer v-if="mounted" min-menu-item-width="160px" background="#DFF2F8" >
+  <MenuContainer v-if="mounted" min-menu-item-width="160px" background="#DFF2F8">
     <template #menu>
-      <div v-for="menu in menus" :key="menu.id">
+      <div v-for="menu in customSections" :key="menu.id">
         <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { ElMessageBox } from 'element-plus';
-import { computed, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
+import { computed, ComputedRef, defineAsyncComponent, defineComponent, Ref, ref } from 'vue';
 
 import HumanRules from '@/classes/humans/HumanRules';
 import Patient from '@/classes/Patient';
@@ -62,21 +62,22 @@ export default defineComponent({
   },
   setup() {
     const componentKey = ref(0);
-    const menus: CustomSection[] = [
-      CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
-      CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
-      CustomSection.Create('anamneses', 'Анамнез', 'PatientAnamneses', 0, true),
-      CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
-      CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
-      CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
-      CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
-      // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
-      // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
-      CustomSection.Create('commission', 'Врачебные комиссии', 'PatientCommissions', 0, true),
-      CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
-      // CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
-    ];
-    const activeMenu: Ref<CustomSection> = ref(menus[0]);
+    const customSections: ComputedRef<CustomSection[]> = computed(() => Provider.store.getters['customSections/items']);
+    // const menus: CustomSection[] = [
+    //   CustomSection.Create('info', 'Паспортные данные', 'PatientPageInfo', 0, true),
+    //   CustomSection.Create('diagnosis', 'Диагнозы', 'PatientDiagnosis', 0, true),
+    //   CustomSection.Create('anamneses', 'Анамнез', 'PatientAnamneses', 0, true),
+    //   CustomSection.Create('patientResearches', 'Исследования', 'PatientResearches', 0, true),
+    //   CustomSection.Create('representatives', 'Представители', 'PatientRepresentatives', 0, true),
+    //   CustomSection.Create('disability', 'Инвалидность', 'DisabilityForm', 0, true),
+    //   CustomSection.Create('documents', 'Документы', 'PatientDocuments', 0, true),
+    //   // CustomSection.Create('insurances', 'Страховки', 'InsuranceForm', 0, false),
+    //   // CustomSection.Create('drugs', 'Лекарства', 'PatientDrugs', 0, true),
+    //   CustomSection.Create('commission', 'Врачебные комиссии', 'PatientCommissions', 0, true),
+    //   CustomSection.Create('registers', 'Регистры', 'PatientRegisters', 0, true),
+    //   // CustomSection.Create('histories', 'История изменений', 'PatientHistories', 0, true),
+    // ];
+    const activeMenu: Ref<CustomSection> = ref(customSections.value[0]);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const menusProperties = computed(() => {
@@ -94,13 +95,13 @@ export default defineComponent({
     const setMenuFromRoute = () => {
       let menu = Provider.route().query.menu as string;
       if (!menu) {
-        menu = menus[0].id;
+        menu = customSections.value[0].id;
       }
       changeMenu(menu);
     };
 
     const changeMenu = (customSectionId: string) => {
-      const section = menus.find((m: CustomSection) => m.id === customSectionId);
+      const section = customSections.value.find((m: CustomSection) => m.id === customSectionId);
       if (!section) {
         return;
       }
@@ -110,6 +111,7 @@ export default defineComponent({
     };
 
     const load = async () => {
+      await Provider.store.dispatch('customSections/getAll', { withCache: true });
       setMenuFromRoute();
       if (Provider.route().params['id']) {
         return await Provider.loadItem();
@@ -145,9 +147,10 @@ export default defineComponent({
       activeMenu,
       patient,
       form,
-      menus,
+      // menus,
       mounted: Provider.mounted,
       rules,
+      customSections,
     };
   },
 });

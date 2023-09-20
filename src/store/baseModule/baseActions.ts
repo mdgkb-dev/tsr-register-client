@@ -21,7 +21,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
     httpClient = endPointOrClient;
   }
   const cache = new Cache();
-  cache.name = 'menus';
+  cache.name = String(endPointOrClient);
 
   interface GetAllOptions {
     filterQuery?: FilterQuery;
