@@ -1,17 +1,12 @@
 <template>
   <div class="table-under-collapse">
-    <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
+    <RemoteSearch key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
     <!--    <el-space v-if="isEditMode" style="margin-bottom: 10px">-->
     <!--      <el-button @click="addDiagnosis">Добавить диагноз</el-button>-->
     <!--      <MkbTreeDialog :store-module="storeModule" />-->
     <!--    </el-space>-->
-    <el-table
-      :data="mkbLinker.getMkbItems()"
-      :row-key="(row) => row.id"
-      class="table-shadow"
-      header-row-class-name="header-style"
-      :expand-row-keys="expandRowKeys"
-    >
+    <el-table :data="mkbLinker.getMkbItems()" :row-key="(row) => row.id" class="table-shadow"
+      header-row-class-name="header-style" :expand-row-keys="expandRowKeys">
       <!--      <el-table-column type="index" width="60" align="center" />-->
 
       <!--      <el-table-column type="expand">-->
@@ -126,21 +121,26 @@ export default defineComponent({
 :deep(.el-timeline) {
   margin-right: 20px;
 }
+
 .selects {
   display: flex;
   flex-direction: column;
   width: 100%;
+
   &-item {
     width: 100%;
     margin: 10px 10px 0 10px;
     padding-right: 10px;
+
     :deep(.el-input__wrapper) {
       border-radius: 20px;
     }
+
     :deep(.el-select) {
       width: 100%;
     }
   }
+
   &-item:empty {
     display: none;
   }

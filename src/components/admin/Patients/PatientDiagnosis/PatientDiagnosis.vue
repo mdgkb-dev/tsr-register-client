@@ -7,7 +7,7 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <RemoteSearch :must-be-translated="true" key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
+        <RemoteSearch key-value="mkbItem" placeholder="Начните вводить название диагноза" @select="addMkbItem" />
       </div>
     </template>
     <template #tabs>

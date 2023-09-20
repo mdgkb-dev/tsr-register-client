@@ -8,7 +8,7 @@
     <template #slider-body>
       <div class="slider-body">
         <div class="slider-item-search">
-          <RemoteSearch :must-be-translated="true" key-value="representative" placeholder="Начните вводить" />
+          <RemoteSearch key-value="representative" placeholder="Начните вводить" />
         </div>
         <div class="slider-item" @click="addDisability">Добавить инвалидность</div>
       </div>

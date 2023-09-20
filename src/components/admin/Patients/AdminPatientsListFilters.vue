@@ -12,13 +12,7 @@
           :with-hover="false"
         >
           <div :style="{ width: '100%' }">
-            <RemoteSearch
-              :must-be-translated="true"
-              key-value="patient"
-              placeholder="Начните вводить ФИО"
-              max-width="100%"
-              @select="selectSearch"
-            />
+            <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%" @select="selectSearch" />
             <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="$emit('load')" />
           </div>
         </InfoItem>

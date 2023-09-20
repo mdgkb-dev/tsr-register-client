@@ -1,5 +1,5 @@
 <template>
-  <RemoteSearch :must-be-translated="true" key-value="patient" placeholder="Начните вводить ФИО" @select="addPatient" />
+  <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" @select="addPatient" />
   <el-table
     v-if="mount"
     :data="representative.representativeToPatient"

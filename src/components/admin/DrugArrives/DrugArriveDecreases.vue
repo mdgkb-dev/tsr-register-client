@@ -18,7 +18,6 @@
       <el-input v-model="drugDecrease.comment" @blur="updateDrugDecrease(drugDecrease)" />
       <el-date-picker v-model="drugDecrease.date" @change="updateDrugDecrease(drugDecrease)" />
       <RemoteSearch
-        :must-be-translated="true"
         key-value="patient"
         placeholder="Введите имя пациента"
         @click.stop="() => undefined"
@@ -339,6 +338,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -346,6 +346,7 @@ export default defineComponent({
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

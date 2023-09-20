@@ -33,7 +33,6 @@ import IFilterModel from '@/services/interfaces/IFilterModel';
 import ISearch from '@/services/interfaces/ISearchObject';
 import { Operators } from '@/services/interfaces/Operators';
 import Provider from '@/services/Provider/Provider';
-import StringsService from '@/services/Strings';
 
 export default defineComponent({
   name: 'RemoteSearch',
@@ -63,10 +62,6 @@ export default defineComponent({
       default: 'Начните вводить запрос',
     },
     showSuggestions: {
-      type: Boolean as PropType<boolean>,
-      default: true,
-    },
-    mustBeTranslated: {
       type: Boolean as PropType<boolean>,
       default: true,
     },
@@ -104,8 +99,7 @@ export default defineComponent({
       }
       searchForm.value.activated = true;
       searchModel.value.searchObjects = [];
-      searchModel.value.query = StringsService.translit(query);
-      searchModel.value.mustBeTranslated = props.mustBeTranslated;
+      searchModel.value.query = query;
       const groupForSearch = searchModel.value.searchGroups.find((group: SearchGroup) => group.key === props.keyValue);
       if (groupForSearch) {
         searchModel.value.searchGroup = groupForSearch;

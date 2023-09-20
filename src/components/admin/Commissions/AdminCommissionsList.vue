@@ -53,13 +53,7 @@
             </template>
             <template #close-inside-content>
               <div :style="{ width: '100%' }">
-                <RemoteSearch
-                  :must-be-translated="true"
-                  key-value="patient"
-                  placeholder="Начните вводить ФИО"
-                  max-width="100%"
-                  @select="selectSearch"
-                />
+                <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%" @select="selectSearch" />
                 <!--                <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="loadPatients" />-->
               </div>
             </template>
@@ -104,7 +98,6 @@
                       />
                       <template #open-inside-content>
                         <RemoteSearch
-                          :must-be-translated="true"
                           key-value="patient"
                           placeholder="Введите имя пациента"
                           @click.stop="() => undefined"
@@ -543,6 +536,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -550,6 +544,7 @@ export default defineComponent({
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

@@ -25,7 +25,6 @@
       </GridContainer>
 
       <RemoteSearch
-        :must-be-translated="true"
         key-value="mkbItem"
         placeholder="Начните вводить диагноз"
         @click.stop="() => undefined"
@@ -337,6 +336,7 @@ export default defineComponent({
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -344,6 +344,7 @@ export default defineComponent({
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

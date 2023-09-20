@@ -8,12 +8,7 @@
     <template #slider-body>
       <div class="slider-body">
         <div class="slider-item-search">
-          <RemoteSearch
-            :must-be-translated="true"
-            key-value="representative"
-            placeholder="Начните вводить имя представителя"
-            @select="addRepresentative"
-          />
+          <RemoteSearch key-value="representative" placeholder="Начните вводить имя представителя" @select="addRepresentative" />
         </div>
         <div class="slider-item" @click="openRepresentativeModal()">Создать представителя</div>
       </div>
