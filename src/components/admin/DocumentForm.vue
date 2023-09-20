@@ -7,7 +7,14 @@
     </div>
     <div v-for="value in document.documentFieldValues" :key="value.id" class="margin-field">
       <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
-        <el-input v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
+        <el-input
+          v-if="value.documentTypeField?.documentType.code === 'snils' && value.documentTypeField.name === 'Номер'"
+          v-model="value.valueString"
+          v-maska="{ mask: '###-###-### ##', eager: true }"
+          size="mini"
+          @blur="updateDocumentField(value)"
+        />
+        <el-input v-else v-model="value.valueString" size="mini" @blur="updateDocumentField(value)" />
       </el-form-item>
 
       <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
