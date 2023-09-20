@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts">
-import { Delete, Edit, FolderChecked } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Anamnesis from '@/classes/Anamnesis';
@@ -74,9 +73,6 @@ export default defineComponent({
       dateFormat,
       remove,
       isEditMode,
-      Edit,
-      FolderChecked,
-      Delete,
       update,
     };
   },

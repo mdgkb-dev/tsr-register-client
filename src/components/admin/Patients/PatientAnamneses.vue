@@ -59,7 +59,6 @@
 </template>
 
 <script lang="ts">
-import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
 import Xlsx from '@/assets/svg/Xlsx.svg';
@@ -206,13 +205,9 @@ export default defineComponent({
       researchesPools: researches,
       research,
       createPatientResearch,
-      Delete,
       patient,
       chartOpened,
       toggleChart,
-
-      Edit,
-      Document,
       scroll,
     };
   },

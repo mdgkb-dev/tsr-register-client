@@ -36,8 +36,9 @@
 </template>
 
 <script lang="ts">
-import { EyeOutlined } from '@ant-design/icons-vue';
 import { defineComponent, PropType } from 'vue';
+
+import EyeOutlined from '@/assets/svg/EyeOutlined.svg';
 
 export default defineComponent({
   name: 'TableButtonGroup',

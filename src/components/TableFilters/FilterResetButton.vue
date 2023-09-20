@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts">
-import { Brush } from '@element-plus/icons-vue';
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex';
+
+import Brush from '@/assets/svg/Brush.svg';
 
 export default defineComponent({
   name: 'FilterResetButton',

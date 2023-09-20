@@ -163,11 +163,7 @@ export default defineComponent({
       selectResearch,
       research,
       createPatientResearch,
-      Delete,
       patient,
-
-      Edit,
-      Document,
       scroll,
       beforeLeave,
       confirmLeave,

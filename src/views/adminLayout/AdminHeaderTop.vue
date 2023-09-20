@@ -23,7 +23,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="logout">
-              <LogoutOutlined />
+              <Logout />
               Выйти
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -36,17 +36,17 @@
 </template>
 
 <script lang="ts">
-import { LogoutOutlined } from '@ant-design/icons-vue';
 import { computed, ComputedRef, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+import Logout from '@/assets/svg/Logout.svg';
 import IUser from '@/services/interfaces/IUser';
 import AdminSearchMenu from '@/views/adminLayout/AdminSearchMenu.vue';
 
 export default defineComponent({
   name: 'AdminHeaderTop',
-  components: { LogoutOutlined, AdminSearchMenu },
+  components: { Logout, AdminSearchMenu },
 
   setup() {
     const store = useStore();

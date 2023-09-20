@@ -75,7 +75,6 @@
 </template>
 
 <script lang="ts">
-import { Check } from '@element-plus/icons-vue';
 import { computed, ComputedRef, defineComponent, PropType, reactive, ref, UnwrapRef, watch } from 'vue';
 import { useStore } from 'vuex';
 
@@ -130,7 +129,6 @@ export default defineComponent({
       humanComputed,
       human,
       updateHuman,
-      Check,
     };
   },
 });

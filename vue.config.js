@@ -16,6 +16,19 @@ module.exports = {
     'chart.js',
   ],
   chainWebpack: (config) => {
+    // Visualize size of webpack output files with an interactive zoomable treemap
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+    // const options = {
+    //   webpackBundleAnalyzer: {
+    //     openAnalyzer: false,
+    //   },
+    // };
+    // config
+    //   .plugin('webpack-bundle-analyzer')
+    //   .use(BundleAnalyzerPlugin)
+    //   .init((Plugin) => new Plugin(options));
+
     const svgRule = config.module.rule('svg');
 
     svgRule.uses.clear();

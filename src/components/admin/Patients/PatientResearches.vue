@@ -60,7 +60,6 @@
 </template>
 
 <script lang="ts">
-import { Delete, Document, Edit } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
 import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
 
@@ -238,11 +237,7 @@ export default defineComponent({
       selectResearch,
       research,
       createPatientResearch,
-      Delete,
       patient,
-
-      Edit,
-      Document,
       scroll,
       beforeLeave,
       confirmLeave,

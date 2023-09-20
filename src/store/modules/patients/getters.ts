@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { GetterTree } from 'vuex';
 
 import Human from '@/classes/Human';
@@ -14,7 +13,7 @@ const getters: GetterTree<State, RootState> = {
     return state.item.human;
   },
   setHuman(state, human: Human) {
-    state.item.human = cloneDeep(human);
+    state.item.human = new Human(human);
   },
   existsInDomain(state): boolean {
     return state.existsInDomain;
