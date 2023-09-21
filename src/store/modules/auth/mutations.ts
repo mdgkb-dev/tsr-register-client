@@ -21,6 +21,9 @@ const mutations: MutationTree<State> = {
   clearTokens() {
     TokenService.clearTokens();
   },
+  clearCache() {
+    sessionStorage.clear();
+  },
   setIsAuth(state, isAuth: boolean) {
     state.isAuth = isAuth;
   },

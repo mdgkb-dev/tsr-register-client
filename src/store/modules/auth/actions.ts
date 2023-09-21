@@ -48,6 +48,7 @@ const actions: ActionTree<State, RootState> = {
     commit('setIsAuth', false);
     commit('clearUser');
     commit('clearTokens');
+    commit('clearCache');
   },
   editAuthUser: async ({ commit }, user: IUser): Promise<void> => {
     const { user: newUser } = await httpClient.put<IUser, IUserResponse>({ query: user.id, payload: user });

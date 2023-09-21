@@ -188,6 +188,7 @@ export default defineComponent({
     const saveResult = async (): Promise<void> => {
       Promise.all([updateReserchResults(), updatePatientsResearches()]).then(() => {
         ElNotification.success(new MessageSuccess());
+        confirmLeave.value = false;
       });
     };
 
