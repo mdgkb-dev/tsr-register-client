@@ -1,16 +1,10 @@
 <template>
   <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
-      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem
-          title="поиск и сортировка"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          :with-hover="false"
-        >
+      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0px">
+        <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+          border-color="#C4C4C4" :with-hover="false">
           <div :style="{ width: '100%' }">
             <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%" @select="selectSearch" />
             <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="$emit('load')" />
@@ -20,40 +14,21 @@
     </template>
 
     <template #filter>
-      <GridContainer
-        max-width="1500px"
-        grid-gap="70px 10px"
-        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-        margin="0 0 0 10px"
-      >
-        <GridContainer
-          max-width="500px"
-          grid-gap="10px"
-          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-          margin="0px"
-          background="#F5F6F8"
-        >
-          <InfoItem
-            title="пол"
-            margin="0"
-            :with-open-window="false"
-            height="98px"
-            background="#F5F5F5"
-            border-color="#C4C4C4"
-            padding="7px"
-            :with-hover="false"
-          >
-            <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
+      <GridContainer max-width="1500px" grid-gap="70px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0 0 0 10px">
+        <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+          margin="0px" background="#F5F6F8">
+          <InfoItem title="пол" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+            border-color="#C4C4C4" padding="7px" :with-hover="false">
+            <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол"
+              @load="$emit('load')" />
           </InfoItem>
 
-          <FiltersButtonsSelect
-            :filter-model="filterByDisabilities"
-            :models="createDisabilityFilters()"
-            default-label="инвалидность"
-            @load="$emit('load')"
-          />
+          <FiltersButtonsSelect :filter-model="filterByDisabilities" :models="createDisabilityFilters()"
+            default-label="инвалидность" @load="$emit('load')" />
         </GridContainer>
-        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+        <GridContainer max-width="100%" grid-gap="7px"
+          grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
           <div v-for="question in questions" :key="question.id">
             <!-- <InfoItem v-if="createCustomFilterModels(question).length === 2" :title="question.name" margin="0"
               :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px"
@@ -62,65 +37,41 @@
                 :second-model="createCustomFilterModels(question)[1]" :default-label="question.name"
                 @load="$emit('load')" />
             </InfoItem> -->
-            <FiltersButtonsSelect
-              :models="createCustomFilterModels(question)"
-              :default-label="question.name"
-              :inverse="true"
-              @load="$emit('load')"
-            />
+            <FiltersButtonsSelect :models="createCustomFilterModels(question)" :default-label="question.name"
+              :inverse="true" @load="$emit('load')" />
           </div>
         </GridContainer>
 
-        <InfoItem
-          title="документы"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          padding="7px"
-          :with-hover="false"
-        >
-          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <GridContainer
-              max-width="100%"
-              grid-gap="7px"
-              grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))"
-              margin="0px"
-            >
+        <InfoItem title="документы" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+          border-color="#C4C4C4" padding="7px" :with-hover="false">
+          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
+            margin="0px">
+            <GridContainer max-width="100%" grid-gap="7px"
+              grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))" margin="0px">
               <Button text="Паспорт" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
               <Button text="СНИЛС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
               <Button text="ОМС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
             </GridContainer>
-            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px">
-              <Button text="Свидетельство пенсионера" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-              <Button text="Удостоверение инвалида" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
+            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))"
+              margin="0px">
+              <Button text="Свидетельство пенсионера" button-class="button-filter" background-hover="#DFF2F8"
+                :toggle-mode="true" />
+              <Button text="Удостоверение инвалида" button-class="button-filter" background-hover="#DFF2F8"
+                :toggle-mode="true" />
             </GridContainer>
           </GridContainer>
         </InfoItem>
       </GridContainer>
     </template>
     <template #download>
-      <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))" margin="0 0 0 10px">
-        <InfoItem
-          title="сохранить"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          padding="7px"
-          :with-hover="false"
-        >
-          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <Button
-              v-for="exportObj in exports"
-              :key="exportObj.exportType"
-              button-class="button-download"
-              background-hover="#DFF2F8"
-              :text="exportObj.exportType"
-              @click="exportData(exportObj)"
-            />
+      <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))"
+        margin="0 0 0 10px">
+        <InfoItem title="сохранить" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+          border-color="#C4C4C4" padding="7px" :with-hover="false">
+          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
+            margin="0px">
+            <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="button-download"
+              background-hover="#DFF2F8" :text="exportObj.exportType" @click="exportData(exportObj)" />
           </GridContainer>
         </InfoItem>
       </GridContainer>

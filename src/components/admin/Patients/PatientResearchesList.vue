@@ -1,23 +1,17 @@
 <template>
   <div class="tools-panel">
-    <Button
-          :with-icon="true"
-          icon="download"
-          icon-class="icon-download"
-          button-class="download-button"
-          @click="toggleSelectMod"
-        />
+    <Button :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
     <div v-if="selectResearchesMod" class="button-download-field">
-      <StringItem v-if="!researches[0].selectedForExport" string="Нажмите на исследования для выбора..." font-size="14px" padding="0" color="#006bb4" margin="0 10px "/>
-
-      <Button
-        v-if="researches[0].selectedForExport"
-        v-for="exportObj in exports"
-        :key="exportObj.exportType"
-        button-class="save-button"
-        :text="'Выгрузить ' + exportObj.exportType"
-        @click="exportData(exportObj)"
-      />
+      <div v-if="someResearchSelected">
+        <Button
+          v-for="exportObj in exports"
+          :key="exportObj.exportType"
+          button-class="save-button"
+          :text="'Выгрузить ' + exportObj.exportType"
+          @click="exportData(exportObj)"
+        />
+      </div>
+      <StringItem v-else string="Нажмите на исследования для выбора..." font-size="14px" padding="0" color="#006bb4" margin="0 10px " />
     </div>
   </div>
 
@@ -29,8 +23,8 @@
       height="60px"
       @click="selectResearch(research)"
     >
-      <template #general-item> 
-        {{ i + 1 }}. {{ research.name }} 
+      <template #general-item>
+        {{ i + 1 }}. {{ research.name }}
 
         <div v-if="selectResearchesMod && !research.selectedForExport" class="select-field"></div>
         <div v-if="selectResearchesMod && research.selectedForExport" class="selected-field">
@@ -47,6 +41,7 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
+import Check from '@/assets/svg/Check.svg';
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
 import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
@@ -59,9 +54,8 @@ import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
-import Provider from '@/services/Provider/Provider';
 import StringItem from '@/services/components/StringItem.vue';
-import Check from '@/assets/svg/Check.svg';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'PatientResearchesList',
@@ -88,6 +82,8 @@ export default defineComponent({
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     const selectResearchesMod = ref(false);
     const selectedResearchesIds: Ref<Set<string>> = ref(new Set());
+
+    const someResearchSelected = computed(() => researches.value.some((r: Research) => r.selectedForExport));
 
     const exports: Ref<ExportOptions[]> = ref([
       ExportOptions.XLSX(
@@ -146,6 +142,7 @@ export default defineComponent({
     };
 
     return {
+      someResearchSelected,
       selectedResearchesIds,
       exportData,
       selectResearchesMod,
@@ -182,25 +179,27 @@ export default defineComponent({
 
 .download-button {
   width: 52px;
-  height:52px;
-  color: #006BB4;
+  height: 52px;
+  color: #006bb4;
   background: #ffffff;
   margin: 0px;
 }
 
 .download-button:hover {
-  background: #DFF2F8;
+  background: #dff2f8;
 }
+
 .button-download-field {
   width: 250px;
   height: 50px;
   background: #ffffff;
-  border: 1px solid #006BB4;
+  border: 1px solid #006bb4;
   border-left: none;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .save-button {
   width: 100%;
   border-radius: 5px;
@@ -240,7 +239,7 @@ export default defineComponent({
 .check-icon {
   width: 40px;
   height: 40px;
-  fill: #00B5A4;
+  fill: #00b5a4;
   fill-opacity: 0.6;
 }
 </style>
