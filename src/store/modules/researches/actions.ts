@@ -11,7 +11,7 @@ const httpClient = new HttpClient('researches');
 
 const actions: ActionTree<State, RootState> = {
   ...getBaseActions<Research, State>(httpClient),
-  xlsx: async ({ commit }, { researchId, patientId }) => {
+  xlsx: async (_, { researchId, patientId }) => {
     const query = `xlsx/${researchId}/${patientId}`;
     await httpClient.get({ query: query, isBlob: true, downloadFileName: 'data.xlsx' });
   },

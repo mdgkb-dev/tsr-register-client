@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import { util } from 'prettier';
 import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
@@ -15,7 +14,6 @@ import ResearchResult from '@/classes/ResearchResult';
 import Button from '@/components/Base/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
-import hasNewline = util.hasNewline;
 
 export default defineComponent({
   name: 'FilesProp',

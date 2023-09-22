@@ -135,4 +135,8 @@ export default class Question {
   getIdWithoutDashes(): string {
     return this.id ? this.id.replaceAll(/[^a-zA-Z]+/g, '') : '';
   }
+
+  static GetClassName(): string {
+    return 'question';
+  }
 }

@@ -1,16 +1,15 @@
+import Question from '@/classes/Question';
+import QuestionFilter from '@/classes/QuestionFilter';
 import FilterModel from '@/services/classes/filters/FilterModel';
 
 const QuestionsFiltersLib = (() => {
   const modelName = 'question';
-  function onlyMkbQuestions(): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoinV2(modelName, 'id', 'mkbQuestionDomain', 'id', 'questionId');
-    // filterModel.joinTableId = id;
-    // filterModel.operator = Operators.;
-    // filterModel.label = label;
+  function onlyFiltersQuetions(): FilterModel {
+    const filterModel = FilterModel.OnlyIfSecondModelExists(Question, QuestionFilter);
     return filterModel;
   }
   return {
-    onlyMkbQuestions,
+    onlyFiltersQuetions,
   };
 })();
 

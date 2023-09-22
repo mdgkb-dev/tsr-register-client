@@ -16,18 +16,13 @@
       <Button
         v-for="(model, index) in models"
         :key="index"
+        button-class="filter-button"
         :text="model.label"
         :with-icon="false"
-        width="auto"
-        height="34px"
-        border-radius="5px"
-        color="#006BB4"
-        background="#ffffff"
-        :is-toggle="(inverse && !selectedFilterModel?.id) || (inverse && model.id !== selectedFilterModel?.id)"
-        background-hover="#DFF2F8"
+        :is-toggle="model.id === selectedFilterModel?.id"
         :toggle-mode="true"
-        font-size="12px"
         :inverse="inverse"
+        background-hover="DFF2F8"
         @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
       >
       </Button>
@@ -105,6 +100,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.filter-button {
+  width: auto;
+  height: 23px;
+  border-radius: 5px;
+  color: #006bb4;
+  background: #ffffff;
+  font-size: 12px;
+}
+
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;

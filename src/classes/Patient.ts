@@ -12,7 +12,6 @@ import PatientHistory from '@/classes/PatientHistory';
 import PatientRegister from '@/classes/PatientRegister';
 import PatientRepresentative from '@/classes/PatientRepresentative';
 import PatientResearch from '@/classes/PatientResearch';
-import PatientResearchesPool from '@/classes/PatientResearchesPool';
 import Register from '@/classes/Register';
 import Representative from '@/classes/Representative';
 import Research from '@/classes/Research';
@@ -49,10 +48,6 @@ export default class Patient {
   @ClassHelper.GetClassConstructor(PatientResearch)
   patientsResearches: PatientResearch[] = [];
   registerGroupsToPatientForDelete: string[] = [];
-
-  @ClassHelper.GetClassConstructor(PatientResearchesPool)
-  patientsResearchesPools: PatientResearchesPool[] = [];
-  patientsResearchesPoolsForDelete: string[] = [];
 
   @ClassHelper.GetClassConstructor(PatientDrugRegimen)
   patientDrugRegimen: PatientDrugRegimen[] = [];
@@ -197,10 +192,6 @@ export default class Patient {
 
   getPatientResearch(researchId: string | undefined): PatientResearch | undefined {
     return this.patientsResearches.find((p: PatientResearch) => p.researchId === researchId);
-  }
-
-  hasResearchesPool(poolId: string): boolean {
-    return this.patientsResearchesPools.some((p: PatientResearchesPool) => p.researchesPoolId === poolId);
   }
 
   hasRegister(id: string): boolean {

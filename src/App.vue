@@ -9,11 +9,10 @@
 <script lang="ts">
 import { defineComponent, watch } from '@vue/runtime-core';
 import { onBeforeMount, Ref, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
 
 import AdminLayout from '@/views/adminLayout/AdminLayout.vue';
 import LoginLayout from '@/views/loginLayout/LoginLayout.vue';
+
 import Provider from './services/Provider/Provider';
 
 export default defineComponent({

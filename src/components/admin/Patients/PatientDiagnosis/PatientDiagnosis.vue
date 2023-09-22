@@ -105,7 +105,7 @@ export default defineComponent({
       await Provider.store.dispatch('patientDiagnosis/update', patientDiagnosis);
     };
 
-    const selectPatientDiagnosis = (patientDiagnosisId: string): void => {
+    const selectPatientDiagnosis = (patientDiagnosisId?: string): void => {
       const findDiagnosis = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
       selectedPatientDiagnosisId.value = findDiagnosis?.id ?? '';
       Provider.store.commit('patientDiagnosis/set', findDiagnosis);

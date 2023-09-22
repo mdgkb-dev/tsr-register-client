@@ -12,7 +12,7 @@
         <el-input
           v-model="patientDiagnosis.doctorName"
           placeholder="ФИО врача, поставившего диагноз"
-          @blur="updatePatientDiagnosis(patientDiagnosis)"
+          @blur="updatePatientDiagnosis()"
         ></el-input>
       </div>
       <div v-for="research in researches" :key="research.id">

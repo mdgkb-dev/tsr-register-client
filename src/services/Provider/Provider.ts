@@ -54,7 +54,10 @@ const Provider = (() => {
     await Router.toAdmin(`${StringsService.toKebabCase(Store.getStoreModule())}/new`);
   }
 
-  async function editAdmin(id: string): Promise<void> {
+  async function editAdmin(id?: string): Promise<void> {
+    if (!id) {
+      return;
+    }
     await Router.toAdmin(`${StringsService.toKebabCase(Store.getStoreModule())}/${id}`);
   }
 

@@ -76,5 +76,4 @@ export default defineComponent({
   margin-right: auto;
   justify-content: center;
 }
-
 </style>

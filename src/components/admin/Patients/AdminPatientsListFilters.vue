@@ -55,26 +55,14 @@
         </GridContainer>
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
           <div v-for="question in questions" :key="question.id">
-            <InfoItem
-              v-if="createCustomFilterModels(question).length === 2"
-              :title="question.name"
-              margin="0"
-              :with-open-window="false"
-              height="98px"
-              background="#F5F5F5"
-              border-color="#C4C4C4"
-              padding="7px"
-              :with-hover="false"
-            >
-              <Switch3Pos
-                :first-model="createCustomFilterModels(question)[0]"
-                :second-model="createCustomFilterModels(question)[1]"
-                :default-label="question.name"
-                @load="$emit('load')"
-              />
-            </InfoItem>
+            <!-- <InfoItem v-if="createCustomFilterModels(question).length === 2" :title="question.name" margin="0"
+              :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px"
+              :with-hover="false">
+              <Switch3Pos :first-model="createCustomFilterModels(question)[0]"
+                :second-model="createCustomFilterModels(question)[1]" :default-label="question.name"
+                @load="$emit('load')" />
+            </InfoItem> -->
             <FiltersButtonsSelect
-              v-else
               :models="createCustomFilterModels(question)"
               :default-label="question.name"
               :inverse="true"
@@ -158,7 +146,9 @@ import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
+import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';
@@ -187,8 +177,12 @@ export default defineComponent({
       await Provider.router.push(`/admin/patients/${event.value}`);
     };
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       filterByRegister.value = PatientsFiltersLib.byRegisters([]);
+
+      const fq = new FilterQuery();
+      fq.setFilterModel(QuestionsFiltersLib.onlyFiltersQuetions());
+      await Provider.store.dispatch('questions/getAll', { filterQuery: fq });
     });
 
     const createDisabilityFilters = (): FilterModel[] => {
