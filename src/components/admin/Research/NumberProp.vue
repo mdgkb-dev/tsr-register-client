@@ -3,10 +3,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
+import Answer from '@/classes/Answer';
 
 export default defineComponent({
   name: 'NumberProp',
@@ -26,17 +27,14 @@ export default defineComponent({
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer = props.variantId
-      ? props.researchResult.getQuestionVariantAnswer(props.variantId)
-      : props.researchResult.getOrCreateAnswer(props.question);
+    const answer: Ref<Answer | undefined> = props.variantId
+      ? ref(props.researchResult.getQuestionVariantAnswer(props.variantId))
+      : ref(props.researchResult.getOrCreateAnswer(props.question));
     const filledCheck = (v: number): void => {
-      console.log(v);
-      if (!answer) {
+      if (!answer.value) {
         return;
       }
-      console.log(v);
-      // answer.valueNumber = v;
-      answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
+      answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');
     };

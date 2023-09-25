@@ -10,8 +10,16 @@
   </el-checkbox>
   <el-form v-if="showOthers" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
+      <SetProp
+        :is="additionalQuestion.valueType.getComponentType()"
+        v-if="additionalQuestion.valueType.getComponentType() === 'SetProp'"
+        :research-result="researchResult"
+        :question="additionalQuestion"
+        @fill="$emit('fill')"
+      />
       <component
         :is="additionalQuestion.valueType.getComponentType()"
+        v-else
         :research-result="researchResult"
         :question="additionalQuestion"
         @fill="$emit('fill')"
@@ -21,8 +29,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
+import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
@@ -54,22 +63,22 @@ export default defineComponent({
   },
   emits: ['update:modelValue', 'fill'],
   setup(props, { emit }) {
-    const answer = props.researchResult.getOrCreateAnswer(props.question);
+    const answer: Ref<Answer> = ref(props.researchResult.getOrCreateAnswer(props.question));
     const showOthers = computed(() => {
       if (props.restrictOthers) {
         return false;
       }
-      return answer.selectedAnswerVariants.some((s: SelectedAnswerVariant) => {
+      return answer.value.selectedAnswerVariants.some((s: SelectedAnswerVariant) => {
         return props.question.answerVariants.some((a: AnswerVariant) => a.id === s.answerVariantId && a.showMoreQuestions);
       });
     });
     const filledCheck = (): void => {
-      answer.filled = answer.selectedAnswerVariants.length > 0;
+      answer.value.filled = answer.value.selectedAnswerVariants.length > 0;
       props.researchResult.calculateFilling();
       emit('fill');
     };
     const selectVariant = (selected: boolean, variantId: string) => {
-      answer.setSelectedAnswerVariant(selected, variantId);
+      answer.value.setSelectedAnswerVariant(selected, variantId);
       filledCheck();
     };
 

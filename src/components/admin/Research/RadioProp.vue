@@ -50,6 +50,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
     const answer: Ref<Answer | undefined> = ref(undefined);
+
     const filledCheck = (variant: AnswerVariant): void => {
       // TODO: временно
       if (Provider.route().params['id'] && answer.value) {
