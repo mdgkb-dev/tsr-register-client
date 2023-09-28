@@ -110,6 +110,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       commit('set', await httpClient.put<T, T>(opts));
     },
     updateWithoutReset: async ({ state }, item: T): Promise<void> => {
+      console.log('updateWithoutReset item', item);
       if (!item) {
         item = state.item;
       }
