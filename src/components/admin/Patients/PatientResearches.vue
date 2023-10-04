@@ -28,7 +28,7 @@
             </div> -->
         </TopSliderContainer>
         <Button v-show="confirmLeave" button-class="grey-button" text="Сохранить" @click="saveResult()" />
-        <Button icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult()" />
+        <Button v-show="confirmLeave" icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult()" />
       </div>
     </template>
     <template #body>
