@@ -12,8 +12,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
+import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import dateFormat from '@/services/DateMask';
@@ -32,10 +33,10 @@ export default defineComponent({
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer = props.researchResult.getOrCreateAnswer(props.question);
+    const answer: ComputedRef<Answer> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
 
     const filledCheck = (): void => {
-      answer.filled = answer.valueNumber === 0 || !!answer.valueNumber;
+      answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');
     };

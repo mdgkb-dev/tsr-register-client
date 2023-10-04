@@ -2,6 +2,7 @@ import DrugRegimenBlockItem from '@/classes/DrugRegimenBlockItem';
 import ClassHelper from '@/services/ClassHelper';
 
 import Drug from './Drug';
+import DrugDoze from './DrugDoze';
 import DrugRegimenBlock from './DrugRegimenBlock';
 
 export default class DrugRegimen {
@@ -11,6 +12,9 @@ export default class DrugRegimen {
 
   drugId?: string;
   drug?: Drug;
+
+  drugDozeId?: string;
+  drugDoze: DrugDoze = new DrugDoze();
 
   drugRegimenBlocks: DrugRegimenBlock[] = [new DrugRegimenBlock()];
   drugRegimenBlocksForDelete: string[] = [];
