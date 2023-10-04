@@ -5,9 +5,9 @@
 <script lang="ts">
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
+import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import Answer from '@/classes/Answer';
 
 export default defineComponent({
   name: 'NumberProp',
