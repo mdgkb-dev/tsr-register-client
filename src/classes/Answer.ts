@@ -13,6 +13,7 @@ export default class Answer {
   valueOther?: string;
   valueNumber?: number;
   valueDate?: Date;
+  @ClassHelper.GetClassConstructor(AnswerVariant)
   answerVariant?: AnswerVariant;
   answerVariantId?: string;
   order = 0;

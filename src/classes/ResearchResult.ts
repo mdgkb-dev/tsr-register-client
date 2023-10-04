@@ -56,6 +56,7 @@ export default class ResearchResult {
     // }
     if (!answer) {
       answer = Answer.Create(question);
+      console.log('not answ', answer);
       this.addAnswer(answer);
     }
     return answer;

@@ -39,7 +39,6 @@ export default defineComponent({
       answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');
-      console.log(answer.value.valueDate);
     };
 
     return {

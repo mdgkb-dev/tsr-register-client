@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
@@ -49,7 +49,7 @@ export default defineComponent({
   emits: ['fill'],
   setup(props, { emit }) {
     const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
-    const answer: Ref<Answer | undefined> = ref(undefined);
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
 
     const filledCheck = (variant: AnswerVariant): void => {
       // TODO: временно
@@ -60,6 +60,7 @@ export default defineComponent({
         return;
       }
       selectVariant(variant);
+      console.log(props.researchResult);
       answer.value.filled = answer.value.answerVariantId === variant.id;
       props.researchResult.calculateFilling();
       emit('fill');
@@ -70,7 +71,6 @@ export default defineComponent({
     };
 
     onBeforeMount(() => {
-      answer.value = props.researchResult.getOrCreateAnswer(props.question);
       selectVariant(props.question.answerVariants.find((a: AnswerVariant) => a.id === answer.value?.answerVariantId));
     });
 
