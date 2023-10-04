@@ -24,6 +24,7 @@
         :inverse="inverse"
         background-hover="DFF2F8"
         @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
+        :height="78/models.length - (models.length - 1)*2 +'px'"
       >
       </Button>
     </GridContainer>

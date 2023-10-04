@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="mainblock"
-    :style="{
-      height: height,
-    }"
-  >
+  <div class="mainblock">
     <div
       class="top-menu"
       :style="{
@@ -57,8 +52,8 @@ export default defineComponent({
   border-radius: $big-border-radius;
   border: $custom-border;
   overflow: hidden;
-  margin: 0 10px 0 0;
-  height: 100%;
+  margin: 0 10px 10px 0;
+  height: calc(100% - 10px);
 }
 
 .top-menu {
@@ -79,20 +74,22 @@ export default defineComponent({
   border-top: 0.5px solid #343d5c;
   box-sizing: border-box;
   overflow: auto;
-  background: blue;
   height: 100%;
-  box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: auto;
+  padding-bottom: 10px;
 }
 
 @media (max-width: 1436px) {
   .body-container {
     height: calc(100% - 55px);
+    height: 100%;
   }
 }
 
 @media (max-width: 1050px) {
   .body-container {
-    height: calc(100% - 95px);
+    height: calc(100% - 81px);
   }
 }
 
@@ -102,13 +99,15 @@ export default defineComponent({
     width: calc(100% - 22px);
   }
   .body-container {
-    height: calc(100% - 55px);
+    height: calc(100% - 40px);
+    // height: 100%;
+    // height: calc(100vh - 10px);
   }
 }
 
 @media (max-width: 822px) {
   .body-container {
-    height: calc(100% - 95px);
+    height: calc(100% - 45px);
   }
 }
 

@@ -185,8 +185,9 @@ export default defineComponent({
 .body-block {
   position: relative;
   width: calc(100% - 110px);
-  height: 100%;
+  height: calc(100% - 10px);
   background: $custom-background;
+  overflow-y: scroll;
 }
 
 @media screen and (max-width: 768px) {
