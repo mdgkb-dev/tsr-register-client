@@ -1,6 +1,7 @@
 <template>
   <div class="tools-panel">
-    <Button :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
+    <Button v-if="!selectResearchesMod" :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
+    <Button v-if="selectResearchesMod" :with-icon="true" icon="aright" icon-class="icon-aright" button-class="download-button" @click="toggleSelectMod" />
     <div v-if="selectResearchesMod" class="button-download-field">
       <div v-if="someResearchSelected" class="field">
         <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="'Выгрузить ' + exportObj.exportType" @click="exportData(exportObj)" />
@@ -166,6 +167,13 @@ export default defineComponent({
   cursor: pointer;
   stroke: #006bb4;
   fill: none;
+}
+
+:deep(.icon-aright) {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  fill: #006bb4;
 }
 
 .download-button {
