@@ -1,38 +1,18 @@
 <template>
-  <RightSliderContainer v-if="research.withDates" :toggle="toggle">
+  <RightSliderContainer :toggle="toggle">
     <template #header>
       <Button button-class="save-button" text="График" @click="toggleChart" />
 
-      <Button
-        v-for="exportObj in exports"
-        :key="exportObj.exportType"
-        button-class="save-button"
-        :text="exportObj.exportType"
-        @click="exportData(exportObj)"
-      />
+      <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="exportObj.exportType" @click="exportData(exportObj)" />
     </template>
     <CollapseContainer :init-active-idx="patientResearch.researchResults.length - 1">
       <template #default="scope">
         <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id, true)">
-          <CollapseItem
-            :is-collaps="false"
-            padding="0 8px"
-            :active-id="scope.activeIdx"
-            :tab-id="i"
-            :selectable="true"
-            @changeActiveId="scope.changeActiveId"
-          >
+          <CollapseItem :is-collaps="false" padding="0 8px" :active-id="scope.activeIdx" :tab-id="i" :selectable="true" @changeActiveId="scope.changeActiveId">
             <template #inside-title>
               <div @click.prevent="() => undefined">
                 <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
-                  <SmallDatePicker
-                    v-model:model-value="result.date"
-                    placeholder="Выбрать"
-                    width="85px"
-                    height="34px"
-                    @change="update(result)"
-                    @click.stop="() => undefined"
-                  />
+                  <SmallDatePicker v-model:model-value="result.date" placeholder="Выбрать" width="85px" height="34px" @change="update(result)" @click.stop="() => undefined" />
                 </InfoItem>
               </div>
             </template>
@@ -89,14 +69,8 @@ export default defineComponent({
     const selectedId: Ref<string> = ref('');
 
     const exports: ExportOptions[] = [
-      ExportOptions.XLSX(
-        PatientsExportOptionLib.onePatient(props.patientResearch.patientId),
-        ResearchesExportOptionLib.oneResearch(props.research.id)
-      ),
-      ExportOptions.PDF(
-        PatientsExportOptionLib.onePatient(props.patientResearch.patientId),
-        ResearchesExportOptionLib.oneResearch(props.research.id)
-      ),
+      ExportOptions.XLSX(PatientsExportOptionLib.onePatient(props.patientResearch.patientId), ResearchesExportOptionLib.oneResearch(props.research.id)),
+      ExportOptions.PDF(PatientsExportOptionLib.onePatient(props.patientResearch.patientId), ResearchesExportOptionLib.oneResearch(props.research.id)),
     ];
 
     const update = async (item: ResearchResult): Promise<void> => {
@@ -106,6 +80,8 @@ export default defineComponent({
     onBeforeMount(async () => {
       const lastResult = props.patientResearch.getLastResult();
       if (lastResult && lastResult.id) {
+        console.log('getLastRes');
+
         await selectResult(lastResult.id);
       }
     });
@@ -114,7 +90,10 @@ export default defineComponent({
       const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
       await Provider.store.dispatch('researchesResults/createWithoutReset', item);
     };
-    const selectResult = async (id: string, beforeLeave?: boolean): Promise<void> => {
+    const selectResult = async (id?: string, beforeLeave?: boolean): Promise<void> => {
+      if (!id) {
+        return;
+      }
       selectedId.value = id;
       if (beforeLeave) {
         await emit('beforeLeave', emit('select', id));

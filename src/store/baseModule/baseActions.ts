@@ -55,7 +55,11 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
         commit('setAllWithCount', res);
       }
     },
-    get: async ({ commit }, filter: string | FilterQuery) => {
+    get: async ({ commit }, filter?: string | FilterQuery) => {
+      if (!filter) {
+        console.warn('noFilterSetInQuery');
+        return;
+      }
       let query: IBodilessParams;
       if (typeof filter === 'string') {
         query = { query: filter };

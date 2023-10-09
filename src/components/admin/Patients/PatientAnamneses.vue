@@ -33,13 +33,13 @@
 
     <template #body>
       <PatientResearchesResultsList
-        v-if="research.id && patientResearch && patientResearch.researchId === research.id"
+        v-if="research.id && research.withDates && patientResearch && patientResearch.researchId === research.id"
         :research="research"
         :patient-research="patientResearch"
         @select="selectResult"
         @show-chart="toggleChart"
       />
-      <PatientResearchesList v-else type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
+      <PatientResearchesList v-else-if="!research.id" type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
       <PatientResearchesQuestion
         v-if="researchResult.id"
         :key="researchResult.id"
@@ -98,9 +98,7 @@ export default defineComponent({
 
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
-    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
-      patient.value.getPatientResearch(research.value.id)
-    );
+    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -116,6 +114,8 @@ export default defineComponent({
     };
 
     const createPatientResearch = async (research: Research) => {
+      console.log('createPatientRes');
+
       if (!patient.value.getPatientResearch(research.id)) {
         const item = PatientResearch.Create(patient.value.id, research);
         patient.value.patientsResearches.push(item);
@@ -137,6 +137,8 @@ export default defineComponent({
     };
 
     const selectResult = async (id: string) => {
+      console.log(id, 'select Resul');
+
       await Provider.store.dispatch('researchesResults/get', id);
     };
 
