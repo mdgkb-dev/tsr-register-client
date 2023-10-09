@@ -1,13 +1,5 @@
 <template>
-  <button
-    class="button"
-    :style="buttonStyle"
-    :class="buttonClass"
-    :disabled="disabled"
-    @click.prevent="changeState"
-    @mouseenter="hovering = true"
-    @mouseleave="hovering = false"
-  >
+  <button class="button" :style="buttonStyle" :class="buttonClass" :disabled="disabled" @click.prevent="changeState" @mouseenter="hovering = true" @mouseleave="hovering = false">
     <div v-if="icon" class="button-icon" :style="buttonIconStyle">
       <svg :class="iconClass">
         <use :xlink:href="'#' + icon"></use>
@@ -23,6 +15,7 @@
     <Filter />
     <Download />
     <Close />
+
     <Outlined />
     <Commission />
     <Back />
@@ -101,9 +94,7 @@ export default defineComponent({
     const buttonStyle = computed(() => {
       return {
         color: props.toggleMode ? getActiveColor(props.color, '#B0A4C0') : getInvertedColor(),
-        background: props.colorSwap
-          ? getActiveColor(props.color, props.background)
-          : getActiveColor(props.backgroundHover, props.background),
+        background: props.colorSwap ? getActiveColor(props.color, props.background) : getActiveColor(props.backgroundHover, props.background),
         margin: props.margin,
         minWidth: props.width,
         maxWidth: props.width,
@@ -116,9 +107,7 @@ export default defineComponent({
     });
 
     const getAnimation = (): string => {
-      return props.colorSwap || props.toggleMode
-        ? getActiveColor(props.backgroundHover, props.background)
-        : getActiveColor('scale(1.1, 1.1)', '');
+      return props.colorSwap || props.toggleMode ? getActiveColor(props.backgroundHover, props.background) : getActiveColor('scale(1.1, 1.1)', '');
     };
 
     const buttonIconStyle = computed(() => {

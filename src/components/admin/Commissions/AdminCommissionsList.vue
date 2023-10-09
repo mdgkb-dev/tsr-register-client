@@ -10,13 +10,7 @@
 
     <ModalWindow :show="templatesOpened" title="Выбрать шаблон комиссии" @close="templatesOpened = false">
       <GridContainer grid-gap="5px" margin="10px 0">
-        <Button
-          v-for="template in commissionsTemplates"
-          :key="template.id"
-          button-class="change-button"
-          :text="template.name"
-          @click="createCommission(template)"
-        />
+        <Button v-for="template in commissionsTemplates" :key="template.id" button-class="change-button" :text="template.name" @click="createCommission(template)" />
       </GridContainer>
     </ModalWindow>
     <ModalWindow :show="showModalDiagnosis" title="Выберите диагноз" @close="showModalDiagnosis = false">
@@ -31,23 +25,14 @@
       </GridContainer>
     </ModalWindow>
     <!--    :background="patientDiagnosis.mkbItemId === commission.drugId ? '#dff2f8' : ''"-->
-    <ModalWindow :show="showModalMedicine" title="Выбор лекарства" @close="showModalMedicine = false">
-      <CommissionDrugForm :commission="selectedCommission" @select="(e) => setDrugRecipe(e, selectedCommission)" />
+    <ModalWindow :show="showModalDrugs" title="Выбор лекарства" @close="showModalDrugs = false">
+      <DrugSelectForm @select="(e) => setDrugRecipe(e, selectedCommission)" />
     </ModalWindow>
 
     <div class="filter-block">
       <GridContainer max-width="900px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <template #grid-items>
-          <InfoItem
-            margin="0"
-            :with-open-window="false"
-            :with-icon="false"
-            height="76px"
-            background="#F5F5F5"
-            border-color="#C4C4C4"
-            padding="7px"
-            :with-hover="false"
-          >
+          <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="76px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
             <template #title>
               <StringItem string="поиск и сортировка" font-size="10px" padding="0" />
             </template>
@@ -83,37 +68,17 @@
                     <StringItem :string="`№${commission.number}`" color="#006BB4" font-size="20px" min-width="110px" margin="0 10px 0 0" />
                   </div>
                   <div class="line-item-right">
-                    <Button
-                      button-class="commission-button"
-                      color="#006bb4"
-                      icon="commission"
-                      icon-class="edit-icon"
-                      @click="openModalDoctorList(commission)"
-                    />
+                    <Button button-class="commission-button" color="#006bb4" icon="commission" icon-class="edit-icon" @click="openModalDoctorList(commission)" />
                     <InfoItem :close="infoItemToggle" title="ФИО пациента" min-width="200px">
-                      <StringItem
-                        :string="commission.patient ? commission.patient.human.getFullName() : ''"
-                        custom-class="patient-name"
-                        width="230px"
-                      />
+                      <StringItem :string="commission.patient ? commission.patient.human.getFullName() : ''" custom-class="patient-name" width="230px" />
                       <template #open-inside-content>
-                        <RemoteSearch
-                          key-value="patient"
-                          placeholder="Введите имя пациента"
-                          @click.stop="() => undefined"
-                          @select="(e) => setPatient(e, commission)"
-                        />
+                        <RemoteSearch key-value="patient" placeholder="Введите имя пациента" @click.stop="() => undefined" @select="(e) => setPatient(e, commission)" />
                       </template>
                     </InfoItem>
                   </div>
                 </div>
                 <div class="item-flex">
-                  <GridContainer
-                    max-width="1920px"
-                    grid-gap="10px"
-                    grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                    margin="0px"
-                  >
+                  <GridContainer max-width="1920px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0px">
                     <InfoItem
                       v-if="commission.patient && commission.patient.id"
                       :close="infoItemToggle"
@@ -123,10 +88,7 @@
                       title="диагноз"
                       @click="openModalDiagnosis(commission)"
                     >
-                      <StringItem
-                        :string="commission.patientDiagnosis ? commission.patientDiagnosis.mkbItem.getCode() : ''"
-                        custom-class="medicine"
-                      />
+                      <StringItem :string="commission.patientDiagnosis ? commission.patientDiagnosis.mkbItem.getCode() : ''" custom-class="medicine" />
                     </InfoItem>
 
                     <InfoItem
@@ -136,22 +98,12 @@
                       width="100%"
                       :with-open-window="false"
                       title="лекарство"
-                      @click="openModalMedicine(commission)"
+                      @click="openModalDrugs(commission)"
                     >
-                      <StringItem
-                        :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''"
-                        custom-class="medicine"
-                        font-size="10px"
-                      />
+                      <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" font-size="10px" />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
-                      <SmallDatePicker
-                        v-model:model-value="commission.date"
-                        placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
-                        @change="updateCommission(commission)"
-                      />
+                      <SmallDatePicker v-model:model-value="commission.date" placeholder="Выбрать" width="100%" height="34px" @change="updateCommission(commission)" />
                     </InfoItem>
                     <Button
                       v-if="commission.canGetProtocol()"
@@ -160,12 +112,7 @@
                       color="#006bb4"
                       @click="fillCommissionDownload(commission)"
                     />
-                    <Button
-                      text="Заявки в ДЗМ"
-                      button-class="medical-commission-button"
-                      color="#006bb4"
-                      @click="openModalDrugApplications(commission)"
-                    />
+                    <Button text="Заявки в ДЗМ" button-class="medical-commission-button" color="#006bb4" @click="openModalDrugApplications(commission)" />
                   </GridContainer>
                 </div>
               </div>
@@ -186,7 +133,7 @@ import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import CommissionDrugApplications from '@/components/admin/Commissions/CommissionDrugApplications.vue';
-import CommissionDrugForm from '@/components/admin/Commissions/CommissionDrugForm.vue';
+import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
@@ -206,7 +153,7 @@ import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 export default defineComponent({
   name: 'AdminCommissionsList',
   components: {
-    CommissionDrugForm,
+    DrugSelectForm,
     CommissionDrugApplications,
     CollapseContainer,
     RemoteSearch,
@@ -229,7 +176,7 @@ export default defineComponent({
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
     const infoItemToggle: Ref<boolean> = ref(false);
     const showModalDiagnosis: Ref<boolean> = ref(false);
-    const showModalMedicine: Ref<boolean> = ref(false);
+    const showModalDrugs: Ref<boolean> = ref(false);
     const showModalDoctorList: Ref<boolean> = ref(false);
     const showModalDrugApplications: Ref<boolean> = ref(false);
 
@@ -301,9 +248,9 @@ export default defineComponent({
       selectCommission(c);
       showModalDiagnosis.value = true;
     };
-    const openModalMedicine = async (c: Commission) => {
+    const openModalDrugs = async (c: Commission) => {
       selectCommission(c);
-      showModalMedicine.value = true;
+      showModalDrugs.value = true;
     };
 
     const openModalDoctorList = (c: Commission) => {
@@ -321,7 +268,7 @@ export default defineComponent({
       if (findedCommission) {
         findedCommission.setDrugRecipe(drugRecipe);
         console.log(drugRecipe);
-        showModalMedicine.value = false;
+        showModalDrugs.value = false;
         await updateCommission(findedCommission);
       }
     };
@@ -346,8 +293,8 @@ export default defineComponent({
       ...Provider.getAdminLib(),
       openModalDiagnosis,
       showModalDiagnosis,
-      openModalMedicine,
-      showModalMedicine,
+      openModalDrugs,
+      showModalDrugs,
       openModalDoctorList,
       showModalDoctorList,
     };

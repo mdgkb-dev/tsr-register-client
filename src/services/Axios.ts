@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { ElNotification } from 'element-plus';
 
-import router from '@/router';
 import TokenService from '@/services/Token';
 import store from '@/store';
 
@@ -31,7 +30,7 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response.status === 500) {
       ElNotification({ message: 'Ошибка на сервере, попробуйте позже', duration: 10000, type: 'error' });
-      router.go(-1);
+      // router.go(-1);
       console.log(error.response.data);
     }
     return Promise.reject(error);

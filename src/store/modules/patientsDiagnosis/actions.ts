@@ -7,7 +7,7 @@ import RootState from '@/store/types';
 import { State } from './index';
 
 const actions: ActionTree<State, RootState> = {
-  ...getBaseActions<PatientDiagnosis, State>('patient-diagnosis'),
+  ...getBaseActions<PatientDiagnosis, State>('patients-diagnosis'),
 };
 
 export default actions;

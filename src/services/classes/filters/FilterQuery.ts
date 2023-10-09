@@ -14,6 +14,16 @@ export default class FilterQuery {
   pagination: Pagination = new Pagination();
   withDeleted = false;
 
+  static Create(filters: FilterModel[], sortModels: SortModel[], pagination?: Pagination): FilterQuery {
+    const item = new FilterQuery();
+    item.filterModels = filters;
+    item.sortModels = sortModels;
+    if (pagination) {
+      item.pagination = pagination;
+    }
+    return item;
+  }
+
   toUrl(): string {
     const filterModels = this.filterModels?.map((filterModel: FilterModel) => {
       return `filterModel=${JSON.stringify(filterModel)}`;

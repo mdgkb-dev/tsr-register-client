@@ -3,13 +3,7 @@
   <Button v-if="stepper.getStepNumber() > 0" button-class="change-button" text="Назад" @click="stepper.decreaseStep()" />
   <div v-if="mounted">
     <GridContainer grid-gap="5px" margin="10px 0">
-      <Button
-        v-for="item in stepsArrays[stepper.getStepNumber()]"
-        :key="item.id"
-        button-class="change-button"
-        :text="item.getName()"
-        @click="stepper.actStepFunc(item)"
-      />
+      <Button v-for="item in stepsArrays[stepper.getStepNumber()]" :key="item.id" button-class="change-button" :text="item.getName()" @click="stepper.actStepFunc(item)" />
     </GridContainer>
   </div>
 </template>
@@ -34,7 +28,7 @@ import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
-  name: 'CommissionDrugForm',
+  name: 'DrugSelectForm',
   components: {
     Button,
     GridContainer,

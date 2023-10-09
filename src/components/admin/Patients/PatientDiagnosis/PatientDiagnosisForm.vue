@@ -9,20 +9,12 @@
     <template #body>
       <div class="diagnosis-doctorName">
         <div class="doctor-title">Диагноз поставил врач:</div>
-        <el-input
-          v-model="patientDiagnosis.doctorName"
-          placeholder="ФИО врача, поставившего диагноз"
-          @blur="updatePatientDiagnosis()"
-        ></el-input>
+        <el-input v-model="patientDiagnosis.doctorName" placeholder="ФИО врача, поставившего диагноз" @blur="updatePatientDiagnosis()"></el-input>
       </div>
       <div v-for="research in researches" :key="research.id">
         <div v-for="question in research.questions" :key="question.id">
           <div class="margin-class">{{ question.name }}</div>
-          <QuestionComponent
-            :question="question"
-            :research-result="patient.getResearchResult(research.id)"
-            @fill="saveResearchResult(patient.getResearchResult(research.id))"
-          />
+          <QuestionComponent :question="question" :research-result="patient.getResearchResult(research.id)" @fill="saveResearchResult(patient.getResearchResult(research.id))" />
         </div>
       </div>
       <div class="margin-class">
@@ -58,11 +50,11 @@ export default defineComponent({
   setup() {
     const mounted = ref(false);
     const researches: ComputedRef<Research[]> = computed(() => Provider.store.getters['researches/items']);
-    const patientDiagnosis: ComputedRef<PatientDiagnosis> = computed(() => Provider.store.getters['patientDiagnosis/item']);
+    const patientDiagnosis: ComputedRef<PatientDiagnosis> = computed(() => Provider.store.getters['patientsDiagnosis/item']);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
 
     const updatePatientDiagnosis = async () => {
-      await Provider.store.dispatch('patientDiagnosis/updateWithoutReset', patientDiagnosis.value);
+      await Provider.store.dispatch('patientsDiagnosis/updateWithoutReset', patientDiagnosis.value);
     };
 
     onBeforeMount(async () => {

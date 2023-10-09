@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 
 import Patient from '@/classes/Patient';
+import IAnthropomentry from '@/interfaces/IAnthropomentry';
 import getBaseDefaultState from '@/store/baseModule/baseIndex';
 import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
@@ -11,12 +12,14 @@ import mutations from './mutations';
 
 export interface State extends IBasicState<Patient> {
   existsInDomain: boolean;
+  actualAnthropometry?: IAnthropomentry;
 }
 
 export const getDefaultState = (): State => {
   return {
     ...getBaseDefaultState(Patient),
     existsInDomain: false,
+    actualAnthropometry: undefined,
   };
 };
 

@@ -32,16 +32,10 @@
       </div>
     </template>
     <template #body>
-      <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList
-          :research="research"
-          :patient-research="patientResearch"
-          @select="selectResult"
-          @show-chart="toggleChart"
-          @before-leave="beforeLeave"
-        />
+      <template v-if="research.id && research.withDates && patientResearch && patientResearch.researchId === research.id">
+        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" @show-chart="toggleChart" @before-leave="beforeLeave" />
       </template>
-      <template v-else>
+      <template v-else-if="!research.id">
         <PatientResearchesList type="researches" :filter-model="researchesFilter" @select="selectResearch" />
       </template>
       <PatientResearchesQuestion
@@ -99,9 +93,7 @@ export default defineComponent({
     const showOnlyNotFilled: Ref<boolean> = ref(false);
     const questionsFilterString: Ref<string> = ref('');
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
-    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
-      patient.value.getPatientResearch(research.value.id)
-    );
+    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
@@ -113,7 +105,6 @@ export default defineComponent({
 
     const createPatientResearch = async (research: Research) => {
       if (!patient.value.getPatientResearch(research.id)) {
-        console.log('NoPatientResearch2');
         const item = PatientResearch.Create(patient.value.id, research);
         patient.value.patientsResearches.push(item);
         await Provider.store.dispatch('patientsResearches/create', item);
@@ -124,21 +115,22 @@ export default defineComponent({
     const selectResearch = async (item: Research) => {
       await Provider.store.dispatch('researches/get', item.id);
       if (!patientResearch.value) {
-        console.log('NoPatientResearch');
         return await createPatientResearch(item);
       }
       Provider.store.commit('researchesResults/set');
-      console.log(patientResearch.value?.researchResults);
       if (patientResearch.value?.researchResults.length === 0) {
-        console.log('addResearchResul');
         const item = patientResearch.value?.addResult(research.value, patientResearch.value?.id);
         await Provider.store.dispatch('researchesResults/createWithoutReset', item);
         // return;
       }
+
       await selectResult(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id as string);
     };
 
-    const selectResult = async (id: string) => {
+    const selectResult = async (id?: string) => {
+      if (!id) {
+        return;
+      }
       await Provider.store.dispatch('researchesResults/get', id);
       confirmLeave.value = false;
     };

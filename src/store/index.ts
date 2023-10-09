@@ -34,7 +34,6 @@ import { menus } from '@/store/modules/menus';
 import { meta } from '@/store/modules/meta';
 import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
-import { patientDiagnosis } from '@/store/modules/patientDiagnosis';
 import { patientHistories } from '@/store/modules/patientHistories';
 import { patients } from '@/store/modules/patients';
 import { patientsDomains } from '@/store/modules/patientsDomains';
@@ -52,6 +51,7 @@ import search from '@/store/modules/search';
 import { statuses } from '@/store/modules/statuses';
 import { users } from '@/store/modules/users';
 
+import { patientsDiagnosis } from './modules/patientsDiagnosis';
 import RootState from './types';
 
 const store: StoreOptions<RootState> = {
@@ -69,7 +69,6 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
-    patientDiagnosis,
     researchesResults,
     auth,
     edvs,
@@ -120,6 +119,7 @@ const store: StoreOptions<RootState> = {
     patientsDomains,
     dataExport,
     customSections,
+    patientsDiagnosis,
   },
 };
 

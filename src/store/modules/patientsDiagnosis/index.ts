@@ -20,7 +20,7 @@ const state = getDefaultState();
 
 const namespaced = true;
 
-export const patientDiagnosis: Module<State, RootState> = {
+export const patientsDiagnosis: Module<State, RootState> = {
   namespaced,
   state,
   getters,

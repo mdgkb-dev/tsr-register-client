@@ -3,13 +3,7 @@
     <Button :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
     <div v-if="selectResearchesMod" class="button-download-field">
       <div v-if="someResearchSelected" class="field">
-        <Button
-          v-for="exportObj in exports"
-          :key="exportObj.exportType"
-          button-class="save-button"
-          :text="'Выгрузить ' + exportObj.exportType"
-          @click="exportData(exportObj)"
-        />
+        <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="'Выгрузить ' + exportObj.exportType" @click="exportData(exportObj)" />
       </div>
       <StringItem v-else string="Нажмите на исследования для выбора..." font-size="14px" padding="0" color="#006bb4" margin="0 10px " />
     </div>
@@ -86,10 +80,7 @@ export default defineComponent({
     const someResearchSelected = computed(() => researches.value.some((r: Research) => r.selectedForExport));
 
     const exports: Ref<ExportOptions[]> = ref([
-      ExportOptions.XLSX(
-        PatientsExportOptionLib.onePatient(patient.value.id),
-        ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
-      ),
+      ExportOptions.XLSX(PatientsExportOptionLib.onePatient(patient.value.id), ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)),
     ]);
 
     onBeforeMount(async () => {
@@ -123,12 +114,7 @@ export default defineComponent({
         } else {
           selectedResearchesIds.value.add(findedResearch.id);
         }
-        exports.value = [
-          ExportOptions.XLSX(
-            PatientsExportOptionLib.onePatient(patient.value.id),
-            ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
-          ),
-        ];
+        exports.value = [ExportOptions.XLSX(PatientsExportOptionLib.onePatient(patient.value.id), ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value))];
       }
     };
 

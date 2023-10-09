@@ -1,6 +1,6 @@
 <template>
   <Button button-class="plus-button" text="Добавить скан" @click="addFile" />
-  <div v-for="answerFile in answer.answerFiles" :key="answerFile.id" class="background-field">
+  <div v-for="answerFile in answer?.answerFiles" :key="answerFile.id" class="background-field">
     <FileUploader :file-info="answerFile.fileInfo" @remove="remove(answerFile.id)" />
   </div>
 </template>
@@ -30,11 +30,12 @@ export default defineComponent({
   },
   setup(props) {
     const answer: Ref<Answer | undefined> = ref(undefined);
+
     onBeforeMount(() => {
       answer.value = props.researchResult.getOrCreateAnswer(props.question);
     });
 
-    const remove = (id: string) => {
+    const remove = (id?: string) => {
       if (!answer.value) {
         return;
       }

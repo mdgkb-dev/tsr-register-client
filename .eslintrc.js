@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: ['simple-import-sort', 'unused-imports'], // Sort imports and delete unused
   rules: {
+    'max-len': 0,
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'simple-import-sort/imports': 'error',
