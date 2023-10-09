@@ -33,13 +33,7 @@
     </template>
     <template #body>
       <template v-if="research.id && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList
-          :research="research"
-          :patient-research="patientResearch"
-          @select="selectResult"
-          @show-chart="toggleChart"
-          @before-leave="beforeLeave"
-        />
+        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" @show-chart="toggleChart" @before-leave="beforeLeave" />
       </template>
       <template v-else>
         <PatientResearchesList type="researches" :filter-model="researchesFilter" @select="selectResearch" />
@@ -99,9 +93,7 @@ export default defineComponent({
     const showOnlyNotFilled: Ref<boolean> = ref(false);
     const questionsFilterString: Ref<string> = ref('');
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
-    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() =>
-      patient.value.getPatientResearch(research.value.id)
-    );
+    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);

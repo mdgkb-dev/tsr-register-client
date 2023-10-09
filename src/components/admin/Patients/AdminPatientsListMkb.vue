@@ -24,12 +24,7 @@
         </div>
       </GridContainer>
 
-      <RemoteSearch
-        key-value="mkbItem"
-        placeholder="Начните вводить диагноз"
-        @click.stop="() => undefined"
-        @select="(e) => addMkbItem(e, patient)"
-      />
+      <RemoteSearch key-value="mkbItem" placeholder="Начните вводить диагноз" @click.stop="() => undefined" @select="(e) => addMkbItem(e, patient)" />
     </template>
   </InfoItem>
   <ModalWindow :show="showModal" title="Диагноз" @close="showModal = false">
@@ -86,17 +81,17 @@ export default defineComponent({
       await Provider.store.dispatch('mkbItems/get', event.value);
       patient.addMkbItem(mkbItem.value);
       const diagnosisLinks = patient.getMkbItems();
-      await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
+      await Provider.store.dispatch('patientsDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
     };
 
     // const removeMkbItem = async (id: string, patient: Patient): Promise<void> => {
     //   ClassHelper.RemoveFromClassById(id, patient.patientDiagnosis, []);
-    //   return await Provider.store.dispatch('patientDiagnosis/remove', id);
+    //   return await Provider.store.dispatch('patientsDiagnosis/remove', id);
     // };
 
     const selectPatientDiagnosis = async (patientDiagnosisId: string): Promise<void> => {
       const findDiagnosis = props.patient.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
-      Provider.store.commit('patientDiagnosis/set', findDiagnosis);
+      Provider.store.commit('patientsDiagnosis/set', findDiagnosis);
       await Provider.store.dispatch('patients/get', props.patient.id);
       showModal.value = !showModal.value;
     };

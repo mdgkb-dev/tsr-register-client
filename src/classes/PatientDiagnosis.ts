@@ -24,4 +24,8 @@ export default class PatientDiagnosis {
     item.mkbItemId = mkbItem.id;
     return item;
   }
+
+  static GetClassName(): string {
+    return 'patientDiagnosis';
+  }
 }

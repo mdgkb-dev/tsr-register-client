@@ -2,6 +2,7 @@ import { GetterTree } from 'vuex';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
+import IAnthropomentry from '@/interfaces/IAnthropomentry';
 import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
@@ -17,6 +18,9 @@ const getters: GetterTree<State, RootState> = {
   },
   existsInDomain(state): boolean {
     return state.existsInDomain;
+  },
+  actualAnthropometry(state): IAnthropomentry | undefined {
+    return state.actualAnthropometry;
   },
 };
 

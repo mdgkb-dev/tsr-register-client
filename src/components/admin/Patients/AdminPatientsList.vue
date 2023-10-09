@@ -22,12 +22,7 @@
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer
-                  max-width="1920px"
-                  custom-class="grid"
-                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                  margin="0"
-                >
+                <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0">
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
                     <ToggleDocumentsForm :human="patient.human" />
                   </GridContainer>

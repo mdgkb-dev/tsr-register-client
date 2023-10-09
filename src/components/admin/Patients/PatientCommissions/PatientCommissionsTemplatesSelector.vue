@@ -7,12 +7,7 @@
     </template>
     <template #slider-body>
       <div class="slider-body">
-        <div
-          v-for="commissionTemplate in commissionsTemplates"
-          :key="commissionTemplate.id"
-          class="slider-item"
-          @click="addCommission(commissionTemplate)"
-        >
+        <div v-for="commissionTemplate in commissionsTemplates" :key="commissionTemplate.id" class="slider-item" @click="addCommission(commissionTemplate)">
           {{ commissionTemplate.name.substring(12) }}
         </div>
       </div>
@@ -21,7 +16,9 @@
       <div
         v-for="commission in patient.commissions"
         :key="commission.id"
-        :class="{ 'tabs-item-active': selectedCommission && commission.id === selectedCommission.id }"
+        :class="{
+          'tabs-item-active': selectedCommission && commission.id === selectedCommission.id,
+        }"
         class="tabs-item"
         @click="selectCommission(commission)"
       >
@@ -45,16 +42,7 @@
       </ModalWindow>
 
       <ModalWindow :show="showModalMedicine" title="Выберите лекарство" @close="showModalMedicine = false">
-        <GridContainer grid-gap="5px" margin="10px 0">
-          <Button
-            v-for="drug in drugs"
-            :key="drug.id"
-            button-class="change-button"
-            :text="drug.name"
-            :background="selectedCommission.drugId === drug.id ? '#dff2f8' : ''"
-            @click="selectDrug(drug)"
-          />
-        </GridContainer>
+        <DrugSelectForm @select="(e) => setDrugRecipe(e, selectedCommission)" />
       </ModalWindow>
 
       <div class="body">
@@ -131,22 +119,15 @@
               </el-select> -->
               <div class="flex-block">
                 <div class="flex-block-left">
+                  <Button text="Состав врачебной комиссии" button-class="medical-commission-button" color="#006bb4" @click="openModalDoctorList()" />
                   <Button
-                    text="Состав врачебной комиссии"
-                    button-class="medical-commission-button"
-                    color="#006bb4"
-                    @click="openModalDoctorList()"
-                  />
-                  <Button
-                    :text="
-                      selectedCommission.patientDiagnosis ? selectedCommission.patientDiagnosis.mkbItem.getFullName() : 'Выбрать диагноз'
-                    "
+                    :text="selectedCommission.patientDiagnosis ? selectedCommission.patientDiagnosis.mkbItem.getFullName() : 'Выбрать диагноз'"
                     button-class="medical-commission-button"
                     :color="selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
                     @click="openModalDiagnosis()"
                   />
                   <Button
-                    :text="selectedCommission.drug ? selectedCommission.drug.name : 'Выбрать лекарство'"
+                    :text="selectedCommission.drugRecipe ? selectedCommission.drugRecipe.drug?.getName() : 'Выбрать лекарство'"
                     button-class="medical-commission-button"
                     :color="selectedCommission.drug ? '#006bb4' : '#B0A4C0'"
                     margin="0"
@@ -162,51 +143,49 @@
                 />
               </div>
 
-              <div v-if="status === 'Заявка подтверждена'">
-                <h3>Договор</h3>
-                <div>Информация по договору</div>
-              </div>
+              <Button
+                text="Рассчитать потребность"
+                button-class="protocol-button"
+                :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
+                margin="0 0 0 10px"
+                @click="calculateDrugNeeding"
+              />
             </template>
           </ResearcheContainer>
         </div>
       </div>
     </template>
   </RightTabsContainer>
-  <svg width="0" height="0" class="hidden">
-    <symbol id="plus" stroke="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <path d="M17.5 11.0714H11.0714V17.5H8.92857V11.0714H2.5V8.92857H8.92857V2.5H11.0714V8.92857H17.5V11.0714Z"></path>
-    </symbol>
-  </svg>
-
-  <svg width="0" height="0" class="hidden">
-    <symbol id="back" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
-      <path
-        d="M7.33333 7.8C13.901 7.20467 18.1253 9.738 20 15.4C16.4217 11.4227 11.9681 10.6905 7.33333 12.8667V16.6667L1 10.3333L7.33333 4V7.8Z"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ></path>
-    </symbol>
-  </svg>
+  <Plus />
+  <Back />
 </template>
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
+import Back from '@/assets/svg/Back.svg';
+import Plus from '@/assets/svg/Plus.svg';
 import Commission from '@/classes/Commission';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Drug from '@/classes/Drug';
+import DrugNeedingOptions from '@/classes/DrugNeedingOptions';
 import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
+// import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
+import IAnthropomentry from '@/interfaces/IAnthropomentry';
+import PatientDiagnosisFiltersLib from '@/libs/filters/PatientDiagnosisFiltersLib';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
 import DatePicker from '@/services/components/DatePicker.vue';
+import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'PatientCommissions',
   components: {
@@ -216,6 +195,11 @@ export default defineComponent({
     DatePicker,
     PersonalityList,
     ModalWindow,
+    // DrugSelectForm,
+    GridContainer,
+    DrugSelectForm,
+    Plus,
+    Back,
   },
 
   setup() {
@@ -223,16 +207,17 @@ export default defineComponent({
     const statuses: string[] = ['Собрана врачебная комиссия', 'Заявка отправлена в Фонд', 'Заявка подтверждена'];
     const status: Ref<string> = ref('');
     const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
+
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
+    const actualAnthropomentry: ComputedRef<IAnthropomentry> = computed(() => Provider.store.getters['patients/actualAnthropometry']);
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
+
     const showModalDiagnosis: Ref<boolean> = ref(false);
     const showModalMedicine: Ref<boolean> = ref(false);
     const showModalDoctorList: Ref<boolean> = ref(false);
 
-    const selectedCommission: Ref<Commission | undefined> = ref(
-      patient.value.commissions.length > 0 ? patient.value.commissions[0] : undefined
-    );
+    const selectedCommission: Ref<Commission | undefined> = ref(patient.value.commissions.length > 0 ? patient.value.commissions[0] : undefined);
     const toggle = async (toggle: boolean) => {
       if (toggle) {
         await Provider.store.dispatch('commissionsTemplates/getAll');
@@ -242,6 +227,9 @@ export default defineComponent({
 
     const addCommission = async (template: CommissionTemplate): Promise<void> => {
       const item = patient.value.addCommission(template);
+
+      await Provider.store.dispatch('patientsDiagnosis/getAll', FilterQuery.Create([PatientDiagnosisFiltersLib.byPatientId(patient.value.id as string)], []));
+
       await Provider.store.dispatch('commissions/createAndSetNumber', item);
       selectedCommission.value = patient.value.commissions[patient.value.commissions.length - 1];
       isToggle.value = false;
@@ -265,8 +253,7 @@ export default defineComponent({
       }
       ClassHelper.RemoveFromClassById(selectedCommission.value.id, patient.value.commissions, []);
       await Provider.store.dispatch('commissions/remove', selectedCommission.value.id);
-      selectedCommission.value =
-        patient.value.commissions.length > 0 ? patient.value.commissions[patient.value.commissions.length - 1] : undefined;
+      selectedCommission.value = patient.value.commissions.length > 0 ? patient.value.commissions[patient.value.commissions.length - 1] : undefined;
     };
 
     const openModalDiagnosis = () => {
@@ -307,7 +294,29 @@ export default defineComponent({
       await Provider.store.dispatch('commissions/filledApplicationDownload', selectedCommission.value);
     };
 
+    const setDrugRecipe = async (drugRecipe: DrugRecipe, c: Commission): Promise<void> => {
+      selectedCommission.value?.setDrugRecipe(drugRecipe);
+      showModalMedicine.value = false;
+      await updateCommission();
+    };
+
+    const calculateDrugNeeding = async () => {
+      await Provider.store.dispatch('patients/getActualAnthropomentry', patient.value.id);
+      if (selectedCommission.value) {
+        const opt = DrugNeedingOptions.Create(
+          actualAnthropomentry.value.weight,
+          actualAnthropomentry.value.height,
+          selectedCommission.value.startDate,
+          selectedCommission.value.endDate,
+          selectedCommission.value.drugRecipe?.drugDozeId
+        );
+        await Provider.store.dispatch('drugDozes/calculateNeeding', opt);
+      }
+    };
+
     return {
+      calculateDrugNeeding,
+      setDrugRecipe,
       fillCommissionDownload,
       selectDrug,
       drugs,
@@ -338,6 +347,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+import { ElMessage } from 'element-plus';
 
 .hidden {
   display: none;

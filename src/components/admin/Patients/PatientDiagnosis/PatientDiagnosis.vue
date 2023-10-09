@@ -14,7 +14,9 @@
       <div
         v-for="patientDiagnosis in patient.patientDiagnosis"
         :key="patientDiagnosis.id"
-        :class="{ 'tabs-item-active': selectedPatientDiagnosisId === patientDiagnosis.id }"
+        :class="{
+          'tabs-item-active': selectedPatientDiagnosisId === patientDiagnosis.id,
+        }"
         class="tabs-item"
         @click="selectPatientDiagnosis(patientDiagnosis.id)"
       >
@@ -91,24 +93,24 @@ export default defineComponent({
       await Provider.store.dispatch('mkbItems/get', event.value);
       patient.value.addMkbItem(mkbItem.value);
       const diagnosisLinks = patient.value.getMkbItems();
-      await Provider.store.dispatch('patientDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
+      await Provider.store.dispatch('patientsDiagnosis/create', diagnosisLinks[diagnosisLinks.length - 1]);
       selectPatientDiagnosis(diagnosisLinks[diagnosisLinks.length - 1].id as string);
       isToggle.value = false;
     };
 
     const removePatientDiagnosis = async (id: string): Promise<void> => {
       ClassHelper.RemoveFromClassById(id, patient.value.patientDiagnosis, []);
-      await Provider.store.dispatch('patientDiagnosis/remove', id);
+      await Provider.store.dispatch('patientsDiagnosis/remove', id);
     };
 
     const updatePatientDiagnosis = async (patientDiagnosis: PatientDiagnosis) => {
-      await Provider.store.dispatch('patientDiagnosis/update', patientDiagnosis);
+      await Provider.store.dispatch('patientsDiagnosis/update', patientDiagnosis);
     };
 
     const selectPatientDiagnosis = (patientDiagnosisId?: string): void => {
       const findDiagnosis = patient.value.patientDiagnosis.find((p: PatientDiagnosis) => p.id === patientDiagnosisId);
       selectedPatientDiagnosisId.value = findDiagnosis?.id ?? '';
-      Provider.store.commit('patientDiagnosis/set', findDiagnosis);
+      Provider.store.commit('patientsDiagnosis/set', findDiagnosis);
     };
 
     return {
