@@ -23,6 +23,7 @@
         :toggle-mode="true"
         :inverse="inverse"
         background-hover="DFF2F8"
+        :height="78 / models.length - (models.length - 1) * 2 + 'px'"
         @click="setFilter(model.id === selectedFilterModel?.id ? undefined : model)"
       >
       </Button>

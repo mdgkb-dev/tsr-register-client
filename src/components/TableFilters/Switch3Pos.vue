@@ -22,7 +22,7 @@
         class="switch-knob1"
         :style="{
           background: knob1 ? '' : 'inherit',
-          border: knob1 ? '' : 'none',
+          border: knob1 ? '' : '1px solid #c4c4c4',
         }"
         @click="selectFirstModel"
       />
@@ -30,7 +30,7 @@
         class="switch-knob2"
         :style="{
           background: knob2 ? '' : 'inherit',
-          border: knob2 ? '' : 'none',
+          border: knob2 ? '' : '1px solid #c4c4c4',
         }"
         @click="dropFilters()"
       />
@@ -39,7 +39,7 @@
         class="switch-knob3"
         :style="{
           background: knob3 ? '' : 'inherit',
-          border: knob3 ? '' : 'none',
+          border: knob3 ? '' : '1px solid #c4c4c4',
         }"
         @click="selectSecondModel()"
       />
