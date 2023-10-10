@@ -1,11 +1,11 @@
 <template>
-  <div class="grid-block" :style="style" :class="customClass">
+  <div class="grid-block" :class="customClass">
     <slot />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from 'vue';
+import { defineComponent, PropType } from 'vue';
 
 export default defineComponent({
   name: 'GridContainer',
@@ -45,24 +45,8 @@ export default defineComponent({
       required: false,
       default: '10px 0 0 0',
     },
+    // Custom class styles have prio
     customClass: { type: String as PropType<string>, required: false, default: '' },
-  },
-  setup(props) {
-    const style = computed(() => {
-      return {
-        maxWidth: props.maxWidth,
-        width: props.width,
-        background: props.background,
-        gridGap: props.gridGap,
-        gridTemplateColumns: props.gridTemplateColumns,
-        gridTemplateRows: props.gridTemplateRows,
-        margin: props.margin,
-      };
-    });
-
-    return {
-      style,
-    };
   },
 });
 </script>
@@ -75,5 +59,12 @@ export default defineComponent({
   margin-left: auto;
   margin-right: auto;
   justify-content: center;
+  max-width: v-bind(maxWidth);
+  width: v-bind(width);
+  background: v-bind(background);
+  grid-gap: v-bind(gridGap);
+  grid-template-columns: v-bind(gridTemplateColumns);
+  grid-template-rows: v-bind(gridTemplateRows);
+  margin: v-bind(margin);
 }
 </style>

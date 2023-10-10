@@ -9,32 +9,21 @@
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))">
+      <GridContainer custom-class="grid">
         <div v-for="(rep, key, index) in patient.patientsRepresentatives" :key="index">
           <InfoItem margin="0" :with-open-window="false" height="32px">
             <template #title>
               <StringItem :string="rep.getRepresentativeParentType(true)" font-size="10px" padding="0 0 0 3px" color="#D42E61" />
             </template>
             <div>
-              <StringItem
-                v-if="rep.representative.human.contact.phone"
-                :string="rep.representative.human.contact.phone"
-                font-size="12px"
-                padding="0 0 0 3px"
-                color="#1979CF"
-              />
+              <StringItem v-if="rep.representative.human.contact.phone" :string="rep.representative.human.contact.phone" font-size="12px" padding="0 0 0 3px" color="#1979CF" />
               <StringItem :string="rep.representative.human.getFullName()" font-size="12px" padding="0 0 0 3px" />
             </div>
           </InfoItem>
         </div>
         <Button button-class="plus-button" icon="plus" icon-class="icon-plus" />
 
-        <RemoteSearch
-          key-value="representative"
-          placeholder="Начните вводить имя представителя"
-          @click.stop="() => undefined"
-          @select="(e) => addRepresentative(e, patient)"
-        />
+        <RemoteSearch key-value="representative" placeholder="Начните вводить имя представителя" @click.stop="() => undefined" @select="(e) => addRepresentative(e, patient)" />
       </GridContainer>
     </template>
   </InfoItem>
@@ -130,7 +119,7 @@ export default defineComponent({
   max-width: auto;
   grid-gap: 10px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
 .plus-button {

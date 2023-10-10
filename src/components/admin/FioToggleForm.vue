@@ -1,19 +1,10 @@
 <template>
   <el-form ref="form" :model="humanCopy" style="width: 100%">
-    <InfoItem
-      title="ФИО"
-      :show-save-dialog="showSaveDialog"
-      icon="edit-title"
-      :with-hover="true"
-      :close="closeToggle"
-      width="100%"
-      @keyup-enter="submit"
-      @after-close="resetCopy"
-    >
+    <InfoItem title="ФИО" :show-save-dialog="showSaveDialog" icon="edit-title" :with-hover="true" :close="closeToggle" width="100%" @keyup-enter="submit" @after-close="resetCopy">
       <StringItem v-if="human.getFullName().length > 3" :string="human.getFullName()" />
       <StringItem v-else string="Введите данные" color="#B0A4C0" />
       <template #open-inside-content>
-        <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0">
+        <GridContainer custom-class="grid">
           <InfoItem
             title="фамилия"
             icon="edit-title"
@@ -23,37 +14,20 @@
             base-box-margin="0 0 15px 0"
             padding="0"
             width="100%"
+            custom-class="test"
           >
             <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname" @change="setFilled">
               <el-input v-model="humanCopy.surname" />
               <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
             </el-form-item>
           </InfoItem>
-          <InfoItem
-            title="имя"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
+          <InfoItem title="имя" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
             <el-form-item style="width: 100%" prop="name" :rules="human.getValidationRules().name" @change="setFilled">
               <el-input v-model="humanCopy.name" />
               <!-- <el-input :model-value="human.name" @input="(e) => human.setName(e)" @click.stop="() => undefined" /> -->
             </el-form-item>
           </InfoItem>
-          <InfoItem
-            title="отчество"
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-          >
+          <InfoItem title="отчество" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
             <el-form-item style="width: 100%" prop="patronymic" :rules="human.getValidationRules().patronymic" @change="setFilled">
               <el-input v-model="humanCopy.patronymic" />
               <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
@@ -178,7 +152,7 @@ export default defineComponent({
   max-width: auto;
   grid-gap: 10px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
 }
 
 .plus-button {
