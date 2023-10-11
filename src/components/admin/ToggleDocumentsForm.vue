@@ -13,13 +13,7 @@
         </div>
 
         <div v-if="documentsIsToggle">
-          <Button
-            v-for="docType in notExistingDocumentTypes"
-            :key="docType.id"
-            button-class="save-button"
-            :text="docType.name"
-            @click="addDocument(docType.id)"
-          />
+          <Button v-for="docType in notExistingDocumentTypes" :key="docType.id" button-class="save-button" :text="docType.name" @click="addDocument(docType.id)" />
         </div>
         <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleDocuments(true)" />
       </GridContainer>
@@ -67,9 +61,7 @@ export default defineComponent({
     const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
     const documentsIsToggle: Ref<boolean> = ref(false);
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
-    const notExistingDocumentTypes: Ref<DocumentType[]> = computed(() =>
-      documentTypes.value.filter((dt: DocumentType) => !props.human.documentTypeExists(dt.id))
-    );
+    const notExistingDocumentTypes: Ref<DocumentType[]> = computed(() => documentTypes.value.filter((dt: DocumentType) => !props.human.documentTypeExists(dt.id)));
     const documentsShortList = computed(() => {
       let list = '';
       props.human.documents.forEach((d: Document, i: number) => {
@@ -105,8 +97,10 @@ export default defineComponent({
         return;
       }
       await Provider.store.dispatch('documentTypes/get', id);
+      console.log(documentType.value);
       const item = props.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/createWithoutReset', item);
+
       await selectDocument(props.human.documents[props.human.documents.length - 1].id);
     };
 

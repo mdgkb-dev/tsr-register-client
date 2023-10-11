@@ -5,18 +5,7 @@
 </template>
 
 <script lang="ts">
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  ChartTypeRegistry,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  TooltipItem,
-} from 'chart.js';
+import { CategoryScale, Chart as ChartJS, ChartTypeRegistry, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, TooltipItem } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { Line } from 'vue-chartjs';
@@ -77,8 +66,7 @@ export default defineComponent({
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context: TooltipItem<keyof ChartTypeRegistry>) =>
-              context.formattedValue + ': ' + (context.dataset as ChartDataSet).results[context.dataIndex],
+            label: (context: TooltipItem<keyof ChartTypeRegistry>) => context.formattedValue + ': ' + (context.dataset as ChartDataSet).results[context.dataIndex],
           },
         },
       },
