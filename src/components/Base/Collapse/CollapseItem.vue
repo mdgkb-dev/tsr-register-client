@@ -2,11 +2,13 @@
   <div
     class="tab"
     :style="{
-      marginTop: marginTop,
+      margin: margin,
       height: isCollaps && collapsed ? '60px' : '',
       'box-shadow': selectable && activeId === tabId ? '0px 0px 1px 2px #1979cf' : '',
     }"
   >
+  <!-- width: `calc(100% - ${margin.prototype.slice()}`
+      width: 'calc(100% - $margin.prototype.slice())' -->
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
       <use xlink:href="#arrow-down"></use>
     </svg>
@@ -87,7 +89,7 @@ export default defineComponent({
     background: { type: String as PropType<string>, required: false, default: '#ffffff' },
     backgroundAttention: { type: String as PropType<string>, required: false, default: '#ffffff' },
     changeColor: { type: Boolean as PropType<boolean>, default: false },
-    marginTop: { type: String as PropType<string>, default: '10px' },
+    margin: { type: String as PropType<string>, default: '10px 8px 2px 2px' },
     padding: { type: String as PropType<string>, default: '0 10px' },
     selectable: { type: Boolean as PropType<boolean>, default: false },
   },
@@ -130,13 +132,14 @@ export default defineComponent({
 
 .tab {
   position: relative;
-  width: calc(100% - 10px);
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   background: #ffffff;
   margin: 10px 8px 2px 2px;
   cursor: pointer;
   transition: 0.15s;
+  overflow: hidden;
+  
   // padding: 0 2px;
   // visibility: ;
 
@@ -154,6 +157,7 @@ export default defineComponent({
   position: absolute;
   opacity: 0;
   z-index: -1;
+  z-index: 2;
 }
 
 .tab-content-down {
@@ -164,7 +168,7 @@ export default defineComponent({
   -o-transition: max-height 0.03s;
   transition: max-height 0.03s;
   color: #343e5c;
-  padding: 0 5px;
+  padding: 0 10px;
 }
 
 .tab-content-up {
@@ -176,7 +180,7 @@ export default defineComponent({
   -o-transition: max-height 0.5s;
   transition: max-height 0.5s;
   color: #343e5c;
-  padding-right: 5px;
+  padding: 0 10px;
 }
 
 .tab input:checked ~ .icon-arrow {
@@ -283,5 +287,6 @@ export default defineComponent({
   align-items: center;
   font-weight: normal;
   border-radius: 5px;
+  background: inherit;
 }
 </style>

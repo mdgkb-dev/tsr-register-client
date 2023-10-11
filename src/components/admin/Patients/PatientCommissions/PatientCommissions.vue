@@ -68,7 +68,8 @@
                 >
                 </Button>
               </div>
-
+            </template>
+            <template #body>
               <div class="line-item">
                 <div class="item-left">
                   <el-form>
@@ -87,8 +88,6 @@
                   </el-form>
                 </div>
               </div>
-            </template>
-            <template #body>
               <div class="line-item">
                 <div class="item-left">
                   <el-form>
@@ -131,12 +130,61 @@
                 />
               </div>
 
-              <Button
-                text="Рассчитать потребность"
-                button-class="need-button"
-                :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
-                @click="calculateDrugNeeding"
-              />
+              <CollapseItem :is-collaps="true" padding="0 10px" margin="10px 3px">
+                <template #inside-title>
+                  <StringItem string="Расчет потребности" color="#343E5C" font-size="18px" />
+                </template>
+                <template #inside-content>
+                  <Button
+                    text="Рассчитать потребность"
+                    button-class="need-button"
+                    :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
+                    @click="calculateDrugNeeding"
+                  />
+                  <el-form-item label="Рост, см">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Вес, кг">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Препарат">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="МНН">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="ЛФ">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Дозировка">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Код АТХ">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Наименование АТХ">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Единицы измерения(ЕИ), г">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Схема лечения">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Схема расчета потребности">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Потребность на период в ЕИ">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Количество, уп">
+                    <el-input />
+                  </el-form-item>
+                  <el-form-item label="Период заявки">
+                    <el-input />
+                  </el-form-item>
+                </template>
+              </CollapseItem>
             </template>
           </ResearcheContainer>
         </div>
@@ -175,6 +223,7 @@ import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import Button from '@/components/Base/Button.vue';
+import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
 import IAnthropomentry from '@/interfaces/IAnthropomentry';
 import PatientDiagnosisFiltersLib from '@/libs/filters/PatientDiagnosisFiltersLib';
@@ -184,6 +233,7 @@ import DatePicker from '@/services/components/DatePicker.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -198,6 +248,8 @@ export default defineComponent({
     // DrugSelectForm,
     GridContainer,
     DrugSelectForm,
+    CollapseItem,
+    StringItem,
   },
 
   setup() {
@@ -465,7 +517,6 @@ export default defineComponent({
   width: 100%;
 }
 
-
 .item-name {
   min-height: 42px;
   width: 100%;
@@ -488,7 +539,6 @@ export default defineComponent({
 :deep(.el-timeline-item) {
   padding-bottom: 8px;
 }
-
 
 .el-select {
   width: 100%;
@@ -573,7 +623,7 @@ export default defineComponent({
   border-radius: $normal-border-radius;
   color: #b0a4c0;
   background: #ffffff;
-  margin: 20px 0 0 0;
+  margin: 10px 0px;
 }
 
 .flex-block {
@@ -706,5 +756,4 @@ export default defineComponent({
     margin-left: 0px;
   }
 }
-
 </style>
