@@ -9,12 +9,7 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="false">
-                    <SmallDatePicker
-                      v-model:model-value="drugArrive.date"
-                      placeholder="Выбрать"
-                      :readonly="true"
-                      @change="updateDrugArrive(drugArrive)"
-                    />
+                    <SmallDatePicker v-model:model-value="drugArrive.date" placeholder="Выбрать" :readonly="true" @change="updateDrugArrive(drugArrive)" />
                   </InfoItem>
                 </div>
                 <div class="line-item-right">
@@ -22,14 +17,8 @@
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer
-                  max-width="1920px"
-                  custom-class="grid"
-                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                  margin="0"
-                >
-                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
-                  </GridContainer>
+                <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))">
+                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"> </GridContainer>
                 </GridContainer>
               </div>
             </div>
@@ -131,12 +120,7 @@ export default defineComponent({
       await Provider.store.dispatch('drugDecreases/remove', item.id);
     };
 
-    const updateDrugDecreaseQuantity = async (
-      cur: number,
-      prev: number,
-      drugArrive: DrugArrive,
-      drugDecrease: DrugDecrease
-    ): Promise<void> => {
+    const updateDrugDecreaseQuantity = async (cur: number, prev: number, drugArrive: DrugArrive, drugDecrease: DrugDecrease): Promise<void> => {
       console.log(drugDecrease, cur, prev);
       const succeedMove = drugArrive.drugMove(cur, prev, drugDecrease);
       if (succeedMove) {
@@ -218,10 +202,8 @@ export default defineComponent({
 }
 
 .grid {
-  max-width: auto;
   grid-gap: 10px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
 }
 
 .plus-button {

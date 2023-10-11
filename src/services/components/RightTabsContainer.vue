@@ -3,13 +3,7 @@
     <div
       class="slider-block"
       :style="{
-        marginRight: mobileWindow
-          ? isToggle
-            ? '49px'
-            : `calc(49px - ${sliderOnWidth})`
-          : isToggle
-          ? sliderOffWidth
-          : `calc(${sliderOffWidth} - ${sliderOnWidth})`,
+        marginRight: mobileWindow ? (isToggle ? '49px' : `calc(49px - ${sliderOnWidth})`) : isToggle ? sliderOffWidth : `calc(${sliderOffWidth} - ${sliderOnWidth})`,
         width: sliderOnWidth,
         minHeight: sliderOffWidth,
         height: isToggle ? 'auto' : '100px',
@@ -28,13 +22,7 @@
         <div
           class="icon-block"
           :style="{
-            transform: hovering
-              ? isToggle
-                ? 'rotate(-225deg) scale(1.2, 1.2)'
-                : 'rotate(0deg) scale(1.2, 1.2)'
-              : isToggle
-              ? 'rotate(-225deg)'
-              : 'rotate(0deg)',
+            transform: hovering ? (isToggle ? 'rotate(-225deg) scale(1.2, 1.2)' : 'rotate(0deg) scale(1.2, 1.2)') : isToggle ? 'rotate(-225deg)' : 'rotate(0deg)',
             fill: isToggle ? '#379FFF' : '#00B5A4',
           }"
         >
@@ -187,7 +175,8 @@ export default defineComponent({
   width: calc(100% - 110px);
   height: calc(100% - 10px);
   background: $custom-background;
-  overflow-y: scroll;
+  // overflow-y: scroll;
+  // padding-right: 3px;
 }
 
 @media screen and (max-width: 768px) {

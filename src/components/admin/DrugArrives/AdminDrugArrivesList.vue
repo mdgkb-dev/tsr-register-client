@@ -26,14 +26,8 @@
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer
-                  max-width="1920px"
-                  custom-class="grid"
-                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                  margin="0"
-                >
-                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
-                  </GridContainer>
+                <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))">
+                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))"> </GridContainer>
                 </GridContainer>
               </div>
             </div>
@@ -223,7 +217,6 @@ export default defineComponent({
   max-width: auto;
   grid-gap: 10px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
 }
 
 .plus-button {

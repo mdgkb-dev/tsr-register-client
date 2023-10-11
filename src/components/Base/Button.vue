@@ -20,6 +20,7 @@
     <Commission />
     <Back />
     <Save />
+    <Aright />
   </button>
 </template>
 
@@ -37,6 +38,7 @@ import Filter from '@/assets/svg/Filter.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
 import Plus from '@/assets/svg/Plus.svg';
 import Save from '@/assets/svg/Save.svg';
+import Aright from '@/assets/svg/Aright.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -52,6 +54,7 @@ export default defineComponent({
     Commission,
     Back,
     Save,
+    Aright
   },
   inheritAttrs: false,
   props: {

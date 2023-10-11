@@ -1,8 +1,9 @@
 <template>
   <div class="tools-panel">
-    <Button :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
+    <Button v-if="!selectResearchesMod" :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
+    <Button v-if="selectResearchesMod" :with-icon="true" icon="aright" icon-class="icon-aright" button-class="download-button" @click="toggleSelectMod" />
     <div v-if="selectResearchesMod" class="button-download-field">
-      <div v-if="someResearchSelected">
+      <div v-if="someResearchSelected" class="field">
         <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="'Выгрузить ' + exportObj.exportType" @click="exportData(exportObj)" />
       </div>
       <StringItem v-else string="Нажмите на исследования для выбора..." font-size="14px" padding="0" color="#006bb4" margin="0 10px " />
@@ -109,7 +110,6 @@ export default defineComponent({
       const findedResearch = researches.value.find((r: Research) => r.id === research.id);
       if (findedResearch && findedResearch.id) {
         findedResearch.selectedForExport = !findedResearch.selectedForExport;
-
         if (selectedResearchesIds.value.has(findedResearch.id)) {
           selectedResearchesIds.value.delete(findedResearch.id);
         } else {
@@ -119,12 +119,18 @@ export default defineComponent({
       }
     };
 
+    const resetSelect = () => {
+      researches.value.forEach((r: Research) => (r.selectedForExport = false));
+      selectedResearchesIds.value.clear();
+    };
+
     const toggleSelectMod = () => {
       selectResearchesMod.value = !selectResearchesMod.value;
     };
 
     const exportData = async (exportOptions: ExportOptions): Promise<void> => {
       await Provider.store.dispatch('dataExport/export', exportOptions);
+      resetSelect();
     };
 
     return {
@@ -163,6 +169,13 @@ export default defineComponent({
   fill: none;
 }
 
+:deep(.icon-aright) {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  fill: #006bb4;
+}
+
 .download-button {
   width: 52px;
   height: 52px;
@@ -181,6 +194,14 @@ export default defineComponent({
   background: #ffffff;
   border: 1px solid #006bb4;
   border-left: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.field {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

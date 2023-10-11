@@ -1,21 +1,11 @@
 <template>
-  <InfoItem
-    title="регистры"
-    margin="0 0 0 0px"
-    close-window-overflow="hidden"
-    open-width="100%"
-    :with-hover="editMode"
-    :with-open-window="editMode"
-  >
+  <InfoItem title="регистры" margin="0 0 0 0px" close-window-overflow="hidden" open-width="100%" :with-hover="editMode" :with-open-window="editMode">
     <div v-for="(patientRegister, i) in patient.patientsRegisters" :key="patientRegister.id">
-      <StringItem
-        :string="patientRegister.register.getTagName() + (i === patient.patientsRegisters.length - 1 ? '' : ',&nbsp')"
-        font-size="14px"
-      />
+      <StringItem :string="patientRegister.register.getTagName() + (i === patient.patientsRegisters.length - 1 ? '' : ',&nbsp')" font-size="14px" />
     </div>
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(90px, 1fr))">
+      <GridContainer custom-class="grid">
         <Button
           v-for="register in registers"
           :key="register.id"
@@ -121,9 +111,9 @@ export default defineComponent({
 
 .grid {
   max-width: auto;
-  grid-gap: 10px;
+  grid-gap: 7px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
 }
 
 .plus-button {

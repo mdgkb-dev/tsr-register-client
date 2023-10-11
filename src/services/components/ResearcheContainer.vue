@@ -62,13 +62,13 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: auto;
-  max-height: 80px;
   z-index: 3;
 }
 
 .mainblock-body {
   width: 100%;
   height: auto;
+  padding-bottom: 70px;
 }
 
 .mainblock-footer {

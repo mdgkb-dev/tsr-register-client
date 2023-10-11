@@ -5,7 +5,7 @@
     <!--    </div>-->
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
+      <GridContainer custom-class="grid">
         <div v-for="document in human.documents" :key="document.id">
           <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="selectDocument(document.id)">
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />
@@ -176,9 +176,9 @@ export default defineComponent({
 
 .grid {
   max-width: initial;
-  grid-gap: 10px;
+  grid-gap: 7px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .plus-button {
