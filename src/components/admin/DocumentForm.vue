@@ -8,7 +8,7 @@
     <div v-for="value in document.documentFieldValues" :key="value.id" class="margin-field">
       <el-form-item v-if="value.documentTypeField.valueType.isString()" :label="value.documentTypeField.name" size="mini">
         <el-input
-          v-if="value.documentTypeField?.documentType.code === 'snils' && value.documentTypeField.name === 'Номер'"
+          v-if="document.documentType.code === 'snils' && value.documentTypeField.name === 'Номер'"
           v-model="value.valueString"
           v-maska="{ mask: '###-###-### ##', eager: true }"
           size="mini"
@@ -18,7 +18,7 @@
       </el-form-item>
 
       <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
-        <el-input-number v-model="document.valueNumber" size="mini" @blur="updateDocumentField(value)" />
+        <el-input-number v-model="value.valueNumber" size="mini" @blur="updateDocumentField(value)" />
       </el-form-item>
 
       <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">

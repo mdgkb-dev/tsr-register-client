@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, Ref } from 'vue';
+import { computed, ComputedRef, defineComponent, Ref } from 'vue';
 
 import Formula from '@/classes/Formula';
 import FormulaResult from '@/classes/FormulaResult';
@@ -47,26 +47,14 @@ export default defineComponent({
     CollapseContainer,
     QuestionComponent,
   },
-  props: {
-    showOnlyNotFilled: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      default: false,
-    },
-    questionsFilterString: {
-      type: String as PropType<string>,
-      required: true,
-      default: '',
-    },
-  },
-  emits: ['save', 'cancel', 'fill'],
+  emits: ['fill'],
   setup(props, { emit }) {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const filteredQuestions: ComputedRef<Question[]> = computed(() => {
-      return research.value.getFilteredQuestions(props.questionsFilterString, props.showOnlyNotFilled, researchResult.value);
+      return research.value.getFilteredQuestions(researchResult.value);
     });
 
     const birthDateToMonth = (birthDate: string): number => {

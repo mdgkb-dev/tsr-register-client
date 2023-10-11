@@ -22,9 +22,11 @@
     </CollapseContainer>
 
     <template v-if="research.withDates" #button>
-      <Button button-class="plus-button" text="Добавить" @click="addResult" />
+      <Button button-class="plus-button" text="Добавить" @click="$emit('addResult')" />
     </template>
   </RightSliderContainer>
+
+  <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
 </template>
 
 <script lang="ts">
@@ -36,6 +38,7 @@ import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesEx
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
+import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
@@ -52,6 +55,7 @@ export default defineComponent({
     RightSliderContainer,
     CollapseItem,
     InfoItem,
+    PatientResearchChart,
   },
   props: {
     patientResearch: {
@@ -63,7 +67,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['select', 'update', 'showChart', 'beforeLeave'],
+  emits: ['select', 'update', 'beforeLeave', 'addResult'],
   setup(props, { emit }) {
     const toggle = ref(props.research.withDates);
     const selectedId: Ref<string> = ref('');
@@ -80,16 +84,10 @@ export default defineComponent({
     onBeforeMount(async () => {
       const lastResult = props.patientResearch.getLastResult();
       if (lastResult && lastResult.id) {
-        console.log('getLastRes');
-
         await selectResult(lastResult.id);
       }
     });
 
-    const addResult = async (): Promise<void> => {
-      const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
-      await Provider.store.dispatch('researchesResults/createWithoutReset', item);
-    };
     const selectResult = async (id?: string, beforeLeave?: boolean): Promise<void> => {
       if (!id) {
         return;
@@ -108,8 +106,7 @@ export default defineComponent({
 
     const chartOpened: Ref<boolean> = ref(false);
     const toggleChart = () => {
-      emit('showChart');
-      // chartOpened.value = !chartOpened.value;
+      chartOpened.value = !chartOpened.value;
     };
 
     return {
@@ -120,7 +117,6 @@ export default defineComponent({
       selectedId,
       selectResult,
       toggle,
-      addResult,
       update,
     };
   },

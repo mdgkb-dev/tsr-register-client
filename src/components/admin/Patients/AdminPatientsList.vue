@@ -22,8 +22,8 @@
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0">
-                  <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))" margin="0px">
+                <GridContainer max-width="1920px" custom-class="grid">
+                  <GridContainer custom-class="grid">
                     <ToggleDocumentsForm :human="patient.human" />
                   </GridContainer>
 
@@ -188,10 +188,8 @@ export default defineComponent({
 }
 
 .grid {
-  max-width: initial;
   grid-gap: 10px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
 }
 
 .plus-button {

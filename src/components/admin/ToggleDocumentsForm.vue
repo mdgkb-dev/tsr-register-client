@@ -5,7 +5,7 @@
     <!--    </div>-->
 
     <template #open-inside-content>
-      <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
+      <GridContainer custom-class="grid">
         <div v-for="document in human.documents" :key="document.id">
           <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="selectDocument(document.id)">
             <StringItem :string="document.documentType.getTagName()" font-size="11px" />
@@ -13,13 +13,7 @@
         </div>
 
         <div v-if="documentsIsToggle">
-          <Button
-            v-for="docType in notExistingDocumentTypes"
-            :key="docType.id"
-            button-class="save-button"
-            :text="docType.name"
-            @click="addDocument(docType.id)"
-          />
+          <Button v-for="docType in notExistingDocumentTypes" :key="docType.id" button-class="save-button" :text="docType.name" @click="addDocument(docType.id)" />
         </div>
         <Button v-else button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleDocuments(true)" />
       </GridContainer>
@@ -67,9 +61,7 @@ export default defineComponent({
     const documentTypes: Ref<DocumentType[]> = computed(() => Provider.store.getters['documentTypes/items']);
     const documentsIsToggle: Ref<boolean> = ref(false);
     const documentType: Ref<DocumentType> = computed(() => Provider.store.getters['documentTypes/item']);
-    const notExistingDocumentTypes: Ref<DocumentType[]> = computed(() =>
-      documentTypes.value.filter((dt: DocumentType) => !props.human.documentTypeExists(dt.id))
-    );
+    const notExistingDocumentTypes: Ref<DocumentType[]> = computed(() => documentTypes.value.filter((dt: DocumentType) => !props.human.documentTypeExists(dt.id)));
     const documentsShortList = computed(() => {
       let list = '';
       props.human.documents.forEach((d: Document, i: number) => {
@@ -105,8 +97,10 @@ export default defineComponent({
         return;
       }
       await Provider.store.dispatch('documentTypes/get', id);
+      console.log(documentType.value);
       const item = props.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/createWithoutReset', item);
+
       await selectDocument(props.human.documents[props.human.documents.length - 1].id);
     };
 
@@ -182,9 +176,9 @@ export default defineComponent({
 
 .grid {
   max-width: initial;
-  grid-gap: 10px;
+  grid-gap: 7px;
   margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(99px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
 .plus-button {

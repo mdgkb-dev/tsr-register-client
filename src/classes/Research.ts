@@ -19,13 +19,14 @@ export default class Research {
   isEdit = false;
   withDates = false;
   withScores = false;
-  showOnlyNotFilled = false;
   @ClassHelper.GetClassConstructor(Formula)
   formulas: Formula[] = [];
   formulasForDelete: string[] = [];
   //
   selectedFormula?: Formula;
   selectedForExport = false;
+  filterString = '';
+  showOnlyNotFilled = false;
 
   constructor(i?: Research) {
     ClassHelper.BuildClass(this, i);
@@ -71,18 +72,16 @@ export default class Research {
     return a;
   }
 
-  getNotFilledQuestions(researchResult: ResearchResult, showOnlyNotFilled: boolean, questions: Question[]): Question[] {
-    return showOnlyNotFilled ? questions.filter((q: Question) => !researchResult.getAnswer(q.id as string)?.filled) : questions;
+  getNotFilledQuestions(researchResult: ResearchResult, questions: Question[]): Question[] {
+    return this.showOnlyNotFilled ? questions.filter((q: Question) => !researchResult.getAnswer(q.id as string)?.filled) : questions;
   }
 
-  getQuestionsByString(filterString: string): Question[] {
-    return filterString === ''
-      ? this.questions
-      : this.questions.filter((q: Question) => StringsService.stringsEquals(filterString, q.name));
+  getQuestionsByString(): Question[] {
+    return this.filterString === '' ? this.questions : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
   }
 
-  getFilteredQuestions(filterString: string, showOnlyNotFilled: boolean, researchResult: ResearchResult): Question[] {
-    return this.getNotFilledQuestions(researchResult, showOnlyNotFilled, this.getQuestionsByString(filterString));
+  getFilteredQuestions(researchResult: ResearchResult): Question[] {
+    return this.getNotFilledQuestions(researchResult, this.getQuestionsByString());
   }
 
   selectFormula(item: Formula): void {

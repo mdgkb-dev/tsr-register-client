@@ -6,7 +6,7 @@ import ClassHelper from '@/services/ClassHelper';
 export default class DocumentFieldValue {
   id?: string;
   documentId?: string;
-  documentTypeField?: DocumentTypeField = new DocumentTypeField();
+  documentTypeField: DocumentTypeField = new DocumentTypeField();
   documentTypeFieldId?: string;
   order = 0;
   valueString?: string;
