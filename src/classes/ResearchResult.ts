@@ -15,7 +15,8 @@ export default class ResearchResult {
   fillingPercentage = 0;
   @ClassHelper.GetClassConstructor(Answer)
   answers: Answer[] = [];
-
+  //
+  changed = false;
   constructor(i?: ResearchResult) {
     ClassHelper.BuildClass(this, i);
   }
@@ -47,16 +48,9 @@ export default class ResearchResult {
   }
 
   getOrCreateAnswer(question: Question): Answer {
-    // if (question.id === 'd8c2be17-bace-45c1-8eda-d76f16b27a10') {
-    //   console.log(this.answers, question.id);
-    // }
     let answer = this.getAnswer(question.id as string);
-    // if (question.id === 'd8c2be17-bace-45c1-8eda-d76f16b27a10') {
-    //   console.log(answer);
-    // }
     if (!answer) {
       answer = Answer.Create(question);
-      console.log('not answ', answer);
       this.addAnswer(answer);
     }
     return answer;
@@ -94,7 +88,6 @@ export default class ResearchResult {
   }
 
   getQuestionsAnswersMap(questions: Question[]): { [key: string]: number } {
-    console.log(questions);
     const map: { [key: string]: number } = {};
     questions.forEach((q: Question) => {
       if (q.code) {
@@ -103,5 +96,9 @@ export default class ResearchResult {
       }
     });
     return map;
+  }
+
+  getIdWithoutDashes(): string {
+    return this.id ? this.id.replaceAll(/[^a-zA-Z]+/g, '') : '';
   }
 }

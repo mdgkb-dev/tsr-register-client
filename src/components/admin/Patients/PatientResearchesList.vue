@@ -42,6 +42,7 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
+import ResearchResult from '@/classes/ResearchResult';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
@@ -51,7 +52,6 @@ import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'PatientResearchesList',
   components: {
@@ -77,6 +77,7 @@ export default defineComponent({
     const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     const selectResearchesMod = ref(false);
     const selectedResearchesIds: Ref<Set<string>> = ref(new Set());
+    const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const someResearchSelected = computed(() => researches.value.some((r: Research) => r.selectedForExport));
 
@@ -99,7 +100,7 @@ export default defineComponent({
       await Provider.store.dispatch('researches/getAll', { filterQuery: fq });
     });
 
-    const selectResearch = (research: Research) => {
+    const selectResearch = async (research: Research) => {
       if (!research.id) {
         return;
       }

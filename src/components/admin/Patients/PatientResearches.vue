@@ -2,12 +2,11 @@
   <ResearcheContainer>
     <template #header>
       <div v-if="research.id && patientResearch" class="header-container">
-        <Button button-class="grey-button" text="Назад" @click="beforeLeave('', true)" />
-        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling(true)" />
+        <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling" />
+        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling" />
         <TopSliderContainer>
           <template #title>
             <span>{{ research.name }}</span>
-            <span v-if="researchResult">&nbsp;Дата: {{ $dateTimeFormatter.format(researchResult.date) }}</span>
             <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
           </template>
           <div v-if="research.withScores" class="flex-line">
@@ -16,10 +15,10 @@
           </div>
           <div class="flex-line">
             <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
-            <el-switch v-model="showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+            <el-switch v-model="research.showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
           </div>
           <div class="search">
-            <el-input v-model="questionsFilterString" placeholder="Найти вопрос" />
+            <el-input v-model="research.filterString" placeholder="Найти вопрос" />
           </div>
           <!-- <div v-for="res in getCalculationsResults(research)" :key="res.name" class="flex-line4">
               <div v-if="Number.isFinite(res.value)" class="res-name">{{ res.formulaName + ':' }}</div>
@@ -27,48 +26,32 @@
               <div :style="{ color: res.color }">{{ res.result }}</div>
             </div> -->
         </TopSliderContainer>
-        <Button v-show="confirmLeave" button-class="grey-button" text="Сохранить" @click="saveResult()" />
-        <Button v-show="confirmLeave" icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult()" />
+        <Button v-if="researchResult.changed" button-class="grey-button" text="Сохранить" @click="saveResult" />
+        <Button v-if="researchResult.changed" icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult" />
       </div>
     </template>
+
     <template #body>
-      <template v-if="research.id && research.withDates && patientResearch && patientResearch.researchId === research.id">
-        <PatientResearchesResultsList :research="research" :patient-research="patientResearch" @select="selectResult" @show-chart="toggleChart" @before-leave="beforeLeave" />
-      </template>
-      <template v-else-if="!research.id">
-        <PatientResearchesList type="researches" :filter-model="researchesFilter" @select="selectResearch" />
-      </template>
-      <PatientResearchesQuestion
-        v-if="researchResult.id"
-        :key="researchResult.id"
-        :questions-filter-string="questionsFilterString"
-        :show-only-not-filled="showOnlyNotFilled"
-        @save="saveResult"
-        @cancel="cancelResearchResultsFilling"
-        @fill="formUpdated"
-      />
-      <PatientResearchChart v-if="chartOpened" :research="research" :patient-research="patientResearch" @close="toggleChart" />
-      <Xlsx />
+      <PatientResearchComponent v-if="research.id" @save="saveResult" />
+      <PatientResearchesList v-else type="researches" :filter-model="researchesFilter" @select="selectResearch" />
     </template>
   </ResearcheContainer>
+  <Xlsx />
 </template>
 
 <script lang="ts">
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
-import { computed, defineComponent, onBeforeUnmount, Ref, ref, WritableComputedRef } from 'vue';
+import { ElMessage, MessageBoxData } from 'element-plus';
+import { computed, ComputedRef, defineComponent, Ref } from 'vue';
 
 import Xlsx from '@/assets/svg/Xlsx.svg';
-import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
-import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
+import PatientResearchComponent from '@/components/admin/Patients/PatientResearchComponent.vue';
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
-import PatientResearchesQuestion from '@/components/admin/Patients/PatientResearchesQuestion.vue';
-import PatientResearchesResultsList from '@/components/admin/Patients/PatientResearchesResultsList.vue';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
-import MessageSuccess from '@/services/classes/messages/MessageSuccess';
+import MessageConfirmSave from '@/services/classes/messages/MessageConfirmSave';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -78,68 +61,42 @@ import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'PatientResearches',
   components: {
-    PatientResearchesResultsList,
     Xlsx,
-    PatientResearchesQuestion,
-    PatientResearchesList,
-    PatientResearchChart,
-    TopSliderContainer,
     Button,
-    StringItem,
     ResearcheContainer,
+    StringItem,
+    PatientResearchesList,
+    TopSliderContainer,
+    PatientResearchComponent,
   },
   setup() {
-    const researchesPoolsIsToggle: Ref<boolean> = ref(false);
-    const showOnlyNotFilled: Ref<boolean> = ref(false);
-    const questionsFilterString: Ref<string> = ref('');
+    const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
-    const patientResearch: WritableComputedRef<PatientResearch | undefined> = computed(() => patient.value.getPatientResearch(research.value.id));
+    const patientResearch: ComputedRef<PatientResearch> = computed(() => Provider.store.getters['patientsResearches/item']);
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
-
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const confirmLeave: Ref<boolean> = ref(false);
-
-    const formUpdated = () => {
-      confirmLeave.value = true;
-    };
-
-    const createPatientResearch = async (research: Research) => {
-      if (!patient.value.getPatientResearch(research.id)) {
-        const item = PatientResearch.Create(patient.value.id, research);
-        patient.value.patientsResearches.push(item);
-        await Provider.store.dispatch('patientsResearches/create', item);
-      }
-      await Provider.store.dispatch('researches/get', research.id);
-    };
 
     const selectResearch = async (item: Research) => {
       await Provider.store.dispatch('researches/get', item.id);
-      if (!patientResearch.value) {
-        return await createPatientResearch(item);
-      }
-      Provider.store.commit('researchesResults/set');
-      if (patientResearch.value?.researchResults.length === 0) {
-        const item = patientResearch.value?.addResult(research.value, patientResearch.value?.id);
-        await Provider.store.dispatch('researchesResults/createWithoutReset', item);
-        // return;
-      }
-
-      await selectResult(patientResearch.value?.researchResults[patientResearch.value?.researchResults.length - 1].id as string);
     };
 
-    const selectResult = async (id?: string) => {
-      if (!id) {
+    const confirmChangeResult = async (): Promise<MessageBoxData | undefined> => {
+      if (!researchResult.value.changed) {
         return;
       }
-      await Provider.store.dispatch('researchesResults/get', id);
-      confirmLeave.value = false;
+      return await MessageConfirmSave();
     };
 
-    const updateReserchResults = async () => {
+    const cancelResearchResultsFilling = async () => {
+      const confirmSave = await confirmChangeResult();
+      if (confirmSave) {
+        return await saveResult();
+      }
+      Provider.store.commit('researchesResults/set');
+      Provider.store.commit('researches/set');
+    };
+
+    const saveResult = async (): Promise<void> => {
       await Provider.store.dispatch('researchesResults/updateWithoutReset', researchResult.value);
-    };
-
-    const updatePatientsResearches = async () => {
       if (patientResearch.value) {
         patientResearch.value.recalculate(researchResult.value);
         await Provider.store.dispatch('patientsResearches/updateWithoutReset', patientResearch.value);
@@ -148,93 +105,21 @@ export default defineComponent({
         Provider.store.commit('researchesResults/set');
         Provider.store.commit('researches/set');
       }
-    };
-
-    const beforeLeave = async (id: string, back: boolean) => {
-      if (confirmLeave.value) {
-        await ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
-          distinguishCancelAndClose: true,
-          confirmButtonText: 'Сохранить',
-          cancelButtonText: 'Не сохранять',
-        })
-          .then(() => {
-            // Вызывается при сохранении
-            Promise.resolve(saveResult()).then(() => {
-              back ? cancelResearchResultsFilling(true) : selectResult(id);
-            });
-          })
-          .catch((action: string) => {
-            if (action === 'cancel') {
-              ElMessage({
-                type: 'warning',
-                message: 'Изменения не были сохранены',
-              });
-              back ? cancelResearchResultsFilling(true) : selectResult(id);
-            }
-          });
-      } else {
-        back ? cancelResearchResultsFilling(true) : selectResult(id);
-      }
-    };
-
-    const saveResult = async (): Promise<void> => {
-      Promise.all([updateReserchResults(), updatePatientsResearches()]).then(() => {
-        ElNotification.success(new MessageSuccess());
-        confirmLeave.value = false;
-      });
-    };
-
-    const toggleResearchesPools = async (toggle: boolean) => {
-      if (toggle) {
-        await Provider.store.dispatch('researchesPools/getAll');
-      }
-      researchesPoolsIsToggle.value = toggle;
-    };
-
-    const cancelResearchFilling = () => {
-      Provider.store.commit('researches/set');
-    };
-
-    const cancelResearchResultsFilling = (s: boolean) => {
-      chartOpened.value = false;
-      Provider.store.commit('researchesResults/set');
-      if (s || !research.value.withDates) {
-        Provider.store.commit('researches/set');
-      }
-    };
-
-    onBeforeUnmount(() => {
-      Provider.store.commit('researches/set');
-      Provider.store.commit('researchesResults/set');
-    });
-
-    const chartOpened: Ref<boolean> = ref(false);
-    const toggleChart = () => {
-      chartOpened.value = !chartOpened.value;
+      researchResult.value.changed = false;
+      ElMessage.success('Исследование успешно сохранено');
     };
 
     return {
       researchesFilter: ResearchesFiltersLib.onlyLaboratory(),
-      questionsFilterString,
-      showOnlyNotFilled,
-      chartOpened,
-      toggleChart,
-      cancelResearchFilling,
-      cancelResearchResultsFilling,
-      toggleResearchesPools,
-      researchesPoolsIsToggle,
       saveResult,
+      cancelResearchResultsFilling,
       researchResult,
-      selectResult,
       patientResearch,
       selectResearch,
+      researches,
+      researchesPools: researches,
       research,
-      createPatientResearch,
-      patient,
       scroll,
-      beforeLeave,
-      confirmLeave,
-      formUpdated,
     };
   },
 });

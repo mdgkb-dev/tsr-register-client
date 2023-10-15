@@ -7,7 +7,7 @@
       'box-shadow': selectable && activeId === tabId ? '0px 0px 1px 2px #1979cf' : '',
     }"
   >
-  <!-- width: `calc(100% - ${margin.prototype.slice()}`
+    <!-- width: `calc(100% - ${margin.prototype.slice()}`
       width: 'calc(100% - $margin.prototype.slice())' -->
     <svg v-if="isCollaps && collapsed" class="icon-arrow" @click="handleItemClick">
       <use xlink:href="#arrow-down"></use>
@@ -139,7 +139,7 @@ export default defineComponent({
   cursor: pointer;
   transition: 0.15s;
   overflow: hidden;
-  
+
   // padding: 0 2px;
   // visibility: ;
 

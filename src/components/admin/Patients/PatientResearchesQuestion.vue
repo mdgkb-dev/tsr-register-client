@@ -16,7 +16,7 @@
         >
           <template #inside-content>
             <div :id="question.getIdWithoutDashes()" class="background-container">
-              <QuestionComponent :question="question" :research-result="researchResult" @fill="fill(question)" />
+              <QuestionComponent :question="question" :research-result="researchResult" />
             </div>
           </template>
         </CollapseItem>
@@ -38,7 +38,6 @@ import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
-import scroll from '@/services/Scroll';
 
 export default defineComponent({
   name: 'PatientResearchesQuestion',
@@ -81,18 +80,12 @@ export default defineComponent({
       return results;
     };
 
-    const fill = (question: Question) => {
-      emit('fill');
-      scroll(question.getIdWithoutDashes());
-    };
-
     return {
       getCalculationsResults,
       filteredQuestions,
       researchResult,
       patient,
       research,
-      fill,
     };
   },
 });

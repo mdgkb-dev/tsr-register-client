@@ -39,7 +39,6 @@ export default defineComponent({
       if (!answer.value) {
         return;
       }
-      console.log(id, answer.value);
       ClassHelper.RemoveFromClassById(id, answer.value?.answerFiles, answer.value?.answerFilesForDelete);
     };
 

@@ -1,10 +1,10 @@
 <template>
-  <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="$emit('fill')" />
-  <component :is="question.valueType.getComponentType()" v-else :research-result="researchResult" :question="question" @fill="$emit('fill')" />
+  <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" />
+  <component :is="question.valueType.getComponentType()" v-else :research-result="researchResult" :question="question" @fill="fill" />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
@@ -15,7 +15,8 @@ import RadioProp from '@/components/admin/Research/RadioProp.vue';
 import SetProp from '@/components/admin/Research/SetProp.vue';
 import SetSelect from '@/components/admin/Research/SetSelect.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
-
+import Provider from '@/services/Provider/Provider';
+import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'QuestionComponent',
   components: {
@@ -29,18 +30,22 @@ export default defineComponent({
   },
 
   props: {
-    researchResult: {
-      type: Object as PropType<ResearchResult>,
-      required: true,
-    },
     question: {
       type: Object as PropType<Question>,
       required: true,
     },
   },
-  emits: ['fill'],
-  setup() {
-    return {};
+  setup(props) {
+    const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
+
+    const fill = () => {
+      scroll(props.question.getIdWithoutDashes());
+      researchResult.value.changed = true;
+    };
+    return {
+      researchResult,
+      fill,
+    };
   },
 });
 </script>

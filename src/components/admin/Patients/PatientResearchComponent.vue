@@ -1,10 +1,11 @@
 <template>
   <PatientResearchesResultsList
-    v-if="research.id && research.withDates && patientResearch && patientResearch.researchId === research.id"
+    v-if="research.id && research.withDates && patientResearch.id"
     :research="research"
     :patient-research="patientResearch"
     @select="selectResult"
     @add-result="addResult"
+    @save="$emit('save')"
   />
   <PatientResearchesQuestion v-if="researchResult.id" :key="researchResult.id" />
 </template>
@@ -27,6 +28,7 @@ export default defineComponent({
     PatientResearchesResultsList,
     PatientResearchesQuestion,
   },
+  emits: ['save'],
   setup() {
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const patientResearch: ComputedRef<PatientResearch> = computed(() => Provider.store.getters['patientsResearches/item']);

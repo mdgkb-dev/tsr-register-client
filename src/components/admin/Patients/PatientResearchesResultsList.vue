@@ -5,12 +5,12 @@
 
       <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="exportObj.exportType" @click="exportData(exportObj)" />
     </template>
-    <CollapseContainer :init-active-idx="patientResearch.researchResults.length - 1">
+    <CollapseContainer :init-active-idx="activeIdx">
       <template #default="scope">
-        <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id, true)">
-          <CollapseItem :is-collaps="false" padding="0 8px" :active-id="scope.activeIdx" :tab-id="i" :selectable="true" @changeActiveId="scope.changeActiveId">
+        <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id, i)">
+          <CollapseItem :is-collaps="false" padding="0 8px" :active-id="scope.activeIdx" :tab-id="i" :selectable="true">
             <template #inside-title>
-              <div @click.prevent="() => undefined">
+              <div :id="result.getIdWithoutDashes()" @click.prevent="() => undefined">
                 <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
                   <SmallDatePicker v-model:model-value="result.date" placeholder="Выбрать" width="85px" height="34px" @change="update(result)" @click.stop="() => undefined" />
                 </InfoItem>
@@ -22,7 +22,7 @@
     </CollapseContainer>
 
     <template v-if="research.withDates" #button>
-      <Button button-class="plus-button" text="Добавить" @click="$emit('addResult')" />
+      <Button button-class="plus-button" text="Добавить" @click="addResult" />
     </template>
   </RightSliderContainer>
 
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, onMounted, PropType, Ref, ref } from 'vue';
 
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
 import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
@@ -42,10 +42,13 @@ import PatientResearchChart from '@/components/admin/Patients/PatientResearchCha
 import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import MessageConfirmSave, { Cancel } from '@/services/classes/messages/MessageConfirmSave';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Provider from '@/services/Provider/Provider';
+import scroll from '@/services/Scroll';
+import WaitElement from '@/services/WaitElement';
 export default defineComponent({
   name: 'PatientResearchesResultsList',
   components: {
@@ -67,10 +70,12 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['select', 'update', 'beforeLeave', 'addResult'],
+  emits: ['select', 'update', 'addResult', 'save'],
   setup(props, { emit }) {
     const toggle = ref(props.research.withDates);
     const selectedId: Ref<string> = ref('');
+    const activeIdx = ref(props.patientResearch.researchResults.length - 1);
+    const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
     const exports: ExportOptions[] = [
       ExportOptions.XLSX(PatientsExportOptionLib.onePatient(props.patientResearch.patientId), ResearchesExportOptionLib.oneResearch(props.research.id)),
@@ -84,20 +89,40 @@ export default defineComponent({
     onBeforeMount(async () => {
       const lastResult = props.patientResearch.getLastResult();
       if (lastResult && lastResult.id) {
-        await selectResult(lastResult.id);
+        selectResult(lastResult.id, props.patientResearch.researchResults.length - 1);
       }
     });
 
-    const selectResult = async (id?: string, beforeLeave?: boolean): Promise<void> => {
+    onMounted(() => {
+      const lastResult = props.patientResearch.getLastResult();
+      if (lastResult) {
+        scroll('#' + lastResult.getIdWithoutDashes());
+      }
+    });
+
+    const confirmChangeResult = async (): Promise<boolean> => {
+      if (!researchResult.value.changed) {
+        return true;
+      }
+      try {
+        await MessageConfirmSave();
+        emit('save');
+        return true;
+      } catch (e) {
+        return e === Cancel;
+      }
+    };
+
+    const selectResult = async (id?: string, idx?: number): Promise<void> => {
       if (!id) {
         return;
       }
-      selectedId.value = id;
-      if (beforeLeave) {
-        await emit('beforeLeave', emit('select', id));
-      } else {
-        emit('select', id);
+      const needContinue = await confirmChangeResult();
+      if (!needContinue) {
+        return;
       }
+      activeIdx.value = idx as number;
+      emit('select', id);
     };
 
     const exportData = async (exportOptions: ExportOptions): Promise<void> => {
@@ -109,7 +134,22 @@ export default defineComponent({
       chartOpened.value = !chartOpened.value;
     };
 
+    const addResult = async () => {
+      const needContinue = await confirmChangeResult();
+      if (!needContinue) {
+        return;
+      }
+      emit('addResult');
+      activeIdx.value = props.patientResearch.researchResults.length - 1;
+      const selector = '#' + props.patientResearch.getLastResult()?.getIdWithoutDashes();
+      WaitElement(selector)
+        .then(() => scroll(selector))
+        .catch((e) => console.warn('result not found', e));
+    };
+
     return {
+      addResult,
+      activeIdx,
       exportData,
       exports,
       chartOpened,

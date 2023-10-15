@@ -2,8 +2,8 @@
   <ResearcheContainer>
     <template #header>
       <div v-if="research.id && patientResearch" class="header-container">
-        <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling(true)" />
-        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling(true)" />
+        <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling" />
+        <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling" />
         <TopSliderContainer>
           <template #title>
             <span>{{ research.name }}</span>
@@ -26,13 +26,13 @@
               <div :style="{ color: res.color }">{{ res.result }}</div>
             </div> -->
         </TopSliderContainer>
-        <Button button-class="grey-button" text="Сохранить" @click="saveResult(researchResult)" />
-        <Button icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult(researchResult)" />
+        <Button v-if="researchResult.changed" button-class="grey-button" text="Сохранить" @click="saveResult" />
+        <Button v-if="researchResult.changed" icon="save" button-class="edit-button" icon-class="edit-icon" @click="saveResult" />
       </div>
     </template>
 
     <template #body>
-      <PatientResearchComponent v-if="research.id" />
+      <PatientResearchComponent v-if="research.id" @save="saveResult" />
       <PatientResearchesList v-else type="anamnesis" :filter-model="researchesFilter" @select="selectResearch" />
     </template>
   </ResearcheContainer>
@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts">
+import { ElMessage, MessageBoxData } from 'element-plus';
 import { computed, ComputedRef, defineComponent, Ref } from 'vue';
 
 import Xlsx from '@/assets/svg/Xlsx.svg';
@@ -50,6 +51,7 @@ import PatientResearchComponent from '@/components/admin/Patients/PatientResearc
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
+import MessageConfirmSave from '@/services/classes/messages/MessageConfirmSave';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -77,33 +79,39 @@ export default defineComponent({
       await Provider.store.dispatch('researches/get', item.id);
     };
 
-    const cancelResearchResultsFilling = (s: boolean) => {
-      Provider.store.commit('researchesResults/set');
-      if (s || !research.value.withDates) {
-        Provider.store.commit('researches/set');
+    const confirmChangeResult = async (): Promise<MessageBoxData | undefined> => {
+      if (!researchResult.value.changed) {
+        return;
       }
+      return await MessageConfirmSave();
     };
 
-    const saveResult = async (result: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/update', result);
+    const cancelResearchResultsFilling = async () => {
+      const confirmSave = await confirmChangeResult();
+      if (confirmSave) {
+        return await saveResult();
+      }
+      Provider.store.commit('researchesResults/set');
+      Provider.store.commit('researches/set');
+    };
+
+    const saveResult = async (): Promise<void> => {
+      await Provider.store.dispatch('researchesResults/updateWithoutReset', researchResult.value);
       if (patientResearch.value) {
-        patientResearch.value.recalculate(result);
-        await Provider.store.dispatch('patientsResearches/update', patientResearch.value);
+        patientResearch.value.recalculate(researchResult.value);
+        await Provider.store.dispatch('patientsResearches/updateWithoutReset', patientResearch.value);
       }
       if (!research.value.withDates) {
         Provider.store.commit('researchesResults/set');
         Provider.store.commit('researches/set');
       }
+      researchResult.value.changed = false;
+      ElMessage.success('Исследование успешно сохранено');
     };
 
-    // onBeforeUnmount(() => {
-    //   Provider.store.commit('researches/set');
-    //   Provider.store.commit('researchesResults/set');
-    // });
-
     return {
-      saveResult,
       researchesFilter: ResearchesFiltersLib.onlyAnamneses(),
+      saveResult,
       cancelResearchResultsFilling,
       researchResult,
       patientResearch,
