@@ -9,6 +9,7 @@
             <span>{{ research.name }}</span>
             <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
           </template>
+          <Button button-class="del-button" text="Удалить исследование" />
           <div v-if="research.withScores" class="flex-line">
             <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
             <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
@@ -143,6 +144,16 @@ export default defineComponent({
   color: #006bb4;
   background: #f5f5f5;
   margin: 0 10px;
+  font-size: 14px;
+}
+
+.del-button {
+  width: 200px;
+  border-radius: 5px;
+  height: 42px;
+  color: #e46862;
+  background: #ffffff;
+  margin: 0px;
   font-size: 14px;
 }
 
