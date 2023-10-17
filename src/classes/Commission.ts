@@ -47,9 +47,7 @@ export default class Commission {
     const item = new Commission();
     item.id = uuidv4();
     item.volume = template.volume;
-    item.commissionsDoctors = template.commissionsDoctorsTemplates.map((cdt: CommissionDoctorTemplate) =>
-      CommissionDoctor.CreateFromTemplate(cdt)
-    );
+    item.commissionsDoctors = template.commissionsDoctorsTemplates.map((cdt: CommissionDoctorTemplate) => CommissionDoctor.CreateFromTemplate(cdt));
     return item;
   }
 
@@ -95,5 +93,10 @@ export default class Commission {
     const n = `№${this.number}`;
     const fio = this.patient.human.getShortName();
     return `${n} (${fio})`;
+  }
+
+  getFormattedPeriod(): string {
+    const f = new DateTimeFormat();
+    return `${f.format(this.startDate)}-${f.format(this.endDate)}`;
   }
 }

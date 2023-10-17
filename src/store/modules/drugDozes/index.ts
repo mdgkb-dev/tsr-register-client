@@ -1,6 +1,7 @@
 import { Module } from 'vuex';
 
 import DrugDoze from '@/classes/DrugDoze';
+import DrugNeeding from '@/classes/DrugNeeding';
 import getBaseDefaultState from '@/store/baseModule/baseIndex';
 import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
@@ -9,10 +10,13 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
-export type State = IBasicState<DrugDoze>;
+export interface State extends IBasicState<DrugDoze> {
+  drugNeeding: DrugNeeding;
+}
 export const getDefaultState = (): State => {
   return {
     ...getBaseDefaultState(DrugDoze),
+    drugNeeding: new DrugNeeding(),
   };
 };
 

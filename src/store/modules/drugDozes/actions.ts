@@ -12,7 +12,7 @@ const httpClient = new HttpClient('drug-dozes');
 const actions: ActionTree<State, RootState> = {
   ...getBaseActions<DrugDoze, State>(httpClient),
   calculateNeeding: async ({ commit }, options: DrugNeedingOptions) => {
-    commit('getActualAnthropomentry', await httpClient.post<DrugNeedingOptions, undefined>({ query: 'calculate-needing', isFormData: true, payload: options }));
+    commit('setDrugNeeding', await httpClient.post<DrugNeedingOptions, undefined>({ query: 'calculate-needing', isFormData: true, payload: options }));
   },
 };
 

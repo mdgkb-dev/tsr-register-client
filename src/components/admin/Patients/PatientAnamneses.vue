@@ -57,7 +57,6 @@ import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 import scroll from '@/services/Scroll';
-
 export default defineComponent({
   name: 'PatientAnamneses',
   components: {

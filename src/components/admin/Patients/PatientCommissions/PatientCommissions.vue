@@ -135,54 +135,7 @@
                   <StringItem string="Расчет потребности" color="#343E5C" font-size="18px" />
                 </template>
                 <template #inside-content>
-                  <Button
-                    text="Рассчитать потребность"
-                    button-class="need-button"
-                    :color="selectedCommission.drug && selectedCommission.patientDiagnosis ? '#006bb4' : '#B0A4C0'"
-                    @click="calculateDrugNeeding"
-                  />
-                  <el-form-item label="Рост, см">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Вес, кг">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Препарат">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="МНН">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="ЛФ">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Дозировка">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Код АТХ">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Наименование АТХ">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Единицы измерения(ЕИ), г">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Схема лечения">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Схема расчета потребности">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Потребность на период в ЕИ">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Количество, уп">
-                    <el-input />
-                  </el-form-item>
-                  <el-form-item label="Период заявки">
-                    <el-input />
-                  </el-form-item>
+                  <NeedingComponent :commission="selectedCommission" />
                 </template>
               </CollapseItem>
             </template>
@@ -215,17 +168,16 @@ import { computed, ComputedRef, defineComponent, onBeforeMount, Ref, ref } from 
 import Commission from '@/classes/Commission';
 import CommissionTemplate from '@/classes/CommissionTemplate';
 import Drug from '@/classes/Drug';
-import DrugNeedingOptions from '@/classes/DrugNeedingOptions';
 import DrugRecipe from '@/classes/DrugRecipe';
 import Patient from '@/classes/Patient';
 // import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import DrugSelectForm from '@/components/admin/Commissions/DrugSelectForm.vue';
+import NeedingComponent from '@/components/admin/Patients/PatientCommissions/NeedingComponent.vue';
 import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
-import IAnthropomentry from '@/interfaces/IAnthropomentry';
 import PatientDiagnosisFiltersLib from '@/libs/filters/PatientDiagnosisFiltersLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
@@ -235,10 +187,10 @@ import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'PatientCommissions',
   components: {
+    NeedingComponent,
     RightTabsContainer,
     ResearcheContainer,
     Button,
@@ -260,7 +212,7 @@ export default defineComponent({
 
     const isToggle: Ref<boolean> = ref(false);
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
-    const actualAnthropomentry: ComputedRef<IAnthropomentry> = computed(() => Provider.store.getters['patients/actualAnthropometry']);
+
     const commissionsTemplates: ComputedRef<CommissionTemplate[]> = computed(() => Provider.store.getters['commissionsTemplates/items']);
     const showModalDiagnosis: Ref<boolean> = ref(false);
     const showModalMedicine: Ref<boolean> = ref(false);
@@ -352,22 +304,7 @@ export default defineComponent({
       await updateCommission();
     };
 
-    const calculateDrugNeeding = async () => {
-      await Provider.store.dispatch('patients/getActualAnthropomentry', patient.value.id);
-      if (selectedCommission.value) {
-        const opt = DrugNeedingOptions.Create(
-          actualAnthropomentry.value.weight,
-          actualAnthropomentry.value.height,
-          selectedCommission.value.startDate,
-          selectedCommission.value.endDate,
-          selectedCommission.value.drugRecipe?.drugDozeId
-        );
-        await Provider.store.dispatch('drugDozes/calculateNeeding', opt);
-      }
-    };
-
     return {
-      calculateDrugNeeding,
       setDrugRecipe,
       fillCommissionDownload,
       selectDrug,
