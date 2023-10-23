@@ -1,14 +1,7 @@
 <template>
   <LeftRightContainer left-width="280px">
     <template #left>
-      <UploaderSingleScan
-        :file-info="patient.human.photo"
-        :height="280"
-        :default-ratio="1"
-        :emit-crop="true"
-        @ratio="(e) => (element.ratio = e)"
-        @crop="savePhoto"
-      />
+      <UploaderSingleScan :file-info="patient.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
       <div class="left-title">Диагноз</div>
       <div class="left-info">
         <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
@@ -29,20 +22,19 @@
               {{ $dateTimeFormatter.format(patient.getActuallyDisability()?.period?.dateEnd) }}
             </div>
             <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle
-                >A
-              </el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle
-                >B
-              </el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle
-                >C
-              </el-button>
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A </el-button>
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B </el-button>
+              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C </el-button>
             </el-space>
             <div v-else>Нет справок ЕДВ</div>
           </el-space>
         </div>
         <div v-else>Не установлена</div>
+      </div>
+
+      <div class="left-info">
+        <el-checkbox v-model="patient.isMoscow" label="Пациент из Москвы" @change="update" />
+        <el-checkbox v-model="patient.agreed" label="Дано информированное согласие" @change="update" />
       </div>
     </template>
     <template #right>
@@ -79,10 +71,15 @@ export default defineComponent({
     const savePhoto = async () => {
       await Provider.store.dispatch('fileInfos/create', patient.value.human.photo);
       patient.value.human.photoId = patient.value.human.photo.id;
+      await update();
+    };
+
+    const update = async () => {
       await Provider.store.dispatch('patients/updateWithoutReset');
     };
 
     return {
+      update,
       savePhoto,
       patient,
       checked,

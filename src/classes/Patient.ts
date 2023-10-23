@@ -75,6 +75,9 @@ export default class Patient {
   fullName?: string;
   dateBirth?: string;
 
+  isMoscow = false;
+  agreed = false;
+
   constructor(i?: Patient) {
     ClassHelper.BuildClass(this, i);
     if (!i) {
@@ -116,10 +119,7 @@ export default class Patient {
       if (rtp.representative?.human.addressResidential != '' && rtp.representative?.human.addressResidential) {
         addresses.push(rtp.representative?.human.addressResidential);
       }
-      if (
-        rtp.representative?.human.addressResidential !== rtp.representative?.human.addressRegistration &&
-        rtp.representative?.human.addressRegistration
-      ) {
+      if (rtp.representative?.human.addressResidential !== rtp.representative?.human.addressRegistration && rtp.representative?.human.addressRegistration) {
         addresses.push(rtp.representative?.human.addressRegistration);
       }
     });
