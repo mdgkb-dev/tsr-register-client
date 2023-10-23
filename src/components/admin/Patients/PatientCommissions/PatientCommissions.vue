@@ -14,13 +14,13 @@
     </template>
     <template #tabs>
       <div
-        v-for="commission in patient.commissions"
+        v-for="commission in commissions"
         :key="commission.id"
         :class="{
-          'tabs-item-active': selectedCommission && commission.id === selectedCommission.id,
+          'tabs-item-active': commission.id === selectedCommission.id,
         }"
         class="tabs-item"
-        @click="selectCommission(commission)"
+        @click="selectCommission(commission.id)"
       >
         <div class="tab-item-text">№{{ commission.number }}</div>
       </div>
@@ -178,7 +178,9 @@ import PersonalityList from '@/components/admin/Patients/PersonalityList.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
+import CommissionsFiltersLib from '@/libs/filters/CommissionsFiltersLib';
 import PatientDiagnosisFiltersLib from '@/libs/filters/PatientDiagnosisFiltersLib';
+import CommissionsSortsLib from '@/libs/sorts/CommissionsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
 import DatePicker from '@/services/components/DatePicker.vue';
@@ -186,6 +188,7 @@ import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
+import { Orders } from '@/services/interfaces/Orders';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({
   name: 'PatientCommissions',
@@ -218,7 +221,8 @@ export default defineComponent({
     const showModalMedicine: Ref<boolean> = ref(false);
     const showModalDoctorList: Ref<boolean> = ref(false);
     const patientsDiagnoses: ComputedRef<PatientDiagnosis[]> = computed(() => Provider.store.getters['patientsDiagnosis/items']);
-    const selectedCommission: Ref<Commission | undefined> = ref(patient.value.commissions.length > 0 ? patient.value.commissions[0] : undefined);
+    const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
+    const selectedCommission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const toggle = async (toggle: boolean) => {
       if (toggle) {
         await Provider.store.dispatch('commissionsTemplates/getAll');
@@ -235,7 +239,8 @@ export default defineComponent({
         ElMessage.warning('Сначала добавьте пациенту диагноз');
       }
       await Provider.store.dispatch('commissions/createAndSetNumber', item);
-      selectedCommission.value = patient.value.commissions[patient.value.commissions.length - 1];
+      Provider.store.commit('commissions/appendToAll', [item]);
+      await selectLastCommission();
       isToggle.value = false;
     };
 
@@ -243,12 +248,21 @@ export default defineComponent({
       await Provider.store.dispatch('commissions/updateWithoutReset', selectedCommission.value);
     };
 
+    const getCommissions = async () => {
+      const fq = new FilterQuery();
+      fq.setFilterModel(CommissionsFiltersLib.byPatientId(patient.value.id as string));
+      fq.setSortModel(CommissionsSortsLib.byNumber(Orders.Asc));
+      console.log(fq);
+      await Provider.store.dispatch('commissions/getAll', { filterQuery: fq });
+    };
+
     onBeforeMount(async () => {
-      await Provider.store.dispatch('drugs/getAll');
+      await getCommissions();
+      await selectLastCommission();
     });
 
-    const selectCommission = (c?: Commission): void => {
-      selectedCommission.value = c;
+    const selectCommission = async (id?: string): Promise<void> => {
+      await Provider.store.dispatch('commissions/get', id);
     };
 
     const removeCommission = async (): Promise<void> => {
@@ -257,7 +271,14 @@ export default defineComponent({
       }
       ClassHelper.RemoveFromClassById(selectedCommission.value.id, patient.value.commissions, []);
       await Provider.store.dispatch('commissions/remove', selectedCommission.value.id);
-      selectedCommission.value = patient.value.commissions.length > 0 ? patient.value.commissions[patient.value.commissions.length - 1] : undefined;
+      await selectLastCommission();
+    };
+
+    const selectLastCommission = async (): Promise<void> => {
+      if (patient.value.commissions.length === 0) {
+        return;
+      }
+      await selectCommission(patient.value.commissions[patient.value.commissions.length - 1].id);
     };
 
     const openModalDiagnosis = () => {
@@ -305,6 +326,7 @@ export default defineComponent({
     };
 
     return {
+      commissions,
       setDrugRecipe,
       fillCommissionDownload,
       selectDrug,
@@ -388,7 +410,7 @@ export default defineComponent({
   border: 1px solid #379fff;
   border-top-right-radius: $normal-border-radius;
   border-bottom-right-radius: $normal-border-radius;
-  border-left: #dff2f8;
+  border-left: none;
   background: $custom-background;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   font-size: 14px;
