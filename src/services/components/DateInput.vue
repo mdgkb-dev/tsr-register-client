@@ -44,21 +44,36 @@ export default defineComponent({
         ElMessage({ type: 'error', message: 'Неверный формат даты' });
         return;
       }
-      const dateParts = value.split('.');
-      const dateObj = new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0]);
-      const newDate = new Date(dateObj);
-      const userTimezoneOffset = newDate.getTimezoneOffset() * 60000;
-      emit('update:modelValue', new Date(newDate.getTime() - userTimezoneOffset));
-      emit('change');
+
+      if (Number(date.value.slice(0, 2)) > 31) {
+        date.value = modelValueString;
+        ElMessage({ type: 'error', message: 'Неверный день месяца' });
+        return;
+      }
+
+      if (Number(date.value.slice(3, 5)) > 12) {
+        date.value = modelValueString;
+        ElMessage({ type: 'error', message: 'Неверный месяц' });
+        return;
+      }
+
+      if (Number(date.value.slice(6, 10)) > 2100) {
+        date.value = modelValueString;
+        ElMessage({ type: 'error', message: 'Неверный год' });
+        return;
+      }
     };
     const inputHandler = (value: string) => {
       date.value = value.replace(/[^0-9.]/g, '');
+
       if ((date.value.length == 3 || date.value.length == 6) && date.value[date.value.length - 1] !== '.') {
         date.value = date.value.substring(0, date.value.length - 1) + '.' + date.value.substring(date.value.length - 1);
       }
       if (date.value.length > 10) {
         date.value = date.value.substring(0, date.value.length - 1);
       }
+
+      console.log(date.value);
     };
 
     return {

@@ -446,6 +446,7 @@ import { ElMessage } from 'element-plus';
   align-items: center;
   text-align: center;
   margin-top: 5px;
+  cursor: pointer;
 }
 
 .tabs-item-active {
@@ -467,6 +468,7 @@ import { ElMessage } from 'element-plus';
   text-align: center;
   margin-left: 0;
   z-index: 2;
+  cursor: default;
 }
 
 .icon-plus {

@@ -138,9 +138,7 @@ export default defineComponent({
     const creatingIndex: Ref<number | undefined> = ref(undefined);
     const representativeTypes: ComputedRef<RepresentativeType[]> = computed(() => store.getters['representativeTypes/items']);
 
-    const selectedPatientRepresentative: WritableComputedRef<PatientRepresentative> = computed(
-      () => store.getters['patientsRepresentatives/item']
-    );
+    const selectedPatientRepresentative: WritableComputedRef<PatientRepresentative> = computed(() => store.getters['patientsRepresentatives/item']);
     // const isEditMode: ComputedRef<boolean> = computed<boolean>(() => store.getters['patients/isEditMode']);
 
     onBeforeMount(async () => {
@@ -348,6 +346,7 @@ export default defineComponent({
   align-items: center;
   text-align: center;
   margin-top: 5px;
+  cursor: pointer;
 }
 
 .tabs-item-active {
@@ -369,6 +368,7 @@ export default defineComponent({
   text-align: center;
   margin-left: 0;
   z-index: 2;
+  cursor: default;
 }
 
 .icon-plus {

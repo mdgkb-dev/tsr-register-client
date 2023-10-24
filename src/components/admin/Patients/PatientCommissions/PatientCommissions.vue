@@ -401,6 +401,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
+  cursor: pointer;
 }
 
 .tabs-item-active {
@@ -422,6 +423,7 @@ export default defineComponent({
   text-align: center;
   margin-left: 0;
   z-index: 2;
+  cursor: default;
 }
 
 .tabs-item {

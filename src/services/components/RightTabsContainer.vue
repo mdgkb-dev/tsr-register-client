@@ -167,7 +167,6 @@ export default defineComponent({
   flex-direction: column;
   overflow: hidden;
   margin-top: 109px;
-  cursor: pointer;
 }
 
 .body-block {

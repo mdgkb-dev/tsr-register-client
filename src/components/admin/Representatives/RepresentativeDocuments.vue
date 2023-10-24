@@ -13,13 +13,7 @@
       </div>
     </template>
     <template #tabs>
-      <div
-        v-for="doc in representative.human.documents"
-        :key="doc.id"
-        :class="{ 'tabs-item-active': doc.id === document.id }"
-        class="tabs-item"
-        @click="selectDocument(doc.id)"
-      >
+      <div v-for="doc in representative.human.documents" :key="doc.id" :class="{ 'tabs-item-active': doc.id === document.id }" class="tabs-item" @click="selectDocument(doc.id)">
         <div class="tab-item-text">{{ doc.documentType.name }}</div>
       </div>
     </template>
@@ -31,16 +25,7 @@
               <div class="researche-name">{{ document.documentType.name }}</div>
             </div> -->
             <div class="line-item">
-              <InfoItem
-                margin="0"
-                :with-open-window="false"
-                :with-icon="false"
-                height="50px"
-                background="#F5F5F5"
-                border-color="#C4C4C4"
-                padding="10px"
-                :with-hover="false"
-              >
+              <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="50px" background="#F5F5F5" border-color="#C4C4C4" padding="10px" :with-hover="false">
                 <template #title>
                   <StringItem string="сохранить" font-size="10px" padding="0" color="#C4C4C4" />
                 </template>
@@ -292,6 +277,7 @@ export default defineComponent({
   text-align: center;
   margin-top: 5px;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .tabs-item:hover {
@@ -317,6 +303,7 @@ export default defineComponent({
   text-align: center;
   margin-left: 0;
   z-index: 2;
+  cursor: default;
 }
 
 .tabs-item-active:hover {
