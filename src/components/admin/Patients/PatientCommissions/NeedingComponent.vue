@@ -26,16 +26,16 @@
         <el-input :model-value="commission.drugRecipe.drugDoze.name" />
       </el-form-item>
       <el-form-item label="Схема лечения">
-        <el-input :model-value="drugNeeding.drugRegimen?.name" />
+        <el-input :model-value="commission.drugNeeding.drugRegimen?.name" />
       </el-form-item>
       <el-form-item label="Схема расчета потребности">
-        <el-input :model-value="drugNeeding.calculation" />
+        <el-input :model-value="commission.drugNeeding.calculation" />
       </el-form-item>
       <el-form-item label="Потребность на период в ЕИ">
-        <el-input :model-value="drugNeeding.measures" />
+        <el-input :model-value="commission.drugNeeding.measures" />
       </el-form-item>
       <el-form-item label="Количество, уп">
-        <el-input :model-value="drugNeeding.packs" />
+        <el-input :model-value="commission.drugNeeding.packs" />
       </el-form-item>
     </div>
 
@@ -82,9 +82,14 @@ export default defineComponent({
         actualAnthropometry.value.height,
         props.commission.startDate,
         props.commission.endDate,
-        props.commission.drugRecipe?.drugDozeId
+        props.commission.drugRecipe?.drugDozeId,
+        patient.value.id
       );
+
       await Provider.store.dispatch('drugDozes/calculateNeeding', opt);
+
+      props.commission.setDrugNeedingId(drugNeeding.value.id);
+      await Provider.store.dispatch('commissions/updateWithoutReset', props.commission);
     };
 
     return {

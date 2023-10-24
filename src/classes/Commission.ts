@@ -12,6 +12,8 @@ import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
 import DateTimeFormat from '@/services/DateFormat';
 
+import DrugNeeding from './DrugNeeding';
+
 export default class Commission {
   id?: string;
   date = new Date();
@@ -23,6 +25,10 @@ export default class Commission {
   @ClassHelper.GetClassConstructor(DrugRecipe)
   drugRecipe?: DrugRecipe;
   drugRecipeId?: string;
+
+  @ClassHelper.GetClassConstructor(DrugNeeding)
+  drugNeeding: DrugNeeding = new DrugNeeding();
+  drugNeedingId?: string;
 
   volume = '';
   @ClassHelper.GetClassConstructor(CommissionDoctor)
@@ -99,4 +105,9 @@ export default class Commission {
     const f = new DateTimeFormat();
     return `${f.format(this.startDate)}-${f.format(this.endDate)}`;
   }
+  
+
+setDrugNeedingId(id?: string): void {
+  this.drugNeedingId = id
+}
 }
