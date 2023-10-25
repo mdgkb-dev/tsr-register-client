@@ -116,7 +116,7 @@ export default defineComponent({
     };
 
     const createPatient = async (): Promise<void> => {
-      await Provider.store.dispatch('patients/createWithoutReset', patient.value);
+      await Provider.store.dispatch('patients/create', patient.value);
       Provider.store.commit('patients/unshiftToAll', patient.value);
       emit('add');
     };

@@ -99,7 +99,7 @@ export default defineComponent({
       await Provider.store.dispatch('documentTypes/get', id);
       console.log(documentType.value);
       const item = props.human.addDocument(documentType.value);
-      await Provider.store.dispatch('documents/createWithoutReset', item);
+      await Provider.store.dispatch('documents/create', item);
 
       await selectDocument(props.human.documents[props.human.documents.length - 1].id);
     };

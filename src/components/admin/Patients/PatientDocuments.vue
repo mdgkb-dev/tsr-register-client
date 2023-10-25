@@ -92,7 +92,7 @@ export default defineComponent({
     const addDocument = async (id: string) => {
       await Provider.store.dispatch('documentTypes/get', id);
       const item = patient.value.human.addDocument(documentType.value);
-      await Provider.store.dispatch('documents/createWithoutReset', item);
+      await Provider.store.dispatch('documents/create', item);
       selectDocument(patient.value.human.documents[patient.value.human.documents.length - 1].id);
     };
 

@@ -6,9 +6,7 @@ import IWithId from '@/services/interfaces/IWithId';
 import getBaseDefaultState from '@/store/baseModule/baseIndex';
 import IBasicState from '@/store/baseModule/baseState';
 
-export default function getBaseMutations<T extends IWithId, StateType extends IBasicState<T>>(
-  passedClass: Constructable<T>
-): MutationTree<StateType> {
+export default function getBaseMutations<T extends IWithId, StateType extends IBasicState<T>>(passedClass: Constructable<T>): MutationTree<StateType> {
   return {
     appendToAll(state, items?: []) {
       if (!items) {
@@ -31,6 +29,7 @@ export default function getBaseMutations<T extends IWithId, StateType extends IB
       state.count = items.count;
     },
     set(state, item: T) {
+      console.log(item);
       state.item = new passedClass(item);
     },
     resetState(state) {

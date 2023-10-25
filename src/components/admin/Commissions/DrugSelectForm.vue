@@ -1,9 +1,16 @@
 <template>
   <StringItem :string="stepper.getStepName()" margin="0 0 30px 0" font-size="16px" color="#006BB4" />
   <Button v-if="stepper.getStepNumber() > 0" button-class="change-button" text="Назад" @click="stepper.decreaseStep()" />
+  <RemoteSearch v-if="stepper.getStepNumber() === 0" key-value="drug" placeholder="Начните вводить лекарство" max-width="100%" @select="selectSearch" />
   <div v-if="mounted">
     <GridContainer grid-gap="5px" margin="10px 0">
-      <Button v-for="item in stepsArrays[stepper.getStepNumber()]" :key="item.id" button-class="change-button" :text="item.getName()" @click="stepper.actStepFunc(item)" />
+      <Button
+        v-for="item in stepsArrays[stepper.getStepNumber()]"
+        :key="item.id"
+        button-class="change-button"
+        :text="stepper.steps.length - 1 == stepper.getStepNumber() ? drugRecipe.getFullName() + item.getName() : item.getName()"
+        @click="stepper.actStepFunc(item)"
+      />
     </GridContainer>
   </div>
 </template>
@@ -19,6 +26,8 @@ import DrugRecipe from '@/classes/DrugRecipe';
 import Step from '@/classes/stepper/Step';
 import Stepper from '@/classes/stepper/Stepper';
 import Button from '@/components/Base/Button.vue';
+import RemoteSearch from '@/components/RemoteSearch.vue';
+import ISearchObject from '@/interfaces/ISearchObject';
 import DrugDozesFiltersLib from '@/libs/filters/DrugDozesFiltersLib';
 import DrugFormsFiltersLib from '@/libs/filters/DrugFormsFiltersLib';
 import DrugsSortsLib from '@/libs/sorts/DrugsSortsLib';
@@ -33,10 +42,12 @@ export default defineComponent({
     Button,
     GridContainer,
     StringItem,
+    RemoteSearch,
   },
   emits: ['select'],
   setup(_, { emit }) {
     const drugs: ComputedRef<Drug[]> = computed(() => Provider.store.getters['drugs/items']);
+    const drug: ComputedRef<Drug> = computed(() => Provider.store.getters['drugs/item']);
     const drugForms: ComputedRef<DrugForm[]> = computed(() => Provider.store.getters['drugForms/items']);
     const drugDozes: ComputedRef<DrugDoze[]> = computed(() => Provider.store.getters['drugDozes/items']);
     const drugRecipe: ComputedRef<DrugRecipe> = computed(() => Provider.store.getters['drugRecipes/item']);
@@ -85,8 +96,13 @@ export default defineComponent({
     const selectDrugDoze = async (item: DrugDoze): Promise<void> => {
       drugRecipe.value.setDrugDoze(item);
       drugRecipe.value.id = uuidv4();
-      await Provider.store.dispatch('drugRecipes/createWithoutReset', drugRecipe.value);
+      await Provider.store.dispatch('drugRecipes/create', drugRecipe.value);
       emit('select', drugRecipe.value);
+    };
+
+    const selectSearch = async (result: ISearchObject) => {
+      await Provider.store.dispatch('drugs/get', result.value);
+      stepper.value.actStepFunc(drug.value as never);
     };
 
     return {
@@ -98,6 +114,7 @@ export default defineComponent({
       selectDrugForm,
       selectDrug,
       drugs,
+      selectSearch,
     };
   },
 });

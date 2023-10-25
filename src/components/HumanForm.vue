@@ -30,26 +30,14 @@
         />
       </el-form-item>
       <el-form-item label="Адрес регистрации" prop="human.addressRegistration">
-        <el-autocomplete
-          v-model="human.addressRegistration"
-          :readonly="readonly"
-          :fetch-suggestions="getAddresses"
-          autocomplete="random"
-          @change="updateHuman"
-        />
+        <el-autocomplete v-model="human.addressRegistration" :readonly="readonly" :fetch-suggestions="getAddresses" autocomplete="random" @change="updateHuman" />
         <span>
           <el-switch :model-value="human.addressesEqual()" @change="(v) => human.setResidentialAddress(v)" />
           Адрес регистрации и адрес проживания совпадают
         </span>
       </el-form-item>
       <el-form-item label="Адрес проживания" prop="human.addressResidential">
-        <el-autocomplete
-          v-model="human.addressResidential"
-          :readonly="readonly"
-          :fetch-suggestions="getAddresses"
-          autocomplete="random"
-          @change="updateHuman"
-        />
+        <el-autocomplete v-model="human.addressResidential" :readonly="readonly" :fetch-suggestions="getAddresses" autocomplete="random" @change="updateHuman" />
       </el-form-item>
       <el-form-item label="Телефон" prop="human.contact.phone">
         <el-input v-model="human.contact.phone" :readonly="readonly" @input="human.contact.formatPhoneNumber()" @change="updateHuman" />

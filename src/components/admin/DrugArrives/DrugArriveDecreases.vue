@@ -17,12 +17,7 @@
 
       <el-input v-model="drugDecrease.comment" @blur="updateDrugDecrease(drugDecrease)" />
       <el-date-picker v-model="drugDecrease.date" @change="updateDrugDecrease(drugDecrease)" />
-      <RemoteSearch
-        key-value="patient"
-        placeholder="Введите имя пациента"
-        @click.stop="() => undefined"
-        @select="(e) => setPatientToDecrease(e, drugDecrease)"
-      />
+      <RemoteSearch key-value="patient" placeholder="Введите имя пациента" @click.stop="() => undefined" @select="(e) => setPatientToDecrease(e, drugDecrease)" />
       <el-button @click="removeDrugDecrease(drugArrive, drugDecrease)" />
     </div>
   </div>
@@ -56,13 +51,13 @@ export default defineComponent({
 
     const createDrugArrive = async () => {
       const item = DrugArrive.Create();
-      await Provider.store.dispatch('drugArrives/createWithoutReset', item);
+      await Provider.store.dispatch('drugArrives/create', item);
       Provider.store.commit('drugArrives/unshiftToAll', item);
     };
 
     const addDrugDecrease = async (drugArrive: DrugArrive): Promise<void> => {
       const item = drugArrive.addDrugDecrease();
-      await Provider.store.dispatch('drugDecreases/createWithoutReset', item);
+      await Provider.store.dispatch('drugDecreases/create', item);
     };
 
     const updateDrugDecrease = async (item: DrugDecrease): Promise<void> => {
@@ -78,12 +73,7 @@ export default defineComponent({
       await Provider.store.dispatch('drugDecreases/remove', item.id);
     };
 
-    const updateDrugDecreaseQuantity = async (
-      cur: number,
-      prev: number,
-      drugArrive: DrugArrive,
-      drugDecrease: DrugDecrease
-    ): Promise<void> => {
+    const updateDrugDecreaseQuantity = async (cur: number, prev: number, drugArrive: DrugArrive, drugDecrease: DrugDecrease): Promise<void> => {
       const succeedMove = drugArrive.drugMove(cur, prev, drugDecrease);
       if (succeedMove) {
         return await updateDrugDecrease(drugDecrease);

@@ -7,13 +7,7 @@
     <template #open-inside-content>
       <GridContainer custom-class="grid" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(180px, 1fr))">
         <div v-for="commissionDrugApplication in drugApplication.commissionsDrugApplications" :key="commissionDrugApplication.id">
-          <InfoItem
-            icon="edit-title"
-            margin="0"
-            :with-open-window="false"
-            height="32px"
-            @click="select(commissionDrugApplication.commission.id)"
-          >
+          <InfoItem icon="edit-title" margin="0" :with-open-window="false" height="32px" @click="select(commissionDrugApplication)">
             <StringItem :string="commissionDrugApplication.commission.getFullNameWithPatient()" font-size="11px" />
           </InfoItem>
         </div>
@@ -28,18 +22,21 @@
     </template>
   </InfoItem>
   <ModalWindow :show="showModal" title="Коммиссия" @close="showModal = false">
-    <CommissionCard @remove="remove" />
+    <CommissionCard @remove="remove" @removeCommission="removeCommissionsDrugApplication" />
   </ModalWindow>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Commission from '@/classes/Commission';
+import CommissionDrugApplication from '@/classes/CommissionDrugApplication';
 import DrugApplication from '@/classes/DrugApplication';
 import CommissionCard from '@/components/admin/CommissionCard.vue';
 import Button from '@/components/Base/Button.vue';
 import ModalWindow from '@/components/Base/ModalWindow.vue';
+import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import StringItem from '@/services/components/StringItem.vue';
@@ -63,14 +60,34 @@ export default defineComponent({
   },
   setup(props) {
     const showModal: Ref<boolean> = ref(false);
-    const commissions: Ref<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
-    const commission: Ref<Commission> = computed(() => Provider.store.getters['commissions/item']);
+    const commissions: ComputedRef<Commission[]> = computed(() => Provider.store.getters['commissions/items']);
+    const commission: ComputedRef<Commission> = computed(() => Provider.store.getters['commissions/item']);
     const isToggle: Ref<boolean> = ref(false);
+    const commissionDrugApplication: ComputedRef<Commission> = computed(() => Provider.store.getters['commissionsDrugApplications/item']);
 
     const remove = async () => {
       // ClassHelper.RemoveFromClassById(id, props.human.documents);
       showModal.value = false;
       Provider.store.commit('documents/set');
+    };
+
+    const removeCommissionsDrugApplication = async () => {
+      ElMessageBox.confirm('Подтвердите удаление', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: 'Удалить',
+        cancelButtonText: 'Отмена',
+      })
+        .then(async () => {
+          await Provider.store.dispatch('commissionsDrugApplications/remove', commissionDrugApplication.value.id);
+          ClassHelper.RemoveFromClassById(commissionDrugApplication.value.id, props.drugApplication.commissionsDrugApplications);
+          showModal.value = false;
+
+          ElMessage({
+            type: 'success',
+            message: 'Удалено',
+          });
+        })
+        .catch(() => null);
     };
 
     const toggle = async (toggle: boolean) => {
@@ -80,15 +97,27 @@ export default defineComponent({
       isToggle.value = toggle;
     };
 
-    const add = async (id: string) => {
+    const add = async (id: string | undefined) => {
+      if (!id) {
+        return;
+      }
+      if (props.drugApplication.commissionsDrugApplications.find((el: CommissionDrugApplication) => el.commission?.id === id)) {
+        ElMessage({
+          type: 'warning',
+          message: 'Выбранная комиссия уже добавлена',
+        });
+        return;
+      }
       await Provider.store.dispatch('commissions/get', id);
       const item = props.drugApplication.addCommission(commission.value);
-      await Provider.store.dispatch('commissionsDrugApplications/createWithoutReset', item);
-      await select(props.drugApplication.commissionsDrugApplications[props.drugApplication.commissionsDrugApplications.length - 1].id);
+      await Provider.store.dispatch('commissionsDrugApplications/create', item);
+      showModal.value = true;
+      isToggle.value = false;
     };
 
-    const select = async (id?: string) => {
-      await Provider.store.dispatch('commissions/get', id);
+    const select = async (commissionDrugApplication: CommissionDrugApplication) => {
+      Provider.store.commit('commissionsDrugApplications/set', commissionDrugApplication);
+      await Provider.store.dispatch('commissions/get', commissionDrugApplication.commission?.id);
       showModal.value = true;
       isToggle.value = false;
     };
@@ -102,6 +131,7 @@ export default defineComponent({
       showModal,
       isToggle,
       toggle,
+      removeCommissionsDrugApplication,
     };
   },
 });

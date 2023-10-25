@@ -81,7 +81,7 @@ export default defineComponent({
 
     const addRepresentative = async (): Promise<void> => {
       const patient = Representative.Create();
-      await Provider.store.dispatch('representatives/createWithoutReset', patient);
+      await Provider.store.dispatch('representatives/create', patient);
       Provider.store.commit('representatives/unshiftToAll', patient);
     };
 

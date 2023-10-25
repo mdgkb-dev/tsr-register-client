@@ -71,7 +71,7 @@ export default defineComponent({
     const addResult = async (): Promise<void> => {
       const item = ResearchResult.Create(research.value, patientResearch.value.id);
       patientResearch.value?.researchResults.push(item);
-      await Provider.store.dispatch('researchesResults/createWithoutReset', item);
+      await Provider.store.dispatch('researchesResults/create', item);
       Provider.store.commit('researchesResults/set', item);
     };
 
