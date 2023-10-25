@@ -7,23 +7,13 @@
   >
     <el-form ref="form" :model="human" :rules="human.validationRules">
       <el-form-item label="Фамилия" prop="surname">
-        <el-input
-          v-model="human.surname"
-          placeholder="Введите фамилию"
-          formatter="firstLetterUpper"
-          @blur="updateHuman('surname')"
-        ></el-input>
+        <el-input v-model="human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman('surname')"></el-input>
       </el-form-item>
       <el-form-item label="Имя" prop="name">
         <el-input v-model="human.name" placeholder="Введите имя" formatter="firstLetterUpper" @blur="updateHuman('name')"></el-input>
       </el-form-item>
       <el-form-item label="Отчество" prop="patronymic">
-        <el-input
-          v-model="human.patronymic"
-          placeholder="Введите отчество"
-          formatter="firstLetterUpper"
-          @blur="updateHuman('patronymic')"
-        ></el-input>
+        <el-input v-model="human.patronymic" placeholder="Введите отчество" formatter="firstLetterUpper" @blur="updateHuman('patronymic')"></el-input>
       </el-form-item>
 
       <div class="line-item">
@@ -36,8 +26,8 @@
           </el-form-item>
         </div>
         <div class="item-right">
-          <el-form-item label="Дата рождения" @change="updateHuman()">
-            <DatePicker v-model="human.dateBirth" />
+          <el-form-item label="Дата рождения">
+            <DatePicker v-model="human.dateBirth" @change="updateHuman()" />
           </el-form-item>
         </div>
       </div>

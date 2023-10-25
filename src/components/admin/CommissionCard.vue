@@ -1,5 +1,5 @@
 <template>
-  <el-form v-if="commission.id">
+  <el-form v-if="commission.id" :key="commission.id">
     <!--    <div v-for="commissionFileInfo in commission.commissionFileInfos" :key="commissionFileInfo.id" class="background-field">-->
     <!--      <FileUploader :file-info="commissionFileInfo.fileInfo" />-->
     <!--      <Button button-class="delete-button" icon-class="edit-icon" text="Удалить файл" @click="removeFile(commissionFileInfo.id)" />-->
@@ -7,26 +7,35 @@
     <div>
       <b>№{{ commission.number }}</b>
     </div>
-    <br />
     <div><b>Пациент:</b> {{ commission.patient.human.getFullName() }}</div>
     <br />
 
-    <div v-if="commission.patientDiagnosis"><b>Диагноз:</b> {{ commission.patientDiagnosis.mkbItem.getFullName() }}</div>
-    <br />
-    <div v-if="commission.drugRecipe"><b>Лекарство:</b> {{ commission.drugRecipe.getFullName() }}</div>
-    <br />
-    <div v-if="commission.drugRecipe"><b>Дата:</b> {{ $dateTimeFormatter.format(commission.date) }}</div>
-    <br />
+    <div v-if="commission.patientDiagnosis">
+      <b>Диагноз:</b> {{ commission.patientDiagnosis.mkbItem.getFullName() }}
+      <br />
+    </div>
+    <div v-if="commission.drugRecipe">
+      <b>Лекарство:</b> {{ commission.drugRecipe.getFullName() }}
+      <br />
+    </div>
+    <div v-if="commission.drugRecipe">
+      <b>Дата:</b> {{ $dateTimeFormatter.format(commission.date) }}
+      <br />
+    </div>
     <div><b>Комиссия:</b></div>
     <div v-for="commissionDoctor in commission.commissionsDoctors" :key="commissionDoctor.id" class="margin-field">
       <div>{{ commissionDoctor.doctor.getNameWithPosition() }}</div>
     </div>
-    <Button v-if="commission.canGetProtocol()" text="Скачать протокол" @click="fillCommissionDownload" />
+    <div style="margin-top: 15px">
+      <Button v-if="commission.canGetProtocol()" text="Скачать протокол" @click="fillCommissionDownload" />
+
+      <Button button-class="delete-document-button" text="Удалить комиссию" @click="$emit('removeCommission')" />
+    </div>
   </el-form>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, Ref } from 'vue';
+import { computed, ComputedRef, defineComponent } from 'vue';
 
 import commission from '@/classes/Commission';
 import Button from '@/components/Base/Button.vue';
@@ -37,9 +46,9 @@ export default defineComponent({
   components: {
     Button,
   },
-  emits: ['remove'],
+  emits: ['remove', 'removeCommission'],
   setup() {
-    const commission: Ref<commission> = computed(() => Provider.store.getters['commissions/item']);
+    const commission: ComputedRef<commission> = computed(() => Provider.store.getters['commissions/item']);
 
     const removeFile = async (id: string) => {
       await Provider.store.dispatch('commissionFileInfos/remove', id);
@@ -581,6 +590,21 @@ export default defineComponent({
 
 :deep(.el-input-number__decrease) {
   border-radius: 0;
+}
+
+.delete-document-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #c4c4c4;
+  background: #ffffff;
+  margin: 2px 10px 0 0;
+  font-size: 14px;
+}
+
+.delete-document-button:hover {
+  color: #e62c21;
+  background: #eeb2af;
 }
 
 @media screen and (max-width: 768px) {

@@ -12,12 +12,7 @@
               <div class="item-flex">
                 <div class="line-item-left">
                   <InfoItem title="дата" margin="0" :with-open-window="false" :with-hover="false">
-                    <SmallDatePicker
-                      v-model:model-value="drugArrive.date"
-                      placeholder="Выбрать"
-                      :readonly="true"
-                      @change="updateDrugArrive(drugArrive)"
-                    />
+                    <SmallDatePicker v-model:model-value="drugArrive.date" placeholder="Выбрать" :readonly="true" @change="updateDrugArrive(drugArrive)" />
                   </InfoItem>
                   <DrugArriveInputNumber :drug-arrive="drugArrive" />
                 </div>
@@ -97,7 +92,7 @@ export default defineComponent({
 
     const createDrugArrive = async () => {
       const item = DrugArrive.Create();
-      await Provider.store.dispatch('drugArrives/createWithoutReset', item);
+      await Provider.store.dispatch('drugArrives/create', item);
       Provider.store.commit('drugArrives/unshiftToAll', item);
     };
 
@@ -120,7 +115,7 @@ export default defineComponent({
     };
     const addDrugDecrease = async (drugArrive: DrugArrive): Promise<void> => {
       const item = drugArrive.addDrugDecrease();
-      await Provider.store.dispatch('drugDecreases/createWithoutReset', item);
+      await Provider.store.dispatch('drugDecreases/create', item);
     };
 
     const updateDrugDecrease = async (item: DrugDecrease): Promise<void> => {
@@ -136,12 +131,7 @@ export default defineComponent({
       await Provider.store.dispatch('drugDecreases/remove', item.id);
     };
 
-    const updateDrugDecreaseQuantity = async (
-      cur: number,
-      prev: number,
-      drugArrive: DrugArrive,
-      drugDecrease: DrugDecrease
-    ): Promise<void> => {
+    const updateDrugDecreaseQuantity = async (cur: number, prev: number, drugArrive: DrugArrive, drugDecrease: DrugDecrease): Promise<void> => {
       const succeedMove = drugArrive.drugMove(cur, prev, drugDecrease);
       if (succeedMove) {
         return await updateDrugDecrease(drugDecrease);

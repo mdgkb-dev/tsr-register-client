@@ -183,7 +183,7 @@ export default defineComponent({
     const createAndSaveRepresentative = async (representative: Representative) => {
       const patientRepresentative = patient.value.addRepresentative(representative);
       await Provider.store.dispatch(`representatives/createWithoutReset`, representative);
-      await store.dispatch('patientsRepresentatives/createWithoutReset', patientRepresentative);
+      await store.dispatch('patientsRepresentatives/create', patientRepresentative);
       selectPatientRepresentative(patientRepresentative.id as string);
       showModal.value = false;
       await toggle(false);

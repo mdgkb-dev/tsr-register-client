@@ -81,7 +81,7 @@ export default defineComponent({
 
     const createDrugArrive = async () => {
       const item = DrugArrive.Create();
-      await Provider.store.dispatch('drugArrives/createWithoutReset', item);
+      await Provider.store.dispatch('drugArrives/create', item);
       Provider.store.commit('drugArrives/unshiftToAll', item);
     };
 
@@ -104,7 +104,7 @@ export default defineComponent({
     };
     const addDrugDecrease = async (drugArrive: DrugArrive): Promise<void> => {
       const item = drugArrive.addDrugDecrease();
-      await Provider.store.dispatch('drugDecreases/createWithoutReset', item);
+      await Provider.store.dispatch('drugDecreases/create', item);
     };
 
     const updateDrugDecrease = async (item: DrugDecrease): Promise<void> => {

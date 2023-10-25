@@ -7,25 +7,11 @@
     <CollapseContainer>
       <template #default="scope">
         <div v-for="(result, i) in patientResearch.researchResults" :key="result.id" @click="selectResult(result.id)">
-          <CollapseItem
-            :is-collaps="false"
-            padding="0 8px"
-            :active-id="scope.activeId"
-            :tab-id="i"
-            :selectable="true"
-            @changeActiveId="scope.changeActiveId"
-          >
+          <CollapseItem :is-collaps="false" padding="0 8px" :active-id="scope.activeId" :tab-id="i" :selectable="true" @changeActiveId="scope.changeActiveId">
             <template #inside-title>
               <div @click.prevent="() => undefined">
                 <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
-                  <SmallDatePicker
-                    v-model:model-value="result.date"
-                    placeholder="Выбрать"
-                    width="85px"
-                    height="34px"
-                    @change="update(result)"
-                    @click.stop="() => undefined"
-                  />
+                  <SmallDatePicker v-model:model-value="result.date" placeholder="Выбрать" width="85px" height="34px" @change="update(result)" @click.stop="() => undefined" />
                 </InfoItem>
               </div>
             </template>
@@ -86,7 +72,7 @@ export default defineComponent({
 
     const addResult = async (): Promise<void> => {
       const item = props.patientResearch.addResult(props.research, props.patientResearch.id);
-      await Provider.store.dispatch('researchesResults/createWithoutReset', item);
+      await Provider.store.dispatch('researchesResults/create', item);
     };
     const selectResult = async (id: string): Promise<void> => {
       selectedId.value = id;

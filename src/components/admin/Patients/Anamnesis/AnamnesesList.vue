@@ -64,7 +64,7 @@ export default defineComponent({
         anamnesis.mkbItem = props.mkbItem;
         anamnesis.mkbItemId = props.mkbItem.id;
       }
-      await Provider.store.dispatch('anamneses/createWithoutReset', anamnesis);
+      await Provider.store.dispatch('anamneses/create', anamnesis);
     };
 
     const removeAnamnesis = async (id: string): Promise<void> => {

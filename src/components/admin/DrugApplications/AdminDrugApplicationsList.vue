@@ -39,12 +39,7 @@
                   </div>
                 </div>
                 <div class="item-flex">
-                  <GridContainer
-                    max-width="1920px"
-                    grid-gap="10px"
-                    grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))"
-                    margin="0px"
-                  >
+                  <GridContainer max-width="1920px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0px">
                     <InfoItem title="дата заявки" margin="0" open-height="auto" :with-open-window="false" width="100%">
                       <SmallDatePicker
                         v-model:model-value="drugApplication.date"
@@ -57,18 +52,8 @@
 
                     <ToggleCommissionsForm :drug-application="drugApplication" />
                     <div class="line-item1">
-                      <Button
-                        text="Поставки лекарств"
-                        button-class="medical-commission-button"
-                        color="#006bb4"
-                        @click="openDrugArrivesModal(drugApplication)"
-                      />
-                      <Button
-                        text="Файлы"
-                        button-class="medical-commission-button"
-                        color="#006bb4"
-                        @click="openDrugApplicationFilesModal(drugApplication)"
-                      />
+                      <Button text="Поставки лекарств" button-class="medical-commission-button" color="#006bb4" @click="openDrugArrivesModal(drugApplication)" />
+                      <Button text="Файлы" button-class="medical-commission-button" color="#006bb4" @click="openDrugApplicationFilesModal(drugApplication)" />
                     </div>
                   </GridContainer>
                 </div>
@@ -115,7 +100,7 @@ import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 export default defineComponent({
-  name: 'AdminPatientsList',
+  name: 'AdminDrugApplicationsList',
   components: {
     SelectStatusForm,
     DrugArrivesList,
@@ -170,7 +155,7 @@ export default defineComponent({
 
     const addApplication = async (): Promise<void> => {
       const drugApplication = new DrugApplication();
-      await Provider.store.dispatch('drugApplications/createWithoutReset', drugApplication);
+      await Provider.store.dispatch('drugApplications/create', drugApplication);
       Provider.store.commit('drugApplications/unshiftToAll', drugApplication);
     };
 
@@ -190,6 +175,7 @@ export default defineComponent({
     };
 
     const addCommission = async (commission: Commission, drugApplication: DrugApplication) => {
+      console.log('addCommission');
       if (drugApplication.commissionExists(commission.id)) {
         return ElMessage.warning('Выбранная заявка уже добавлена');
       }
