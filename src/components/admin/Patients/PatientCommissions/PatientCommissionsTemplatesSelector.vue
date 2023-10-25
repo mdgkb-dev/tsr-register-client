@@ -187,7 +187,7 @@ import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({
-  name: 'PatientCommissions',
+  name: 'PatientCommissionsTemplatesSelector',
   components: {
     RightTabsContainer,
     ResearcheContainer,

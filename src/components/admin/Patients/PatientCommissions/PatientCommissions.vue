@@ -16,9 +16,7 @@
       <div
         v-for="commission in commissions"
         :key="commission.id"
-        :class="{
-          'tabs-item-active': commission.id === selectedCommission.id,
-        }"
+        :class="{'tabs-item-active': commission.id === selectedCommission.id,}"
         class="tabs-item"
         @click="selectCommission(commission.id)"
       >
@@ -401,6 +399,24 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.tabs-item {
+  width: 101px;
+  height: 51px;
+  border: 1px solid #b0a4c0;
+  border-top-right-radius: $normal-border-radius;
+  border-bottom-right-radius: $normal-border-radius;
+  border-left: #dff2f8;
+  background: $base-background;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  font-size: 14px;
+  color: #b0a4c0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 5px;
   cursor: pointer;
 }
 
@@ -424,24 +440,6 @@ export default defineComponent({
   margin-left: 0;
   z-index: 2;
   cursor: default;
-}
-
-.tabs-item {
-  width: 101px;
-  height: 51px;
-  border: 1px solid #b0a4c0;
-  border-top-right-radius: $normal-border-radius;
-  border-bottom-right-radius: $normal-border-radius;
-  border-left: #dff2f8;
-  background: $base-background;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  font-size: 14px;
-  color: #b0a4c0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 5px;
 }
 
 :deep(.change-button) {
