@@ -18,8 +18,8 @@
         :key="commission.id"
         :class="{
           'tabs-item-active': selectedCommission && commission.id === selectedCommission.id,
+          'tabs-item': selectedCommission && commission.id !== selectedCommission.id,
         }"
-        class="tabs-item"
         @click="selectCommission(commission)"
       >
         <div class="tab-item-text">№{{ commission.number }}</div>

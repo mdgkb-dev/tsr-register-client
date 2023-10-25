@@ -16,8 +16,7 @@
       <div
         v-for="patientRegisterItem in patient.patientsRegisters"
         :key="patientRegisterItem.id"
-        :class="{ 'tabs-item-active': patientRegisterItem.registerId === patientRegister.registerId }"
-        class="tabs-item"
+        :class="{ 'tabs-item-active': patientRegisterItem.registerId === patientRegister.registerId, 'tabs-item': patientRegisterItem.registerId !== patientRegister.registerId }"
         @click="selectPatientRegister(patientRegisterItem.id)"
       >
         <div class="tab-item-text">
@@ -253,6 +252,7 @@ export default defineComponent({
   align-items: center;
   text-align: center;
   margin-left: 0;
+  margin-top: 5px;
   z-index: 2;
   cursor: default;
 }

@@ -16,8 +16,8 @@
         :key="patientDiagnosis.id"
         :class="{
           'tabs-item-active': selectedPatientDiagnosisId === patientDiagnosis.id,
+          'tabs-item': selectedPatientDiagnosisId !== patientDiagnosis.id,
         }"
-        class="tabs-item"
         @click="selectPatientDiagnosis(patientDiagnosis.id)"
       >
         <div class="tab-item-text">

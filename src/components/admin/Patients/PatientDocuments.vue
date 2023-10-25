@@ -13,7 +13,12 @@
       </div>
     </template>
     <template #tabs>
-      <div v-for="doc in patient.human.documents" :key="doc.id" :class="{ 'tabs-item-active': doc.id === document.id }" class="tabs-item" @click="selectDocument(doc.id)">
+      <div
+        v-for="doc in patient.human.documents"
+        :key="doc.id"
+        :class="{ 'tabs-item-active': doc.id === document.id, 'tabs-item': doc.id !== document.id }"
+        @click="selectDocument(doc.id)"
+      >
         <div class="tab-item-text">{{ doc.documentType.name }}</div>
       </div>
     </template>
@@ -302,6 +307,7 @@ export default defineComponent({
   align-items: center;
   text-align: center;
   margin-left: 0;
+  margin-top: 5px;
   z-index: 2;
   cursor: default;
 }

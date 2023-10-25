@@ -13,7 +13,12 @@
       </div>
     </template>
     <template #tabs>
-      <div v-for="doc in representative.human.documents" :key="doc.id" :class="{ 'tabs-item-active': doc.id === document.id }" class="tabs-item" @click="selectDocument(doc.id)">
+      <div
+        v-for="doc in representative.human.documents"
+        :key="doc.id"
+        :class="{ 'tabs-item-active': doc.id === document.id, 'tabs-item': doc.id !== document.id }"
+        @click="selectDocument(doc.id)"
+      >
         <div class="tab-item-text">{{ doc.documentType.name }}</div>
       </div>
     </template>
