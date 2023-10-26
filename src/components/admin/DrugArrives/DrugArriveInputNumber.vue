@@ -24,7 +24,7 @@ export default defineComponent({
   },
   setup(props) {
     const updateDrugArrive = async (): Promise<void> => {
-      await Provider.store.dispatch('drugArrives/updateWithoutReset', props.drugArrive);
+      await Provider.store.dispatch('drugArrives/update', props.drugArrive);
     };
 
     const increment = async (): Promise<void> => {

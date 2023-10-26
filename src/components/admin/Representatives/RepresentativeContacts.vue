@@ -29,7 +29,7 @@ export default defineComponent({
     const savePhoto = async () => {
       await Provider.store.dispatch('fileInfos/create', representative.value.human.photo);
       representative.value.human.photoId = representative.value.human.photo.id;
-      await Provider.store.dispatch('representatives/updateWithoutReset');
+      await Provider.store.dispatch('representatives/update');
     };
 
     return {

@@ -75,7 +75,7 @@ export default defineComponent({
     };
 
     const update = async () => {
-      await Provider.store.dispatch('patients/updateWithoutReset');
+      await Provider.store.dispatch('patients/update');
     };
 
     return {

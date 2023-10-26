@@ -16,7 +16,7 @@
       <div
         v-for="commission in commissions"
         :key="commission.id"
-        :class="{'tabs-item-active': commission.id === selectedCommission.id, 'tabs-item' : commission.id !== selectedCommission.id}"
+        :class="{ 'tabs-item-active': commission.id === selectedCommission.id, 'tabs-item': commission.id !== selectedCommission.id }"
         @click="selectCommission(commission.id)"
       >
         <div class="tab-item-text">№{{ commission.number }}</div>
@@ -242,7 +242,7 @@ export default defineComponent({
     };
 
     const updateCommission = async (): Promise<void> => {
-      await Provider.store.dispatch('commissions/updateWithoutReset', selectedCommission.value);
+      await Provider.store.dispatch('commissions/update', selectedCommission.value);
     };
 
     const getCommissions = async () => {

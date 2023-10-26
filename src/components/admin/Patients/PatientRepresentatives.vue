@@ -182,7 +182,7 @@ export default defineComponent({
 
     const createAndSaveRepresentative = async (representative: Representative) => {
       const patientRepresentative = patient.value.addRepresentative(representative);
-      await Provider.store.dispatch(`representatives/createWithoutReset`, representative);
+      await Provider.store.dispatch(`representatives/create`, representative);
       await store.dispatch('patientsRepresentatives/create', patientRepresentative);
       selectPatientRepresentative(patientRepresentative.id as string);
       showModal.value = false;
@@ -207,7 +207,7 @@ export default defineComponent({
       const t = representativeTypes.value.find((r: RepresentativeType) => r.id === e);
       patient.value.patientsRepresentatives[i].representativeType = t as RepresentativeType;
       patient.value.patientsRepresentatives[i].representativeTypeId = e;
-      await Provider.store.dispatch('patientsRepresentatives/updateWithoutReset', patientRepresentative);
+      await Provider.store.dispatch('patientsRepresentatives/update', patientRepresentative);
     };
 
     const selectPatientRepresentative = (id: string): void => {

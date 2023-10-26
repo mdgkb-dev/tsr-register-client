@@ -68,7 +68,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       }
       commit('set', await httpClient.get<T>(query));
     },
-    create: async ({ commit, state }, item: T): Promise<void> => {
+    create: async ({ state }, item: T): Promise<unknown> => {
       if (!item) {
         item = state.item;
       }
@@ -77,13 +77,17 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
         opts.fileInfos = item.getFileInfos();
         opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
       }
-      commit('set', await httpClient.post<T, T>(opts));
+      return await httpClient.post<T, T>(opts);
+    },
+    createAndSet: async ({ commit, dispatch }, item: T): Promise<void> => {
+      const result = await dispatch('create', item);
+      commit('set', result);
     },
     createAndReset: async ({ commit, dispatch }, item: T): Promise<void> => {
-      dispatch('create', item);
+      await dispatch('create', item);
       commit('set');
     },
-    update: async ({ commit, state }, item: T): Promise<void> => {
+    update: async ({ state }, item: T): Promise<unknown> => {
       if (!item) {
         item = state.item;
       }
@@ -92,29 +96,15 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
         opts.fileInfos = item.getFileInfos();
         opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
       }
-      await httpClient.put<T, T>(opts);
+      return await httpClient.put<T, T>(opts);
+    },
+    updateAndSet: async ({ dispatch, commit }, item: T): Promise<void> => {
+      const result = await dispatch('update', item);
+      commit('set', result);
+    },
+    updateAndReset: async ({ dispatch, commit }, item: T): Promise<void> => {
+      await dispatch('update', item);
       commit('set');
-    },
-    updateAndSet: async ({ commit, state }, item: T): Promise<void> => {
-      if (!item) {
-        item = state.item;
-      }
-      const opts: IBodyfulParams<T> = { query: `${item.id}`, payload: item, isFormData: true };
-      if (item.getFileInfos) {
-        opts.fileInfos = item.getFileInfos();
-      }
-      commit('set', await httpClient.put<T, T>(opts));
-    },
-    updateWithoutReset: async ({ state }, item: T): Promise<void> => {
-      console.log('updateWithoutReset item', item);
-      if (!item) {
-        item = state.item;
-      }
-      const opts: IBodyfulParams<T> = { query: `${item.id}`, payload: item, isFormData: true };
-      if (item.getFileInfos) {
-        opts.fileInfos = item.getFileInfos();
-      }
-      await httpClient.put<T, T>(opts);
     },
     remove: async ({ commit }, id: string): Promise<void> => {
       await httpClient.delete({ query: `${id}` });

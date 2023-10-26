@@ -35,7 +35,7 @@ export default defineComponent({
   emits: ['remove', 'click'],
   setup(props) {
     const updateDrugArrive = async () => {
-      await Provider.store.dispatch('drugArrives/updateWithoutReset', props.drugArrive);
+      await Provider.store.dispatch('drugArrives/update', props.drugArrive);
     };
 
     const updateDrugArriveDate = async (newDate: Date) => {

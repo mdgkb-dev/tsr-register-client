@@ -89,7 +89,7 @@ export default defineComponent({
       await Provider.store.dispatch('drugDozes/calculateNeeding', opt);
 
       props.commission.setDrugNeedingId(drugNeeding.value.id);
-      await Provider.store.dispatch('commissions/updateWithoutReset', props.commission);
+      await Provider.store.dispatch('commissions/update', props.commission);
     };
 
     return {

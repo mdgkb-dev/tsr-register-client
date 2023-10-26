@@ -54,7 +54,7 @@ export default defineComponent({
     const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
 
     const updatePatientDiagnosis = async () => {
-      await Provider.store.dispatch('patientsDiagnosis/updateWithoutReset', patientDiagnosis.value);
+      await Provider.store.dispatch('patientsDiagnosis/update', patientDiagnosis.value);
     };
 
     onBeforeMount(async () => {
@@ -82,7 +82,7 @@ export default defineComponent({
     };
 
     const saveResearchResult = async (result: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/updateWithoutReset', result);
+      await Provider.store.dispatch('researchesResults/update', result);
     };
 
     return {
