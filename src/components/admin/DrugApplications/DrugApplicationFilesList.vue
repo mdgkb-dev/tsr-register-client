@@ -39,7 +39,7 @@ export default defineComponent({
 
     const sortDrugArrives = async (): Promise<void> => {
       sort(drugApplication.value.fundContract.drugArrives);
-      await Provider.store.dispatch('drugApplications/updateWithoutReset');
+      await Provider.store.dispatch('drugApplications/update');
     };
 
     const add = async () => {

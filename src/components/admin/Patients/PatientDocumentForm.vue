@@ -64,7 +64,7 @@ export default defineComponent({
     };
 
     const updateDocumentField = async (field: DocumentFieldValue) => {
-      await Provider.store.dispatch('documentFieldValues/updateWithoutReset', field);
+      await Provider.store.dispatch('documentFieldValues/update', field);
     };
 
     return {

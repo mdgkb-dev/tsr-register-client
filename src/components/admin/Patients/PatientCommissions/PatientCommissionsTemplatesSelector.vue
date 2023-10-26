@@ -236,7 +236,7 @@ export default defineComponent({
     };
 
     const updateCommission = async (): Promise<void> => {
-      await Provider.store.dispatch('commissions/updateWithoutReset', selectedCommission.value);
+      await Provider.store.dispatch('commissions/update', selectedCommission.value);
     };
 
     onBeforeMount(async () => {

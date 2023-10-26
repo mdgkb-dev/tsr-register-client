@@ -83,7 +83,7 @@ export default defineComponent({
     ];
 
     const update = async (item: ResearchResult): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/updateWithoutReset', item);
+      await Provider.store.dispatch('researchesResults/update', item);
     };
 
     onBeforeMount(async () => {

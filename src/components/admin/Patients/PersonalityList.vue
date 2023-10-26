@@ -60,7 +60,7 @@ export default defineComponent({
 
     const sortDoctors = async (): Promise<void> => {
       sort(commission.value.commissionsDoctors);
-      await Provider.store.dispatch('commissions/updateWithoutReset', commission.value);
+      await Provider.store.dispatch('commissions/update', commission.value);
     };
 
     const addCommissionDoctor = async (doctor: Doctor): Promise<void> => {

@@ -1,14 +1,7 @@
 <template>
   <LeftRightContainer left-width="280px">
     <template #left>
-      <UploaderSingleScan
-        :file-info="representative.human.photo"
-        :height="280"
-        :default-ratio="1"
-        :emit-crop="true"
-        @ratio="(e) => (element.ratio = e)"
-        @crop="savePhoto"
-      />
+      <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
     </template>
     <template #right>
       <PassportForm store-module="representatives" :edit-mode="true" />
@@ -41,7 +34,7 @@ export default defineComponent({
     const savePhoto = async () => {
       await Provider.store.dispatch('fileInfos/create', representative.value.human.photo);
       representative.value.human.photoId = representative.value.human.photo.id;
-      await Provider.store.dispatch('representatives/updateWithoutReset');
+      await Provider.store.dispatch('representatives/update');
     };
 
     return {
