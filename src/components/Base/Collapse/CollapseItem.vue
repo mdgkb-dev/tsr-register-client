@@ -132,14 +132,13 @@ export default defineComponent({
 
 .tab {
   position: relative;
+  width: calc(100% - 10px);
   border: $light-pink-border;
   border-radius: $normal-border-radius;
   background: #ffffff;
   margin: 10px 8px 2px 2px;
   cursor: pointer;
   transition: 0.15s;
-  overflow: hidden;
-
   // padding: 0 2px;
   // visibility: ;
 
@@ -157,7 +156,6 @@ export default defineComponent({
   position: absolute;
   opacity: 0;
   z-index: -1;
-  z-index: 2;
 }
 
 .tab-content-down {
@@ -168,7 +166,7 @@ export default defineComponent({
   -o-transition: max-height 0.03s;
   transition: max-height 0.03s;
   color: #343e5c;
-  padding: 0 10px;
+  padding: 0 5px;
 }
 
 .tab-content-up {
@@ -180,7 +178,7 @@ export default defineComponent({
   -o-transition: max-height 0.5s;
   transition: max-height 0.5s;
   color: #343e5c;
-  padding: 0 10px;
+  padding-right: 5px;
 }
 
 .tab input:checked ~ .icon-arrow {
@@ -287,6 +285,5 @@ export default defineComponent({
   align-items: center;
   font-weight: normal;
   border-radius: 5px;
-  background: inherit;
 }
 </style>
