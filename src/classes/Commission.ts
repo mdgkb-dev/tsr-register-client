@@ -105,9 +105,9 @@ export default class Commission {
     const f = new DateTimeFormat();
     return `${f.format(this.startDate)}-${f.format(this.endDate)}`;
   }
-  
 
-setDrugNeedingId(id?: string): void {
-  this.drugNeedingId = id
-}
+  setDrugNeeding(item: DrugNeeding): void {
+    this.drugNeedingId = item.id;
+    this.drugNeeding = item;
+  }
 }

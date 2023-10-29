@@ -36,19 +36,12 @@ export default defineComponent({
 
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
 
-    const selectOrAddResult = async (research: Research) => {
-      if (research.withDates) {
-        return;
-      }
+    onBeforeMount(async () => {
+      Provider.store.commit('researchesResults/set');
+      await getPatientResearch(research.value);
       if (patientResearch.value.researchResults.length > 0) {
         return await selectResult(patientResearch.value.getLastResult()?.id as string);
       }
-      await addResult();
-    };
-
-    onBeforeMount(async () => {
-      await getPatientResearch(research.value);
-      await selectOrAddResult(research.value);
     });
 
     const createPatientResearch = async (research: Research) => {
@@ -78,6 +71,7 @@ export default defineComponent({
     onBeforeUnmount(() => {
       Provider.store.commit('researches/set');
       Provider.store.commit('researchesResults/set');
+      Provider.store.commit('patientsResearches/set');
     });
 
     return {

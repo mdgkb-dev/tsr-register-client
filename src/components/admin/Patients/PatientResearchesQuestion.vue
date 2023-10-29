@@ -47,7 +47,7 @@ export default defineComponent({
     QuestionComponent,
   },
   emits: ['fill'],
-  setup(props, { emit }) {
+  setup() {
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);

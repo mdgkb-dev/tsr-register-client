@@ -85,10 +85,11 @@ export default defineComponent({
         props.commission.drugRecipe?.drugDozeId,
         patient.value.id
       );
+      console.log(drugNeeding);
 
       await Provider.store.dispatch('drugDozes/calculateNeeding', opt);
 
-      props.commission.setDrugNeedingId(drugNeeding.value.id);
+      props.commission.setDrugNeeding(drugNeeding.value);
       await Provider.store.dispatch('commissions/update', props.commission);
     };
 

@@ -2,19 +2,10 @@
   <div class="select-block">
     <Button button-class="plus-button" icon="plus" icon-class="icon-plus" @click="toggleAddAllergen" />
     <div class="item-list">
-      <div
-        v-for="variant in question.questionVariants.filter((q) => !!researchResult.getQuestionVariantAnswer(q.id))"
-        :key="variant.id"
-        class="item-line"
-      >
+      <div v-for="variant in question.questionVariants.filter((q) => !!researchResult.getQuestionVariantAnswer(q.id))" :key="variant.id" class="item-line">
         <div class="left">
           <div class="item-counter">
-            <NumberProp
-              v-if="question.valueType.isNumber()"
-              :research-result="researchResult"
-              :question="question"
-              :variant-id="variant.id"
-            />
+            <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" :variant-id="variant.id" />
           </div>
           <div class="item-name">{{ variant.name }}</div>
         </div>
@@ -41,16 +32,7 @@
         <template #header>
           <div class="header-block">
             <div class="researche-title">
-              <Button
-                text="Назад"
-                background="#ffffff"
-                margin-right="10px"
-                height="42px"
-                font-size="16px"
-                border-radius="5px"
-                color="#343e5c"
-                @click="toggleAddAllergen"
-              >
+              <Button text="Назад" background="#ffffff" margin-right="10px" height="42px" font-size="16px" border-radius="5px" color="#343e5c" @click="toggleAddAllergen">
                 <template #icon>
                   <svg class="icon-back">
                     <use xlink:href="#back"></use>
