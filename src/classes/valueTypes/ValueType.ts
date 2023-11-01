@@ -51,6 +51,9 @@ export default class ValueType {
     if (this.name === ValueTypes.Set) {
       return 'SetProp';
     }
+    if (this.name === ValueTypes.Number) {
+      return 'NumberProp';
+    }
     return ValueTypesComponentMap[this.name].name;
   }
 }

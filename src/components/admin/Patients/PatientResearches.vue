@@ -52,7 +52,7 @@ import PatientResearchComponent from '@/components/admin/Patients/PatientResearc
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
-import MessageConfirmSave from '@/services/classes/messages/MessageConfirmSave';
+import MessageConfirmSave, { Close } from '@/services/classes/messages/MessageConfirmSave';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -88,11 +88,16 @@ export default defineComponent({
     };
 
     const cancelResearchResultsFilling = async () => {
-      const confirmSave = await confirmChangeResult();
-      if (confirmSave) {
-        return await saveResult();
+      try {
+        await confirmChangeResult();
+        await saveResult();
+      } catch (e) {
+        if (e === Close) {
+          return;
+        }
       }
       Provider.store.commit('researchesResults/set');
+      Provider.store.commit('patientsResearches/set');
       Provider.store.commit('researches/set');
     };
 

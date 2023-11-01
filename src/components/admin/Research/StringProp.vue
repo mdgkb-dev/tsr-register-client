@@ -1,5 +1,7 @@
 <template>
-  <el-input v-model="answer.valueString" @input="filledCheck" />
+  {{ researchResult.getOrCreateAnswer(question) === answer }}
+  {{ researchResult.getOrCreateAnswer(question).valueString }}
+  <el-input v-if="answer" v-model="answer.valueString" @input="filledCheck" />
 </template>
 
 <script lang="ts">

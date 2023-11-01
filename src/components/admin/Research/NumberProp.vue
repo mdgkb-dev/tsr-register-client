@@ -1,16 +1,19 @@
 <template>
-  <el-input-number v-model="answer.valueNumber" @change="filledCheck" />
+  {{ researchResult.getOrCreateAnswer(question) === answer }}
+  {{ researchResult.getOrCreateAnswer(question).valueNumber }}
+  <el-input-number v-if="answer" v-model="answer.valueNumber" @input="filledCheck" />
+  <!-- <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" /> -->
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-
 export default defineComponent({
   name: 'NumberProp',
+  // components: { InputNumber },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -20,24 +23,27 @@ export default defineComponent({
       type: Object as PropType<Question>,
       required: true,
     },
-    variantId: {
-      type: String as PropType<string>,
-      default: '',
-    },
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = props.variantId
-      ? ref(props.researchResult.getQuestionVariantAnswer(props.variantId))
-      : ref(props.researchResult.getOrCreateAnswer(props.question));
-    const filledCheck = (v: number): void => {
+    const answer: Ref<Answer | undefined> = ref(undefined);
+    const filledCheck = (): void => {
       if (!answer.value) {
         return;
       }
+      console.log(answer.value === props.researchResult.getOrCreateAnswer(props.question));
+      // const answer: Ref<Answer | undefined> = ref(undefined);
       answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');
     };
+
+    onBeforeMount(() => {
+      console.log();
+      answer.value = props.researchResult.getOrCreateAnswer(props.question);
+      console.log(answer.value === props.researchResult.getOrCreateAnswer(props.question));
+    });
+
     return {
       filledCheck,
       answer,
