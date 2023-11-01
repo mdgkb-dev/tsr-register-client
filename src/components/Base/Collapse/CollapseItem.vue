@@ -239,6 +239,24 @@ export default defineComponent({
   max-height: auto;
 }
 
+
+:deep(.el-form-item__label) {
+  width: 100%;
+  text-align: left;
+}
+
+:deep(.el-form-item) {
+  display: block;
+}
+
+:deep(.el-input__inner) {
+  height: 40px;
+}
+
+:deep(.el-radio:first-child) {
+  padding-left: 20px;
+}
+
 .hidden-part {
   visibility: hidden;
   opacity: 0;
