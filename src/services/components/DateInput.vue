@@ -30,7 +30,7 @@ export default defineComponent({
     width: { type: String as PropType<string>, required: false, default: 'auto' },
   },
   emits: ['update:modelValue', 'change'],
-  setup(props, { emit }) {
+  setup(props) {
     const modelValueString = props.modelValue.toLocaleDateString('ru-RU', {
       day: '2-digit',
       month: '2-digit',

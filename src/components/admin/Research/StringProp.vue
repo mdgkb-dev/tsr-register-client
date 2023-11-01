@@ -1,5 +1,5 @@
 <template>
-  <el-input v-model="answer.valueString" @input="filledCheck" />
+  <el-input v-if="answer" v-model="answer.valueString" @input="filledCheck" />
 </template>
 
 <script lang="ts">
