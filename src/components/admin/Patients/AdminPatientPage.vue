@@ -8,7 +8,7 @@
       </div>
     </template>
     <template #body>
-      <InputNumber />
+      <!-- <InputNumber /> -->
       <component v-bind="menusProperties" :is="activeMenu.component" :key="componentKey" />
     </template>
   </MenuContainer>
