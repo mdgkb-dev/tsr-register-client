@@ -5,7 +5,7 @@
         <use xlink:href="#minus"></use>
       </svg>
     </button>
-    <input v-model="num" type="number" min="0" step="0.1" @input="$emit('change')" />
+    <input v-model="num" class="input-field" type="number" min="0" step="0.1" @input="input" />
     <button class="number-plus" type="button" @click="increase">
       <svg class="icon-plus">
         <use xlink:href="#plus"></use>
@@ -36,20 +36,26 @@ export default defineComponent({
     const increase = () => {
       num.value++;
       emit('update:modelValue', num.value);
-      // emit('change');
+      emit('change');
     };
 
     const decrease = () => {
       num.value--;
-      // props.modelValue = num.value;
       emit('update:modelValue', num.value);
-      // emit('change');
+      emit('change');
+    };
+
+    const input = (v: number) => {
+      console.log(v);
+      emit('update:modelValue', num.value);
+      emit('change');
     };
 
     return {
       num,
       increase,
       decrease,
+      input,
     };
   },
 });
@@ -57,6 +63,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.input-field:hover {
+  cursor: text !important;
+}
 
 .icon-plus {
   width: 16px;

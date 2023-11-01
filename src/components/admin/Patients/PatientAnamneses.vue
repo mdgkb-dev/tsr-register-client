@@ -100,17 +100,20 @@ export default defineComponent({
     };
 
     const saveResult = async (): Promise<void> => {
-      await Provider.store.dispatch('researchesResults/update', researchResult.value);
-      if (patientResearch.value) {
-        patientResearch.value.recalculate(researchResult.value);
-        await Provider.store.dispatch('patientsResearches/update', patientResearch.value);
+      if (researchResult.value.changed) {
+        await Provider.store.dispatch('researchesResults/update', researchResult.value);
+        if (patientResearch.value) {
+          patientResearch.value.recalculate(researchResult.value);
+          await Provider.store.dispatch('patientsResearches/update', patientResearch.value);
+        }
+        ElMessage.success('Исследование успешно сохранено');
       }
+
       if (!research.value.withDates) {
         Provider.store.commit('researchesResults/set');
         Provider.store.commit('researches/set');
       }
       researchResult.value.changed = false;
-      ElMessage.success('Исследование успешно сохранено');
     };
 
     return {
