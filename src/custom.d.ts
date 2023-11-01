@@ -1,4 +1,4 @@
 declare module '*.svg' {
-  const content: never;
+  const content: Record<string, never>;
   export default content;
 }

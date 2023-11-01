@@ -41,6 +41,8 @@ export default defineComponent({
       await getPatientResearch(research.value);
       if (patientResearch.value.researchResults.length > 0) {
         return await selectResult(patientResearch.value.getLastResult()?.id as string);
+      } else if (!research.value.withDates) {
+        return await addResult();
       }
     });
 

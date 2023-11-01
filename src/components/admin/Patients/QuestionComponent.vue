@@ -41,6 +41,7 @@ export default defineComponent({
     const fill = () => {
       scroll(props.question.getIdWithoutDashes());
       researchResult.value.changed = true;
+      console.log(researchResult.value);
     };
     return {
       researchResult,

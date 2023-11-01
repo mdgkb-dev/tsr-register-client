@@ -1,16 +1,17 @@
 <template>
-  <el-input-number v-model="answer.valueNumber" @change="filledCheck" />
+  <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" @change="filledCheck" />
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-
+import InputNumber from '@/components/Base/InputNumber.vue';
 export default defineComponent({
   name: 'NumberProp',
+  components: { InputNumber },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -20,17 +21,11 @@ export default defineComponent({
       type: Object as PropType<Question>,
       required: true,
     },
-    variantId: {
-      type: String as PropType<string>,
-      default: '',
-    },
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = props.variantId
-      ? ref(props.researchResult.getQuestionVariantAnswer(props.variantId))
-      : ref(props.researchResult.getOrCreateAnswer(props.question));
-    const filledCheck = (v: number): void => {
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    const filledCheck = (): void => {
       if (!answer.value) {
         return;
       }
@@ -38,6 +33,7 @@ export default defineComponent({
       props.researchResult.calculateFilling();
       emit('fill');
     };
+
     return {
       filledCheck,
       answer,
