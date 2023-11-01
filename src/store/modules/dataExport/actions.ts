@@ -13,7 +13,7 @@ const httpClient = new HttpClient('data-export');
 
 const actions: ActionTree<RootState, RootState> = {
   export: async (_, exportOptions: ExportOptions): Promise<void> => {
-    await httpClient.get<SearchModel>({ query: `?exportOptions=${JSON.stringify(exportOptions)}`, isBlob: true });
+    await httpClient.get<SearchModel>({ query: `?exportOptions=${JSON.stringify(exportOptions)}`, isBlob: true, downloadFileName: exportOptions.getFileName() });
   },
 };
 

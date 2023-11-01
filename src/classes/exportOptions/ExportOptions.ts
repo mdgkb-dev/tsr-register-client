@@ -1,4 +1,5 @@
 import ExportTypes from '@/classes/exportOptions/ExportTypes';
+import DateTimeFormatter from '@/services/DateFormat';
 
 export type ExportOptionsObject = Record<string, unknown>;
 export type ExportOptionsMap = {
@@ -7,10 +8,12 @@ export type ExportOptionsMap = {
 
 export default class ExportOptions {
   exportType: ExportTypes = ExportTypes.XLSX;
+  fileName = ExportOptions.getDefaultName(ExportTypes.XLSX);
   options: ExportOptionsMap = {};
 
   constructor(exportType: ExportTypes) {
     this.exportType = exportType;
+    this.fileName = ExportOptions.getDefaultName(exportType);
   }
 
   setOptions(...options: ExportOptionsObject[]): void {
@@ -31,5 +34,10 @@ export default class ExportOptions {
     const rootOptions = new ExportOptions(ExportTypes.PDF);
     rootOptions.setOptions(...options);
     return rootOptions;
+  }
+
+  private static getDefaultName(exportType: ExportTypes): string {
+    const f = new DateTimeFormatter();
+    return `Данные от ${f.format(new Date())}.${exportType}`;
   }
 }
