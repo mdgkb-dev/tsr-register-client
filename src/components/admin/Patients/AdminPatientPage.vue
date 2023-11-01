@@ -8,6 +8,7 @@
       </div>
     </template>
     <template #body>
+      <InputNumber />
       <component v-bind="menusProperties" :is="activeMenu.component" :key="componentKey" />
     </template>
   </MenuContainer>
@@ -31,6 +32,7 @@ import PatientPageInfo from '@/components/admin/Patients/PatientPageInfo.vue';
 import PatientRegisters from '@/components/admin/Patients/PatientRegisters.vue';
 import PatientRepresentatives from '@/components/admin/Patients/PatientRepresentatives.vue';
 import PatientResearches from '@/components/admin/Patients/PatientResearches.vue';
+import InputNumber from '@/components/Base/InputNumber.vue';
 import HumanForm from '@/components/HumanForm.vue';
 import MkbForm from '@/components/Mkb/MkbForm.vue';
 import CustomSection from '@/services/classes/page/CustomSection';
@@ -59,6 +61,7 @@ export default defineComponent({
     PatientHistories,
     PatientCommissions,
     PatientAnamneses,
+    InputNumber,
   },
   setup() {
     const componentKey = ref(0);
