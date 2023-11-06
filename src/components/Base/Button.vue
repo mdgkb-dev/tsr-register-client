@@ -27,6 +27,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, ref } from 'vue';
 
+import Aright from '@/assets/svg/Aright.svg';
 import Back from '@/assets/svg/Back.svg';
 import Close from '@/assets/svg/Close.svg';
 import Commission from '@/assets/svg/Commission.svg';
@@ -38,7 +39,6 @@ import Filter from '@/assets/svg/Filter.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
 import Plus from '@/assets/svg/Plus.svg';
 import Save from '@/assets/svg/Save.svg';
-import Aright from '@/assets/svg/Aright.svg';
 
 export default defineComponent({
   name: 'Button',
@@ -54,7 +54,7 @@ export default defineComponent({
     Commission,
     Back,
     Save,
-    Aright
+    Aright,
   },
   inheritAttrs: false,
   props: {

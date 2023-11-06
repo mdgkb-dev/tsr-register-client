@@ -1,10 +1,6 @@
 <template>
   <el-timeline>
-    <el-timeline-item
-      v-for="history in patient.patientHistories"
-      :key="history.id"
-      :timestamp="$dateTimeFormatter.format(history.createdAt)"
-    >
+    <el-timeline-item v-for="history in patient.patientHistories" :key="history.id" :timestamp="$dateTimeFormatter.format(history.createdAt)">
       {{ history.getInfo() }}
     </el-timeline-item>
   </el-timeline>

@@ -5,13 +5,7 @@
     <!--      <el-button @click="addDiagnosis">Добавить диагноз</el-button>-->
     <!--      <MkbTreeDialog :store-module="storeModule" />-->
     <!--    </el-space>-->
-    <el-table
-      :data="mkbLinker.getMkbItems()"
-      :row-key="(row) => row.id"
-      class="table-shadow"
-      header-row-class-name="header-style"
-      :expand-row-keys="expandRowKeys"
-    >
+    <el-table :data="mkbLinker.getMkbItems()" :row-key="(row) => row.id" class="table-shadow" header-row-class-name="header-style" :expand-row-keys="expandRowKeys">
       <!--      <el-table-column type="index" width="60" align="center" />-->
 
       <!--      <el-table-column type="expand">-->

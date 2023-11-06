@@ -1,12 +1,6 @@
 <template>
   <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" @select="addPatient" />
-  <el-table
-    v-if="mount"
-    :data="representative.representativeToPatient"
-    style="width: 600px"
-    class="table-shadow"
-    header-row-class-name="header-style"
-  >
+  <el-table v-if="mount" :data="representative.representativeToPatient" style="width: 600px" class="table-shadow" header-row-class-name="header-style">
     <el-table-column type="index" width="50" align="center" />
     <el-table-column type="index" width="50" align="center" />
     <el-table-column label="ФИО" align="start">
@@ -19,12 +13,7 @@
 
     <el-table-column label="Роль подопечного" width="250" align="center">
       <template #default="scope">
-        <el-form-item
-          label-width="0"
-          style="margin: 0"
-          :rules="rules.representativeTypeId"
-          :prop="`representativeToPatient.${scope.$index}.representativeTypeId`"
-        >
+        <el-form-item label-width="0" style="margin: 0" :rules="rules.representativeTypeId" :prop="`representativeToPatient.${scope.$index}.representativeTypeId`">
           <el-select v-model="scope.row.representativeTypeId" placeholder="Роль подопечного" :disabled="!scope.row.patientId">
             <el-option v-for="item in representativeTypes" :key="item.id" :label="item.childMaleType" :value="item.id"></el-option>
           </el-select>
@@ -36,13 +25,7 @@
       <template #default="scope">
         <TableButtonGroup
           :show-remove-button="true"
-          @remove="
-            $classHelper.RemoveFromClassByIndex(
-              scope.$index,
-              representative.representativeToPatient,
-              representative.representativeToPatientForDelete
-            )
-          "
+          @remove="$classHelper.RemoveFromClassByIndex(scope.$index, representative.representativeToPatient, representative.representativeToPatientForDelete)"
         />
       </template>
     </el-table-column>

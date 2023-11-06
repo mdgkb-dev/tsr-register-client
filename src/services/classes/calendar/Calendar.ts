@@ -73,10 +73,7 @@ export default class Calendar {
         return days.concat(d);
       }
       if (m.firstWeekActive) {
-        const d = this.years[activeYearIndex].months[mi - 1].weeks[this.years[activeYearIndex].months[mi - 1].weeks.length - 1].days.slice(
-          0,
-          lostDays
-        );
+        const d = this.years[activeYearIndex].months[mi - 1].weeks[this.years[activeYearIndex].months[mi - 1].weeks.length - 1].days.slice(0, lostDays);
         return d.concat(days);
       }
     }

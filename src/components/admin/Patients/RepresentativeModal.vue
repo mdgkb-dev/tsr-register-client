@@ -1,14 +1,6 @@
 <template>
   <div class="representative-page-container">
-    <el-dialog
-      v-if="show"
-      top="0vh"
-      :model-value="show"
-      width="70%"
-      :show-close="false"
-      :before-close="beforeClose"
-      @close="$emit('close')"
-    >
+    <el-dialog v-if="show" top="0vh" :model-value="show" width="70%" :show-close="false" :before-close="beforeClose" @close="$emit('close')">
       <template #title>
         <div class="dialog-header">
           <div>

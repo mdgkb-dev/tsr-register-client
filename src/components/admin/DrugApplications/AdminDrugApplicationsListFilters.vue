@@ -2,15 +2,7 @@
   <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem
-          title="поиск и сортировка"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          :with-hover="false"
-        >
+        <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" :with-hover="false">
           <div :style="{ width: '100%' }">
             <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="load" />
           </div>
@@ -19,33 +11,19 @@
     </template>
 
     <template #filter>
-      <GridContainer
-        max-width="900px"
-        grid-gap="70px 10px"
-        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
-        margin="0 0 0 10px"
-      >
+      <GridContainer max-width="900px" grid-gap="70px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0 0 0 10px">
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
           <FiltersButtonsMultiply
             :filter-model="filterByStatus"
             :options="createStatusesOptions()"
             default-label="статус"
             :inverse="true"
-            :grid-template-columns="
-              mobileWindow ? 'repeat(auto-fit, minmax(calc(50% - 7px), 1fr))' : 'repeat(auto-fit, minmax(calc(30% - 7px), 1fr))'
-            "
+            :grid-template-columns="mobileWindow ? 'repeat(auto-fit, minmax(calc(50% - 7px), 1fr))' : 'repeat(auto-fit, minmax(calc(30% - 7px), 1fr))'"
             :height="mobileWindow ? '134px' : '98px'"
             @load="$emit('load')"
           />
         </GridContainer>
-        <GridContainer
-          max-width="500px"
-          grid-gap="10px"
-          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-          margin="0px"
-          background="#F5F6F8"
-        >
-        </GridContainer>
+        <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8"> </GridContainer>
       </GridContainer>
     </template>
   </RightSliderContainer>

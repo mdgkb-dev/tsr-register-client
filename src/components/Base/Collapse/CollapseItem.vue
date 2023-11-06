@@ -235,7 +235,6 @@ export default defineComponent({
   max-height: auto;
 }
 
-
 :deep(.el-form-item__label) {
   width: 100%;
   text-align: left;

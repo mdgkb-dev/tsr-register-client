@@ -456,12 +456,7 @@ describe('Class Patient', () => {
     registerPropertyToPatient3.registerPropertyId = propertyId3;
     registerPropertyToPatient4.registerPropertyId = propertyId4;
 
-    patient.registerPropertyToPatient = [
-      registerPropertyToPatient1,
-      registerPropertyToPatient2,
-      registerPropertyToPatient3,
-      registerPropertyToPatient4,
-    ];
+    patient.registerPropertyToPatient = [registerPropertyToPatient1, registerPropertyToPatient2, registerPropertyToPatient3, registerPropertyToPatient4];
 
     // Assert
     expect(patient.findProperty(propertyId1)).toBe(registerPropertyToPatient1);
@@ -529,12 +524,7 @@ describe('Class Patient', () => {
     registerPropertyToPatient4.valueOther = valueOther4;
 
     patient = new Patient();
-    patient.registerPropertyToPatient = [
-      registerPropertyToPatient1,
-      registerPropertyToPatient2,
-      registerPropertyToPatient3,
-      registerPropertyToPatient4,
-    ];
+    patient.registerPropertyToPatient = [registerPropertyToPatient1, registerPropertyToPatient2, registerPropertyToPatient3, registerPropertyToPatient4];
 
     // Assert
     expect(patient.getOtherPropertyValue(registerProperty1)).toBe(valueOther1);

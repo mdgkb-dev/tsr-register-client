@@ -8,14 +8,7 @@
         <el-input placeholder="ФИО врача" :model-value="anamnesis.doctorName" @input="(e) => anamnesis.setDoctorName(e)" @blur="update" />
       </el-form-item>
       <el-form-item>
-        <el-input
-          type="textarea"
-          class="textarea"
-          :autosize="{ minRows: 3, maxRows: 7 }"
-          :model-value="anamnesis.value"
-          @input="(e) => anamnesis.setValue(e)"
-          @blur="update"
-        >
+        <el-input type="textarea" class="textarea" :autosize="{ minRows: 3, maxRows: 7 }" :model-value="anamnesis.value" @input="(e) => anamnesis.setValue(e)" @blur="update">
         </el-input>
       </el-form-item>
       <Button

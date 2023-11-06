@@ -26,12 +26,7 @@ const PatientsSortsLib = (() => {
   }
 
   function byCreatedAt(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
-      modelName,
-      'createdAt',
-      order ? order : Orders.Asc,
-      `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`
-    );
+    return SortModel.CreateSortModelV2(modelName, 'createdAt', order ? order : Orders.Asc, `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
   }
 
   return {
