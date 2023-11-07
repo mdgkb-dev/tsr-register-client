@@ -1,18 +1,22 @@
 import { Module } from 'vuex';
 
-import Drug from '@/classes/drugs/Drug';
+import Drug from '@/classes/Drug';
+import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
-import { State } from './state';
 
-export const state: State = {
-  drugs: [],
-  drug: new Drug(),
-  activeCollapseName: '0',
+export type State = IBasicState<Drug>;
+export const getDefaultState = (): State => {
+  return {
+    ...getBaseDefaultState(Drug),
+  };
 };
+
+const state = getDefaultState();
 
 const namespaced = true;
 

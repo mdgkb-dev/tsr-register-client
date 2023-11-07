@@ -1,17 +1,13 @@
 import { GetterTree } from 'vuex';
 
-import IDocumentType from '@/interfaces/documents/IDocumentType';
+import DocumentType from '@/classes/DocumentType';
+import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
-import State from './state';
+import { State } from './index';
 
 const getters: GetterTree<State, RootState> = {
-  documentType(state: State): IDocumentType | undefined {
-    return state.documentType;
-  },
-  documentTypes(state: State): IDocumentType[] | undefined {
-    return state.documentTypes;
-  },
+  ...getBaseGetters<DocumentType, State>(),
 };
 
 export default getters;

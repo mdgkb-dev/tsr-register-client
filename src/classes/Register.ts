@@ -1,70 +1,57 @@
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import PatientRegister from '@/classes/PatientRegister';
+import Question from '@/classes/Question';
 import RegisterDiagnosis from '@/classes/RegisterDiagnosis';
-import RegisterGroup from '@/classes/RegisterGroup';
-import RegisterToPatient from '@/classes/RegisterToPatient';
-import IRegister from '@/interfaces/IRegister';
-import IRegisterDiagnosis from '@/interfaces/IRegisterDiagnosis';
-import IRegisterGroup from '@/interfaces/IRegisterGroup';
-import IRegisterProperty from '@/interfaces/IRegisterProperty';
-import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
-import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
+import Research from '@/classes/Research';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class Register implements IRegister {
+export default class Register {
   id?: string;
   name = '';
-  registerDiagnosis: IRegisterDiagnosis[] = [];
+  @ClassHelper.GetClassConstructor(RegisterDiagnosis)
+  registerDiagnosis: RegisterDiagnosis[] = [];
   registerDiagnosisForDelete: string[] = [];
-  registerGroups: IRegisterGroup[] = [];
+  @ClassHelper.GetClassConstructor(Research)
+  registerGroups: Research[] = [];
   registerGroupsForDelete: string[] = [];
-  registerToPatient: IRegisterToPatient[] = [];
+  @ClassHelper.GetClassConstructor(PatientRegister)
+  patientsRegisters: PatientRegister[] = [];
   registerGroupToRegisterForDelete: string[] = [];
   registerToPatientCount = 0;
 
-  constructor(i?: IRegister) {
-    if (!i) return;
-
-    this.id = i.id;
-    this.name = i.name;
-    if (i.registerGroups) {
-      this.registerGroups = i.registerGroups.map((item: IRegisterGroup) => new RegisterGroup(item));
-    }
-    if (i.registerDiagnosis) {
-      this.registerDiagnosis = i.registerDiagnosis.map((registerDiagnosis: IRegisterDiagnosis) => new RegisterDiagnosis(registerDiagnosis));
-    }
-    if (i.registerToPatient) {
-      this.registerToPatient = i.registerToPatient.map((item: IRegisterToPatient) => new RegisterToPatient(item));
-    }
-    this.registerToPatientCount = i.registerToPatientCount;
+  constructor(i?: Register) {
+    ClassHelper.BuildClass(this, i);
   }
 
-  getProps(): IRegisterProperty[] {
-    const props: IRegisterProperty[] = [];
-    this.registerGroups.forEach((group: IRegisterGroup) =>
-      group.registerProperties.forEach((property: IRegisterProperty) => {
+  getProps(): Question[] {
+    const props: Question[] = [];
+    this.registerGroups.forEach((group: Research) =>
+      group.questions.forEach((property: Question) => {
         props.push(property);
       })
     );
-    return props as IRegisterProperty[];
+    return props as Question[];
   }
 
-  patientIncludableByDiagnosis(patientDiagnosis: IPatientDiagnosis[]): boolean {
+  patientIncludableByDiagnosis(patientDiagnosis: PatientDiagnosis[]): boolean {
     if (this.registerDiagnosis.length === 0) return true;
-    const diagnosis = patientDiagnosis.find((d: IPatientDiagnosis) => {
-      return !!this.registerDiagnosis.find((i) => i.mkbDiagnosisId === d.mkbDiagnosisId);
+    const diagnosis = patientDiagnosis.find((d: PatientDiagnosis) => {
+      return !!this.registerDiagnosis.find((i) => i.mkbItemId === d.mkbItemId);
     });
     return !!diagnosis;
   }
 
-  patientInRegister(registerToPatient: IRegisterToPatient[]): boolean {
-    return !!registerToPatient.find((i: IRegisterToPatient) => i.registerId === this.id);
+  patientInRegister(registerToPatient: PatientRegister[]): boolean {
+    return !!registerToPatient.find((i: PatientRegister) => i.registerId === this.id);
   }
 
   getTagName(): string {
-    if (this.name.length > 10) return this.name.replace(/(?<=.{9}).+/g, '...');
+    if (this.name.length > 30) return this.name.replace(/(?<=.{9}).+/g, '...');
     return this.name;
   }
 
-  addRegisterGroup(item?: IRegisterGroup): void {
-    const newItem = new RegisterGroup(item);
+  addRegisterGroup(item?: Research): void {
+    const newItem = new Research(item);
     newItem.order = this.registerGroups.length;
     this.registerGroups.push(newItem);
   }
@@ -78,6 +65,6 @@ export default class Register implements IRegister {
   }
 
   sortGroups(): void {
-    this.registerGroups.forEach((item: IRegisterGroup, index: number) => (item.order = index));
+    this.registerGroups.forEach((item: Research, index: number) => (item.order = index));
   }
 }

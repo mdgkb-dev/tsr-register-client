@@ -1,20 +1,13 @@
 import { GetterTree } from 'vuex';
 
-import IRepresentativeType from '@/interfaces/representatives/IRepresentativeType';
+import RepresentativeType from '@/classes/RepresentativeType';
+import getBaseGetters from '@/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
-import { State } from './state';
+import { State } from './index';
 
 const getters: GetterTree<State, RootState> = {
-  representativeTypes(state): IRepresentativeType[] {
-    return state.representativeTypes;
-  },
-  representativeType(state): IRepresentativeType | undefined {
-    return state.representativeType;
-  },
-  getById(state, id: string): IRepresentativeType | undefined {
-    return state.representativeTypes.find((item: IRepresentativeType) => item.id === id);
-  },
+  ...getBaseGetters<RepresentativeType, State>(),
 };
 
 export default getters;

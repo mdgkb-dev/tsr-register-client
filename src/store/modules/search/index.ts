@@ -1,6 +1,6 @@
 import { Module } from 'vuex';
 
-import SearchModel from '@/classes/SearchModel';
+import SearchModel from '@/services/classes/SearchModel';
 import RootState from '@/store/types';
 
 import actions from './actions';
@@ -12,6 +12,7 @@ export const state: State = {
   isSearchDrawerOpen: false,
   searchModel: new SearchModel(),
   searchGroups: [],
+  count: 0,
 };
 
 const namespaced = true;

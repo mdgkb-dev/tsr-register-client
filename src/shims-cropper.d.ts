@@ -3,9 +3,7 @@ declare module 'vue-advanced-cropper' {
 
   type CombinedVueInstance<Instance extends Vue, Data, Methods, Computed, Props> = Data & Methods & Computed & Props & Instance;
 
-  type ExtendedVue<Instance extends Vue, Data, Methods, Computed, Props> = VueConstructor<
-    CombinedVueInstance<Instance, Data, Methods, Computed, Props> & Vue
-  >;
+  type ExtendedVue<Instance extends Vue, Data, Methods, Computed, Props> = VueConstructor<CombinedVueInstance<Instance, Data, Methods, Computed, Props> & Vue>;
 
   const Cropper: ExtendedVue<
     Vue,

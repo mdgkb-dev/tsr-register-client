@@ -1,17 +1,17 @@
+import Answer from '@/classes/Answer';
 import HeightWeight from '@/classes/anthropometry/HeightWeight';
-import Disability from '@/classes/disability/Disability';
-import Edv from '@/classes/disability/Edv';
-import Document from '@/classes/documents/Document';
-import FileInfoToDocument from '@/classes/documents/FileInfoToDocument';
+import Disability from '@/classes/Disability';
+import Document from '@/classes/Document';
+import DocumentFileInfo from '@/classes/DocumentFileInfo';
+import Edv from '@/classes/Edv';
 import FileInfo from '@/classes/files/FileInfo';
 import History from '@/classes/history/History';
-import Human from '@/classes/humans/Human';
-import Patient from '@/classes/patients/Patient';
-import PatientDiagnosis from '@/classes/patients/PatientDiagnosis';
-import PatientDiagnosisAnamnesis from '@/classes/patients/PatientDiagnosisAnamnesis';
-import RegisterProperty from '@/classes/RegisterProperty';
-import RegisterPropertySetToPatient from '@/classes/RegisterPropertySetToPatient';
-import RegisterPropertyToPatient from '@/classes/RegisterPropertyToPatient';
+import Human from '@/classes/Human';
+import Patient from '@/classes/Patient';
+import PatientDiagnosis from '@/classes/PatientDiagnosis';
+import Anamnesis from '@/classes/PatientDiagnosisAnamnesis';
+import Question from '@/classes/Question';
+import PatientAnswer from '@/classes/RegisterPropertySetToPatient';
 import ValueType from '@/classes/valueTypes/ValueType';
 import ICircumference from '@/interfaces/anthropometry/ICircumference';
 import IHeightWeight from '@/interfaces/anthropometry/IHeightWeight';
@@ -19,13 +19,12 @@ import IDisability from '@/interfaces/disabilities/IDisability';
 import IRegisterPropertySetToPatient from '@/interfaces/IRegisterPropertySetToPatient';
 import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
 import IRegisterToPatient from '@/interfaces/IRegisterToPatient';
-import IPatient from '@/interfaces/patients/IPatient';
 import IPatientDiagnosis from '@/interfaces/patients/IPatientDiagnosis';
 import IPatientDrugRegimen from '@/interfaces/patients/IPatientDrugRegimen';
 import IRepresentativeToPatient from '@/interfaces/representatives/IRepresentativeToPatient';
 
 describe('Class Patient', () => {
-  let patient: IPatient | undefined;
+  let patient: Patient | undefined;
   const emptyString = '';
 
   afterEach(() => {
@@ -41,7 +40,7 @@ describe('Class Patient', () => {
     expect(patient.human).toBeInstanceOf(Human);
     expect(patient.patientDiagnosis).toHaveLength(0);
     expect(patient.patientDiagnosisForDelete).toHaveLength(0);
-    expect(patient.representativeToPatient).toHaveLength(0);
+    expect(patient.patientsRepresentatives).toHaveLength(0);
     expect(patient.representativeToPatientForDelete).toHaveLength(0);
     expect(patient.disabilities).toHaveLength(0);
     expect(patient.disabilitiesForDelete).toHaveLength(0);
@@ -51,7 +50,7 @@ describe('Class Patient', () => {
     expect(patient.chestCircumferenceForDelete).toHaveLength(0);
     expect(patient.headCircumference).toHaveLength(0);
     expect(patient.headCircumferenceForDelete).toHaveLength(0);
-    expect(patient.registerToPatient).toHaveLength(0);
+    expect(patient.patientsRegisters).toHaveLength(0);
     expect(patient.registerToPatientForDelete).toHaveLength(0);
     expect(patient.registerPropertyToPatient).toHaveLength(0);
     expect(patient.registerPropertySetToPatient).toHaveLength(0);
@@ -92,7 +91,7 @@ describe('Class Patient', () => {
       history,
       patientDiagnosis,
       patientDiagnosisForDelete,
-      representativeToPatient,
+      patientsRepresentatives: representativeToPatient,
       representativeToPatientForDelete,
       disabilities,
       disabilitiesForDelete,
@@ -102,7 +101,7 @@ describe('Class Patient', () => {
       chestCircumferenceForDelete,
       headCircumference,
       headCircumferenceForDelete,
-      registerToPatient,
+      patientsRegisters: registerToPatient,
       registerToPatientForDelete,
       registerPropertyToPatient,
       registerPropertySetToPatient,
@@ -240,181 +239,182 @@ describe('Class Patient', () => {
   });
 
   /*   test('getBmiGroup() возвращает строку "Недостаточно данных" когда рост или вес не заполнены в записи с наиболее поздней датой в heightWeight[]', () => {
-    // Arrange
-    const message = 'Недостаточно данных';
-    const heightWeights1: IHeightWeight[] = [
-      new HeightWeight({
-        height: 0,
-        weight: 50,
-        date: '2000-01-03',
-      }),
-    ];
+      // Arrange
+      const message = 'Недостаточно данных';
+      const heightWeights1: IHeightWeight[] = [
+        new HeightWeight({
+          height: 0,
+          weight: 50,
+          date: '2000-01-03',
+        }),
+      ];
 
-    patient = new Patient();
-    patient.heightWeight = heightWeights1;
+      patient = new Patient();
+      patient.heightWeight = heightWeights1;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
 
-    // Arrange
-    const heightWeights2: IHeightWeight[] = [
-      new HeightWeight({
-        height: 50,
-        weight: 0,
-        date: '2000-01-03',
-      }),
-    ];
+      // Arrange
+      const heightWeights2: IHeightWeight[] = [
+        new HeightWeight({
+          height: 50,
+          weight: 0,
+          date: '2000-01-03',
+        }),
+      ];
 
-    patient = new Patient();
-    patient.heightWeight = heightWeights2;
+      patient = new Patient();
+      patient.heightWeight = heightWeights2;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные по дате рождения или дате изменения" когда пациент старше 230 месяцев', () => {
-    // Arrange
-    const message = 'Некорректные данные по дате рождения или дате изменения';
-    patient = new Patient();
-    const today = new Date();
-    const twentyYearsBeforeToday = new Date().setFullYear(today.getFullYear() - 20);
-    patient.human.dateBirth = twentyYearsBeforeToday.toString();
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные по дате рождения или дате изменения" когда пациент старше 230 месяцев', () => {
+      // Arrange
+      const message = 'Некорректные данные по дате рождения или дате изменения';
+      patient = new Patient();
+      const today = new Date();
+      const twentyYearsBeforeToday = new Date().setFullYear(today.getFullYear() - 20);
+      patient.human.dateBirth = twentyYearsBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: 50,
-        weight: 50,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: 50,
+          weight: 50,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные антропометрии" когда параметры роста и веса за пределами допустимых значений', () => {
-    // TODO: Возможно стоит проверить больше пограничных значений.
-    // Arrange
-    const message = 'Некорректные данные антропометрии';
-    patient = new Patient();
-    const today = new Date();
-    const tenYearsBeforeToday = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
-    patient.human.dateBirth = tenYearsBeforeToday.toString();
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает строку "Некорректные данные антропометрии" когда параметры роста и веса за пределами допустимых значений', () => {
+      // TODO: Возможно стоит проверить больше пограничных значений.
+      // Arrange
+      const message = 'Некорректные данные антропометрии';
+      patient = new Patient();
+      const today = new Date();
+      const tenYearsBeforeToday = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+      patient.human.dateBirth = tenYearsBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: 50,
-        weight: 50,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: 50,
+          weight: 50,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(message);
+    });
 
-  test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает группу ИМТ и класс веса для пациента мужского пола', () => {
-    // Arrange
-    const pathalogicClass = 'есть вероятность патологии развития';
-    const possibilityClass = 'возможно потребуются дополнительные обследования и консультации специалистов';
-    const observationClass = 'требуются дополнительные обследования и консультации специалистов';
-    const normalClass = 'нормальный вес';
-    const perfectClass = 'эталон';
-    const group1 = '1st';
-    const group3 = '3rd';
-    const group5 = '5th';
-    const group15 = '15th';
-    const group25 = '25th';
-    const group50 = '50th';
-    const group75 = '75th';
-    const group85 = '85th';
-    const group95 = '95th';
-    const group97 = '97th';
-    const group99 = '99th';
-    const height = 50;
-    const pathalogicWeight1 = 2.7;
-    const pathalogicWeight99 = 4.4;
-    const possibilityWeight3 = 3;
-    const possibilityWeight5 = 3.15;
-    const possibilityWeight95 = 4.2;
-    const possibilityWeight97 = 4.35;
-    const observationWeight15 = 3.2;
-    const observationWeight85 = 4;
-    const normalWeight25 = 3.4;
-    const normalWeight75 = 3.8;
-    const perfectWeight50 = 3.6;
+    test('getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale) возвращает группу ИМТ и класс веса для пациента мужского пола', () => {
+      // Arrange
+      const pathalogicClass = 'есть вероятность патологии развития';
+      const possibilityClass = 'возможно потребуются дополнительные обследования и консультации специалистов';
+      const observationClass = 'требуются дополнительные обследования и консультации специалистов';
+      const normalClass = 'нормальный вес';
+      const perfectClass = 'эталон';
+      const group1 = '1st';
+      const group3 = '3rd';
+      const group5 = '5th';
+      const group15 = '15th';
+      const group25 = '25th';
+      const group50 = '50th';
+      const group75 = '75th';
+      const group85 = '85th';
+      const group95 = '95th';
+      const group97 = '97th';
+      const group99 = '99th';
+      const height = 50;
+      const pathalogicWeight1 = 2.7;
+      const pathalogicWeight99 = 4.4;
+      const possibilityWeight3 = 3;
+      const possibilityWeight5 = 3.15;
+      const possibilityWeight95 = 4.2;
+      const possibilityWeight97 = 4.35;
+      const observationWeight15 = 3.2;
+      const observationWeight85 = 4;
+      const normalWeight25 = 3.4;
+      const normalWeight75 = 3.8;
+      const perfectWeight50 = 3.6;
 
-    patient = new Patient();
-    const today = new Date();
-    const oneMonthBeforeToday = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-    patient.human.dateBirth = oneMonthBeforeToday.toString();
+      patient = new Patient();
+      const today = new Date();
+      const oneMonthBeforeToday = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+      patient.human.dateBirth = oneMonthBeforeToday.toString();
 
-    patient.heightWeight = [
-      new HeightWeight({
-        height: height,
-        weight: pathalogicWeight1,
-        date: today.toString(),
-      }),
-    ];
+      patient.heightWeight = [
+        new HeightWeight({
+          height: height,
+          weight: pathalogicWeight1,
+          date: today.toString(),
+        }),
+      ];
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group1}, ${pathalogicClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group1}, ${pathalogicClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = pathalogicWeight99;
+      // Arrange
+      patient.heightWeight[0].weight = pathalogicWeight99;
 
-    // Arrange
-    patient.heightWeight[0].weight = possibilityWeight95;
+      // Arrange
+      patient.heightWeight[0].weight = possibilityWeight95;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group95}, ${possibilityClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group95}, ${possibilityClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = possibilityWeight97;
+      // Arrange
+      patient.heightWeight[0].weight = possibilityWeight97;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group97}, ${possibilityClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group97}, ${possibilityClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = observationWeight15;
+      // Arrange
+      patient.heightWeight[0].weight = observationWeight15;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group15}, ${observationClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group15}, ${observationClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = observationWeight85;
+      // Arrange
+      patient.heightWeight[0].weight = observationWeight85;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
-      `${group85}, ${observationClass}`
-    );
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(
+        `${group85}, ${observationClass}`
+      );
 
-    // Arrange
-    patient.heightWeight[0].weight = normalWeight25;
+      // Arrange
+      patient.heightWeight[0].weight = normalWeight25;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group25}, ${normalClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group25}, ${normalClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = normalWeight75;
+      // Arrange
+      patient.heightWeight[0].weight = normalWeight75;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group75}, ${normalClass}`);
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group75}, ${normalClass}`);
 
-    // Arrange
-    patient.heightWeight[0].weight = perfectWeight50;
+      // Arrange
+      patient.heightWeight[0].weight = perfectWeight50;
 
-    // Assert
-    expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group50}, ${perfectClass}`);
-  });
+      // Assert
+      expect(patient.getLastHeightWeight()?.getBmiGroup(patient.human.dateBirth, patient.human.isMale)).toBe(`${group50}, ${perfectClass}`);
+    });
 
- */ test('findProperty() возвращает undefined когда в registerPropertyToPatient[] отсутствует запись с переданным propertyId', () => {
+   */
+  test('findProperty() возвращает undefined когда в registerPropertyToPatient[] отсутствует запись с переданным propertyId', () => {
     // Arrange
     patient = new Patient();
     const propertyId1 = 'd06fa531-aad1-45b8-a581-0da077666797';
@@ -426,9 +426,9 @@ describe('Class Patient', () => {
     expect(patient.findProperty(notExistedId)).toBeUndefined();
 
     // Arrange
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
 
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
@@ -447,21 +447,16 @@ describe('Class Patient', () => {
     const propertyId2 = '99e25d7b-30d6-4db8-8244-a806e297efba';
     const propertyId3 = '41d2d8ac-7c0e-4a44-9ee1-83678adf17fa';
     const propertyId4 = 'd601b11a-6824-4272-aaeb-d759cc0139c8';
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient4 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
+    const registerPropertyToPatient4 = new Answer();
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
     registerPropertyToPatient3.registerPropertyId = propertyId3;
     registerPropertyToPatient4.registerPropertyId = propertyId4;
 
-    patient.registerPropertyToPatient = [
-      registerPropertyToPatient1,
-      registerPropertyToPatient2,
-      registerPropertyToPatient3,
-      registerPropertyToPatient4,
-    ];
+    patient.registerPropertyToPatient = [registerPropertyToPatient1, registerPropertyToPatient2, registerPropertyToPatient3, registerPropertyToPatient4];
 
     // Assert
     expect(patient.findProperty(propertyId1)).toBe(registerPropertyToPatient1);
@@ -489,7 +484,7 @@ describe('Class Patient', () => {
   test('getOtherPropertyValue() возвращает undefined когда в registerPropertyToPatient[] нет записи с переданными ID', () => {
     // Arrange
     const notExistedId = '2a1b06f0-2a61-475a-b7b3-8700cd562816';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = notExistedId;
     patient = new Patient();
 
@@ -507,18 +502,18 @@ describe('Class Patient', () => {
     const valueOther2 = 'B';
     const valueOther3 = 'C';
     const valueOther4 = 'D';
-    const registerProperty1 = new RegisterProperty();
-    const registerProperty2 = new RegisterProperty();
-    const registerProperty3 = new RegisterProperty();
-    const registerProperty4 = new RegisterProperty();
+    const registerProperty1 = new Question();
+    const registerProperty2 = new Question();
+    const registerProperty3 = new Question();
+    const registerProperty4 = new Question();
     registerProperty1.id = propertyId1;
     registerProperty2.id = propertyId2;
     registerProperty3.id = propertyId3;
     registerProperty4.id = propertyId4;
-    const registerPropertyToPatient1 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient2 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient3 = new RegisterPropertyToPatient();
-    const registerPropertyToPatient4 = new RegisterPropertyToPatient();
+    const registerPropertyToPatient1 = new Answer();
+    const registerPropertyToPatient2 = new Answer();
+    const registerPropertyToPatient3 = new Answer();
+    const registerPropertyToPatient4 = new Answer();
     registerPropertyToPatient1.registerPropertyId = propertyId1;
     registerPropertyToPatient2.registerPropertyId = propertyId2;
     registerPropertyToPatient3.registerPropertyId = propertyId3;
@@ -529,12 +524,7 @@ describe('Class Patient', () => {
     registerPropertyToPatient4.valueOther = valueOther4;
 
     patient = new Patient();
-    patient.registerPropertyToPatient = [
-      registerPropertyToPatient1,
-      registerPropertyToPatient2,
-      registerPropertyToPatient3,
-      registerPropertyToPatient4,
-    ];
+    patient.registerPropertyToPatient = [registerPropertyToPatient1, registerPropertyToPatient2, registerPropertyToPatient3, registerPropertyToPatient4];
 
     // Assert
     expect(patient.getOtherPropertyValue(registerProperty1)).toBe(valueOther1);
@@ -546,7 +536,7 @@ describe('Class Patient', () => {
   test('getRegisterPropertyValue() возвращает null когда в переданном IRegisterProperty нет id', () => {
     // Arrange
     patient = new Patient();
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
 
     // Assert
     expect(patient.getRegisterPropertyValue(registerProperty, false)).toBeNull();
@@ -556,13 +546,13 @@ describe('Class Patient', () => {
     // Arrange
     const id = 'a999dd30-a4d4-49c9-b02d-99f187146014';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -580,7 +570,7 @@ describe('Class Patient', () => {
     const valueType = new ValueType();
     valueType.name = 'set';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -593,13 +583,13 @@ describe('Class Patient', () => {
   test('getRegisterPropertyValue() возвращает true когда в registerPropertySetToPatient[] присутстует запись, у которой registerPropertySetId равен ID переданного IRegisterProperty и name переданного IRegisterProperty - "set"', () => {
     // Arrange
     const id = '7039651b-e03e-495d-ae98-7f9f54289782';
-    const registerPropertySetToPatient = new RegisterPropertySetToPatient();
+    const registerPropertySetToPatient = new PatientAnswer();
     registerPropertySetToPatient.registerPropertySetId = id;
 
     const valueType = new ValueType();
     valueType.name = 'set';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -615,14 +605,14 @@ describe('Class Patient', () => {
     const id = 'a3c60090-bfec-4ae5-b1dc-5f3d083521f9';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueString = valueString;
 
     const valueType = new ValueType();
     valueType.name = 'string';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -638,14 +628,14 @@ describe('Class Patient', () => {
     const id = 'b3a7948d-b1c2-47de-b26a-d5a47ebbd55c';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueString = valueString;
 
     const valueType = new ValueType();
     valueType.name = 'text';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -661,14 +651,14 @@ describe('Class Patient', () => {
     const id = '27f961a8-94be-4394-addc-816991b6f384';
     const valueNumber = 42;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueNumber = valueNumber;
 
     const valueType = new ValueType();
     valueType.name = 'number';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -684,14 +674,14 @@ describe('Class Patient', () => {
     const id = '8ad5732a-fc23-463b-820f-775c32af7573';
     const valueDate = new Date();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
     registerPropertyToPatient.valueDate = valueDate;
 
     const valueType = new ValueType();
     valueType.name = 'date';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -707,14 +697,14 @@ describe('Class Patient', () => {
     const id = '0ea11d28-660c-4589-a72d-284ca1a07fbf';
     const registerPropertyRadioId = '59858649-033c-49f4-8f74-f3654469f393';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
-    registerPropertyToPatient.registerPropertyRadioId = registerPropertyRadioId;
+    registerPropertyToPatient.answerId = registerPropertyRadioId;
 
     const valueType = new ValueType();
     valueType.name = 'radio';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -734,16 +724,16 @@ describe('Class Patient', () => {
     const unusedUuid = 'f912d28b-844f-426e-9f0f-0dc6f196d0d6';
 
     const registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid4,
       }),
     ];
@@ -770,16 +760,16 @@ describe('Class Patient', () => {
     const uuid4 = '80c1f76c-86e9-4f87-b292-bf545ce1cdb5';
 
     const registerPropertySetToPatient: IRegisterPropertySetToPatient[] = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: uuid4,
       }),
     ];
@@ -797,7 +787,7 @@ describe('Class Patient', () => {
   test('setRegisterPropertyValueOther() не записывает переданный value в свойство valueOther записи из registerPropertyToPatient[] когда переданный IRegisterProperty не содержит ID', () => {
     // Arrange
     const value = 'A';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     patient = new Patient();
 
     // Act
@@ -812,10 +802,10 @@ describe('Class Patient', () => {
     const id = 'b905dfbf-1895-4bbb-ba11-a30e6d7cd01d';
     const value = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     patient = new Patient();
@@ -839,7 +829,7 @@ describe('Class Patient', () => {
     // Arrange
     const id = 'b905dfbf-1895-4bbb-ba11-a30e6d7cd01d';
     const value = 'A';
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     patient = new Patient();
 
@@ -857,9 +847,9 @@ describe('Class Patient', () => {
     const id = 'f56e60fe-5297-40e3-8160-d83159d8d35c';
     const value = 'A';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     patient = new Patient();
@@ -881,13 +871,13 @@ describe('Class Patient', () => {
     const id = '078aa78e-17a7-4753-9abf-1ff60ab9d347';
     const valueString = 'A';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'string';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -913,13 +903,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const valueNumber = 42;
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'number';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -945,13 +935,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const valueDate = new Date();
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'date';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -977,13 +967,13 @@ describe('Class Patient', () => {
     const id = '7f3955cf-5794-4ad6-92f3-07c5d4eb9021';
     const registerPropertyRadioId = 'cdf995b7-6726-4e7c-9d9a-b907a14fe7fd';
 
-    const registerPropertyToPatient = new RegisterPropertyToPatient();
+    const registerPropertyToPatient = new Answer();
     registerPropertyToPatient.registerPropertyId = id;
 
     const valueType = new ValueType();
     valueType.name = 'radio';
 
-    const registerProperty = new RegisterProperty();
+    const registerProperty = new Question();
     registerProperty.id = id;
     registerProperty.valueType = valueType;
 
@@ -1032,16 +1022,16 @@ describe('Class Patient', () => {
 
     patient = new Patient();
     patient.registerPropertySetToPatient = [
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId1,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId2,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId3,
       }),
-      new RegisterPropertySetToPatient({
+      new PatientAnswer({
         registerPropertySetId: registerPropertySetId4,
       }),
     ];
@@ -1078,9 +1068,9 @@ describe('Class Patient', () => {
     const humanDocumentFileInfo3 = new FileInfo();
     const humanPhotoFileInfo = new FileInfo();
 
-    const fileInfoToDocument1 = new FileInfoToDocument();
-    const fileInfoToDocument2 = new FileInfoToDocument();
-    const fileInfoToDocument3 = new FileInfoToDocument();
+    const fileInfoToDocument1 = new DocumentFileInfo();
+    const fileInfoToDocument2 = new DocumentFileInfo();
+    const fileInfoToDocument3 = new DocumentFileInfo();
     fileInfoToDocument1.fileInfo = humanDocumentFileInfo1;
     fileInfoToDocument2.fileInfo = humanDocumentFileInfo2;
     fileInfoToDocument3.fileInfo = humanDocumentFileInfo3;
@@ -1141,7 +1131,7 @@ describe('Class Patient', () => {
     patient = new Patient();
 
     // Assert
-    expect(patient.getAnamnesis(id)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(id)).toBeInstanceOf(Anamnesis);
     expect(patient.getAnamnesis(id).id).toBeUndefined();
   });
 
@@ -1151,10 +1141,10 @@ describe('Class Patient', () => {
     const uuid2 = '5c5ca9aa-5509-4540-a589-6e6d4f22030b';
     const uuid3 = '144e526a-8961-4519-b761-f92445fef766';
     const uuid4 = '3758f082-b550-4103-bbea-4ab6cdd9f0c4';
-    const patientDiagnosisAnamnesis1 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis2 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis3 = new PatientDiagnosisAnamnesis();
-    const patientDiagnosisAnamnesis4 = new PatientDiagnosisAnamnesis();
+    const patientDiagnosisAnamnesis1 = new Anamnesis();
+    const patientDiagnosisAnamnesis2 = new Anamnesis();
+    const patientDiagnosisAnamnesis3 = new Anamnesis();
+    const patientDiagnosisAnamnesis4 = new Anamnesis();
     patientDiagnosisAnamnesis1.id = uuid1;
     patientDiagnosisAnamnesis2.id = uuid2;
     patientDiagnosisAnamnesis3.id = uuid3;
@@ -1165,16 +1155,16 @@ describe('Class Patient', () => {
     const patientDiagnosis3 = new PatientDiagnosis();
     const patientDiagnosis4 = new PatientDiagnosis();
 
-    patientDiagnosis1.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis1];
-    patientDiagnosis2.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis2, patientDiagnosisAnamnesis3];
-    patientDiagnosis3.patientDiagnosisAnamnesis = [];
-    patientDiagnosis4.patientDiagnosisAnamnesis = [patientDiagnosisAnamnesis4];
+    patientDiagnosis1.anamneses = [patientDiagnosisAnamnesis1];
+    patientDiagnosis2.anamneses = [patientDiagnosisAnamnesis2, patientDiagnosisAnamnesis3];
+    patientDiagnosis3.anamneses = [];
+    patientDiagnosis4.anamneses = [patientDiagnosisAnamnesis4];
 
     patient = new Patient();
     patient.patientDiagnosis = [patientDiagnosis1, patientDiagnosis2, patientDiagnosis3, patientDiagnosis4];
 
     // Assert
-    expect(patient.getAnamnesis(uuid2)).toBeInstanceOf(PatientDiagnosisAnamnesis);
+    expect(patient.getAnamnesis(uuid2)).toBeInstanceOf(Anamnesis);
     expect(patient.getAnamnesis(uuid2).id).toBe(uuid2);
   });
 });

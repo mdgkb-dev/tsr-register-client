@@ -16,19 +16,19 @@
 </template>
 
 <script lang="ts">
-import { FilterFilled } from '@ant-design/icons-vue';
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
-import IFilterModel from '@/interfaces/filters/IFilterModel';
+import FilterModel from '@/services/classes/filters/FilterModel';
+
 export default defineComponent({
-  name: 'FilterPopover',
+  // name: 'FilterPopover',
   components: {
-    FilterFilled,
+    // FilterFilled,
   },
   props: {
     filterModel: {
-      type: Object as PropType<IFilterModel>,
+      type: Object as PropType<FilterModel>,
       required: true,
     },
   },
@@ -77,13 +77,16 @@ export default defineComponent({
 .cursor {
   cursor: pointer;
 }
+
 .anticon {
   margin: 4px 4px 2px 4px;
   font-size: 13px;
+
   &:hover {
     color: #5cb6ff;
   }
 }
+
 .set {
   color: #5cb6ff;
 }

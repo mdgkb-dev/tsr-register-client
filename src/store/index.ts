@@ -1,36 +1,57 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import { admin } from '@/store/modules/admin';
+import { anamneses } from '@/store/modules/anamnses';
 import auth from '@/store/modules/auth';
-import { chopScaleQuestions } from '@/store/modules/chopScaleQuestions';
+import { commissions } from '@/store/modules/commissions';
+import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
+import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
+import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
 import { cropper } from '@/store/modules/cropper';
+import { customSections } from '@/store/modules/customSections';
+import dataExport from '@/store/modules/dataExport';
 import { disabilities } from '@/store/modules/disabilities';
-import documentTypes from '@/store/modules/documentTypes';
+import { doctors } from '@/store/modules/doctors';
+import { documentFieldValues } from '@/store/modules/documentFieldValues';
+import { documentFileInfos } from '@/store/modules/documentFileInfos';
+import { documents } from '@/store/modules/documents';
+import { documentTypes } from '@/store/modules/documentTypes';
+import { drugApplications } from '@/store/modules/drugApplications';
+import { drugArrives } from '@/store/modules/drugArrives';
+import { drugDecreases } from '@/store/modules/drugDecreases';
+import { drugDozes } from '@/store/modules/drugDozes';
+import { drugForms } from '@/store/modules/drugForms';
+import { drugRecipes } from '@/store/modules/drugRecipes';
 import { drugs } from '@/store/modules/drugs';
-import files from '@/store/modules/files';
+import { edvs } from '@/store/modules/edvs';
+import { fileInfos } from '@/store/modules/fileInfos';
 import { filter } from '@/store/modules/filter';
-import { hmfseScaleQuestions } from '@/store/modules/hmfseScaleQuestions';
-import { insuranceCompanies } from '@/store/modules/insuranceCompanies';
+import { fundContracts } from '@/store/modules/fundContracts';
+import { fundCouncils } from '@/store/modules/fundCouncils';
+import { humans } from '@/store/modules/humans';
 import { main } from '@/store/modules/main';
+import { menus } from '@/store/modules/menus';
 import { meta } from '@/store/modules/meta';
-import { mkb } from '@/store/modules/mkb';
-import { mkbConcreteDiagnoses } from '@/store/modules/mkbConcreteDiagnoses';
-import { mkbDiagnoses } from '@/store/modules/mkbDiagnoses';
-import { mkbGroups } from '@/store/modules/mkbGroups';
-import { mkbSubDiagnoses } from '@/store/modules/mkbSubDiagnoses';
+import { mkbItems } from '@/store/modules/mkbItems';
 import { pagination } from '@/store/modules/pagination';
+import { patientHistories } from '@/store/modules/patientHistories';
 import { patients } from '@/store/modules/patients';
-import { regions } from '@/store/modules/regions';
-import { registerGroups } from '@/store/modules/registerGroups';
-import { registerProperties } from '@/store/modules/registerProperties';
-import { registerPropertiesToUser } from '@/store/modules/registerPropertiesToUser';
-import registerQueries from '@/store/modules/registerQueries';
+import { patientsDomains } from '@/store/modules/patientsDomains';
+import { patientsRegisters } from '@/store/modules/patientsRegisters';
+import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
+import { patientsResearches } from '@/store/modules/patientsResearches';
+import { questions } from '@/store/modules/questions';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
+import { researches } from '@/store/modules/researches';
+import { researchesPools } from '@/store/modules/researchesPools';
+import { researchesResults } from '@/store/modules/researchesResults';
 import search from '@/store/modules/search';
+import { statuses } from '@/store/modules/statuses';
 import { users } from '@/store/modules/users';
 
+import { patientsDiagnosis } from './modules/patientsDiagnosis';
 import RootState from './types';
 
 const store: StoreOptions<RootState> = {
@@ -48,36 +69,57 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
+    researchesResults,
     auth,
-    cropper,
+    edvs,
     disabilities,
-    documentTypes,
-    drugs,
-    files,
+    cropper,
     filter,
-    insuranceCompanies,
     main,
     meta,
-    mkb,
+    mkbItems,
     pagination,
     patients,
-    registerGroups,
-    registerProperties,
-    registerPropertiesToUser,
-    registerQueries,
+    researches,
+    researchesPools,
     registers,
     representatives,
     representativeTypes,
     users,
     search,
     admin,
-    mkbGroups,
-    mkbDiagnoses,
-    mkbSubDiagnoses,
-    mkbConcreteDiagnoses,
-    regions,
-    chopScaleQuestions,
-    hmfseScaleQuestions,
+    patientsResearches,
+    patientsRepresentatives,
+    humans,
+    anamneses,
+    patientsRegisters,
+    patientHistories,
+    commissionsTemplates,
+    commissionsDoctors,
+    commissions,
+    doctors,
+    drugs,
+    drugArrives,
+    fundContracts,
+    fundCouncils,
+    drugApplications,
+    commissionsDrugApplications,
+    statuses,
+    drugDecreases,
+    drugForms,
+    drugRecipes,
+    questions,
+    documentTypes,
+    documents,
+    documentFieldValues,
+    documentFileInfos,
+    drugDozes,
+    fileInfos,
+    menus,
+    patientsDomains,
+    dataExport,
+    customSections,
+    patientsDiagnosis,
   },
 };
 

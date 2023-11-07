@@ -11,9 +11,6 @@ const actions: ActionTree<State, RootState> = {
   getCount: async ({ commit }, table: string): Promise<void> => {
     commit('setCount', await httpClient.get<number>({ query: `count/${table}` }));
   },
-  getSchema: async ({ commit }): Promise<void> => {
-    commit('setSchema', await httpClient.get<number>({ query: `schema` }));
-  },
 };
 
 export default actions;

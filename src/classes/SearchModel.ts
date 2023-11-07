@@ -1,35 +1,21 @@
 import SearchElement from '@/classes/SearchElement';
 import SearchGroup from '@/classes/SearchGroup';
-import ISearchElement from '@/interfaces/ISearchElement';
-import ISearchGroup from '@/interfaces/ISearchGroup';
-import ISearchModel from '@/interfaces/ISearchModel';
-import ISearchObject from '@/interfaces/ISearchObject';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class SearchModel implements ISearchModel {
+export default class SearchModel {
   query = '';
   params = '';
   suggester = false;
   mustBeTranslated = true;
-  options: ISearchElement[] = [];
+  options: SearchElement[] = [];
   searchGroupId = '';
-  searchGroups: ISearchGroup[] = [];
-  searchGroup: ISearchGroup = new SearchGroup();
-  searchObjects: ISearchObject[] = [];
+  searchGroups: SearchGroup[] = [];
+  searchGroup: SearchGroup = new SearchGroup();
+
+  // searchObjects: SearchObject[] = [];
 
   constructor(i?: SearchModel) {
-    if (!i) {
-      return;
-    }
-    this.query = i.query;
-    if (i.searchGroups) {
-      this.searchGroups = i.searchGroups.map((item: ISearchGroup) => new SearchGroup(item));
-    }
-    if (i.searchGroup) {
-      this.searchGroup = new SearchGroup(i.searchGroup);
-    }
-    if (i.options) {
-      this.options = i.options.map((item: ISearchElement) => new SearchElement(item));
-    }
+    ClassHelper.BuildClass(this, i);
   }
 
   toUrl(): string {
@@ -38,12 +24,12 @@ export default class SearchModel implements ISearchModel {
 
   setSearchGroup(groupId: string | undefined): void {
     if (!groupId) {
-      this.searchGroups.forEach((group: ISearchGroup) => {
+      this.searchGroups.forEach((group: SearchGroup) => {
         group.active = true;
       });
       return;
     }
-    this.searchGroups.forEach((group: ISearchGroup) => {
+    this.searchGroups.forEach((group: SearchGroup) => {
       group.active = group.id === groupId;
     });
   }

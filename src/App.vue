@@ -1,62 +1,46 @@
 <template>
-  <component :is="layout">
-    <router-view />
-  </component>
+  <Suspense>
+    <component :is="$route.meta.layout || 'AdminLayout'" v-if="mounted">
+      <router-view />
+    </component>
+  </Suspense>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, watch } from '@vue/runtime-core';
+import { onBeforeMount, Ref, ref } from 'vue';
 
-import User from './classes/User';
-import TokenService from './services/Token';
-import LoginLayout from './views/Login/LoginLayout.vue';
-import MainLayout from './views/Main/MainLayout.vue';
+import AdminLayout from '@/views/adminLayout/AdminLayout.vue';
+import LoginLayout from '@/views/loginLayout/LoginLayout.vue';
+
+import Provider from './services/Provider/Provider';
 
 export default defineComponent({
   name: 'App',
   components: {
+    AdminLayout,
     LoginLayout,
-    MainLayout,
   },
   setup() {
-    const store = useStore();
-    const isAuth = computed(() => store.getters['auth/isAuth']);
-
-    const layout = computed(() => {
-      if (isAuth.value) {
-        store.commit('setLayout', 'main-layout');
-      } else {
-        store.commit('setLayout', 'login-layout');
-      }
-      return store.getters.layout;
+    const mounted: Ref<boolean> = ref(false);
+    watch(Provider.route(), () => {
+      changeDocumentTitle();
     });
 
-    const setLocalStorageToVuex = () => {
-      const userData = localStorage.getItem('user');
-      const token = TokenService.getAccessToken();
-      if (userData && token) {
-        const user = new User(JSON.parse(userData));
-        store.commit('auth/setTokens', token);
-        store.commit('auth/setUser', user);
-        store.commit('auth/setIsAuth', true);
-      }
+    const changeDocumentTitle = () => {
+      const defaultTitle = 'ТСР';
+      document.title = Provider.route().meta.title ? `${Provider.route().meta.title} | ТСР` : defaultTitle;
     };
 
     onBeforeMount(async (): Promise<void> => {
-      await store.dispatch('meta/getSchema');
-      await store.dispatch('search/searchGroups');
-    });
-
-    onMounted(() => {
-      setLocalStorageToVuex();
+      changeDocumentTitle();
+      await Provider.store.dispatch('auth/setAuth');
+      mounted.value = true;
     });
 
     return {
-      layout,
+      mounted,
     };
   },
 });
 </script>
-
-<style lang="scss"></style>

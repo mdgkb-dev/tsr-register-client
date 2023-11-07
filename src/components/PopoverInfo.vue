@@ -1,14 +1,17 @@
 <template>
   <el-popover placement="top-start" width="auto" trigger="hover" :content="content">
     <template #reference>
-      <el-icon size="20"><QuestionFilled /></el-icon>
+      <el-icon ::size="20">
+        <QuestionFilled />
+      </el-icon>
     </template>
   </el-popover>
 </template>
 
 <script lang="ts">
-import { QuestionFilled } from '@element-plus/icons-vue';
 import { defineComponent, PropType } from 'vue';
+
+import QuestionFilled from '@/assets/svg/QuestionFilled.svg';
 
 export default defineComponent({
   name: 'PopoverInfo',

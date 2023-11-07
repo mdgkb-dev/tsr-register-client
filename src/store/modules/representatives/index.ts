@@ -1,22 +1,28 @@
 import { Module } from 'vuex';
 
-import Representative from '@/classes/representatives/Representative';
+import Representative from '@/classes/Representative';
+import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
-import { State } from './state';
 
-export const state: State = {
-  representatives: [],
-  representative: new Representative(),
-  filteredRepresentatives: [],
-  photoFileList: [],
-  count: 0,
-  isEditMode: true,
-  lastInsertedId: undefined,
+export interface State extends IBasicState<Representative> {
+  lastInsertedId?: string;
+  existsInDomain: boolean;
+}
+
+export const getDefaultState = (): State => {
+  return {
+    ...getBaseDefaultState(Representative),
+    lastInsertedId: undefined,
+    existsInDomain: false,
+  };
 };
+
+const state = getDefaultState();
 
 const namespaced = true;
 

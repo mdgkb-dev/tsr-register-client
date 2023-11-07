@@ -1,14 +1,11 @@
-import IRegisterUser from '@/interfaces/IRegisterUser';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterUser implements IRegisterUser {
+export default class RegisterUser {
   id?: string;
   userId?: string;
   registerId?: string;
 
-  constructor(i?: IRegisterUser) {
-    if (!i) return;
-    this.id = i.id;
-    this.userId = i.userId;
-    this.registerId = i.registerId;
+  constructor(i?: RegisterUser) {
+    ClassHelper.BuildClass(this, i);
   }
 }

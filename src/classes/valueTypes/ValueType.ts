@@ -1,49 +1,59 @@
-import IValueType from '@/interfaces/valueTypes/IValueType';
 import ValueRelation from '@/interfaces/valueTypes/ValueRelation';
+import ValueTypes from '@/interfaces/valueTypes/ValueTypes';
+import ValueTypesComponentMap from '@/interfaces/valueTypes/ValueTypesComponentMap';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class ValueType implements IValueType {
+export default class ValueType {
   id?: string;
-  name?: string;
+  name: ValueTypes = ValueTypes.String;
   valueRelation: ValueRelation = ValueRelation.simple;
 
-  constructor(valueType?: IValueType) {
-    if (!valueType) {
-      return;
-    }
-    this.id = valueType.id;
-    this.name = valueType.name;
-    this.valueRelation = valueType.valueRelation;
+  constructor(i?: ValueType) {
+    ClassHelper.BuildClass(this, i);
   }
 
   isString(): boolean {
-    return this.name === 'string';
+    return this.name === ValueTypes.String;
   }
 
   isNumber(): boolean {
-    return this.name === 'number';
+    return this.name === ValueTypes.Number;
   }
 
   isDate(): boolean {
-    return this.name === 'date';
+    return this.name === ValueTypes.Date;
   }
 
   isRadio(): boolean {
-    return this.name === 'radio';
+    return this.name === ValueTypes.Radio;
   }
 
   isSet(): boolean {
-    return this.name === 'set';
+    return this.name === ValueTypes.Set;
   }
 
   isText(): boolean {
-    return this.name === 'text';
+    return this.name === ValueTypes.Text;
   }
 
   isBoolean(): boolean {
-    return this.name === 'boolean';
+    return this.name === ValueTypes.Boolean;
   }
 
   isFiles(): boolean {
-    return this.name === 'files';
+    return this.name === ValueTypes.Files;
+  }
+
+  getComponentType(): string | undefined {
+    if (this.name === ValueTypes.Radio) {
+      return 'RadioProp';
+    }
+    if (this.name === ValueTypes.Set) {
+      return 'SetProp';
+    }
+    if (this.name === ValueTypes.Number) {
+      return 'NumberProp';
+    }
+    return ValueTypesComponentMap[this.name].name;
   }
 }

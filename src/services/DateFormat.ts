@@ -1,8 +1,10 @@
+import Time from '@/services/Time';
+
 interface CustomDateTimeFormatOptions {
   localeMatcher?: string;
   weekday?: 'narrow' | 'short' | 'long';
   era?: string;
-  year?: 'numeric' | '2-digit';
+  year?: 'numeric' | '2-digit' | undefined;
   month?: 'numeric' | '2-digit' | 'narrow' | 'short' | 'long';
   day?: 'numeric' | '2-digit';
   hour?: 'numeric' | '2-digit';
@@ -25,10 +27,16 @@ export default class DateTimeFormat {
     if (!date) {
       return '';
     }
-    const opt: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit', hour: undefined, minute: undefined };
+    const opt: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: undefined,
+      minute: undefined,
+    };
     if (options) {
-      opt.year = options.year ?? opt.year;
-      opt.month = options.month ?? opt.month;
+      opt.year = options.year || options.year == undefined ? options.year : opt.year;
+      opt.month = options.month || options.month == undefined ? options.month : opt.month;
       opt.day = options.day ?? opt.day;
       opt.hour = options.hour ?? opt.hour;
       opt.minute = options.minute ?? opt.minute;
@@ -38,5 +46,33 @@ export default class DateTimeFormat {
 
   getPeriod(start: Date, end: Date, options?: CustomDateTimeFormatOptions): string {
     return `${this.format(start, options)}-${this.format(end, options)}`;
+  }
+
+  getShortDayName(date?: Date): string {
+    if (!date) {
+      return '';
+    }
+    return Time.SetShortDays[date.getDay()];
+  }
+
+  getCurrentWeekPeriod(options?: CustomDateTimeFormatOptions): string {
+    const now = new Date();
+    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay() + 1);
+    const endOfWeek = new Date(now.getFullYear(), now.getMonth(), startOfWeek.getDate() + 7);
+    return this.getPeriod(
+      startOfWeek,
+      endOfWeek,
+      options
+        ? options
+        : {
+            month: '2-digit',
+            day: 'numeric',
+            year: undefined,
+          }
+    );
+  }
+
+  getMonthsDiff(dateFrom: Date, dateTo: Date): number {
+    return dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
   }
 }

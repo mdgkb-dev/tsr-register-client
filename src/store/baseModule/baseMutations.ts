@@ -1,13 +1,12 @@
 import { MutationTree } from 'vuex';
 
-import ItemsWithCount from '@/interfaces/ItemsWithCount';
-import IWithId from '@/interfaces/IWithId';
-import getBaseDefaultState, { Constructable } from '@/store/baseModule/baseIndex';
+import { Constructable } from '@/services/ClassHelper';
+import ItemsWithCount from '@/services/interfaces/ItemsWithCount';
+import IWithId from '@/services/interfaces/IWithId';
+import getBaseDefaultState from '@/store/baseModule/baseIndex';
 import IBasicState from '@/store/baseModule/baseState';
 
-export default function getBaseMutations<T extends IWithId, StateType extends IBasicState<T>>(
-  passedClass: Constructable<T>
-): MutationTree<StateType> {
+export default function getBaseMutations<T extends IWithId, StateType extends IBasicState<T>>(passedClass: Constructable<T>): MutationTree<StateType> {
   return {
     appendToAll(state, items?: []) {
       if (!items) {
@@ -38,6 +37,15 @@ export default function getBaseMutations<T extends IWithId, StateType extends IB
     remove(state, id: string) {
       const index = state.items.findIndex((i: T) => i.id === id);
       state.items.splice(index, 1);
+    },
+    resetItem(state) {
+      state.item = new passedClass();
+    },
+    unshiftToAll(state, item: T) {
+      state.items.unshift(new passedClass(item));
+    },
+    clearItems(state) {
+      state.items = [];
     },
   };
 }

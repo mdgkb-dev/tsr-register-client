@@ -1,61 +1,12 @@
 import { MutationTree } from 'vuex';
 
-import MkbDiagnosis from '@/classes/mkb/MkbDiagnosis';
-import MkbSubDiagnosis from '@/classes/mkb/MkbSubDiagnosis';
 import Register from '@/classes/Register';
-import RegisterDiagnosis from '@/classes/RegisterDiagnosis';
-import ValueType from '@/classes/valueTypes/ValueType';
-import IRegister from '@/interfaces/IRegister';
-import IRegisterDiagnosis from '@/interfaces/IRegisterDiagnosis';
-import IValueType from '@/interfaces/valueTypes/IValueType';
+import getBaseMutations from '@/store/baseModule/baseMutations';
 
-import { State } from './state';
+import { State } from './index';
 
 const mutations: MutationTree<State> = {
-  setAll(state, registers: IRegister[]) {
-    state.registers = registers?.map((a: IRegister) => new Register(a));
-  },
-  set(state, item: IRegister) {
-    state.item = new Register(item);
-  },
-  create(state, payload: IRegister) {
-    state.registers.push(new Register(payload));
-  },
-  update(state, payload: IRegister) {
-    const item = state.registers.find((i: IRegister) => i.id === payload.id);
-    if (item) {
-      Object.assign(item, payload);
-    }
-  },
-  delete(state, id: string) {
-    const i = state.registers.findIndex((item: IRegister) => item.id === id);
-    state.registers.splice(i, 1);
-  },
-  addDiagnosis(state, id: string) {
-    const diagnosis = new RegisterDiagnosis();
-    diagnosis.id = id;
-    state.item.registerDiagnosis.push(diagnosis);
-  },
-  removeDiagnosis(state, id: string) {
-    const index = state.item.registerDiagnosis.findIndex((i: IRegisterDiagnosis) => i.id === id);
-    if (index !== -1) state.item.registerDiagnosis.splice(index, 1);
-    state.item.registerDiagnosisForDelete.push(id);
-  },
-  clearDiagnosis(state, id: string) {
-    const diagnosis = state.item.registerDiagnosis.find((d: IRegisterDiagnosis) => d.id === id);
-    if (diagnosis) {
-      diagnosis.mkbDiagnosis = new MkbDiagnosis();
-      diagnosis.mkbDiagnosisId = undefined;
-      diagnosis.mkbSubDiagnosis = new MkbSubDiagnosis();
-      diagnosis.mkbSubDiagnosisId = undefined;
-    }
-  },
-  setValueTypes(state, valueTypes: IValueType[]) {
-    state.valueTypes = valueTypes.map((a: IValueType) => new ValueType(a));
-  },
-  setActiveCollapseName(state, index: string) {
-    state.activeCollapseName = index;
-  },
+  ...getBaseMutations<Register, State>(Register),
 };
 
 export default mutations;

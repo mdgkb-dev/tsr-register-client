@@ -10,26 +10,46 @@ import 'element-plus/theme-chalk/display.css';
 import 'dayjs/locale/ru';
 import '@/assets/element-variables.scss';
 import '@/router/componentHooks';
-import Provider from '@/services/Provider';
+import Provider from '@/services/Provider/Provider';
+
+import './assets/styles/element-variables.scss';
+import Maska from 'maska';
+import DateTimeFormatter from '@/services/DateFormat';
+import ru from 'element-plus/es/locale/lang/ru';
+
+import { setupElementPlusComponents, setupElementPlusPlugins } from '@/plugins/ElementPlus';
+import ClassHelper from '@/services/ClassHelper';
+import StringsService from '@/services/Strings';
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
 app.use(ElementPlus);
 
-import Maska from 'maska';
 app.use(Maska);
 
 Provider.router = router;
 Provider.store = store;
 
-import DateTimeFormatter from '@/services/DateFormat';
 app.config.globalProperties.$dateTimeFormatter = new DateTimeFormatter('ru-RU');
+app.config.globalProperties.$classHelper = ClassHelper;
+app.config.globalProperties.$stringsService = StringsService;
+app.use(setupElementPlusComponents, { locale: ru });
+app.use(setupElementPlusPlugins);
 
-import * as ElementPlusIconsVue from '@element-plus/icons-vue';
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component);
-}
+app.directive('click-outside', {
+  mounted(el, binding) {
+    el.clickOutsideEvent = function (event: Event) {
+      if (!(el === event.target || el.contains(event.target))) {
+        binding.value(event, el);
+      }
+    };
+    document.body.addEventListener('click', el.clickOutsideEvent);
+  },
+  unmounted(el) {
+    document.body.removeEventListener('click', el.clickOutsideEvent);
+  },
+});
 
 router.isReady().then(() => {
   app.mount('#app');

@@ -25,19 +25,17 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, Ref, ref, toRefs } from 'vue';
+import { defineComponent, PropType, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
-import FilterModel from '@/classes/filters/FilterModel';
-import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
-import { DataTypes } from '@/interfaces/filters/DataTypes';
-import { Operators } from '@/interfaces/filters/Operators';
-import IMkbDiagnosis from '@/interfaces/mkb/IMkbDiagnosis';
-import IOption from '@/interfaces/shared/IOption';
+// import FilterPopover from '@/components/Filters/FilterPopover.vue';
+import FilterModel from '@/services/classes/filters/FilterModel';
+import { DataTypes } from '@/services/interfaces/DataTypes';
+import { Operators } from '@/services/interfaces/Operators';
 
 export default defineComponent({
   name: 'FilterSet',
-  components: { FilterPopover },
+  // components: { FilterPopover },
   props: {
     table: {
       type: String as PropType<string>,
@@ -65,12 +63,7 @@ export default defineComponent({
     const store = useStore();
     const loading = ref(false);
     const filter = ref();
-    const filteredDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/filteredDiagnosis']);
-    const mkbDiagnosis: ComputedRef<IMkbDiagnosis[]> = computed(() => store.getters['mkb/mkbDiagnoses']);
-    let diagnosis: Ref<IOption[]> = ref([]);
-    const filterModel = ref(
-      FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set)
-    );
+    const filterModel = ref(FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set));
     filterModel.value.operator = Operators.In;
 
     const setTrigger = (trigger: string) => {
@@ -82,25 +75,14 @@ export default defineComponent({
 
     const dropFilterModel = () => {
       store.commit('filter/spliceFilterModel', filterModel.value.id);
-      filterModel.value = FilterModel.CreateFilterModelWithJoin(
-        table.value,
-        col.value,
-        joinTable.value,
-        joinTablePk.value,
-        joinTableFk.value,
-        DataTypes.Set
-      );
+      filterModel.value = FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set);
       filterModel.value.operator = Operators.In;
     };
 
     const find = async (query: string): Promise<void> => {
       loading.value = true;
       if (query.length > 2) {
-        diagnosis.value = [];
         await store.dispatch('mkb/searchDiagnosis', query);
-        mkbDiagnosis.value.forEach((d: IMkbDiagnosis) => {
-          if (d.id) diagnosis.value.push({ value: d.id, label: d.getFullName() });
-        });
       }
       loading.value = false;
     };
@@ -113,10 +95,7 @@ export default defineComponent({
     return {
       blurSelect,
       filter,
-      diagnosis,
       loading,
-      filteredDiagnosis,
-      mkbDiagnosis,
       find,
       dropFilterModel,
       addFilterModel,

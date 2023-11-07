@@ -4,13 +4,7 @@
       <el-form label-position="top" :model="filterModel">
         <el-form-item :label="label">
           <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
-            <el-option
-              v-for="(item, index) in filterList"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-              @click="setTrigger('click')"
-            ></el-option>
+            <el-option v-for="(item, index) in filterList" :key="index" :label="item.label" :value="item.value" @click="setTrigger('click')"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="filterModel.isUnaryFilter()">
@@ -29,15 +23,14 @@
 import { defineComponent, PropType, Ref, ref, toRefs } from 'vue';
 import { useStore } from 'vuex';
 
-import FilterModel from '@/classes/filters/FilterModel';
-import OperatorsOptions from '@/classes/filters/OperatorsOptions';
-import FilterPopover from '@/components/TableFilters/FilterPopover.vue';
 import { DataTypes } from '@/interfaces/filters/DataTypes';
 import IOption from '@/interfaces/shared/IOption';
+import FilterModel from '@/services/classes/filters/FilterModel';
+import OperatorsOptions from '@/services/classes/filters/OperatorsOptions';
 
 export default defineComponent({
   name: 'FilterSelectForm',
-  components: { FilterPopover },
+  // components: { FilterPopover },
   props: {
     label: {
       type: String as PropType<string>,

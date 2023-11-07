@@ -1,35 +1,13 @@
 import { ActionTree } from 'vuex';
 
-import IDrug from '@/interfaces/drugs/IDrug';
-import HttpClient from '@/services/HttpClient';
+import Drug from '@/classes/Drug';
+import getBaseActions from '@/store/baseModule/baseActions';
 import RootState from '@/store/types';
 
-import { State } from './state';
-
-const httpClient = new HttpClient('drugs');
+import { State } from './index';
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, diagnosisIds: string[]): Promise<void> => {
-    let query = '';
-    if (diagnosisIds && diagnosisIds.length > 0) {
-      // diagnosisIds.forEach((d: s))
-      query = `?diagnosis=${diagnosisIds.join(',')}`;
-    }
-    commit('setAll', await httpClient.get<IDrug[]>({ query: query }));
-  },
-  get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get<IDrug>({ query: id }));
-  },
-  create: async ({ commit }, payload: IDrug): Promise<void> => {
-    commit('create', await httpClient.post<IDrug, IDrug>({ payload }));
-  },
-  edit: async ({ commit }, payload: IDrug): Promise<void> => {
-    commit('update', await httpClient.put<IDrug, IDrug>({ payload, query: payload.id }));
-  },
-  delete: async ({ commit }, id: string): Promise<void> => {
-    await httpClient.delete<IDrug, IDrug>({ query: id });
-    commit('delete', id);
-  },
+  ...getBaseActions<Drug, State>('drugs'),
 };
 
 export default actions;

@@ -1,24 +1,16 @@
+import Answer from '@/classes/Answer';
 import FileInfo from '@/classes/files/FileInfo';
 import IFileInfo from '@/interfaces/files/IFileInfo';
-import IRegisterPropertyToPatient from '@/interfaces/IRegisterPropertyToPatient';
-import IRegisterPropertyToPatientToFile from '@/interfaces/IRegisterPropertyToPatientToFile';
+import ClassHelper from '@/services/ClassHelper';
 
-export default class RegisterPropertyToPatientToFile implements IRegisterPropertyToPatientToFile {
+export default class RegisterPropertyToPatientToFile {
   id?: string;
-  registerPropertyToPatient?: IRegisterPropertyToPatient;
+  registerPropertyToPatient?: Answer;
   registerPropertyToPatientId?: string;
   fileInfo: IFileInfo = new FileInfo();
   fileInfoId?: string;
 
-  constructor(i?: IRegisterPropertyToPatientToFile) {
-    if (!i) {
-      return;
-    }
-    this.id = i.id;
-    this.registerPropertyToPatientId = i.registerPropertyToPatientId;
-    this.fileInfoId = i.fileInfoId;
-    if (i.fileInfo) {
-      this.fileInfo = new FileInfo(i.fileInfo);
-    }
+  constructor(i?: RegisterPropertyToPatientToFile) {
+    ClassHelper.BuildClass(this, i);
   }
 }

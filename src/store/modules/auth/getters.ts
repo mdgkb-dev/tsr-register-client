@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import User from '@/classes/User';
-import IUser from '@/interfaces/IUser';
+import Auth from '@/services/classes/auth/Auth';
 import TokenService from '@/services/Token';
 import RootState from '@/store/types';
 
@@ -11,7 +11,7 @@ const getters: GetterTree<State, RootState> = {
   token(state): string {
     return state.token;
   },
-  user(state): IUser | undefined {
+  user(state): User | undefined {
     if (TokenService.getUser()) {
       state.user = new User(TokenService.getUser());
     }
@@ -20,6 +20,12 @@ const getters: GetterTree<State, RootState> = {
   isAuth(state): boolean {
     state.isAuth = TokenService.isAuth();
     return state.isAuth;
+  },
+  authModalVisible(state): boolean {
+    return state.authModalVisible;
+  },
+  auth(state): Auth {
+    return state.auth;
   },
 };
 

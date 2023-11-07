@@ -1,48 +1,117 @@
 import { ActionTree } from 'vuex';
 
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import IFileInfosGetter from '@/interfaces/IFileInfosGetter';
-import ItemsWithCount from '@/interfaces/ItemsWithCount';
-import IWithId from '@/interfaces/IWithId';
+import IFileInfo from '@/interfaces/files/IFileInfo';
+import Cache from '@/services/Cache';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import HttpClient from '@/services/HttpClient';
+import IFileInfosGetter from '@/services/interfaces/IFileInfosGetter';
+import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
+import ItemsWithCount from '@/services/interfaces/ItemsWithCount';
+import IWithId from '@/services/interfaces/IWithId';
+import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
-export default function getBaseActions<T extends IWithId & IFileInfosGetter, StateType>(
-  endPoint: string
+export default function getBaseActions<T extends IWithId & IFileInfosGetter, StateType extends IBasicState<T>>(
+  endPointOrClient: HttpClient | string
 ): ActionTree<StateType, RootState> {
-  const httpClient = new HttpClient(endPoint);
+  let httpClient: HttpClient = new HttpClient();
+  if (typeof endPointOrClient === 'string') {
+    httpClient = new HttpClient(endPointOrClient);
+  } else {
+    httpClient = endPointOrClient;
+  }
+  const cache = new Cache();
+  cache.name = String(endPointOrClient);
+
+  interface GetAllOptions {
+    filterQuery?: FilterQuery;
+    withCache?: boolean;
+  }
+
   return {
-    getAll: async ({ commit }, filterQuery?: IFilterQuery): Promise<void> => {
-      const items = await httpClient.get<T[]>({ query: filterQuery ? filterQuery.toUrl() : '' });
-      if (filterQuery && filterQuery.pagination.append) {
-        commit('appendToAll', items);
-        filterQuery.setAllLoaded(items ? items.length : 0);
+    getAll: async ({ commit }, options?: GetAllOptions): Promise<void> => {
+      const get = async () => {
+        return await httpClient.get<T[] | ItemsWithCount<T>>({ query: options && options.filterQuery ? options.filterQuery.toUrl() : '' });
+      };
+      let res;
+      if (options && options.withCache) {
+        res = await cache.storeGetWithCache<T[] | ItemsWithCount<T>>(get);
+      } else {
+        res = await get();
+      }
+      if (Array.isArray(res)) {
+        if (options && options.filterQuery && options.filterQuery.pagination.append && res) {
+          commit('appendToAll', res);
+          options.filterQuery.pagination.setAllLoaded(res ? res.length : 0);
+          return;
+        }
+        commit('setAll', res);
+      } else {
+        if (options && options.filterQuery && options.filterQuery.pagination.append && res) {
+          commit('appendToAll', res.items);
+          options.filterQuery.pagination.setAllLoaded(res.items.length ? res.items.length : 0);
+          return;
+        }
+        commit('setAllWithCount', res);
+      }
+    },
+    get: async ({ commit }, filter?: string | FilterQuery) => {
+      if (!filter) {
+        console.warn('noFilterSetInQuery');
         return;
       }
-      commit('setAll', items);
+      let query: IBodilessParams;
+      if (typeof filter === 'string') {
+        query = { query: filter };
+      } else {
+        query = { query: `get${filter.toUrl()}` };
+      }
+      commit('set', await httpClient.get<T>(query));
     },
-    getAllWithCount: async ({ commit }, filterQuery?: IFilterQuery): Promise<void> => {
-      commit('setAllWithCount', await httpClient.get<ItemsWithCount<T>[]>({ query: filterQuery ? filterQuery.toUrl() : '' }));
+    create: async ({ state }, item: T): Promise<unknown> => {
+      if (!item) {
+        item = state.item;
+      }
+      const opts: IBodyfulParams<T> = { payload: item, isFormData: true };
+      if (item.getFileInfos) {
+        opts.fileInfos = item.getFileInfos();
+        opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
+      }
+      return await httpClient.post<T, T>(opts);
     },
-    get: async ({ commit }, id: string) => {
-      commit('set', await httpClient.get<T>({ query: `${id}` }));
+    createAndSet: async ({ commit, dispatch }, item: T): Promise<void> => {
+      const result = await dispatch('create', item);
+      commit('set', result);
     },
-    create: async ({ commit }, item: T): Promise<void> => {
-      await httpClient.post<T, T>({ payload: item, fileInfos: item.getFileInfos(), isFormData: true });
+    createAndReset: async ({ commit, dispatch }, item: T): Promise<void> => {
+      await dispatch('create', item);
       commit('set');
     },
-    update: async ({ commit }, item: T): Promise<void> => {
-      await httpClient.put<T, T>({
-        query: `${item.id}`,
-        payload: item,
-        fileInfos: item.getFileInfos(),
-        isFormData: true,
-      });
+    update: async ({ state }, item: T): Promise<unknown> => {
+      if (!item) {
+        item = state.item;
+      }
+      const opts: IBodyfulParams<T> = { query: `${item.id}`, payload: item, isFormData: true };
+      if (item.getFileInfos) {
+        opts.fileInfos = item.getFileInfos();
+        opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
+      }
+      return await httpClient.put<T, T>(opts);
+    },
+    updateAndSet: async ({ dispatch, commit }, item: T): Promise<void> => {
+      const result = await dispatch('update', item);
+      commit('set', result);
+    },
+    updateAndReset: async ({ dispatch, commit }, item: T): Promise<void> => {
+      await dispatch('update', item);
       commit('set');
     },
     remove: async ({ commit }, id: string): Promise<void> => {
       await httpClient.delete({ query: `${id}` });
       commit('remove', id);
+    },
+    updateMany: async ({ state }): Promise<void> => {
+      await httpClient.put<T[], T[]>({ query: 'many', payload: state.items });
     },
   };
 }

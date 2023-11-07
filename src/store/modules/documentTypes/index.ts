@@ -1,26 +1,29 @@
 import { Module } from 'vuex';
 
-import DocumentType from '@/classes/documents/DocumentType';
+import DocumentType from '@/classes/DocumentType';
+import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
-import State from './state';
 
-export const state: State = {
-  documentType: new DocumentType(),
-  documentTypes: [],
+export type State = IBasicState<DocumentType>;
+export const getDefaultState = (): State => {
+  return {
+    ...getBaseDefaultState(DocumentType),
+  };
 };
+
+const state = getDefaultState();
 
 const namespaced = true;
 
-const documentTypes: Module<State, RootState> = {
+export const documentTypes: Module<State, RootState> = {
   namespaced,
   state,
   getters,
-  mutations,
   actions,
+  mutations,
 };
-
-export default documentTypes;

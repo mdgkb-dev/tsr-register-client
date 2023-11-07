@@ -1,13 +1,6 @@
 <template>
   <el-dialog v-model="cropper.isOpen" title="Кроппер" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
-    <Cropper
-      v-if="cropper.ratio"
-      ref="cropperRef"
-      :src="cropper.src"
-      :stencil-props="{ aspectRatio: cropper.ratio }"
-      style="max-height: 50vh"
-      @change="onChange"
-    />
+    <Cropper v-if="cropper.ratio" ref="cropperRef" :src="cropper.src" :stencil-props="{ aspectRatio: cropper.ratio }" style="max-height: 50vh" @change="onChange" />
     <Cropper v-else ref="cropperRef" :src="cropper.src" style="max-height: 50vh" @change="onChange" />
     <div class="dialog-footer">
       <el-button :loading="loading" type="warning" @click="cancel">Отменить</el-button>
@@ -49,7 +42,10 @@ export default defineComponent({
       const canvas = cropperRef.value.getResult();
       if (canvas) {
         canvas.canvas.toBlob((blob: Blob) => {
-          store.commit(`${cropper.value.store}/${cropper.value.mutation}`, { blob: blob, src: canvas.canvas.toDataURL() });
+          store.commit(`${cropper.value.store}/${cropper.value.mutation}`, {
+            blob: blob,
+            src: canvas.canvas.toDataURL(),
+          });
         });
       }
       loading.value = false;

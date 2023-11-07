@@ -1,56 +1,18 @@
 import { ActionTree } from 'vuex';
 
-import IFilterQuery from '@/interfaces/filters/IFilterQuery';
-import IRepresentative from '@/interfaces/representatives/IRepresentative';
+import Representative from '@/classes/Representative';
 import HttpClient from '@/services/HttpClient';
+import getBaseActions from '@/store/baseModule/baseActions';
 import RootState from '@/store/types';
 
-import { State } from './state';
+import { State } from './index';
 
 const httpClient = new HttpClient('representatives');
 
 const actions: ActionTree<State, RootState> = {
-  getAll: async ({ commit }, filterQuery: IFilterQuery): Promise<void> => {
-    commit('setAll', await httpClient.get<IRepresentative[]>({ query: filterQuery ? filterQuery.toUrl() : '' }));
-  },
-  get: async ({ commit }, id: string) => {
-    commit('set', await httpClient.get<IRepresentative>({ query: id }));
-  },
-  create: async ({ commit }, representative: IRepresentative | void): Promise<void> => {
-    if (!representative) {
-      return;
-    }
-    representative.human.removeDocumentFieldValuesIds();
-    const resp = await httpClient.post<IRepresentative, IRepresentative>({
-      payload: representative,
-      fileInfos: representative.getFileInfos(),
-      isFormData: true,
-    });
-    representative = resp;
-    commit('create', resp);
-    console.log(representative);
-  },
-  edit: async ({ commit }, representative: IRepresentative): Promise<void> => {
-    commit(
-      'update',
-      await httpClient.put<IRepresentative, IRepresentative>({
-        payload: representative,
-        query: representative.id,
-        isFormData: true,
-        fileInfos: representative.getFileInfos(),
-      })
-    );
-  },
-  delete: async ({ commit }, id: string): Promise<void> => {
-    await httpClient.delete<IRepresentative, IRepresentative>({ query: id });
-    commit('delete', id);
-  },
-  search: async ({ commit }, query: string): Promise<void> => {
-    commit('setFilteredItems', await httpClient.get<IRepresentative[]>({ query: `?query=${query}` }));
-  },
-  getAllById: async ({ commit }, id: string): Promise<void> => {
-    const res = await httpClient.get<IRepresentative>({ query: id });
-    commit('setAll', { patients: [res], count: 1 });
+  ...getBaseActions<Representative, State>(httpClient),
+  getBySnils: async ({ commit }, snils: string) => {
+    commit('setExists', await httpClient.get<Representative>({ query: 'by-snils/' + snils }));
   },
 };
 

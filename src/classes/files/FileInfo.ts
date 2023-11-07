@@ -95,9 +95,11 @@ export default class FileInfo implements IFileInfo {
     this.category = '';
   }
 
-  errorImg(event: Event, errorImgName?: string): void {
-    // if (event.target) {
-    //   (event.target as HTMLImageElement).src = errorImgName ? require(`@/assets/img/${errorImgName}`) : require('@/assets/img/avatar.webp');
-    // }
+  errorImg(): void {
+    return;
+  }
+
+  getFileInfos(): IFileInfo[] {
+    return [this];
   }
 }

@@ -1,5 +1,4 @@
 import IEdv from '@/interfaces/disabilities/IEdv';
-import IPatient from '@/interfaces/patients/IPatient';
 import IPeriod from '@/interfaces/shared/IPeriod';
 
 export default interface IDisability {
@@ -7,7 +6,7 @@ export default interface IDisability {
   period?: IPeriod;
   periodId?: string;
   patientId?: string;
-  patient?: IPatient;
+  patient?: Patient;
   edvs: IEdv[];
 
   getActuallyEdv: () => IEdv;
