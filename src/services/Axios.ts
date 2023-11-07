@@ -33,6 +33,11 @@ axiosInstance.interceptors.response.use(
       // router.go(-1);
       console.log(error.response.data);
     }
+    if (error.response.status === 400) {
+      ElNotification({ message: error.response.data, duration: 10000, type: 'error' });
+      // router.go(-1);
+      console.log(error.response.data);
+    }
     return Promise.reject(error);
   }
 );

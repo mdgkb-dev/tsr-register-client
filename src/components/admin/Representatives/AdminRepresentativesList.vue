@@ -32,6 +32,9 @@
       </div>
     </div>
   </AdminListWrapper>
+  <ModalWindow :show="showAddModal" title="Добавить представителя" @close="showAddModal = false">
+    <CreateRepresentativeForm @add="showAddModal = false" />
+  </ModalWindow>
 </template>
 
 <script lang="ts">
@@ -43,6 +46,7 @@ import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import ModalWindow from '@/components/Base/ModalWindow.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import RepresentativesSortsLib from '@/libs/sorts/RepresentativesSortsLib';
 import GridContainer from '@/services/components/GridContainer.vue';
@@ -52,6 +56,7 @@ import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
+import CreateRepresentativeForm from '../Patients/CreateRepresentativeForm.vue';
 export default defineComponent({
   name: 'AdminRepresentativesList',
   components: {
@@ -63,8 +68,11 @@ export default defineComponent({
     Button,
     SmallDatePicker,
     ToggleDocumentsForm,
+    CreateRepresentativeForm,
+    ModalWindow,
   },
   setup() {
+    const showAddModal: Ref<boolean> = ref(false);
     const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);
     const count: Ref<number> = computed(() => Provider.store.getters['representatives/count']);
 
@@ -80,9 +88,7 @@ export default defineComponent({
     };
 
     const addRepresentative = async (): Promise<void> => {
-      const patient = Representative.Create();
-      await Provider.store.dispatch('representatives/create', patient);
-      Provider.store.commit('representatives/unshiftToAll', patient);
+      showAddModal.value = !showAddModal.value;
     };
 
     Hooks.onBeforeMount(load, {
@@ -110,6 +116,8 @@ export default defineComponent({
     };
 
     return {
+      showAddModal,
+      addRepresentative,
       updateIsMale,
       loadRepresentatives,
       selectSearch,

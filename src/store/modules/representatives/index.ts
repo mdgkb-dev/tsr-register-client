@@ -11,12 +11,14 @@ import mutations from './mutations';
 
 export interface State extends IBasicState<Representative> {
   lastInsertedId?: string;
+  existsInDomain: boolean;
 }
 
 export const getDefaultState = (): State => {
   return {
     ...getBaseDefaultState(Representative),
     lastInsertedId: undefined,
+    existsInDomain: false,
   };
 };
 

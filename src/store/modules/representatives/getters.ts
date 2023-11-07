@@ -11,6 +11,9 @@ const getters: GetterTree<State, RootState> = {
   lastInsertedId(state): string | undefined {
     return state.lastInsertedId;
   },
+  existsInDomain(state): boolean {
+    return state.existsInDomain;
+  },
 };
 
 export default getters;
