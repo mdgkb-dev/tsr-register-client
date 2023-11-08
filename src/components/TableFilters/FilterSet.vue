@@ -63,9 +63,7 @@ export default defineComponent({
     const store = useStore();
     const loading = ref(false);
     const filter = ref();
-    const filterModel = ref(
-      FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set)
-    );
+    const filterModel = ref(FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set));
     filterModel.value.operator = Operators.In;
 
     const setTrigger = (trigger: string) => {
@@ -77,14 +75,7 @@ export default defineComponent({
 
     const dropFilterModel = () => {
       store.commit('filter/spliceFilterModel', filterModel.value.id);
-      filterModel.value = FilterModel.CreateFilterModelWithJoin(
-        table.value,
-        col.value,
-        joinTable.value,
-        joinTablePk.value,
-        joinTableFk.value,
-        DataTypes.Set
-      );
+      filterModel.value = FilterModel.CreateFilterModelWithJoin(table.value, col.value, joinTable.value, joinTablePk.value, joinTableFk.value, DataTypes.Set);
       filterModel.value.operator = Operators.In;
     };
 

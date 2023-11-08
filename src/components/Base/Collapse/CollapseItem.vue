@@ -139,8 +139,6 @@ export default defineComponent({
   margin: 10px 8px 2px 2px;
   cursor: pointer;
   transition: 0.15s;
-  // padding: 0 2px;
-  // visibility: ;
 
   &-name {
     position: relative;
@@ -187,8 +185,6 @@ export default defineComponent({
 
 .tab input:checked ~ .tab-content-down {
   max-height: 100vh;
-  // overflow: hidden;
-  // overflow-y: scroll;
 }
 
 .tab input:checked ~ .tab-content-up {
@@ -237,6 +233,19 @@ export default defineComponent({
 
 :deep(.el-carousel__container) {
   max-height: auto;
+}
+
+:deep(.el-form-item__label) {
+  width: 100%;
+  text-align: left;
+}
+
+:deep(.el-form-item) {
+  display: block;
+}
+
+:deep(.el-input__inner) {
+  height: 40px;
 }
 
 .hidden-part {

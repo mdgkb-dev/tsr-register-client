@@ -1,14 +1,6 @@
 <template>
   <div class="load-containet">
-    <el-upload
-      :on-change="changeFileHandler"
-      action="#"
-      :auto-upload="false"
-      class="upload-container"
-      :show-file-list="false"
-      list-type="picture"
-      accept=".pdf, .jpeg, .jpg"
-    >
+    <el-upload :on-change="changeFileHandler" action="#" :auto-upload="false" class="upload-container" :show-file-list="false" list-type="picture" accept=".pdf, .jpeg, .jpg">
       <Button button-class="save-button" :text="fileInfo && fileInfo.originalName ? 'Обновить' : 'Загрузить'" @click="addFile" />
 
       <template #tip>

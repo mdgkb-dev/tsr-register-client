@@ -1,6 +1,14 @@
 <template>
-  <el-radio v-for="variant in question.answerVariants" :key="variant.id" v-model="answer.answerVariantId" :label="variant.id" @change="filledCheck(variant)">
-    {{ variant.name }}
+  <el-radio
+    v-for="variant in question.answerVariants"
+    :key="variant.id"
+    v-model="answer.answerVariantId"
+    class="block"
+    :style="{ width: 'calc(100% - 10px)', height: 'auto' }"
+    :label="variant.id"
+    @change="filledCheck(variant)"
+  >
+    <p>{{ variant.name }}</p>
   </el-radio>
   <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
@@ -116,14 +124,18 @@ export default defineComponent({
 
 :deep(.el-input__icon) {
   color: $site_dark_gray;
+  margin-right: 10px;
 }
 
 :deep(.el-form-item__label) {
   color: $site_light_pink;
   padding: 0 !important;
   text-transform: uppercase;
-  margin-left: 5px;
   font-size: 14px;
   margin-bottom: 6px;
+}
+
+.block p {
+  white-space: pre-wrap;
 }
 </style>

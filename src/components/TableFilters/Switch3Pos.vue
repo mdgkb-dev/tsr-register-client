@@ -1,21 +1,9 @@
 <template>
   <div class="switch-container">
     <div class="line">
-      <StringItem
-        :string="firstModel.label"
-        font-size="12px"
-        padding="0"
-        :style="{ color: knob1 ? '#006bb4' : '#B0A4C0' }"
-        @click="selectFirstModel"
-      />
+      <StringItem :string="firstModel.label" font-size="12px" padding="0" :style="{ color: knob1 ? '#006bb4' : '#B0A4C0' }" @click="selectFirstModel" />
       <StringItem string="Все" font-size="12px" padding="0" :style="{ color: knob2 ? '#006bb4' : '#B0A4C0' }" @click="dropFilters" />
-      <StringItem
-        :string="secondModel.label"
-        font-size="12px"
-        padding="0"
-        :style="{ color: knob3 ? '#006bb4' : '#B0A4C0' }"
-        @click="selectSecondModel"
-      />
+      <StringItem :string="secondModel.label" font-size="12px" padding="0" :style="{ color: knob3 ? '#006bb4' : '#B0A4C0' }" @click="selectSecondModel" />
     </div>
     <div class="line">
       <div

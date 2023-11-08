@@ -7,9 +7,7 @@
             <svg class="icon-move">
               <use xlink:href="#move"></use>
             </svg>
-            <button class="admin-del2" @click.prevent="$classHelper.RemoveFromClassByIndex(index, fileList, fileListForDelete)">
-              Удалить
-            </button>
+            <button class="admin-del2" @click.prevent="$classHelper.RemoveFromClassByIndex(index, fileList, fileListForDelete)">Удалить</button>
           </div>
           <UploaderSingleScan
             :file-info="element.fileInfo"

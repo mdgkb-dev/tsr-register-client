@@ -96,7 +96,6 @@ export default defineComponent({
 
     const toNameStep = async (): Promise<void> => {
       await findExistingPatient();
-      console.log(existsInDomain.value);
       if (existsInDomain.value) {
         ElMessage.warning({ message: 'Пациент с данным СНИЛС уже добавлен' });
         return;
@@ -117,6 +116,8 @@ export default defineComponent({
 
     const createPatient = async (): Promise<void> => {
       await Provider.store.dispatch('patients/create', patient.value);
+      await Provider.store.dispatch('documents/create', patient.value.human.getOrCreateDocument(snils.value));
+      await Provider.store.dispatch('patients/get', patient.value.id);
       Provider.store.commit('patients/unshiftToAll', patient.value);
       emit('add');
     };

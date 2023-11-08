@@ -4,13 +4,7 @@
       <el-form label-position="top" :model="filterModel">
         <el-form-item :label="label">
           <el-select v-model="filterModel.operator" size="mini" placeholder="Выберите дату..." @click="setTrigger('manual')">
-            <el-option
-              v-for="(item, index) in filterList"
-              :key="index"
-              :label="item.label"
-              :value="item.value"
-              @click="setTrigger('click')"
-            ></el-option>
+            <el-option v-for="(item, index) in filterList" :key="index" :label="item.label" :value="item.value" @click="setTrigger('click')"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="filterModel.isUnaryFilter()">

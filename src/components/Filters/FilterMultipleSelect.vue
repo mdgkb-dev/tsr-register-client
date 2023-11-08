@@ -1,15 +1,7 @@
 <template>
   <el-form :gutter="12" label-position="top" :style="{ width: '100%', maxWidth: `${maxWidth}${typeof maxWidth === 'number' ? 'px' : ''}` }">
     <el-form-item>
-      <el-select
-        multiple
-        :model-value="filterModel.set"
-        :filterable="filterable"
-        clearable
-        :placeholder="placeholder"
-        round
-        @change="addFilterModel"
-      >
+      <el-select multiple :model-value="filterModel.set" :filterable="filterable" clearable :placeholder="placeholder" round @change="addFilterModel">
         <el-option v-for="(option, optionIndex) in options" :key="optionIndex" :label="option.label" :value="option.value"></el-option>
       </el-select>
     </el-form-item>

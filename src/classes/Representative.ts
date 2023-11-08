@@ -53,11 +53,19 @@ export default class Representative {
     this.representativeToPatient.push(item);
   }
 
-  static Create(): Representative {
+  static Create(user: User): Representative {
     const item = new Representative();
     item.id = uuidv4();
+
     item.human.id = uuidv4();
     item.humanId = item.human.id;
+
+    item.createdBy = user;
+    item.createdById = user.id;
+
+    item.createdAt = new Date();
+    item.updatedAt = new Date();
+
     return item;
   }
 

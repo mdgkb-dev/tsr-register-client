@@ -19,9 +19,7 @@
 
     <el-table-column label="Схема приема" align="start">
       <template #default="scope">
-        {{
-          scope.row.drugRegimen?.name ? scope.row.drugRegimen?.name : getDrugRegimenByDrugId(scope.row.drugId, scope.row.drugRegimenId).name
-        }}
+        {{ scope.row.drugRegimen?.name ? scope.row.drugRegimen?.name : getDrugRegimenByDrugId(scope.row.drugId, scope.row.drugRegimenId).name }}
       </template>
     </el-table-column>
 
@@ -64,42 +62,20 @@
 
   <el-dialog v-model="dialogVisible" title="Назначание лекарства" :before-close="handleCloseDialog" destroy-on-close width="450px">
     <el-form ref="form" label-width="180px" :model="newPatientDrugRegimen">
-      <el-form-item
-        label="Лекарство"
-        prop="drugId"
-        :rules="{ required: true, message: 'Пожалуйста выберите лекарство', trigger: 'change' }"
-      >
+      <el-form-item label="Лекарство" prop="drugId" :rules="{ required: true, message: 'Пожалуйста выберите лекарство', trigger: 'change' }">
         <el-select v-model="newPatientDrugRegimen.drugId" filterable placeholder="Лекарство">
           <el-option v-for="item in drugs" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
 
-      <el-form-item
-        label="Схема приема"
-        prop="drugRegimenId"
-        :rules="{ required: true, message: 'Пожалуйста выберите схему приема', trigger: 'change' }"
-      >
-        <el-select
-          v-model="newPatientDrugRegimen.drugRegimenId"
-          placeholder="Схема приема"
-          :disabled="newPatientDrugRegimen.drugId ? false : true"
-        >
-          <el-option
-            v-for="item in getDrugRegimens(newPatientDrugRegimen.drugId)"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            @click="chosenDrugRegimen = item"
-          >
+      <el-form-item label="Схема приема" prop="drugRegimenId" :rules="{ required: true, message: 'Пожалуйста выберите схему приема', trigger: 'change' }">
+        <el-select v-model="newPatientDrugRegimen.drugRegimenId" placeholder="Схема приема" :disabled="newPatientDrugRegimen.drugId ? false : true">
+          <el-option v-for="item in getDrugRegimens(newPatientDrugRegimen.drugId)" :key="item.id" :label="item.name" :value="item.id" @click="chosenDrugRegimen = item">
           </el-option>
         </el-select>
       </el-form-item>
 
-      <el-form-item
-        label="Дата начала приема"
-        prop="date"
-        :rules="{ required: true, message: 'Пожалуйста укажите дату начала приема', trigger: 'change' }"
-      >
+      <el-form-item label="Дата начала приема" prop="date" :rules="{ required: true, message: 'Пожалуйста укажите дату начала приема', trigger: 'change' }">
         <el-date-picker
           v-model="newPatientDrugRegimen.date"
           format="DD.MM.YYYY"
@@ -205,10 +181,7 @@ export default defineComponent({
           }
         });
         const d = new Date(newPatientDrugRegimen.value.date);
-        if (
-          drugRegimenBlock.infinitely &&
-          new Date(d.getFullYear(), d.getMonth(), d.getDate() + daysSum) < new Date(d.getFullYear() + 1, d.getMonth(), d.getDate())
-        ) {
+        if (drugRegimenBlock.infinitely && new Date(d.getFullYear(), d.getMonth(), d.getDate() + daysSum) < new Date(d.getFullYear() + 1, d.getMonth(), d.getDate())) {
           addPatientDrugRegimenItems(drugRegimenBlock);
         }
       };

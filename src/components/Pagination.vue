@@ -1,14 +1,6 @@
 <template>
   <div :key="count" style="text-align: center; width: 100%; background: #f5f5f5">
-    <el-pagination
-      style="padding: 10px 0"
-      :current-page="curPage"
-      background
-      layout="prev, pager, next"
-      :page-count="pageCount"
-      @current-change="currentChange"
-    >
-    </el-pagination>
+    <el-pagination style="padding: 10px 0" :current-page="curPage" background layout="prev, pager, next" :page-count="pageCount" @current-change="currentChange"> </el-pagination>
   </div>
 </template>
 
@@ -32,9 +24,7 @@ export default defineComponent({
     const action: string = Provider.store.getters['filter/action'];
     const count: ComputedRef<number> = computed(() => Provider.store.getters[`${storeModule}/count`]);
     const pageCount: ComputedRef<number> = computed(() =>
-      Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) > 0
-        ? Math.ceil(count.value / Provider.filterQuery.value.pagination.limit)
-        : 1
+      Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) > 0 ? Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) : 1
     );
     const curPage: ComputedRef<number> = computed(() => Provider.store.getters['pagination/curPage']);
 

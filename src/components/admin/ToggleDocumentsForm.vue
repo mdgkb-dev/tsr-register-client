@@ -97,7 +97,6 @@ export default defineComponent({
         return;
       }
       await Provider.store.dispatch('documentTypes/get', id);
-      console.log(documentType.value);
       const item = props.human.addDocument(documentType.value);
       await Provider.store.dispatch('documents/create', item);
 

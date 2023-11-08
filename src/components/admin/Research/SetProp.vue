@@ -17,13 +17,7 @@
         :question="additionalQuestion"
         @fill="$emit('fill')"
       />
-      <component
-        :is="additionalQuestion.valueType.getComponentType()"
-        v-else
-        :research-result="researchResult"
-        :question="additionalQuestion"
-        @fill="$emit('fill')"
-      />
+      <component :is="additionalQuestion.valueType.getComponentType()" v-else :research-result="researchResult" :question="additionalQuestion" @fill="$emit('fill')" />
     </el-form-item>
   </el-form>
 </template>

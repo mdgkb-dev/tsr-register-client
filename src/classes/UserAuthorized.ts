@@ -22,9 +22,7 @@ export default class UserAuthorized implements IUserAuthorized {
   }
 
   filterActualProperties(registerProperties: IRegisterProperty[]): IRegisterProperty[] {
-    const props = registerProperties.filter(
-      (prop: IRegisterProperty) => !this.registerPropertyToUser.find((userProp) => userProp.registerPropertyId === prop.id)
-    );
+    const props = registerProperties.filter((prop: IRegisterProperty) => !this.registerPropertyToUser.find((userProp) => userProp.registerPropertyId === prop.id));
     return props;
   }
 }

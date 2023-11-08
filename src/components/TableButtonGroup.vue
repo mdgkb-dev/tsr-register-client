@@ -8,13 +8,7 @@
     <el-button v-if="showMoveUpButton" class="table-button" icon="el-icon-arrow-up" @click="$emit('moveUp')" />
     <el-button v-if="showMoveDownButton" class="table-button" icon="el-icon-arrow-down" @click="$emit('moveDown')" />
     <el-button v-if="showDownloadButton" class="table-button" icon="el-icon-download" @click="$emit('download')" />
-    <el-button
-      v-if="showEditButton"
-      class="table-button"
-      icon="el-icon-edit"
-      data-test="tableButtonGroupEditButton"
-      @click="$emit('edit')"
-    />
+    <el-button v-if="showEditButton" class="table-button" icon="el-icon-edit" data-test="tableButtonGroupEditButton" @click="$emit('edit')" />
     <el-button v-if="showCheckButton" class="table-button" icon="el-icon-check" @click="$emit('check')" />
     <el-popconfirm
       v-if="showRemoveButton"

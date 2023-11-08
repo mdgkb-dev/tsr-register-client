@@ -1,19 +1,17 @@
 <template>
-  {{ researchResult.getOrCreateAnswer(question) === answer }}
-  {{ researchResult.getOrCreateAnswer(question).valueNumber }}
-  <el-input-number v-if="answer" v-model="answer.valueNumber" @input="filledCheck" />
-  <!-- <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" /> -->
+  <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" @change="filledCheck" />
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
+import InputNumber from '@/components/Base/InputNumber.vue';
 export default defineComponent({
   name: 'NumberProp',
-  // components: { InputNumber },
+  components: { InputNumber },
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -26,23 +24,15 @@ export default defineComponent({
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = ref(undefined);
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
     const filledCheck = (): void => {
       if (!answer.value) {
         return;
       }
-      console.log(answer.value === props.researchResult.getOrCreateAnswer(props.question));
-      // const answer: Ref<Answer | undefined> = ref(undefined);
       answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
       props.researchResult.calculateFilling();
       emit('fill');
     };
-
-    onBeforeMount(() => {
-      console.log();
-      answer.value = props.researchResult.getOrCreateAnswer(props.question);
-      console.log(answer.value === props.researchResult.getOrCreateAnswer(props.question));
-    });
 
     return {
       filledCheck,

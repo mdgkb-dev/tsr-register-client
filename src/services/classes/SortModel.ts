@@ -21,13 +21,7 @@ export default class SortModel {
     return model;
   }
 
-  static CreateSortModelV2(
-    model: string | ClassNameGetter,
-    col: string | undefined,
-    order?: Orders,
-    label?: string,
-    defaultModel?: boolean
-  ): SortModel {
+  static CreateSortModelV2(model: string | ClassNameGetter, col: string | undefined, order?: Orders, label?: string, defaultModel?: boolean): SortModel {
     const m = new SortModel();
     m.model = typeof model === 'string' ? model : model.GetClassName();
     m.col = col ?? '';

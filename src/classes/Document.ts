@@ -34,7 +34,6 @@ export default class Document {
     doc.documentType = docType;
     docType.documentTypeFields.forEach((f: DocumentTypeField) => doc.documentFieldValues.push(DocumentFieldValue.CreateFromType(f)));
     doc.humanId = humanId;
-    console.log(doc);
     return doc;
   }
 
@@ -44,5 +43,11 @@ export default class Document {
     file.documentId = this.id;
     this.documentFileInfos.push(file);
     return file;
+  }
+
+  static CreateSnils(docType: DocumentType, humanId?: string, snils?: string): Document {
+    const doc = this.CreateFromType(docType, humanId);
+    doc.documentFieldValues.forEach((f: DocumentFieldValue) => (f.valueString = snils));
+    return doc;
   }
 }

@@ -29,32 +29,14 @@ const PatientsFiltersLib = (() => {
   }
 
   function byRegisters(set: string[]): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoin(
-      table,
-      'id',
-      'patients_registers',
-      'id',
-      'patient_id',
-      DataTypes.Join,
-      'id',
-      'register_id'
-    );
+    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'patients_registers', 'id', 'patient_id', DataTypes.Join, 'id', 'register_id');
     filterModel.operator = Operators.In;
     filterModel.set = set;
     return filterModel;
   }
 
   function byQuestionVariantId(variantId: string, label: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoin(
-      table,
-      'id',
-      'answers',
-      'id',
-      'patient_id',
-      DataTypes.Join,
-      variantId,
-      'answer_variant_id'
-    );
+    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'answers', 'id', 'patient_id', DataTypes.Join, variantId, 'answer_variant_id');
     filterModel.operator = Operators.Eq;
     filterModel.label = label;
     return filterModel;

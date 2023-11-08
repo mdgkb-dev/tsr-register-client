@@ -69,10 +69,7 @@ export default class DrugRegimen {
         result += `${drugRegimenBlockItem.daysCount}дн`;
         if (drugRegimenBlock.infinitely && drugRegimenBlock.drugRegimenBlockItems.length - 1 === drugRegimenBlockItemIndex) {
           result += ' до конца.';
-        } else if (
-          this.drugRegimenBlocks.length - 1 === drugRegimenBlockIndex &&
-          drugRegimenBlock.drugRegimenBlockItems.length - 1 === drugRegimenBlockItemIndex
-        ) {
+        } else if (this.drugRegimenBlocks.length - 1 === drugRegimenBlockIndex && drugRegimenBlock.drugRegimenBlockItems.length - 1 === drugRegimenBlockItemIndex) {
           result += '. ';
         } else if (drugRegimenBlock.drugRegimenBlockItems.length - 1 === drugRegimenBlockItemIndex) {
           result += '; ';
