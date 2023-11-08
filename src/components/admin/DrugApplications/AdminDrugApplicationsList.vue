@@ -41,12 +41,11 @@
                 <div class="item-flex">
                   <GridContainer max-width="1920px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))" margin="0px">
                     <InfoItem title="дата заявки" margin="0" open-height="auto" :with-open-window="false" width="100%">
-                      <SmallDatePicker
+                      <DateInput
                         v-model:model-value="drugApplication.date"
                         placeholder="Выбрать"
-                        width="100%"
-                        height="34px"
                         @change="updateDrugApplication(drugApplication)"
+                        @beforeChange="(date) => drugApplication.setDate(date)"
                       />
                     </InfoItem>
 
@@ -91,9 +90,9 @@ import DrugApplicationsSortsLib from '@/libs/sorts/DrugApplicationsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import ClassHelper from '@/services/ClassHelper';
+import DateInput from '@/services/components/DateInput.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
-import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -112,11 +111,11 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
-    SmallDatePicker,
     Del,
     DrugApplicationFilesList,
     ToggleCommissionsForm,
     AdminDrugApplicationsListFilters,
+    DateInput,
   },
   setup() {
     const filterQuery = new FilterQuery();
@@ -175,7 +174,6 @@ export default defineComponent({
     };
 
     const addCommission = async (commission: Commission, drugApplication: DrugApplication) => {
-      console.log('addCommission');
       if (drugApplication.commissionExists(commission.id)) {
         return ElMessage.warning('Выбранная заявка уже добавлена');
       }

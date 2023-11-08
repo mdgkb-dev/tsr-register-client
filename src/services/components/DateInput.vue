@@ -29,8 +29,8 @@ export default defineComponent({
     },
     width: { type: String as PropType<string>, required: false, default: 'auto' },
   },
-  emits: ['update:modelValue', 'change'],
-  setup(props) {
+  emits: ['update:modelValue', 'change', 'beforeChange'],
+  setup(props, { emit }) {
     const modelValueString = props.modelValue.toLocaleDateString('ru-RU', {
       day: '2-digit',
       month: '2-digit',
@@ -39,7 +39,7 @@ export default defineComponent({
     const date: Ref<string> = ref(modelValueString);
 
     const changeHandler = (value: string) => {
-      if (value.length < 8) {
+      if (value.length != 10) {
         date.value = modelValueString;
         ElMessage({ type: 'error', message: 'Неверный формат даты' });
         return;
@@ -62,6 +62,8 @@ export default defineComponent({
         ElMessage({ type: 'error', message: 'Неверный год' });
         return;
       }
+      emit('beforeChange', date.value);
+      emit('change');
     };
     const inputHandler = (value: string) => {
       date.value = value.replace(/[^0-9.]/g, '');
@@ -72,8 +74,6 @@ export default defineComponent({
       if (date.value.length > 10) {
         date.value = date.value.substring(0, date.value.length - 1);
       }
-
-      console.log(date.value);
     };
 
     return {

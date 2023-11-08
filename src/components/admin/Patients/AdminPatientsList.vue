@@ -17,7 +17,12 @@
                 <div class="line-item-right">
                   <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
                   <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
-                    <DateInput v-model:model-value="patient.human.dateBirth" placeholder="Выбрать" @change="updateHuman(patient.human)" />
+                    <DateInput
+                      v-model:model-value="patient.human.dateBirth"
+                      placeholder="Выбрать"
+                      @change="updateHuman(patient.human)"
+                      @before-change="(date) => patient.human.setDateBirth(date)"
+                    />
                   </InfoItem>
                 </div>
               </div>

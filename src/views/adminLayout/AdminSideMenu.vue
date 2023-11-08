@@ -42,6 +42,8 @@ import { useStore } from 'vuex';
 
 import MenuIcon from '@/assets/svg/Menu.svg';
 import Button from '@/components/Base/Button.vue';
+import MenusSortsLib from '@/libs/sorts/MenusSortsLib';
+import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Menu from '@/services/classes/Menu';
 import Provider from '@/services/Provider/Provider';
 
@@ -72,7 +74,9 @@ export default defineComponent({
     );
 
     onBeforeMount(async () => {
-      await store.dispatch('menus/getAll', { withCache: true });
+      const filterQuery = new FilterQuery();
+      filterQuery.setSortModel(MenusSortsLib.byOrder());
+      await store.dispatch('menus/getAll', { withCache: true, filterQuery });
       // await store.dispatch('meta/getApplicationsCounts');
       // store.commit('admin/setApplicationsCounts', applicationsCounts.value);
       // await store.dispatch('admin/subscribeApplicationsCountsGet');

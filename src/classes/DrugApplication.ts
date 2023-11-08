@@ -31,6 +31,11 @@ export default class DrugApplication {
     ClassHelper.BuildClass(this, i);
   }
 
+  setDate(date: string): void {
+    const pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+    this.date = new Date(date.replace(pattern, '$3-$2-$1'));
+  }
+
   getNumber(): string {
     return this.number === '' ? 'Номер отсутствует' : this.number;
   }

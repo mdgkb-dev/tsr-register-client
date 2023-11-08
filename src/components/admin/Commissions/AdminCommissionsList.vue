@@ -103,7 +103,12 @@
                       <StringItem :string="commission.drugRecipe ? commission.drugRecipe.getFullName() : ''" custom-class="medicine" font-size="10px" />
                     </InfoItem>
                     <InfoItem title="дата комиссии" margin="0" open-height="auto" :with-open-window="false" width="100%">
-                      <SmallDatePicker v-model:model-value="commission.date" placeholder="Выбрать" width="100%" height="34px" @change="updateCommission(commission)" />
+                      <DateInput
+                        v-model:model-value="commission.date"
+                        placeholder="Выбрать"
+                        @change="updateCommission(commission)"
+                        @beforeChange="(date) => commission.setDate(date)"
+                      />
                     </InfoItem>
                     <Button
                       v-if="commission.canGetProtocol()"
@@ -142,9 +147,9 @@ import ModalWindow from '@/components/Base/ModalWindow.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import CommissionsSortsLib from '@/libs/sorts/CommissionsSortsLib';
+import DateInput from '@/services/components/DateInput.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
-import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -163,9 +168,9 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
-    SmallDatePicker,
     ModalWindow,
     PersonalityList,
+    DateInput,
   },
   setup() {
     const templatesOpened: Ref<boolean> = ref(false);
@@ -267,7 +272,6 @@ export default defineComponent({
       const findedCommission = commissions.value.find((com: Commission) => com.id === c.id);
       if (findedCommission) {
         findedCommission.setDrugRecipe(drugRecipe);
-        console.log(drugRecipe);
         showModalDrugs.value = false;
         await updateCommission(findedCommission);
       }
