@@ -1,5 +1,3 @@
-import IUser from '@/interfaces/IUser';
-
 export default interface IModelInfo {
   createdAt?: Date;
   updatedAt?: Date;
@@ -7,6 +5,6 @@ export default interface IModelInfo {
   createdById?: string;
   updatedById?: string;
 
-  createdBy?: IUser;
-  updatedBy?: IUser;
+  // createdBy?: IUser;
+  // updatedBy?: IUser;
 }

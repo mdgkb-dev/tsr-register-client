@@ -9,15 +9,20 @@
     @change="filledCheck"
     @visible-change="false"
   />
+  <span v-if="question.ageCompare" style="margin-left: 10px">
+    {{ patient.human.getAge(answer.valueDate) }}
+  </span>
 </template>
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
 import Answer from '@/classes/Answer';
+import Patient from '@/classes/Patient';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import dateFormat from '@/services/DateMask';
+import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
   name: 'DateQuestion',
@@ -33,6 +38,7 @@ export default defineComponent({
   },
   emits: ['fill'],
   setup(props, { emit }) {
+    const patient: ComputedRef<Patient> = computed(() => Provider.store.getters['patients/item']);
     const answer: ComputedRef<Answer> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
 
     const filledCheck = (): void => {
@@ -45,6 +51,7 @@ export default defineComponent({
       filledCheck,
       dateFormat,
       answer,
+      patient,
     };
   },
 });

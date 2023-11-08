@@ -9,7 +9,7 @@
             <span>{{ research.name }}</span>
             <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
           </template>
-          <Button button-class="del-button" text="Удалить исследование" />
+          <Button button-class="del-button" text="Удалить результат" @click="removeResearchResult" />
           <div v-if="research.withScores" class="flex-line">
             <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
             <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
@@ -53,6 +53,7 @@ import PatientResearchesList from '@/components/admin/Patients/PatientResearches
 import Button from '@/components/Base/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import MessageConfirmSave, { Close } from '@/services/classes/messages/MessageConfirmSave';
+import ClassHelper from '@/services/ClassHelper';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
@@ -101,6 +102,12 @@ export default defineComponent({
       Provider.store.commit('researches/set');
     };
 
+    const removeResearchResult = async () => {
+      ClassHelper.RemoveFromClassById(researchResult.value.id, patientResearch.value.researchResults);
+      await Provider.store.dispatch('researchesResults/remove', researchResult.value.id);
+      Provider.store.commit('researchesResults/set');
+    };
+
     const saveResult = async (): Promise<void> => {
       if (researchResult.value.changed) {
         await Provider.store.dispatch('researchesResults/update', researchResult.value);
@@ -129,6 +136,7 @@ export default defineComponent({
       researchesPools: researches,
       research,
       scroll,
+      removeResearchResult,
     };
   },
 });

@@ -164,4 +164,24 @@ export default class Human {
   documentTypeExists(id?: string): boolean {
     return this.documents.some((d: Document) => d.documentTypeId === id);
   }
+
+  setDateBirth(date: string): void {
+    const pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+    this.dateBirth = new Date(date.replace(pattern, '$3-$2-$1'));
+  }
+
+  // возраст человека на момент dateinput
+  getAge(dateinput: Date | string | undefined): string {
+    if (!dateinput) {
+      return '';
+    }
+    const date = new Date(dateinput);
+    const age = date.getFullYear() - this.dateBirth.getFullYear();
+    const m = date.getMonth() - this.dateBirth.getMonth();
+    const result = `${age} лет`;
+    if (m) {
+      return result + `, ${m} мес.`;
+    }
+    return result;
+  }
 }

@@ -60,7 +60,7 @@ export default defineComponent({
       const filterQuery = new FilterQuery();
       filterQuery.pagination.limit = 0;
       filterQuery.setSortModel(DrugsSortsLib.byNameINN());
-      await Provider.store.dispatch('drugs/getAll', { filterQuery });
+      // await Provider.store.dispatch('drugs/getAll', { filterQuery });
 
       stepsArrays.value = {
         0: drugs,
