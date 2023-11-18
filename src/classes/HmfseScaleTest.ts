@@ -31,10 +31,7 @@ export default class HmfseScaleTest {
     if (findedIndex > -1 && this.hmfseScaleTestResults[findedIndex].hmfseScaleQuestionScoreId === hmfseScaleScore.id) {
       return;
     }
-    if (
-      findedIndex > -1 &&
-      this.hmfseScaleTestResults[findedIndex].hmfseScaleQuestionScore?.hmfseScaleQuestionId === hmfseScaleScore.hmfseScaleQuestionId
-    ) {
+    if (findedIndex > -1 && this.hmfseScaleTestResults[findedIndex].hmfseScaleQuestionScore?.hmfseScaleQuestionId === hmfseScaleScore.hmfseScaleQuestionId) {
       RemoveFromClass(findedIndex, this.hmfseScaleTestResults, this.hmfseScaleTestResultsForDelete);
     }
     const r = new HmfseScaleTestResult();
