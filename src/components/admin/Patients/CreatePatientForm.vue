@@ -76,6 +76,7 @@ export default defineComponent({
     const findExistingPatient = async (): Promise<boolean> => {
       let snilsNumber = '';
       const snilsNumberField = snils.value.getFieldByCode(DocumentTypeFieldsCodes.Number);
+
       patient.value.human.documents.some((d: Document) => {
         return d.documentFieldValues.some(async (dfv: DocumentFieldValue) => {
           if (dfv.documentTypeFieldId === snilsNumberField?.id && dfv.valueString) {
@@ -83,6 +84,10 @@ export default defineComponent({
           }
         });
       });
+      if (snilsNumber == '') {
+        ElMessage.warning({ message: 'Обращаем внимание - вы добавляете пациента без СНИЛС' });
+        return false;
+      }
       await Provider.store.dispatch('patients/getBySnils', snilsNumber);
       return existingValues.value.length > 0;
     };
@@ -109,9 +114,9 @@ export default defineComponent({
           await addToDomain();
         });
       }
-      if (!existingPatient.value.id) {
-        showSnilsForm.value = false;
-      }
+      // if (!existingPatient.value.id) {
+      showSnilsForm.value = false;
+      // }
     };
 
     const createPatient = async (): Promise<void> => {

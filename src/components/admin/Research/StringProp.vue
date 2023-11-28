@@ -1,3 +1,4 @@
+~~~
 <template>
   <el-input v-if="answer" ref="inputRef" v-model="answer.valueString" @input="filledCheck" />
 </template>

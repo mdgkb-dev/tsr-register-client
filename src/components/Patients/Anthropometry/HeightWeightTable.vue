@@ -77,10 +77,7 @@
         <el-button type="success" size="small" :icon="Plus" circle @click="patient.addHeightWeight()" />
       </template>
       <template #default="scope">
-        <TableButtonGroup
-          :show-remove-button="true"
-          @remove="RemoveFromClass(scope.$index, patient.heightWeight, patient.heightWeightForDelete)"
-        />
+        <TableButtonGroup :show-remove-button="true" @remove="RemoveFromClass(scope.$index, patient.heightWeight, patient.heightWeightForDelete)" />
       </template>
     </el-table-column>
   </el-table>
@@ -95,8 +92,8 @@ import BodyArea from '@/classes/BodyArea';
 import Patient from '@/classes/patients/Patient';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import useDateFormat from '@/mixins/useDateFormat';
-import RemoveFromClass from '@/services/RemoveFromClass';
 import DateHelper from '@/services/DateHelper';
+import RemoveFromClass from '@/services/RemoveFromClass';
 export default defineComponent({
   name: 'HeightWeightTable',
   components: {

@@ -1,7 +1,7 @@
-import IRegion from '@/interfaces/IRegion';
-import IFileInfo from '@/interfaces/files/IFileInfo';
-import ClassBuilder from '@/services/ClassBuilder';
 import ChopScaleQuestionScore from '@/classes/ChopScaleQuestionScore';
+import IFileInfo from '@/interfaces/files/IFileInfo';
+import IRegion from '@/interfaces/IRegion';
+import ClassBuilder from '@/services/ClassBuilder';
 
 export default class ChopScaleQuestion {
   id?: string;

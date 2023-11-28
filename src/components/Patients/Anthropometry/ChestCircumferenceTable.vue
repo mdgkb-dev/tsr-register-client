@@ -50,10 +50,7 @@
         <el-button type="success" size="small" :icon="Plus" circle @click="patient.addChestCircumference()" />
       </template>
       <template #default="scope">
-        <TableButtonGroup
-          :show-remove-button="true"
-          @remove="RemoveFromClass(scope.$index, scope.row.chestCircumference, scope.row.chestCircumferenceForDelete)"
-        />
+        <TableButtonGroup :show-remove-button="true" @remove="RemoveFromClass(scope.$index, scope.row.chestCircumference, scope.row.chestCircumferenceForDelete)" />
       </template>
     </el-table-column>
   </el-table>
