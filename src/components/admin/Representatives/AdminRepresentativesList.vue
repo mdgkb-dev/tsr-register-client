@@ -1,5 +1,7 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
+    <AdminRepresentativesListFilters @load="load" />
+
     <div class="scroll-block">
       <div class="patient-count">Количество пациентов: {{ count }}</div>
       <div v-for="representative in representatives" :key="representative.id">
@@ -43,6 +45,7 @@ import { computed, defineComponent, Ref, ref } from 'vue';
 import Human from '@/classes/Human';
 import Representative from '@/classes/Representative';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
+import AdminRepresentativesListFilters from '@/components/admin/Representatives/AdminRepresentativesListFilters.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import Button from '@/components/Base/Button.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
@@ -70,6 +73,7 @@ export default defineComponent({
     ToggleDocumentsForm,
     CreateRepresentativeForm,
     ModalWindow,
+    AdminRepresentativesListFilters,
   },
   setup() {
     const showAddModal: Ref<boolean> = ref(false);
@@ -126,6 +130,7 @@ export default defineComponent({
       representatives,
       ...Provider.getAdminLib(),
       count,
+      load,
     };
   },
 });
@@ -253,7 +258,7 @@ export default defineComponent({
 }
 
 .scroll-block {
-  height: 75vh;
+  height: 100%;
   overflow: hidden;
   overflow-y: scroll;
   margin-left: 8px;

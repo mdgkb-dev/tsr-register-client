@@ -4,7 +4,7 @@
       <div v-if="research.id && patientResearch" class="header-container">
         <Button button-class="grey-button" text="Назад" @click="cancelResearchResultsFilling" />
         <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling" />
-        <TopSliderContainer>
+        <TopSliderContainer slider-on-height="250px">
           <template #title>
             <span>{{ research.name }}</span>
             <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
@@ -14,9 +14,13 @@
             <StringItem string="Кол-во баллов:" font-size="14px" padding="0 10px 0 0" />
             <StringItem :string="researchResult.calculateScores(research.getAnswerVariants())" font-size="14px" padding="0 10px 0 0" />
           </div>
-          <div class="flex-line">
+          <div v-show="!research.showOnlyFilled" class="flex-line">
             <StringItem string="Скрыть&nbsp;заполненные" font-size="14px" padding="0 10px 0 0" />
             <el-switch v-model="research.showOnlyNotFilled" placeholder="Отобразить только незаполненные" />
+          </div>
+          <div v-show="!research.showOnlyNotFilled" class="flex-line">
+            <StringItem string="Скрыть&nbsp;незаполненные" font-size="14px" padding="0 10px 0 0" />
+            <el-switch v-model="research.showOnlyFilled" placeholder="Отобразить только заполненные" />
           </div>
           <div class="search">
             <el-input v-model="research.filterString" placeholder="Найти вопрос" />

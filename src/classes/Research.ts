@@ -27,6 +27,7 @@ export default class Research {
   selectedForExport = false;
   filterString = '';
   showOnlyNotFilled = false;
+  showOnlyFilled = false;
 
   constructor(i?: Research) {
     ClassHelper.BuildClass(this, i);
@@ -76,12 +77,16 @@ export default class Research {
     return this.showOnlyNotFilled ? questions.filter((q: Question) => !researchResult.getAnswer(q.id as string)?.filled) : questions;
   }
 
+  getFilledQuestions(researchResult: ResearchResult, questions: Question[]): Question[] {
+    return this.showOnlyFilled ? questions.filter((q: Question) => researchResult.getAnswer(q.id as string)?.filled) : questions;
+  }
+
   getQuestionsByString(): Question[] {
     return this.filterString === '' ? this.questions : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
   }
 
   getFilteredQuestions(researchResult: ResearchResult): Question[] {
-    return this.getNotFilledQuestions(researchResult, this.getQuestionsByString());
+    return this.showOnlyNotFilled ? this.getNotFilledQuestions(researchResult, this.getQuestionsByString()) : this.getFilledQuestions(researchResult, this.getQuestionsByString());
   }
 
   selectFormula(item: Formula): void {

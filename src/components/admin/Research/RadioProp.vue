@@ -12,13 +12,13 @@
   </el-radio>
   <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
-      <component :is="additionalQuestion.valueType.getComponentType()" :research-result="researchResult" :question="additionalQuestion" @fill="$emit('fill')" />
+      <component :is="additionalQuestion.valueType.getComponentType()" ref="compRef" :research-result="researchResult" :question="additionalQuestion" @fill="$emit('fill')" />
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, nextTick, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
@@ -47,6 +47,8 @@ export default defineComponent({
   setup(props, { emit }) {
     const selectedVariant: Ref<AnswerVariant | undefined> = ref(undefined);
     const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    const myinput = ref<HTMLInputElement>();
+    const compRef = ref();
 
     const filledCheck = (variant: AnswerVariant): void => {
       // TODO: временно
@@ -61,6 +63,7 @@ export default defineComponent({
       answer.value.filled = answer.value.answerVariantId === variant.id;
       props.researchResult.calculateFilling();
       emit('fill');
+      nextTick(() => compRef.value.inputRef.focus());
     };
 
     const selectVariant = (variant?: AnswerVariant): void => {
@@ -75,6 +78,8 @@ export default defineComponent({
       selectedVariant,
       filledCheck,
       answer,
+      myinput,
+      compRef,
     };
   },
 });
