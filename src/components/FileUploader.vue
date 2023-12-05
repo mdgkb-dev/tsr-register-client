@@ -38,7 +38,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['remove'],
+  emits: ['remove', 'upload'],
   setup(props, { emit }) {
     const changeFileHandler = (file: IFile) => {
       if (!isAcceptedFormat(file.name)) {
@@ -48,6 +48,7 @@ export default defineComponent({
         return;
       }
       props.fileInfo.uploadAndSetFile(file);
+      emit('upload');
     };
     const removeFile = () => {
       props.fileInfo.clearFile();

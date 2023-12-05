@@ -1,5 +1,4 @@
 <template>
-  adfadsf
   <el-checkbox
     v-for="variant in question.answerVariants"
     :key="variant.id"
@@ -19,13 +18,12 @@
         @fill="$emit('fill')"
       />
       <component :is="additionalQuestion.valueType.getComponentType()" v-else :research-result="researchResult" :question="additionalQuestion" @fill="$emit('fill')" />
-      {{ researchResult.getOrCreateAnswer(additionalQuestion) }}
     </el-form-item>
   </el-form>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
+import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
@@ -59,7 +57,7 @@ export default defineComponent({
   },
   emits: ['update:modelValue', 'fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    const answer: Ref<Answer> = ref(props.researchResult.getOrCreateAnswer(props.question));
     const showOthers = computed(() => {
       if (props.restrictOthers) {
         return false;

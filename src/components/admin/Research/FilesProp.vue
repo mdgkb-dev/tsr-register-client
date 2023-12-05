@@ -1,12 +1,12 @@
 <template>
   <Button button-class="plus-button" text="Добавить скан" @click="addFile" />
   <div v-for="answerFile in answer?.answerFiles" :key="answerFile.id" class="background-field">
-    <FileUploader :file-info="answerFile.fileInfo" @remove="remove(answerFile.id)" />
+    <FileUploader :file-info="answerFile.fileInfo" @remove="remove(answerFile.id)" @upload="$emit('fill')" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
@@ -30,11 +30,7 @@ export default defineComponent({
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = ref(undefined);
-
-    onBeforeMount(() => {
-      answer.value = props.researchResult.getOrCreateAnswer(props.question);
-    });
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
 
     const remove = (id?: string) => {
       if (!answer.value) {

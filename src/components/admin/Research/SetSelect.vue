@@ -20,7 +20,7 @@
             background="#ffffff"
             :with-icon="false"
             :color-swap="true"
-            @click="$classHelper.RemoveFromClassById(researchResult.getQuestionVariantAnswer(variant.id)?.id, researchResult.answers, [])"
+            @click="removeVariantAnswer(variant.id)"
           >
           </Button>
         </div>
@@ -86,6 +86,7 @@ import ResearchResult from '@/classes/ResearchResult';
 import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
 import Button from '@/components/Base/Button.vue';
+import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringsService from '@/services/Strings';
@@ -141,14 +142,18 @@ export default defineComponent({
       const answer = Answer.Create(props.question);
       answer.questionVariantId = questionVariant.id;
       props.researchResult.addAnswer(answer);
-      console.log(props.researchResult.answers);
+      emit('fill');
     };
 
     const getAns = (v: string) => {
       return props.researchResult.getQuestionVariantAnswer(v)?.valueNumber;
     };
-
+    const removeVariantAnswer = (variantId: string) => {
+      ClassHelper.RemoveFromClassById(props.researchResult.getQuestionVariantAnswer(variantId)?.id, props.researchResult.answers, []);
+      emit('fill');
+    };
     return {
+      removeVariantAnswer,
       filterString,
       filteredVariants,
       getAns,
