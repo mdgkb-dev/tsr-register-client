@@ -40,8 +40,7 @@
     </div>
     <div class="text-center">
       <el-button type="success" @click="save"
-        >Сохранить, заполнено на {{ chopScaleTest.getFillingPercentage(chopScaleQuestions.length) }}%, результат:
-        {{ chopScaleTest.getFormattedScoresSum() }}</el-button
+        >Сохранить, заполнено на {{ chopScaleTest.getFillingPercentage(chopScaleQuestions.length) }}%, результат: {{ chopScaleTest.getFormattedScoresSum() }}</el-button
       >
     </div>
   </div>

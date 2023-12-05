@@ -32,14 +32,10 @@ axiosInstance.interceptors.response.use(
     }
     if (error.response.status === 500) {
       ElNotification({ message: 'Ошибка на сервере, попробуйте позже', duration: 10000, type: 'error' });
-      // router.go(-1);
-      console.log(error.response.data);
     }
     if (error.response.status === 400) {
       const err = new HttpError(error.response.data);
       ElNotification({ message: err.getErr(), duration: 10000, type: 'error' });
-      // router.go(-1);
-      console.log(error.response.data);
     }
     return Promise.reject(error);
   }

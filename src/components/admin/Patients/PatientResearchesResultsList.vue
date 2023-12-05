@@ -30,6 +30,7 @@
 </template>
 
 <script lang="ts">
+import { ElMessage } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, onMounted, PropType, Ref, ref } from 'vue';
 
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
@@ -43,6 +44,7 @@ import Button from '@/components/Base/Button.vue';
 import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
 import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
 import MessageConfirmSave, { Cancel } from '@/services/classes/messages/MessageConfirmSave';
+import MessageSuccess from '@/services/classes/messages/MessageSuccess';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
@@ -84,6 +86,7 @@ export default defineComponent({
 
     const update = async (item: ResearchResult): Promise<void> => {
       await Provider.store.dispatch('researchesResults/update', item);
+      ElMessage(new MessageSuccess());
     };
 
     onBeforeMount(async () => {

@@ -40,8 +40,7 @@
     </div>
     <div class="text-center">
       <el-button type="success" @click="save"
-        >Сохранить, заполнено на {{ hmfseScaleTest.getFillingPercentage(hmfseScaleQuestions.length) }}%, результат:
-        {{ hmfseScaleTest.getFormattedScoresSum() }}</el-button
+        >Сохранить, заполнено на {{ hmfseScaleTest.getFillingPercentage(hmfseScaleQuestions.length) }}%, результат: {{ hmfseScaleTest.getFormattedScoresSum() }}</el-button
       >
     </div>
   </div>

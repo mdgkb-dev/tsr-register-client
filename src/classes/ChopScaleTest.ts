@@ -31,10 +31,7 @@ export default class ChopScaleTest {
     if (findedIndex > -1 && this.chopScaleTestResults[findedIndex].chopScaleQuestionScoreId === chopScaleScore.id) {
       return;
     }
-    if (
-      findedIndex > -1 &&
-      this.chopScaleTestResults[findedIndex].chopScaleQuestionScore?.chopScaleQuestionId === chopScaleScore.chopScaleQuestionId
-    ) {
+    if (findedIndex > -1 && this.chopScaleTestResults[findedIndex].chopScaleQuestionScore?.chopScaleQuestionId === chopScaleScore.chopScaleQuestionId) {
       RemoveFromClass(findedIndex, this.chopScaleTestResults, this.chopScaleTestResultsForDelete);
     }
     const r = new ChopScaleTestResult();

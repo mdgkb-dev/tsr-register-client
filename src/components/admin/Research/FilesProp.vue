@@ -28,7 +28,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ['fill'],
+  setup(props, { emit }) {
     const answer: Ref<Answer | undefined> = ref(undefined);
 
     onBeforeMount(() => {
@@ -40,6 +41,7 @@ export default defineComponent({
         return;
       }
       ClassHelper.RemoveFromClassById(id, answer.value?.answerFiles, answer.value?.answerFilesForDelete);
+      emit('fill');
     };
 
     const addFile = async () => {
@@ -47,6 +49,7 @@ export default defineComponent({
         return;
       }
       answer.value.addFile();
+      emit('fill');
     };
 
     return { answer, remove, addFile };
