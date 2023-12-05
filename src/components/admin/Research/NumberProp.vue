@@ -21,10 +21,19 @@ export default defineComponent({
       type: Object as PropType<Question>,
       required: true,
     },
+    variantId: {
+      type: String as PropType<string>,
+      default: '',
+    },
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    const answer: Ref<Answer | undefined> = computed(() => {
+      if (props.variantId !== '') {
+        return props.researchResult.getQuestionVariantAnswer(props.variantId);
+      }
+      return props.researchResult.getOrCreateAnswer(props.question);
+    });
     const filledCheck = (): void => {
       if (!answer.value) {
         return;

@@ -5,7 +5,7 @@
       <div v-for="variant in question.questionVariants.filter((q) => !!researchResult.getQuestionVariantAnswer(q.id))" :key="variant.id" class="item-line">
         <div class="left">
           <div class="item-counter">
-            <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" :variant-id="variant.id" />
+            <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" :variant-id="variant.id" @fill="$emit('fill')" />
           </div>
           <div class="item-name">{{ variant.name }}</div>
         </div>
@@ -112,7 +112,7 @@ export default defineComponent({
   emits: ['update:modelValue', 'fill'],
   setup(props, { emit }) {
     const addAllergen = ref(false);
-    const answer = props.researchResult.getOrCreateAnswer(props.question);
+    const answer = computed(() => props.researchResult.getOrCreateAnswer(props.question));
     const filterString: Ref<string> = ref('');
     const filteredVariants: ComputedRef<QuestionVariant[]> = computed(() => {
       if (filterString.value === '') {
@@ -122,12 +122,12 @@ export default defineComponent({
     });
 
     const filledCheck = (): void => {
-      answer.filled = answer.selectedAnswerVariants.length > 0;
+      // answer.value.filled = answer.selectedAnswerVariants.length > 0;
       props.researchResult.calculateFilling();
       emit('fill');
     };
     const selectVariant = (selected: boolean, variantId: string) => {
-      answer.setSelectedAnswerVariant(selected, variantId);
+      answer.value.setSelectedAnswerVariant(selected, variantId);
       filledCheck();
     };
 
