@@ -11,7 +11,7 @@ export default class DocumentFieldValue {
   order = 0;
   valueString?: string;
   valueNumber?: number;
-  valueDate?: Date;
+  valueDate: Date = new Date();
 
   constructor(i?: DocumentFieldValue) {
     ClassHelper.BuildClass(this, i);
@@ -23,5 +23,10 @@ export default class DocumentFieldValue {
     field.documentTypeFieldId = docTypeField.id;
     field.order = docTypeField.order;
     return field;
+  }
+
+  setDate(date: string): void {
+    const pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+    this.valueDate = new Date(date.replace(pattern, '$3-$2-$1'));
   }
 }

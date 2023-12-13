@@ -11,7 +11,7 @@
             </a>
           </div>
           <div v-else class="file-name">Файл не загружен</div>
-          <Button button-class="close-button" icon="close" icon-class="edit-icon" @click="removeFile" />
+          <Button v-if="fileInfo.originalName" button-class="close-button" icon="close" icon-class="edit-icon" @click="removeFile" />
         </div>
       </template>
     </el-upload>
@@ -38,7 +38,7 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['remove'],
+  emits: ['remove', 'upload'],
   setup(props, { emit }) {
     const changeFileHandler = (file: IFile) => {
       if (!isAcceptedFormat(file.name)) {
@@ -47,7 +47,9 @@ export default defineComponent({
         });
         return;
       }
+      console.log(props.fileInfo);
       props.fileInfo.uploadAndSetFile(file);
+      emit('upload');
     };
     const removeFile = () => {
       props.fileInfo.clearFile();
