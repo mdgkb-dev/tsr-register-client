@@ -41,7 +41,7 @@ export default defineComponent({
   setup() {
     const menus: CustomSection[] = [
       CustomSection.Create('info', 'Паспортные данные', 'RepresentativePageInfo', 0, true),
-      CustomSection.Create('contacts', 'Контакты', 'RepresentativeContacts', 0, true),
+      // CustomSection.Create('contacts', 'Контакты', 'RepresentativeContacts', 0, true),
       CustomSection.Create('documents', 'Документы', 'RepresentativeDocuments', 0, true),
       // CustomSection.Create('wards', 'Подопечные', 'RepresentativeWards', 0, true),
     ];

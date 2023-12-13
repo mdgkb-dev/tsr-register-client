@@ -71,7 +71,7 @@
                 </Button>
               </div>
             </div>
-            <PassportForm :edit-mode="true" store-module="representatives" />
+            <RepresentativePageInfo />
           </template>
         </ResearcheContainer>
       </div>
@@ -105,8 +105,8 @@ import PatientRepresentative from '@/classes/PatientRepresentative';
 import Representative from '@/classes/Representative';
 import RepresentativeToPatientRules from '@/classes/RepresentativeToPatientRules';
 import RepresentativeType from '@/classes/RepresentativeType';
-import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import RepresentativeModal from '@/components/admin/Patients/RepresentativeModal.vue';
+import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
 import Button from '@/components/Base/Button.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
@@ -114,7 +114,6 @@ import ClassHelper from '@/services/ClassHelper';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'PatientRepresentatives',
   components: {
@@ -122,7 +121,7 @@ export default defineComponent({
     RemoteSearch,
     RightTabsContainer,
     ResearcheContainer,
-    PassportForm,
+    RepresentativePageInfo,
     Button,
   },
   setup() {
