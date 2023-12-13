@@ -11,7 +11,7 @@
     <template #open-inside-content>
       <GridContainer custom-class="grid">
         <div v-for="(rep, key, index) in patient.patientsRepresentatives" :key="index">
-          <InfoItem margin="0" :with-open-window="false" height="32px">
+          <InfoItem margin="0" :with-open-window="false" height="32px" @click="toRepresentative(rep.representativeId)">
             <template #title>
               <StringItem :string="rep.getRepresentativeParentType(true)" font-size="10px" padding="0 0 0 3px" color="#D42E61" />
             </template>
@@ -21,7 +21,6 @@
             </div>
           </InfoItem>
         </div>
-        <Button button-class="plus-button" icon="plus" icon-class="icon-plus" />
 
         <RemoteSearch key-value="representative" placeholder="Начните вводить имя представителя" @click.stop="() => undefined" @select="(e) => addRepresentative(e, patient)" />
       </GridContainer>
@@ -35,7 +34,6 @@ import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
-import Button from '@/components/Base/Button.vue';
 import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import GridContainer from '@/services/components/GridContainer.vue';
@@ -50,7 +48,6 @@ export default defineComponent({
     StringItem,
     InfoItem,
     GridContainer,
-    Button,
   },
   props: {
     patient: {
@@ -73,7 +70,11 @@ export default defineComponent({
       await Provider.store.dispatch('patientsRepresentatives/create', item);
     };
 
+    const toRepresentative = (id?: string) => {
+      Provider.router.push(`/admin/representatives/${id}`);
+    };
     return {
+      toRepresentative,
       representative,
       addRepresentative,
     };

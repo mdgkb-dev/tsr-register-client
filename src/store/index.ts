@@ -7,6 +7,7 @@ import { commissions } from '@/store/modules/commissions';
 import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
 import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
 import { commissionsTemplates } from '@/store/modules/commissionsTemplates';
+import { contacts } from '@/store/modules/contacts';
 import { cropper } from '@/store/modules/cropper';
 import { customSections } from '@/store/modules/customSections';
 import dataExport from '@/store/modules/dataExport';
@@ -120,6 +121,7 @@ const store: StoreOptions<RootState> = {
     dataExport,
     customSections,
     patientsDiagnosis,
+    contacts,
   },
 };
 

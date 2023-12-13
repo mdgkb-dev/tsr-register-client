@@ -279,7 +279,7 @@ export default defineComponent({
 }
 
 .scroll-block {
-  height: 75vh;
+  height: 100%;
   overflow: hidden;
   overflow-y: scroll;
   margin-left: 8px;

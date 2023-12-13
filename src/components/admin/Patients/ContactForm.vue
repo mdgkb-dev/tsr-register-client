@@ -7,10 +7,10 @@
   >
     <el-form>
       <el-form-item label="Телефон">
-        <el-input v-model="human.contact.phone" placeholder="Введите номер" @blur="updateHuman()"></el-input>
+        <el-input v-model="human.contact.phone" placeholder="Введите номер" @input="human.contact.formatPhoneNumber()" @blur="update()"></el-input>
       </el-form-item>
       <el-form-item label="Email">
-        <el-input v-model="human.contact.email" placeholder="Введите адрес" @blur="updateHuman()"></el-input>
+        <el-input v-model="human.contact.email" placeholder="Введите адрес" @blur="update()"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -62,7 +62,7 @@ export default defineComponent({
     const human: Ref<Human> = computed(() => Provider.store.getters[`${props.storeModule}/item`].getHuman());
     const toggleAddress = async (addressesEqual: boolean): Promise<void> => {
       human.value.setResidentialAddress(addressesEqual);
-      await updateHuman();
+      await update();
     };
     const getForm = (value: string) => {
       switch (value) {
@@ -73,7 +73,7 @@ export default defineComponent({
       }
     };
 
-    const updateHuman = async (form?: string): Promise<void> => {
+    const update = async (form?: string): Promise<void> => {
       if (form) {
         if (!validate(getForm(form))) {
           return;
@@ -81,14 +81,14 @@ export default defineComponent({
       }
       await Provider.withHeadLoader(async () => {
         if (props.editMode) {
-          await Provider.store.dispatch('humans/update', human.value);
+          await Provider.store.dispatch('contacts/update', human.value.contact);
         }
       });
     };
 
     return {
       human,
-      updateHuman,
+      update,
       toggleAddress,
       form,
       surnameForm,
