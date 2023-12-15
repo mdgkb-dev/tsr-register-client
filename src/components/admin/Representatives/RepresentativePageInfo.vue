@@ -1,13 +1,15 @@
 <template>
-  <LeftRightContainer left-width="280px">
-    <template #left>
-      <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
-      <ContactForm store-module="representatives" :edit-mode="true" />
-    </template>
-    <template #right>
-      <PassportForm store-module="representatives" :edit-mode="true" />
-    </template>
-  </LeftRightContainer>
+  <div class="slider">
+    <LeftRightContainer left-width="280px">
+      <template #left>
+        <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
+        <ContactForm store-module="representatives" :edit-mode="true" />
+      </template>
+      <template #right>
+        <PassportForm store-module="representatives" :edit-mode="true" />
+      </template>
+    </LeftRightContainer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -52,6 +54,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/elements/pageInfo.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.slider {
+  height: 500px;
+  overflow-y: auto;
+}
 
 .register-tag {
   &:hover {
