@@ -56,7 +56,7 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 
 .slider {
-  height: 500px;
+  height: auto;
   overflow-y: auto;
 }
 
@@ -92,5 +92,29 @@ export default defineComponent({
   color: $site_dark_gray;
   margin-top: 3px;
   margin-left: 10px;
+}
+
+@media screen and (max-width: 2000px) {
+  .slider {
+    height: 600px;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .slider {
+    height: 450px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .slider {
+    height: 430px;
+  }
+}
+
+@media screen and (max-width: 452px) {
+  .slider {
+    height: 380px;
+  }
 }
 </style>

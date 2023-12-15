@@ -40,7 +40,6 @@
             </TopSliderContainer>
           </template>
           <template #body>
-            <!-- <div class="scroll"> -->
             <div class="line-item">
               <div class="item-left">
                 <el-form>
@@ -78,7 +77,6 @@
               </div>
             </div>
             <RepresentativePageInfo />
-            <!-- </div> -->
           </template>
         </ResearcheContainer>
       </div>
@@ -596,11 +594,6 @@ export default defineComponent({
   padding: 0;
 }
 
-// .scroll {
-//   overflow-y: auto;
-//   overflow: hidden;
-//   height: 60vh;
-// }
 
 @media screen and (max-width: 768px) {
   .tabs-item {

@@ -14,11 +14,7 @@
     >
       <slot name="header" />
     </div>
-    <!-- :style="{
-      height: autoHeight,
-    }" -->
     <div class="mainblock-body">
-      {{ autoHeight }}
       <slot name="body" />
     </div>
 
@@ -78,7 +74,6 @@ export default defineComponent({
 
 .mainblock-body {
   width: 100%;
-  // height: 600px;
   padding-bottom: 70px;
 }
 
