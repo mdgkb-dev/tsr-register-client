@@ -403,6 +403,18 @@ export default defineComponent({
   cursor: pointer;
 }
 
+:deep(.el-input__inner) {
+  height: 34px;
+  display: flex;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: $site_dark_gray;
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+  width: 100%;
+}
+
 :deep(.edit-icon) {
   width: 28px;
   height: 28px;

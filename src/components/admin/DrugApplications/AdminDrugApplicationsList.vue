@@ -434,9 +434,15 @@ export default defineComponent({
 }
 
 :deep(.el-input__inner) {
-  border: none;
   height: 37px;
+  display: flex;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 14px;
   color: $site_dark_gray;
+  padding-left: 0;
+  padding-right: 0;
+  border: none;
+  width: 100%;
 }
 
 :deep(.medical-commission-button) {
