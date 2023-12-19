@@ -6,8 +6,8 @@
         <Button icon="back" button-class="edit-button" icon-class="edit-icon" @click="cancelResearchResultsFilling" />
         <TopSliderContainer slider-on-height="250px">
           <template #title>
-            <span>{{ research.name }}</span>
-            <span v-if="research.withScores"> &nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</span>
+            <div class="title">{{ research.name }}</div>
+            <div v-if="research.withScores" class="title">&nbsp;(Баллов: {{ researchResult.calculateScores(research.getAnswerVariants()) }})</div>
           </template>
           <Button button-class="del-button" text="Удалить результат" @click="removeResearchResult" />
           <div v-if="research.withScores" class="flex-line">
@@ -205,6 +205,13 @@ export default defineComponent({
   width: 28px;
   height: 28px;
   fill: #006bb4;
+}
+
+.title {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 768px) {

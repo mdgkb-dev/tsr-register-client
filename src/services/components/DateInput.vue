@@ -95,18 +95,6 @@ export default defineComponent({
   width: 100%;
 }
 
-:deep(.el-input__inner) {
-  height: 34px;
-  display: flex;
-  font-family: Comfortaa, Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  color: $site_dark_gray;
-  padding-left: 0;
-  padding-right: 0;
-  border: none;
-  width: 100%;
-}
-
 :deep(.el-input__prefix) {
   left: 0;
   top: -3px;
@@ -155,4 +143,16 @@ export default defineComponent({
 :deep(.disable) {
   display: none;
 }
+
+// :deep(.el-input__inner) {
+//   height: 34px;
+//   display: flex;
+//   font-family: Comfortaa, Arial, Helvetica, sans-serif;
+//   font-size: 14px;
+//   color: $site_dark_gray;
+//   padding-left: 0;
+//   padding-right: 0;
+//   border: none;
+//   width: 100%;
+// }
 </style>

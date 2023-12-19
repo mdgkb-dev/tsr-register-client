@@ -20,7 +20,6 @@
       <el-form-item v-if="value.documentTypeField.valueType.isNumber()" :label="value.documentTypeField.name" size="mini">
         <el-input-number v-model="value.valueNumber" size="mini" @blur="updateDocumentField(value)" />
       </el-form-item>
-
       <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">
         <DateInput v-model:model-value="value.valueDate" placeholder="Выбрать" @change="updateDocumentField(value)" @before-change="(date) => value.setDate(date)" />
       </el-form-item>
@@ -602,6 +601,18 @@ export default defineComponent({
   font-size: 15px;
   color: $site_dark_gray;
 }
+
+// :deep(.el-input__inner) {
+//   height: 34px;
+//   display: flex;
+//   font-family: Comfortaa, Arial, Helvetica, sans-serif;
+//   font-size: 14px;
+//   color: $site_dark_gray;
+//   padding-left: 0;
+//   padding-right: 0;
+//   // border: none;
+//   width: 100%;
+// }
 
 :deep(.el-input__inner::placeholder) {
   color: $site_light_pink;

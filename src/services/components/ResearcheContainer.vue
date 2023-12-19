@@ -14,7 +14,6 @@
     >
       <slot name="header" />
     </div>
-
     <div class="mainblock-body">
       <slot name="body" />
     </div>
@@ -42,6 +41,14 @@ export default defineComponent({
       default: '0px 10px',
     },
   },
+  setup() {
+    let autoHeight: number;
+    autoHeight = window.innerHeight;
+
+    return {
+      autoHeight,
+    };
+  },
 });
 </script>
 
@@ -67,7 +74,6 @@ export default defineComponent({
 
 .mainblock-body {
   width: 100%;
-  height: auto;
   padding-bottom: 70px;
 }
 

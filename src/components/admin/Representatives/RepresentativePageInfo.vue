@@ -1,13 +1,15 @@
 <template>
-  <LeftRightContainer left-width="280px">
-    <template #left>
-      <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
-      <ContactForm store-module="representatives" :edit-mode="true" />
-    </template>
-    <template #right>
-      <PassportForm store-module="representatives" :edit-mode="true" />
-    </template>
-  </LeftRightContainer>
+  <div class="slider">
+    <LeftRightContainer left-width="280px">
+      <template #left>
+        <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
+        <ContactForm store-module="representatives" :edit-mode="true" />
+      </template>
+      <template #right>
+        <PassportForm store-module="representatives" :edit-mode="true" />
+      </template>
+    </LeftRightContainer>
+  </div>
 </template>
 
 <script lang="ts">
@@ -53,6 +55,11 @@ export default defineComponent({
 @import '@/assets/elements/pageInfo.scss';
 @import '@/assets/styles/elements/base-style.scss';
 
+.slider {
+  height: auto;
+  overflow-y: auto;
+}
+
 .register-tag {
   &:hover {
     cursor: pointer;
@@ -85,5 +92,29 @@ export default defineComponent({
   color: $site_dark_gray;
   margin-top: 3px;
   margin-left: 10px;
+}
+
+@media screen and (max-width: 2000px) {
+  .slider {
+    height: 600px;
+  }
+}
+
+@media screen and (max-width: 820px) {
+  .slider {
+    height: 450px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .slider {
+    height: 430px;
+  }
+}
+
+@media screen and (max-width: 452px) {
+  .slider {
+    height: 380px;
+  }
 }
 </style>

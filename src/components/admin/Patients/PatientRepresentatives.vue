@@ -33,6 +33,11 @@
         <ResearcheContainer background="#DFF2F8">
           <template #header>
             <div class="researche-name">Информация о представителе</div>
+            <TopSliderContainer>
+              <template #title>
+                <StringItem width="100%" string="Управление представителем" />
+              </template>
+            </TopSliderContainer>
           </template>
           <template #body>
             <div class="line-item">
@@ -113,7 +118,10 @@ import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
+import StringItem from '@/services/components/StringItem.vue';
+import TopSliderContainer from '@/services/components/TopSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
+
 export default defineComponent({
   name: 'PatientRepresentatives',
   components: {
@@ -123,6 +131,8 @@ export default defineComponent({
     ResearcheContainer,
     RepresentativePageInfo,
     Button,
+    TopSliderContainer,
+    StringItem,
   },
   setup() {
     const store = useStore();
@@ -404,6 +414,7 @@ export default defineComponent({
   color: #343e5c;
   font-size: 14px;
   text-transform: uppercase;
+  margin-top: 60px;
 }
 
 .icon-back {
@@ -582,6 +593,7 @@ export default defineComponent({
 :deep(.el-timeline) {
   padding: 0;
 }
+
 
 @media screen and (max-width: 768px) {
   .tabs-item {
