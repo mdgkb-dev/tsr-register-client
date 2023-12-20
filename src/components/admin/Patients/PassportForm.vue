@@ -36,6 +36,31 @@
       </el-form-item>
 
       <div class="tab-tools">
+        <div v-if="human.addressesEqual()" style="display: flex; align-items: center">
+          <svg class="activated-icon active" @click="toggleAddress(false)">
+            <use xlink:href="#active" />
+          </svg>
+        </div>
+        <el-popconfirm
+          v-else
+          confirm-button-text="Продолжить"
+          cancel-button-text="Отмена"
+          title="Текущий адрес проживания будет заменен"
+          @confirm="toggleAddress(true)"
+          @cancel="() => {}"
+        >
+          <template #reference>
+            <div style="display: flex; align-items: center">
+              <svg class="activated-icon non-active">
+                <use xlink:href="#non-active" />
+              </svg>
+            </div>
+          </template>
+        </el-popconfirm>
+        Адрес регистрации и адрес проживания совпадают
+      </div>
+
+      <!-- <div class="tab-tools">
         <svg v-if="human.addressesEqual()" class="activated-icon active" @click="toggleAddress(false)">
           <use xlink:href="#active" />
         </svg>
@@ -43,7 +68,7 @@
           <use xlink:href="#non-active" />
         </svg>
         Адрес регистрации и адрес проживания совпадают
-      </div>
+      </div> -->
 
       <el-form-item label="Адрес проживания" prop="addressResidential">
         <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman('addressResidential')"></el-input>
