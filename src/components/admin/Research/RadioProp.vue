@@ -12,7 +12,6 @@
   </el-radio>
   <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
-      {{ researchResult.getOrCreateAnswer(additionalQuestion) }}
       <component :is="additionalQuestion.valueType.getComponentType()" :research-result="researchResult" :question="additionalQuestion" @fill="$emit('fill')" />
     </el-form-item>
   </el-form>
