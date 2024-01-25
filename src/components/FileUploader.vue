@@ -11,7 +11,7 @@
             </a>
           </div>
           <div v-else class="file-name">Файл не загружен</div>
-          <Button button-class="close-button" icon="close" icon-class="edit-icon" @click="removeFile" />
+          <Button v-if="fileInfo.originalName" button-class="close-button" icon="close" icon-class="edit-icon" @click="removeFile" />
         </div>
       </template>
     </el-upload>
@@ -47,6 +47,7 @@ export default defineComponent({
         });
         return;
       }
+      console.log(props.fileInfo);
       props.fileInfo.uploadAndSetFile(file);
       emit('upload');
     };

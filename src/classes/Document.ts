@@ -15,7 +15,7 @@ export default class Document {
   @ClassHelper.GetClassConstructor(DocumentFieldValue)
   documentFieldValues: DocumentFieldValue[] = [];
   isDraft? = false;
-  @ClassHelper.GetClassConstructor(DocumentFieldValue)
+  @ClassHelper.GetClassConstructor(DocumentFileInfo)
   documentFileInfos: DocumentFileInfo[] = [];
 
   constructor(i?: Document) {

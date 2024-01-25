@@ -2,7 +2,7 @@
   <el-form v-if="document.id">
     <Button button-class="plus-button" text="Добавить скан документа" @click="addFile" />
     <div v-for="documentFileInfo in document.documentFileInfos" :key="documentFileInfo.id" class="background-field">
-      <FileUploader :file-info="documentFileInfo.fileInfo" />
+      <FileUploader :file-info="documentFileInfo.fileInfo" @upload="uploadFile(documentFileInfo)" @remove="removeFileInfo(documentFileInfo)" />
       <Button button-class="delete-button" icon-class="edit-icon" text="Удалить файл" @click="removeFile(documentFileInfo.id)" />
     </div>
     <div v-for="value in document.documentFieldValues" :key="value.id" class="margin-field">
@@ -22,15 +22,7 @@
       </el-form-item>
 
       <el-form-item v-if="value.documentTypeField.valueType.isDate()" :label="value.documentTypeField.name" size="mini">
-        <el-date-picker
-          v-model="value.valueDate"
-          format="DD.MM.YYYY"
-          type="date"
-          placeholder="Выберите дату"
-          size="mini"
-          @blur="updateDocumentField(value)"
-          @change="updateDocumentField(value)"
-        />
+        <DateInput v-model:model-value="value.valueDate" placeholder="Выбрать" @change="updateDocumentField(value)" @before-change="(date) => value.setDate(date)" />
       </el-form-item>
     </div>
     <Button button-class="delete-document-button" text="Удалить документ" @click="removeDocument" />
@@ -42,16 +34,18 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Document from '@/classes/Document';
 import DocumentFieldValue from '@/classes/DocumentFieldValue';
+import DocumentFileInfo from '@/classes/DocumentFileInfo';
 import Button from '@/components/Base/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
+import DateInput from '@/services/components/DateInput.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'DocumentForm',
   components: {
     Button,
     FileUploader,
+    DateInput,
   },
   props: {
     storeModule: {
@@ -81,8 +75,19 @@ export default defineComponent({
       await Provider.store.dispatch('documents/remove', document.value.id);
       emit('remove', document.value.id);
     };
+    const uploadFile = async (documentFileInfo: DocumentFileInfo) => {
+      await Provider.store.dispatch('fileInfos/create', documentFileInfo.fileInfo);
+      documentFileInfo.fileInfoId = documentFileInfo.fileInfo.id;
+      await Provider.store.dispatch('documentFileInfos/update', documentFileInfo);
+    };
 
+    const removeFileInfo = async (documentFileInfo: DocumentFileInfo) => {
+      documentFileInfo.fileInfoId = undefined;
+      await Provider.store.dispatch('documentFileInfos/update', documentFileInfo);
+    };
     return {
+      removeFileInfo,
+      uploadFile,
       removeDocument,
       updateDocumentField,
       addFile,

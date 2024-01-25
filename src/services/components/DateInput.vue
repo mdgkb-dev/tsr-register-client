@@ -6,7 +6,7 @@
       position: 'relative',
     }"
   >
-    <el-input v-model="date" :placeholder="placeholder" @change="changeHandler" @input="inputHandler" />
+    <el-input v-model="date" :placeholder="placeholder" @change="changeHandler" @input="inputHandler" @keydown.enter.prevent="undefined" />
   </div>
 </template>
 
