@@ -1,4 +1,5 @@
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import FTSP from '@/services/classes/filters/FTSP';
 import SortModel from '@/services/classes/SortModel';
 
 export interface State {
@@ -8,4 +9,6 @@ export interface State {
   action: string;
   sortModels: SortModel[];
   setDefaultSortModel: boolean;
+  filterExists: boolean;
+  ftsp: FTSP;
 }

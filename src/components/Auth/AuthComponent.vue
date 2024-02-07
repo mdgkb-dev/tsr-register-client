@@ -31,10 +31,10 @@
 import { ElMessage } from 'element-plus';
 import { computed, ComputedRef, defineComponent, onBeforeMount, ref } from 'vue';
 
-import Button from '@/components/Base/Button.vue';
 import { MyCallbackWithOptParam } from '@/interfaces/elements/Callback';
 import Auth from '@/services/classes/auth/Auth';
 import AuthButton from '@/services/classes/auth/AuthButton';
+import Button from '@/services/components/Button.vue';
 import Provider from '@/services/Provider/Provider';
 import validate from '@/services/validate';
 

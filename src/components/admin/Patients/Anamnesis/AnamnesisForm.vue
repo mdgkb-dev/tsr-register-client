@@ -32,7 +32,7 @@
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import Anamnesis from '@/classes/Anamnesis';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import dateFormat from '@/services/DateMask';
 import Provider from '@/services/Provider/Provider';

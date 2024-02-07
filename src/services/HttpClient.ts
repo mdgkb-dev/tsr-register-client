@@ -1,5 +1,5 @@
-import IFileInfo from '@/interfaces/files/IFileInfo';
 import axiosInstance from '@/services/Axios';
+import FileInfo from '@/services/classes/FileInfo';
 import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
 import TokenService from '@/services/Token';
 
@@ -119,16 +119,12 @@ export default class HttpClient {
   private buildUrl(query?: string): string {
     if (query) {
       const queryString = query ?? '';
-      let divider = '/';
-      if (queryString[0] == '?') {
-        divider = '';
-      }
-      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + divider + queryString;
+      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
     }
     return baseUrl + apiVersion + this.endpoint;
   }
 
-  private createFormDataPayload<PayloadType>(payload?: PayloadType, fileInfos?: IFileInfo[]): FormData {
+  private createFormDataPayload<PayloadType>(payload?: PayloadType, fileInfos?: FileInfo[]): FormData {
     const data = new FormData();
     data.append('form', JSON.stringify(payload));
 

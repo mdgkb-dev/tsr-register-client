@@ -14,7 +14,6 @@ export default function scroll(query?: string, yOffset?: number): void {
     y = elRect.top + offset + document.body.scrollTop;
   }
   if (y) {
-    el?.scrollIntoView();
     document.body.scrollTo({ top: y, behavior: 'smooth' });
   }
 }

@@ -17,11 +17,10 @@ import draggable from 'vuedraggable';
 
 import DrugApplication from '@/classes/DrugApplication';
 import DrugApplicationFile from '@/components/admin/DrugApplications/DrugApplicationFile.vue';
-import Button from '@/components/Base/Button.vue';
+import Arrays from '@/services/Arrays';
 import ClassHelper from '@/services/ClassHelper';
+import Button from '@/services/components/Button.vue';
 import Provider from '@/services/Provider/Provider';
-import sort from '@/services/sort';
-
 export default defineComponent({
   name: 'DrugApplicationFilesList',
   components: {
@@ -38,7 +37,7 @@ export default defineComponent({
     };
 
     const sortDrugArrives = async (): Promise<void> => {
-      sort(drugApplication.value.fundContract.drugArrives);
+      Arrays.Sort(drugApplication.value.fundContract.drugArrives);
       await Provider.store.dispatch('drugApplications/update');
     };
 

@@ -6,7 +6,7 @@ const DocumentTypesFiltersLib = (() => {
   const modelName = 'documentType';
 
   function byCode(code: string): FilterModel {
-    const model = FilterModel.CreateFilterModelV2(modelName, String(ClassHelper.GetPropertyName(DocumentType).code), DataTypes.String);
+    const model = FilterModel.CreateFilterModel(modelName, String(ClassHelper.GetPropertyName(DocumentType).code), DataTypes.String);
     model.value1 = code;
     return model;
   }

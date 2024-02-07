@@ -1,5 +1,3 @@
-import SearchElementMeta from '@/classes/SearchElementMeta';
-import SearchGroup from '@/classes/SearchGroup';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class SearchElement {
@@ -9,8 +7,8 @@ export default class SearchElement {
   key = '';
   description = '';
   route = '';
-  searchGroup: SearchGroup = new SearchGroup();
-  searchElementMetas: SearchElementMeta[] = [];
+  // searchGroup: SearchGroup = new SearchGroup();
+  searchElementMetas: any[] = [];
 
   constructor(i?: SearchElement) {
     ClassHelper.BuildClass(this, i);

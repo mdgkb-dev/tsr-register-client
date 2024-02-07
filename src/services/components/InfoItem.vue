@@ -1,11 +1,23 @@
 <template>
   <div v-if="isToggle" class="blur">blur</div>
   <div class="base-box" :style="baseBoxStyle" @click.prevent.stop="changeState()">
-    <div class="body" :class="insideClass" :style="bodyStyle" @mouseenter="withHover ? (hovering = true) : (hovering = false)" @mouseleave="hovering = false">
+    <div
+      class="body"
+      :class="insideClass"
+      :style="bodyStyle"
+      @mouseenter="withHover ? (hovering = true) : (hovering = false)"
+      @mouseleave="hovering = false"
+    >
       <div v-if="!isToggle" class="close-window" :style="closeWindowStyle" :class="customClass">
         <slot />
       </div>
-      <div v-if="isToggle" id="info-item-opened-content" v-click-outside.prevent="outsideClick" class="open-window" :style="openWindowStyle">
+      <div
+        v-if="isToggle"
+        id="info-item-opened-content"
+        v-click-outside.prevent="outsideClick"
+        class="open-window"
+        :style="openWindowStyle"
+      >
         <slot name="open-inside-content" />
       </div>
       <div class="top-title" :style="topTitleStyle">
@@ -27,14 +39,20 @@
       </div>
     </div>
   </div>
-  <el-dialog v-if="showSaveDialog" v-model="isMessageBoxOpen" center width="500px" title="У вас остались несохраненные изменения, вы уверены что хотите закрыть окно?">
+  <el-dialog
+    v-if="showSaveDialog"
+    v-model="isMessageBoxOpen"
+    center
+    width="500px"
+    title="У вас остались несохраненные изменения, вы уверены что хотите закрыть окно?"
+  >
     <div style="display: flex; justify-content: center">
       <el-button size="small" type="danger" @click="notSaveClickHandler">Не сохранять</el-button>
       <el-button size="small" type="success" @click="saveClickHandler">Сохранить</el-button>
     </div>
   </el-dialog>
-  <EditTitle />
-  <Del />
+  <!-- <EditTitle /> -->
+  <!-- <Del /> -->
 </template>
 
 <script lang="ts">
@@ -168,6 +186,7 @@ export default defineComponent({
       return {
         height: windowOpened.value ? '0' : '',
         overflow: props.closeWindowOverflow,
+        width: props.width,
       };
     });
 

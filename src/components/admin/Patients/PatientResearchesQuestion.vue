@@ -35,8 +35,8 @@ import Question from '@/classes/Question';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import QuestionComponent from '@/components/admin/Patients/QuestionComponent.vue';
-import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import CollapseContainer from '@/services/components/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

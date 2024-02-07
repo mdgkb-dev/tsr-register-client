@@ -85,7 +85,7 @@ import QuestionVariant from '@/classes/QuestionVariant';
 import ResearchResult from '@/classes/ResearchResult';
 import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';

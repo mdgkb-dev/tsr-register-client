@@ -45,8 +45,8 @@ export default class DrugApplication {
     item.id = uuidv4();
     item.commission = commission;
     item.commissionId = commission.id;
-    item.drugApplicationId = this.id;
-    this.commissionsDrugApplications.push(item);
+    // item.drugApplicationId = this.id;
+    // this.commissionsDrugApplications.push(item);
     return item;
   }
 

@@ -31,6 +31,7 @@ const Hooks = (() => {
       Provider.mounted.value = false;
       Provider.store.commit('admin/showLoading');
       Provider.resetFilterQuery();
+      // await Provider.store.dispatch('meta/getSchema');
       if (options?.sortsLib) {
         Provider.setSortList(...createSortModels(options.sortsLib));
       }

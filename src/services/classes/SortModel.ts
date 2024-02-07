@@ -1,5 +1,8 @@
-import { ClassNameGetter } from '@/services/interfaces/Class';
+import { LocationQuery } from 'vue-router';
+
 import { Orders } from '@/services/interfaces/Orders';
+
+import { ClassNameGetter } from '../interfaces/Class';
 
 export default class SortModel {
   model = '';
@@ -8,27 +11,22 @@ export default class SortModel {
   order: Orders | undefined;
   label = '';
   default = false;
-  version = '';
   selected = false;
 
-  static CreateSortModel(table: string, col: string, order?: Orders, label?: string, defaultModel?: boolean): SortModel {
-    const model = new SortModel();
-    model.table = table;
-    model.col = col;
-    model.order = order ?? Orders.Asc;
-    model.label = label ?? '';
-    model.default = defaultModel ?? false;
-    return model;
-  }
-
-  static CreateSortModelV2(model: string | ClassNameGetter, col: string | undefined, order?: Orders, label?: string, defaultModel?: boolean): SortModel {
+  static CreateSortModel(
+    model: string | ClassNameGetter,
+    col: unknown,
+    order: Orders = Orders.Asc,
+    label?: string,
+    defaultModel?: boolean
+  ): SortModel {
+    console.log(1);
     const m = new SortModel();
     m.model = typeof model === 'string' ? model : model.GetClassName();
-    m.col = col ?? '';
+    m.col = (col as string) ?? '';
     m.order = order ?? Orders.Asc;
     m.label = label ?? '';
     m.default = defaultModel ?? false;
-    m.version = 'v2';
     return m;
   }
 
@@ -41,29 +39,19 @@ export default class SortModel {
   }
 
   toUrlQuery(): string {
-    let url = '';
-    Object.keys(this).forEach((el, i) => {
-      const value = this[el as keyof typeof this];
-      const isObj = typeof this[el as keyof typeof this] == 'object';
-      if (value && url !== '?' && !isObj) {
-        if (i !== 0) {
-          url += '&';
-        }
-        url += `${el}=${value}`;
-      }
-    });
-    url += '|';
-    return url;
-  }
+    const model = this.model ? `"model":"${this.model}"` : '';
+    const col = this.col ? `"col":"${this.col}"` : '';
+    const order = this.order ? `"order":"${this.order}"` : '';
 
-  async fromUrlQuery(): Promise<void> {
+    return [model, col, order].toString();
+  }
+  async fromUrlQuery(obj: LocationQuery): Promise<void> {
     const str = window.location.search;
     const sormModelString = str.substring(str.indexOf('s=') + 2, str.indexOf('|'));
     const params = new URLSearchParams(decodeURIComponent(sormModelString));
     this.model = params.get('model') ?? '';
     this.col = params.get('col') ?? '';
     this.label = params.get('label') ?? '';
-    this.version = params.get('version') ?? '';
     this.default = Boolean(params.get('default'));
     // this.id = params.get('id') ?? '';
     this.order = (params.get('order') as Orders) ?? ('' as Orders);

@@ -1,9 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import CommissionDoctor from '@/classes/CommissionDoctor';
-import CommissionDoctorTemplate from '@/classes/CommissionDoctorTemplate';
 import CommissionTemplate from '@/classes/CommissionTemplate';
-import Doctor from '@/classes/Doctor';
 import DrugRecipe from '@/classes/DrugRecipe';
 import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
@@ -31,8 +28,8 @@ export default class Commission {
   drugNeedingId?: string;
 
   volume = '';
-  @ClassHelper.GetClassConstructor(CommissionDoctor)
-  commissionsDoctors: CommissionDoctor[] = [];
+  // @ClassHelper.GetClassConstructor(CommissionDoctor)
+  // commissionsDoctors: CommissionDoctor[] = [];
   number?: number;
   @ClassHelper.GetClassConstructor(FundContract)
   fundContract: FundContract = new FundContract();
@@ -53,20 +50,21 @@ export default class Commission {
     const item = new Commission();
     item.id = uuidv4();
     item.volume = template.volume;
-    item.commissionsDoctors = template.commissionsDoctorsTemplates.map((cdt: CommissionDoctorTemplate) => CommissionDoctor.CreateFromTemplate(cdt));
+    // item.commissionsDoctors = template.commissionsDoctorsTemplates.map((cdt: CommissionDoctorTemplate) => CommissionDoctor.CreateFromTemplate(cdt));
     return item;
   }
 
-  addDoctor(doctor: Doctor): CommissionDoctor {
-    const item = CommissionDoctor.Create(doctor);
-    this.commissionsDoctors.push(item);
-    item.commissionId = this.id;
-    item.order = this.commissionsDoctors.length - 1;
-    return item;
-  }
+  // addDoctor(doctor: Doctor): CommissionDoctor {
+  //   const item = CommissionDoctor.Create(doctor);
+  //   // this.commissionsDoctors.push(item);
+  //   item.commissionId = this.id;
+  //   // item.order = this.commissionsDoctors.length - 1;
+  //   return item;
+  // }
 
   doctorExists(id?: string): boolean {
-    return this.commissionsDoctors.some((c: CommissionDoctor) => c.doctorId === id);
+    return true;
+    // return this.commissionsDoctors.some((c: CommissionDoctor) => c.doctorId === id);
   }
 
   setPatient(patient: Patient): void {

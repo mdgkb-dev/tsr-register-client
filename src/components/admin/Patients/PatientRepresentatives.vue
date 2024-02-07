@@ -107,10 +107,9 @@ import RepresentativeToPatientRules from '@/classes/RepresentativeToPatientRules
 import RepresentativeType from '@/classes/RepresentativeType';
 import RepresentativeModal from '@/components/admin/Patients/RepresentativeModal.vue';
 import RepresentativePageInfo from '@/components/admin/Representatives/RepresentativePageInfo.vue';
-import Button from '@/components/Base/Button.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import ClassHelper from '@/services/ClassHelper';
+import Button from '@/services/components/Button.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';
 import Provider from '@/services/Provider/Provider';
@@ -145,23 +144,24 @@ export default defineComponent({
     onBeforeMount(async () => {
       await store.dispatch('representativeTypes/getAll');
       mount.value = true;
-      const pR = patient.value.patientsRepresentatives.length > 0 ? patient.value.patientsRepresentatives[0] : undefined;
-      if (!pR) {
-        return;
-      }
-      Provider.store.commit('patientsRepresentatives/set', pR);
-      Provider.store.commit('representatives/set', pR?.representative);
+      // const pR = patient.value.patientsRepresentatives.length > 0 ? patient.value.patientsRepresentatives[0] : undefined;
+      // if (!pR) {
+      //   return;
+      // }
+      // Provider.store.commit('patientsRepresentatives/set', pR);
+      // Provider.store.commit('representatives/set', pR?.representative);
     });
 
     const getRepresentativeTypeLabel = (item: RepresentativeType): string => {
       if (!selectedPatientRepresentative.value.representativeType) {
         return 'Неизвестный представитель';
       }
-      if (selectedPatientRepresentative.value.representative.human.isMale) {
-        return item.parentMaleType;
-      } else {
-        return item.parentWomanType;
-      }
+      return '';
+      // if (selectedPatientRepresentative.value.representative.human.isMale) {
+      //   return item.parentMaleType;
+      // } else {
+      //   return item.parentWomanType;
+      // }
     };
 
     const addRepresentative = async (event: ISearchObject) => {
@@ -189,30 +189,30 @@ export default defineComponent({
     };
 
     const remove = async (id: string): Promise<void> => {
-      ClassHelper.RemoveFromClassById(id, patient.value.patientsRepresentatives, []);
+      // ClassHelper.RemoveFromClassById(id, patient.value.patientsRepresentatives, []);
       await store.dispatch('patientsRepresentatives/remove', id);
-      if (patient.value.patientsRepresentatives.length > 0) {
-        return;
-      }
+      // if (patient.value.patientsRepresentatives.length > 0) {
+      //   return;
+      // }
       Provider.store.commit('patientsRepresentatives/set');
-      selectPatientRepresentative(patient.value.patientsRepresentatives[patient.value.patientsRepresentatives.length - 1].id as string);
+      // selectPatientRepresentative(patient.value.patientsRepresentatives[patient.value.patientsRepresentatives.length - 1].id as string);
     };
 
     const selectRepresentativeType = async (e: string, patientRepresentative: PatientRepresentative): Promise<void> => {
-      const i = patient.value.patientsRepresentatives.findIndex((pr: PatientRepresentative) => pr.id === patientRepresentative.id);
-      if (i < 0) {
-        return;
-      }
-      const t = representativeTypes.value.find((r: RepresentativeType) => r.id === e);
-      patient.value.patientsRepresentatives[i].representativeType = t as RepresentativeType;
-      patient.value.patientsRepresentatives[i].representativeTypeId = e;
+      // const i = patient.value.patientsRepresentatives.findIndex((pr: PatientRepresentative) => pr.id === patientRepresentative.id);
+      // if (i < 0) {
+      //   return;
+      // }
+      // const t = representativeTypes.value.find((r: RepresentativeType) => r.id === e);
+      // patient.value.patientsRepresentatives[i].representativeType = t as RepresentativeType;
+      // patient.value.patientsRepresentatives[i].representativeTypeId = e;
       await Provider.store.dispatch('patientsRepresentatives/update', patientRepresentative);
     };
 
     const selectPatientRepresentative = (id: string): void => {
-      const v = patient.value.patientsRepresentatives.find((p: PatientRepresentative) => p.id === id);
-      Provider.store.commit('patientsRepresentatives/set', v);
-      Provider.store.commit('representatives/set', v?.representative);
+      // const v = patient.value.patientsRepresentatives.find((p: PatientRepresentative) => p.id === id);
+      // Provider.store.commit('patientsRepresentatives/set', v);
+      // Provider.store.commit('representatives/set', v?.representative);
     };
 
     return {

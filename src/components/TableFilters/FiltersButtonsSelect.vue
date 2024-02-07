@@ -25,8 +25,8 @@
 <script lang="ts">
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref, WritableComputedRef } from 'vue';
 
-import Button from '@/components/Base/Button.vue';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import Button from '@/services/components/Button.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import StringItem from '@/services/components/StringItem.vue';
@@ -67,7 +67,7 @@ export default defineComponent({
     });
 
     const setFilter = async (model: FilterModel | undefined) => {
-      if (model && (model.table || model.model)) {
+      if (model && model.model) {
         selectedFilterModel.value = model;
         Provider.replaceFilterModel(selectedFilterModel.value, selectedId.value);
         selectedId.value = selectedFilterModel.value.id;

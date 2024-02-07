@@ -41,7 +41,6 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 import Logout from '@/assets/svg/Logout.svg';
-import IUser from '@/services/interfaces/IUser';
 import AdminSearchMenu from '@/views/adminLayout/AdminSearchMenu.vue';
 
 export default defineComponent({
@@ -53,7 +52,7 @@ export default defineComponent({
     const router = useRouter();
     const collapseSideMenu = () => store.commit('admin/collapseSideMenu');
     const openDrawer = () => store.commit('admin/openDrawer');
-    const user: ComputedRef<IUser> = computed(() => store.getters['auth/user']);
+    const user: ComputedRef<any> = computed(() => store.getters['auth/user']);
     const logout = async () => {
       await store.dispatch('auth/logout');
       await router.push('/login');

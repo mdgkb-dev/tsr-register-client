@@ -14,7 +14,7 @@
 import { defineComponent, PropType } from 'vue';
 
 import DrugApplicationFile from '@/classes/DrugApplicationFile';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import Provider from '@/services/Provider/Provider';
 

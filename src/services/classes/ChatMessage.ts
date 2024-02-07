@@ -2,13 +2,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import User from '@/classes/User';
 import ClassHelper from '@/services/ClassHelper';
-
 export enum ChateMessageTypes {
   Ping = 'ping',
   Enter = 'enter',
   Exit = 'exit',
   Message = 'message',
   Write = 'write',
+  Empty = '',
 }
 
 export default class ChatMessage {
@@ -40,5 +40,9 @@ export default class ChatMessage {
     item.type = ChateMessageTypes.Ping;
     item.id = uuidv4();
     return item;
+  }
+
+  isMessage(): boolean {
+    return this.type === ChateMessageTypes.Message || this.type === ChateMessageTypes.Empty;
   }
 }

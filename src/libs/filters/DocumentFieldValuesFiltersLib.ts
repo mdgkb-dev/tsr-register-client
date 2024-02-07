@@ -6,7 +6,7 @@ const DocumentFieldValuesFiltersLib = (() => {
   const modelName = 'documentFieldValue';
 
   function byValueStrings(value: string): FilterModel {
-    const model = FilterModel.CreateFilterModelV2(modelName, String(ClassHelper.GetPropertyName(DocumentFieldValue).valueString), DataTypes.String);
+    const model = FilterModel.CreateFilterModel(modelName, String(ClassHelper.GetPropertyName(DocumentFieldValue).valueString), DataTypes.String);
     model.value1 = value;
     return model;
   }

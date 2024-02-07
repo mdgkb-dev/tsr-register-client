@@ -11,7 +11,7 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
 

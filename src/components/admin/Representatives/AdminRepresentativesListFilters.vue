@@ -26,8 +26,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
+import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';

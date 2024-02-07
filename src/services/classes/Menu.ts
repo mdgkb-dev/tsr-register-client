@@ -1,6 +1,11 @@
-import IFileInfo from '@/interfaces/files/IFileInfo';
+import { v4 as uuidv4 } from 'uuid';
+
+// import IElementPlusFile from '@/interfaces/files/IElementPlusFile';
+import FileInfo from '@/services/classes/FileInfo';
+import Page from '@/services/classes/page/Page';
 import SubMenu from '@/services/classes/SubMenu';
 import ClassHelper from '@/services/ClassHelper';
+
 export default class Menu {
   id?: string;
   name = '';
@@ -14,25 +19,57 @@ export default class Menu {
   selected = false;
   editMode = false;
 
+  page = new Page();
+  pageId?: string;
+
   @ClassHelper.GetClassConstructor(SubMenu)
   subMenus: SubMenu[] = [];
   subMenusForDelete: string[] = [];
+
+  iconId?: string;
+  icon = new FileInfo();
 
   constructor(i?: Menu) {
     ClassHelper.BuildClass(this, i);
   }
 
   getLink(): string {
-    return this.link;
+    if (this.isLink() && !this.isPageLink()) {
+      return this.link;
+    }
+    if (!this.isLink() && this.isPageLink()) {
+      return this.page.getLink();
+    }
+    return '';
   }
 
   withoutChildren(): boolean {
     return this.subMenus.length === 0;
   }
 
-  getFileInfos(): IFileInfo[] {
-    const fileInfos: IFileInfo[] = [];
+  isLink(): boolean {
+    return this.link !== '';
+  }
+
+  isPageLink(): boolean {
+    return !!this.pageId && this.pageId !== '';
+  }
+
+  getFileInfos(): FileInfo[] {
+    const fileInfos: FileInfo[] = [];
+    fileInfos.push(this.icon);
+    this.subMenus.forEach((subMenu: SubMenu) => {
+      fileInfos.push(subMenu.icon);
+    });
     return fileInfos;
+  }
+
+  addFile(file: any): void {
+    if (!this.icon.id) {
+      this.icon.id = uuidv4();
+    }
+    this.icon.originalName = file.name;
+    this.icon.file = file.raw;
   }
 
   addSubMenu(): void {
@@ -55,7 +92,6 @@ export default class Menu {
       i === colors.length - 1 ? (i = 0) : i++;
     });
   }
-
   containPath(path: string): boolean {
     return this.getLink() === path || !!this.subMenus.find((subMenu: SubMenu) => subMenu.getLink() === path);
   }

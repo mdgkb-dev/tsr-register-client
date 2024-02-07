@@ -8,7 +8,7 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import InputNumber from '@/components/Base/InputNumber.vue';
+import InputNumber from '@/services/components/InputNumber.vue';
 export default defineComponent({
   name: 'NumberProp',
   components: { InputNumber },

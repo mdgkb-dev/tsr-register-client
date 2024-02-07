@@ -7,7 +7,7 @@ const DrugApplicationsSortsLib = (() => {
   const modelName = 'drugApplication';
 
   function byNumber(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       ClassHelper.GetPropertyName(DrugApplication).number,
       order ? order : Orders.Asc,
@@ -17,7 +17,7 @@ const DrugApplicationsSortsLib = (() => {
   }
 
   function byDate(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       String(ClassHelper.GetPropertyName(DrugApplication).date),
       order ? order : Orders.Asc,

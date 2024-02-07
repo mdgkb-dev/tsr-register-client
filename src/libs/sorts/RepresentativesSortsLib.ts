@@ -7,7 +7,7 @@ const RepresentativesSortsLib = (() => {
   const modelName = 'representative';
 
   function byFullName(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       ClassHelper.GetPropertyName(Patient).fullName,
       order ? order : Orders.Asc,
@@ -17,7 +17,7 @@ const RepresentativesSortsLib = (() => {
   }
 
   function byDateBirth(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       ClassHelper.GetPropertyName(Patient).dateBirth,
       order ? order : Orders.Asc,

@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 
 export default defineComponent({
   name: 'AlphabetFilter',

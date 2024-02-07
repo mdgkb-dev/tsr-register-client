@@ -58,7 +58,7 @@ import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vu
 import DocumentType from '@/classes/DocumentType';
 import Patient from '@/classes/Patient';
 import DocumentForm from '@/components/admin/DocumentForm.vue';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';

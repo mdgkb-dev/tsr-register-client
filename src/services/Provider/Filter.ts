@@ -2,17 +2,34 @@ import { computed, ComputedRef, Ref, ref } from 'vue';
 
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import Pagination from '@/services/classes/filters/Pagination';
 import SortModel from '@/services/classes/SortModel';
-import IFilterModel from '@/services/interfaces/IFilterModel';
 import Store from '@/services/Provider/Store';
+
+import FTSP from '../classes/filters/FTSP';
 
 const Filter = (() => {
   const sortList: Ref<SortModel[]> = ref([]);
   const filterQuery: ComputedRef<FilterQuery> = computed(() => Store.store.getters['filter/filterQuery']);
+  const ftsp: ComputedRef<FTSP> = computed(() => Store.store.getters['filter/ftsp']);
 
   function setSortList(...models: SortModel[]): void {
     sortList.value = models;
     setDefaultSortModel();
+  }
+
+  function getPagination(): Pagination {
+    return ftsp.value.id ? ftsp.value.p : filterQuery.value.pagination;
+  }
+
+  function findFilterModel(filterModels: FilterModel[]): FilterModel | undefined {
+    let fmFromFilterQuery = filterModels.find((f: FilterModel) => filterQuery.value.findFilterModel(f));
+    if (fmFromFilterQuery) {
+      return fmFromFilterQuery;
+    }
+
+    fmFromFilterQuery = filterModels.find((f: FilterModel) => ftsp.value.findFilterModel(f));
+    return fmFromFilterQuery;
   }
 
   function setDefaultSortModel(): void {
@@ -36,6 +53,7 @@ const Filter = (() => {
 
   function setSortModel(model: SortModel): void {
     filterQuery.value.sortModel = model;
+    filterQuery.value.sortModels.push(model);
   }
 
   function setSortModels(...models: SortModel[]): void {
@@ -48,27 +66,23 @@ const Filter = (() => {
     });
   }
 
-  function setFilterModels(...models: IFilterModel[]): void {
-    models.forEach((model: IFilterModel) => filterQuery.value.setFilterModel(model));
-  }
-
-  function replaceFilterModel(newFilterModel: IFilterModel, previousFilterModelId: string | undefined) {
-    filterQuery.value.spliceFilterModel(previousFilterModelId);
-    filterQuery.value.setFilterModel(newFilterModel);
+  function setFilterModels(...models: FilterModel[]): void {
+    models.forEach((model: FilterModel) => filterQuery.value.setFilterModel(model));
   }
 
   function setFilterModel(f: FilterModel) {
     filterQuery.value.setFilterModel(f);
   }
 
-  function spliceFilterModel(id: string | undefined) {
-    filterQuery.value.spliceFilterModel(id);
+  function setQid(qid: string) {
+    filterQuery.value.id = qid;
   }
 
   return {
+    setQid,
     sortList,
     filterQuery,
-
+    ftsp,
     setSortList,
     setDefaultSortModel,
     resetFilterQuery,
@@ -76,10 +90,10 @@ const Filter = (() => {
     setSortModel,
     setSortModels,
     setSortModelsForOneTable,
-    replaceFilterModel,
     setFilterModel,
+    findFilterModel,
     setFilterModels,
-    spliceFilterModel,
+    getPagination,
   };
 })();
 

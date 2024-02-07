@@ -1,5 +1,5 @@
 <template>
-  <AdminListWrapper v-if="mounted" pagination show-header>
+  <AdminListWrapper pagination show-header>
     <AdminPatientsListFilters @load="loadPatients" />
 
     <div class="scroll-block">
@@ -10,7 +10,7 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(patient.id)" />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="Provider.editAdmin(patient.id)" />
                   <FioToggleForm :human="patient.human" />
                 </div>
 
@@ -50,8 +50,8 @@
   </ModalWindow>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
@@ -61,101 +61,61 @@ import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListM
 import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
 import CreatePatientForm from '@/components/admin/Patients/CreatePatientForm.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import ModalWindow from '@/components/Base/ModalWindow.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import Button from '@/services/components/Button.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import DateInput from '@/services/components/DateInput.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import ModalWindow from '@/services/components/ModalWindow.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
-export default defineComponent({
-  name: 'AdminPatientsList',
-  components: {
-    CreatePatientForm,
-    AdminPatientsListFilters,
-    AdminListWrapper,
-    CollapseItem,
-    Button,
-    FioToggleForm,
-    InfoItem,
-    GridContainer,
-    AdminPatientsListRepresentatives,
-    AdminPatientsListMkb,
-    DateInput,
-    ToggleDocumentsForm,
-    ModalWindow,
+const showAddModal: Ref<boolean> = ref(false);
+const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
+const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
+
+// const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
+const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
+const editMode: Ref<boolean> = ref(true);
+const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
+const loadPatients = async () => {
+  Provider.setSortModels(PatientsSortsLib.byFullName());
+  await Provider.store.dispatch('patients/ftsp', { qid: Provider.getQid(), ftsp: Provider.filterQuery.value });
+};
+
+const loadQuestions = async () => {
+  // await Provider.store.dispatch('questions/getAll');
+};
+
+const load = async () => {
+  await Promise.all([loadPatients(), loadQuestions()]);
+};
+
+const addPatient = async (): Promise<void> => {
+  showAddModal.value = !showAddModal.value;
+};
+
+Hooks.onBeforeMount(load, {
+  adminHeader: {
+    title: 'Пациенты',
+    buttons: [{ text: 'Добавить', type: 'normal-button', action: addPatient }],
   },
-  setup() {
-    const showAddModal: Ref<boolean> = ref(false);
-    const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
-    const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
-
-    // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
-    const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
-    const editMode: Ref<boolean> = ref(true);
-    const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
-    const loadPatients = async () => {
-      await Provider.loadItems();
-    };
-
-    const loadQuestions = async () => {
-      // await Provider.store.dispatch('questions/getAll');
-    };
-
-    const load = async () => {
-      await Promise.all([loadPatients(), loadQuestions()]);
-    };
-
-    const addPatient = async (): Promise<void> => {
-      showAddModal.value = !showAddModal.value;
-    };
-
-    Hooks.onBeforeMount(load, {
-      adminHeader: {
-        title: 'Пациенты',
-        buttons: [
-          { text: 'Добавить', type: 'normal-button', action: addPatient },
-          // {
-          //   text: computed(() => (editMode.value ? 'Просмотр' : 'Редактирование')),
-          //   action: () => (editMode.value = !editMode.value),
-          //   type: 'normal-button',
-          // },
-        ],
-      },
-      sortsLib: PatientsSortsLib,
-      getAction: 'getAll',
-    });
-
-    const updateHuman = async (human: Human): Promise<void> => {
-      await Provider.withHeadLoader(async () => {
-        await Provider.store.dispatch('humans/update', human);
-      });
-    };
-
-    const updateIsMale = async (human: Human): Promise<void> => {
-      human.isMale = !human.isMale;
-      await updateHuman(human);
-    };
-
-    return {
-      showAddModal,
-      updateIsMale,
-      updateHuman,
-      count,
-      filterByStatus,
-      authModalVisible,
-      loadPatients,
-      patients,
-      ...Provider.getAdminLib(),
-      editMode,
-    };
-  },
+  pagination: { storeModule: 'patients', action: 'ftsp' },
 });
+
+const updateHuman = async (human: Human): Promise<void> => {
+  await Provider.withHeadLoader(async () => {
+    await Provider.store.dispatch('humans/update', human);
+  });
+};
+
+const updateIsMale = async (human: Human): Promise<void> => {
+  human.isMale = !human.isMale;
+  await updateHuman(human);
+};
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';

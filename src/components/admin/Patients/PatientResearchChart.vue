@@ -1,17 +1,16 @@
 <template>
   <div class="research-info">
-    <Line v-if="mounted && data" :data="data" :options="options" />
+    <!-- <Line v-if="mounted && data" :data="data" :options="options" /> -->
   </div>
 </template>
 
 <script lang="ts">
-import { CategoryScale, Chart as ChartJS, ChartTypeRegistry, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, TooltipItem } from 'chart.js';
-import annotationPlugin from 'chartjs-plugin-annotation';
+// import { CategoryScale, Chart as ChartJS, ChartTypeRegistry, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, TooltipItem } from 'chart.js';
+// import annotationPlugin from 'chartjs-plugin-annotation';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
-import { Line } from 'vue-chartjs';
 
+// import { Line } from 'vue-chartjs';
 import ChartData from '@/classes/chartData/ChartData';
-import ChartDataSet from '@/classes/chartData/ChartDataSet';
 import Patient from '@/classes/Patient';
 import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
@@ -21,11 +20,11 @@ import ResearchesResultsSortsLib from '@/libs/sorts/ResearchesResultsSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Provider from '@/services/Provider/Provider';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin);
+// ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin);
 
 export default defineComponent({
   name: 'PatientResearchChart',
-  components: { Line },
+  // components: { Line },
   props: {
     research: {
       type: Object as PropType<Research>,
@@ -66,7 +65,7 @@ export default defineComponent({
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context: TooltipItem<keyof ChartTypeRegistry>) => context.formattedValue + ': ' + (context.dataset as ChartDataSet).results[context.dataIndex],
+            // label: (context: TooltipItem<keyof ChartTypeRegistry>) => context.formattedValue + ': ' + (context.dataset as ChartDataSet).results[context.dataIndex],
           },
         },
       },

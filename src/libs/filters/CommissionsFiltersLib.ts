@@ -8,13 +8,13 @@ const CommissionsFiltersLib = (() => {
   const modelName = 'commission';
 
   function byStatus(): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(Commission).statusId, DataTypes.Set);
+    const filterModel = FilterModel.CreateFilterModel(modelName, ClassHelper.GetPropertyName(Commission).statusId, DataTypes.Set);
     filterModel.operator = Operators.In;
     return filterModel;
   }
 
   function byPatientId(patientId: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(Commission).patientId, DataTypes.Set);
+    const filterModel = FilterModel.CreateFilterModel(modelName, ClassHelper.GetPropertyName(Commission).patientId, DataTypes.Set);
     filterModel.operator = Operators.Eq;
     filterModel.value1 = patientId;
     return filterModel;

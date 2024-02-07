@@ -7,7 +7,7 @@
             <svg class="icon-move">
               <use xlink:href="#move"></use>
             </svg>
-            <button class="admin-del2" @click.prevent="$classHelper.RemoveFromClassByIndex(index, fileList, fileListForDelete)">Удалить</button>
+            <button class="admin-del2" @click.prevent="remove(element)">Удалить</button>
           </div>
           <UploaderSingleScan
             :file-info="element.fileInfo"
@@ -15,6 +15,7 @@
             :default-ratio="defaultRatio"
             @remove-file="$classHelper.RemoveFromClassByIndex(index, fileList, fileListForDelete)"
             @ratio="(e) => (element.ratio = e)"
+            @crop="crop(element)"
           />
         </div>
         <div class="item-description">
@@ -34,7 +35,7 @@ import Move from '@/services/assets/svg/Move.svg';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import IFiler from '@/services/interfaces/IFiler';
 import sort from '@/services/sort';
-
+import ClassHelper from '@/services/ClassHelper';
 export default defineComponent({
   name: 'AdminGallery',
   components: { draggable, UploaderSingleScan, Move },
@@ -53,10 +54,26 @@ export default defineComponent({
       required: false,
       default: 1,
     },
+    upload: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
-  emits: ['addImage', 'ratio'],
-  setup() {
+  emits: ['addImage', 'ratio', 'remove'],
+  setup(props, { emit }) {
+    const crop = async (filer: IFiler) => {
+      emit('addImage', filer);
+    };
+
+    const remove = async (filer: IFiler) => {
+      ClassHelper.RemoveFromClassById(filer.id, props.fileList, []);
+      emit('remove', filer);
+    };
+
     return {
+      remove,
+      crop,
       sort,
     };
   },

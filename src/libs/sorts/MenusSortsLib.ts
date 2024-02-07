@@ -5,7 +5,7 @@ import { Orders } from '@/services/interfaces/Orders';
 
 const MenusSortsLib = (() => {
   function byOrder(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2('Menu', String(ClassHelper.GetPropertyName(Menu).order), order ? order : Orders.Asc);
+    return SortModel.CreateSortModel('Menu', String(ClassHelper.GetPropertyName(Menu).order), order ? order : Orders.Asc);
   }
   return {
     byOrder,

@@ -1,5 +1,5 @@
 <template>
-  <AdminListWrapper v-if="mounted" pagination show-header>
+  <AdminListWrapper pagination show-header>
     <AdminRepresentativesListFilters @load="load" />
 
     <div class="scroll-block">
@@ -10,7 +10,7 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="edit(representative.id)" />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="Provider.edit(representative.id)" />
                   <FioToggleForm :human="representative.human" />
                 </div>
 
@@ -39,101 +39,71 @@
   </ModalWindow>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
 import Representative from '@/classes/Representative';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
 import AdminRepresentativesListFilters from '@/components/admin/Representatives/AdminRepresentativesListFilters.vue';
 import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import ModalWindow from '@/components/Base/ModalWindow.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import RepresentativesSortsLib from '@/libs/sorts/RepresentativesSortsLib';
+import Button from '@/services/components/Button.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import ModalWindow from '@/services/components/ModalWindow.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 import CreateRepresentativeForm from '../Patients/CreateRepresentativeForm.vue';
-export default defineComponent({
-  name: 'AdminRepresentativesList',
-  components: {
-    FioToggleForm,
-    AdminListWrapper,
-    GridContainer,
-    InfoItem,
-    CollapseItem,
-    Button,
-    SmallDatePicker,
-    ToggleDocumentsForm,
-    CreateRepresentativeForm,
-    ModalWindow,
-    AdminRepresentativesListFilters,
+const showAddModal: Ref<boolean> = ref(false);
+const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);
+const count: Ref<number> = computed(() => Provider.store.getters['representatives/count']);
+
+const queryStringsRepresentative: Ref<string> = ref('');
+
+const loadRepresentatives = async () => {
+  await Provider.store.dispatch('representatives/getAll', { filterQuery: Provider.filterQuery.value });
+};
+
+const load = async () => {
+  // Provider.setSortModels(PatientsSortsLib.byFullName());
+  Provider.setSortModels(RepresentativesSortsLib.byFullName());
+  await Provider.store.dispatch('representatives/ftsp', { qid: Provider.getQid(), ftsp: Provider.filterQuery.value });
+};
+
+const addRepresentative = async (): Promise<void> => {
+  showAddModal.value = !showAddModal.value;
+};
+
+Hooks.onBeforeMount(load, {
+  adminHeader: {
+    title: 'Представители',
+    buttons: [{ text: 'Добавить', type: 'normal-button', action: addRepresentative }],
   },
-  setup() {
-    const showAddModal: Ref<boolean> = ref(false);
-    const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);
-    const count: Ref<number> = computed(() => Provider.store.getters['representatives/count']);
-
-    const queryStringsRepresentative: Ref<string> = ref('');
-
-    const loadRepresentatives = async () => {
-      await Provider.store.dispatch('representatives/getAll', { filterQuery: Provider.filterQuery.value });
-    };
-
-    const load = async () => {
-      // Provider.setSortModels(PatientsSortsLib.byFullName());
-      await Provider.loadItems();
-    };
-
-    const addRepresentative = async (): Promise<void> => {
-      showAddModal.value = !showAddModal.value;
-    };
-
-    Hooks.onBeforeMount(load, {
-      adminHeader: {
-        title: 'Представители',
-        buttons: [{ text: 'Добавить', type: 'normal-button', action: addRepresentative }],
-      },
-      sortsLib: RepresentativesSortsLib,
-      getAction: 'getAll',
-    });
-
-    const selectSearch = async (event: ISearchObject): Promise<void> => {
-      await Provider.router.push(`/admin/representatives/${event.value}`);
-    };
-
-    const updateHuman = async (human: Human): Promise<void> => {
-      await Provider.withHeadLoader(async () => {
-        await Provider.store.dispatch('humans/update', human);
-      });
-    };
-
-    const updateIsMale = async (human: Human): Promise<void> => {
-      human.isMale = !human.isMale;
-      await updateHuman(human);
-    };
-
-    return {
-      showAddModal,
-      addRepresentative,
-      updateIsMale,
-      loadRepresentatives,
-      selectSearch,
-      updateHuman,
-      queryStringsRepresentative,
-      representatives,
-      ...Provider.getAdminLib(),
-      count,
-      load,
-    };
-  },
+  pagination: { storeModule: 'representatives', action: 'ftsp' },
+  sortsLib: RepresentativesSortsLib,
+  getAction: 'getAll',
 });
+
+const selectSearch = async (event: ISearchObject): Promise<void> => {
+  await Provider.router.push(`/admin/representatives/${event.value}`);
+};
+
+const updateHuman = async (human: Human): Promise<void> => {
+  await Provider.withHeadLoader(async () => {
+    await Provider.store.dispatch('humans/update', human);
+  });
+};
+
+const updateIsMale = async (human: Human): Promise<void> => {
+  human.isMale = !human.isMale;
+  await updateHuman(human);
+};
 </script>
 
 <style lang="scss" scoped>

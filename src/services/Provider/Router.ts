@@ -3,10 +3,13 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import router from '../../router';
 
 const Router = (() => {
+  const r = router;
   function id() {
     return route().params['id'];
   }
-
+  function getQid() {
+    return getStringQueryParam('qid');
+  }
   function route(): RouteLocationNormalizedLoaded {
     return router.currentRoute.value;
   }
@@ -28,7 +31,6 @@ const Router = (() => {
     }
     await router.push(`/admin/${safePath}`);
   }
-
   function getStringQueryParam(param: string): string {
     return String(route().query[param]);
   }
@@ -38,6 +40,7 @@ const Router = (() => {
   }
 
   return {
+    getQid,
     getStringQueryParam,
     getNumberQueryParam,
     toAdmin,
@@ -45,6 +48,7 @@ const Router = (() => {
     route,
     getPath,
     routerPushBlank,
+    router,
   };
 })();
 

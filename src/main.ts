@@ -3,7 +3,6 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
-import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/display.css';
 
@@ -15,16 +14,14 @@ import Provider from '@/services/Provider/Provider';
 import './assets/styles/element-variables.scss';
 import Maska from 'maska';
 import DateTimeFormatter from '@/services/DateFormat';
-import ru from 'element-plus/es/locale/lang/ru';
 
-import { setupElementPlusComponents, setupElementPlusPlugins } from '@/plugins/ElementPlus';
 import ClassHelper from '@/services/ClassHelper';
 import StringsService from '@/services/Strings';
 
 const app = createApp(App);
 app.use(store);
 app.use(router);
-app.use(ElementPlus);
+// app.use(ElementPlus);
 
 app.use(Maska);
 
@@ -34,8 +31,8 @@ Provider.store = store;
 app.config.globalProperties.$dateTimeFormatter = new DateTimeFormatter('ru-RU');
 app.config.globalProperties.$classHelper = ClassHelper;
 app.config.globalProperties.$stringsService = StringsService;
-app.use(setupElementPlusComponents, { locale: ru });
-app.use(setupElementPlusPlugins);
+// app.use(setupElementPlusComponents, { locale: ru });
+// app.use(setupElementPlusPlugins);
 
 app.directive('click-outside', {
   mounted(el, binding) {

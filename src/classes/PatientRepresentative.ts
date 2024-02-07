@@ -1,21 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
 import RepresentativeType from '@/classes/RepresentativeType';
 import ClassHelper from '@/services/ClassHelper';
-
-import Patient from './Patient';
-
 export default class PatientRepresentative {
   id?: string;
   representativeTypeId?: string;
   representativeType = new RepresentativeType();
   patientId?: string;
-  @ClassHelper.GetClassConstructor(Patient)
-  patient = new Patient();
+  patient? = new Patient();
   representativeId?: string;
-  @ClassHelper.GetClassConstructor(Representative)
-  representative = new Representative();
+  representative? = new Representative();
 
   constructor(i?: PatientRepresentative) {
     ClassHelper.BuildClass(this, i);

@@ -76,9 +76,6 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Question from '@/classes/Question';
 import Register from '@/classes/Register';
-import Button from '@/components/Base/Button.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
 import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
@@ -88,8 +85,11 @@ import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import Button from '@/services/components/Button.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
+import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

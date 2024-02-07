@@ -25,11 +25,10 @@
 import { watch } from '@vue/runtime-core';
 import { computed, defineComponent, PropType, Ref, ref } from 'vue';
 
-import SearchGroup from '@/classes/SearchGroup';
+import SearchGroup from '@/services/classes/SearchGroup';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import SearchModel from '@/services/classes/SearchModel';
 import { DataTypes } from '@/services/interfaces/DataTypes';
-import IFilterModel from '@/services/interfaces/IFilterModel';
 import ISearch from '@/services/interfaces/ISearchObject';
 import { Operators } from '@/services/interfaces/Operators';
 import Provider from '@/services/Provider/Provider';
@@ -100,6 +99,7 @@ export default defineComponent({
       searchForm.value.activated = true;
       searchModel.value.searchObjects = [];
       searchModel.value.query = query;
+      searchModel.value.key = props.keyValue;
       const groupForSearch = searchModel.value.searchGroups.find((group: SearchGroup) => group.key === props.keyValue);
       if (groupForSearch) {
         searchModel.value.searchGroup = groupForSearch;
@@ -129,7 +129,7 @@ export default defineComponent({
       queryString.value = '';
     };
 
-    const createModel = (): IFilterModel => {
+    const createModel = (): FilterModel => {
       const fm = FilterModel.CreateFilterModel(props.table, props.col, DataTypes.String);
       fm.operator = Operators.Like;
       return fm;

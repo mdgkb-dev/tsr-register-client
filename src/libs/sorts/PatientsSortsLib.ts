@@ -7,7 +7,7 @@ const PatientsSortsLib = (() => {
   const modelName = 'patient';
 
   function byFullName(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       ClassHelper.GetPropertyName(Patient).fullName,
       order ? order : Orders.Asc,
@@ -17,7 +17,7 @@ const PatientsSortsLib = (() => {
   }
 
   function byDateBirth(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       ClassHelper.GetPropertyName(Patient).dateBirth,
       order ? order : Orders.Asc,
@@ -26,7 +26,7 @@ const PatientsSortsLib = (() => {
   }
 
   function byCreatedAt(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(modelName, 'createdAt', order ? order : Orders.Asc, `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
+    return SortModel.CreateSortModel(modelName, 'createdAt', order ? order : Orders.Asc, `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
   }
 
   return {

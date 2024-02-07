@@ -33,7 +33,7 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Status from '@/classes/Status';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
+import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import IOption from '@/interfaces/shared/IOption';

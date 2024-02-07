@@ -1,3 +1,5 @@
+import { ElMessage, MessageHandle } from 'element-plus';
+
 import IMessage from '@/services/interfaces/IMessage';
 
 interface IWithMessage {
@@ -19,11 +21,15 @@ export default class MessageError implements IMessage {
     let errorMessage = '<strong>Проверьте правильность введенных данных:</strong><ul>';
     for (const item of Object.keys(errorFields)) {
       const err = (errorFields[item] as Array<unknown>)[0] as IWithMessage;
-      if (err && err) {
+      if (err && err.message) {
         errorMessage += `<li>${err.message}</li>`;
       }
     }
     errorMessage += '</ul>';
     return errorMessage;
+  }
+
+  static Show(message: string): MessageHandle {
+    return ElMessage({ message: message, type: 'error' });
   }
 }

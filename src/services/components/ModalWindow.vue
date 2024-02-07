@@ -12,11 +12,6 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { v4 as uuidv4 } from 'uuid';
 import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
-import Representative from '@/classes/Representative';
-import RepresentativeRules from '@/classes/RepresentativeRules';
-// import DocumentForm from '@/components/admin/Patients/DocumentForm.vue';
-import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'ModalWindow',
   props: {
@@ -34,20 +29,15 @@ export default defineComponent({
 
   setup(props, { emit }) {
     const form = ref();
-    const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
-    const rules = RepresentativeRules;
-
-    onBeforeMount(async () => {
-      Provider.store.commit('representatives/resetItem');
-    });
+    // const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
 
     const submitForm = async (): Promise<void> => {
       // saveButtonClick.value = true;
       // if (!validate(form.value)) {
       //   return;
       // }
-      representative.value.id = uuidv4();
-      await emit('save', representative.value);
+      // representative.value.id = uuidv4();
+      // await emit('save', representative.value);
       // ElNotification.error(new MessageSuccess());
     };
 
@@ -92,9 +82,8 @@ export default defineComponent({
       close,
       beforeClose,
       form,
-      rules,
       submitForm,
-      representative,
+      // representative,
     };
   },
 });
@@ -108,18 +97,6 @@ export default defineComponent({
   justify-content: space-between;
 }
 
-// .el-row {
-//   display: block;
-//   &:last-child {
-//     margin-bottom: 0;
-//   }
-// }
-
-// .row-bg {
-//   padding: 10px 0;
-//   background-color: #f9fafc;
-// }
-
 .modal-wrapper {
   width: 100%;
   height: 100%;
@@ -130,10 +107,11 @@ export default defineComponent({
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 10px;
 }
 
 :deep(.el-dialog__body) {
-  padding-top: 0;
+  padding: 10px;
   overflow: auto;
 }
 

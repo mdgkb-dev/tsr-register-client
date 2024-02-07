@@ -2,7 +2,7 @@ export {};
 
 declare global {
   interface Array<T> {
-    swap(a: T, b: T): void;
+    swap(a: number, b: number): void;
   }
 }
 

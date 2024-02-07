@@ -6,7 +6,7 @@ const StatusesFiltersLib = (() => {
   const model = 'status';
 
   function byModel(value: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(model, 'model', DataTypes.String);
+    const filterModel = FilterModel.CreateFilterModel(model, 'model', DataTypes.String);
     filterModel.value1 = value;
     filterModel.operator = Operators.Eq;
     return filterModel;

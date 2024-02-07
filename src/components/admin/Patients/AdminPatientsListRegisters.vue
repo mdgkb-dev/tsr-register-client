@@ -28,7 +28,7 @@ import Patient from '@/classes/Patient';
 import PatientRegister from '@/classes/PatientRegister';
 import Register from '@/classes/Register';
 import User from '@/classes/User';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';

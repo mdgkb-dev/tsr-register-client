@@ -41,7 +41,7 @@ import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
 import RepresentativeToPatientRules from '@/classes/RepresentativeToPatientRules';
 import RepresentativeType from '@/classes/RepresentativeType';
-import RemoteSearch from '@/components/RemoteSearch.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 

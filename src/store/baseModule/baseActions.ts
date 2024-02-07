@@ -1,13 +1,16 @@
 import { ActionTree } from 'vuex';
 
-import IFileInfo from '@/interfaces/files/IFileInfo';
 import Cache from '@/services/Cache';
+import FileInfo from '@/services/classes/FileInfo';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import FTSP from '@/services/classes/filters/FTSP';
+import HttpResponse from '@/services/classes/HttpResponse';
 import HttpClient from '@/services/HttpClient';
 import IFileInfosGetter from '@/services/interfaces/IFileInfosGetter';
 import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
 import ItemsWithCount from '@/services/interfaces/ItemsWithCount';
 import IWithId from '@/services/interfaces/IWithId';
+import Provider from '@/services/Provider/Provider';
 import IBasicState from '@/store/baseModule/baseState';
 import RootState from '@/store/types';
 
@@ -39,32 +42,60 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       } else {
         res = await get();
       }
+      const setItems = Array.isArray(res) ? res : res?.items;
+
+      if (options && options.filterQuery && options.filterQuery.pagination.append && setItems) {
+        commit('appendToAll', setItems);
+        options.filterQuery.pagination.setAllLoaded(setItems ? setItems.length : 0);
+        return;
+      }
+
       if (Array.isArray(res)) {
-        if (options && options.filterQuery && options.filterQuery.pagination.append && res) {
-          commit('appendToAll', res);
-          options.filterQuery.pagination.setAllLoaded(res ? res.length : 0);
-          return;
-        }
         commit('setAll', res);
       } else {
-        if (options && options.filterQuery && options.filterQuery.pagination.append && res) {
-          commit('appendToAll', res.items);
-          options.filterQuery.pagination.setAllLoaded(res.items.length ? res.items.length : 0);
-          return;
-        }
         commit('setAllWithCount', res);
+      }
+    },
+    ftsp: async ({ commit }, params?: { qid: string; ftsp: FilterQuery }) => {
+      if (!params) {
+        console.warn('noFilterSetInQuery');
+        return;
+      }
+      const ftsp = FTSP.GetFTSPOrQID(params.ftsp);
+
+      const p: IBodyfulParams<unknown> = {
+        payload: typeof ftsp === 'string' ? { qid: ftsp, ftsp: undefined } : { qid: '', ftsp: ftsp },
+        isFormData: true,
+        query: 'ftsp',
+      };
+      // если фильтр есть
+      const res: HttpResponse<T> = (await httpClient.post<unknown, HttpResponse<T>>(p)) as HttpResponse<T>;
+      if (!res || !res.ftsp || !res.ftsp.id) {
+        commit('filter/filterExists', false, { root: true });
+        await Provider.router.replace({ query: {} });
+        return;
+      }
+      commit('filter/setFTSP', res.ftsp, { root: true });
+      try {
+        await Provider.router.replace({ query: { qid: res.ftsp.id } });
+      } catch (error) {
+        console.log(error);
+      }
+      if (Array.isArray(res.data)) {
+        commit('setAll', res.data);
+      } else {
+        commit('setAllWithCount', res.data);
       }
     },
     get: async ({ commit }, filter?: string | FilterQuery) => {
       if (!filter) {
         console.warn('noFilterSetInQuery');
-        return;
       }
       let query: IBodilessParams;
       if (typeof filter === 'string') {
         query = { query: filter };
       } else {
-        query = { query: `get${filter.toUrl()}` };
+        query = { query: `get${filter?.toUrl()}` };
       }
       commit('set', await httpClient.get<T>(query));
     },
@@ -75,7 +106,7 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       const opts: IBodyfulParams<T> = { payload: item, isFormData: true };
       if (item.getFileInfos) {
         opts.fileInfos = item.getFileInfos();
-        opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
+        opts.fileInfos.forEach((f: FileInfo) => (f.url = ''));
       }
       return await httpClient.post<T, T>(opts);
     },
@@ -84,17 +115,18 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       commit('set', result);
     },
     createAndReset: async ({ commit, dispatch }, item: T): Promise<void> => {
+      return;
       await dispatch('create', item);
       commit('set');
     },
-    update: async ({ state }, item: T): Promise<unknown> => {
+    update: async ({ state }, item?: T): Promise<unknown> => {
       if (!item) {
         item = state.item;
       }
       const opts: IBodyfulParams<T> = { query: `${item.id}`, payload: item, isFormData: true };
       if (item.getFileInfos) {
         opts.fileInfos = item.getFileInfos();
-        opts.fileInfos.forEach((f: IFileInfo) => (f.url = ''));
+        opts.fileInfos.forEach((f: FileInfo) => (f.url = ''));
       }
       return await httpClient.put<T, T>(opts);
     },

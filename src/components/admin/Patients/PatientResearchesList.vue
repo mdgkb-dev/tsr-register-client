@@ -42,7 +42,7 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';

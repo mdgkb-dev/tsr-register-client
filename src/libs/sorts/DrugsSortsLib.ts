@@ -5,7 +5,7 @@ const DrugsSortsLib = (() => {
   const modelName = 'drug';
 
   function byNameINN(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       'nameINN',
       order ? order : Orders.Asc,

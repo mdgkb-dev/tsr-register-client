@@ -1,22 +1,21 @@
-import { Ref, ref, watch } from 'vue';
+import { ElLoading } from 'element-plus';
+import { computed, Ref, ref, watch } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
-import router from '@/router';
+// import { CallbackFunction } from '@/interfaces/elements/elements/Callback';
+import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Pagination from '@/services/classes/filters/Pagination';
 import Filter from '@/services/Provider/Filter';
 import Router from '@/services/Provider/Router';
 import StringsService from '@/services/Strings';
 import useConfirmLeavePage from '@/services/useConfirmLeavePage';
-import store from '@/store';
 
 import Store from './Store';
 
 const Provider = (() => {
   const mounted: Ref<boolean> = ref(false);
   const form = ref();
-  const r = router;
-  const s = store;
   const saveButtonClicked: Ref<boolean> = ref(false);
 
   function dropPagination(): void {
@@ -25,13 +24,17 @@ const Provider = (() => {
   }
 
   async function submit(next?: NavigationGuardNext): Promise<void> {
-    console.log(Router.id());
     if (Router.id()) {
       await Store.update();
     } else {
       await Store.create();
     }
     next ? next() : await Router.toAdmin(StringsService.toKebabCase(Store.getStoreModule()));
+  }
+
+  async function loadItems(): Promise<void> {
+    const qid = Router.getQid();
+    await Store.store.dispatch(Store.getDispatchModuleAndAction(), { qid: qid, ftsp: Filter.filterQuery });
   }
 
   async function loadItem(col?: string | FilterQuery): Promise<void> {
@@ -50,14 +53,21 @@ const Provider = (() => {
     watch(Store.store.getters[Store.getStoreModule() + '/item'], formUpdated, { deep: true });
   }
 
+  async function replaceFilterModel(newFilterModel: FilterModel, previousFilterModelId: string | undefined) {
+    Filter.filterQuery.value.spliceFilterModel(previousFilterModelId);
+    Filter.filterQuery.value.setFilterModel(newFilterModel);
+    await Provider.router.replace({ query: {} });
+  }
+
+  async function spliceFilterModel(id: string | undefined) {
+    Filter.filterQuery.value.spliceFilterModel(id);
+    await Provider.router.replace({ query: {} });
+  }
   async function createAdmin(): Promise<void> {
     await Router.toAdmin(`${StringsService.toKebabCase(Store.getStoreModule())}/new`);
   }
 
-  async function editAdmin(id?: string): Promise<void> {
-    if (!id) {
-      return;
-    }
+  async function editAdmin(id: string): Promise<void> {
     await Router.toAdmin(`${StringsService.toKebabCase(Store.getStoreModule())}/${id}`);
   }
 
@@ -78,7 +88,7 @@ const Provider = (() => {
     if (!module) {
       module = Store.getStoreModule();
     }
-    await Store.store.dispatch(`${module}/getAll`, Provider.filterQuery.value);
+    await Store.store.dispatch(`${module}/getAll`, { filterQuery: Provider.filterQuery.value });
   }
 
   function getAdminLib() {
@@ -90,6 +100,12 @@ const Provider = (() => {
       mounted: mounted,
       sortList: Filter.sortList,
     };
+  }
+
+  async function loadingDecor(fn: any) {
+    const loading = ElLoading.service({ lock: true, text: 'Загрузка' });
+    await fn();
+    loading.close();
   }
 
   type func = () => Promise<void> | void;
@@ -104,6 +120,7 @@ const Provider = (() => {
 
   return {
     withHeadLoader,
+    loadingDecor,
     dropPagination,
     saveButtonClicked,
     mounted,
@@ -119,8 +136,8 @@ const Provider = (() => {
     ...Store,
     ...Router,
     ...Filter,
-    router: r,
-    store: s,
+    replaceFilterModel,
+    spliceFilterModel,
   };
 })();
 

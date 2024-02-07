@@ -1,4 +1,3 @@
-import ResearchesPoolResearch from '@/classes/ResearchesPoolResearch';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class ResearchesPool {
@@ -7,8 +6,8 @@ export default class ResearchesPool {
   // @ClassHelper.GetClassConstructor(RegisterDiagnosis)
   // registerDiagnosis: RegisterDiagnosis[] = [];
   registerDiagnosisForDelete: string[] = [];
-  @ClassHelper.GetClassConstructor(ResearchesPoolResearch)
-  researchesPoolsResearches: ResearchesPoolResearch[] = [];
+  // @ClassHelper.GetClassConstructor(ResearchesPoolResearch)
+  researchesPoolsResearches: any[] = [];
   researchesPoolsResearchesForDelete: string[] = [];
 
   constructor(i?: ResearchesPool) {

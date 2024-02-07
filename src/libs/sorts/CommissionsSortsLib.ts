@@ -5,7 +5,7 @@ const CommissionsSortsLib = (() => {
   const modelName = 'commission';
 
   function byNumber(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
+    return SortModel.CreateSortModel(
       modelName,
       'number',
       order ? order : Orders.Asc,
@@ -15,7 +15,7 @@ const CommissionsSortsLib = (() => {
   }
 
   function byDate(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(modelName, 'date', order ? order : Orders.Asc, `По рождению ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
+    return SortModel.CreateSortModel(modelName, 'date', order ? order : Orders.Asc, `По рождению ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
   }
 
   return {
