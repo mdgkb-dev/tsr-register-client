@@ -143,7 +143,6 @@ declare module '@vue/runtime-core' {
     RepresentativeModal: typeof import('./src/components/admin/Patients/RepresentativeModal.vue')['default']
     RepresentativePageInfo: typeof import('./src/components/admin/Representatives/RepresentativePageInfo.vue')['default']
     RepresentativeToPatientForm: typeof import('./src/components/admin/Representatives/RepresentativeToPatientForm.vue')['default']
-    RightSliderContainer: typeof import('./src/components/Base/RightSliderContainer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectStatusForm: typeof import('./src/components/admin/SelectStatusForm.vue')['default']

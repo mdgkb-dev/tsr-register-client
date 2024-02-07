@@ -1,187 +1,83 @@
 <template>
-  <div class="mainblock">
-    <div v-if="collapsed1 | collapsed2" class="blur" @click="handClick()"></div>
-    <div class="body">
-      <div
-        class="visability-block"
-        :style="{
-          maxWidth: mobileWindow ? '100%' : '300px',
-        }"
-      >
-        <slot name="visability" />
+  <div
+    class="right-slider"
+    :style="{
+      marginRight: isToggle ? `calc(${sliderOffWidth} - ${sliderOnWidth})` : `0`,
+      width: sliderOnWidth,
+    }"
+  >
+    <div class="click-line" @click="toggleSlider(!isToggle)">
+      <StringItem v-if="isToggle" string="Показать список исследований" font-size="16px" padding="0" color="#343E5C" />
+      <StringItem v-if="!isToggle" string="Скрыть список исследований" font-size="16px" padding="0" color="#343E5C" />
+    </div>
+    <div class="right-slider-content">
+      <div class="right-slider-content-header">
+        <slot name="header" />
       </div>
-      <div
-        class="filter-block"
-        :style="{
-          position: mobileWindow ? 'absolute' : '',
-          top: mobileWindow ? '10px' : '',
-          right: mobileWindow ? '0px' : '',
-          width: mobileWindow ? '220px' : '100%',
-          zIndex: mobileWindow ? '4' : '',
-          padding: mobileWindow ? '10px 20px 26px 0px' : '0',
-          marginRight: mobileWindow ? (collapsed1 ? '0' : '-250px') : '0',
-          transition: mobileWindow ? '0.3s' : '',
-          background: mobileWindow ? '#F5f5f5' : '',
-          borderTopLeftRadius: mobileWindow ? '5px' : '',
-          borderBottomLeftRadius: mobileWindow ? '5px' : '',
-          boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
-          height: mobileWindow ? '370px' : '',
-        }"
-      >
-        <div v-if="mobileWindow" class="title">
-          <svg
-            class="icon-filter"
-            :style="{
-              stroke: '#B0A4C0',
-              paddingLeft: '10px',
-            }"
-          >
-            <use xlink:href="#filter"></use>
-          </svg>
-          <svg
-            class="icon-close"
-            :style="{
-              marginRight: '-10px',
-            }"
-            @click="handClick1()"
-          >
-            <use xlink:href="#close"></use>
-          </svg>
-        </div>
-        <slot name="filter" />
+      <div class="right-slider-content-box">
+        <slot />
       </div>
-      <div v-if="!mobileWindow" class="help-block"></div>
-      <div
-        class="download-block"
-        :style="{
-          position: mobileWindow ? 'absolute' : '',
-          top: mobileWindow ? '60px' : '',
-          right: mobileWindow ? '0px' : '',
-          width: mobileWindow ? '77px' : '',
-          zIndex: mobileWindow ? '4' : '',
-          padding: mobileWindow ? '10px 10px 26px 0px' : '0 0 0 10px',
-          marginRight: mobileWindow ? (collapsed2 ? '-2px' : '-130px') : '0',
-          transition: mobileWindow ? '0.3s' : '',
-          background: mobileWindow ? '#F5f5f5' : '',
-          borderTopLeftRadius: mobileWindow ? '5px' : '',
-          borderBottomLeftRadius: mobileWindow ? '5px' : '',
-          boxShadow: mobileWindow ? 'rgba(0, 0, 0, 0.35) 0px 5px 5px' : '',
-          height: mobileWindow ? '150px' : '',
-        }"
-      >
-        <div v-if="mobileWindow" class="title">
-          <svg
-            class="icon-download"
-            :style="{
-              stroke: '#B0A4C0',
-              paddingLeft: '10px',
-            }"
-          >
-            <use xlink:href="#download"></use>
-          </svg>
-          <svg class="icon-close" @click="handClick2()">
-            <use xlink:href="#close"></use>
-          </svg>
-        </div>
-        <slot name="download" />
-      </div>
-
-      <div v-if="mobileWindow" class="icons">
-        <Button
-          :with-icon="true"
-          width="42px"
-          height="42px"
-          color="#006BB4"
-          background="#ffffff"
-          background-hover="#DFF2F8"
-          margin="0 0 0 10px"
-          icon-class="icon-filter"
-          icon="filter"
-          @click="handClick1()"
-        />
-
-        <Button
-          :with-icon="true"
-          width="42px"
-          height="42px"
-          color="#006BB4"
-          background="#ffffff"
-          background-hover="#DFF2F8"
-          margin="13px 0 0 10px"
-          icon="download"
-          icon-class="icon-download"
-          @click="handClick2()"
-        />
-      </div>
+    </div>
+    <div class="right-slider-button">
+      <slot name="button" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { watch } from '@vue/runtime-core';
+import { defineComponent, PropType, ref } from 'vue';
 
-import Button from '@/services/components/Button.vue';
+import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({
   name: 'RightSliderContainer',
   components: {
-    Button,
+    StringItem,
   },
   props: {
-    menuWidth: {
+    sliderOffWidth: {
       type: String as PropType<string>,
       required: false,
-      default: '0px',
+      default: '30px',
     },
-    mobileWidth: {
+    sliderOnWidth: {
       type: String as PropType<string>,
       required: false,
-      default: '1330px',
+      default: '260px',
+    },
+    background: {
+      type: String as PropType<string>,
+      required: false,
+      default: 'inherit',
+    },
+    toggle: {
+      type: Boolean as PropType<boolean>,
+      default: false,
     },
   },
-  setup(props) {
-    const mounted = ref(false);
-    const collapsed1: Ref<boolean> = ref(false);
-    const collapsed2: Ref<boolean> = ref(false);
-    const mobileWindow = ref(window.matchMedia('(max-width: 1330px)').matches);
+  emits: ['toggle'],
+  setup(props, { emit }) {
+    const isToggle = ref(false);
+    watch(
+      () => props.toggle,
+      () => {
+        isToggle.value = !isToggle.value;
+      }
+    );
 
-    const handClick = () => {
-      collapsed1.value = false;
-      collapsed2.value = false;
+    const mobileWindow = ref(window.matchMedia('(max-width: 768px)').matches);
+    const toggleSlider = (toggle: boolean) => {
+      isToggle.value = !isToggle.value;
+      emit('toggle', toggle);
     };
-
-    const handClick1 = () => {
-      collapsed1.value = !collapsed1.value;
-    };
-    const handClick2 = () => {
-      collapsed2.value = !collapsed2.value;
-    };
-
-    onBeforeMount(async () => {
-      window.addEventListener('resize', () => {
-        switch (props.mobileWidth) {
-          case '1330px':
-            return (mobileWindow.value = window.matchMedia('(max-width: 1330px)').matches);
-          case '1215px':
-            return (mobileWindow.value = window.matchMedia('(max-width: 1215px)').matches);
-          case '1024px':
-            return (mobileWindow.value = window.matchMedia('(max-width: 1024px)').matches);
-          case '768px':
-            return (mobileWindow.value = window.matchMedia('(max-width: 768px)').matches);
-        }
-        return (mobileWindow.value = window.matchMedia('(max-width: 1330px)').matches);
-      });
-      mounted.value = true;
-    });
+    const hovering = ref(false);
 
     return {
-      collapsed1,
-      collapsed2,
-      handClick,
-      handClick1,
-      handClick2,
+      toggleSlider,
+      hovering,
       mobileWindow,
-      mounted,
+      isToggle,
     };
   },
 });
@@ -190,84 +86,107 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 
-.hidden {
-  display: none;
+* {
+  box-sizing: border-box;
 }
 
-.mainblock {
-  position: relative;
-  display: flex;
-  z-index: 3;
-  justify-content: space-between;
-  align-items: center;
-  width: calc(100% - 20px);
-  padding: 10px;
-  background: #f5f5f5;
-  height: 100px;
-  border-bottom: 1px solid #c4c4c4;
-}
-
-.blur {
+.right-slider {
   position: fixed;
-  height: 20000px;
-  width: 20000px;
-  background: #000000;
-  opacity: 0.2;
-  z-index: 4;
-}
-
-.body {
   display: flex;
-  justify-content: space-between;
-  min-height: 20px;
-  height: auto;
-  width: 100%;
+  top: 165px;
+  right: 0px;
+  background: #f5f5f5;
+  z-index: 3;
+  height: 75vh;
+  border: $dark-border;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  transition: 0.3s;
 }
 
-.visability-block {
-  width: 100%;
-}
-
-:deep(.icon-filter) {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  stroke: #006bb4;
-  fill: none;
-}
-
-:deep(.icon-download) {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  stroke: #006bb4;
-  fill: none;
-}
-
-.icon-close {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  fill: #343e5c;
-}
-
-.icon-close:hover {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  fill: #006bb4;
-}
-
-.help-block {
-  height: 92px;
-  width: 1px;
-}
-
-.title {
-  height: 40px;
+.click-line {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  width: 35px;
+  height: 100%;
+  writing-mode: vertical-lr;
+  background: #c1efeb;
+  background: #f5f5f5;
+  cursor: pointer;
+  border-right: $normal-darker-border;
+}
+
+.right-slider-content {
+  width: 100%;
+  height: calc(100% - 90px);
+}
+
+.right-slider-content-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 62px;
+  border-bottom: $normal-darker-border;
+  margin-left: -1px;
+  background: #f5f5f5;
+}
+
+.right-slider-content-box {
+  width: 100%;
+  height: calc(100% - 33px);
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 0px 3px 10px 7px;
+  border-bottom: $normal-darker-border;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: #f5f5f5;
+}
+
+.right-slider-button {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 62px;
+  width: calc(100% - 30px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: -1px;
+  background: #f5f5f5;
+}
+
+@media (max-width: 1690px) {
+  .right-slider {
+    height: 65vh;
+    top: 205px;
+  }
+}
+
+@media (max-width: 1436px) {
+  .right-slider {
+    top: 205px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .right-slider {
+    top: 245px;
+  }
+}
+
+@media (max-width: 992px) {
+  .right-slider {
+    top: 205px;
+  }
+}
+
+@media screen and (max-width: 822px) {
+  .right-slider {
+    top: 245px;
+  }
 }
 </style>

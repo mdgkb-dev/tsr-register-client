@@ -1,5 +1,5 @@
 <template>
-  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+  <RSContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" :with-hover="false">
@@ -64,7 +64,7 @@
         </InfoItem>
       </GridContainer>
     </template>
-  </RightSliderContainer>
+  </RSContainer>
 </template>
 
 <script lang="ts">
@@ -89,7 +89,7 @@ import Button from '@/services/components/Button.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RemoteSearch from '@/services/components/RemoteSearch.vue';
-import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
+import RSContainer from '@/services/components/RSContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -101,7 +101,7 @@ export default defineComponent({
     Button,
     InfoItem,
     GridContainer,
-    RightSliderContainer,
+    RSContainer,
     Switch3Pos,
   },
   emits: ['load'],
