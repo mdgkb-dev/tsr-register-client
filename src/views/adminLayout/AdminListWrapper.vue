@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import Pagination from '@/components/Pagination.vue';
+import Pagination from '@/services/components/Pagination.vue';
 
 defineProps({
   showHeader: {
