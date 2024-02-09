@@ -53,17 +53,17 @@ const currentChange = async (pageNum: number) => {
     await setPage(pageNum, true);
   }
 };
+
 const setPage = async (pageNum: number, load: boolean): Promise<void> => {
   Provider.loadingDecor(async () => {
     Provider.store.commit('pagination/setCurPage', pageNum);
     Provider.store.commit('filter/setOffset', pageNum - 1);
-    // await Provider.router.replace({ query: { q: Provider.filterQuery.value.toUrlQuery() } });
     if (load) {
       if (action !== 'ftsp') {
         await Provider.store.dispatch(`${storeModule}/${action}`, { filterQuery: Provider.filterQuery.value });
       } else {
         await Provider.router.replace({ query: {} });
-        await Provider.store.dispatch(`${storeModule}/${action}`, { qid: undefined, ftsp: Provider.filterQuery.value });
+        await Provider.store.dispatch(`${storeModule}/${action}`);
       }
     }
     scrollToBack();

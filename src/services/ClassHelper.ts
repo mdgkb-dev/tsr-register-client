@@ -51,10 +51,12 @@ export default class ClassHelper {
     return prop !== null && typeof prop !== 'undefined' && prop !== Object(prop);
   }
 
-  static RemoveFromClassByIndex(index: number, arrayFromDelete: IWithId[], arrayForDelete: string[]): void {
-    console.log('index: ', index);
+  static RemoveFromClassByIndex(index: number, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
+    if (index === -1) {
+      return;
+    }
     const idForDelete = arrayFromDelete[index].id;
-    if (idForDelete) {
+    if (idForDelete && arrayForDelete) {
       arrayForDelete.push(idForDelete);
     }
     arrayFromDelete.splice(index, 1);

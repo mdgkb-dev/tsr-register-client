@@ -30,4 +30,7 @@ export default class Drug {
   getName(): string {
     return this.nameINN;
   }
+  static GetClassName(): string {
+    return 'drug';
+  }
 }

@@ -154,7 +154,6 @@ export default class FilterQuery {
   }
 
   setFilterModel(filterModel: FilterModel) {
-    console.log(this);
     filterModel.isSet = true;
     let item = this.filterModels.find((i: FilterModel) => i.id === filterModel.id);
     if (item) {

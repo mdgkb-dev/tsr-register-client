@@ -76,9 +76,6 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Question from '@/classes/Question';
 import Register from '@/classes/Register';
-import SortList from '@/components/SortList.vue';
-import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
-import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
@@ -86,10 +83,13 @@ import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Button from '@/services/components/Button.vue';
+import FiltersButtonsSelect from '@/services/components/FiltersButtonsSelect.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import RSContainer from '@/services/components/RSContainer.vue';
+import SortList from '@/services/components/SortList.vue';
+import Switch3Pos from '@/services/components/Switch3Pos.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

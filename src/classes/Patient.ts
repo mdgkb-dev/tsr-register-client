@@ -254,4 +254,7 @@ export default class Patient {
     }
     return this.anamneses.filter((i: Anamnesis) => i.mkbItemId === mkbItemId);
   }
+  static GetClassName(): string {
+    return 'patient';
+  }
 }

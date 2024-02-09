@@ -1,11 +1,11 @@
+import Research from '@/classes/Research';
 import SortModel from '@/services/classes/SortModel';
+import ClassHelper from '@/services/ClassHelper';
 import { Orders } from '@/services/interfaces/Orders';
 
 const ResearchesResultsSortsLib = (() => {
-  const modelName = 'researchResult';
-
   function byDate(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(modelName, 'date', order ? order : Orders.Asc);
+    return SortModel.Create(Research, ClassHelper.GetPropertyName(Research).date, order ? order : Orders.Asc);
   }
 
   return {

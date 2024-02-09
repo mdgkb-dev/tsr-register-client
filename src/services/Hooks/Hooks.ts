@@ -30,10 +30,10 @@ const Hooks = (() => {
     return onBeforeMount(async () => {
       Provider.mounted.value = false;
       Provider.store.commit('admin/showLoading');
-      Provider.resetFilterQuery();
+      Provider.ftsp.value.reset();
       // await Provider.store.dispatch('meta/getSchema');
       if (options?.sortsLib) {
-        Provider.setSortList(...createSortModels(options.sortsLib));
+        Provider.sortList = [...createSortModels(options.sortsLib)];
       }
       // await Provider.filterQuery.value.fromUrlQuery(Provider.route().query);
       // Provider.setDefaultSortModel();

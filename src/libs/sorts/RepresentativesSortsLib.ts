@@ -1,14 +1,13 @@
 import Patient from '@/classes/Patient';
+import Representative from '@/classes/Representative';
 import SortModel from '@/services/classes/SortModel';
 import ClassHelper from '@/services/ClassHelper';
 import { Orders } from '@/services/interfaces/Orders';
 
 const RepresentativesSortsLib = (() => {
-  const modelName = 'representative';
-
   function byFullName(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(
-      modelName,
+    return SortModel.Create(
+      Representative,
       ClassHelper.GetPropertyName(Patient).fullName,
       order ? order : Orders.Asc,
       `По ФИО ${order === Orders.Asc ? '(по возрастанию)' : '(по убыванию)'}`,
@@ -17,8 +16,8 @@ const RepresentativesSortsLib = (() => {
   }
 
   function byDateBirth(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(
-      modelName,
+    return SortModel.Create(
+      Representative,
       ClassHelper.GetPropertyName(Patient).dateBirth,
       order ? order : Orders.Asc,
       `По дате рождения ${order === Orders.Asc ? '(по возрастанию)' : '(по убыванию)'}`

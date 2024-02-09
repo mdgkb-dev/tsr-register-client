@@ -76,4 +76,7 @@ export default class Representative {
   getHuman(): Human {
     return this.human;
   }
+  static GetClassName(): string {
+    return 'representative';
+  }
 }

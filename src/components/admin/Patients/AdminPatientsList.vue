@@ -1,5 +1,5 @@
 <template>
-  <AdminListWrapper pagination show-header>
+  <AdminListWrapper v-if="mounted" pagination show-header>
     <AdminPatientsListFilters @load="loadPatients" />
 
     <div class="scroll-block">
@@ -51,39 +51,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, Ref, ref } from 'vue';
-
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
-import FioToggleForm from '@/components/admin/FioToggleForm.vue';
-import AdminPatientsListFilters from '@/components/admin/Patients/AdminPatientsListFilters.vue';
-import AdminPatientsListMkb from '@/components/admin/Patients/AdminPatientsListMkb.vue';
-import AdminPatientsListRepresentatives from '@/components/admin/Patients/AdminPatientsListRepresentatives.vue';
-import CreatePatientForm from '@/components/admin/Patients/CreatePatientForm.vue';
-import ToggleDocumentsForm from '@/components/admin/ToggleDocumentsForm.vue';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
-import FilterModel from '@/services/classes/filters/FilterModel';
-import Button from '@/services/components/Button.vue';
-import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
-import DateInput from '@/services/components/DateInput.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
-import ModalWindow from '@/services/components/ModalWindow.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
-import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 const showAddModal: Ref<boolean> = ref(false);
 const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
 const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
 
+const mounted = ref(false);
 // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
-const filterByStatus: Ref<FilterModel> = ref(new FilterModel());
 const editMode: Ref<boolean> = ref(true);
-const authModalVisible = computed(() => Provider.store.getters['auth/authModalVisible']);
+
 const loadPatients = async () => {
-  Provider.setSortModels(PatientsSortsLib.byFullName());
-  await Provider.store.dispatch('patients/ftsp', { qid: Provider.getQid(), ftsp: Provider.filterQuery.value });
+  await Provider.store.dispatch('patients/ftsp');
+  mounted.value = true;
 };
 
 const loadQuestions = async () => {
@@ -104,6 +88,7 @@ Hooks.onBeforeMount(load, {
     buttons: [{ text: 'Добавить', type: 'normal-button', action: addPatient }],
   },
   pagination: { storeModule: 'patients', action: 'ftsp' },
+  sortsLib: PatientsSortsLib,
 });
 
 const updateHuman = async (human: Human): Promise<void> => {

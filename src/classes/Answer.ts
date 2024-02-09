@@ -85,4 +85,7 @@ export default class Answer {
     const findedIndex = this.selectedAnswerVariants.findIndex((v: SelectedAnswerVariant) => v.answerVariantId === answerVariantId);
     ClassHelper.RemoveFromClassByIndex(findedIndex, this.selectedAnswerVariants, this.selectedAnswerVariantsForDelete);
   }
+  static GetClassName(): string {
+    return 'answer';
+  }
 }

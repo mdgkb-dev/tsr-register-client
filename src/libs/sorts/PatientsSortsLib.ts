@@ -4,11 +4,9 @@ import ClassHelper from '@/services/ClassHelper';
 import { Orders } from '@/services/interfaces/Orders';
 
 const PatientsSortsLib = (() => {
-  const modelName = 'patient';
-
   function byFullName(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(
-      modelName,
+    return SortModel.Create(
+      Patient,
       ClassHelper.GetPropertyName(Patient).fullName,
       order ? order : Orders.Asc,
       `По ФИО ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`,
@@ -17,20 +15,15 @@ const PatientsSortsLib = (() => {
   }
 
   function byDateBirth(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(
-      modelName,
-      ClassHelper.GetPropertyName(Patient).dateBirth,
-      order ? order : Orders.Asc,
-      `По рождению ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`
-    );
+    return SortModel.Create(Patient, ClassHelper.GetPropertyName(Patient).dateBirth, order ? order : Orders.Asc, `По рождению ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
   }
 
-  function byCreatedAt(order?: Orders): SortModel {
-    return SortModel.CreateSortModel(modelName, 'createdAt', order ? order : Orders.Asc, `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
-  }
+  // function byCreatedAt(order?: Orders): SortModel {
+  //   return SortModel.Create(Patient, ClassHelper.GetPropertyName(Patient).createdAt, order ? order : Orders.Asc, `По дате создания ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`);
+  // }
 
   return {
-    byCreatedAt,
+    // byCreatedAt,
     byFullName,
     byDateBirth,
   };

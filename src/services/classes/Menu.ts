@@ -95,4 +95,7 @@ export default class Menu {
   containPath(path: string): boolean {
     return this.getLink() === path || !!this.subMenus.find((subMenu: SubMenu) => subMenu.getLink() === path);
   }
+  static GetClassName(): string {
+    return 'menu';
+  }
 }

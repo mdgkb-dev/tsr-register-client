@@ -67,4 +67,7 @@ export default class DrugApplication {
     this.fundContractId = this.fundContract.id;
     this.fundContract.drugApplicationId = this.id;
   }
+  static GetClassName(): string {
+    return 'drugApplication';
+  }
 }

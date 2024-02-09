@@ -1,4 +1,4 @@
-const AutoImport = require('unplugin-auto-import/webpack');
+// const AutoImport = require('unplugin-auto-import/webpack');
 const Components = require('unplugin-vue-components/webpack');
 const { ElementPlusResolver } = require('unplugin-vue-components/resolvers');
 module.exports = {
@@ -20,11 +20,32 @@ module.exports = {
   ],
   configureWebpack: {
     plugins: [
-      AutoImport({
+      require('unplugin-auto-import/webpack').default({
+        include: [
+          '.ts',
+          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+          /\.vue$/,
+          /\.vue\?vue/, // .vue
+          /\.md$/, // .md
+        ],
+        imports: [
+          'vue',
+          {
+            'srs/services/classes': ['ClassHelper'],
+          },
+        ],
         resolvers: [ElementPlusResolver()],
+        dirs: ['srs/classes', 'srs/services/classes'],
+
+        vueTemplate: true,
+        dts: true,
+        eslintrc: {
+          enabled: true,
+        },
       }),
       Components({
         resolvers: [ElementPlusResolver()],
+        dirs: ['src/components', 'src/services/components', 'src/views'],
       }),
     ],
   },

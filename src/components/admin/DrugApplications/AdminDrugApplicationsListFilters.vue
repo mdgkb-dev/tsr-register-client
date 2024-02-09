@@ -33,7 +33,6 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Status from '@/classes/Status';
-import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import IOption from '@/interfaces/shared/IOption';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
@@ -41,6 +40,7 @@ import FilterModel from '@/services/classes/filters/FilterModel';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RSContainer from '@/services/components/RSContainer.vue';
+import SortList from '@/services/components/SortList.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

@@ -21,4 +21,7 @@ export default abstract class Arrays {
   static Sort(ordered: IOrdered[]): void {
     ordered.forEach((o: IOrdered, i: number) => (o.order = i));
   }
+  static Eq<ArrayType>(arr1: ArrayType[], arr2: ArrayType[]): boolean {
+    return arr1.length === arr2.length && arr1?.every((el: ArrayType, i: number) => arr1[i] === arr2[i]);
+  }
 }

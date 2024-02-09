@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, nextTick, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import AnswerVariant from '@/classes/AnswerVariant';
@@ -63,7 +63,7 @@ export default defineComponent({
       answer.value.filled = answer.value.answerVariantId === variant.id;
       props.researchResult.calculateFilling();
       emit('fill');
-      nextTick(() => compRef.value.inputRef.focus());
+      // nextTick(() => compRef.value.inputRef.focus());
     };
 
     const selectVariant = (variant?: AnswerVariant): void => {

@@ -1,9 +1,9 @@
 <template>
-  <AdminListWrapper pagination show-header>
+  <AdminListWrapper v-if="mounted" pagination show-header>
     <AdminRepresentativesListFilters @load="load" />
 
     <div class="scroll-block">
-      <div class="patient-count">Количество пациентов: {{ count }}</div>
+      <div class="patient-count">Количество представителей: {{ count }}</div>
       <div v-for="representative in representatives" :key="representative.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
@@ -63,17 +63,15 @@ import CreateRepresentativeForm from '../Patients/CreateRepresentativeForm.vue';
 const showAddModal: Ref<boolean> = ref(false);
 const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);
 const count: Ref<number> = computed(() => Provider.store.getters['representatives/count']);
-
-const queryStringsRepresentative: Ref<string> = ref('');
+const mounted = ref(false);
 
 const loadRepresentatives = async () => {
   await Provider.store.dispatch('representatives/getAll', { filterQuery: Provider.filterQuery.value });
 };
 
 const load = async () => {
-  // Provider.setSortModels(PatientsSortsLib.byFullName());
-  Provider.setSortModels(RepresentativesSortsLib.byFullName());
-  await Provider.store.dispatch('representatives/ftsp', { qid: Provider.getQid(), ftsp: Provider.filterQuery.value });
+  await Provider.store.dispatch('representatives/ftsp');
+  mounted.value = true;
 };
 
 const addRepresentative = async (): Promise<void> => {
@@ -87,7 +85,6 @@ Hooks.onBeforeMount(load, {
   },
   pagination: { storeModule: 'representatives', action: 'ftsp' },
   sortsLib: RepresentativesSortsLib,
-  getAction: 'getAll',
 });
 
 const selectSearch = async (event: ISearchObject): Promise<void> => {
