@@ -1,8 +1,9 @@
 import Vuex, { StoreOptions } from 'vuex';
 
+import User from '@/classes/User';
+import { authStateConstructor } from '@/services/store/modules/auth';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
-import auth from '@/store/modules/auth';
 import { commissions } from '@/store/modules/commissions';
 import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
 import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
@@ -70,8 +71,8 @@ const store: StoreOptions<RootState> = {
     },
   },
   modules: {
+    auth: authStateConstructor(User),
     researchesResults,
-    auth,
     edvs,
     disabilities,
     cropper,

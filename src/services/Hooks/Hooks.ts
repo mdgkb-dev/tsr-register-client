@@ -4,6 +4,7 @@ import { NavigationGuardNext, onBeforeRouteLeave, RouteLocationNormalized } from
 
 import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import SortModel from '@/services/classes/SortModel';
 import createSortModels from '@/services/CreateSortModels';
 import { SortModelBuildersLib } from '@/services/interfaces/Sort';
 import Provider from '@/services/Provider/Provider';
@@ -33,14 +34,19 @@ const Hooks = (() => {
       Provider.ftsp.value.reset();
       // await Provider.store.dispatch('meta/getSchema');
       if (options?.sortsLib) {
-        Provider.sortList = [...createSortModels(options.sortsLib)];
+        const sortModels = createSortModels(options.sortsLib);
+        Provider.sortList = sortModels;
+        const defaultSortModel = sortModels.find((s: SortModel) => s.default);
+        if (defaultSortModel) {
+          Provider.ftsp.value.setSortModel(defaultSortModel);
+        }
       }
       // await Provider.filterQuery.value.fromUrlQuery(Provider.route().query);
       // Provider.setDefaultSortModel();
       Provider.setStoreModule(undefined);
       Provider.setGetAction(options?.getAction);
       Provider.initPagination(options?.pagination);
-      await f(Provider.filterQuery.value);
+      await f();
       if ((options?.adminHeader, options?.adminHeader)) {
         Provider.store.commit('admin/setHeaderParams', options.adminHeader);
       }

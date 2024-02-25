@@ -1,5 +1,5 @@
 <template>
-  <draggable class="groups" :list="fileList" item-key="id" handle=".move" @end="sort(fileList)">
+  <draggable class="groups" :list="fileList" item-key="id" handle=".move" @end="Arrays.Sort(fileList)">
     <template #item="{ element, index }">
       <div class="item">
         <div class="move">
@@ -27,57 +27,45 @@
   <Move />
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, PropType } from 'vue';
 import draggable from 'vuedraggable';
 
 import Move from '@/services/assets/svg/Move.svg';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import IFiler from '@/services/interfaces/IFiler';
-import sort from '@/services/sort';
+import Arrays from '@/services/Arrays';
 import ClassHelper from '@/services/ClassHelper';
-export default defineComponent({
-  name: 'AdminGallery',
-  components: { draggable, UploaderSingleScan, Move },
-  props: {
-    fileList: {
-      type: Array as PropType<IFiler[]>,
-      reguired: true,
-      default: () => [],
-    },
-    fileListForDelete: {
-      type: Array as PropType<string[]>,
-      default: () => [],
-    },
-    defaultRatio: {
-      type: Number,
-      required: false,
-      default: 1,
-    },
-    upload: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
+const props = defineProps({
+  fileList: {
+    type: Array as PropType<IFiler[]>,
+    reguired: true,
+    default: () => [],
   },
-  emits: ['addImage', 'ratio', 'remove'],
-  setup(props, { emit }) {
-    const crop = async (filer: IFiler) => {
-      emit('addImage', filer);
-    };
-
-    const remove = async (filer: IFiler) => {
-      ClassHelper.RemoveFromClassById(filer.id, props.fileList, []);
-      emit('remove', filer);
-    };
-
-    return {
-      remove,
-      crop,
-      sort,
-    };
+  fileListForDelete: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
+  defaultRatio: {
+    type: Number,
+    required: false,
+    default: 1,
+  },
+  upload: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
 });
+const emits = defineEmits(['addImage', 'ratio', 'remove']);
+const crop = async (filer: IFiler) => {
+  emits('addImage', filer);
+};
+
+const remove = async (filer: IFiler) => {
+  ClassHelper.RemoveFromClassById(filer.id, props.fileList, []);
+  emits('remove', filer);
+};
 </script>
 
 <style lang="scss" scoped>

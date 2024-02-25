@@ -328,8 +328,6 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   z-index: 1;
-  // background: #343e5c;
-  // opacity: 0.2;
 }
 
 :deep(.el-input__inner) {

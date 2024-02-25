@@ -71,7 +71,7 @@ export default class HttpClient {
       url: this.buildUrl(query),
       method: 'post',
       headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
-      data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
+      data: this.createFormDataPayload<PayloadType>(payload, fileInfos),
       responseType: isBlob ? 'blob' : undefined,
     });
     if (!isBlob) {

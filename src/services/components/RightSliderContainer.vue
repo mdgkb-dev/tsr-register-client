@@ -7,8 +7,8 @@
     }"
   >
     <div class="click-line" @click="toggleSlider(!isToggle)">
-      <StringItem v-if="isToggle" string="Показать список исследований" font-size="16px" padding="0" color="#343E5C" />
-      <StringItem v-if="!isToggle" string="Скрыть список исследований" font-size="16px" padding="0" color="#343E5C" />
+      <StringItem v-if="isToggle" :string="titleClose" font-size="16px" padding="0" color="#343E5C" />
+      <StringItem v-if="!isToggle" :string="titleOpen" font-size="16px" padding="0" color="#343E5C" />
     </div>
     <div class="right-slider-content">
       <div class="right-slider-content-header">
@@ -54,6 +54,16 @@ export default defineComponent({
     toggle: {
       type: Boolean as PropType<boolean>,
       default: false,
+    },
+    titleOpen: {
+      type: String as PropType<string>,
+      required: false,
+      default: 'Скрыть список исследований',
+    },
+    titleClose: {
+      type: String as PropType<string>,
+      required: false,
+      default: 'Показать список исследований',
     },
   },
   emits: ['toggle'],

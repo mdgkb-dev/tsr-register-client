@@ -50,7 +50,7 @@ import ResearchResult from '@/classes/ResearchResult';
 import PatientResearchComponent from '@/components/admin/Patients/PatientResearchComponent.vue';
 import PatientResearchesList from '@/components/admin/Patients/PatientResearchesList.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
-import MessageConfirmSave, { Close } from '@/services/classes/messages/MessageConfirmSave';
+// import MessageConfirmSave, { Close } from '@/services/classes/messages/MessageConfirmSave';
 import Button from '@/services/components/Button.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
@@ -82,7 +82,7 @@ export default defineComponent({
       if (!researchResult.value.changed) {
         return;
       }
-      return await MessageConfirmSave();
+      // return await MessageConfirmSave();
     };
 
     const cancelResearchResultsFilling = async () => {
@@ -90,9 +90,9 @@ export default defineComponent({
         await confirmChangeResult();
         await saveResult();
       } catch (e) {
-        if (e === Close) {
-          return;
-        }
+        // if (e === Close) {
+        //   return;
+        // }
       }
       Provider.store.commit('researchesResults/set');
       Provider.store.commit('patientsResearches/set');

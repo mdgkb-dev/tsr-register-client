@@ -124,24 +124,22 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      document.addEventListener('keyup', function (evt) {
-        console.log(evt.key);
-
-        switch (evt.key) {
-          case 'ArrowLeft': {
-            toPrev();
-            break;
-          }
-          case 'ArrowRight': {
-            toNext();
-            break;
-          }
-          case 'Escape': {
-            fullScreenMode.value = false;
-            break;
-          }
-        }
-      });
+      // document.addEventListener('keyup', function (evt) {
+      //   switch (evt.key) {
+      //     case 'ArrowLeft': {
+      //       toPrev();
+      //       break;
+      //     }
+      //     case 'ArrowRight': {
+      //       toNext();
+      //       break;
+      //     }
+      //     case 'Escape': {
+      //       fullScreenMode.value = false;
+      //       break;
+      //     }
+      //   }
+      // });
     });
 
     const toNextGroup = () =>

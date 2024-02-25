@@ -13,27 +13,27 @@
       <StringItem v-if="name.length" :string="name.length > 60 ? name.slice(0, 60) + '...' : name" />
       <StringItem v-else string="Введите данные" color="#B0A4C0" />
       <template #open-inside-content>
-        <GridContainer custom-class="grid">
-          <InfoItem
-            title=""
-            icon="edit-title"
-            :with-open-window="false"
-            :with-hover="false"
-            border-color="#ffffff"
-            base-box-margin="0 0 15px 0"
-            padding="0"
-            width="100%"
-            custom-class="test"
-          >
-            <el-form>
-              <el-form-item style="width: 100%" prop="surname">
-                <el-input style="width: 100%" :autosize="true" type="textarea" v-model="name" />
-                <!-- <el-input :model-value="human.surname" @input="(e) => human.setSurname(e)" @click.stop="() => undefined" /> -->
-              </el-form-item>
-            </el-form>
-          </InfoItem>
-          <Button button-class="save-button" text="Сохранить" @click="submit" />
-        </GridContainer>
+        <InfoItem
+          title=""
+          icon="edit-title"
+          :with-open-window="false"
+          :with-hover="false"
+          border-color="#ffffff"
+          base-box-margin="0 0 15px 0"
+          padding="0"
+          width="100%"
+          custom-class="test"
+          open-width="100%"
+        >
+        <div class="field">
+          <el-form>
+            <el-form-item style="width: 100%" prop="surname">
+              <el-input style="width: 100%" :autosize="true" type="textarea" v-model="name" />
+            </el-form-item>
+          </el-form>
+        </div>
+        </InfoItem>
+        <Button button-class="save-button" text="Сохранить" @click="submit" />
       </template>
     </InfoItem>
   </el-form>
@@ -76,6 +76,10 @@ const submit = async (): Promise<void> => {
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+.field {
+  width: 100%;
+}
 
 .button {
   width: auto;
@@ -336,5 +340,64 @@ const submit = async (): Promise<void> => {
     width: 100%;
     margin: 0 0px 10px 0;
   }
+}
+
+.save-button {
+  width: 100%;
+  border-radius: 5px;
+  height: 42px;
+  color: #006bb4;
+  background: #dff2f8;
+  margin: 10px 0 0 0;
+  font-size: 14px;
+}
+
+:deep(.el-date-editor.el-input, .el-date-editor.el-input__inner) {
+  width: 100%;
+}
+
+:deep(.el-form-item) {
+  display: block;
+  margin-bottom: 16px;
+}
+
+:deep(.el-input__inner) {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: $site_dark_gray;
+}
+
+:deep(.el-input__inner::placeholder) {
+  color: $site_light_pink;
+}
+
+:deep(.el-input__icon) {
+  color: $site_dark_gray;
+}
+
+:deep(.el-form-item__label) {
+  color: $site_light_pink;
+  padding: 0 !important;
+  text-transform: uppercase;
+  margin-left: 5px;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+:deep(.el-input-number__increase) {
+  border-radius: 0;
+}
+
+:deep(.el-input-number__decrease) {
+  border-radius: 0;
+}
+
+:deep(.el-textarea__inner) {
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: $site_dark_gray;
 }
 </style>
