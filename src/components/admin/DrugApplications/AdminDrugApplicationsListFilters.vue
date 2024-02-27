@@ -1,5 +1,5 @@
 <template>
-  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+  <RSContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" :with-hover="false">
@@ -26,21 +26,21 @@
         <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8"> </GridContainer>
       </GridContainer>
     </template>
-  </RightSliderContainer>
+  </RSContainer>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Status from '@/classes/Status';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import SortList from '@/components/SortList.vue';
 import FiltersButtonsMultiply from '@/components/TableFilters/FiltersButtonsMultiply.vue';
 import IOption from '@/interfaces/shared/IOption';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import RSContainer from '@/services/components/RSContainer.vue';
+import SortList from '@/services/components/SortList.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -50,7 +50,7 @@ export default defineComponent({
     SortList,
     InfoItem,
     GridContainer,
-    RightSliderContainer,
+    RSContainer,
   },
   emits: ['load'],
   setup() {

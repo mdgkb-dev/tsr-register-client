@@ -50,4 +50,8 @@ export default class Disability {
   removeEdv(id: string): void {
     ClassHelper.RemoveFromClassById(id, this.edvs, []);
   }
+
+  static GetClassName(): string {
+    return 'disability';
+  }
 }

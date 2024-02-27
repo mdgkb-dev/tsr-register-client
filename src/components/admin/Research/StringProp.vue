@@ -1,10 +1,9 @@
-~~~
 <template>
   <el-input v-if="answer" ref="inputRef" v-model="answer.valueString" @input="filledCheck" />
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
@@ -23,9 +22,9 @@ export default defineComponent({
     },
   },
   emits: ['fill'],
-  setup(props, { emit, expose }) {
-    const answer: Ref<Answer | undefined> = ref(undefined);
-    const inputRef = ref();
+  setup(props, { emit }) {
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    // const answer: Ref<Answer | undefined> = ref(undefined);
     const filledCheck = (input: string): void => {
       if (!answer.value) {
         return;
@@ -35,16 +34,12 @@ export default defineComponent({
       emit('fill');
     };
 
-    onBeforeMount(() => {
-      answer.value = props.researchResult.getOrCreateAnswer(props.question);
-    });
-
-    expose({ inputRef });
-
+    // onBeforeMount(() => {
+    //   answer.value = props.researchResult.getOrCreateAnswer(props.question);
+    // });
     return {
       filledCheck,
       answer,
-      inputRef,
     };
   },
 });

@@ -41,11 +41,11 @@
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue';
 
 import MkbItem from '@/classes/MkbItem';
-// import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import TableButtonGroup from '@/components/TableButtonGroup.vue';
 import IMkbLinker from '@/interfaces/IMkbLinker';
 import ISearchObject from '@/interfaces/ISearchObject';
+// import MkbTreeDialog from '@/components/Mkb/MkbTreeDialog.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import Provider from '@/services/Provider/Provider';
 
 // const AnamnesisForm = defineAsyncComponent(() => import('@/components/Patients/AnamnesisForm.vue'));

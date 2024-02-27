@@ -38,7 +38,7 @@
 import { computed, ComputedRef, defineComponent } from 'vue';
 
 import commission from '@/classes/Commission';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

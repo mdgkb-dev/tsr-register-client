@@ -30,9 +30,8 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 import DrugArrive from '@/classes/DrugArrive';
 import DrugDecrease from '@/classes/DrugDecrease';
 import Patient from '@/classes/Patient';
-import RemoteSearch from '@/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
-import ClassHelper from '@/services/ClassHelper';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -69,7 +68,7 @@ export default defineComponent({
     };
 
     const removeDrugDecrease = async (drugArrive: DrugArrive, item: DrugDecrease): Promise<void> => {
-      ClassHelper.RemoveFromClassById(item.id, drugArrive.drugDecreases, []);
+      // ClassHelper.RemoveFromClassById(item.id, drugArrive.drugDecreases, []);
       await Provider.store.dispatch('drugDecreases/remove', item.id);
     };
 

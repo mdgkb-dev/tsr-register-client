@@ -2,7 +2,7 @@ import { MutationTree } from 'vuex';
 
 import DrugDoze from '@/classes/DrugDoze';
 import DrugNeeding from '@/classes/DrugNeeding';
-import getBaseMutations from '@/store/baseModule/baseMutations';
+import getBaseMutations from '@/services/store/baseModule/baseMutations';
 
 import { State } from './index';
 

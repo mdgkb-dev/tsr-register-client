@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import PatientResearch from '@/classes/PatientResearch';
-import getBaseGetters from '@/store/baseModule/baseGetters';
+import getBaseGetters from '@/services/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
 import { State } from './index';

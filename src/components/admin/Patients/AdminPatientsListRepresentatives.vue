@@ -34,7 +34,7 @@ import { computed, ComputedRef, defineComponent, PropType } from 'vue';
 
 import Patient from '@/classes/Patient';
 import Representative from '@/classes/Representative';
-import RemoteSearch from '@/components/RemoteSearch.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';

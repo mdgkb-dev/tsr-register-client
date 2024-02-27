@@ -55,7 +55,7 @@ import Commission from '@/classes/Commission';
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import Doctor from '@/classes/Doctor';
 import PersonalityItem from '@/components/admin/Patients/PersonalityItem.vue';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';

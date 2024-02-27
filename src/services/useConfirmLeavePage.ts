@@ -1,11 +1,8 @@
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { Ref, ref } from 'vue';
 import { NavigationGuardNext } from 'vue-router';
 
-import MessageConfirmSave from './classes/messages/MessageConfirmSave';
-
 declare type SubmitCallback = () => void;
-
 interface IReturn {
   confirmLeave: Ref<boolean>;
   saveButtonClick: Ref<boolean>;
@@ -30,7 +27,11 @@ export default function (): IReturn {
 
   const showConfirmModal = (submit: SubmitCallback, next: NavigationGuardNext): void => {
     if (confirmLeave.value && !saveButtonClick.value) {
-      MessageConfirmSave()
+      ElMessageBox.confirm('У вас есть несохранённые изменения', 'Вы уверены, что хотите покинуть страницу?', {
+        distinguishCancelAndClose: true,
+        confirmButtonText: 'Сохранить',
+        cancelButtonText: 'Не сохранять',
+      })
         .then(() => {
           // Вызывается при сохранении
           submit();

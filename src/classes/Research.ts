@@ -28,7 +28,8 @@ export default class Research {
   filterString = '';
   showOnlyNotFilled = false;
   showOnlyFilled = false;
-
+  //
+  date = '';
   constructor(i?: Research) {
     ClassHelper.BuildClass(this, i);
   }

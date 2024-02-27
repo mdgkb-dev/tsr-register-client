@@ -4,7 +4,7 @@ import { DataTypes } from '@/services/interfaces/DataTypes';
 
 const PatientDiagnosisFiltersLib = (() => {
   function byPatientId(patientId: string): FilterModel {
-    return FilterModel.CreateFilterModelV2(PatientDiagnosis.GetClassName(), patientId, DataTypes.String);
+    return FilterModel.CreateFilterModel(PatientDiagnosis.GetClassName(), patientId, DataTypes.String);
   }
 
   return {

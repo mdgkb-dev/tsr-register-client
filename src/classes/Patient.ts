@@ -10,8 +10,8 @@ import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDrugRegimen from '@/classes/PatientDrugRegimen';
 import PatientHistory from '@/classes/PatientHistory';
 import PatientRegister from '@/classes/PatientRegister';
-import PatientRepresentative from '@/classes/PatientRepresentative';
 import PatientResearch from '@/classes/PatientResearch';
+import { PatientRepresentative } from '@/classes/PR';
 import Register from '@/classes/Register';
 import Representative from '@/classes/Representative';
 import Research from '@/classes/Research';
@@ -37,10 +37,6 @@ export default class Patient {
   @ClassHelper.GetClassConstructor(PatientDiagnosis)
   patientDiagnosis: PatientDiagnosis[] = [];
   patientDiagnosisForDelete: string[] = [];
-
-  // @ClassHelper.GetClassConstructor(PatientDiagnosis)
-  // patientDiagnosis: PatiDo[] = [];
-  // patientDiagnosisForDelete: string[] = [];
 
   @ClassHelper.GetClassConstructor(PatientRegister)
   patientsRegisters: PatientRegister[] = [];
@@ -150,7 +146,7 @@ export default class Patient {
     return this.patientDiagnosis;
   }
 
-  addRepresentative(representative: Representative): PatientRepresentative {
+  addRepresentative(representative: Representative): any {
     const item = PatientRepresentative.Create(representative, this);
     this.patientsRepresentatives.push(item);
     return item;
@@ -257,5 +253,8 @@ export default class Patient {
       return this.anamneses;
     }
     return this.anamneses.filter((i: Anamnesis) => i.mkbItemId === mkbItemId);
+  }
+  static GetClassName(): string {
+    return 'patient';
   }
 }

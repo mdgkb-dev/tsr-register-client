@@ -11,7 +11,7 @@ const ResearchesFiltersLib = (() => {
   }
 
   function onlyLaboratory(): FilterModel {
-    const fm = FilterModel.CreateFilterModelV2(Research, String(ClassHelper.GetPropertyName(Research).isLaboratory), DataTypes.Boolean);
+    const fm = FilterModel.CreateFilterModel(Research, String(ClassHelper.GetPropertyName(Research).isLaboratory), DataTypes.Boolean);
     fm.boolean = true;
     return fm;
   }

@@ -44,7 +44,7 @@
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
 import Human from '@/classes/Human';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import StringItem from '@/services/components/StringItem.vue';

@@ -7,8 +7,7 @@ export default class Month {
   lastWeekActive = false;
   active = false;
   number = 0;
-
-  constructor() {
+  constructor(d?: Date) {
     // const now = d ? new Date(d) : new Date();
     // if (!d) {
     //   this.active = true;
@@ -87,7 +86,6 @@ export default class Month {
     }
     this.setActiveBorder();
   }
-
   setActiveBorder(): void {
     const activeWeekIndex = this.weeks.findIndex((w: Week) => w.active);
     if (activeWeekIndex === 0) {

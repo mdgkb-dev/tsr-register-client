@@ -1,22 +1,19 @@
+import Representative from '@/classes/Representative';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import Human from '@/services/classes/Human';
+import ClassHelper from '@/services/ClassHelper';
 import { DataTypes } from '@/services/interfaces/DataTypes';
-import { Operators } from '@/services/interfaces/Operators';
-
 const RepresentativesFiltersLib = (() => {
-  const table = 'representatives_view';
-
   function onlyFemale(): FilterModel {
-    const filterModel = FilterModel.CreateFilterModel(table, 'is_male', DataTypes.Boolean);
+    const filterModel = FilterModel.Create(Representative, ClassHelper.GetPropertyName(Human).isMale, DataTypes.Boolean);
     filterModel.boolean = false;
-    filterModel.operator = Operators.Eq;
     filterModel.label = 'Ж';
     return filterModel;
   }
 
   function onlyMale(): FilterModel {
-    const filterModel = FilterModel.CreateFilterModel(table, 'is_male', DataTypes.Boolean);
+    const filterModel = FilterModel.Create(Representative, ClassHelper.GetPropertyName(Human).isMale, DataTypes.Boolean);
     filterModel.boolean = true;
-    filterModel.operator = Operators.Eq;
     filterModel.label = 'М';
     return filterModel;
   }

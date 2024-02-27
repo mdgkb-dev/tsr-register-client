@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from 'element-plus';
 import { computed, defineComponent, onBeforeMount, onMounted, PropType, Ref, ref } from 'vue';
 
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
@@ -40,11 +39,11 @@ import PatientResearch from '@/classes/PatientResearch';
 import Research from '@/classes/Research';
 import ResearchResult from '@/classes/ResearchResult';
 import PatientResearchChart from '@/components/admin/Patients/PatientResearchChart.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import MessageConfirmSave, { Cancel } from '@/services/classes/messages/MessageConfirmSave';
-import MessageSuccess from '@/services/classes/messages/MessageSuccess';
+// import MessageConfirmSave, { Cancel } from '@/services/classes/messages/MessageConfirmSave';
+// import MessageSuccess from '@/services/classes/messages/MessageSuccess';
+import Button from '@/services/components/Button.vue';
+import CollapseContainer from '@/services/components/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import RightSliderContainer from '@/services/components/RightSliderContainer.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
@@ -86,7 +85,7 @@ export default defineComponent({
 
     const update = async (item: ResearchResult): Promise<void> => {
       await Provider.store.dispatch('researchesResults/update', item);
-      ElMessage(new MessageSuccess());
+      // ElMessage(new MessageSuccess());
     };
 
     onBeforeMount(async () => {
@@ -108,11 +107,12 @@ export default defineComponent({
         return true;
       }
       try {
-        await MessageConfirmSave();
+        // await MessageConfirmSave();
         emit('save');
         return true;
       } catch (e) {
-        return e === Cancel;
+        return false;
+        // return e === Cancel;
       }
     };
 

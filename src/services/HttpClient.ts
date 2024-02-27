@@ -1,7 +1,10 @@
-import IFileInfo from '@/interfaces/files/IFileInfo';
 import axiosInstance from '@/services/Axios';
+import FileInfo from '@/services/classes/FileInfo';
 import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
 import TokenService from '@/services/Token';
+
+import LocalStore from './classes/LocalStore';
+import LocalStoreKeys from './interfaces/LocalStoreKeys';
 
 const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
 const apiVersion = process.env.VUE_APP_API_V1 ?? '';
@@ -45,7 +48,7 @@ export default class HttpClient {
     const res = await axiosInstance({
       url: this.buildUrl(params?.query),
       method: 'get',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
       responseType: !isBlob ? 'json' : 'blob',
     });
     if (!res) {
@@ -66,12 +69,12 @@ export default class HttpClient {
   }
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType | void> {
-    const { payload, fileInfos, query, headers, isFormData, isBlob, downloadFileName } = params;
+    const { payload, fileInfos, query, headers, isBlob, downloadFileName } = params;
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'post',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
-      data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
+      data: this.createFormDataPayload<PayloadType>(payload, fileInfos),
       responseType: isBlob ? 'blob' : undefined,
     });
     if (!isBlob) {
@@ -119,16 +122,12 @@ export default class HttpClient {
   private buildUrl(query?: string): string {
     if (query) {
       const queryString = query ?? '';
-      let divider = '/';
-      if (queryString[0] == '?') {
-        divider = '';
-      }
-      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + divider + queryString;
+      return this.endpoint.length <= 0 ? baseUrl + apiVersion + queryString : baseUrl + apiVersion + this.endpoint + '/' + queryString;
     }
     return baseUrl + apiVersion + this.endpoint;
   }
 
-  private createFormDataPayload<PayloadType>(payload?: PayloadType, fileInfos?: IFileInfo[]): FormData {
+  private createFormDataPayload<PayloadType>(payload?: PayloadType, fileInfos?: FileInfo[]): FormData {
     const data = new FormData();
     data.append('form', JSON.stringify(payload));
 

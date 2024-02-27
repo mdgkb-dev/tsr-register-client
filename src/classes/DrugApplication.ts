@@ -45,8 +45,8 @@ export default class DrugApplication {
     item.id = uuidv4();
     item.commission = commission;
     item.commissionId = commission.id;
-    item.drugApplicationId = this.id;
-    this.commissionsDrugApplications.push(item);
+    // item.drugApplicationId = this.id;
+    // this.commissionsDrugApplications.push(item);
     return item;
   }
 
@@ -66,5 +66,8 @@ export default class DrugApplication {
     this.fundContract.id = uuidv4();
     this.fundContractId = this.fundContract.id;
     this.fundContract.drugApplicationId = this.id;
+  }
+  static GetClassName(): string {
+    return 'drugApplication';
   }
 }

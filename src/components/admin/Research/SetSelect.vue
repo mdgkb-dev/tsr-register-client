@@ -5,7 +5,7 @@
       <div v-for="variant in question.questionVariants.filter((q) => !!researchResult.getQuestionVariantAnswer(q.id))" :key="variant.id" class="item-line">
         <div class="left">
           <div class="item-counter">
-            <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" :variant-id="variant.id" />
+            <NumberProp v-if="question.valueType.isNumber()" :research-result="researchResult" :question="question" :variant-id="variant.id" @fill="$emit('fill')" />
           </div>
           <div class="item-name">{{ variant.name }}</div>
         </div>
@@ -20,7 +20,7 @@
             background="#ffffff"
             :with-icon="false"
             :color-swap="true"
-            @click="$classHelper.RemoveFromClassById(researchResult.getQuestionVariantAnswer(variant.id)?.id, researchResult.answers, [])"
+            @click="removeVariantAnswer(variant.id)"
           >
           </Button>
         </div>
@@ -85,7 +85,8 @@ import QuestionVariant from '@/classes/QuestionVariant';
 import ResearchResult from '@/classes/ResearchResult';
 import AlphabetFilter from '@/components/admin/Patients/AlphabetFilter.vue';
 import NumberProp from '@/components/admin/Research/NumberProp.vue';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
+import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
 import StringsService from '@/services/Strings';
@@ -112,7 +113,7 @@ export default defineComponent({
   emits: ['update:modelValue', 'fill'],
   setup(props, { emit }) {
     const addAllergen = ref(false);
-    const answer = props.researchResult.getOrCreateAnswer(props.question);
+    const answer = computed(() => props.researchResult.getOrCreateAnswer(props.question));
     const filterString: Ref<string> = ref('');
     const filteredVariants: ComputedRef<QuestionVariant[]> = computed(() => {
       if (filterString.value === '') {
@@ -122,12 +123,12 @@ export default defineComponent({
     });
 
     const filledCheck = (): void => {
-      answer.filled = answer.selectedAnswerVariants.length > 0;
+      // answer.value.filled = answer.selectedAnswerVariants.length > 0;
       props.researchResult.calculateFilling();
       emit('fill');
     };
     const selectVariant = (selected: boolean, variantId: string) => {
-      answer.setSelectedAnswerVariant(selected, variantId);
+      answer.value.setSelectedAnswerVariant(selected, variantId);
       filledCheck();
     };
 
@@ -141,14 +142,18 @@ export default defineComponent({
       const answer = Answer.Create(props.question);
       answer.questionVariantId = questionVariant.id;
       props.researchResult.addAnswer(answer);
-      console.log(props.researchResult.answers);
+      emit('fill');
     };
 
     const getAns = (v: string) => {
       return props.researchResult.getQuestionVariantAnswer(v)?.valueNumber;
     };
-
+    const removeVariantAnswer = (variantId: string) => {
+      ClassHelper.RemoveFromClassById(props.researchResult.getQuestionVariantAnswer(variantId)?.id, props.researchResult.answers, []);
+      emit('fill');
+    };
     return {
+      removeVariantAnswer,
       filterString,
       filteredVariants,
       getAns,

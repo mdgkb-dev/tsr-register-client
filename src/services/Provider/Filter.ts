@@ -1,85 +1,70 @@
-import { computed, ComputedRef, Ref, ref } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import Pagination from '@/services/classes/filters/Pagination';
 import SortModel from '@/services/classes/SortModel';
-import IFilterModel from '@/services/interfaces/IFilterModel';
 import Store from '@/services/Provider/Store';
 
-const Filter = (() => {
-  const sortList: Ref<SortModel[]> = ref([]);
-  const filterQuery: ComputedRef<FilterQuery> = computed(() => Store.store.getters['filter/filterQuery']);
+import FTSP from '../classes/filters/FTSP';
 
-  function setSortList(...models: SortModel[]): void {
-    sortList.value = models;
-    setDefaultSortModel();
+const Filter = (() => {
+  let sortList: SortModel[] = [];
+  const filterQuery: ComputedRef<FilterQuery> = computed(() => Store.store.getters['filter/filterQuery']);
+  const ftsp: ComputedRef<FTSP> = computed(() => Store.store.getters['filter/ftsp']);
+
+  function getPagination(): Pagination {
+    return ftsp.value.p;
   }
 
-  function setDefaultSortModel(): void {
-    if (filterQuery.value.sortModel) {
-      return;
+  function findFilterModel(filterModels: FilterModel[]): FilterModel | undefined {
+    let fmFromFilterQuery = filterModels.find((f: FilterModel) => filterQuery.value.findFilterModel(f));
+    if (fmFromFilterQuery) {
+      return fmFromFilterQuery;
     }
-    const defaultSortModel = sortList.value.find((sortModel: SortModel) => sortModel.default);
-    if (defaultSortModel) {
-      filterQuery.value.sortModel = defaultSortModel;
-    }
+
+    fmFromFilterQuery = filterModels.find((f: FilterModel) => ftsp.value.findFilterModel(f));
+    return fmFromFilterQuery;
   }
 
   function resetFilterQuery(): void {
     filterQuery.value.reset();
-    sortList.value = [];
+    sortList = [];
   }
 
   function setLimit(limit: number): void {
     filterQuery.value.pagination.limit = limit;
   }
 
-  function setSortModel(model: SortModel): void {
-    filterQuery.value.sortModel = model;
-  }
+  // function setSortModelsForOneTable(table: string, ...cols: string[]) {
+  //   cols.forEach((col: string) => {
+  //     setSortModel(SortModel.CreateSortModel(table, col));
+  //   });
+  // }
 
-  function setSortModels(...models: SortModel[]): void {
-    models.forEach((model: SortModel) => setSortModel(model));
-  }
-
-  function setSortModelsForOneTable(table: string, ...cols: string[]) {
-    cols.forEach((col: string) => {
-      setSortModel(SortModel.CreateSortModel(table, col));
-    });
-  }
-
-  function setFilterModels(...models: IFilterModel[]): void {
-    models.forEach((model: IFilterModel) => filterQuery.value.setFilterModel(model));
-  }
-
-  function replaceFilterModel(newFilterModel: IFilterModel, previousFilterModelId: string | undefined) {
-    filterQuery.value.spliceFilterModel(previousFilterModelId);
-    filterQuery.value.setFilterModel(newFilterModel);
+  function setFilterModels(...models: FilterModel[]): void {
+    models.forEach((model: FilterModel) => filterQuery.value.setFilterModel(model));
   }
 
   function setFilterModel(f: FilterModel) {
     filterQuery.value.setFilterModel(f);
   }
 
-  function spliceFilterModel(id: string | undefined) {
-    filterQuery.value.spliceFilterModel(id);
+  function setQid(qid: string) {
+    filterQuery.value.id = qid;
   }
 
   return {
+    setQid,
     sortList,
     filterQuery,
-
-    setSortList,
-    setDefaultSortModel,
+    ftsp,
     resetFilterQuery,
     setLimit,
-    setSortModel,
-    setSortModels,
-    setSortModelsForOneTable,
-    replaceFilterModel,
     setFilterModel,
+    findFilterModel,
     setFilterModels,
-    spliceFilterModel,
+    getPagination,
   };
 })();
 

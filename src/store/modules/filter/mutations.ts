@@ -2,11 +2,18 @@ import { MutationTree } from 'vuex';
 
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import FTSP from '@/services/classes/filters/FTSP';
 import SortModel from '@/services/classes/SortModel';
 
 import { State } from './state';
 
 const mutations: MutationTree<State> = {
+  filterExists(state: State, filterExists: boolean) {
+    state.filterExists = filterExists;
+  },
+  setFTSP(state: State, ftsp: FTSP) {
+    state.ftsp = new FTSP(ftsp);
+  },
   setTrigger(state, trigger: string) {
     if (trigger == 'manual' && state.trigger == 'manual') {
       trigger = 'click';
@@ -24,7 +31,7 @@ const mutations: MutationTree<State> = {
     state.action = action;
   },
   setOffset(state, offset: number) {
-    state.filterQuery.pagination.offset = offset * state.filterQuery.pagination.limit;
+    state.ftsp.p.offset = offset * state.ftsp.p.limit;
   },
   setWithDeleted(state, withDeleted: boolean) {
     state.filterQuery.withDeleted = withDeleted;
@@ -54,7 +61,7 @@ const mutations: MutationTree<State> = {
     //   state.filterQuery.sortModels.push(sortModel);
     // }
   },
-  spliceSortModel(state) {
+  spliceSortModel(state, id: string) {
     state.filterQuery.sortModel = undefined;
     // const index = state.filterQuery.sortModels.findIndex((i: SortModel) => i.id === id);
     // if (index > -1) state.filterQuery.sortModels.splice(index, 1);

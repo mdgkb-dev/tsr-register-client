@@ -5,7 +5,7 @@ import { Orders } from '@/services/interfaces/Orders';
 
 const ResearchesSortsLib = (() => {
   function byOrder(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(Research, String(ClassHelper.GetPropertyName(Research).order), order ? order : Orders.Asc);
+    return SortModel.Create(Research, ClassHelper.GetPropertyName(Research).order, order ? order : Orders.Asc);
   }
   return {
     byOrder,

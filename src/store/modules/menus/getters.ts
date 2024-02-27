@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex';
 
 import Menu from '@/services/classes/Menu';
-import getBaseGetters from '@/store/baseModule/baseGetters';
+import getBaseGetters from '@/services/store/baseModule/baseGetters';
 import RootState from '@/store/types';
 
 import { State } from './index';

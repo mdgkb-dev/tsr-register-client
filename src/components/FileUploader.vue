@@ -23,8 +23,8 @@ import { ElNotification } from 'element-plus';
 import { defineComponent, PropType } from 'vue';
 
 import FileInfo from '@/classes/files/FileInfo';
-import Button from '@/components/Base/Button.vue';
 import IFile from '@/interfaces/files/IFile';
+import Button from '@/services/components/Button.vue';
 import getExtension from '@/services/GetExtension';
 
 export default defineComponent({

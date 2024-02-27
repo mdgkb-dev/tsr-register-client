@@ -35,9 +35,9 @@
 <script lang="ts">
 import { defineComponent, PropType, Ref, ref } from 'vue';
 
-import Button from '@/components/Base/Button.vue';
 import IOption from '@/interfaces/shared/IOption';
 import FilterModel from '@/services/classes/filters/FilterModel';
+import Button from '@/services/components/Button.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import Provider from '@/services/Provider/Provider';

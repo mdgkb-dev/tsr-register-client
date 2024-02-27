@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
-import PatientRepresentative from '@/classes/PatientRepresentative';
+import { PatientRepresentative } from '@/classes/PR';
 import User from '@/classes/User';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassHelper from '@/services/ClassHelper';
@@ -75,5 +75,8 @@ export default class Representative {
 
   getHuman(): Human {
     return this.human;
+  }
+  static GetClassName(): string {
+    return 'representative';
   }
 }

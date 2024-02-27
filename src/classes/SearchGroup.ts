@@ -1,4 +1,3 @@
-import SearchElement from '@/classes/SearchElement';
 import SearchGroupMetaColumn from '@/classes/SearchGroupMetaColumn';
 import ClassHelper from '@/services/ClassHelper';
 
@@ -14,8 +13,7 @@ export default class SearchGroup {
   descriptionColumn = '';
   labelColumn = '';
   valueColumn = '';
-  @ClassHelper.GetClassConstructor(SearchElement)
-  options: SearchElement[] = [];
+  options: any[] = [];
   @ClassHelper.GetClassConstructor(SearchGroupMetaColumn)
   searchGroupMetaColumns: SearchGroupMetaColumn[] = [];
 

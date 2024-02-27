@@ -1,5 +1,5 @@
 import Commission from '@/classes/Commission';
-import DrugApplication from '@/classes/DrugApplication';
+// import DrugApplication from '@/classes/DrugApplication';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class CommissionDrugApplication {
@@ -9,9 +9,9 @@ export default class CommissionDrugApplication {
   commission?: Commission;
   commissionId?: string;
 
-  @ClassHelper.GetClassConstructor(DrugApplication)
-  drugApplication?: DrugApplication;
-  drugApplicationId?: string;
+  // @ClassHelper.GetClassConstructor(DrugApplication)
+  // drugApplication?: DrugApplication;
+  // drugApplicationId?: string;
 
   constructor(i?: CommissionDrugApplication) {
     ClassHelper.BuildClass(this, i);

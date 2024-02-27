@@ -1,5 +1,5 @@
 <template>
-  <RightSliderContainer :menu-width="'300px'" :mobile-width="'1215px'">
+  <RSContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" :with-hover="false">
@@ -64,7 +64,7 @@
         </InfoItem>
       </GridContainer>
     </template>
-  </RightSliderContainer>
+  </RSContainer>
 </template>
 
 <script lang="ts">
@@ -76,20 +76,20 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Question from '@/classes/Question';
 import Register from '@/classes/Register';
-import Button from '@/components/Base/Button.vue';
-import RightSliderContainer from '@/components/Base/RightSliderContainer.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
-import SortList from '@/components/SortList.vue';
-import FiltersButtonsSelect from '@/components/TableFilters/FiltersButtonsSelect.vue';
-import Switch3Pos from '@/components/TableFilters/Switch3Pos.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import Button from '@/services/components/Button.vue';
+import FiltersButtonsSelect from '@/services/components/FiltersButtonsSelect.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
+import RSContainer from '@/services/components/RSContainer.vue';
+import SortList from '@/services/components/SortList.vue';
+import Switch3Pos from '@/services/components/Switch3Pos.vue';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({
@@ -101,7 +101,7 @@ export default defineComponent({
     Button,
     InfoItem,
     GridContainer,
-    RightSliderContainer,
+    RSContainer,
     Switch3Pos,
   },
   emits: ['load'],

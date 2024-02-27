@@ -32,10 +32,8 @@ import Commission from '@/classes/Commission';
 import CommissionDoctor from '@/classes/CommissionDoctor';
 import Doctor from '@/classes/Doctor';
 import PersonalityItem from '@/components/admin/Patients/PersonalityItem.vue';
-import Button from '@/components/Base/Button.vue';
-import ClassHelper from '@/services/ClassHelper';
+import Button from '@/services/components/Button.vue';
 import Provider from '@/services/Provider/Provider';
-import sort from '@/services/sort';
 
 export default defineComponent({
   name: 'PersonalityList',
@@ -54,12 +52,12 @@ export default defineComponent({
     };
 
     const removeCommissionDoctor = async (commissionDoctor: CommissionDoctor): Promise<void> => {
-      ClassHelper.RemoveFromClassById(commissionDoctor.id, commission.value.commissionsDoctors);
+      // ClassHelper.RemoveFromClassById(commissionDoctor.id, commission.value.commissionsDoctors);
       await Provider.store.dispatch('commissionsDoctors/remove', commissionDoctor.id);
     };
 
     const sortDoctors = async (): Promise<void> => {
-      sort(commission.value.commissionsDoctors);
+      // sort(commission.value.commissionsDoctors);
       await Provider.store.dispatch('commissions/update', commission.value);
     };
 
@@ -71,8 +69,8 @@ export default defineComponent({
         });
         return;
       }
-      const item = commission.value.addDoctor(doctor);
-      await Provider.store.dispatch('commissionsDoctors/create', item);
+      // const item = commission.value.addDoctor(doctor);
+      // await Provider.store.dispatch('commissionsDoctors/create', item);
     };
 
     return {

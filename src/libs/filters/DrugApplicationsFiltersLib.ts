@@ -1,4 +1,3 @@
-import CommissionDrugApplication from '@/classes/CommissionDrugApplication';
 import DrugApplication from '@/classes/DrugApplication';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import ClassHelper from '@/services/ClassHelper';
@@ -9,25 +8,17 @@ const DrugApplicationsFiltersLib = (() => {
   const modelName = 'drugApplication';
 
   function byStatus(): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(DrugApplication).statusId, DataTypes.Set);
+    const filterModel = FilterModel.CreateFilterModel(modelName, ClassHelper.GetPropertyName(DrugApplication).statusId, DataTypes.Set);
     filterModel.operator = Operators.In;
     return filterModel;
   }
 
   function byCommissionsId(id: string, label: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoinV2(
-      modelName,
-      'id',
-      'commissionDrugApplication',
-      'id',
-      ClassHelper.GetPropertyName(CommissionDrugApplication).drugApplicationId as string,
-      id,
-      ClassHelper.GetPropertyName(CommissionDrugApplication).commissionId as string
-    );
-    filterModel.joinTableId = id;
-    filterModel.operator = Operators.Eq;
-    filterModel.label = label;
-    return filterModel;
+    // const filterModel = FilterModel.CreateFilterModelWithJoinV2(modelName, 'id', 'commissionDrugApplication', 'id');
+    // filterModel.joinTableId = id;
+    // filterModel.operator = Operators.Eq;
+    // filterModel.label = label;
+    return new FilterModel();
   }
 
   return {

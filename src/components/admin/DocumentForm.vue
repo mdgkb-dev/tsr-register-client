@@ -34,9 +34,9 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 import Document from '@/classes/Document';
 import DocumentFieldValue from '@/classes/DocumentFieldValue';
 import DocumentFileInfo from '@/classes/DocumentFileInfo';
-import Button from '@/components/Base/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
+import Button from '@/services/components/Button.vue';
 import DateInput from '@/services/components/DateInput.vue';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({

@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
+
+import { v4 as uuidv4 } from 'uuid';
 
 import IWithId from '@/services/interfaces/IWithId';
 
@@ -24,14 +25,14 @@ export default class ClassHelper {
           passedClass[key] = new passedClass[key].constructor(prop);
         } else {
           const constructor = Reflect.getMetadata(key, passedClass);
-          if (constructor && constructor[key]) {
+          if (constructor) {
             passedClass[key] = new constructor[key](prop);
           }
         }
       }
       if (Array.isArray(prop)) {
         const constructor = Reflect.getMetadata(key, passedClass);
-        if (constructor && constructor[key]) {
+        if (constructor) {
           passedClass[key] = prop.map((t) => new constructor[key](t));
         }
       }
@@ -50,9 +51,12 @@ export default class ClassHelper {
     return prop !== null && typeof prop !== 'undefined' && prop !== Object(prop);
   }
 
-  static RemoveFromClassByIndex(index: number, arrayFromDelete: IWithId[], arrayForDelete: string[]): void {
+  static RemoveFromClassByIndex(index: number, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
+    if (index === -1) {
+      return;
+    }
     const idForDelete = arrayFromDelete[index].id;
-    if (idForDelete) {
+    if (idForDelete && arrayForDelete) {
       arrayForDelete.push(idForDelete);
     }
     arrayFromDelete.splice(index, 1);
@@ -80,5 +84,19 @@ export default class ClassHelper {
         return key;
       },
     });
+  }
+
+  static CreateUUID(): string {
+    return uuidv4();
+  }
+
+  static InitClassInstance(passedClass: ClassType, arg?: ClassType): ClassType {
+    const item = passedClass.constructor(arg);
+    ClassHelper.BuildClass(item);
+    item.id = ClassHelper.CreateUUID();
+    return item;
+  }
+  static ExistsWithId(arr: IWithId[], id?: string): boolean {
+    return arr.some((a: IWithId) => a.id === id);
   }
 }

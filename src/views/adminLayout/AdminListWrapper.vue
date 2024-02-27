@@ -27,23 +27,17 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import Pagination from '@/services/components/Pagination.vue';
 
-import Pagination from '@/components/Pagination.vue';
-
-export default defineComponent({
-  name: 'AdminListWrapper',
-  components: { Pagination },
-  props: {
-    showHeader: {
-      type: Boolean,
-      default: false,
-    },
-    pagination: {
-      type: Boolean,
-      default: false,
-    },
+defineProps({
+  showHeader: {
+    type: Boolean,
+    default: false,
+  },
+  pagination: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

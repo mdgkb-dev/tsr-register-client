@@ -55,7 +55,7 @@ import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDiagnosisForm from '@/components/admin/Patients/PatientDiagnosis/PatientDiagnosisForm.vue';
-import RemoteSearch from '@/components/RemoteSearch.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import ClassHelper from '@/services/ClassHelper';
 import RightTabsContainer from '@/services/components/RightTabsContainer.vue';

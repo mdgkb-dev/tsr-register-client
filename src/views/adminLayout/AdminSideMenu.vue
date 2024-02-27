@@ -41,7 +41,7 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import MenuIcon from '@/assets/svg/Menu.svg';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import MenusSortsLib from '@/libs/sorts/MenusSortsLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Menu from '@/services/classes/Menu';

@@ -1,4 +1,3 @@
-import SearchElement from '@/classes/SearchElement';
 import SearchGroup from '@/classes/SearchGroup';
 import ClassHelper from '@/services/ClassHelper';
 
@@ -7,7 +6,7 @@ export default class SearchModel {
   params = '';
   suggester = false;
   mustBeTranslated = true;
-  options: SearchElement[] = [];
+  options: any[] = [];
   searchGroupId = '';
   searchGroups: SearchGroup[] = [];
   searchGroup: SearchGroup = new SearchGroup();

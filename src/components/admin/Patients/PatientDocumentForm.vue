@@ -33,7 +33,7 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 
 import Document from '@/classes/Document';
 import DocumentFieldValue from '@/classes/DocumentFieldValue';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import FileUploader from '@/components/FileUploader.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';

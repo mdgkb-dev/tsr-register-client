@@ -8,7 +8,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import StringItem from '@/services/components/StringItem.vue';
 
 export default defineComponent({

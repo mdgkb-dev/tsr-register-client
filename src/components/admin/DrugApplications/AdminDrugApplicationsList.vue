@@ -79,10 +79,10 @@ import DrugApplicationFilesList from '@/components/admin/DrugApplications/DrugAp
 import DrugArrivesList from '@/components/admin/DrugApplications/DrugArrivesList.vue';
 import ToggleCommissionsForm from '@/components/admin/DrugApplications/ToggleCommissionsForm.vue';
 import SelectStatusForm from '@/components/admin/SelectStatusForm.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseContainer from '@/components/Base/Collapse/CollapseContainer.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import ModalWindow from '@/components/Base/ModalWindow.vue';
+import Button from '@/services/components/Button.vue';
+import CollapseContainer from '@/services/components/Collapse/CollapseContainer.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
+import ModalWindow from '@/services/components/ModalWindow.vue';
 // import FilterDateForm from '@/components/TableFilters/FilterDateForm.vue';
 import DrugApplicationsFiltersLib from '@/libs/filters/DrugApplicationsFiltersLib';
 import StatusesFiltersLib from '@/libs/filters/StatusesFiltersLib';

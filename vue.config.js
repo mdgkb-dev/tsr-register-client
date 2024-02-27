@@ -1,3 +1,6 @@
+// const AutoImport = require('unplugin-auto-import/webpack');
+const Components = require('unplugin-vue-components/webpack');
+const { ElementPlusResolver } = require('unplugin-vue-components/resolvers');
 module.exports = {
   lintOnSave: false,
   devServer: {
@@ -12,27 +15,47 @@ module.exports = {
   },
   transpileDependencies: [
     // can be string or regex
-    'vue-chartjs',
-    'chart.js',
+    // 'vue-chartjs',
+    // 'chart.js',
   ],
-  chainWebpack: (config) => {
-    // Visualize size of webpack output files with an interactive zoomable treemap
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-    // const options = {
-    //   webpackBundleAnalyzer: {
-    //     openAnalyzer: false,
-    //   },
-    // };
-    // config
-    //   .plugin('webpack-bundle-analyzer')
-    //   .use(BundleAnalyzerPlugin)
-    //   .init((Plugin) => new Plugin(options));
+  configureWebpack: {
+    plugins: [
+      require('unplugin-auto-import/webpack').default({
+        include: [
+          '.ts',
+          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+          /\.vue$/,
+          /\.vue\?vue/, // .vue
+          /\.md$/, // .md
+        ],
+        imports: [
+          'vue',
+          {
+            'srs/services/classes': ['ClassHelper'],
+          },
+        ],
+        resolvers: [ElementPlusResolver()],
+        dirs: ['srs/classes', 'srs/services/classes'],
 
+        vueTemplate: true,
+        dts: true,
+        eslintrc: {
+          enabled: true,
+        },
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+        dirs: ['src/components', 'src/services/components', 'src/views'],
+      }),
+    ],
+  },
+  chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
 
     svgRule.uses.clear();
 
+    svgRule.delete('type');
+    svgRule.delete('generator');
     svgRule
       .use('vue-loader')
       .loader('vue-loader-v16') // or `vue-loader-v16` if you are using a preview support of Vue 3 in Vue CLI

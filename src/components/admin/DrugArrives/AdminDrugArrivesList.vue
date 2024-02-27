@@ -43,15 +43,14 @@ import FundContract from '@/classes/FundContract';
 import Patient from '@/classes/Patient';
 import DrugArriveDecreases from '@/components/admin/DrugArrives/DrugArriveDecreases.vue';
 import DrugArriveInputNumber from '@/components/admin/DrugArrives/DrugArriveInputNumber.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
-import ModalWindow from '@/components/Base/ModalWindow.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import StatusesFiltersLib from '@/libs/filters/StatusesFiltersLib';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
-import ClassHelper from '@/services/ClassHelper';
+import Button from '@/services/components/Button.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import ModalWindow from '@/services/components/ModalWindow.vue';
 import SmallDatePicker from '@/services/components/SmallDatePicker.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
@@ -127,7 +126,7 @@ export default defineComponent({
     };
 
     const removeDrugDecrease = async (drugArrive: DrugArrive, item: DrugDecrease): Promise<void> => {
-      ClassHelper.RemoveFromClassById(item.id, drugArrive.drugDecreases, []);
+      // ClassHelper.RemoveFromClassById(item.id, drugArrive.drugDecreases, []);
       await Provider.store.dispatch('drugDecreases/remove', item.id);
     };
 

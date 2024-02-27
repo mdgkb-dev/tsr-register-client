@@ -38,7 +38,7 @@ import Document from '@/classes/Document';
 import DocumentFieldValue from '@/classes/DocumentFieldValue';
 import DocumentType from '@/classes/DocumentType';
 import Patient from '@/classes/Patient';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import DocumentTypeFieldsCodes from '@/interfaces/DocumentTypeFieldsCodes';
 import DocumentTypesCodes from '@/interfaces/DocumentTypesCodes';
 import DocumentTypesFiltersLib from '@/libs/filters/DocumentTypesFiltersLib';

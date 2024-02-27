@@ -5,19 +5,19 @@ const ResearchesResultsFiltersLib = (() => {
   const model = 'researchResult';
 
   function byResearchId(id: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(model, 'researchId', DataTypes.String);
+    const filterModel = FilterModel.CreateFilterModel(model, 'researchId', DataTypes.String);
     filterModel.value1 = id;
     return filterModel;
   }
 
   function byPatientId(id: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(model, 'patientId', DataTypes.String);
+    const filterModel = FilterModel.CreateFilterModel(model, 'patientId', DataTypes.String);
     filterModel.value1 = id;
     return filterModel;
   }
 
   function byPatientResearchId(id: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(model, 'patientResearchId', DataTypes.String);
+    const filterModel = FilterModel.CreateFilterModel(model, 'patientResearchId', DataTypes.String);
     filterModel.value1 = id;
     return filterModel;
   }

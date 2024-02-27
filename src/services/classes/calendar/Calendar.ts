@@ -73,7 +73,10 @@ export default class Calendar {
         return days.concat(d);
       }
       if (m.firstWeekActive) {
-        const d = this.years[activeYearIndex].months[mi - 1].weeks[this.years[activeYearIndex].months[mi - 1].weeks.length - 1].days.slice(0, lostDays);
+        const d = this.years[activeYearIndex].months[mi - 1].weeks[this.years[activeYearIndex].months[mi - 1].weeks.length - 1].days.slice(
+          0,
+          lostDays
+        );
         return d.concat(days);
       }
     }
@@ -159,7 +162,7 @@ export default class Calendar {
     return activePeriod1.every((day: Day, i: number) => day.date.getDate() === activePeriod2[i].date.getDate());
   }
 
-  getDateWithOffset(): Date {
+  getDateWithOffset() {
     return new Date(this.getSelectedDay().date.getTime() - new Date().getTimezoneOffset() * 60000);
   }
 }

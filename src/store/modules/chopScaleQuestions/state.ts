@@ -1,4 +1,4 @@
 import ChopScaleQuestion from '@/classes/ChopScaleQuestion';
-import IBasicState from '@/store/baseModule/baseState';
+import IBasicState from '@/services/store/baseModule/baseState';
 
 export type State = IBasicState<ChopScaleQuestion>;

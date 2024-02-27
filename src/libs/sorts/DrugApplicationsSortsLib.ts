@@ -4,11 +4,9 @@ import ClassHelper from '@/services/ClassHelper';
 import { Orders } from '@/services/interfaces/Orders';
 
 const DrugApplicationsSortsLib = (() => {
-  const modelName = 'drugApplication';
-
   function byNumber(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
-      modelName,
+    return SortModel.Create(
+      DrugApplication,
       ClassHelper.GetPropertyName(DrugApplication).number,
       order ? order : Orders.Asc,
       `По номеру ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`,
@@ -17,8 +15,8 @@ const DrugApplicationsSortsLib = (() => {
   }
 
   function byDate(order?: Orders): SortModel {
-    return SortModel.CreateSortModelV2(
-      modelName,
+    return SortModel.Create(
+      DrugApplication,
       String(ClassHelper.GetPropertyName(DrugApplication).date),
       order ? order : Orders.Asc,
       `По дате ${order === Orders.Asc ? '(вверх)' : '(вниз)'}`

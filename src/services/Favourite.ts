@@ -18,7 +18,7 @@ const FavouriteService = (() => {
       _setFavourite(domain, [id]);
       return;
     }
-    const idArr = ids.split(',');
+    const idArr = ids!.split(',');
     idArr.push(id);
     _setFavourite(domain, idArr);
   }
@@ -39,7 +39,6 @@ const FavouriteService = (() => {
       }
     }
   }
-
   // function _getAccessToken() {
   //   return localStorage.getItem('access_token');
   // }

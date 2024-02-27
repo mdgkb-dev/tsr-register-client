@@ -2,7 +2,7 @@ import { MutationTree } from 'vuex';
 
 import Patient from '@/classes/Patient';
 import IAnthropomentry from '@/interfaces/IAnthropomentry';
-import getBaseMutations from '@/store/baseModule/baseMutations';
+import getBaseMutations from '@/services/store/baseModule/baseMutations';
 
 import { State } from './index';
 

@@ -34,8 +34,8 @@ import { defineComponent, PropType } from 'vue';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import AnamnesisForm from '@/components/admin/Patients/Anamnesis/AnamnesisForm.vue';
-import Button from '@/components/Base/Button.vue';
-import CollapseItem from '@/components/Base/Collapse/CollapseItem.vue';
+import Button from '@/services/components/Button.vue';
+import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 

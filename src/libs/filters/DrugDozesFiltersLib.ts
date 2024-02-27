@@ -7,7 +7,7 @@ const DrugDozesFiltersLib = (() => {
   const modelName = 'drugDoze';
 
   function byDrugFormId(id?: string): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelV2(modelName, ClassHelper.GetPropertyName(DrugDoze).drugFormId, DataTypes.String);
+    const filterModel = FilterModel.CreateFilterModel(modelName, ClassHelper.GetPropertyName(DrugDoze).drugFormId, DataTypes.String);
     filterModel.value1 = id;
     return filterModel;
   }

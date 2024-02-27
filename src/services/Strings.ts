@@ -93,10 +93,6 @@ const StringsService = (() => {
     return regex.test(str);
   }
 
-  function formatToPercentage(percent: number): string {
-    return `${percent}%`;
-  }
-
   function stringsEquals(str1: string, str2: string): boolean {
     const low1 = str1.toLowerCase().replaceAll(/\s/g, '');
     const low2 = str2.toLowerCase().replaceAll(/\s/g, '');
@@ -105,8 +101,12 @@ const StringsService = (() => {
     return low2.includes(low1) || transl2.includes(low1) || low2.includes(transl1);
   }
 
+  function formatToPercentage(percent: number): string {
+    return `${percent}%`;
+  }
+
   return {
-    stringsEquals,
+    formatToPercentage,
     removeEmoji,
     translit,
     getStringBetweenChars,
@@ -114,7 +114,7 @@ const StringsService = (() => {
     toKebabCase,
     capitalizeString,
     canBeTranslited,
-    formatToPercentage,
+    stringsEquals,
   };
 })();
 

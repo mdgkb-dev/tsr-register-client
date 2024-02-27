@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 
 import HmfseScaleQuestion from '@/classes/HmfseScaleQuestion';
-import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import getBaseDefaultState from '@/services/store/baseModule/baseIndex';
 import RootState from '@/store/types';
 
 import actions from './actions';

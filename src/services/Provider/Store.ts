@@ -4,10 +4,8 @@ import StringsService from '@/services/Strings';
 import store from '../../store';
 
 const Store = (() => {
-  const s = store;
   let getAction = '';
   let storeModule = '';
-
   function initPagination(options?: IPaginationOptions): void {
     store.commit('filter/setStoreModule', options?.storeModule ?? getStoreModule());
     store.commit('filter/setAction', options?.action ?? getGetAction());
@@ -26,6 +24,10 @@ const Store = (() => {
     return storeModule;
   }
 
+  function getDispatchModuleAndAction(): string {
+    return getStoreModule() + '/' + getGetAction();
+  }
+
   function resetState(): void {
     if (storeModule === '') {
       return;
@@ -38,7 +40,7 @@ const Store = (() => {
   }
 
   async function loadItems(): Promise<void> {
-    return await Store.store.dispatch(`${Store.getStoreModule()}/${getGetAction()}`, { filterQuery: s.getters['filter/filterQuery'] });
+    return await store.dispatch(`${Store.getStoreModule()}/${getGetAction()}`, store.getters['filter/filterQuery']);
   }
 
   async function create(): Promise<void> {
@@ -46,6 +48,7 @@ const Store = (() => {
   }
 
   async function update(): Promise<void> {
+    console.log(store.getters[storeModule + '/item']);
     return store.dispatch(`${storeModule}/update`, store.getters[storeModule + '/item']);
   }
 
@@ -58,7 +61,7 @@ const Store = (() => {
   }
 
   return {
-    store: s,
+    store,
     setGetAction,
     getGetAction,
     setModule,
@@ -72,6 +75,7 @@ const Store = (() => {
     update,
     get,
     remove,
+    getDispatchModuleAndAction,
   };
 })();
 

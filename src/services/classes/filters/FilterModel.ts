@@ -1,15 +1,15 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Ref, ref } from 'vue';
 
+import ClassHelper from '@/services//ClassHelper';
+import Arrays from '@/services/Arrays';
 import { ClassNameGetter } from '@/services/interfaces/Class';
 import { DataTypes } from '@/services/interfaces/DataTypes';
-import IFilterModel from '@/services/interfaces/IFilterModel';
 import { Operators } from '@/services/interfaces/Operators';
 import StringsService from '@/services/Strings';
 
 export default class FilterModel {
   id?: string;
-  table = '';
   model = '';
   label = '';
   col = '';
@@ -21,7 +21,6 @@ export default class FilterModel {
   number = 0;
   type: DataTypes = DataTypes.String;
   set: string[] = [];
-  version = '';
   isSet = false;
 
   joinTable = '';
@@ -31,29 +30,57 @@ export default class FilterModel {
   joinTableId = '';
   joinTableIdCol = '';
 
+  constructor(i?: FilterModel) {
+    ClassHelper.BuildClass(this, i);
+  }
+
+  eq(s?: FilterModel): boolean {
+    if (!s) {
+      return false;
+    }
+    if (this.type === DataTypes.Join) {
+      return s.model === this.model && s.operator === this.operator && this.joinTableModel === s.joinTableModel;
+    }
+    return s.model === this.model && s.col === this.col && s.operator === this.operator;
+  }
+
+  valueEq(s?: FilterModel): boolean {
+    if (!this || !s || !this.eq(s)) {
+      return false;
+    }
+
+    if (this.type === DataTypes.Boolean) {
+      return this.boolean === s?.boolean;
+    }
+    if (this.type === DataTypes.String) {
+      return this.value1 === s?.value1;
+    }
+    if (this.type === DataTypes.Join) {
+      return this.set.length ? Arrays.Eq(this.set, s.set) : false;
+    }
+    return false;
+  }
+
   toUrlQuery(): string {
-    let url = '';
-    Object.keys(this).forEach((el, i) => {
-      let value: unknown = this[el as keyof typeof this];
-      if (value && url !== '?' && (value as Array<unknown>).length !== 0) {
-        if (el == ('date1' || 'date2') && value) {
-          value = String(new Date(String(value)).toISOString().split('T')[0]);
-        }
-        if (i !== 0) {
-          url += '&';
-        }
-        url += `${el}=${value}`;
-      }
-    });
-    url += '|';
-    return url;
+    const t = this.type ? `"type":"${this.type}"` : '';
+    const model = this.model ? `"model":"${this.model}"` : '';
+    const col = this.col ? `"col":"${this.col}"` : '';
+    const operator = this.operator ? `"operator":"${this.operator}"` : '';
+    const value1 = this.value1 ? `"value1":"${this.value1}"` : '';
+    const b = this.type === DataTypes.Boolean ? `"boolean":${this.boolean}` : '';
+    const date1 = this.type === DataTypes.Date && this.date1 ? `"date1":"${this.date1.toISOString()}"` : '';
+    const date2 = this.type === DataTypes.Date && this.date2 ? `"date2":"${this.date2.toISOString()}"` : '';
+    const n = this.type === DataTypes.Number ? `"number":${this.number}` : '';
+    const s = this.type === DataTypes.Set || this.operator === Operators.In ? `"set":${JSON.stringify(this.set)}` : '';
+    const joinTableModel = this.type === DataTypes.Join ? `"joinTableModel":"${this.joinTableModel}"` : '';
+
+    return [t, model, col, operator, value1, b, date1, date2, n, s, joinTableModel].filter((s) => s !== '').toString();
   }
 
   fromUrlQuery(params: URLSearchParams): void {
     this.model = params.get('model') ?? '';
     this.col = params.get('col') ?? '';
     this.label = params.get('label') ?? '';
-    this.version = params.get('version') ?? '';
     this.operator = (params.get('operator') as Operators) ?? '';
     this.value1 = params.get('value1') ?? '';
     this.type = (params.get('type') as DataTypes) ?? '';
@@ -77,11 +104,10 @@ export default class FilterModel {
     return this.operator === Operators.In;
   }
 
-  static CreateFilterModel(table: string, col: string, type: DataTypes): IFilterModel {
+  static Create(model: ClassNameGetter, col: unknown, type: DataTypes): FilterModel {
     const filterModel = new FilterModel();
-    filterModel.id = uuidv4();
-    filterModel.table = table;
-    filterModel.col = col;
+    filterModel.model = model.GetClassName();
+    filterModel.col = (col as string) ?? '';
     filterModel.type = type;
     if (filterModel.type === DataTypes.Number) {
       filterModel.value1 = '0';
@@ -91,15 +117,16 @@ export default class FilterModel {
     }
     if (filterModel.type === DataTypes.Boolean) {
       filterModel.value1 = 'false';
+      filterModel.operator = Operators.Eq;
     }
     return filterModel;
   }
 
-  static CreateFilterModelV2(model: string | ClassNameGetter, col: string | undefined, type: DataTypes): IFilterModel {
+  static CreateFilterModel(model: string | ClassNameGetter, col: unknown, type: DataTypes): FilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
     filterModel.model = typeof model === 'string' ? model : model.GetClassName();
-    filterModel.col = col ?? '';
+    filterModel.col = (col as string) ?? '';
     filterModel.type = type;
     if (filterModel.type === DataTypes.Number) {
       filterModel.value1 = '0';
@@ -110,7 +137,6 @@ export default class FilterModel {
     if (filterModel.type === DataTypes.Boolean) {
       filterModel.value1 = 'false';
     }
-    filterModel.version = 'v2';
     return filterModel;
   }
 
@@ -123,10 +149,9 @@ export default class FilterModel {
     type: DataTypes,
     joinTableId?: string,
     joinTableIdCol?: string
-  ): IFilterModel {
+  ): FilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
-    filterModel.table = table;
     filterModel.joinTable = joinTable;
     filterModel.joinTablePk = joinTablePk;
     filterModel.joinTableFk = joinTableFk;
@@ -149,16 +174,14 @@ export default class FilterModel {
     joinTableFk: string,
     joinTableId?: string,
     joinTableIdCol?: string
-  ): IFilterModel {
+  ): FilterModel {
     const filterModel = new FilterModel();
-    filterModel.id = uuidv4();
     filterModel.model = model;
     filterModel.joinTableModel = joinTableModel;
     filterModel.joinTablePk = joinTablePk;
     filterModel.joinTableFk = joinTableFk;
     filterModel.col = col;
     filterModel.type = DataTypes.Join;
-    filterModel.version = 'v2';
     if (joinTableId) {
       filterModel.joinTableId = joinTableId;
     }
@@ -175,7 +198,6 @@ export default class FilterModel {
     filterModel.model = StringsService.toCamelCase(firstClass.GetClassName());
     filterModel.joinTableModel = StringsService.toCamelCase(secondClass.GetClassName());
     filterModel.type = DataTypes.Join;
-    filterModel.version = 'v3';
     return filterModel;
   }
 
@@ -205,7 +227,7 @@ export default class FilterModel {
     this.boolean = value;
   }
 
-  toRef(): Ref<IFilterModel> {
+  toRef(): Ref<FilterModel> {
     return ref(this);
   }
 }

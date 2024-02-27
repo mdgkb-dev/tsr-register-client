@@ -21,7 +21,6 @@ import { useStore } from 'vuex';
 
 import Patient from '@/classes/Patient';
 import Register from '@/classes/Register';
-import ClassHelper from '@/services/ClassHelper';
 
 export default defineComponent({
   name: 'PatientRegistersForm',
@@ -50,7 +49,7 @@ export default defineComponent({
 
     const handleSelectionChange = (_: Register[], register: Register): void => {
       if (props.patient.inRegister(register.id)) {
-        ClassHelper.RemoveFromClassById(register.id, props.patient.patientsRegisters, props.patient.representativeToPatientForDelete);
+        // ClassHelper.RemoveFromClassById(register.id, props.patient.patientsRegisters, props.patient.representativeToPatientForDelete);
       } else {
         // props.patient.addRegisterToPatient(register);
       }

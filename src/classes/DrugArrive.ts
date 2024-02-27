@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import Drug from '@/classes/Drug';
-import DrugDecrease from '@/classes/DrugDecrease';
+// import DrugDecrease from '@/classes/DrugDecrease';
 import FundContract from '@/classes/FundContract';
 import Status from '@/classes/Status';
 import ClassHelper from '@/services/ClassHelper';
@@ -26,8 +26,8 @@ export default class DrugArrive {
   stage = 0;
   order = 0;
 
-  @ClassHelper.GetClassConstructor(DrugDecrease)
-  drugDecreases: DrugDecrease[] = [];
+  // @ClassHelper.GetClassConstructor(DrugDecrease)
+  // drugDecreases: DrugDecrease[] = [];
 
   constructor(i?: DrugArrive) {
     ClassHelper.BuildClass(this, i);
@@ -40,8 +40,8 @@ export default class DrugArrive {
   }
 
   getSpended(): number {
-    let spended = 0;
-    this.drugDecreases.forEach((d: DrugDecrease) => (spended += d.quantity));
+    const spended = 0;
+    // this.drugDecreases.forEach((d: DrugDecrease) => (spended += d.quantity));
     return spended;
   }
 
@@ -53,12 +53,12 @@ export default class DrugArrive {
     return this.getRemain() > 0;
   }
 
-  addDrugDecrease(): DrugDecrease {
-    const item = new DrugDecrease();
-    item.id = uuidv4();
-    item.drugArriveId = this.id;
-    this.drugDecreases.push(item);
-    return item;
+  addDrugDecrease(): any {
+    // const item = new DrugDecrease();
+    // item.id = uuidv4();
+    // item.drugArriveId = this.id;
+    // this.drugDecreases.push(item);
+    // return item;
   }
 
   decrement(): boolean {
@@ -73,7 +73,7 @@ export default class DrugArrive {
     this.quantity++;
   }
 
-  drugMove(cur: number, prev: number, drugDecrease: DrugDecrease): boolean {
+  drugMove(cur: number, prev: number, drugDecrease: any): boolean {
     let succeedMove = true;
     if (cur > prev) {
       if (this.canSpend()) {

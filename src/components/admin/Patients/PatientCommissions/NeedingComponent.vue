@@ -55,7 +55,7 @@ import Commission from '@/classes/Commission';
 import DrugNeeding from '@/classes/DrugNeeding';
 import DrugNeedingOptions from '@/classes/DrugNeedingOptions';
 import Patient from '@/classes/Patient';
-import Button from '@/components/Base/Button.vue';
+import Button from '@/services/components/Button.vue';
 import IAnthropomentry from '@/interfaces/IAnthropomentry';
 import Provider from '@/services/Provider/Provider';
 export default defineComponent({

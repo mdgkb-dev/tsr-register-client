@@ -34,7 +34,7 @@ export default defineComponent({
 
     onBeforeMount(async (): Promise<void> => {
       changeDocumentTitle();
-      await Provider.store.dispatch('auth/setAuth');
+      // await Provider.store.dispatch('auth/setAuth');
       mounted.value = true;
     });
 
