@@ -1,7 +1,7 @@
 import { Module } from 'vuex';
 
 import ChopScaleQuestion from '@/classes/ChopScaleQuestion';
-import getBaseDefaultState from '@/store/baseModule/baseIndex';
+import getBaseDefaultState from '@/services/store/baseModule/baseIndex';
 import RootState from '@/store/types';
 
 import actions from './actions';

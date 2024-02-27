@@ -3,34 +3,33 @@ import { createRouter, createWebHistory, NavigationGuardNext, RouteLocationNorma
 import AuthPage from '@/components/Auth/AuthPage.vue';
 import PageNotFound from '@/components/PageNotFound.vue';
 import indexAdminRoutes from '@/router/indexAdminRoutes';
-import TokenService from '@/services/Token';
 import UserService from '@/services/User';
 import store from '@/store/index';
 
 export const isAuthorized = (next: NavigationGuardNext): void => {
-  const user = localStorage.getItem('user');
-  if (user) {
-    store.commit('auth/setIsAuth', true);
-  }
+  // const user = localStorage.getItem('user');
+  // if (user) {
+  //   store.commit('auth/setIsAuth', true);
+  // }
   next();
 };
 
 export const authGuard = async (next?: NavigationGuardNext): Promise<void> => {
   if (next) {
-    await store.dispatch('auth/setAuth');
-    const isAuth: boolean = store.getters['auth/isAuth'];
-    store.commit('auth/showWarning', true);
-    store.commit('auth/authOnly', true);
-    if (!isAuth) {
-      store.commit('auth/openModal', 'login');
-    }
+    // await store.dispatch('auth/setAuth');
+    // const isAuth: boolean = store.getters['auth/isAuth'];
+    // store.commit('auth/showWarning', true);
+    // store.commit('auth/authOnly', true);
+    // if (!isAuth) {
+    //   store.commit('auth/openModal', 'login');
+    // }
     next();
     return;
   }
 
-  if (!TokenService.isAuth()) {
-    router.push('/login');
-  }
+  // if (!TokenService.isAuth()) {
+  //   router.push('/login');
+  // }
 };
 
 export const devGuard = (): void => {

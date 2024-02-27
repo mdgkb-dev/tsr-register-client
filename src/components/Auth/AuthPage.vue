@@ -1,9 +1,16 @@
 <template>
-  <AuthForm />
+  <AuthForm @action="action" />
 </template>
 
 <script lang="ts" setup>
 import AuthForm from '@/services/components/AuthForm.vue';
+import Provider from '@/services/Provider/Provider';
+const form: ComputedRef<AuthForm> = computed(() => Provider.store.getters['auth/form']);
+const action = () => {
+  if (form.value.isLogin()) {
+    Provider.router.push('/admin/patients');
+  }
+};
 </script>
 
 <style scoped lang="scss">

@@ -9,14 +9,14 @@ export default abstract class LocalStore {
     return JSON.parse(item);
   }
 
-  static Set(key: LocalStoreKeys, item: unknown) {
+  static Set(key: LocalStoreKeys, item: unknown): void {
     if (!item) {
       return;
     }
     localStorage.setItem(key, JSON.stringify(item));
   }
 
-  static Remove(key: LocalStoreKeys) {
+  static Remove(key: LocalStoreKeys): void {
     localStorage.removeItem(key);
   }
 }

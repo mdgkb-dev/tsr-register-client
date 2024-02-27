@@ -3,6 +3,9 @@ import FileInfo from '@/services/classes/FileInfo';
 import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
 import TokenService from '@/services/Token';
 
+import LocalStore from './classes/LocalStore';
+import LocalStoreKeys from './interfaces/LocalStoreKeys';
+
 const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
 const apiVersion = process.env.VUE_APP_API_V1 ?? '';
 const apiHost = process.env.VUE_APP_API_HOST ?? '';
@@ -45,7 +48,7 @@ export default class HttpClient {
     const res = await axiosInstance({
       url: this.buildUrl(params?.query),
       method: 'get',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
       responseType: !isBlob ? 'json' : 'blob',
     });
     if (!res) {
@@ -66,11 +69,11 @@ export default class HttpClient {
   }
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType | void> {
-    const { payload, fileInfos, query, headers, isFormData, isBlob, downloadFileName } = params;
+    const { payload, fileInfos, query, headers, isBlob, downloadFileName } = params;
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'post',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
       data: this.createFormDataPayload<PayloadType>(payload, fileInfos),
       responseType: isBlob ? 'blob' : undefined,
     });

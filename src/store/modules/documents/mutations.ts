@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 
 import Document from '@/classes/Document';
-import getBaseMutations from '@/store/baseModule/baseMutations';
+import getBaseMutations from '@/services/store/baseModule/baseMutations';
 
 import { State } from './index';
 

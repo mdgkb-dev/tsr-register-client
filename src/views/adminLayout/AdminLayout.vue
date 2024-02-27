@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount } from 'vue';
+import { computed, ComputedRef, defineComponent } from 'vue';
 
 import { AdminLayout } from '@/services/interfaces/AdminLayout';
 import Provider from '@/services/Provider/Provider';
@@ -43,10 +43,6 @@ export default defineComponent({
     const isDrawerOpen: ComputedRef<boolean> = computed(() => Provider.store.getters['admin/isDrawerOpen']);
     const closeDrawer = () => Provider.store.commit('admin/closeDrawer');
     const showTopHeader = false;
-
-    onBeforeMount(async () => {
-      await Provider.store.dispatch('search/searchGroups');
-    });
 
     return { isDrawerOpen, closeDrawer, AdminLayout, showTopHeader };
   },

@@ -26,14 +26,14 @@
 </template>
 
 <script lang="ts" setup>
-import AuthForm from '@/services/classes/AuthForm';
-import Provider from '@/services/Provider/Provider';
-import Message from '@/services/classes/Message';
 import AuthButton from '@/services/classes/AuthButton';
+import AuthForm from '@/services/classes/AuthForm';
+import Message from '@/services/classes/Message';
+import Provider from '@/services/Provider/Provider';
 
 const form: ComputedRef<AuthForm> = computed(() => Provider.store.getters['auth/form']);
 const modal: ComputedRef<AuthModal> = computed(() => Provider.store.getters['auth/modal']);
-
+const emits = defineEmits(['action']);
 const authButtonClick = async (authButton: AuthButton): Promise<void> => {
   // TODO: VALIDATION
   if (!authButton.isSubmit) {
@@ -50,6 +50,7 @@ const authButtonClick = async (authButton: AuthButton): Promise<void> => {
   if (form.value.isRestore()) {
     await Provider.router.push('/main');
   }
+  emits('action');
 };
 onBeforeUnmount(() => {
   form.value.reset;
