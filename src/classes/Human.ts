@@ -7,20 +7,15 @@ import Contact from '@/classes/humans/Contact';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import IInsuranceCompanyToHuman from '@/interfaces/insuranceCompanies/IInsuranceCompanyToHuman';
 import IOption from '@/interfaces/shared/IOption';
+import ValidationRule from '@/services/classes/ValidationRules';
 import ClassHelper from '@/services/ClassHelper';
 
-interface Rule {
-  required: boolean;
-  trigger: string;
-  message: string;
-}
-
 interface Rules {
-  surname: Rule[];
-  name: Rule[];
-  patronymic: Rule[];
-  addressRegistration: Rule[];
-  addressResidential: Rule[];
+  surname: ValidationRule[];
+  name: ValidationRule[];
+  patronymic: ValidationRule[];
+  addressRegistration: ValidationRule[];
+  addressResidential: ValidationRule[];
 }
 
 export default class Human {
@@ -43,11 +38,11 @@ export default class Human {
   photo: IFileInfo = new FileInfo();
   photoId?: string;
   validationRules: Rules = {
-    surname: [{ required: false, message: 'Необходимо указать фамилию', trigger: 'blur' }],
-    name: [{ required: false, message: 'Необходимо указать имя', trigger: 'blur' }],
-    patronymic: [{ required: false, message: 'Необходимо указать отчество', trigger: 'blur' }],
-    addressRegistration: [{ required: false, message: 'Необходимо указать адрес регистрации', trigger: 'blur' }],
-    addressResidential: [{ required: false, message: 'Необходимо указать адрес проживания', trigger: 'blur' }],
+    surname: [ValidationRule.Create('Необходимо указать фамилию')],
+    name: [ValidationRule.Create('Необходимо указать имя')],
+    patronymic: [ValidationRule.Create('Необходимо указать отчество')],
+    addressRegistration: [ValidationRule.Create('Необходимо указать адрес регистрации')],
+    addressResidential: [ValidationRule.Create('Необходимо указать адрес проживания')],
   };
 
   editNameMode = false;

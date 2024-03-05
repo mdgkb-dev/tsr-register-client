@@ -4,4 +4,13 @@ import AdminDrugsApplicationsRoutes from '@/router/AdminDrugsApplicationsRoutes'
 import AdminPatientsRoutes from '@/router/AdminPatientsRoutes';
 import AdminRepresentativeRoutes from '@/router/AdminRepresentativeRoutes';
 
-export default [...AdminPatientsRoutes, ...AdminRepresentativeRoutes, ...AdminDrugsApplicationsRoutes, ...AdminDrugArrivesRoutes, ...AdminCommissionsRoutes];
+import AdminResearchesRouters from './AdminResearchesRouters';
+
+export default [
+  ...AdminPatientsRoutes,
+  ...AdminRepresentativeRoutes,
+  ...AdminDrugsApplicationsRoutes,
+  ...AdminDrugArrivesRoutes,
+  ...AdminCommissionsRoutes,
+  ...AdminResearchesRouters,
+];

@@ -1,9 +1,11 @@
 import ClassHelper from '@/services/ClassHelper';
 import ValueRelation from '@/services/interfaces/ValueRelation';
 
+import ValueTypes from '../types/ValueTypes';
+
 export default class ValueType {
   id?: string;
-  name?: string;
+  name: ValueTypes = ValueTypes.String;
   valueRelation: ValueRelation = ValueRelation.simple;
 
   constructor(i?: ValueType) {

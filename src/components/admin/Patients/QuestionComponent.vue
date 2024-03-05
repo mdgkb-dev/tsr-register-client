@@ -1,6 +1,6 @@
 <template>
   <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" />
-  <component :is="question.valueType.getComponentType()" v-else :research-result="researchResult" :question="question" @fill="fill" />
+  <component :is="getComponent()" v-else :research-result="researchResult" :question="question" @fill="fill" />
 </template>
 
 <script lang="ts">
@@ -38,12 +38,26 @@ export default defineComponent({
   setup(props) {
     const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 
+    const getComponent = () => {
+      if (props.question.valueType.isRadio()) {
+        return 'RadioProp';
+      }
+      if (props.question.valueType.isSet()) {
+        return 'SetProp';
+      }
+      if (props.question.valueType.isNumber()) {
+        return 'NumberProp';
+      }
+      // return ValueTypesComponentMap[props.question.valueType.name].name;
+    };
+
     const fill = () => {
       scroll(props.question.getIdWithoutDashes());
       researchResult.value.changed = true;
       console.log(researchResult.value);
     };
     return {
+      getComponent,
       researchResult,
       fill,
     };

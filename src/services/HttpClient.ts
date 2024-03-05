@@ -1,7 +1,6 @@
 import axiosInstance from '@/services/Axios';
 import FileInfo from '@/services/classes/FileInfo';
 import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPTypes';
-import TokenService from '@/services/Token';
 
 import LocalStore from './classes/LocalStore';
 import LocalStoreKeys from './interfaces/LocalStoreKeys';
@@ -92,7 +91,7 @@ export default class HttpClient {
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'put',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
       data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 
@@ -105,7 +104,7 @@ export default class HttpClient {
     const { data } = await axiosInstance({
       url: this.buildUrl(query),
       method: 'delete',
-      headers: { ...(headers ?? this.headers), token: TokenService.getAccessToken() },
+      headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
       data: !isFormData ? payload : this.createFormDataPayload<PayloadType>(payload, fileInfos),
     });
 

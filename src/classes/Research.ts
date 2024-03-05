@@ -38,6 +38,11 @@ export default class Research {
     return 'research';
   }
 
+  static Create(): Research {
+    const item = new Research();
+    return item;
+  }
+
   editRegisterGroup(isEdit?: boolean): void {
     this.isEdit = isEdit ?? !this.isEdit;
   }

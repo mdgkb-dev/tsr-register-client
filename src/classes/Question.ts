@@ -2,7 +2,7 @@ import AnswerVariant from '@/classes/AnswerVariant';
 import QuestionExample from '@/classes/QuestionExample';
 import QuestionMeasure from '@/classes/QuestionMeasure';
 import QuestionVariant from '@/classes/QuestionVariant';
-import ValueType from '@/classes/valueTypes/ValueType';
+import ValueType from '@/services/classes/ValueType';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class Question {
@@ -35,6 +35,8 @@ export default class Question {
   @ClassHelper.GetClassConstructor(Question)
   parent?: Question;
   parentId?: string;
+
+  selected = false;
 
   constructor(i?: Question) {
     ClassHelper.BuildClass(this, i);
@@ -138,5 +140,13 @@ export default class Question {
 
   static GetClassName(): string {
     return 'question';
+  }
+
+  setType(item: ValueType): void {
+    this.valueType = item;
+  }
+
+  setName(item: string): void {
+    this.name = item;
   }
 }

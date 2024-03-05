@@ -2,6 +2,7 @@ import Vuex, { StoreOptions } from 'vuex';
 
 import User from '@/classes/User';
 import { authStateConstructor } from '@/services/store/modules/auth';
+import { valueTypes } from '@/services/store/modules/valueTypes';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
 import { commissions } from '@/store/modules/commissions';
@@ -123,6 +124,7 @@ const store: StoreOptions<RootState> = {
     customSections,
     patientsDiagnosis,
     contacts,
+    valueTypes,
   },
 };
 

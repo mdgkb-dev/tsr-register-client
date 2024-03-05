@@ -1,5 +1,4 @@
 <template>
-  numberComponent
   <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" @change="filledCheck" />
 </template>
 

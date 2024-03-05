@@ -1,6 +1,5 @@
 <template>
-  numberComponent
-  <InputNumber v-if="answer" v-model:model-value="answer.valueNumber" @change="filledCheck" />
+  <el-input v-if="answer" ref="inputRef" v-model="answer.valueString" @input="filledCheck" />
 </template>
 
 <script lang="ts">
@@ -9,10 +8,9 @@ import { computed, defineComponent, PropType, Ref } from 'vue';
 import Answer from '@/classes/Answer';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
-import InputNumber from '@/services/components/InputNumber.vue';
+
 export default defineComponent({
-  name: 'NumberProp',
-  components: { InputNumber },
+  name: 'StringProp',
   props: {
     researchResult: {
       type: Object as PropType<ResearchResult>,
@@ -22,28 +20,23 @@ export default defineComponent({
       type: Object as PropType<Question>,
       required: true,
     },
-    variantId: {
-      type: String as PropType<string>,
-      default: '',
-    },
   },
   emits: ['fill'],
   setup(props, { emit }) {
-    const answer: Ref<Answer | undefined> = computed(() => {
-      if (props.variantId !== '') {
-        return props.researchResult.getQuestionVariantAnswer(props.variantId);
-      }
-      return props.researchResult.getOrCreateAnswer(props.question);
-    });
-    const filledCheck = (): void => {
+    const answer: Ref<Answer | undefined> = computed(() => props.researchResult.getOrCreateAnswer(props.question));
+    // const answer: Ref<Answer | undefined> = ref(undefined);
+    const filledCheck = (input: string): void => {
       if (!answer.value) {
         return;
       }
-      answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
+      answer.value.filled = input.length > 0;
       props.researchResult.calculateFilling();
       emit('fill');
     };
 
+    // onBeforeMount(() => {
+    //   answer.value = props.researchResult.getOrCreateAnswer(props.question);
+    // });
     return {
       filledCheck,
       answer,
@@ -72,17 +65,5 @@ export default defineComponent({
 
 .el-divider {
   margin: 10px 0;
-}
-
-:deep(.el-input-number__increase) {
-  border-radius: 0;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-:deep(.el-input-number__decrease) {
-  border-radius: 0;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
 }
 </style>

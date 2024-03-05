@@ -1,4 +1,4 @@
-import ValueType from '@/classes/valueTypes/ValueType';
+import ValueType from '@/services/classes/ValueType';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class DocumentTypeField {
