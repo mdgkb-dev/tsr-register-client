@@ -31,10 +31,14 @@ export default function getActions<UserT extends IWithId>(): ActionTree<State<Us
       await httpClient.post<EmailPassword, AuthInfo<UserT>>({ query: 'register', payload: state.form.toEmailPassword() });
     },
     restorePassword: async ({ state }): Promise<void> => {
-      await httpClient.post<string, UserT>({ query: 'restore-password', payload: state.form.email.email });
+      await httpClient.post<EmailPassword, UserT>({ query: 'restore-password', payload: state.form.toEmailPassword() });
     },
-    passwordChange: async ({ commit, state }): Promise<void> => {
-      await httpClient.post<string, UserT>({ query: 'password-change', payload: state.form.password.password });
+    passwordChange: async ({ state }): Promise<void> => {
+      await httpClient.put<unknown, UserT>({
+        query: 'password-change',
+        payload: { id: state.auth.user.getId(), email: state.form.email.email, password: state.form.password.password },
+        isFormData: true,
+      });
     },
     refreshToken: async ({ commit }): Promise<void> => {
       await httpClient.post<any, { user: UserT; token: ITokens }>({

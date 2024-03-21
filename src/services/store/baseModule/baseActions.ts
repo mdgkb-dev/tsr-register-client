@@ -63,25 +63,33 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
       const qid = new URLSearchParams(window.location.search).get('qid');
       ftsp.clearForHTTP();
 
+      // if qid exists - set query with only id, or send ftsp
       const p: IBodyfulParams<unknown> = {
         payload: qid ? { qid: qid, ftsp: undefined } : { qid: '', ftsp: ftsp },
         isFormData: true,
         query: 'ftsp',
       };
+      let res: HttpResponse<T> = (await httpClient.post<unknown, HttpResponse<T>>(p)) as HttpResponse<T>;
 
-      // если фильтр есть
-      const res: HttpResponse<T> = (await httpClient.post<unknown, HttpResponse<T>>(p)) as HttpResponse<T>;
+      // if qid wrong - repeat query with new ftsp
       if (!res || !res.ftsp || !res.ftsp.id) {
         commit('filter/filterExists', false, { root: true });
         await Provider.router.replace({ query: {} });
+        p.payload = { qid: '', ftsp: ftsp };
+        res = (await httpClient.post<unknown, HttpResponse<T>>(p)) as HttpResponse<T>;
+      }
+
+      if (!res || !res.ftsp) {
         return;
       }
+
       commit('filter/setFTSP', res.ftsp, { root: true });
       try {
         await Provider.router.replace({ query: { qid: res.ftsp.id } });
       } catch (error) {
         console.log(error);
       }
+
       if (Array.isArray(res.data)) {
         commit('setAll', res.data);
       } else {

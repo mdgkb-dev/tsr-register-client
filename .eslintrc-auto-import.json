@@ -64,6 +64,9 @@
     "watchEffect": true,
     "watchPostEffect": true,
     "watchSyncEffect": true,
-    "ElMessageBox": true
+    "ElMessageBox": true,
+    "Period": true,
+    "Scheduler": true,
+    "Time": true
   }
 }

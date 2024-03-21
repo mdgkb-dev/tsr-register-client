@@ -3,12 +3,28 @@
     <div class="line">
       <StringItem :string="firstModel.label" font-size="12px" padding="0" :style="getStyle(firstModel)" @click="selectModel(firstModel)" />
       <StringItem string="Все" font-size="12px" padding="0" :style="getStyle()" @click="selectModel()" />
-      <StringItem :string="secondModel.label" font-size="12px" padding="0" :style="getStyle(secondModel)" @click="selectModel(secondModel)" />
+      <StringItem
+        :string="secondModel.label"
+        font-size="12px"
+        padding="0"
+        :style="getStyle(secondModel)"
+        @click="selectModel(secondModel)"
+      />
     </div>
     <div class="line">
-      <div class="switch-knob1" :style="getKnobStyle1()" :class="{ active: firstModel.valueEq(filterModel) }" @click="selectModel(firstModel)" />
+      <div
+        class="switch-knob1"
+        :style="getKnobStyle1()"
+        :class="{ active: firstModel.valueEq(filterModel) }"
+        @click="selectModel(firstModel)"
+      />
       <div class="switch-knob2" :style="getKnobStyle2()" :class="{ active: !filterModel }" @click="selectModel()" />
-      <div class="switch-knob3" :style="getKnobStyle3()" :class="{ active: secondModel.valueEq(filterModel) }" @click="selectModel(secondModel)" />
+      <div
+        class="switch-knob3"
+        :style="getKnobStyle3()"
+        :class="{ active: secondModel.valueEq(filterModel) }"
+        @click="selectModel(secondModel)"
+      />
 
       <div class="switch-axis"></div>
       <div class="switch-axis-dash1"></div>

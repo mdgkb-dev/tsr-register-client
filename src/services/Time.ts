@@ -1,3 +1,5 @@
+import Period from './Period';
+
 export default abstract class Time {
   static NormalizeTime(m: string | number): string {
     return String(m).padStart(2, '0');
@@ -15,6 +17,9 @@ export default abstract class Time {
   }
 
   static SplitHM(time: string): number[] {
+    if (!time) {
+      return [];
+    }
     const parts = time.split(':');
     return [Number(parts[0]), Number(parts[1])];
   }
@@ -39,27 +44,20 @@ export default abstract class Time {
   }
 
   static DiffM(t1: string, t2: string): number {
-    // const timeStart = new Date();
-    // const timeEnd = new Date();
-    // const valueStart = Time.SplitHM(time1);
-    // const valueEnd = Time.SplitHM(time2);
-    //
-    // timeStart.setHours(valueStart[0], valueStart[1], 0, 0);
-    // timeEnd.setHours(valueEnd[0], valueEnd[1], 0, 0);
-    //
-    // const diff = timeEnd.getTime() - timeStart.getTime();
-    //
-    // return diff / Minute; // millisecond
     return Time.Gt(t2, t1) ? Time.HMtoM(t2) - Time.HMtoM(t1) : Time.HMtoM(t1) - Time.HMtoM(t2);
   }
 
   static GetPeriod(t1: string, t2: string): string {
-    return `${t1}-${t2}`;
+    return Period.Get(t1, t2);
   }
 
   static Gt(t1: string, t2: string): boolean {
     return Time.HMtoM(t1) > Time.HMtoM(t2);
   }
+  static GtOrEq(t1: string, t2: string): boolean {
+    return Time.Gt(t1, t2) || Time.Eq(t1, t2);
+  }
+
   static Eq(t1: string, t2: string): boolean {
     return Time.HMtoM(t1) === Time.HMtoM(t2);
   }
@@ -68,22 +66,7 @@ export default abstract class Time {
   }
 
   static PeriodsIntersects(p1Start: string, p1End: string, p2Start: string, p2End: string): boolean {
-    const t1Min = Time.HMtoM(p1Start);
-    const t2Min = Time.HMtoM(p1End);
-    const startMin = Time.HMtoM(p2Start);
-    const endMin = Time.HMtoM(p2End);
-
-    if (t1Min > startMin && t1Min < endMin) {
-      return true;
-    }
-    if (t2Min > startMin && t2Min < endMin) {
-      return true;
-    }
-    if (t2Min > endMin && t1Min < startMin) {
-      return true;
-    }
-
-    return false;
+    return Period.Intersects(Time.HMtoM(p1Start), Time.HMtoM(p1End), Time.HMtoM(p2Start), Time.HMtoM(p2End));
   }
 }
 

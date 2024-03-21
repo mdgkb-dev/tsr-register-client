@@ -4,7 +4,7 @@ import { Commit } from 'vuex';
 import ChatMessage from '@/services/classes/ChatMessage';
 import ClassHelper from '@/services/ClassHelper';
 
-const apiHost = process.env.VUE_APP_API_HOST ?? '';
+const apiHost = import.meta.env.VITE_APP_API_HOST ?? '';
 export default class WebSocketClient {
   private client?: WebSocket;
   private endpoint = '';

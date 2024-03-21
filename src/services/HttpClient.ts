@@ -5,9 +5,10 @@ import { IBodilessParams, IBodyfulParams } from '@/services/interfaces/IHTTPType
 import LocalStore from './classes/LocalStore';
 import LocalStoreKeys from './interfaces/LocalStoreKeys';
 
-const baseUrl = process.env.VUE_APP_BASE_URL ?? '';
-const apiVersion = process.env.VUE_APP_API_V1 ?? '';
-const apiHost = process.env.VUE_APP_API_HOST ?? '';
+const baseUrl = import.meta.env.VITE_APP_BASE_URL ?? '';
+const apiVersion = import.meta.env.VITE_APP_API_V1 ?? '';
+const apiHost = import.meta.env.VITE_APP_API_HOST ?? '';
+
 export default class HttpClient {
   endpoint: string;
   headers: Record<string, string>;
@@ -69,7 +70,7 @@ export default class HttpClient {
 
   async post<PayloadType, ReturnType>(params: IBodyfulParams<PayloadType>): Promise<ReturnType | void> {
     const { payload, fileInfos, query, headers, isBlob, downloadFileName } = params;
-    const { data } = await axiosInstance({
+    const res = await axiosInstance({
       url: this.buildUrl(query),
       method: 'post',
       headers: { ...(headers ?? this.headers), token: LocalStore.Get(LocalStoreKeys.AccessToken) },
@@ -77,11 +78,16 @@ export default class HttpClient {
       responseType: isBlob ? 'blob' : undefined,
     });
     if (!isBlob) {
-      return data;
+      return res.data;
     }
-    const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-    const url = URL.createObjectURL(blob);
-    const fileName = HttpClient.getDownloadFileName(downloadFileName, '');
+    // const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const url = URL.createObjectURL(res.data);
+
+    const headerLine = res.headers['content-disposition'];
+    const startFileNameIndex = headerLine.indexOf('"') + 1;
+    const endFileNameIndex = headerLine.lastIndexOf('"');
+    const filename = headerLine.substring(startFileNameIndex, endFileNameIndex);
+    const fileName = HttpClient.getDownloadFileName(downloadFileName, filename);
     return HttpClient.download(url, fileName);
   }
 

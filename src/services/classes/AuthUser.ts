@@ -13,7 +13,11 @@ export default class AuthUser<UserT extends IWithId> {
   }
 
   get(): UserT | undefined {
-    return LocalStore.Get(LocalStoreKeys.User);
+    if (!this.userConstructor) {
+      return;
+    }
+    this.user = new this.userConstructor(LocalStore.Get(LocalStoreKeys.User));
+    return this.user;
   }
 
   getId(): string | undefined {
@@ -21,8 +25,6 @@ export default class AuthUser<UserT extends IWithId> {
   }
 
   set(user: UserT): void {
-    console.log(user);
-    // console.log(this.userConstructor);
     if (!this.userConstructor) {
       return;
     }

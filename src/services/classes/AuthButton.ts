@@ -3,6 +3,7 @@ import AuthStatuses from '@/services/interfaces/AuthStatuses';
 export default class AuthButton {
   label = '';
   isSubmit = false;
+  disabled = false;
   private readonly toStatus: AuthStatuses = AuthStatuses.Login;
 
   constructor(label: string, toStatus: AuthStatuses, isSubmit = false) {

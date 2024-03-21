@@ -1,5 +1,6 @@
 import ClassHelper from '@/services/ClassHelper';
 import ValueRelation from '@/services/interfaces/ValueRelation';
+import ValueTypesComponentMap from '@/interfaces/valueTypes/ValueTypesComponentMap';
 
 import ValueTypes from '../types/ValueTypes';
 
@@ -50,5 +51,17 @@ export default class ValueType {
 
   isFiles(): boolean {
     return this.name === 'files';
+  }
+  getComponentType(): string | undefined {
+    if (this.name === ValueTypes.Radio) {
+      return 'RadioProp';
+    }
+    if (this.name === ValueTypes.Set) {
+      return 'SetProp';
+    }
+    if (this.name === ValueTypes.Number) {
+      return 'NumberProp';
+    }
+    return ValueTypesComponentMap[this.name].name;
   }
 }

@@ -10,6 +10,16 @@ export default class AuthForm {
   email = new EmailField();
   password = new PasswordField();
 
+  getErrors(): string[] {
+    if (this.isRefresh()) {
+      return this.password.getErrors();
+    }
+    if (this.isRestore()) {
+      return this.email.getErrors();
+    }
+    return [...this.email.getErrors(), ...this.password.getErrors()];
+  }
+
   toEmailPassword(): IEmailPassword {
     return { email: this.email.email, password: this.password.password };
   }
@@ -62,5 +72,9 @@ export default class AuthForm {
     this.email.reset();
     this.password.reset();
     this.status = AuthStatuses.Login;
+  }
+
+  focus(): void {
+    this.email.focus();
   }
 }

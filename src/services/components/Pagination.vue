@@ -1,12 +1,18 @@
 <template>
   <div :key="count" style="text-align: center; width: 100%">
-    <el-pagination style="margin: 10px 0" :current-page="curPage" background layout="prev, pager, next" :page-count="pageCount" @current-change="currentChange" />
+    <el-pagination
+      style="margin: 10px 0"
+      :current-page="curPage"
+      background
+      layout="prev, pager, next"
+      :page-count="pageCount"
+      @current-change="currentChange"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { computed, ComputedRef, defineEmits, defineProps, onBeforeMount, onBeforeUnmount } from 'vue';
 
 import Provider from '@/services/Provider/Provider';
 
@@ -22,7 +28,9 @@ const storeModule: string = Provider.store.getters['filter/storeModule'];
 const action: string = Provider.store.getters['filter/action'];
 const count: ComputedRef<number> = computed(() => Provider.store.getters[`${storeModule}/count`]);
 const pageCount: ComputedRef<number> = computed(() =>
-  Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) > 0 ? Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) : 1
+  Math.ceil(count.value / Provider.filterQuery.value.pagination.limit) > 0
+    ? Math.ceil(count.value / Provider.filterQuery.value.pagination.limit)
+    : 1
 );
 const curPage: ComputedRef<number> = computed(() => Provider.store.getters['pagination/curPage']);
 

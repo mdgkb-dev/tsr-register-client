@@ -1,6 +1,6 @@
 import { ActionTree } from 'vuex';
 
-import PatientRepresentative from '@/classes/PatientRepresentative';
+import { PatientRepresentative } from '@/classes/Patient';
 import getBaseActions from '@/services/store/baseModule/baseActions';
 import RootState from '@/store/types';
 

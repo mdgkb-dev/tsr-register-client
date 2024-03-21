@@ -12,6 +12,7 @@ import PatientHistory from '@/classes/PatientHistory';
 import PatientRegister from '@/classes/PatientRegister';
 import PatientResearch from '@/classes/PatientResearch';
 import { PatientRepresentative } from '@/classes/PR';
+// import PatientRepresentative from '@/classes/PatientRepresentative';
 import Register from '@/classes/Register';
 import Representative from '@/classes/Representative';
 import Research from '@/classes/Research';
@@ -28,7 +29,7 @@ export default class Patient {
   humanId?: string;
   regionId?: string;
   // history?: IHistory = new History();
-  @ClassHelper.GetClassConstructor(PatientRepresentative)
+  @ClassHelper.GetClassConstructor(PatientRepresentative.default)
   patientsRepresentatives: PatientRepresentative[] = [];
   representativeToPatientForDelete: string[] = [];
   @ClassHelper.GetClassConstructor(Disability)
@@ -115,7 +116,10 @@ export default class Patient {
       if (rtp.representative?.human.addressResidential != '' && rtp.representative?.human.addressResidential) {
         addresses.push(rtp.representative?.human.addressResidential);
       }
-      if (rtp.representative?.human.addressResidential !== rtp.representative?.human.addressRegistration && rtp.representative?.human.addressRegistration) {
+      if (
+        rtp.representative?.human.addressResidential !== rtp.representative?.human.addressRegistration &&
+        rtp.representative?.human.addressRegistration
+      ) {
         addresses.push(rtp.representative?.human.addressRegistration);
       }
     });

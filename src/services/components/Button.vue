@@ -22,17 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, defineEmits, PropType, ref } from 'vue';
-
 import Aright from '@/assets/svg/Aright.svg';
 import Back from '@/assets/svg/Back.svg';
 import Close from '@/assets/svg/Close.svg';
 import Commission from '@/assets/svg/Commission.svg';
 import Del from '@/assets/svg/Del.svg';
 import Download from '@/assets/svg/Download.svg';
-import Edit from '@/assets/svg/Edit.svg';
-// import {VueComponent as Edit} from '@/assets/svg/Edit.svg';
 import EditTitle from '@/assets/svg/EditTitle.svg';
+import Edit from '@/assets/svg/Edit.svg';
 import Filter from '@/assets/svg/Filter.svg';
 import Outlined from '@/assets/svg/Outlined.svg';
 import Plus from '@/assets/svg/Plus.svg';
@@ -76,7 +73,7 @@ const iconComponent = {
   plus: Plus,
   save: Save,
 };
-
+// const dynSvg = computed(() => import(`@/assets/svg/${props.}`))
 const emit = defineEmits(['click']);
 const hovering = ref(false);
 const changeState = () => {

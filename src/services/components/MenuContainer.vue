@@ -77,7 +77,7 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
   overflow-y: auto;
-  padding-bottom: 10px;
+  padding-bottom: 50px;
 }
 
 @media (max-width: 1436px) {

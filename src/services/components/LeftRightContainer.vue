@@ -47,6 +47,7 @@ export default defineComponent({
 @import '@/assets/styles/elements/base-style.scss';
 
 .mainblock {
+  box-sizing: border-box;
   display: flex;
   justify-content: left;
   width: auto;
@@ -66,6 +67,7 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  box-sizing: border-box;
 }
 
 .mainblock-right {
@@ -75,6 +77,7 @@ export default defineComponent({
   justify-content: right;
   width: calc(100% - 10px);
   padding-left: 10px;
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 600px) {

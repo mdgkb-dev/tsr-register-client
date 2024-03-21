@@ -1,5 +1,13 @@
 <template>
-  <el-select v-if="mounted" v-model="sortModel" :popper-append-to-body="false" :clearable="!sortModel?.default" value-key="label" @change="setSort" @clear="setSort(undefined)">
+  <el-select
+    v-if="mounted"
+    v-model="sortModel"
+    :popper-append-to-body="false"
+    :clearable="!sortModel?.default"
+    value-key="label"
+    @change="setSort"
+    @clear="setSort(undefined)"
+  >
     <el-option v-for="(item, i) in Provider.sortList" :key="i" :label="item.label" :value="item" />
   </el-select>
 </template>

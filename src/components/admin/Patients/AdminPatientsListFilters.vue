@@ -2,7 +2,15 @@
   <RSContainer :menu-width="'300px'" :mobile-width="'1215px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" :with-hover="false">
+        <InfoItem
+          title="поиск и сортировка"
+          margin="0"
+          :with-open-window="false"
+          height="98px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          :with-hover="false"
+        >
           <div :style="{ width: '100%' }">
             <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%" @select="selectSearch" />
             <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="$emit('load')" />
@@ -12,13 +20,38 @@
     </template>
 
     <template #filter>
-      <GridContainer max-width="1500px" grid-gap="70px 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0 0 0 10px">
-        <GridContainer max-width="500px" grid-gap="10px" grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))" margin="0px" background="#F5F6F8">
-          <InfoItem title="пол" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
+      <GridContainer
+        max-width="1500px"
+        grid-gap="70px 10px"
+        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0 0 0 10px"
+      >
+        <GridContainer
+          max-width="500px"
+          grid-gap="10px"
+          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
+          margin="0px"
+          background="#F5F6F8"
+        >
+          <InfoItem
+            title="пол"
+            margin="0"
+            :with-open-window="false"
+            height="98px"
+            background="#F5F5F5"
+            border-color="#C4C4C4"
+            padding="7px"
+            :with-hover="false"
+          >
             <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
           </InfoItem>
 
-          <FiltersButtonsSelect :filter-model="filterByDisabilities" :models="createDisabilityFilters()" default-label="инвалидность" @load="$emit('load')" />
+          <FiltersButtonsSelect
+            :filter-model="filterByDisabilities"
+            :models="createDisabilityFilters()"
+            default-label="инвалидность"
+            @load="$emit('load')"
+          />
         </GridContainer>
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
           <div v-for="question in questions" :key="question.id">
@@ -29,13 +62,32 @@
                 :second-model="createCustomFilterModels(question)[1]" :default-label="question.name"
                 @load="$emit('load')" />
             </InfoItem> -->
-            <FiltersButtonsSelect :models="createCustomFilterModels(question)" :default-label="question.name" :inverse="true" @load="$emit('load')" />
+            <FiltersButtonsSelect
+              :models="createCustomFilterModels(question)"
+              :default-label="question.name"
+              :inverse="true"
+              @load="$emit('load')"
+            />
           </div>
         </GridContainer>
 
-        <InfoItem title="документы" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
+        <InfoItem
+          title="документы"
+          margin="0"
+          :with-open-window="false"
+          height="98px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          padding="7px"
+          :with-hover="false"
+        >
           <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))" margin="0px">
+            <GridContainer
+              max-width="100%"
+              grid-gap="7px"
+              grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))"
+              margin="0px"
+            >
               <Button text="Паспорт" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
               <Button text="СНИЛС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
               <Button text="ОМС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
@@ -50,7 +102,16 @@
     </template>
     <template #download>
       <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))" margin="0 0 0 10px">
-        <InfoItem title="сохранить" margin="0" :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
+        <InfoItem
+          title="сохранить"
+          margin="0"
+          :with-open-window="false"
+          height="98px"
+          background="#F5F5F5"
+          border-color="#C4C4C4"
+          padding="7px"
+          :with-hover="false"
+        >
           <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
             <Button
               v-for="exportObj in exports"
@@ -67,7 +128,7 @@
   </RSContainer>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
 
 import AnswerVariant from '@/classes/AnswerVariant';
@@ -82,89 +143,53 @@ import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
-import Button from '@/services/components/Button.vue';
-import FiltersButtonsSelect from '@/services/components/FiltersButtonsSelect.vue';
-import GridContainer from '@/services/components/GridContainer.vue';
-import InfoItem from '@/services/components/InfoItem.vue';
-import RemoteSearch from '@/services/components/RemoteSearch.vue';
-import RSContainer from '@/services/components/RSContainer.vue';
-import SortList from '@/services/components/SortList.vue';
-import Switch3Pos from '@/services/components/Switch3Pos.vue';
 import Provider from '@/services/Provider/Provider';
 
-export default defineComponent({
-  name: 'AdminPatientsListFilters',
-  components: {
-    FiltersButtonsSelect,
-    RemoteSearch,
-    SortList,
-    Button,
-    InfoItem,
-    GridContainer,
-    RSContainer,
-    Switch3Pos,
-  },
-  emits: ['load'],
-  setup() {
-    const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
+const emits = defineEmits(['load']);
+const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
 
-    const questions: Ref<Question[]> = computed(() => Provider.store.getters['questions/items']);
-    const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
-    const filterByDisabilities: Ref<FilterModel> = ref(new FilterModel());
-    const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
-    const selectSearch = async (event: ISearchObject): Promise<void> => {
-      await Provider.router.push(`/admin/patients/${event.value}`);
-    };
+const questions: Ref<Question[]> = computed(() => Provider.store.getters['questions/items']);
+const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
+const filterByDisabilities: Ref<FilterModel> = ref(new FilterModel());
+const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
+const selectSearch = async (event: ISearchObject): Promise<void> => {
+  await Provider.router.push(`/admin/patients/${event.value}`);
+};
 
-    onBeforeMount(async () => {
-      filterByRegister.value = PatientsFiltersLib.byRegisters([]);
+onBeforeMount(async () => {
+  filterByRegister.value = PatientsFiltersLib.byRegisters([]);
 
-      const fq = new FilterQuery();
-      fq.setFilterModel(QuestionsFiltersLib.onlyFiltersQuetions());
-      await Provider.store.dispatch('questions/getAll', { filterQuery: fq });
-    });
-
-    const createDisabilityFilters = (): FilterModel[] => {
-      return [PatientsFiltersLib.withDisabilities()];
-    };
-
-    const createRegistersOptions = (): IOption[] => {
-      const ids: IOption[] = [];
-      registers.value.forEach((r: Register) => ids.push({ value: r.id as string, label: r.name }));
-      return ids;
-    };
-
-    const createCustomFilterModels = (question: Question): FilterModel[] => {
-      const filterModels: FilterModel[] = [];
-      question.answerVariants.forEach((a: AnswerVariant) => {
-        if (a.id) {
-          filterModels.push(PatientsFiltersLib.byQuestionVariantId(a.id, a.name));
-        }
-      });
-      return filterModels;
-    };
-
-    const exportData = async (exportOptions: ExportOptions): Promise<void> => {
-      await Provider.store.dispatch('dataExport/export', exportOptions);
-    };
-
-    return {
-      exportData,
-      exports,
-      createCustomFilterModels,
-      questions,
-      registers,
-      createDisabilityFilters,
-      onlyMaleFilter: PatientsFiltersLib.onlyMale(),
-      onlyFemaleFilter: PatientsFiltersLib.onlyFemale(),
-      filterByDisabilities,
-      filterByRegister,
-      selectSearch,
-      createRegistersOptions,
-      ...Provider.getAdminLib(),
-    };
-  },
+  const fq = new FilterQuery();
+  fq.setFilterModel(QuestionsFiltersLib.onlyFiltersQuetions());
+  await Provider.store.dispatch('questions/getAll', { filterQuery: fq });
 });
+
+const createDisabilityFilters = (): FilterModel[] => {
+  return [PatientsFiltersLib.withDisabilities()];
+};
+
+const createRegistersOptions = (): IOption[] => {
+  const ids: IOption[] = [];
+  registers.value.forEach((r: Register) => ids.push({ value: r.id as string, label: r.name }));
+  return ids;
+};
+
+const createCustomFilterModels = (question: Question): FilterModel[] => {
+  const filterModels: FilterModel[] = [];
+  question.answerVariants.forEach((a: AnswerVariant) => {
+    if (a.id) {
+      filterModels.push(PatientsFiltersLib.byQuestionVariantId(a.id, a.name));
+    }
+  });
+  return filterModels;
+};
+
+const exportData = async (exportOptions: ExportOptions): Promise<void> => {
+  await Provider.store.dispatch('dataExport/export', { exportOptions: exportOptions, ftsp: Provider.ftsp.value });
+};
+
+const onlyMaleFilter = PatientsFiltersLib.onlyMale();
+const onlyFemaleFilter = PatientsFiltersLib.onlyFemale();
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';

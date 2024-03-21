@@ -36,7 +36,7 @@ export default class FTSP {
   }
 
   getFirstSortModel(): SortModel | undefined {
-    return Arrays.GetLastEl(this.s);
+    return Arrays.GetLast(this.s);
   }
 
   setSortModel(sortModel: SortModel): void {

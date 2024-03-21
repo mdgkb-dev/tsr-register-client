@@ -10,80 +10,80 @@
   </div>
 </template>
 
-<script lang="ts">
-import { ElMessage } from 'element-plus';
-import { defineComponent, PropType, Ref, ref } from 'vue';
+<script lang="ts" setup>
+import Message from '@/services/classes/Message';
+import DatesFormatter from '@/services/DatesFormatter';
 
-import dateFormat from '@/services/DateMask';
-
-export default defineComponent({
-  name: 'DateInput',
-  props: {
-    modelValue: {
-      type: Date,
-      required: true,
-    },
-    placeholder: {
-      type: String,
-      default: 'Укажите дату',
-    },
-    width: { type: String as PropType<string>, required: false, default: 'auto' },
+const props = defineProps({
+  modelValue: {
+    type: Date,
+    required: true,
   },
-  emits: ['update:modelValue', 'change', 'beforeChange'],
-  setup(props, { emit }) {
-    const modelValueString = props.modelValue.toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-    const date: Ref<string> = ref(modelValueString);
-
-    const changeHandler = (value: string) => {
-      if (value.length != 10) {
-        date.value = modelValueString;
-        ElMessage({ type: 'error', message: 'Неверный формат даты' });
-        return;
-      }
-
-      if (Number(date.value.slice(0, 2)) > 31) {
-        date.value = modelValueString;
-        ElMessage({ type: 'error', message: 'Неверный день месяца' });
-        return;
-      }
-
-      if (Number(date.value.slice(3, 5)) > 12) {
-        date.value = modelValueString;
-        ElMessage({ type: 'error', message: 'Неверный месяц' });
-        return;
-      }
-
-      if (Number(date.value.slice(6, 10)) > 2100) {
-        date.value = modelValueString;
-        ElMessage({ type: 'error', message: 'Неверный год' });
-        return;
-      }
-      emit('beforeChange', date.value);
-      emit('change');
-    };
-    const inputHandler = (value: string) => {
-      date.value = value.replace(/[^0-9.]/g, '');
-
-      if ((date.value.length == 3 || date.value.length == 6) && date.value[date.value.length - 1] !== '.') {
-        date.value = date.value.substring(0, date.value.length - 1) + '.' + date.value.substring(date.value.length - 1);
-      }
-      if (date.value.length > 10) {
-        date.value = date.value.substring(0, date.value.length - 1);
-      }
-    };
-
-    return {
-      date,
-      dateFormat,
-      changeHandler,
-      inputHandler,
-    };
+  placeholder: {
+    type: String,
+    default: 'Укажите дату',
   },
+  width: { type: String as PropType<string>, required: false, default: 'auto' },
 });
+
+const emits = defineEmits(['update:modelValue', 'change', 'beforeChange']);
+
+const modelValueString = DatesFormatter.Format(props.modelValue);
+const date: Ref<string> = ref(modelValueString);
+
+watch(
+  () => props.modelValue,
+  () => {
+    date.value = DatesFormatter.Format(props.modelValue);
+  }
+);
+
+const changeHandler = (value: string) => {
+  if (!valid(value)) {
+    return;
+  }
+  const dateObj = DatesFormatter.FromRuStr(value);
+  emits('beforeChange', dateObj);
+  emits('change', dateObj);
+};
+
+const valid = (value: string): boolean => {
+  if (value.length != 10) {
+    date.value = modelValueString;
+    Message.Error('Неверный формат даты');
+    return false;
+  }
+
+  if (Number(date.value.slice(0, 2)) > 31) {
+    date.value = modelValueString;
+    Message.Error('Неверный день месяца');
+    return false;
+  }
+
+  if (Number(date.value.slice(3, 5)) > 12) {
+    date.value = modelValueString;
+    Message.Error('Неверный месяц');
+    return false;
+  }
+
+  if (Number(date.value.slice(6, 10)) > 2100) {
+    date.value = modelValueString;
+    Message.Error('Неверный год');
+    return false;
+  }
+  return true;
+};
+
+const inputHandler = (value: string) => {
+  date.value = value.replace(/[^0-9.]/g, '');
+
+  if ((date.value.length == 3 || date.value.length == 6) && date.value[date.value.length - 1] !== '.') {
+    date.value = date.value.substring(0, date.value.length - 1) + '.' + date.value.substring(date.value.length - 1);
+  }
+  if (date.value.length > 10) {
+    date.value = date.value.substring(0, date.value.length - 1);
+  }
+};
 </script>
 
 <style scoped lang="scss">

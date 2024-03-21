@@ -52,21 +52,18 @@ export default class ClassHelper {
   }
 
   static RemoveFromClassByIndex(index: number, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
-    if (index === -1) {
-      return;
-    }
-    const idForDelete = arrayFromDelete[index].id;
-    if (idForDelete && arrayForDelete) {
-      arrayForDelete.push(idForDelete);
-    }
-    arrayFromDelete.splice(index, 1);
+    ClassHelper.RemoveFromClass(index, arrayFromDelete, arrayForDelete);
   }
 
-  static RemoveFromClassById(id: string | undefined, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
+  static RemoveFromClassById(id: string | undefined, arrayFromDelete: IWithId[], arrayForDelete?: string[]): string | undefined {
     if (!id) {
       return;
     }
     const index = arrayFromDelete.findIndex((i: IWithId) => i.id === id);
+    ClassHelper.RemoveFromClass(index, arrayFromDelete, arrayForDelete);
+  }
+
+  private static RemoveFromClass(index: number, arrayFromDelete: IWithId[], arrayForDelete?: string[]): void {
     if (index < 0) {
       return;
     }

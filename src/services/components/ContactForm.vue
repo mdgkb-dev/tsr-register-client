@@ -122,12 +122,13 @@ const removePhone = async (id: string) => {
 }
 
 .contact-container {
-  width: calc(100% - 62px);
+  box-sizing: border-box;
+  width: 100%;
   position: relative;
   padding: 0 10px;
   border: 1px solid #c3c3c3;
   border-radius: 5px;
-  margin: 0px 20px 20px 20px;
+  margin: 0px 0px 20px 0px;
   background: #dff2f8;
 }
 
@@ -226,26 +227,4 @@ const removePhone = async (id: string) => {
   margin-bottom: 10px;
 }
 
-@media screen and (max-width: 400px) {
-  .contact-container {
-    width: calc(100% - 42px);
-    margin: 0px 10px 20px 10px;
-  }
-
-  .contact-container-item {
-    width: calc(100% - 22px);
-    margin: 0px 0px 20px 0px;
-  }
-
-  .admin-del {
-    padding: 1px 0px;
-  }
-
-  .bottom-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 5px;
-  }
-}
 </style>

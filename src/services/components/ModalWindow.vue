@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-if="show" top="10vh" :model-value="show" width="60%" :show-close="true" :before-close="beforeClose" @close="$emit('close')">
+  <el-dialog v-if="show" top="10vh" :model-value="show" :width="width" :show-close="true" :before-close="beforeClose" @close="$emit('close')">
     <template #title>
       {{ title }}
     </template>
@@ -10,7 +10,7 @@
 <script lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { v4 as uuidv4 } from 'uuid';
-import { computed, defineComponent, onBeforeMount, PropType, Ref, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, PropType, Ref, ref, withDirectives } from 'vue';
 
 export default defineComponent({
   name: 'ModalWindow',
@@ -23,6 +23,10 @@ export default defineComponent({
     title: {
       type: String as PropType<string>,
       default: '',
+    },
+    width: {
+      type: String as PropType<string>,
+      default: '60%',
     },
   },
   emits: ['save', 'close'],
@@ -103,11 +107,13 @@ export default defineComponent({
 }
 
 :deep(.el-dialog) {
+  position: relative;
   background-color: #eef1f6;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 10px;
+  z-index: 10000;
 }
 
 :deep(.el-dialog__body) {

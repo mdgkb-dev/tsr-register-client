@@ -23,7 +23,6 @@
       <div class="top-title" :style="topTitleStyle">
         <svg v-if="icon" class="icon-top-title" :style="iconTopTitleStyle">
           <use :xlink:href="'#' + icon"></use>
-          <!--          <use xlink:href="#iconamoon_edit-light"></use>-->
         </svg>
         <slot name="title">
           <StringItem
@@ -257,7 +256,7 @@ export default defineComponent({
 
 .inside-class {
   font-weight: normal;
-  background: #ffffff;
+  // background: #ffffff;
   padding: 0 10px;
   width: 100%;
   max-width: 100%;

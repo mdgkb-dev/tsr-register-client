@@ -3,22 +3,22 @@ import AuthStatuses from '@/services/interfaces/AuthStatuses';
 
 export const AuthStatusesObjects: Record<AuthStatuses, Record<string, string | AuthButton[]>> = {
   [AuthStatuses.Login]: {
-    title: 'Войдите в систему',
+    title: 'Вход в систему',
     action: 'login',
     component: 'LoginChunk',
     buttons: AuthButton.LoginButtons(),
     errorMessage: 'Неверно указан email или пароль',
   },
   [AuthStatuses.Register]: {
-    title: 'Зарегистрируйтесь',
+    title: 'Регистрация',
     action: 'register',
     component: 'RegisterChunk',
     buttons: AuthButton.RegisterButtons(),
     errorMessage: 'Неверно указан email или пароль',
-    successMessage: 'Вы успешно зарегистрировались в системе, проверьте почту для подтверждения',
+    successMessage: 'Вы успешно зарегистрировались в системе, войдите под своим паролем',
   },
   [AuthStatuses.Restore]: {
-    title: 'Введите email для восстановления пароля',
+    title: 'Восстановление пароля',
     component: 'ForgotPasswordChunk',
     action: 'restorePassword',
     successMessage: 'Ссылка для восстановления пароля отправлена на Вашу почту',
@@ -26,7 +26,7 @@ export const AuthStatusesObjects: Record<AuthStatuses, Record<string, string | A
     buttons: AuthButton.RestoreButtons(),
   },
   [AuthStatuses.Refresh]: {
-    title: 'Введите новый пароль',
+    title: 'Создание нового пароля',
     action: 'passwordChange',
     component: 'PasswordChangeChunk',
     successMessage: 'Воспользуйтесь новым паролем для входа',

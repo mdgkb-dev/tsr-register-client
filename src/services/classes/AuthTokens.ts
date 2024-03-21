@@ -1,5 +1,3 @@
-import { LocaleInjectionKey } from 'element-plus';
-
 import ITokens from '@/services/interfaces/ITokens';
 
 import LocalStoreKeys from '../interfaces/LocalStoreKeys';

@@ -1,9 +1,11 @@
-import AuthStatuses from '@/services/interfaces/AuthStatuses';
+import { ref } from 'vue';
 
+import AuthStatuses from '@/services/interfaces/AuthStatuses';
 type MyCallbackWithOptParam = (error?: Error) => void;
 
 export default class EmailPasswordForm {
   password = '';
+  private passwordRef = ref();
 
   rule(_: unknown, value: string, callback: MyCallbackWithOptParam) {
     if (!value) {
@@ -21,5 +23,17 @@ export default class EmailPasswordForm {
 
   show(status: AuthStatuses): boolean {
     return [AuthStatuses.Login, AuthStatuses.Register, AuthStatuses.Refresh].includes(status);
+  }
+
+  getErrors(): string[] {
+    const errors: string[] = [];
+    if (this.password === '') {
+      errors.push('Введите пароль');
+    }
+    return errors;
+  }
+
+  focus(): void {
+    (this.passwordRef as any).value.focus();
   }
 }

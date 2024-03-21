@@ -24,6 +24,7 @@ export default class DateTimeFormat {
   constructor(locale?: string) {
     this.locale = locale ?? this.locale;
   }
+
   format(date?: Date, options?: CustomDateTimeFormatOptions): string {
     if (!date) {
       return '';
@@ -91,5 +92,11 @@ export default class DateTimeFormat {
 
   getMonthsDiff(dateFrom: Date, dateTo: Date): number {
     return dateTo.getMonth() - dateFrom.getMonth() + 12 * (dateTo.getFullYear() - dateFrom.getFullYear());
+  }
+
+  stringToDate(value: string): Date {
+    const parts = value.split('.');
+    const date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    return date;
   }
 }

@@ -16,6 +16,7 @@ import SetProp from '@/components/admin/Research/SetProp.vue';
 import SetSelect from '@/components/admin/Research/SetSelect.vue';
 import StringProp from '@/components/admin/Research/StringProp.vue';
 import Provider from '@/services/Provider/Provider';
+import ValueTypesComponentMap from '@/interfaces/valueTypes/ValueTypesComponentMap';
 import scroll from '@/services/Scroll';
 export default defineComponent({
   name: 'QuestionComponent',
@@ -48,7 +49,7 @@ export default defineComponent({
       if (props.question.valueType.isNumber()) {
         return 'NumberProp';
       }
-      // return ValueTypesComponentMap[props.question.valueType.name].name;
+      return ValueTypesComponentMap[props.question.valueType.name].name;
     };
 
     const fill = () => {
