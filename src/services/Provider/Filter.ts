@@ -38,7 +38,7 @@ const Filter = (() => {
 
   // function setSortModelsForOneTable(table: string, ...cols: string[]) {
   //   cols.forEach((col: string) => {
-  //     setSortModel(SortModel.CreateSortModel(table, col));
+  //     setSortModel(SortModel.Create(table, col));
   //   });
   // }
 

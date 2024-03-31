@@ -3,7 +3,7 @@ import { ActionTree } from 'vuex';
 import Schedule from '@/classes/Schedule';
 import HttpClient from '@/services/HttpClient';
 import RootState from '@/services/interfaces/types';
-import getBaseActions from '@/services/store/baseModule/baseActions';
+import getBaseActions from '@/services/services/store/baseModule/baseActions';
 
 import { State } from './index';
 

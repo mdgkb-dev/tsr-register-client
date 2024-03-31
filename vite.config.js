@@ -48,7 +48,8 @@ export default ({ mode }) => {
         imports: [
           'vue',
           {
-            '@/services/Main': ['Period', 'Time', 'Scheduler'],
+            '@/services/Main': ['Period', 'Time', 'Scheduler', 'Contact', 'Email', 'Message', 'Provider', 'Router', 'FTSP', 'Store'],
+            '@/classes/Main': ['Doctor'],
           },
         ],
         resolvers: [ElementPlusResolver()],
@@ -65,61 +66,4 @@ export default ({ mode }) => {
       alias: [{ find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) }],
     },
   });
-  // lintOnSave: false,
-  // outputDir: './test',
-  // configureWebpack: {
-  //   devtool: 'source-map',
-  // },
-  // transpileDependencies: [
-  //   // can be string or regex
-  //   // 'vue-chartjs',
-  //   // 'chart.js',
-  // ],
-  // configureWebpack: {
-  //   plugins: [
-  //     require('unplugin-auto-import/webpack').default({
-  //       include: [
-  //         '.ts',
-  //         /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
-  //         /\.vue$/,
-  //         /\.vue\?vue/, // .vue
-  //         /\.md$/, // .md
-  //       ],
-  //       imports: [
-  //         'vue',
-  //         {
-  //           'srs/services/classes': ['ClassHelper'],
-  //           'srs/classes': ['Event'],
-  //         },
-  //       ],
-  //       resolvers: [ElementPlusResolver()],
-  //       dirs: ['srs/classes', 'srs/services'],
-  //
-  //       vueTemplate: true,
-  //       dts: true,
-  //       eslintrc: {
-  //         enabled: true,
-  //       },
-  //     }),
-  //   ],
-  // },
-  // chainWebpack: (config) => {
-  //   const svgRule = config.module.rule('svg');
-  //
-  //   svgRule.uses.clear();
-  //
-  //   svgRule.delete('type');
-  //   svgRule.delete('generator');
-  //   svgRule
-  //     .use('vue-loader')
-  //     .loader('vue-loader-v16') // or `vue-loader-v16` if you are using a preview support of Vue 3 in Vue CLI
-  //     .end()
-  //     .use('vue-svg-loader')
-  //     .loader('vue-svg-loader')
-  //     .options({
-  //       svgo: {
-  //         plugins: [{ cleanupIDs: false }, { collapseGroups: false }, { removeEmptyContainers: false }],
-  //       },
-  //     });
-  // },
 };

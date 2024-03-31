@@ -10,7 +10,13 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="Provider.editAdmin(patient.id)" />
+                  <Button
+                    button-class="edit-button"
+                    color="#006bb4"
+                    icon="edit"
+                    icon-class="edit-icon"
+                    @click="Provider.editAdmin(patient.id)"
+                  />
                   <FioToggleForm :human="patient.human" />
                 </div>
 
@@ -58,15 +64,15 @@ import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 
 const showAddModal: Ref<boolean> = ref(false);
-const patients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/items']);
-const count: Ref<number> = computed(() => Provider.store.getters['patients/count']);
+const patients: Ref<Patient[]> = Store.Items('patients');
+const count: Ref<number> = Store.Count('patients');
 
 const mounted = ref(false);
 // const filteredPatients: Ref<Patient[]> = computed(() => Provider.store.getters['patients/filteredPatients']);
 const editMode: Ref<boolean> = ref(true);
 
 const loadPatients = async () => {
-  await Provider.store.dispatch('patients/ftsp');
+  await Store.FTSP('patients');
   mounted.value = true;
 };
 
@@ -93,7 +99,7 @@ Hooks.onBeforeMount(load, {
 
 const updateHuman = async (human: Human): Promise<void> => {
   await Provider.withHeadLoader(async () => {
-    await Provider.store.dispatch('humans/update', human);
+    Store.Update('humans', human);
   });
 };
 

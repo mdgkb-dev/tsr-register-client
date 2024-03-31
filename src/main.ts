@@ -49,3 +49,7 @@ app.directive('click-outside', {
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+export function getStore() {
+  return store;
+}

@@ -54,9 +54,6 @@ export default class Contact {
   addPostAddress(): void {
     this.postAddresses.push(new PostAddress());
   }
-  addTelephoneNumber(): void {
-    this.phones.push(new Phone());
-  }
   addWebsite(): void {
     this.websites.push(new Website());
   }

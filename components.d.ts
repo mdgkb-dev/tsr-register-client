@@ -7,6 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AdaptiveContainer: typeof import('./src/services/components/AdaptiveContainer.vue')['default']
+    AdaptiveContainerHorizontal: typeof import('./src/services/components/AdaptiveContainerHorizontal.vue')['default']
     AdminCommissionsList: typeof import('./src/components/admin/Commissions/AdminCommissionsList.vue')['default']
     AdminDrugApplicationsList: typeof import('./src/components/admin/DrugApplications/AdminDrugApplicationsList.vue')['default']
     AdminDrugApplicationsListFilters: typeof import('./src/components/admin/DrugApplications/AdminDrugApplicationsListFilters.vue')['default']
@@ -28,9 +30,12 @@ declare module '@vue/runtime-core' {
     AdminRepresentativesList: typeof import('./src/components/admin/Representatives/AdminRepresentativesList.vue')['default']
     AdminRepresentativesListFilters: typeof import('./src/components/admin/Representatives/AdminRepresentativesListFilters.vue')['default']
     AdminResearchesList: typeof import('./src/components/admin/Researches/AdminResearchesList.vue')['default']
+    AdminResearchesPoolsList: typeof import('./src/components/admin/ResearchesPools/AdminResearchesPoolsList.vue')['default']
     AdminResearchPage: typeof import('./src/components/admin/Researches/AdminResearchPage.vue')['default']
     AdminResearchPageInfo: typeof import('./src/components/admin/Researches/AdminResearchPageInfo.vue')['default']
     AdminResearchPageQuestions: typeof import('./src/components/admin/Researches/AdminResearchPageQuestions.vue')['default']
+    AdminResearchPoolPage: typeof import('./src/components/admin/ResearchesPools/AdminResearchPoolPage.vue')['default']
+    AdminResearchPoolPageInfo: typeof import('./src/components/admin/ResearchesPools/AdminResearchPoolPageInfo.vue')['default']
     AdminSearchMenu: typeof import('./src/views/adminLayout/AdminSearchMenu.vue')['default']
     AdminSideMenu: typeof import('./src/views/adminLayout/AdminSideMenu.vue')['default']
     AlphabetFilter: typeof import('./src/components/admin/Patients/AlphabetFilter.vue')['default']
@@ -175,6 +180,7 @@ declare module '@vue/runtime-core' {
     QuestionComponent: typeof import('./src/components/admin/Patients/QuestionComponent.vue')['default']
     QuestionEdit: typeof import('./src/components/admin/Researches/QuestionEdit.vue')['default']
     RadioProp: typeof import('./src/components/admin/Research/RadioProp.vue')['default']
+    RadioPropEdit: typeof import('./src/components/admin/Researches/RadioPropEdit.vue')['default']
     RemoteSearch: typeof import('./src/services/components/RemoteSearch.vue')['default']
     RepresentativeContacts: typeof import('./src/components/admin/Representatives/RepresentativeContacts.vue')['default']
     RepresentativeDocuments: typeof import('./src/components/admin/Representatives/RepresentativeDocuments.vue')['default']
@@ -197,6 +203,7 @@ declare module '@vue/runtime-core' {
     SortList: typeof import('./src/services/components/SortList.vue')['default']
     StringItem: typeof import('./src/services/components/StringItem.vue')['default']
     StringProp: typeof import('./src/components/admin/Research/StringProp.vue')['default']
+    StringPropEdit: typeof import('./src/components/admin/Researches/StringPropEdit.vue')['default']
     SvgIcon: typeof import('./src/services/components/SvgIcon.vue')['default']
     Switch3Pos: typeof import('./src/services/components/Switch3Pos.vue')['default']
     TableButtonGroup: typeof import('./src/components/TableButtonGroup.vue')['default']

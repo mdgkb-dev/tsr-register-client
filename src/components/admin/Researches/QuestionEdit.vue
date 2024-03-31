@@ -11,6 +11,8 @@ import { computed, PropType, Ref } from 'vue';
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
+import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
+import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
 import ValueType from '@/services/classes/ValueType';
 import Provider from '@/services/Provider/Provider';
 import ValueTypes from '@/services/types/ValueTypes';
@@ -31,11 +33,16 @@ const selectType = (item: ValueTypes) => {
 };
 const components = {
   num: NumberPropEdit,
+  string: StringPropEdit,
+  radio: RadioPropEdit,
   // AdminResearchPageSponsors: AdminResearchPageSponsors,
 };
 const component = computed(() => {
   if (props.question.valueType.isNumber()) {
     return components['num'];
+  }
+  if (props.question.valueType.isRadio()) {
+    return components['radio'];
   }
   return 'no';
 });

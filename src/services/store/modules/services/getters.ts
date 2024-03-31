@@ -4,7 +4,7 @@ import Schedule from '@/classes/Schedule';
 import Session from '@/classes/Session';
 import RootState from '@/services/interfaces/types';
 import Scheduler from '@/services/Scheduler';
-import getBaseGetters from '@/services/store/baseModule/baseGetters';
+import getBaseGetters from '@/services/services/store/baseModule/baseGetters';
 import { TimelineMinutes, TimelineSteps } from '@/services/Time';
 
 import { State } from './index';

@@ -41,7 +41,7 @@ const Hooks = (() => {
           Provider.ftsp.value.setSortModel(defaultSortModel);
         }
       }
-      // await Provider.filterQuery.value.fromUrlQuery(Provider.route().query);
+      // await Proider.filterQuery.value.fromUrlQuery(Provider.route().query);
       // Provider.setDefaultSortModel();
       Provider.setStoreModule(undefined);
       Provider.setGetAction(options?.getAction);

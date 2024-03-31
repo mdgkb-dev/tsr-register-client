@@ -49,7 +49,8 @@ export default class WebSocketClient {
   }
 
   private buildUrl(): string {
-    return new URL(path.join('ws', this.endpoint, this.query), apiHost.replace('http', 'ws')).toString();
+    const path = `ws/${this.endpoint}/${this.query}`;
+    return new URL(path, apiHost.replace('http', 'ws')).toString();
   }
 
   private connect() {

@@ -44,7 +44,7 @@ export default class Human {
   }
 
   getInitialsName(): string {
-    return `${this.name.slice(0, 1)}. ${this.patronymic.slice(0, 1)}. ${this.surname}`;
+    return `${this.name.slice(0, 1)}.${this.patronymic.slice(0, 1)}. ${this.surname}`;
   }
   getGender(full?: boolean): string {
     if (full) {

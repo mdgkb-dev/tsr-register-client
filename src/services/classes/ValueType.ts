@@ -1,6 +1,5 @@
 import ClassHelper from '@/services/ClassHelper';
 import ValueRelation from '@/services/interfaces/ValueRelation';
-import ValueTypesComponentMap from '@/interfaces/valueTypes/ValueTypesComponentMap';
 
 import ValueTypes from '../types/ValueTypes';
 
@@ -62,6 +61,6 @@ export default class ValueType {
     if (this.name === ValueTypes.Number) {
       return 'NumberProp';
     }
-    return ValueTypesComponentMap[this.name].name;
+    // return ValueTypesComponentMap[this.name].name;
   }
 }

@@ -18,7 +18,13 @@
           </el-form>
         </div>
       </div>
-      <Cropper ref="cropperRef" :src="cropper.src" :stencil-props="{ aspectRatio: cropper.ratio }" style="max-height: 50vh" @change="onChange" />
+      <Cropper
+        ref="cropperRef"
+        :src="cropper.src"
+        :stencil-props="{ aspectRatio: cropper.ratio }"
+        style="max-height: 50vh"
+        @change="onChange"
+      />
 
       <div class="dialog-footer">
         <el-button :loading="loading" type="success" @click="save">Сохранить</el-button>
@@ -28,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import 'vue-advanced-cropper/dist/style.css';
+// import 'vue-advanced-cropper/dist/style.css';
 
 import { computed, defineComponent, Ref, ref } from 'vue';
 import { Cropper } from 'vue-advanced-cropper';

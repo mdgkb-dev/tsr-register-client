@@ -21,7 +21,6 @@ export default class EmailField {
   }
 
   show(status: AuthStatuses): boolean {
-    console.log(status);
     return [AuthStatuses.Login, AuthStatuses.Register, AuthStatuses.Restore].includes(status);
   }
 

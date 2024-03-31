@@ -1,7 +1,7 @@
 import { MutationTree } from 'vuex';
 
 import Schedule from '@/classes/Schedule';
-import getBaseMutations from '@/services/store/baseModule/baseMutations';
+import getBaseMutations from '@/services/services/store/baseModule/baseMutations';
 import { TimelineSteps } from '@/services/Time';
 
 import { State } from './index';

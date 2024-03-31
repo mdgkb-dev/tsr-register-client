@@ -34,16 +34,18 @@
       </svg>
     </div>
     <div class="link-number">
-      <div
-        v-for="(j, i) in carousel"
-        :id="i.toString()"
-        :key="i"
-        class="number"
-        :style="{ background: i.toString() === activeGroupIndex.toString() ? '#9D9D9D' : '' }"
-        @click.stop="toGroup(i)"
-      >
-        {{ i + 1 }}
-      </div>
+      <GridContainer grid-template-columns="repeat(auto-fit, minmax(26px, 1fr))" grid-gap="5px" margin="0">
+        <div
+          v-for="(j, i) in carousel"
+          :id="i.toString()"
+          :key="i"
+          class="number"
+          :style="{ background: i.toString() === activeGroupIndex.toString() ? '#9D9D9D' : '' }"
+          @click.stop="toGroup(i)"
+        >
+          {{ i + 1 }}
+        </div>
+      </GridContainer>
     </div>
   </div>
 
@@ -59,11 +61,14 @@ import ArrowPrev from '@/assets/svg/CarouselImages/ArrowPrev.svg';
 import { Animations } from '@/services/interfaces/Animations';
 import makeCarousel from '@/services/MakeCarousel';
 import Event from '@/classes/Event';
+import GridContainer from '@/services/components/GridContainer.vue';
+
 export default defineComponent({
   name: 'CarouselImages',
   components: {
     ArrowPrev,
     ArrowNext,
+    GridContainer,
   },
   props: {
     events: {
@@ -194,6 +199,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 .event-name {
+  height: auto;
   &:hover {
     cursor: pointer;
     color: grey;
@@ -418,6 +424,12 @@ img {
   color: #9d9d9d;
 }
 
+@media screen and (max-width: 1024px) {
+  .event-name {
+    font-size: 30px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .label {
     font-size: 12px;
@@ -425,12 +437,32 @@ img {
   .icon-arrow {
     padding: 0px;
   }
+
+  .event-name {
+    font-size: 24px;
+  }
 }
 
 @media screen and (max-width: 480px) {
   .label {
     height: 40px;
     font-size: 9px;
+  }
+
+  .slide-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 20px);
+    height: 80%;
+    z-index: 2;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .event-name {
+    font-size: 18px;
   }
 }
 </style>

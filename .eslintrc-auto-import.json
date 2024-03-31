@@ -67,6 +67,14 @@
     "ElMessageBox": true,
     "Period": true,
     "Scheduler": true,
-    "Time": true
+    "Time": true,
+    "Contact": true,
+    "Doctor": true,
+    "Email": true,
+    "FTSP": true,
+    "Message": true,
+    "Provider": true,
+    "Router": true,
+    "Store": true
   }
 }

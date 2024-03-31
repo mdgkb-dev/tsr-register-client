@@ -3,8 +3,8 @@ import { Module } from 'vuex';
 import Schedule from '@/classes/Schedule';
 import RootState from '@/services/interfaces/types';
 import Scheduler from '@/services/Scheduler';
-import getBaseDefaultState from '@/services/store/baseModule/baseIndex';
-import IBasicState from '@/services/store/baseModule/baseState';
+import getBaseDefaultState from '@/services/services/store/baseModule/baseIndex';
+import IBasicState from '@/services/services/store/baseModule/baseState';
 import { TimelineSteps } from '@/services/Time';
 
 import actions from './actions';
