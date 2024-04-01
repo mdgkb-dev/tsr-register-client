@@ -15,7 +15,7 @@ export default abstract class HttpEngine {
   }
   static async Post(url: string, headers: unknown, responseType: ResponseType, data: unknown): Promise<AxiosPromise> {
     //@ts-ignore
-    headers['Context-Type'] = 'multipart/form-data';
+    headers['Content-Type'] = 'multipart/form-data';
     return await engine({ method: HttpMethods.POST, url: url, headers: headers, responseType: responseType, data: data });
   }
   static async Put(url: string, headers: unknown, data: unknown): Promise<AxiosPromise> {
