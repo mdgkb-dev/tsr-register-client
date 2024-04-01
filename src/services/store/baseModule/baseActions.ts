@@ -70,7 +70,6 @@ export default function getBaseActions<T extends IWithId & IFileInfosGetter, Sta
         query: 'ftsp',
       };
       let res: HttpResponse<T> = (await httpClient.post<unknown, HttpResponse<T>>(p)) as HttpResponse<T>;
-      console.log(res);
       // if qid wrong - repeat query with new ftsp
       if (!res || !res.ftsp || !res.ftsp.id) {
         commit('filter/filterExists', false, { root: true });

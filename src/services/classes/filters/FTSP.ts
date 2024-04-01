@@ -2,6 +2,7 @@ import Arrays from '@/services/Arrays';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Pagination from '@/services/classes/filters/Pagination';
 import ClassHelper from '@/services/ClassHelper';
+import { DataTypes } from '@/services/interfaces/DataTypes';
 
 import SortModel from '../SortModel';
 
@@ -44,6 +45,15 @@ export default class FTSP {
   }
 
   replaceF(curF?: FilterModel, prevF?: FilterModel): void {
+    if (curF?.type === DataTypes.Join) {
+      const f = this.f.find((f: FilterModel) => f.type === DataTypes.Join && f.model === curF.model);
+      if (f) {
+        curF.set.push(...f.set);
+        this.removeF(f);
+        this.f.push(curF);
+        return;
+      }
+    }
     this.removeF(prevF);
     if (curF) {
       this.f.push(curF);
@@ -53,8 +63,8 @@ export default class FTSP {
   removeF(model?: FilterModel): void {
     const index = this.f.findIndex((f: FilterModel) => f.eq(model));
     ClassHelper.RemoveFromClassByIndex(index, this.f);
-    console.log(index);
   }
+
   reset(): void {
     this.f = [];
     this.s = [];

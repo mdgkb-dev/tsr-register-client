@@ -1,14 +1,24 @@
 <template>
-  <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
+  <InfoItem
+    margin="0"
+    :with-open-window="false"
+    :with-icon="false"
+    height="98px"
+    background="#F5F5F5"
+    border-color="#C4C4C4"
+    padding="7px"
+    :with-hover="false"
+  >
     <template #title>
       <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
     </template>
+
     <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
       <Button
         v-for="(model, index) in models"
         :key="index"
         button-class="filter-button"
-        :text="model.label"
+        :text="model.set"
         :with-icon="false"
         :is-toggle="model.valueEq(filterModel)"
         :toggle-mode="true"
@@ -57,6 +67,7 @@ const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 // });
 
 const setFilter = async (model?: FilterModel) => {
+  console.log(model?.set);
   Provider.ftsp.value.replaceF(model, filterModel.value);
   filterModel.value = model;
   await Provider.router.replace({ query: {} });

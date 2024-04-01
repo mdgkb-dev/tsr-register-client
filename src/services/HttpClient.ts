@@ -59,7 +59,6 @@ export default class HttpClient {
       //@ts-ignore
       headers.token = token;
     }
-    console.log(headers);
     return headers ?? this.headers;
   }
 

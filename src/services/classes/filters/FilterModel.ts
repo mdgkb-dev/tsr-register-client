@@ -20,6 +20,7 @@ export default class FilterModel {
   boolean = false;
   number = 0;
   type: DataTypes = DataTypes.String;
+  @ClassHelper.GetClassConstructor(String)
   set: string[] = [];
   isSet = false;
 

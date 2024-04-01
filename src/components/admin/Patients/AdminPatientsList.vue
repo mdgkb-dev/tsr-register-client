@@ -1,4 +1,5 @@
 <template>
+  {{ Provider.ftsp }}
   <AdminListWrapper v-if="mounted" pagination show-header>
     <AdminPatientsListFilters @load="loadPatients" />
 
