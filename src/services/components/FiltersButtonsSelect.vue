@@ -1,5 +1,5 @@
 <template>
-  <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
+  <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="auto" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false">
     <template #title>
       <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
     </template>
@@ -18,6 +18,7 @@
         @click="setFilter(model.valueEq(filterModel) ? undefined : model)"
       >
       </Button>
+
     </GridContainer>
   </InfoItem>
 </template>
