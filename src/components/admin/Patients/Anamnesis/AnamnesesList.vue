@@ -11,8 +11,7 @@
     background-hover="#C7ECEA"
     :color-swap="false"
     @click="addAnamnesis()"
-  >
-  </Button>
+  />
   <div class="scroll-feild">
     <el-timeline style="margin-top: 20px">
       <el-timeline-item v-for="anamnesis in patient.getAnamnesesByMkbItemId(mkbItem?.id)" :key="anamnesis.id" placement="top" center>
@@ -34,9 +33,9 @@ import { defineComponent, PropType } from 'vue';
 import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import AnamnesisForm from '@/components/admin/Patients/Anamnesis/AnamnesisForm.vue';
+import ClassHelper from '@/services/ClassHelper';
 import Button from '@/services/components/Button.vue';
 import CollapseItem from '@/services/components/Collapse/CollapseItem.vue';
-import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 
 export default defineComponent({

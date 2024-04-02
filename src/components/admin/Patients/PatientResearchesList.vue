@@ -1,10 +1,30 @@
 <template>
   <div class="tools-panel">
-    <Button v-if="!selectResearchesMod" :with-icon="true" icon="download" icon-class="icon-download" button-class="download-button" @click="toggleSelectMod" />
-    <Button v-if="selectResearchesMod" :with-icon="true" icon="aright" icon-class="icon-aright" button-class="download-button" @click="toggleSelectMod" />
+    <Button
+      v-if="!selectResearchesMod"
+      :with-icon="true"
+      icon="download"
+      icon-class="icon-download"
+      button-class="download-button"
+      @click="toggleSelectMod"
+    />
+    <Button
+      v-if="selectResearchesMod"
+      :with-icon="true"
+      icon="aright"
+      icon-class="icon-aright"
+      button-class="download-button"
+      @click="toggleSelectMod"
+    />
     <div v-if="selectResearchesMod" class="button-download-field">
       <div v-if="someResearchSelected" class="field">
-        <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="save-button" :text="'Выгрузить ' + exportObj.exportType" @click="exportData(exportObj)" />
+        <Button
+          v-for="exportObj in exports"
+          :key="exportObj.exportType"
+          button-class="save-button"
+          :text="'Выгрузить ' + exportObj.exportType"
+          @click="exportData(exportObj)"
+        />
       </div>
       <StringItem v-else string="Нажмите на исследования для выбора..." font-size="14px" padding="0" color="#006bb4" margin="0 10px " />
     </div>
@@ -21,10 +41,10 @@
       <template #general-item>
         {{ i + 1 }}. {{ research.name }}
 
-        <div v-if="selectResearchesMod && !research.selectedForExport" class="select-field"></div>
+        <div v-if="selectResearchesMod && !research.selectedForExport" class="select-field" />
         <div v-if="selectResearchesMod && research.selectedForExport" class="selected-field">
           <svg class="check-icon">
-            <use xlink:href="#check"></use>
+            <use xlink:href="#check" />
           </svg>
         </div>
       </template>
@@ -42,11 +62,10 @@ import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExport
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Patient from '@/classes/Patient';
 import Research from '@/classes/Research';
-import Button from '@/services/components/Button.vue';
 import ResearchesFiltersLib from '@/libs/filters/ResearchesFiltersLib';
 import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
-import FilterQuery from '@/services/classes/filters/FilterQuery';
+import Button from '@/services/components/Button.vue';
 import GeneralItem from '@/services/components/GeneralItem.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import StringItem from '@/services/components/StringItem.vue';
@@ -80,22 +99,25 @@ export default defineComponent({
     const someResearchSelected = computed(() => researches.value.some((r: Research) => r.selectedForExport));
 
     const exports: Ref<ExportOptions[]> = ref([
-      ExportOptions.XLSX(PatientsExportOptionLib.onePatient(patient.value.id), ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)),
+      ExportOptions.XLSX(
+        PatientsExportOptionLib.onePatient(patient.value.id),
+        ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
+      ),
     ]);
 
     onBeforeMount(async () => {
-      const fq = new FilterQuery();
+      const fq = new FTSP();
       if (props.type === 'anamnesis') {
-        fq.setFilterModel(ResearchesFiltersLib.onlyAnamneses());
+        fq.f.push(ResearchesFiltersLib.onlyAnamneses());
       }
       if (props.type === 'researches') {
-        fq.setFilterModel(ResearchesFiltersLib.onlyLaboratory());
+        fq.f.push(ResearchesFiltersLib.onlyLaboratory());
       }
       if (props.type === 'diagnosis') {
-        fq.setFilterModel(ResearchesFiltersLib.onlyMkb());
+        fq.f.push(ResearchesFiltersLib.onlyMkb());
       }
       fq.setSortModel(ResearchesSortsLib.byOrder());
-      await Provider.store.dispatch('researches/getAll', { filterQuery: fq });
+      await Provider.store.dispatch('researches/ftsp', { ftsp: fq });
     });
 
     const selectResearch = async (research: Research) => {
@@ -114,7 +136,12 @@ export default defineComponent({
         } else {
           selectedResearchesIds.value.add(findedResearch.id);
         }
-        exports.value = [ExportOptions.XLSX(PatientsExportOptionLib.onePatient(patient.value.id), ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value))];
+        exports.value = [
+          ExportOptions.XLSX(
+            PatientsExportOptionLib.onePatient(patient.value.id),
+            ResearchesExportOptionLib.manyResearches(selectedResearchesIds.value)
+          ),
+        ];
       }
     };
 

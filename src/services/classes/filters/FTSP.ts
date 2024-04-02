@@ -2,7 +2,6 @@ import Arrays from '@/services/Arrays';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Pagination from '@/services/classes/filters/Pagination';
 import ClassHelper from '@/services/ClassHelper';
-import { DataTypes } from '@/services/interfaces/DataTypes';
 
 import SortModel from '../SortModel';
 

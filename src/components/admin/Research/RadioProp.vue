@@ -1,5 +1,4 @@
 <template>
-  {{ answer }}
   <el-radio
     v-for="variant in question.answerVariants"
     :key="variant.id"
@@ -9,7 +8,7 @@
     :label="variant.id"
     @change="filledCheck(variant)"
   >
-    <p>{{ variant.name }}, {{ variant.id }}</p>
+    <p>{{ variant.name }}</p>
   </el-radio>
   <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
     <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
