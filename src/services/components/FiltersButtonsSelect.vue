@@ -9,6 +9,7 @@
     padding="7px"
     :with-hover="false"
   >
+    <!-- <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="auto" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false"> -->
     <template #title>
       <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
     </template>
@@ -18,7 +19,7 @@
         v-for="(model, index) in models"
         :key="index"
         button-class="filter-button"
-        :text="model.set"
+        :text="model.label"
         :with-icon="false"
         :is-toggle="model.valueEq(filterModel)"
         :toggle-mode="true"
@@ -67,7 +68,6 @@ const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 // });
 
 const setFilter = async (model?: FilterModel) => {
-  console.log(model?.set);
   Provider.ftsp.value.replaceF(model, filterModel.value);
   filterModel.value = model;
   await Provider.router.replace({ query: {} });

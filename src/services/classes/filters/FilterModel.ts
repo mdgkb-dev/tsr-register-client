@@ -40,7 +40,11 @@ export default class FilterModel {
       return false;
     }
     if (this.type === DataTypes.Join) {
-      return s.model === this.model && s.operator === this.operator && this.joinTableModel === s.joinTableModel;
+      let eq = s.model === this.model && s.operator === this.operator && this.joinTableModel === s.joinTableModel;
+      if (s.operator === Operators.In) {
+        return eq && Arrays.Eq(this.set, s.set);
+      }
+      return eq;
     }
     return s.model === this.model && s.col === this.col && s.operator === this.operator;
   }

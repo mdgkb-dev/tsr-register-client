@@ -10,7 +10,7 @@ import '@/router/componentHooks';
 import Provider from '@/services/Provider/Provider';
 
 import './assets/styles/element-variables.scss';
-import Maska from 'maska';
+// import Maska from 'maska';
 import DateTimeFormatter from '@/services/DateFormat';
 
 import ClassHelper from '@/services/ClassHelper';
@@ -21,7 +21,7 @@ app.use(store);
 app.use(router);
 // app.use(ElementPlus);
 
-app.use(Maska);
+// app.use(Maska);
 
 Provider.router = router;
 Provider.store = store;

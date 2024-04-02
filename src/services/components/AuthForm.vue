@@ -3,6 +3,9 @@
     <div class="auth-card-header">
       {{ form.getTitle() }}
     </div>
+    {{  form.password.show(form.status) }}
+    {{  form.email.show(form.status) }}
+    {{  form.passwordRepeat.show(form.status) }}
     <div>
       <el-form ref="form" :model="form" :label-position="'top'">
         <el-form-item v-if="form.email.show(form.status)" prop="email" label="Введите email">
@@ -10,6 +13,9 @@
         </el-form-item>
         <el-form-item v-if="form.password.show(form.status)" prop="password" label="Введите пароль">
           <el-input ref="passwordRef" v-model="form.password.password" placeholder="Пароль" type="password" />
+        </el-form-item>
+        <el-form-item v-if="form.passwordRepeat.show(form.status)" prop="passwordRepeat" label="Повторите пароль">
+          <el-input ref="passwordRepeatRef" v-model="form.passwordRepeat.text" placeholder="Пароль" type="password" />
         </el-form-item>
         <div class="btn-group">
           <Button
@@ -128,6 +134,12 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.wer {
+  height: 20px;
+  width: 20px;
+  background: red;
+}
+
 .auth-card {
   // width: 320px;
 }

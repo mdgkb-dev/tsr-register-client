@@ -1,5 +1,5 @@
 <template>
-  <RSContainer :menu-width="'300px'" :mobile-width="'1215px'">
+  <RSContainer :menu-width="'300px'" :mobile-width="'6000px'">
     <template #visability>
       <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
         <InfoItem
@@ -22,7 +22,7 @@
     <template #filter>
       <GridContainer
         max-width="1500px"
-        grid-gap="70px 10px"
+        grid-gap="10px 10px"
         grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
         margin="0 0 0 10px"
       >

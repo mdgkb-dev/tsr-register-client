@@ -20,10 +20,12 @@ export default class FTSP {
     ClassHelper.BuildClass(this, i);
   }
 
-  clearForHTTP(): void {
-    this.f = this.f.map((fm: FilterModel) => FTSP.EmptyEntiries(fm) as FilterModel);
-    this.s = this.s.map((sm: SortModel) => FTSP.EmptyEntiries(sm) as SortModel);
-    this.p = FTSP.EmptyEntiries(this.p) as Pagination;
+  clearForHTTP(): FTSP {
+    const f = new FTSP(this);
+    f.f = this.f.map((fm: FilterModel) => FTSP.EmptyEntiries(fm) as FilterModel);
+    f.s = this.s.map((sm: SortModel) => FTSP.EmptyEntiries(sm) as SortModel);
+    f.p = FTSP.EmptyEntiries(this.p) as Pagination;
+    return f;
   }
 
   private static EmptyEntiries(sm: any): unknown {
@@ -43,17 +45,16 @@ export default class FTSP {
   setSortModel(sortModel: SortModel): void {
     this.s[0] = sortModel;
   }
-
   replaceF(curF?: FilterModel, prevF?: FilterModel): void {
-    if (curF?.type === DataTypes.Join) {
-      const f = this.f.find((f: FilterModel) => f.type === DataTypes.Join && f.model === curF.model);
-      if (f) {
-        curF.set.push(...f.set);
-        this.removeF(f);
-        this.f.push(curF);
-        return;
-      }
-    }
+    // if (curF?.type === DataTypes.Join) {
+    //   const f = this.f.find((f: FilterModel) => f.type === DataTypes.Join && f.model === curF.model);
+    //   if (f) {
+    //     curF.set.push(...f.set);
+    //     this.removeF(f);
+    //     this.f.push(curF);
+    //     return;
+    //   }
+    // }
     this.removeF(prevF);
     if (curF) {
       this.f.push(curF);
