@@ -18,6 +18,7 @@ export const isAuthorized = (next: NavigationGuardNext): void => {
 
 export const authGuard = async (next?: NavigationGuardNext): Promise<void> => {
   const auth = store.getters['auth/auth'];
+  auth.actualize();
   // if (next) {
   //   // await store.dispatch('auth/setAuth');
   //   // const isAuth: boolean = store.getters['auth/isAuth'];

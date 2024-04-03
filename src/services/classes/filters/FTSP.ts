@@ -45,15 +45,6 @@ export default class FTSP {
     this.s[0] = sortModel;
   }
   replaceF(curF?: FilterModel, prevF?: FilterModel): void {
-    // if (curF?.type === DataTypes.Join) {
-    //   const f = this.f.find((f: FilterModel) => f.type === DataTypes.Join && f.model === curF.model);
-    //   if (f) {
-    //     curF.set.push(...f.set);
-    //     this.removeF(f);
-    //     this.f.push(curF);
-    //     return;
-    //   }
-    // }
     this.removeF(prevF);
     if (curF) {
       this.f.push(curF);
