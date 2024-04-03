@@ -1,8 +1,8 @@
 <template>
-  <div v-if="showMenuBar" class="blur" @click="showMenuBar = false"></div>
+  <div v-if="showMenuBar" class="blur" @click="showMenuBar = false" />
   <div class="menu-icon" @click="openMenuBar()">
     <svg class="menu-icon-svg">
-      <use xlink:href="#menu-icon"></use>
+      <use xlink:href="#menu-icon" />
     </svg>
   </div>
   <div
@@ -41,12 +41,12 @@ import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 
 import MenuIcon from '@/assets/svg/Menu.svg';
-import Button from '@/services/components/Button.vue';
 import MenusSortsLib from '@/libs/sorts/MenusSortsLib';
+import Auth from '@/services/Auth';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Menu from '@/services/classes/Menu';
+import Button from '@/services/components/Button.vue';
 import Provider from '@/services/Provider/Provider';
-
 export default defineComponent({
   name: 'AdminSideMenu',
   components: {
@@ -61,6 +61,7 @@ export default defineComponent({
     const closeDrawer = () => store.commit('admin/closeDrawer');
     const route = useRoute();
     const activePath: Ref<string> = ref('');
+    const auth = computed(() => Provider.store.getters['auth/auth']);
     // const applicationsCounts: Ref<IApplicationsCount[]> = computed(() => store.getters['admin/applicationsCounts']);
     const mounted = ref(false);
     const showMenuBar: Ref<boolean> = ref(false);
@@ -93,7 +94,7 @@ export default defineComponent({
     };
 
     const logout = async () => {
-      await Provider.store.dispatch('auth/logout');
+      auth.value.logout();
       await Provider.router.push('/login');
     };
     return { logout, menus, closeDrawer, isCollapseSideMenu, activePath, mounted, openMenuBar, showMenuBar };

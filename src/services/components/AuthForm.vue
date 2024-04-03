@@ -3,9 +3,6 @@
     <div class="auth-card-header">
       {{ form.getTitle() }}
     </div>
-    {{  form.password.show(form.status) }}
-    {{  form.email.show(form.status) }}
-    {{  form.passwordRepeat.show(form.status) }}
     <div>
       <el-form ref="form" :model="form" :label-position="'top'">
         <el-form-item v-if="form.email.show(form.status)" prop="email" label="Введите email">
@@ -20,8 +17,8 @@
         <div class="btn-group">
           <Button
             v-for="btn in buttons"
-            :colorSwap="true"
             :key="btn.getStatus()"
+            :color-swap="true"
             :text="btn.label"
             :button="btn.disabled"
             :button-class="btn.isSubmit ? 'btn-active' : 'btn'"
@@ -38,6 +35,7 @@ import AuthButton from '@/services/classes/AuthButton';
 import AuthForm from '@/services/classes/AuthForm';
 import Message from '@/services/classes/Message';
 import Provider from '@/services/Provider/Provider';
+
 import AuthStatuses from '../interfaces/AuthStatuses';
 
 const form: ComputedRef<AuthForm> = computed(() => Provider.store.getters['auth/form']);
