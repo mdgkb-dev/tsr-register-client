@@ -129,8 +129,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, Ref, ref } from 'vue';
-
 import AnswerVariant from '@/classes/AnswerVariant';
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
 import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
@@ -145,13 +143,13 @@ import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Provider from '@/services/Provider/Provider';
 
-const emits = defineEmits(['load']);
+defineEmits(['load']);
 const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
 
-const questions: Ref<Question[]> = computed(() => Provider.store.getters['questions/items']);
+const questions: Ref<Question[]> = Store.Items('questions');
 const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
 const filterByDisabilities: Ref<FilterModel> = ref(new FilterModel());
-const registers: Ref<Register[]> = computed(() => Provider.store.getters['registers/items']);
+const registers: Ref<Register[]> = Store.Items('registers');
 const selectSearch = async (event: ISearchObject): Promise<void> => {
   await Provider.router.push(`/admin/patients/${event.value}`);
 };

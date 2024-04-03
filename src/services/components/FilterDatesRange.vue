@@ -46,14 +46,14 @@ const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 //   }
 //   setDefaultFilterModel();
 // });
-const setStart = async (date: Date): Promise<void> => {
-  // props.model.setDate1(date);
+const setStart = async (): Promise<void> => {
   await setFilter();
 };
-const setEnd = async (date: Date): Promise<void> => {
-  // props.model.setDate2(date);
+
+const setEnd = async (): Promise<void> => {
   await setFilter();
 };
+
 const setFilter = async () => {
   Provider.ftsp.value.replaceF(props.model, props.model);
   filterModel.value = props.model;
