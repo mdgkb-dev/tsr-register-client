@@ -116,6 +116,7 @@ declare module '@vue/runtime-core' {
     FilesProp: typeof import('./src/components/admin/Research/FilesProp.vue')['default']
     FileUploader: typeof import('./src/components/FileUploader.vue')['default']
     FilterDateForm: typeof import('./src/components/TableFilters/FilterDateForm.vue')['default']
+    FilterDatesRange: typeof import('./src/services/components/FilterDatesRange.vue')['default']
     FilterMultipleSelect: typeof import('./src/components/Filters/FilterMultipleSelect.vue')['default']
     FilterPopover: typeof import('./src/components/TableFilters/FilterPopover.vue')['default']
     FilterResetButton: typeof import('./src/components/TableFilters/FilterResetButton.vue')['default']

@@ -24,7 +24,16 @@ const PatientsFiltersLib = (() => {
   }
 
   function byRegisters(set: string[]): FilterModel {
-    const filterModel = FilterModel.CreateFilterModelWithJoin(table, 'id', 'patients_registers', 'id', 'patient_id', DataTypes.Join, 'id', 'register_id');
+    const filterModel = FilterModel.CreateFilterModelWithJoin(
+      table,
+      'id',
+      'patients_registers',
+      'id',
+      'patient_id',
+      DataTypes.Join,
+      'id',
+      'register_id'
+    );
     filterModel.operator = Operators.In;
     filterModel.set = set;
     return filterModel;
@@ -45,7 +54,13 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
+  function byDateBirth(): FilterModel {
+    const filterModel = FilterModel.Create(Patient, ClassHelper.GetPropertyName(Patient).dateBirth, DataTypes.Date);
+    filterModel.operator = Operators.Btw;
+    return filterModel;
+  }
   return {
+    byDateBirth,
     byQuestionVariantId,
     withDisabilities,
     onlyMale,

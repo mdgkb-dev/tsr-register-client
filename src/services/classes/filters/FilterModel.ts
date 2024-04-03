@@ -40,7 +40,7 @@ export default class FilterModel {
       return false;
     }
     if (this.type === DataTypes.Join) {
-      let eq = s.model === this.model && s.operator === this.operator && this.joinTableModel === s.joinTableModel;
+      const eq = s.model === this.model && s.operator === this.operator && this.joinTableModel === s.joinTableModel;
       if (s.operator === Operators.In) {
         return eq && Arrays.Eq(this.set, s.set);
       }
@@ -234,5 +234,13 @@ export default class FilterModel {
 
   toRef(): Ref<FilterModel> {
     return ref(this);
+  }
+
+  setDate1(date: Date): void {
+    this.date1 = date;
+  }
+
+  setDate2(date: Date): void {
+    this.date2 = date;
   }
 }

@@ -45,7 +45,6 @@
           >
             <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
           </InfoItem>
-
           <FiltersButtonsSelect
             :filter-model="filterByDisabilities"
             :models="createDisabilityFilters()"
@@ -54,6 +53,7 @@
           />
         </GridContainer>
         <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+          <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
           <div v-for="question in questions" :key="question.id">
             <!-- <InfoItem v-if="createCustomFilterModels(question).length === 2" :title="question.name" margin="0"
               :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px"
@@ -129,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, onBeforeMount, Ref, ref } from 'vue';
+import { computed, onBeforeMount, Ref, ref } from 'vue';
 
 import AnswerVariant from '@/classes/AnswerVariant';
 import ExportOptions from '@/classes/exportOptions/ExportOptions';
@@ -190,6 +190,7 @@ const exportData = async (exportOptions: ExportOptions): Promise<void> => {
 
 const onlyMaleFilter = PatientsFiltersLib.onlyMale();
 const onlyFemaleFilter = PatientsFiltersLib.onlyFemale();
+const dateBirthFilter = PatientsFiltersLib.byDateBirth();
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
