@@ -5,6 +5,7 @@ import { authStateConstructor } from '@/services/store/modules/auth';
 import { valueTypes } from '@/services/store/modules/valueTypes';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
+import { answerVariants } from '@/store/modules/answerVariants';
 import { commissions } from '@/store/modules/commissions';
 import { commissionsDoctors } from '@/store/modules/commissionsDoctors';
 import { commissionsDrugApplications } from '@/store/modules/commissionsDrugApplications';
@@ -125,6 +126,7 @@ const store: StoreOptions<RootState> = {
     patientsDiagnosis,
     contacts,
     valueTypes,
+    answerVariants,
   },
 };
 

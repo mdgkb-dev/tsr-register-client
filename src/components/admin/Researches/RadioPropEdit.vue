@@ -1,14 +1,10 @@
 <template>
-  <!-- <el-radio -->
-  <!--   v-for="variant in question.answerVariants" -->
-  <!--   :key="variant.id" -->
-  <!--   v-model="answer.answerVariantId" -->
-  <!--   class="block" -->
-  <!--   :style="{ width: 'calc(100% - 10px)', height: 'auto' }" -->
-  <!--   :label="variant.id" -->
-  <!--   @change="filledCheck(variant)" -->
-  <!-- > -->
-  <!--   <p>{{ variant.name }}</p> -->
+  <div v-for="variant in question.answerVariants" :key="variant.id">
+    <p>{{ variant.name }}</p>
+    <Button text="x" @click="removeAnswerVariant(variant.id)" />
+  </div>
+
+  <Button text="Добавить" @click="addAnswerVariant()" />
   <!-- </el-radio> -->
   <!-- <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line"> -->
   <!--   <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name"> -->
@@ -20,53 +16,27 @@
   <!--     /> -->
   <!--   </el-form-item> -->
   <!-- </el-form> -->
-  123
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, PropType, Ref } from 'vue';
-
-// import Answer from '@/classes/Answer';
-// import Question from '@/classes/Question';
+import Question from '@/classes/Question';
 // import ResearchResult from '@/classes/ResearchResult';
 // import InputNumber from '@/services/components/InputNumber.vue';
-// props: {
-//   researchResult: {
-//     type: Object as PropType<ResearchResult>,
-//     required: true,
-//   },
-//   question: {
-//     type: Object as PropType<Question>,
-//     required: true,
-//   },
-//   variantId: {
-//     type: String as PropType<string>,
-//     default: '',
-//   },
-// },
-// emits: ['fill'],
-// setup(props, { emit }) {
-//   const answer: Ref<Answer | undefined> = computed(() => {
-//     if (props.variantId !== '') {
-//       return props.researchResult.getQuestionVariantAnswer(props.variantId);
-//     }
-//     return props.researchResult.getOrCreateAnswer(props.question);
-//   });
-//   const filledCheck = (): void => {
-//     if (!answer.value) {
-//       return;
-//     }
-//     answer.value.filled = answer.value.valueNumber === 0 || !!answer.value.valueNumber;
-//     props.researchResult.calculateFilling();
-//     emit('fill');
-//   };
-//
-//   return {
-//     filledCheck,
-//     answer,
-//   };
-// },
-// });
+const props = defineProps({
+  question: {
+    type: Object as PropType<Question>,
+    required: true,
+  },
+});
+const addAnswerVariant = async () => {
+  const item = props.question.addAnswerVariant();
+  await Store.Create('answerVariants', item);
+};
+const removeAnswerVariant = async (id?: string) => {
+  ClassHelper.RemoveFromClassById(id, props.question.answerVariants);
+  const item = props.question.removeAnswerVariant();
+  await Store.Remove('answerVariants', item);
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,11 +1,13 @@
-import FTSP from './classes/filters/FTSP';
 import { getStore } from '@/main';
+
+import FTSP from './classes/filters/FTSP';
 enum Methods {
   GetAll = 'getAll',
   Get = 'get',
   FTSP = 'ftsp',
   Create = 'create',
   Update = 'update',
+  Remove = 'remove',
 }
 
 interface GetAllOptions {
@@ -20,7 +22,7 @@ interface GetOptions {
 }
 
 // import store from '../store';
-import { ComputedRef, computed } from 'vue';
+import { computed, ComputedRef } from 'vue';
 
 export default abstract class Store {
   static async dispatch(request: string, opts?: GetAllOptions) {
@@ -60,6 +62,15 @@ export default abstract class Store {
   static async Update(module: string, data: unknown) {
     await getStore().dispatch(`${module}/${Methods.Update}`, data);
   }
+
+  static async Create(module: string, data: unknown) {
+    await getStore().dispatch(`${module}/${Methods.Create}`, data);
+  }
+
+  static async Remove(module: string, data: unknown) {
+    await getStore().dispatch(`${module}/${Methods.Remove}`, data);
+  }
+
   static Set(moduleAndGetter: string, data: unknown): void {
     getStore().commit(`${moduleAndGetter}`, data);
   }

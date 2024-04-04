@@ -7,7 +7,14 @@ export default class AnswerVariant {
   order = 0;
   showMoreQuestions = false;
 
+  questionId?: string;
+
   constructor(i?: AnswerVariant) {
     ClassHelper.BuildClass(this, i);
+  }
+  static Create(quesionId?: string): AnswerVariant {
+    const item = new AnswerVariant();
+    item.questionId = quesionId;
+    return item;
   }
 }

@@ -6,13 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, Ref } from 'vue';
-
 import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
-import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
 import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
+import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
 import ValueType from '@/services/classes/ValueType';
 import Provider from '@/services/Provider/Provider';
 import ValueTypes from '@/services/types/ValueTypes';
@@ -24,7 +22,6 @@ const props = defineProps({
   },
 });
 
-const researchResult: Ref<ResearchResult> = computed(() => Provider.store.getters['researchesResults/item']);
 const valueType: Ref<ValueType> = computed(() => Provider.store.getters['valueTypes/item']);
 const changeName = () => {};
 const selectType = (item: ValueTypes) => {

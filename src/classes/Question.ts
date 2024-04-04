@@ -36,11 +36,17 @@ export default class Question {
   parent?: Question;
   parentId?: string;
 
+  researchId?: string;
   selected = false;
 
   constructor(i?: Question) {
     ClassHelper.BuildClass(this, i);
     this.changeRelation([this.valueType]);
+  }
+  static Create(researchId?: string): Question {
+    const item = new Question();
+    item.researchId = researchId;
+    return item;
   }
 
   getRegisterPropertyRadioOriginalValue(id: string): string {
@@ -95,19 +101,6 @@ export default class Question {
     this.valueType = valueType;
   }
 
-  // getOthers(propResult: boolean | string | number | Date | null): RegisterPropertyOther[] {
-  //   const radioProperty = this.answers.find((radio: Answer) => radio.id === propResult);
-  //   if (radioProperty) {
-  //     return radioProperty.registerPropertyOthers;
-  //   }
-  //   const setProperty = this.registerPropertySets.find((set: RegisterPropertySet) => set.id === propResult);
-  //   // console.log(setProperty, propResult);
-  //   if (setProperty) {
-  //     return setProperty.registerPropertyOthers;
-  //   }
-  //   return [];
-  // }
-
   editRegisterProperty(isEdit?: boolean): void {
     this.isEdit = isEdit ?? !this.isEdit;
   }
@@ -124,16 +117,6 @@ export default class Question {
     this.questionVariants.push(new QuestionVariant());
   }
 
-  // getRegisterPropertySets(): RegisterPropertySet[] {
-  //   if (this.setFilterString === '') {
-  //     return this.registerPropertySets;
-  //   }
-  //
-  //   return this.registerPropertySets.filter((s: RegisterPropertySet) => {
-  //     return s.name.toLowerCase().includes(this.setFilterString.toLowerCase());
-  //   });
-  // }
-
   getIdWithoutDashes(): string {
     return this.id ? this.id.replaceAll(/[^a-zA-Z]+/g, '') : '';
   }
@@ -148,5 +131,17 @@ export default class Question {
 
   setName(item: string): void {
     this.name = item;
+  }
+
+  addAnswerVariant(): AnswerVariant {
+    const item = AnswerVariant.Create(this.id);
+    item.name = 'Вариант';
+    return item;
+  }
+  addChild(): Question {
+    const item = Question.Create();
+    item.parentId = this.id;
+    item.name = 'Вопрос';
+    return item;
   }
 }

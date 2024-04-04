@@ -1,5 +1,4 @@
 <template>
-  asdfsadf
   <Button v-for="(value, type) in types" :key="value" :text="value" @click="select(type)" />
 </template>
 
@@ -15,6 +14,8 @@ const props = defineProps({
 const types = {
   [ValueTypes.String]: 'Строка',
   [ValueTypes.Number]: 'Число',
+  [ValueTypes.Radio]: 'Выбор из одного варианта',
+  [ValueTypes.Set]: 'Выбор нескольких вариантов',
 };
 const emits = defineEmits(['select']);
 
