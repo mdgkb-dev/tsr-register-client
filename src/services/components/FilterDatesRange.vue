@@ -14,6 +14,15 @@
         <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
       </template>
       <DateInputRange v-model:start="props.model.date1" v-model:end="props.model.date2" @setStart="setStart" @setEnd="setEnd" />
+      <Button
+        button-class="filter-button"
+        text="Сбросить"
+        :with-icon="false"
+        :toggle-mode="true"
+        background-hover="DFF2F8"
+        height="36px"
+      >
+      </Button>
     </GridContainer>
   </InfoItem>
 </template>
@@ -23,6 +32,7 @@ import { PropType, Ref, ref } from 'vue';
 
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Provider from '@/services/Provider/Provider';
+import Button from '@/services/components/Button.vue';
 
 const props = defineProps({
   model: {
