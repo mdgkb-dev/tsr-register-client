@@ -1,9 +1,10 @@
 <template>
+  <StringItem :string="defaultLabel" font-size="14px" padding="0" margin="20px 0 0 10px" />
   <InfoItem
-    margin="0"
+    margin="5px 0 0 0px"
     :with-open-window="false"
     :with-icon="false"
-    height="98px"
+    height="auto"
     background="#F5F5F5"
     border-color="#C4C4C4"
     padding="7px"
@@ -11,7 +12,7 @@
   >
     <!-- <InfoItem margin="0" :with-open-window="false" :with-icon="false" height="auto" background="#F5F5F5" border-color="#C4C4C4" padding="7px" :with-hover="false"> -->
     <template #title>
-      <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
+      <!-- <StringItem :string="defaultLabel" font-size="14px" padding="0" margin="-5px 0 0 0" /> -->
     </template>
 
     <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
@@ -25,7 +26,7 @@
         :toggle-mode="true"
         :inverse="inverse"
         background-hover="DFF2F8"
-        :height="78 / models.length - (models.length - 1) * 2 + 'px'"
+        height="auto"
         @click="setFilter(model.valueEq(filterModel) ? undefined : model)"
       >
       </Button>
@@ -83,6 +84,7 @@ const setFilter = async (model?: FilterModel) => {
   color: #006bb4;
   background: #ffffff;
   font-size: 12px;
+  padding: 10px;
 }
 
 .anticon {

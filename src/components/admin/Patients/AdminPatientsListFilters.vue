@@ -23,21 +23,15 @@
       <GridContainer
         max-width="1500px"
         grid-gap="10px 10px"
-        grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        grid-template-columns="repeat(auto-fit, minmax(300px, 1fr))"
         margin="0 0 0 10px"
       >
-        <GridContainer
-          max-width="500px"
-          grid-gap="10px"
-          grid-template-columns="repeat(auto-fit, minmax(95px, 1fr))"
-          margin="0px"
-          background="#F5F6F8"
-        >
+        <StringItem string="Выберите пол пациента:" font-size="14px" padding="0" margin="20px 0 0 10px" />
           <InfoItem
             title="пол"
-            margin="0"
+            margin="10px 0"
             :with-open-window="false"
-            height="98px"
+            height="auto"
             background="#F5F5F5"
             border-color="#C4C4C4"
             padding="7px"
@@ -48,20 +42,12 @@
           <FiltersButtonsSelect
             :filter-model="filterByDisabilities"
             :models="createDisabilityFilters()"
-            default-label="инвалидность"
+            default-label="Инвалидность"
             @load="$emit('load')"
           />
-        </GridContainer>
-        <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(calc(50% - 7px), 1fr))" margin="0px">
+          <StringItem string="Задайте диапазон дат рождения:" font-size="14px" padding="0" margin="20px 0 0 10px" />
           <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
           <div v-for="question in questions" :key="question.id">
-            <!-- <InfoItem v-if="createCustomFilterModels(question).length === 2" :title="question.name" margin="0"
-              :with-open-window="false" height="98px" background="#F5F5F5" border-color="#C4C4C4" padding="7px"
-              :with-hover="false">
-              <Switch3Pos :first-model="createCustomFilterModels(question)[0]"
-                :second-model="createCustomFilterModels(question)[1]" :default-label="question.name"
-                @load="$emit('load')" />
-            </InfoItem> -->
             <FiltersButtonsSelect
               :models="createCustomFilterModels(question)"
               :default-label="question.name"
@@ -69,8 +55,6 @@
               @load="$emit('load')"
             />
           </div>
-        </GridContainer>
-
         <InfoItem
           title="документы"
           margin="0"

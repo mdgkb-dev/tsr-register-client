@@ -53,7 +53,8 @@ const setEnd = (date: Date) => {
 
 .date-range {
   display: flex;
-  max-width: 300px;
-  justify-content: left;
+  justify-content: space-between;
+  max-width: 100%;
+  // margin: 0 auto;
 }
 </style>

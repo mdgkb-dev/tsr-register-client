@@ -194,6 +194,7 @@ export default defineComponent({
   box-sizing: border-box;
   overflow: hidden;
   overflow-y: auto;
+  max-width: 600px;
 }
 
 .hidden {
