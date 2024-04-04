@@ -18,4 +18,7 @@ export default class SelectedAnswerVariant {
     item.answerVariantId = answerVariantId;
     return item;
   }
+  static GetClassName(): string {
+    return 'selectedAnswerVariant';
+  }
 }

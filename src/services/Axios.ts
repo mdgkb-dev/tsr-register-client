@@ -19,6 +19,7 @@ export default abstract class HttpEngine {
     return await engine({ method: HttpMethods.POST, url: url, headers: headers, responseType: responseType, data: data });
   }
   static async Put(url: string, headers: HttpHeaders, data: unknown): Promise<AxiosPromise> {
+    headers['Content-Type'] = 'multipart/form-data';
     return await engine({ method: HttpMethods.PUT, url: url, headers: headers, data: data });
   }
   static async Delete(url: string, headers: HttpHeaders, data: unknown): Promise<AxiosPromise> {

@@ -1,6 +1,6 @@
 <template>
   <div v-for="variant in question.answerVariants" :key="variant.id">
-    <p>{{ variant.name }}</p>
+    <el-input v-model="variant.name" @blur="updateAnswerVariant(variant)" />
     <Button text="x" @click="removeAnswerVariant(variant.id)" />
   </div>
 
@@ -19,8 +19,9 @@
 </template>
 
 <script setup lang="ts">
+import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
-// import ResearchResult from '@/classes/ResearchResult';
+import ClassHelper from '@/services/ClassHelper';
 // import InputNumber from '@/services/components/InputNumber.vue';
 const props = defineProps({
   question: {
@@ -34,8 +35,10 @@ const addAnswerVariant = async () => {
 };
 const removeAnswerVariant = async (id?: string) => {
   ClassHelper.RemoveFromClassById(id, props.question.answerVariants);
-  const item = props.question.removeAnswerVariant();
-  await Store.Remove('answerVariants', item);
+  await Store.Remove('answerVariants', id);
+};
+const updateAnswerVariant = async (item?: AnswerVariant) => {
+  await Store.Update('answerVariants', item);
 };
 </script>
 

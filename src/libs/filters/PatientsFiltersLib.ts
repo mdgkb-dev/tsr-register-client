@@ -2,6 +2,7 @@ import Answer from '@/classes/Answer';
 import Disability from '@/classes/Disability';
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
+import SelectedAnswerVariant from '@/classes/SelectedAnswerVariant';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import ClassHelper from '@/services/ClassHelper';
 import { DataTypes } from '@/services/interfaces/DataTypes';
@@ -48,6 +49,14 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
 
+  function bySelectedAnswerVariantId(variantId: string, label: string): FilterModel {
+    const filterModel = FilterModel.OnlyIfSecondModelExists(Patient, SelectedAnswerVariant);
+    filterModel.col = 'answerVariantId';
+    filterModel.operator = Operators.In;
+    filterModel.set = [variantId];
+    filterModel.label = label;
+    return filterModel;
+  }
   function withDisabilities(): FilterModel {
     const filterModel = FilterModel.OnlyIfSecondModelExists(Patient, Disability);
     filterModel.label = 'Только с инвалидностью';
@@ -60,6 +69,7 @@ const PatientsFiltersLib = (() => {
     return filterModel;
   }
   return {
+    bySelectedAnswerVariantId,
     byDateBirth,
     byQuestionVariantId,
     withDisabilities,

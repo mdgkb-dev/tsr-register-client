@@ -47,11 +47,11 @@ export default class FileInfo implements IFileInfo {
   }
 
   getImageUrl(): string {
-    return this.url ? this.url : `${process.env.VUE_APP_STATIC_URL}/${this.fileSystemPath}`;
+    return this.url ? this.url : `${import.meta.env.VITE_APP_STATIC_URL}/${this.fileSystemPath}`;
   }
 
   getFileUrl(): string {
-    return this.url ? this.url : `${process.env.VUE_APP_STATIC_URL}/${this.fileSystemPath}`;
+    return this.url ? this.url : `${import.meta.env.VITE_APP_STATIC_URL}/${this.fileSystemPath}`;
   }
 
   getFileListObject(): IFilesList {

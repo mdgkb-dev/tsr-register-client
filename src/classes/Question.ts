@@ -136,6 +136,7 @@ export default class Question {
   addAnswerVariant(): AnswerVariant {
     const item = AnswerVariant.Create(this.id);
     item.name = 'Вариант';
+    this.answerVariants.push(item);
     return item;
   }
   addChild(): Question {

@@ -20,7 +20,6 @@ const types = {
 const emits = defineEmits(['select']);
 
 const select = (t: ValueTypes) => {
-  console.log(t);
   emits('select', t);
 };
 </script>
