@@ -236,11 +236,16 @@ export default class FilterModel {
     return ref(this);
   }
 
-  setDate1(date: Date): void {
+  setDate1(date?: Date): void {
     this.date1 = date;
   }
 
-  setDate2(date: Date): void {
+  setDate2(date?: Date): void {
     this.date2 = date;
+  }
+
+  dropDates(): void {
+    this.setDate1();
+    this.setDate2();
   }
 }

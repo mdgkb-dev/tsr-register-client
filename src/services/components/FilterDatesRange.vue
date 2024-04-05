@@ -13,7 +13,7 @@
       <template #title>
         <StringItem :string="defaultLabel" font-size="10px" padding="0" color="#c4c4c4" />
       </template>
-      <DateInputRange v-model:start="props.model.date1" v-model:end="props.model.date2" @setStart="setStart" @setEnd="setEnd" />
+      <DateInputRange v-model:start="startDate" v-model:end="endDate" @setStart="setStart" @setEnd="setEnd" />
       <Button
         button-class="filter-button"
         text="Сбросить"
@@ -21,8 +21,8 @@
         :toggle-mode="true"
         background-hover="DFF2F8"
         height="36px"
-      >
-      </Button>
+        @click="reset"
+      />
     </GridContainer>
   </InfoItem>
 </template>
@@ -31,8 +31,8 @@
 import { PropType, Ref, ref } from 'vue';
 
 import FilterModel from '@/services/classes/filters/FilterModel';
-import Provider from '@/services/Provider/Provider';
 import Button from '@/services/components/Button.vue';
+import Provider from '@/services/Provider/Provider';
 
 const props = defineProps({
   model: {
@@ -48,6 +48,8 @@ const props = defineProps({
 const emits = defineEmits(['load']);
 const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 
+const startDate = ref(props.model.date1);
+const endDate = ref(props.model.date2);
 // onBeforeMount((): void => {
 //   const findedModel = props.models?.find((m: FilterModel) => Provider.filterQuery.value.findFilterModel(m));
 //   if (findedModel) {
@@ -56,11 +58,13 @@ const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 //   }
 //   setDefaultFilterModel();
 // });
-const setStart = async (): Promise<void> => {
+const setStart = async (date: Date): Promise<void> => {
+  props.model.setDate1(date);
   await setFilter();
 };
 
-const setEnd = async (): Promise<void> => {
+const setEnd = async (date: Date): Promise<void> => {
+  props.model.setDate2(date);
   await setFilter();
 };
 
@@ -68,6 +72,13 @@ const setFilter = async () => {
   Provider.ftsp.value.replaceF(props.model, props.model);
   filterModel.value = props.model;
   await Provider.router.replace({ query: {} });
+  emits('load');
+};
+const reset = async () => {
+  props.model.dropDates();
+  startDate.value = undefined;
+  endDate.value = undefined;
+  Provider.ftsp.value.removeF(props.model);
   emits('load');
 };
 </script>

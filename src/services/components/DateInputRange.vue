@@ -23,7 +23,18 @@ const props = defineProps({
 });
 
 const emits = defineEmits(['update:start', 'update:end', 'setStart', 'setEnd']);
-
+watch(
+  () => [props.start, props.end],
+  () => {
+    console.log('watchDate');
+    if (!props.start) {
+      startDate.value = undefined;
+    }
+    if (!props.end) {
+      endDate.value = undefined;
+    }
+  }
+);
 const startDate = ref(props.start);
 const endDate = ref(props.end);
 
