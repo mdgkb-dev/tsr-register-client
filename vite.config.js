@@ -6,7 +6,8 @@ import Components from 'unplugin-vue-components/vite';
 import { fileURLToPath, URL } from 'url';
 import { defineConfig, loadEnv } from 'vite';
 import svgLoader from 'vite-svg-loader';
-
+import ServicesNames from './src/services/ServicesNames';
+ 
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
@@ -48,7 +49,8 @@ export default ({ mode }) => {
         imports: [
           'vue',
           {
-            '@/services/Main': ['Period', 'Time', 'Scheduler', 'Contact', 'Email', 'Message', 'Provider', 'Router', 'FTSP', 'Store'],
+            '@/services/Main': ServicesNames,
+
             '@/classes/Main': ['Doctor'],
           },
         ],
