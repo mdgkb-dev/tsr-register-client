@@ -63,6 +63,8 @@ declare global {
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
   const markRaw: typeof import('vue')['markRaw']
+  const moveDown: typeof import('@/services/Main')['moveDown']
+  const moveUp: typeof import('@/services/Main')['moveUp']
   const moves: typeof import('@/services/Main')['moves']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
@@ -173,7 +175,8 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly moves: UnwrapRef<typeof import('@/services/Main')['moves']>
+    readonly moveDown: UnwrapRef<typeof import('@/services/Main')['moveDown']>
+    readonly moveUp: UnwrapRef<typeof import('@/services/Main')['moveUp']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -276,7 +279,8 @@ declare module '@vue/runtime-core' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly moves: UnwrapRef<typeof import('@/services/Main')['moves']>
+    readonly moveDown: UnwrapRef<typeof import('@/services/Main')['moveDown']>
+    readonly moveUp: UnwrapRef<typeof import('@/services/Main')['moveUp']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>

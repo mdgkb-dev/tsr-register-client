@@ -24,7 +24,7 @@ import Favourite from './Favourite';
 import GetExtension from './GetExtension';
 import HttpClient from './HttpClient';
 import MakeCarousel from './MakeCarousel';
-import moves from './moves';
+import { moveDown, moveUp } from './moves';
 import Period from './Period';
 import PhoneService from './PhoneService';
 import Provider from './Provider/Provider';
@@ -34,9 +34,7 @@ import Scroll from './Scroll';
 import sort from './sort';
 import Store from './Store';
 import Strings from './Strings';
-import Swapper from './Swapper';
 import Time from './Time';
-import TimeFormatter from './TimeFormatter';
 import Token from './Token';
 import useConfirmLeavePage from './useConfirmLeavePage';
 import User from './User';
@@ -70,7 +68,8 @@ export {
   HttpClient,
   MakeCarousel,
   Message,
-  moves,
+  moveDown,
+  moveUp,
   Period,
   PhoneService,
   Provider,
@@ -80,9 +79,7 @@ export {
   sort,
   Store,
   Strings,
-  Swapper,
   Time,
-  TimeFormatter,
   Token,
   useConfirmLeavePage,
   User,
