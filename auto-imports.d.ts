@@ -115,49 +115,19 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
-    readonly Arrays: UnwrapRef<typeof import('@/services/Main')['Arrays']>
-    readonly Axios: UnwrapRef<typeof import('@/services/Main')['Axios']>
-    readonly Cache: UnwrapRef<typeof import('@/services/Main')['Cache']>
-    readonly CarouselSwipe: UnwrapRef<typeof import('@/services/Main')['CarouselSwipe']>
-    readonly ClassHelper: UnwrapRef<typeof import('@/services/Main')['ClassHelper']>
-    readonly Color: UnwrapRef<typeof import('@/services/Main')['Color']>
-    readonly Confirm: UnwrapRef<typeof import('@/services/Main')['Confirm']>
     readonly Contact: UnwrapRef<typeof import('@/services/Main')['Contact']>
-    readonly CreateSortModels: UnwrapRef<typeof import('@/services/Main')['CreateSortModels']>
-    readonly Cursor: UnwrapRef<typeof import('@/services/Main')['Cursor']>
-    readonly DateFormat: UnwrapRef<typeof import('@/services/Main')['DateFormat']>
-    readonly DateMask: UnwrapRef<typeof import('@/services/Main')['DateMask']>
-    readonly Dates: UnwrapRef<typeof import('@/services/Main')['Dates']>
-    readonly DatesFormatter: UnwrapRef<typeof import('@/services/Main')['DatesFormatter']>
     readonly Doctor: UnwrapRef<typeof import('@/classes/Main')['Doctor']>
-    readonly Dragger: UnwrapRef<typeof import('@/services/Main')['Dragger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Email: UnwrapRef<typeof import('@/services/Main')['Email']>
     readonly FTSP: UnwrapRef<typeof import('@/services/Main')['FTSP']>
-    readonly Favourite: UnwrapRef<typeof import('@/services/Main')['Favourite']>
-    readonly GetExtension: UnwrapRef<typeof import('@/services/Main')['GetExtension']>
-    readonly HttpClient: UnwrapRef<typeof import('@/services/Main')['HttpClient']>
-    readonly MakeCarousel: UnwrapRef<typeof import('@/services/Main')['MakeCarousel']>
     readonly Message: UnwrapRef<typeof import('@/services/Main')['Message']>
     readonly Period: UnwrapRef<typeof import('@/services/Main')['Period']>
-    readonly PhoneService: UnwrapRef<typeof import('@/services/Main')['PhoneService']>
     readonly Provider: UnwrapRef<typeof import('@/services/Main')['Provider']>
     readonly Router: UnwrapRef<typeof import('@/services/Main')['Router']>
     readonly Scheduler: UnwrapRef<typeof import('@/services/Main')['Scheduler']>
-    readonly Scroll: UnwrapRef<typeof import('@/services/Main')['Scroll']>
     readonly Store: UnwrapRef<typeof import('@/services/Main')['Store']>
-    readonly Strings: UnwrapRef<typeof import('@/services/Main')['Strings']>
-    readonly Swapper: UnwrapRef<typeof import('@/services/Main')['Swapper']>
     readonly Time: UnwrapRef<typeof import('@/services/Main')['Time']>
-    readonly TimeFormatter: UnwrapRef<typeof import('@/services/Main')['TimeFormatter']>
-    readonly Token: UnwrapRef<typeof import('@/services/Main')['Token']>
-    readonly User: UnwrapRef<typeof import('@/services/Main')['User']>
-    readonly WaitElement: UnwrapRef<typeof import('@/services/Main')['WaitElement']>
-    readonly WebSocketClient: UnwrapRef<typeof import('@/services/Main')['WebSocketClient']>
-    readonly brandColors: UnwrapRef<typeof import('@/services/Main')['brandColors']>
-    readonly buildNameNumbers: UnwrapRef<typeof import('@/services/Main')['buildNameNumbers']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
-    readonly countRating: UnwrapRef<typeof import('@/services/Main')['countRating']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
@@ -172,7 +142,6 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly moves: UnwrapRef<typeof import('@/services/Main')['moves']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -195,7 +164,6 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
-    readonly sort: UnwrapRef<typeof import('@/services/Main')['sort']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
@@ -203,11 +171,9 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useConfirmLeavePage: UnwrapRef<typeof import('@/services/Main')['useConfirmLeavePage']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly validate: UnwrapRef<typeof import('@/services/Main')['validate']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
@@ -217,49 +183,19 @@ declare module 'vue' {
 declare module '@vue/runtime-core' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
-    readonly Arrays: UnwrapRef<typeof import('@/services/Main')['Arrays']>
-    readonly Axios: UnwrapRef<typeof import('@/services/Main')['Axios']>
-    readonly Cache: UnwrapRef<typeof import('@/services/Main')['Cache']>
-    readonly CarouselSwipe: UnwrapRef<typeof import('@/services/Main')['CarouselSwipe']>
-    readonly ClassHelper: UnwrapRef<typeof import('@/services/Main')['ClassHelper']>
-    readonly Color: UnwrapRef<typeof import('@/services/Main')['Color']>
-    readonly Confirm: UnwrapRef<typeof import('@/services/Main')['Confirm']>
     readonly Contact: UnwrapRef<typeof import('@/services/Main')['Contact']>
-    readonly CreateSortModels: UnwrapRef<typeof import('@/services/Main')['CreateSortModels']>
-    readonly Cursor: UnwrapRef<typeof import('@/services/Main')['Cursor']>
-    readonly DateFormat: UnwrapRef<typeof import('@/services/Main')['DateFormat']>
-    readonly DateMask: UnwrapRef<typeof import('@/services/Main')['DateMask']>
-    readonly Dates: UnwrapRef<typeof import('@/services/Main')['Dates']>
-    readonly DatesFormatter: UnwrapRef<typeof import('@/services/Main')['DatesFormatter']>
     readonly Doctor: UnwrapRef<typeof import('@/classes/Main')['Doctor']>
-    readonly Dragger: UnwrapRef<typeof import('@/services/Main')['Dragger']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Email: UnwrapRef<typeof import('@/services/Main')['Email']>
     readonly FTSP: UnwrapRef<typeof import('@/services/Main')['FTSP']>
-    readonly Favourite: UnwrapRef<typeof import('@/services/Main')['Favourite']>
-    readonly GetExtension: UnwrapRef<typeof import('@/services/Main')['GetExtension']>
-    readonly HttpClient: UnwrapRef<typeof import('@/services/Main')['HttpClient']>
-    readonly MakeCarousel: UnwrapRef<typeof import('@/services/Main')['MakeCarousel']>
     readonly Message: UnwrapRef<typeof import('@/services/Main')['Message']>
     readonly Period: UnwrapRef<typeof import('@/services/Main')['Period']>
-    readonly PhoneService: UnwrapRef<typeof import('@/services/Main')['PhoneService']>
     readonly Provider: UnwrapRef<typeof import('@/services/Main')['Provider']>
     readonly Router: UnwrapRef<typeof import('@/services/Main')['Router']>
     readonly Scheduler: UnwrapRef<typeof import('@/services/Main')['Scheduler']>
-    readonly Scroll: UnwrapRef<typeof import('@/services/Main')['Scroll']>
     readonly Store: UnwrapRef<typeof import('@/services/Main')['Store']>
-    readonly Strings: UnwrapRef<typeof import('@/services/Main')['Strings']>
-    readonly Swapper: UnwrapRef<typeof import('@/services/Main')['Swapper']>
     readonly Time: UnwrapRef<typeof import('@/services/Main')['Time']>
-    readonly TimeFormatter: UnwrapRef<typeof import('@/services/Main')['TimeFormatter']>
-    readonly Token: UnwrapRef<typeof import('@/services/Main')['Token']>
-    readonly User: UnwrapRef<typeof import('@/services/Main')['User']>
-    readonly WaitElement: UnwrapRef<typeof import('@/services/Main')['WaitElement']>
-    readonly WebSocketClient: UnwrapRef<typeof import('@/services/Main')['WebSocketClient']>
-    readonly brandColors: UnwrapRef<typeof import('@/services/Main')['brandColors']>
-    readonly buildNameNumbers: UnwrapRef<typeof import('@/services/Main')['buildNameNumbers']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
-    readonly countRating: UnwrapRef<typeof import('@/services/Main')['countRating']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
@@ -274,7 +210,6 @@ declare module '@vue/runtime-core' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
-    readonly moves: UnwrapRef<typeof import('@/services/Main')['moves']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly onActivated: UnwrapRef<typeof import('vue')['onActivated']>
     readonly onBeforeMount: UnwrapRef<typeof import('vue')['onBeforeMount']>
@@ -297,7 +232,6 @@ declare module '@vue/runtime-core' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
-    readonly sort: UnwrapRef<typeof import('@/services/Main')['sort']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
@@ -305,11 +239,9 @@ declare module '@vue/runtime-core' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
-    readonly useConfirmLeavePage: UnwrapRef<typeof import('@/services/Main')['useConfirmLeavePage']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
-    readonly validate: UnwrapRef<typeof import('@/services/Main')['validate']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
