@@ -14,6 +14,7 @@ const props = defineProps({
 const types = {
   [ValueTypes.String]: 'Строка',
   [ValueTypes.Number]: 'Число',
+  [ValueTypes.Date]: 'Дата',
   [ValueTypes.Radio]: 'Выбор из одного варианта',
   [ValueTypes.Set]: 'Выбор нескольких вариантов',
 };

@@ -5,17 +5,16 @@
   </div>
 
   <Button text="Добавить" @click="addAnswerVariant()" />
-  <!-- </el-radio> -->
-  <!-- <el-form v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line"> -->
-  <!--   <el-form-item v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name"> -->
-  <!--     <component -->
-  <!--       :is="additionalQuestion.valueType.getComponentType()" -->
-  <!--       :research-result="researchResult" -->
-  <!--       :question="additionalQuestion" -->
-  <!--       @fill="$emit('fill')" -->
-  <!--     /> -->
-  <!--   </el-form-item> -->
-  <!-- </el-form> -->
+  <div v-if="selectedVariant && selectedVariant.showMoreQuestions" class="line">
+    <div v-for="additionalQuestion in question.children" :key="additionalQuestion.id" :label="additionalQuestion.name">
+      <component
+        :is="additionalQuestion.valueType.getComponentType()"
+        :research-result="researchResult"
+        :question="additionalQuestion"
+        @fill="$emit('fill')"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

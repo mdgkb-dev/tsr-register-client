@@ -88,11 +88,15 @@ export default class Research {
   }
 
   getQuestionsByString(): Question[] {
-    return this.filterString === '' ? this.questions : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
+    return this.filterString === ''
+      ? this.questions
+      : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
   }
 
   getFilteredQuestions(researchResult: ResearchResult): Question[] {
-    return this.showOnlyNotFilled ? this.getNotFilledQuestions(researchResult, this.getQuestionsByString()) : this.getFilledQuestions(researchResult, this.getQuestionsByString());
+    return this.showOnlyNotFilled
+      ? this.getNotFilledQuestions(researchResult, this.getQuestionsByString())
+      : this.getFilledQuestions(researchResult, this.getQuestionsByString());
   }
 
   selectFormula(item: Formula): void {
@@ -130,5 +134,9 @@ export default class Research {
     });
 
     return data;
+  }
+
+  setQuestionsOrder(): void {
+    this.questions.forEach((q: Question, i: number) => (q.order = i));
   }
 }

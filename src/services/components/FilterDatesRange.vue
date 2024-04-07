@@ -60,6 +60,11 @@ const endDate = ref(props.model.date2);
 // });
 const setStart = async (date: Date): Promise<void> => {
   props.model.setDate1(date);
+  console.log(props.model.date2);
+  if (!props.model.date2) {
+    props.model.setDate2(props.model.date1);
+    endDate.value = props.model.date2;
+  }
   await setFilter();
 };
 

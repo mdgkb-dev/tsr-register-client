@@ -2,37 +2,46 @@
   <div class="research-info">
     <div class="scroll-block">
       <CollapseContainer>
-        <CollapseItem
-          v-for="question in research.questions"
-          :key="question.id"
-          :tab-id="question.id"
-          :active-id="question.id"
-          :is-collaps="true"
-          background="#DFF2F8"
-          background-attention="#EECEAF"
-          margin-top="20px"
-        >
-          <template #tools> 1 </template>
-          <template #inside-title>
-            {{ question.order + 1 }}
-            <el-input v-model="question.name" @blur="setName" />
-          </template>
-          <template #inside-content>
-            <div :id="question.getIdWithoutDashes()" class="background-container">
-              <QuestionEdit :question="question" />
+        <draggable :list="research.questions" item-key="id" @end="updateOrder">
+          <template #item="{ element }">
+            <div>
+              <CollapseItem
+                :tab-id="element.id"
+                :active-id="element.id"
+                :is-collaps="true"
+                background="#DFF2F8"
+                background-attention="#EECEAF"
+                margin-top="20px"
+              >
+                <template #inside-title>
+                  {{ element.order + 1 }}
+                  <el-input v-model="element.name" @blur="setName" />
+                  <Button text="удалить" @click="removeQuestion(element.id)" />
+                </template>
+                <template #inside-content>
+                  <div :id="element.getIdWithoutDashes()" class="background-container">
+                    <QuestionEdit :question="element" />
+                  </div>
+                </template>
+              </CollapseItem>
             </div>
           </template>
-        </CollapseItem>
+        </draggable>
       </CollapseContainer>
+      <Button text="Добавить вопрос" @click="addQuestion()" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Research from '@/classes/Research';
-import Provider from '@/services/Provider/Provider';
+import draggable from 'vuedraggable';
 
-const research: Ref<Research> = computed(() => Provider.store.getters['researches/item']);
+import Research from '@/classes/Research';
+import ClassHelper from '@/services/ClassHelper';
+import Provider from '@/services/Provider/Provider';
+import sort from '@/services/sort';
+
+const research: Ref<Research> = Store.Item('researches');
 // const filteredQuestions: ComputedRef<Question[]> = computed(() => {
 //   return research.value.getFilteredQuestions(researchResult.value);
 // });
@@ -41,11 +50,30 @@ const selectMode = ref(false);
 
 const update = async () => {
   Provider.withHeadLoader(async () => {
-    await Provider.store.dispatch('researches/update');
+    await Store.Update('researches');
   });
 };
 const setName = () => {
   // props.question.setName(name.value);
+};
+const addQuestion = async () => {
+  const item = research.value.addQuestion();
+  await Store.Create('questions', item);
+};
+const removeQuestion = async (id: string) => {
+  ClassHelper.RemoveFromClassById(id, research.value.questions);
+  await Store.Remove('questions', id);
+  research.value.setQuestionsOrder();
+  sort(research.value.questions);
+  research.value.questions.forEach((q: Question) => {
+    Store.Update('questions', q);
+  });
+};
+const updateOrder = async (): Promise<void> => {
+  sort(research.value.questions);
+  research.value.questions.forEach((q: Question) => {
+    Store.Update('questions', q);
+  });
 };
 </script>
 
