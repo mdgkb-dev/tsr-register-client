@@ -27,61 +27,61 @@
         margin="0 0 0 10px"
       >
         <StringItem string="Выберите пол пациента:" font-size="14px" padding="0" margin="20px 0 0 10px" />
-          <InfoItem
-            title="пол"
-            margin="10px 0"
-            :with-open-window="false"
-            height="auto"
-            background="#F5F5F5"
-            border-color="#C4C4C4"
-            padding="7px"
-            :with-hover="false"
-          >
-            <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
-          </InfoItem>
-          <FiltersButtonsSelect
-            :filter-model="filterByDisabilities"
-            :models="createDisabilityFilters()"
-            default-label="Инвалидность"
-            @load="$emit('load')"
-          />
-          <StringItem string="Задайте диапазон дат рождения:" font-size="14px" padding="0" margin="20px 0 0 10px" />
-          <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
-          <div v-for="question in questions" :key="question.id">
-            <FiltersButtonsSelect
-              :models="createCustomFilterModels(question)"
-              :default-label="question.name"
-              :inverse="true"
-              @load="$emit('load')"
-            />
-          </div>
         <InfoItem
-          title="документы"
-          margin="0"
+          title="пол"
+          margin="10px 0"
           :with-open-window="false"
-          height="98px"
+          height="auto"
           background="#F5F5F5"
           border-color="#C4C4C4"
           padding="7px"
           :with-hover="false"
         >
-          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <GridContainer
-              max-width="100%"
-              grid-gap="7px"
-              grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))"
-              margin="0px"
-            >
-              <Button text="Паспорт" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-              <Button text="СНИЛС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-              <Button text="ОМС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-            </GridContainer>
-            <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px">
-              <Button text="Свидетельство пенсионера" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-              <Button text="Удостоверение инвалида" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" />
-            </GridContainer>
-          </GridContainer>
+          <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
         </InfoItem>
+        <FiltersButtonsSelect
+          :filter-model="filterByDisabilities"
+          :models="createDisabilityFilters()"
+          default-label="Инвалидность"
+          @load="$emit('load')"
+        />
+        <StringItem string="Задайте диапазон дат рождения:" font-size="14px" padding="0" margin="20px 0 0 10px" />
+        <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
+        <div v-for="question in questions" :key="question.id">
+          <FiltersButtonsSelect
+            :models="createCustomFilterModels(question)"
+            :default-label="question.name"
+            :inverse="true"
+            @load="$emit('load')"
+          />
+        </div>
+        <!-- <InfoItem -->
+        <!--   title="документы" -->
+        <!--   margin="0" -->
+        <!--   :with-open-window="false" -->
+        <!--   height="98px" -->
+        <!--   background="#F5F5F5" -->
+        <!--   border-color="#C4C4C4" -->
+        <!--   padding="7px" -->
+        <!--   :with-hover="false" -->
+        <!-- > -->
+        <!--   <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px"> -->
+        <!--     <GridContainer -->
+        <!--       max-width="100%" -->
+        <!--       grid-gap="7px" -->
+        <!--       grid-template-columns="repeat(auto-fit, minmax(calc(33% - 7px), 1fr))" -->
+        <!--       margin="0px" -->
+        <!--     > -->
+        <!--       <Button text="Паспорт" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" /> -->
+        <!--       <Button text="СНИЛС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" /> -->
+        <!--       <Button text="ОМС" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" /> -->
+        <!--     </GridContainer> -->
+        <!--     <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(88px, 1fr))" margin="0px"> -->
+        <!--       <Button text="Свидетельство пенсионера" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" /> -->
+        <!--       <Button text="Удостоверение инвалида" button-class="button-filter" background-hover="#DFF2F8" :toggle-mode="true" /> -->
+        <!--     </GridContainer> -->
+        <!--   </GridContainer> -->
+        <!-- </InfoItem> -->
       </GridContainer>
     </template>
     <template #download>
@@ -158,11 +158,20 @@ const createRegistersOptions = (): IOption[] => {
 
 const createCustomFilterModels = (question: Question): FilterModel[] => {
   const filterModels: FilterModel[] = [];
-  question.answerVariants.forEach((a: AnswerVariant) => {
-    if (a.id) {
-      filterModels.push(PatientsFiltersLib.byQuestionVariantId(a.id, a.name));
-    }
-  });
+  if (question.valueType.isRadio()) {
+    question.answerVariants.forEach((a: AnswerVariant) => {
+      if (a.id) {
+        filterModels.push(PatientsFiltersLib.byQuestionVariantId(a.id, a.name));
+      }
+    });
+  }
+  if (question.valueType.isSet()) {
+    question.answerVariants.forEach((a: AnswerVariant) => {
+      if (a.id) {
+        filterModels.push(PatientsFiltersLib.bySelectedAnswerVariantId(a.id, a.name));
+      }
+    });
+  }
   return filterModels;
 };
 

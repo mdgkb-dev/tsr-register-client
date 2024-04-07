@@ -14,6 +14,7 @@ export default class AnswerVariant {
   }
   static Create(quesionId?: string): AnswerVariant {
     const item = new AnswerVariant();
+    item.id = ClassHelper.CreateUUID();
     item.questionId = quesionId;
     return item;
   }

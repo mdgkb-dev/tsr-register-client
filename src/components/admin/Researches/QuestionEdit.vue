@@ -2,6 +2,7 @@
   <SelectValueType :selected-type="question.valueType" @select="selectType" />
 
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
+  <hr />
   <component :is="component" :question="question" />
 </template>
 
@@ -22,12 +23,13 @@ const props = defineProps({
   },
 });
 
-const valueType: Ref<ValueType> = computed(() => Provider.store.getters['valueTypes/item']);
-const changeName = () => {};
-const selectType = (item: ValueTypes) => {
-  Provider.store.dispatch('valueTypes/get', item);
+const valueType: Ref<ValueType> = Store.Item('valueTypes');
+
+const selectType = async (itemName: string) => {
+  await Store.Get('valueTypes', itemName);
   props.question.setType(valueType.value);
 };
+
 const components = {
   num: NumberPropEdit,
   string: StringPropEdit,

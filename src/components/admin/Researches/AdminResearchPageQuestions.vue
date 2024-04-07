@@ -15,10 +15,12 @@
           <template #tools> 1 </template>
           <template #inside-title>
             {{ question.order + 1 }}
-            <el-input v-model="question.name" @blur="setName"></el-input>
+            <el-input v-model="question.name" @blur="setName" />
           </template>
           <template #inside-content>
-            <QuestionEdit :question="question" />
+            <div :id="question.getIdWithoutDashes()" class="background-container">
+              <QuestionEdit :question="question" />
+            </div>
           </template>
         </CollapseItem>
       </CollapseContainer>
@@ -50,102 +52,33 @@ const setName = () => {
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
-
-.tools-panel {
-  width: 100%;
-  height: 60px;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  padding: 13px 0 0 0;
-}
-
-:deep(.icon-download) {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  stroke: #006bb4;
-  fill: none;
-}
-
-:deep(.icon-aright) {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  fill: #006bb4;
-}
-
-.download-button {
-  width: 52px;
-  height: 52px;
-  color: #006bb4;
-  background: #ffffff;
-  margin: 0px;
-}
-
-.download-button:hover {
+.research-info {
+  width: calc(100% - 22px);
+  height: calc(100% - 22px);
   background: #dff2f8;
+  margin: 0;
+  padding: 0px 10px 10px 10px;
+}
+.scroll-block {
+  width: 100%;
+  height: calc(100% - 60px);
+  overflow: hidden;
+  overflow-y: auto;
 }
 
-.button-download-field {
-  width: 250px;
-  height: 50px;
+.background-container {
+  width: auto;
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  background: #dff2f8;
   background: #ffffff;
-  border: 1px solid #006bb4;
-  border-left: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.field {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.save-button {
-  width: 100%;
   border-radius: 5px;
-  height: 42px;
-  color: #006bb4;
-  background: #dff2f8;
-  margin: 0 5px;
-  font-size: 14px;
+  border: 1px solid #c3c3c3;
 }
 
-.select-field {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #c4c4c4;
-  opacity: 0.2;
-  width: 100%;
-  height: 100%;
-}
-
-.selected-field {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.check-icon {
-  width: 40px;
-  height: 40px;
-  fill: #00b5a4;
-  fill-opacity: 0.6;
+@media screen and (max-width: 630px) {
+  .research-info {
+    margin: 0 0 10px 0;
+  }
 }
 </style>
