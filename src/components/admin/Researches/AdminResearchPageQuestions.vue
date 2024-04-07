@@ -22,6 +22,7 @@
                   <div :id="element.getIdWithoutDashes()" class="background-container">
                     <QuestionEdit :question="element" />
                   </div>
+                  <!-- <QuestionChildrenEdit :question="question"/> -->
                 </template>
               </CollapseItem>
             </div>

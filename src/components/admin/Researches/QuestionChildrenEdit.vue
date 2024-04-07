@@ -1,22 +1,21 @@
 <template>
-  <draggable :list="question.children" item-key="id" @end="updateOrder">
-    <template #item="{ element }">
-      <SelectValueType :selected-type="question.valueType" @select="(e) => selectType(e, element)" />
+  <SelectValueType :selected-type="question.valueType" @select="selectType" />
 
-      <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
-      <hr />
-      <component :is="component" :question="question" />
-    </template>
-  </draggable>
+  <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
+  <hr />
+  <component :is="component" :question="question" />
 </template>
 
 <script setup lang="ts">
 import Question from '@/classes/Question';
+import ResearchResult from '@/classes/ResearchResult';
 import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
 import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
 import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
 import ValueType from '@/services/classes/ValueType';
-import sort from '@/services/sort';
+import Provider from '@/services/Provider/Provider';
+import ValueTypes from '@/services/types/ValueTypes';
+
 const props = defineProps({
   question: {
     type: Object as PropType<Question>,
@@ -46,12 +45,6 @@ const component = computed(() => {
   }
   return 'no';
 });
-const updateOrder = async (): Promise<void> => {
-  sort(props.question.children);
-  props.question.children.forEach((q: Question) => {
-    Store.Update('questions', q);
-  });
-};
 </script>
 
 <style lang="scss" scoped></style>

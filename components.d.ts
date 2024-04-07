@@ -178,6 +178,7 @@ declare module '@vue/runtime-core' {
     PhoneForm: typeof import('./src/services/components/PhoneForm.vue')['default']
     PopoverInfo: typeof import('./src/components/PopoverInfo.vue')['default']
     PropertyHeader: typeof import('./src/components/admin/Research/PropertyHeader.vue')['default']
+    QuestionChildrenEdit: typeof import('./src/components/admin/Researches/QuestionChildrenEdit.vue')['default']
     QuestionComponent: typeof import('./src/components/admin/Patients/QuestionComponent.vue')['default']
     QuestionEdit: typeof import('./src/components/admin/Researches/QuestionEdit.vue')['default']
     RadioProp: typeof import('./src/components/admin/Research/RadioProp.vue')['default']
