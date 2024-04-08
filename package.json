@@ -6,6 +6,7 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build --mode prod",
+    "start": "vite preview --port 8082",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix"
   },
