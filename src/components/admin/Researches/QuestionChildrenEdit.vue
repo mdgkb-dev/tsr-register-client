@@ -42,8 +42,10 @@ const addChild = async () => {
   await Store.Create('questions', item);
 };
 const removeQuestion = async (id: string) => {
-  ClassHelper.RemoveFromClassById(id, props.question.children);
   await Store.Remove('questions', id);
+  console.log(id);
+  ClassHelper.RemoveFromClassById(id, props.question.children);
+  console.log(id);
   sort(props.question.children);
   props.question.children.forEach((q: Question) => {
     Store.Update('questions', q);
