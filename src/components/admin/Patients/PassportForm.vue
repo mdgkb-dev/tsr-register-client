@@ -255,6 +255,7 @@ export default defineComponent({
   //   margin-left: 5px;
   //   font-size: 14px;
   //   margin-bottom: 6px;
+  //   justify-content: left;
   // }
 
   // :deep(.el-input__prefix) {
@@ -298,6 +299,7 @@ export default defineComponent({
     margin-left: 5px;
     font-size: 14px;
     margin-bottom: 6px;
+    justify-content: left;
   }
 
   :deep(.el-input-number__increase) {

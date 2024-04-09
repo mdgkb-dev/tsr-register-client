@@ -1,20 +1,6 @@
 <template>
   <el-form>
-    <LeftRightContainer left-width="280px">
-      <template #left>
-        <!-- <UploaderSingleScan -->
-        <!--   :file-info="event.image" -->
-        <!--   :height="280" -->
-        <!--   :default-ratio="1" -->
-        <!--   :emit-crop="true" -->
-        <!--   @ratio="(e) => (element.ratio = e)" -->
-        <!--   @crop="savePhoto" -->
-        <!-- /> -->
-        <!-- <div class="left-title"> -->
-        <!--   Статус: -->
-        <!--   <StringItem string="Ожидается" color="#006BB4" margin="0 10px" /> -->
-        <!-- </div> -->
-      </template>
+    <LeftRightContainer>
       <template #right>
         <div class="container">
           <el-form-item label="Название" prop="surname">
@@ -133,6 +119,7 @@ const update = async () => {
   margin-left: 5px;
   font-size: 14px;
   margin-bottom: 6px;
+  justify-content: left;
 }
 
 :deep(.el-input-number__increase) {
