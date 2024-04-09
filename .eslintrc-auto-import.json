@@ -110,6 +110,7 @@
     "useConfirmLeavePage": true,
     "validate": true,
     "moveDown": true,
-    "moveUp": true
+    "moveUp": true,
+    "Hooks": true
   }
 }

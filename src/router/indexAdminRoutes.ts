@@ -5,6 +5,7 @@ import AdminPatientsRoutes from '@/router/AdminPatientsRoutes';
 import AdminRepresentativeRoutes from '@/router/AdminRepresentativeRoutes';
 
 import AdminResearchesRouters from './AdminResearchesRouters';
+import AdminUsersRouters from './AdminUsersRouters';
 
 export default [
   ...AdminPatientsRoutes,
@@ -13,4 +14,5 @@ export default [
   ...AdminDrugArrivesRoutes,
   ...AdminCommissionsRoutes,
   ...AdminResearchesRouters,
+  ...AdminUsersRouters,
 ];

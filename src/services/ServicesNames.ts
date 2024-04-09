@@ -44,7 +44,7 @@ const ServicesNames = [
   'validate',
   'WaitElement',
   'WebSocketClient',
+  'Hooks',
 ];
 
 export default ServicesNames;
-

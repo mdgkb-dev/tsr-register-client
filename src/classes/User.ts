@@ -48,4 +48,7 @@ export default class User {
   //   );
   //   return props;
   // }
+  static GetClassName(): string {
+    return 'user';
+  }
 }

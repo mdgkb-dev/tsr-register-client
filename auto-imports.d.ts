@@ -27,6 +27,7 @@ declare global {
   const FTSP: typeof import('@/services/Main')['FTSP']
   const Favourite: typeof import('@/services/Main')['Favourite']
   const GetExtension: typeof import('@/services/Main')['GetExtension']
+  const Hooks: typeof import('@/services/Main')['Hooks']
   const HttpClient: typeof import('@/services/Main')['HttpClient']
   const MakeCarousel: typeof import('@/services/Main')['MakeCarousel']
   const Message: typeof import('@/services/Main')['Message']
@@ -138,6 +139,7 @@ declare module 'vue' {
     readonly FTSP: UnwrapRef<typeof import('@/services/Main')['FTSP']>
     readonly Favourite: UnwrapRef<typeof import('@/services/Main')['Favourite']>
     readonly GetExtension: UnwrapRef<typeof import('@/services/Main')['GetExtension']>
+    readonly Hooks: UnwrapRef<typeof import('@/services/Main')['Hooks']>
     readonly HttpClient: UnwrapRef<typeof import('@/services/Main')['HttpClient']>
     readonly MakeCarousel: UnwrapRef<typeof import('@/services/Main')['MakeCarousel']>
     readonly Message: UnwrapRef<typeof import('@/services/Main')['Message']>
@@ -242,6 +244,7 @@ declare module '@vue/runtime-core' {
     readonly FTSP: UnwrapRef<typeof import('@/services/Main')['FTSP']>
     readonly Favourite: UnwrapRef<typeof import('@/services/Main')['Favourite']>
     readonly GetExtension: UnwrapRef<typeof import('@/services/Main')['GetExtension']>
+    readonly Hooks: UnwrapRef<typeof import('@/services/Main')['Hooks']>
     readonly HttpClient: UnwrapRef<typeof import('@/services/Main')['HttpClient']>
     readonly MakeCarousel: UnwrapRef<typeof import('@/services/Main')['MakeCarousel']>
     readonly Message: UnwrapRef<typeof import('@/services/Main')['Message']>

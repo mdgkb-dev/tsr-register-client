@@ -1,10 +1,8 @@
 <template>
   <AdminListWrapper v-if="mounted" pagination show-header>
-    <!-- <AdminResearchesListFilters @load="loadResearches" /> -->
-
     <div class="scroll-block">
-      <div class="research-count">Количество исследований: {{ count }}</div>
-      <div v-for="research in researches" :key="research.id">
+      <div class="user-count">Количество пользователей: {{ count }}</div>
+      <div v-for="user in users" :key="user.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
             <div class="flex-block" @click.prevent="() => undefined">
@@ -15,9 +13,9 @@
                     color="#006bb4"
                     icon="edit"
                     icon-class="edit-icon"
-                    @click="Provider.editAdmin(research.id)"
+                    @click="Provider.editAdmin(user.id)"
                   />
-                  <StringItem :string="research.name" />
+                  <StringItem :string="user.name" />
                 </div>
               </div>
               <div class="item-flex">
@@ -30,42 +28,40 @@
     </div>
   </AdminListWrapper>
   <ModalWindow :show="showAddModal" title="Добавить пациента" @close="showAddModal = false">
-    <CreateResearchForm @add="showAddModal = false" />
+    <CreateUserForm @add="showAddModal = false" />
   </ModalWindow>
 </template>
 
 <script lang="ts" setup>
-import Research from '@/classes/Research';
-import ResearchesSortsLib from '@/libs/sorts/ResearchesSortsLib';
-import Hooks from '@/services/Hooks/Hooks';
-import Provider from '@/services/Provider/Provider';
+import User from '@/classes/User';
+// import UsersSortsLib from '@/libs/sorts/UsersSortsLib';
 
 const showAddModal: Ref<boolean> = ref(false);
-const researches: Ref<Research[]> = computed(() => Provider.store.getters['researches/items']);
-const count: Ref<number> = computed(() => Provider.store.getters['researches/count']);
+const users: Ref<User[]> = Store.Items('users');
+const count: Ref<number> = Store.Count('users');
 
 const mounted = ref(false);
 
-const loadResearches = async () => {
-  await Provider.store.dispatch('researches/ftsp');
+const loadUsers = async () => {
+  await Store.FTSP('users');
   mounted.value = true;
 };
 
 const load = async () => {
-  await Promise.all([loadResearches()]);
+  await Promise.all([loadUsers()]);
 };
 
-const addResearch = async (): Promise<void> => {
+const addUser = async (): Promise<void> => {
   showAddModal.value = !showAddModal.value;
 };
 
 Hooks.onBeforeMount(load, {
   adminHeader: {
-    title: 'Исследования',
-    buttons: [{ text: 'Добавить', type: 'normal-button', action: addResearch }],
+    title: 'Пользователи',
+    buttons: [{ text: 'Добавить', type: 'normal-button', action: addUser }],
   },
-  pagination: { storeModule: 'researches', action: 'ftsp' },
-  sortsLib: ResearchesSortsLib,
+  pagination: { storeModule: 'users', action: 'ftsp' },
+  // sortsLib: UsersSortsLib,
 });
 </script>
 <style lang="scss" scoped>
@@ -177,7 +173,7 @@ Hooks.onBeforeMount(load, {
   }
 }
 
-.research-name {
+.user-name {
   color: #006bb4;
   font-size: 17px;
   min-width: 150px;
@@ -202,7 +198,7 @@ Hooks.onBeforeMount(load, {
   }
 }
 
-.research-link {
+.user-link {
   &:hover {
     cursor: pointer;
     text-decoration: underline;
@@ -278,7 +274,7 @@ Hooks.onBeforeMount(load, {
   cursor: pointer;
 }
 
-.research-count {
+.user-count {
   margin-top: 10px;
   color: $site_light_pink;
   font-size: 14px;
