@@ -40,6 +40,7 @@ export default class Research {
 
   static Create(): Research {
     const item = new Research();
+    item.id = ClassHelper.CreateUUID();
     return item;
   }
 
