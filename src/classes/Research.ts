@@ -47,10 +47,12 @@ export default class Research {
     this.isEdit = isEdit ?? !this.isEdit;
   }
 
-  addQuestion(item?: Question): void {
-    const newItem = new Question(item);
-    newItem.order = this.questions.length;
-    this.questions.push(newItem);
+  addQuestion(): Question {
+    const item = new Question();
+    item.order = this.questions.length;
+    this.questions.push(item);
+    item.researchId = this.id;
+    return item;
   }
 
   removeRegisterProperty(index: number): void {
