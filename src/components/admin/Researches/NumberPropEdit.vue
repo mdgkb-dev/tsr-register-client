@@ -1,4 +1,4 @@
-<template>999</template>
+<template>вопрос-число</template>
 
 <script setup lang="ts">
 import { computed, defineComponent, PropType, Ref } from 'vue';

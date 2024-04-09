@@ -3,7 +3,7 @@ import ChopScaleQuestionScore from '@/classes/ChopScaleQuestionScore';
 import ChopScaleTestResult from '@/classes/ChopScaleTestResult';
 import ClassBuilder from '@/services/ClassBuilder';
 import RemoveFromClass from '@/services/RemoveFromClass';
-import StringsService from '@/services/Strings';
+import Strings from '@/services/Strings';
 
 export default class ChopScaleTest {
   id?: string;
@@ -57,10 +57,10 @@ export default class ChopScaleTest {
     }
     return Math.round((this.chopScaleTestResults.length * 100) / questionsQuantity);
   }
-
-  getFormattedScoresSum(): string {
-    return StringsService.buildNameNumbersFromNumber(this.getScoresSum(), ['балл', 'балла', 'баллов']);
-  }
+// TODO
+  // getFormattedScoresSum(): string {
+  //   return Strings.BuildNameNumbersFromNumber(this.getScoresSum(), ['балл', 'балла', 'баллов']);
+  // }
 
   questionResultExists(questionId: string): boolean {
     return this.chopScaleTestResults.some((r: ChopScaleTestResult) => {

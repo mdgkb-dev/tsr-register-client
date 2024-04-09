@@ -127,6 +127,7 @@ export default class Question {
 
   setType(item: ValueType): void {
     this.valueType = item;
+    this.valueTypeId = item.id;
   }
 
   setName(item: string): void {
@@ -143,6 +144,7 @@ export default class Question {
     const item = Question.Create();
     item.parentId = this.id;
     item.name = 'Вопрос';
+    this.children.push(item);
     return item;
   }
 }

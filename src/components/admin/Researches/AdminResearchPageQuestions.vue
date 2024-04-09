@@ -15,14 +15,18 @@
               >
                 <template #inside-title>
                   {{ element.order + 1 }}
-                  <el-input v-model="element.name" @blur="setName" />
+                  <el-input v-model="element.name" @blur="setName(element)" />
                   <Button text="удалить" @click="removeQuestion(element.id)" />
                 </template>
                 <template #inside-content>
                   <div :id="element.getIdWithoutDashes()" class="background-container">
                     <QuestionEdit :question="element" />
                   </div>
-                  <!-- <QuestionChildrenEdit :question="question"/> -->
+
+                  <div>
+                    под-вопросы:
+                    <QuestionChildrenEdit :question="element" />
+                  </div>
                 </template>
               </CollapseItem>
             </div>
@@ -43,24 +47,22 @@ import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
 
 const research: Ref<Research> = Store.Item('researches');
-// const filteredQuestions: ComputedRef<Question[]> = computed(() => {
-//   return research.value.getFilteredQuestions(researchResult.value);
-// });
 
-const selectMode = ref(false);
-
-const update = async () => {
+const setName = (question: Question) => {
   Provider.withHeadLoader(async () => {
-    await Store.Update('researches');
+    await Store.Update('questions', question);
   });
-};
-const setName = () => {
-  // props.question.setName(name.value);
 };
 const addQuestion = async () => {
   const item = research.value.addQuestion();
   await Store.Create('questions', item);
 };
+
+const addChild = async (question: Question) => {
+  const item = question.addChild();
+  await Store.Create('questions', item);
+};
+
 const removeQuestion = async (id: string) => {
   ClassHelper.RemoveFromClassById(id, research.value.questions);
   await Store.Remove('questions', id);

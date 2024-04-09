@@ -1,22 +1,20 @@
 <template>
-  <draggable :list="question.children" item-key="id" @end="updateOrder">
-    <template #item="{ element }">
-      <SelectValueType :selected-type="question.valueType" @select="(e) => selectType(e, element)" />
+  <SelectValueType :selected-type="question.valueType" @select="selectType" />
 
-      <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
-      <hr />
-      <component :is="component" :question="question" />
-    </template>
-  </draggable>
+  <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
+  <hr />
+  <component :is="component" :question="question" />
 </template>
 
 <script setup lang="ts">
 import Question from '@/classes/Question';
+import DatePropEdit from '@/components/admin/Researches/DatePropEdit.vue';
 import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
 import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
+import SetPropEdit from '@/components/admin/Researches/SetPropEdit.vue';
 import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
 import ValueType from '@/services/classes/ValueType';
-import sort from '@/services/sort';
+
 const props = defineProps({
   question: {
     type: Object as PropType<Question>,
@@ -29,13 +27,15 @@ const valueType: Ref<ValueType> = Store.Item('valueTypes');
 const selectType = async (itemName: string) => {
   await Store.Get('valueTypes', itemName);
   props.question.setType(valueType.value);
+  await Store.Update('questions', props.question);
 };
 
 const components = {
   num: NumberPropEdit,
   string: StringPropEdit,
   radio: RadioPropEdit,
-  // AdminResearchPageSponsors: AdminResearchPageSponsors,
+  set: SetPropEdit,
+  date: DatePropEdit,
 };
 const component = computed(() => {
   if (props.question.valueType.isNumber()) {
@@ -44,14 +44,17 @@ const component = computed(() => {
   if (props.question.valueType.isRadio()) {
     return components['radio'];
   }
+  if (props.question.valueType.isString()) {
+    return components['string'];
+  }
+  if (props.question.valueType.isDate()) {
+    return components['date'];
+  }
+  if (props.question.valueType.isSet()) {
+    return components['set'];
+  }
   return 'no';
 });
-const updateOrder = async (): Promise<void> => {
-  sort(props.question.children);
-  props.question.children.forEach((q: Question) => {
-    Store.Update('questions', q);
-  });
-};
 </script>
 
 <style lang="scss" scoped></style>

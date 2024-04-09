@@ -6,7 +6,7 @@ import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import ClassHelper from '@/services/ClassHelper';
 import DateTimeFormat from '@/services/DateFormat';
-import StringsService from '@/services/Strings';
+import Strings from '@/services/Strings';
 
 export default class Research {
   id?: string;
@@ -47,10 +47,12 @@ export default class Research {
     this.isEdit = isEdit ?? !this.isEdit;
   }
 
-  addQuestion(item?: Question): void {
-    const newItem = new Question(item);
-    newItem.order = this.questions.length;
-    this.questions.push(newItem);
+  addQuestion(): Question {
+    const item = new Question();
+    item.order = this.questions.length;
+    this.questions.push(item);
+    item.researchId = this.id;
+    return item;
   }
 
   removeRegisterProperty(index: number): void {
@@ -90,7 +92,7 @@ export default class Research {
   getQuestionsByString(): Question[] {
     return this.filterString === ''
       ? this.questions
-      : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
+      : this.questions.filter((q: Question) => Strings.StringsEquals(this.filterString, q.name));
   }
 
   getFilteredQuestions(researchResult: ResearchResult): Question[] {

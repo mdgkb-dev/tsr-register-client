@@ -1,20 +1,25 @@
 <template>
-  <SelectValueType :selected-type="question.valueType" @select="selectType" />
-
-  <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
   <hr />
-  <component :is="component" :question="question" />
+  <draggable :list="question.children" item-key="id" @end="updateOrder">
+    <template #item="{ element, index }">
+      <div>
+        <QuestionEdit :question="element" />
+
+        <hr />
+        <Button text="удалить под-вопрос" @click="removeQuestion(element.id)" />
+        <hr />
+        <hr />
+      </div>
+    </template>
+  </draggable>
+  <Button text="Добавить под-вопрос" @click="addChild" />
 </template>
 
 <script setup lang="ts">
+import draggable from 'vuedraggable';
+
 import Question from '@/classes/Question';
-import ResearchResult from '@/classes/ResearchResult';
-import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
-import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
-import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
 import ValueType from '@/services/classes/ValueType';
-import Provider from '@/services/Provider/Provider';
-import ValueTypes from '@/services/types/ValueTypes';
 
 const props = defineProps({
   question: {
@@ -25,26 +30,25 @@ const props = defineProps({
 
 const valueType: Ref<ValueType> = Store.Item('valueTypes');
 
-const selectType = async (itemName: string) => {
+const selectType = async (itemName: string, question: Question) => {
   await Store.Get('valueTypes', itemName);
-  props.question.setType(valueType.value);
+  question.setType(valueType.value);
+  await Store.Update('questions', props.question);
 };
 
-const components = {
-  num: NumberPropEdit,
-  string: StringPropEdit,
-  radio: RadioPropEdit,
-  // AdminResearchPageSponsors: AdminResearchPageSponsors,
+const addChild = async () => {
+  console.log('question');
+  const item = props.question.addChild();
+  await Store.Create('questions', item);
 };
-const component = computed(() => {
-  if (props.question.valueType.isNumber()) {
-    return components['num'];
-  }
-  if (props.question.valueType.isRadio()) {
-    return components['radio'];
-  }
-  return 'no';
-});
+const removeQuestion = async (id: string) => {
+  ClassHelper.RemoveFromClassById(id, props.question.children);
+  await Store.Remove('questions', id);
+  sort(props.question.children);
+  props.question.children.forEach((q: Question) => {
+    Store.Update('questions', q);
+  });
+};
 </script>
 
 <style lang="scss" scoped></style>

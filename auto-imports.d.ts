@@ -65,7 +65,6 @@ declare global {
   const markRaw: typeof import('vue')['markRaw']
   const moveDown: typeof import('@/services/Main')['moveDown']
   const moveUp: typeof import('@/services/Main')['moveUp']
-  const moves: typeof import('@/services/Main')['moves']
   const nextTick: typeof import('vue')['nextTick']
   const onActivated: typeof import('vue')['onActivated']
   const onBeforeMount: typeof import('vue')['onBeforeMount']

@@ -14,7 +14,7 @@ import './assets/styles/element-variables.scss';
 import DateTimeFormatter from '@/services/DateFormat';
 
 import ClassHelper from '@/services/ClassHelper';
-import StringsService from '@/services/Strings';
+import Strings from '@/services/Strings';
 
 const app = createApp(App);
 app.use(store);
@@ -28,7 +28,7 @@ Provider.store = store;
 
 app.config.globalProperties.$dateTimeFormatter = new DateTimeFormatter('ru-RU');
 app.config.globalProperties.$classHelper = ClassHelper;
-app.config.globalProperties.$stringsService = StringsService;
+app.config.globalProperties.$stringsService = Strings;
 // app.use(setupElementPlusComponents, { locale: ru });
 // app.use(setupElementPlusPlugins);
 
