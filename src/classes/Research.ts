@@ -6,7 +6,7 @@ import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import ClassHelper from '@/services/ClassHelper';
 import DateTimeFormat from '@/services/DateFormat';
-import StringsService from '@/services/Strings';
+import Strings from '@/classes/Strings';
 
 export default class Research {
   id?: string;
@@ -92,7 +92,7 @@ export default class Research {
   getQuestionsByString(): Question[] {
     return this.filterString === ''
       ? this.questions
-      : this.questions.filter((q: Question) => StringsService.stringsEquals(this.filterString, q.name));
+      : this.questions.filter((q: Question) => Strings.StringsEquals(this.filterString, q.name));
   }
 
   getFilteredQuestions(researchResult: ResearchResult): Question[] {

@@ -89,7 +89,7 @@ import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import StringsService from '@/services/Strings';
+import Strings from '@/classes/Strings';
 
 export default defineComponent({
   name: 'SetSelect',
@@ -119,7 +119,7 @@ export default defineComponent({
       if (filterString.value === '') {
         return props.question.questionVariants;
       }
-      return props.question.questionVariants.filter((qv: QuestionVariant) => StringsService.stringsEquals(filterString.value, qv.name));
+      return props.question.questionVariants.filter((qv: QuestionVariant) => Strings.StringsEquals(filterString.value, qv.name));
     });
 
     const filledCheck = (): void => {

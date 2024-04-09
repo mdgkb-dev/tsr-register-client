@@ -6,7 +6,7 @@ import Arrays from '@/services/Arrays';
 import { ClassNameGetter } from '@/services/interfaces/Class';
 import { DataTypes } from '@/services/interfaces/DataTypes';
 import { Operators } from '@/services/interfaces/Operators';
-import StringsService from '@/services/Strings';
+import Strings from '@/classes/Strings';
 
 export default class FilterModel {
   id?: string;
@@ -200,8 +200,8 @@ export default class FilterModel {
     const filterModel = new FilterModel();
     filterModel.id = uuidv4();
 
-    filterModel.model = StringsService.toCamelCase(firstClass.GetClassName());
-    filterModel.joinTableModel = StringsService.toCamelCase(secondClass.GetClassName());
+    filterModel.model = Strings.ToCamelCase(firstClass.GetClassName());
+    filterModel.joinTableModel = Strings.ToCamelCase(secondClass.GetClassName());
     filterModel.type = DataTypes.Join;
     return filterModel;
   }
