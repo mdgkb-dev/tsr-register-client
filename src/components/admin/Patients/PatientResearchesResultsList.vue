@@ -11,8 +11,8 @@
           <CollapseItem :is-collaps="false" padding="0 8px" :active-id="scope.activeIdx" :tab-id="i" :selectable="true">
             <template #inside-title>
               <div :id="result.getIdWithoutDashes()" @click.prevent="() => undefined">
-                <InfoItem title="дата" margin="0" :with-open-window="false" width="100px">
-                  <SmallDatePicker v-model:model-value="result.date" placeholder="Выбрать" width="85px" height="34px" @change="update(result)" @click.stop="() => undefined" />
+                <InfoItem title="дата" margin="0" :with-open-window="false" width="140px">
+                  <SmallDatePicker v-model:model-value="result.date" placeholder="Выбрать" width="120px" height="34px" @change="update(result)" @click.stop="() => undefined" />
                 </InfoItem>
               </div>
             </template>
