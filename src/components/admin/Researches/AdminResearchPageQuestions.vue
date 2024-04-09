@@ -15,7 +15,7 @@
               >
                 <template #inside-title>
                   {{ element.order + 1 }}
-                  <el-input v-model="element.name" @blur="setName" />
+                  <el-input v-model="element.name" @blur="setName(element)" />
                   <Button text="удалить" @click="removeQuestion(element.id)" />
                 </template>
                 <template #inside-content>
@@ -47,20 +47,11 @@ import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
 
 const research: Ref<Research> = Store.Item('researches');
-// const filteredQuestions: ComputedRef<Question[]> = computed(() => {
-//   return research.value.getFilteredQuestions(researchResult.value);
-// });
 
-const selectMode = ref(false);
-
-const update = async () => {
+const setName = (question: Question) => {
   Provider.withHeadLoader(async () => {
-    await Store.Update('researches');
+    await Store.Update('questions', question);
   });
-};
-
-const setName = () => {
-  // props.question.setName(name.value);
 };
 const addQuestion = async () => {
   const item = research.value.addQuestion();

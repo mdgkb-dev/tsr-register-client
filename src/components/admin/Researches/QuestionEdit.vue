@@ -36,7 +36,6 @@ const components = {
   radio: RadioPropEdit,
   set: SetPropEdit,
   date: DatePropEdit,
-  // AdminResearchPageSponsors: AdminResearchPageSponsors,
 };
 const component = computed(() => {
   if (props.question.valueType.isNumber()) {
@@ -50,6 +49,9 @@ const component = computed(() => {
   }
   if (props.question.valueType.isDate()) {
     return components['date'];
+  }
+  if (props.question.valueType.isSet()) {
+    return components['set'];
   }
   return 'no';
 });
