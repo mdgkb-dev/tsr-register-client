@@ -14,7 +14,7 @@ import './assets/styles/element-variables.scss';
 import DateTimeFormatter from '@/services/DateFormat';
 
 import ClassHelper from '@/services/ClassHelper';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 const app = createApp(App);
 app.use(store);

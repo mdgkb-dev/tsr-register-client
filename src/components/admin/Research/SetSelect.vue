@@ -89,7 +89,7 @@ import Button from '@/services/components/Button.vue';
 import ClassHelper from '@/services/ClassHelper';
 import GridContainer from '@/services/components/GridContainer.vue';
 import ResearcheContainer from '@/services/components/ResearcheContainer.vue';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default defineComponent({
   name: 'SetSelect',

@@ -3,7 +3,7 @@ import HmfseScaleQuestionScore from '@/classes/HmfseScaleQuestionScore';
 import HmfseScaleTestResult from '@/classes/HmfseScaleTestResult';
 import ClassBuilder from '@/services/ClassBuilder';
 import RemoveFromClass from '@/services/RemoveFromClass';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class HmfseScaleTest {
   id?: string;

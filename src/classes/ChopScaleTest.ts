@@ -3,7 +3,7 @@ import ChopScaleQuestionScore from '@/classes/ChopScaleQuestionScore';
 import ChopScaleTestResult from '@/classes/ChopScaleTestResult';
 import ClassBuilder from '@/services/ClassBuilder';
 import RemoveFromClass from '@/services/RemoveFromClass';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class ChopScaleTest {
   id?: string;

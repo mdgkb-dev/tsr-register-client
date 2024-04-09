@@ -34,7 +34,7 @@
     <GeneralItem
       v-for="(research, i) in researches"
       :key="research.id"
-      :ready="$stringsService.formatToPercentage(patient.getResearchFillingPercentage(research.id))"
+      :ready="Strings.FormatToPercentage(patient.getResearchFillingPercentage(research.id))"
       height="60px"
       @click="selectResearch(research)"
     >

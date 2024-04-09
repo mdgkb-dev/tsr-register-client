@@ -1,7 +1,7 @@
 import HmfseScaleQuestion from '@/classes/HmfseScaleQuestion';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassBuilder from '@/services/ClassBuilder';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class HmfseScaleQuestionScore {
   id?: string;

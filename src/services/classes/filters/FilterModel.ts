@@ -6,7 +6,7 @@ import Arrays from '@/services/Arrays';
 import { ClassNameGetter } from '@/services/interfaces/Class';
 import { DataTypes } from '@/services/interfaces/DataTypes';
 import { Operators } from '@/services/interfaces/Operators';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class FilterModel {
   id?: string;

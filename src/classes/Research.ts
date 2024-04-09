@@ -6,7 +6,7 @@ import Question from '@/classes/Question';
 import ResearchResult from '@/classes/ResearchResult';
 import ClassHelper from '@/services/ClassHelper';
 import DateTimeFormat from '@/services/DateFormat';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class Research {
   id?: string;

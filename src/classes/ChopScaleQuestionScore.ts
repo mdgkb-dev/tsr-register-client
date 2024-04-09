@@ -1,7 +1,7 @@
 import ChopScaleQuestion from '@/classes/ChopScaleQuestion';
 import IFileInfo from '@/interfaces/files/IFileInfo';
 import ClassBuilder from '@/services/ClassBuilder';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class ChopScaleQuestionScore {
   id?: string;

@@ -8,7 +8,7 @@ import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Pagination from '@/services/classes/filters/Pagination';
 import Filter from '@/services/Provider/Filter';
 import Router from '@/services/Provider/Router';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 import useConfirmLeavePage from '@/services/useConfirmLeavePage';
 
 import Store from './Store';

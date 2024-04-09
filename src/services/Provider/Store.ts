@@ -1,5 +1,5 @@
 import { IPaginationOptions } from '@/services/Hooks/Hooks';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 import store from '../../store';
 

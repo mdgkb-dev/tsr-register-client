@@ -18,6 +18,7 @@ const types = {
   [ValueTypes.Date]: 'Дата',
   [ValueTypes.Radio]: 'Выбор из одного варианта',
   [ValueTypes.Set]: 'Выбор нескольких вариантов',
+  [ValueTypes.Files]: 'Файлы',
 };
 const emits = defineEmits(['select']);
 

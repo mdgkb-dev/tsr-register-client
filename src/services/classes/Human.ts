@@ -1,7 +1,7 @@
 import Contact from '@/services/classes/Contact';
 import FileInfo from '@/services/classes/FileInfo';
 import ClassHelper from '@/services/ClassHelper';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default class Human {
   id?: string;

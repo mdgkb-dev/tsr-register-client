@@ -54,7 +54,7 @@ import HmfseScaleQuestion from '@/classes/HmfseScaleQuestion';
 import HmfseScaleTest from '@/classes/HmfseScaleTest';
 import DateTimeFormatter from '@/services/DateFormat';
 import Provider from '@/services/Provider';
-import Strings from '@/classes/Strings';
+import Strings from '@/services/Strings';
 
 export default defineComponent({
   name: 'HmfseScaleForm',
