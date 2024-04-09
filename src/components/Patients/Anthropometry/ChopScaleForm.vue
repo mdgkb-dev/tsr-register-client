@@ -54,7 +54,7 @@ import ChopScaleQuestion from '@/classes/ChopScaleQuestion';
 import ChopScaleTest from '@/classes/ChopScaleTest';
 import DateTimeFormatter from '@/services/DateFormat';
 import Provider from '@/services/Provider';
-import StringsService from '@/services/Strings';
+import Strings from '@/classes/Strings';
 
 export default defineComponent({
   name: 'ChopScaleForm',
@@ -82,7 +82,7 @@ export default defineComponent({
 
     return {
       save,
-      StringsService,
+      Strings,
       DateTimeFormatter,
       mounted,
       chopScaleQuestions,

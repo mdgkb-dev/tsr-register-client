@@ -3,7 +3,7 @@ import HmfseScaleQuestionScore from '@/classes/HmfseScaleQuestionScore';
 import HmfseScaleTestResult from '@/classes/HmfseScaleTestResult';
 import ClassBuilder from '@/services/ClassBuilder';
 import RemoveFromClass from '@/services/RemoveFromClass';
-import StringsService from '@/services/Strings';
+import Strings from '@/classes/Strings';
 
 export default class HmfseScaleTest {
   id?: string;
@@ -57,10 +57,10 @@ export default class HmfseScaleTest {
     }
     return Math.round((this.hmfseScaleTestResults.length * 100) / questionsQuantity);
   }
-
-  getFormattedScoresSum(): string {
-    return StringsService.buildNameNumbersFromNumber(this.getScoresSum(), ['балл', 'балла', 'баллов']);
-  }
+// TODO
+  // getFormattedScoresSum(): string {
+  //   return Strings.BuildNameNumbersFromNumber(this.getScoresSum(), ['балл', 'балла', 'баллов']);
+  // }
 
   questionResultExists(questionId: string): boolean {
     return this.hmfseScaleTestResults.some((r: HmfseScaleTestResult) => {
