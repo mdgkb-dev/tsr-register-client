@@ -22,6 +22,7 @@ import DatesFormatter from './DatesFormatter';
 import Dragger from './Dragger';
 import Favourite from './Favourite';
 import GetExtension from './GetExtension';
+import Hooks from './Hooks/Hooks';
 import HttpClient from './HttpClient';
 import MakeCarousel from './MakeCarousel';
 import { moveDown, moveUp } from './moves';
@@ -65,6 +66,7 @@ export {
   Favourite,
   FTSP,
   GetExtension,
+  Hooks,
   HttpClient,
   MakeCarousel,
   Message,
