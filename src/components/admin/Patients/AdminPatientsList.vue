@@ -1,5 +1,4 @@
 <template>
-  <!-- {{ Provider.ftsp }} -->
   <AdminListWrapper v-if="mounted" pagination show-header>
     <AdminPatientsListFilters @load="loadPatients" />
 
@@ -16,7 +15,7 @@
                     color="#006bb4"
                     icon="edit"
                     icon-class="edit-icon"
-                    @click="Provider.editAdmin(patient.id)"
+                    @click="Router.ToAdmin('patients/' + patient.id)"
                   />
                   <FioToggleForm :human="patient.human" />
                 </div>
