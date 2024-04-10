@@ -45,6 +45,7 @@ import { patientsRegisters } from '@/store/modules/patientsRegisters';
 import { patientsRepresentatives } from '@/store/modules/patientsRepresentatives';
 import { patientsResearches } from '@/store/modules/patientsResearches';
 import { questions } from '@/store/modules/questions';
+import { questionVariants } from '@/store/modules/questionVariants';
 import { registers } from '@/store/modules/registers';
 import { representatives } from '@/store/modules/representatives';
 import { representativeTypes } from '@/store/modules/representativeTypes';
@@ -127,6 +128,7 @@ const store: StoreOptions<RootState> = {
     contacts,
     valueTypes,
     answerVariants,
+    questionVariants,
   },
 };
 

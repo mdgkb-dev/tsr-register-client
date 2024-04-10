@@ -111,6 +111,7 @@
     "validate": true,
     "moveDown": true,
     "moveUp": true,
-    "Hooks": true
+    "Hooks": true,
+    "ValueType": true
   }
 }

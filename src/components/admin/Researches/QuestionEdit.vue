@@ -1,9 +1,27 @@
 <template>
-  <SelectValueType :selected-type="question.valueType" @select="selectType" />
+  <div>
+    <SelectValueType :selected-type="question.valueType" @select="selectType" />
+    <Button text="Добавить" button-class="edit-button" icon="settings" icon-class="edit-icon" @click="edit" />
+  </div>
 
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
   <hr />
   <component :is="component" :question="question" />
+  <ModalWindow
+    v-if="questionVariantsModalOpened"
+    :show="questionVariantsModalOpened"
+    title="Добавить подпункты вопроса"
+    @close="questionVariantsModalOpened = false"
+  >
+    <div v-for="variant in question.questionVariants" :key="variant.id">
+      <el-input v-model="variant.name" @blur="updateVariant(variant)" />
+      <Button text="Удалить" @click="removeVariant(variant.id)" />
+    </div>
+    <Button text="Добавить" @click="addVariant()" />
+
+    <!-- <SessionConstructor :start-time="selectedSession" :session="selectedSession" @close="showEditSessionModal = false" /> -->
+    <!-- <Button button-class="del-button" text="Удалить" @click="removeSession" /> -->
+  </ModalWindow>
 </template>
 
 <script setup lang="ts">
@@ -13,7 +31,12 @@ import NumberPropEdit from '@/components/admin/Researches/NumberPropEdit.vue';
 import RadioPropEdit from '@/components/admin/Researches/RadioPropEdit.vue';
 import SetPropEdit from '@/components/admin/Researches/SetPropEdit.vue';
 import StringPropEdit from '@/components/admin/Researches/StringPropEdit.vue';
-import ValueType from '@/services/classes/ValueType';
+
+const questionVariantsModalOpened = ref(false);
+
+const edit = () => {
+  questionVariantsModalOpened.value = true;
+};
 
 const props = defineProps({
   question: {
@@ -55,6 +78,23 @@ const component = computed(() => {
   }
   return 'no';
 });
+
+const updateVariant = async (item: QuestionVariant) => {
+  sort(props.question.questionVariants);
+  await Store.Update('questionVariants', item);
+};
+
+const removeVariant = async (id: string) => {
+  ClassHelper.RemoveFromClassById(id, props.question.questionVariants);
+  sort(props.question.questionVariants);
+  await Store.Remove('questionVariants', id);
+};
+
+const addVariant = async () => {
+  const item = props.question.addQuestionVariant();
+  sort(props.question.questionVariants);
+  await Store.Create('questionVariants', item);
+};
 </script>
 
 <style lang="scss" scoped></style>

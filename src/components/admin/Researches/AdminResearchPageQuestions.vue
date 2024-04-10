@@ -14,9 +14,10 @@
                 margin-top="20px"
               >
                 <template #inside-title>
-                  <div class="number" >{{ element.order + 1 }}</div>
+                  <div class="number">
+                    {{ element.order + 1 }}
+                  </div>
                   <el-input v-model="element.name" @blur="setName(element)" />
-                  <Button button-class="edit-button" icon="settings" icon-class="edit-icon" @click="edit" />
                   <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeQuestion(element.id)" />
                 </template>
                 <template #inside-content>
@@ -37,15 +38,6 @@
       <Button text="Добавить вопрос" @click="addQuestion()" />
     </div>
   </div>
-  <ModalWindow
-      v-if="showEditSessionModal"
-      :show="showEditSessionModal"
-      title="Свойства исследования"
-      @close="showEditSessionModal = false"
-    >
-      <!-- <SessionConstructor :start-time="selectedSession" :session="selectedSession" @close="showEditSessionModal = false" /> -->
-      <!-- <Button button-class="del-button" text="Удалить" @click="removeSession" /> -->
-    </ModalWindow>
 </template>
 
 <script lang="ts" setup>
@@ -56,20 +48,7 @@ import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
 
-
 const research: Ref<Research> = Store.Item('researches');
-const showEditSessionModal = ref(false);
-
-// const emits = defineEmits(['edit']);
-
-// const edit = async () => {
-//   emits('edit');
-// };
-
-const edit = () => {
-  // selectedSession.value = session;
-  showEditSessionModal.value = true;
-};
 
 const setName = (question: Question) => {
   Provider.withHeadLoader(async () => {
@@ -78,11 +57,6 @@ const setName = (question: Question) => {
 };
 const addQuestion = async () => {
   const item = research.value.addQuestion();
-  await Store.Create('questions', item);
-};
-
-const addChild = async (question: Question) => {
-  const item = question.addChild();
   await Store.Create('questions', item);
 };
 
@@ -147,7 +121,7 @@ const updateOrder = async (): Promise<void> => {
 }
 
 .edit-button:hover {
-  fill: #1E77CD;
+  fill: #1e77cd;
 }
 
 :deep(.edit-icon) {
@@ -165,8 +139,8 @@ const updateOrder = async (): Promise<void> => {
   min-height: 32px;
   max-height: 32px;
   border-radius: 20px;
-  background: #1E77CD;
-  color:#ffffff;
+  background: #1e77cd;
+  color: #ffffff;
   font-size: 14px;
 }
 

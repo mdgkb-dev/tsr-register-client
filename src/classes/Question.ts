@@ -147,4 +147,9 @@ export default class Question {
     this.children.push(item);
     return item;
   }
+  addQuestionVariant(): QuestionVariant {
+    const item = QuestionVariant.Create(this.id);
+    this.questionVariants.push(item);
+    return item;
+  }
 }

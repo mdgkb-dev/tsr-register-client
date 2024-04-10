@@ -9,6 +9,7 @@ import Contact from './classes/Contact';
 import Email from './classes/Email';
 import FTSP from './classes/filters/FTSP';
 import Message from './classes/Message';
+import ValueType from './classes/ValueType';
 import ClassHelper from './ClassHelper';
 import Color from './Color';
 import Confirm from './Confirm';
@@ -86,6 +87,7 @@ export {
   useConfirmLeavePage,
   User,
   validate,
+  ValueType,
   WaitElement,
   WebSocketClient,
 };
