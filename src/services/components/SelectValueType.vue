@@ -1,5 +1,7 @@
 <template>
-  <Button v-for="(value, type) in types" :key="value" :text="value" :button-class="getButtonClass(type)" @click="select(type)" />
+  <el-select :model-value="selectedType.name" placeholder="Тип вопроса" @change="select">
+    <el-option v-for="(value, type) in types" :key="value" :label="value" :value="type" />
+  </el-select>
 </template>
 
 <script setup lang="ts">
@@ -22,12 +24,8 @@ const types = {
 };
 const emits = defineEmits(['select']);
 
-const getButtonClass = (type: string) => {
-  console.log(props.selectedType, type);
-  return props.selectedType.name === type ? 'red' : '';
-};
-
 const select = (t: ValueTypes) => {
+  console.log(t);
   emits('select', t);
 };
 </script>
