@@ -14,9 +14,10 @@
                 margin-top="20px"
               >
                 <template #inside-title>
-                  {{ element.order + 1 }}
+                  <div class="number" >{{ element.order + 1 }}</div>
                   <el-input v-model="element.name" @blur="setName(element)" />
-                  <Button text="удалить" @click="removeQuestion(element.id)" />
+                  <Button button-class="edit-button" icon="settings" icon-class="edit-icon" @click="edit" />
+                  <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeQuestion(element.id)" />
                 </template>
                 <template #inside-content>
                   <div :id="element.getIdWithoutDashes()" class="background-container">
@@ -36,6 +37,15 @@
       <Button text="Добавить вопрос" @click="addQuestion()" />
     </div>
   </div>
+  <ModalWindow
+      v-if="showEditSessionModal"
+      :show="showEditSessionModal"
+      title="Свойства исследования"
+      @close="showEditSessionModal = false"
+    >
+      <!-- <SessionConstructor :start-time="selectedSession" :session="selectedSession" @close="showEditSessionModal = false" /> -->
+      <!-- <Button button-class="del-button" text="Удалить" @click="removeSession" /> -->
+    </ModalWindow>
 </template>
 
 <script lang="ts" setup>
@@ -46,7 +56,20 @@ import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
 
+
 const research: Ref<Research> = Store.Item('researches');
+const showEditSessionModal = ref(false);
+
+// const emits = defineEmits(['edit']);
+
+// const edit = async () => {
+//   emits('edit');
+// };
+
+const edit = () => {
+  // selectedSession.value = session;
+  showEditSessionModal.value = true;
+};
 
 const setName = (question: Question) => {
   Provider.withHeadLoader(async () => {
@@ -83,6 +106,70 @@ const updateOrder = async (): Promise<void> => {
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.icon-edit {
+  width: 24px;
+  height: 24px;
+  fill: #006bb4;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.icon-session-edit:hover {
+  fill: #379fff;
+  transform: scale(1.2);
+}
+
+.del-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #343e5c;
+  border: none;
+  margin: 0 5px 0 10px;
+  fill: #c4c4c4;
+}
+
+.del-button:hover {
+  fill: red;
+}
+
+.edit-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #343e5c;
+  border: none;
+  margin: 0 0 0 10px;
+  fill: #c4c4c4;
+}
+
+.edit-button:hover {
+  fill: #1E77CD;
+}
+
+:deep(.edit-icon) {
+  width: 28px;
+  height: 28px;
+}
+
+.number {
+  margin: 0 10px 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
+  border-radius: 20px;
+  background: #1E77CD;
+  color:#ffffff;
+  font-size: 14px;
+}
+
 .research-info {
   width: calc(100% - 22px);
   height: calc(100% - 22px);

@@ -147,6 +147,7 @@ export default defineComponent({
     height: auto;
     align-items: center;
     font-weight: bold;
+    cursor: pointer;
   }
 }
 
