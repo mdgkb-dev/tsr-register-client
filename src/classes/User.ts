@@ -1,14 +1,16 @@
 import Human from '@/classes/Human';
 import RegionUser from '@/classes/RegionUser';
 import RegisterUser from '@/classes/RegisterUser';
+import UserAccount from '@/services/classes/UserAccount';
 import ClassHelper from '@/services/ClassHelper';
 
 export default class User {
   id?: string;
+  @ClassHelper.GetClassConstructor(UserAccount)
+  userAccount: UserAccount = new UserAccount();
+
+  @ClassHelper.GetClassConstructor(RegisterUser)
   human: Human = new Human();
-  login = '';
-  password = '';
-  email = '';
   @ClassHelper.GetClassConstructor(RegisterUser)
   registersUsers: RegisterUser[] = [];
   registersUsersForDelete: string[] = [];
@@ -16,6 +18,8 @@ export default class User {
   regionsUsers: RegionUser[] = [];
   regionsUsersForDelete: string[] = [];
 
+  position = '';
+  division = '';
   // registerPropertyToUser: RegisterPropertyToUser[] = [];
 
   constructor(i?: User) {

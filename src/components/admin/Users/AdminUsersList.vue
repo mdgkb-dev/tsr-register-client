@@ -8,18 +8,13 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button
-                    button-class="edit-button"
-                    color="#006bb4"
-                    icon="edit"
-                    icon-class="edit-icon"
-                    @click="Provider.editAdmin(user.id)"
-                  />
-                  <StringItem :string="user.name" />
+                  <InfoItem title="email" margin="0" :with-open-window="false">
+                    <el-input v-model="user.userAccount.email" />
+                  </InfoItem>
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer max-width="1920px" custom-class="grid"> </GridContainer>
+                <GridContainer max-width="1920px" custom-class="grid" />
               </div>
             </div>
           </template>
