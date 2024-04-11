@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-// import Button from '@/services/components/Button';
 import ValueTypes from '@/services/types/ValueTypes';
 import StringItem from '@/services/components/StringItem.vue';
 

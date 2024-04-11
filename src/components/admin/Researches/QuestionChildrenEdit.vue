@@ -135,18 +135,6 @@ const removeQuestion = async (id: string) => {
   cursor: pointer;
 }
 
-// .admin-del2 {
-//   border: none;
-//   background: inherit;
-//   color: #a3a9be;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
-
-// .admin-del2:hover {
-//   color: darken($color: #cf3d19, $amount: 5%);
-// }
-
 .tools-buttons {
   display: flex;
   justify-content: space-between;
@@ -166,20 +154,6 @@ const removeQuestion = async (id: string) => {
 
 
 .list-number {
-  // position: absolute;
-  // top: 7px;
-  // right: 10px;
-  // min-width: 24px;
-  // min-height: 24px;
-  // max-width: 24px;
-  // max-height: 24px;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // color: #ffffff;
-  // background: #1979cf;
-  // border-radius: 20px;
-
   margin: 0 10px;
 }
 

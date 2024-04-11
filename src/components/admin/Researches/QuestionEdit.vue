@@ -149,18 +149,6 @@ const addVariant = async () => {
   color: darken($color: #cf3d19, $amount: 5%);
 }
 
-// .admin-del2 {
-//   border: none;
-//   background: inherit;
-//   color: #a3a9be;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
-
-// .admin-del2:hover {
-//   color: darken($color: #cf3d19, $amount: 5%);
-// }
-
 .tools-buttons {
   display: flex;
   justify-content: right;

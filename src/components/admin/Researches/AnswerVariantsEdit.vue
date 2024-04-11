@@ -9,40 +9,16 @@
         <div class="container">
           <div class="ch-title" >
             <StringItem :string="'Вариант ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
-            <!-- <div class="list-number">{{ i + 1 }}</div> -->
           </div>
           <button class="admin-del" @click="removeAnswerVariant(element.id)" >
             Удалить
           </button>
           <el-input v-model="element.name" @blur="updateAnswerVariant(element)" />
-          <!-- <Button text="удалить вариант" @click="removeAnswerVariant(element.id)" /> -->
         </div>
       </template>
     </draggable>
 
   </div>
-  <!-- <Button text="Добавить вариант" @click="addAnswerVariant()" /> -->
-
-  <!-- <div v-for="(element, i) in question.children" :key="element.id" class="container"> -->
-    <!-- <div class="container"> -->
-      <!-- <button class="admin-del" @click="removeAnswerVariant(element.id)" >
-        Удалить под-вопрос
-      </button> -->
-      <!-- <div class="list-number">{{ i + 1 }}</div> -->
-      <!-- <el-input v-model="element.name" @blur="updateAnswerVariant(element)" /> -->
-      <!-- <el-input v-model="variant.name" @blur="updateVariant(variant)" /> -->
-    <!-- </div> -->
-      <!-- <div>
-        <QuestionEdit :question="element" />
-
-        <hr />
-        <Button text="удалить под-вопрос" @click="removeQuestion(element.id)" />
-        <hr />
-        <hr />
-      </div> -->
-    <!-- </template> -->
-  <!-- </draggable> -->
-
 </template>
 
 <script setup lang="ts">
@@ -181,18 +157,6 @@ const updateOrder = async (): Promise<void> => {
 .admin-del:hover {
   color: darken($color: #cf3d19, $amount: 5%);
 }
-
-// .admin-del2 {
-//   border: none;
-//   background: inherit;
-//   color: #a3a9be;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
-
-// .admin-del2:hover {
-//   color: darken($color: #cf3d19, $amount: 5%);
-// }
 
 .tools-buttons {
   display: flex;

@@ -1,6 +1,10 @@
 <template>
   <div class="research-info">
     <div class="scroll-block">
+      <div class="st">
+        <StringItem :string="'Вопросов: ' + research.questions.length" font-size="14px" padding="0" justify-content="left" margin="0" width="auto"/> 
+        <button class="admin-add2" @click="addQuestion()" >+ Добавить вопрос</button>
+      </div>
       <CollapseContainer>
         <draggable :list="research.questions" item-key="id" @end="updateOrder">
           <template #item="{ element }">
@@ -14,10 +18,8 @@
                 margin-top="20px"
               >
                 <template #inside-title>
-                  <!-- <StringItem :string="(element.order + 1)" font-size="16px" padding="0" margin="0 10px 0 0" width="auto" />  -->
                   <div class="number">{{ element.order + 1 }}</div>
                   <div class="q-text">
-                    <!-- <StringItem string="ВВЕДИТЕ ТЕКСТ ВОПРОСА:" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> -->
                     <el-input v-model="element.name" @blur="setName(element)" placeholder="Введите текст вопроса" />
                   </div>
                   <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeQuestion(element.id)" />
@@ -35,7 +37,6 @@
           </template>
         </draggable>
       </CollapseContainer>
-      <Button text="Добавить вопрос" @click="addQuestion()" />
     </div>
   </div>
 </template>
@@ -80,6 +81,35 @@ const updateOrder = async (): Promise<void> => {
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.st {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  background: #DFF2F8;
+  border-bottom: 1px solid #c3c3c3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+  padding: 0 10px;
+}
+
+.admin-add2 {
+  border: none;
+  background: inherit;
+  color: #00b5a4;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.admin-add2:hover {
+  color: darken($color: #00b5a4, $amount: 10%);
+}
+
 
 .q-text {
   width: 100%;
@@ -149,13 +179,15 @@ const updateOrder = async (): Promise<void> => {
 }
 
 .research-info {
-  width: calc(100% - 22px);
-  height: calc(100% - 22px);
+  position: relative;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
   background: #dff2f8;
   margin: 0;
-  padding: 0px 10px 10px 10px;
+  padding: 0px;
 }
 .scroll-block {
+  position: relative;
   width: 100%;
   height: calc(100% - 60px);
   overflow: hidden;
