@@ -9,15 +9,17 @@
                 :tab-id="element.id"
                 :active-id="element.id"
                 :is-collaps="true"
-                background="#DFF2F8"
-                background-attention="#EECEAF"
+                background="#F1F2F7"
+                background-attention="#F1F2F7"
                 margin-top="20px"
               >
                 <template #inside-title>
-                  <div class="number">
-                    {{ element.order + 1 }}
+                  <!-- <StringItem :string="(element.order + 1)" font-size="16px" padding="0" margin="0 10px 0 0" width="auto" />  -->
+                  <div class="number">{{ element.order + 1 }}</div>
+                  <div class="q-text">
+                    <!-- <StringItem string="ВВЕДИТЕ ТЕКСТ ВОПРОСА:" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> -->
+                    <el-input v-model="element.name" @blur="setName(element)" placeholder="Введите текст вопроса" />
                   </div>
-                  <el-input v-model="element.name" @blur="setName(element)" />
                   <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeQuestion(element.id)" />
                 </template>
                 <template #inside-content>
@@ -79,6 +81,10 @@ const updateOrder = async (): Promise<void> => {
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
 
+.q-text {
+  width: 100%;
+}
+
 .icon-edit {
   width: 24px;
   height: 24px;
@@ -132,13 +138,13 @@ const updateOrder = async (): Promise<void> => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 32px;
-  max-width: 32px;
-  min-height: 32px;
-  max-height: 32px;
-  border-radius: 20px;
-  background: #1e77cd;
-  color: #ffffff;
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  border-radius: 5px;
+  background: #ffffff;
+  // color: #ffffff;
   font-size: 14px;
 }
 
@@ -158,7 +164,7 @@ const updateOrder = async (): Promise<void> => {
 
 .background-container {
   width: auto;
-  padding: 10px;
+  padding: 0;
   margin: 0 10px 10px 10px;
   // background: #dff2f8;
   // background: #ffffff;

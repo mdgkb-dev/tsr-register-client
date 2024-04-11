@@ -1,6 +1,6 @@
 <template>
-  Выберите тип ответа:
-  <el-select :model-value="selectedType.name" placeholder="Тип вопроса" @change="select">
+  <StringItem string="Выберите вид ответа:" font-size="14px" padding="0" justify-content="left" margin="10px 0"/> 
+  <el-select :model-value="selectedType.name" placeholder="Вид ответа" @change="select" >
     <el-option v-for="(value, type) in types" :key="value" :label="value" :value="type" />
   </el-select>
 </template>
@@ -8,6 +8,7 @@
 <script setup lang="ts">
 // import Button from '@/services/components/Button';
 import ValueTypes from '@/services/types/ValueTypes';
+import StringItem from '@/services/components/StringItem.vue';
 
 const props = defineProps({
   selectedType: {
@@ -16,12 +17,12 @@ const props = defineProps({
   },
 });
 const types = {
-  [ValueTypes.String]: 'Строка',
-  [ValueTypes.Number]: 'Число',
-  [ValueTypes.Date]: 'Дата',
-  [ValueTypes.Radio]: 'Выбор из одного варианта',
+  [ValueTypes.String]: 'Текстовый ответ',
+  [ValueTypes.Number]: 'Числовой ответ',
+  [ValueTypes.Date]: 'Ответ в виде даты',
+  [ValueTypes.Radio]: 'Выбор одного из вариантов',
   [ValueTypes.Set]: 'Выбор нескольких вариантов',
-  [ValueTypes.Files]: 'Файлы',
+  [ValueTypes.Files]: 'Ответ в виде файла',
 };
 const emits = defineEmits(['select']);
 
@@ -35,4 +36,5 @@ const select = (t: ValueTypes) => {
 .red {
   background: red;
 }
+
 </style>

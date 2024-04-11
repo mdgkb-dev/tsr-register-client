@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="q-container">
     <SelectValueType :selected-type="question.valueType" @select="selectType" />
-    <Button text="Добавить" button-class="edit-button" icon="settings" icon-class="edit-icon" @click="edit" />
+    <button v-if="question.valueType.isNumber()" class="admin-add2" @click="edit" >+ Добавить варианты ответов числового вида</button>
   </div>
 
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
@@ -10,7 +10,7 @@
   <ModalWindow
     v-if="questionVariantsModalOpened"
     :show="questionVariantsModalOpened"
-    title="Добавить подпункты вопроса"
+    title="Варианты ответов числового вида"
     @close="questionVariantsModalOpened = false"
   >
   <div class="tools-buttons"><button class="admin-add" @click="addVariant()" >+ Добавить</button></div>
@@ -101,6 +101,12 @@ const addVariant = async () => {
 
 <style lang="scss" scoped>
 
+.q-container {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0 0px;
+}
+
 .admin-add {
   border: none;
   background: inherit;
@@ -116,17 +122,17 @@ const addVariant = async () => {
   background: inherit;
 }
 
-// .admin-add2 {
-//   border: none;
-//   background: inherit;
-//   color: #00b5a4;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
+.admin-add2 {
+  border: none;
+  background: inherit;
+  color: #00b5a4;
+  transition: 0.3s;
+  cursor: pointer;
+}
 
-// .admin-add2:hover {
-//   color: darken($color: #00b5a4, $amount: 10%);
-// }
+.admin-add2:hover {
+  color: darken($color: #00b5a4, $amount: 10%);
+}
 
 .admin-del {
   position: absolute;

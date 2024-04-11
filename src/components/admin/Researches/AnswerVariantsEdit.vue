@@ -1,16 +1,26 @@
 <template>
-  <draggable :list="question.answerVariants" item-key="id" @end="updateOrder">
-    <template #item="{ element }">
-      <div class="container">
-        <button class="admin-del" @click="removeAnswerVariant(element.id)" >
-          Удалить вариант ответа
-        </button>
-        <el-input v-model="element.name" @blur="updateAnswerVariant(element)" />
-        <!-- <Button text="удалить вариант" @click="removeAnswerVariant(element.id)" /> -->
-      </div>
-    </template>
-  </draggable>
-  <div class="tools-buttons"><button class="admin-add" @click="addAnswerVariant()" >+ Добавить вариант ответа</button></div>
+  <div class="an-v">
+    <div class="tools-buttons">
+      <StringItem string="Варианты ответов:" font-size="14px" padding="0" justify-content="left" margin="0" width="auto"/> 
+      <button class="admin-add2" @click="addAnswerVariant()" >+ Добавить вариант ответа</button>
+    </div>
+    <draggable :list="question.answerVariants" item-key="id" @end="updateOrder">
+      <template #item="{ element }">
+        <div class="container">
+          <div class="ch-title" >
+            <StringItem :string="'Вариант ' + ( + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
+            <!-- <div class="list-number">{{ i + 1 }}</div> -->
+          </div>
+          <button class="admin-del" @click="removeAnswerVariant(element.id)" >
+            Удалить
+          </button>
+          <el-input v-model="element.name" @blur="updateAnswerVariant(element)" />
+          <!-- <Button text="удалить вариант" @click="removeAnswerVariant(element.id)" /> -->
+        </div>
+      </template>
+    </draggable>
+
+  </div>
   <!-- <Button text="Добавить вариант" @click="addAnswerVariant()" /> -->
 
   <!-- <div v-for="(element, i) in question.children" :key="element.id" class="container"> -->
@@ -41,6 +51,7 @@ import draggable from 'vuedraggable';
 import AnswerVariant from '@/classes/AnswerVariant';
 import Question from '@/classes/Question';
 import ClassHelper from '@/services/ClassHelper';
+import StringItem from '@/services/components/StringItem.vue';
 const props = defineProps({
   question: {
     type: Object as PropType<Question>,
@@ -73,6 +84,31 @@ const updateOrder = async (): Promise<void> => {
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 
+.an-v {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 1px solid #c3c3c3;
+  padding: 10px;
+  margin: 10px 0 0 0;
+}
+
+.ch-title {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border: none;
+  background: inherit;
+  color: #343D5B;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
 .register-property-block {
   background-color: #eef1f6;
   padding: 10px;
@@ -104,7 +140,7 @@ const updateOrder = async (): Promise<void> => {
   border-bottom-left-radius: 5px;
 }
 
-admin-add {
+.admin-add {
   border: none;
   background: inherit;
   color: #1979cf;
@@ -119,22 +155,22 @@ admin-add {
   background: inherit;
 }
 
-// .admin-add2 {
-//   border: none;
-//   background: inherit;
-//   color: #00b5a4;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
+.admin-add2 {
+  border: none;
+  background: inherit;
+  color: #00b5a4;
+  transition: 0.3s;
+  cursor: pointer;
+}
 
-// .admin-add2:hover {
-//   color: darken($color: #00b5a4, $amount: 10%);
-// }
+.admin-add2:hover {
+  color: darken($color: #00b5a4, $amount: 10%);
+}
 
 .admin-del {
   position: absolute;
   top: 10px;
-  right: 36px;
+  right: 16px;
   border: none;
   background: inherit;
   color: #a3a9be;
@@ -160,14 +196,14 @@ admin-add {
 
 .tools-buttons {
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
 }
 
 .container {
   position: relative;
-  width: calc(100% - 62px);
-  margin: 0px 20px 20px 20px;
+  width: calc(100% - 22px);
+  margin: 20px 0 10px 0;
   border: 1px solid #c3c3c3;
   border-radius: 5px;
   padding: 40px 10px 10px 10px;

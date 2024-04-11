@@ -1,30 +1,29 @@
 <template>
+  <div class="q-ch">
+    <div class="tools-buttons">
+      <StringItem string="Под-вопросы:" font-size="14px" padding="0" justify-content="left" margin="0" width="auto"/> 
+      <button class="admin-add2" @click="addChild" >+ Добавить под-вопрос</button>
+    </div>
+    
   <!-- <hr /> -->
   <!-- <draggable :list="question.children" item-key="id" @end="updateOrder"> -->
     <!-- <template #item="{ element, index }"> -->
     <div v-for="(element, i) in question.children" :key="element.id" class="container">
-    <!-- <div class="container"> -->
+      <div class="ch-title" >
+        <StringItem :string="'Под-вопрос ' + (i + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
+      </div>
+      <el-input v-model="element.name" @blur="" placeholder="Введите текст вопроса" />
+
       <button class="admin-del" @click="removeQuestion(element.id)" >
-        Удалить под-вопрос
+        Удалить
       </button>
-      <div class="list-number">{{ i + 1 }}</div>
+      
       <QuestionEdit :question="element" />
       <!-- <el-input v-model="variant.name" @blur="updateVariant(variant)" /> -->
     </div>
-      <!-- <div>
-        <QuestionEdit :question="element" />
-
-        <hr />
-        <Button text="удалить под-вопрос" @click="removeQuestion(element.id)" />
-        <hr />
-        <hr />
-      </div> -->
     <!-- </template> -->
   <!-- </draggable> -->
-
-  <div class="tools-buttons"><button class="admin-add" @click="addChild" >+ Добавить под-вопрос</button></div>
-
-  <!-- <Button text="Добавить под-вопрос" @click="addChild" /> -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -53,6 +52,8 @@ const addChild = async () => {
   const item = props.question.addChild();
   await Store.Create('questions', item);
 };
+
+
 const removeQuestion = async (id: string) => {
   await Store.Remove('questions', id);
   console.log(id);
@@ -66,6 +67,19 @@ const removeQuestion = async (id: string) => {
 </script>
 
 <style lang="scss" scoped>
+
+.q-ch {
+  width: calc(100% - 50px);
+  box-sizing: border-box;
+  background: #ffffff;
+  overflow: hidden;
+  border-radius: 5px;
+  border: 1px solid #c3c3c3;
+  padding: 10px;
+  margin: 30px 0 10px 40px;
+}
+
+
 .admin-add {
   border: none;
   background: inherit;
@@ -81,22 +95,22 @@ const removeQuestion = async (id: string) => {
   background: inherit;
 }
 
-// .admin-add2 {
-//   border: none;
-//   background: inherit;
-//   color: #00b5a4;
-//   transition: 0.3s;
-//   cursor: pointer;
-// }
+.admin-add2 {
+  border: none;
+  background: inherit;
+  color: #00b5a4;
+  transition: 0.3s;
+  cursor: pointer;
+}
 
-// .admin-add2:hover {
-//   color: darken($color: #00b5a4, $amount: 10%);
-// }
+.admin-add2:hover {
+  color: darken($color: #00b5a4, $amount: 10%);
+}
 
 .admin-del {
   position: absolute;
   top: 10px;
-  right: 36px;
+  right: 10px;
   border: none;
   background: inherit;
   color: #a3a9be;
@@ -106,6 +120,20 @@ const removeQuestion = async (id: string) => {
 
 .admin-del:hover {
   color: darken($color: #cf3d19, $amount: 5%);
+}
+
+.ch-title {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  border: none;
+  background: inherit;
+  color: #343D5B;
+  transition: 0.3s;
+  cursor: pointer;
 }
 
 // .admin-del2 {
@@ -122,33 +150,38 @@ const removeQuestion = async (id: string) => {
 
 .tools-buttons {
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
 }
 
 .container {
   position: relative;
-  width: calc(100% - 62px);
-  margin: 0px 20px 20px 20px;
+  width: calc(100% - 72px);
+  margin: 10px 10px 20px 40px;
   border: 1px solid #c3c3c3;
   border-radius: 5px;
   padding: 40px 10px 10px 10px;
   background: #dff2f8;
+  background: #ffffff;
 }
 
 
 .list-number {
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  background: #1979cf;
-  border-radius: 20px;
+  // position: absolute;
+  // top: 7px;
+  // right: 10px;
+  // min-width: 24px;
+  // min-height: 24px;
+  // max-width: 24px;
+  // max-height: 24px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+  // color: #ffffff;
+  // background: #1979cf;
+  // border-radius: 20px;
+
+  margin: 0 10px;
 }
 
 
