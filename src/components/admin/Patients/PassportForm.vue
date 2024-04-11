@@ -7,21 +7,21 @@
   >
     <el-form ref="form" :model="human" :rules="human.validationRules">
       <el-form-item label="Фамилия" prop="surname">
-        <el-input v-model="human.surname" placeholder="Введите фамилию" formatter="firstLetterUpper" @blur="updateHuman('surname')"></el-input>
+        <el-input v-model="human.surname" placeholder="Введите фамилию" @blur="updateHuman('surname')" />
       </el-form-item>
       <el-form-item label="Имя" prop="name">
-        <el-input v-model="human.name" placeholder="Введите имя" formatter="firstLetterUpper" @blur="updateHuman('name')"></el-input>
+        <el-input v-model="human.name" placeholder="Введите имя" @blur="updateHuman('name')" />
       </el-form-item>
       <el-form-item label="Отчество" prop="patronymic">
-        <el-input v-model="human.patronymic" placeholder="Введите отчество" formatter="firstLetterUpper" @blur="updateHuman('patronymic')"></el-input>
+        <el-input v-model="human.patronymic" placeholder="Введите отчество" @blur="updateHuman('patronymic')" />
       </el-form-item>
 
       <div class="line-item">
         <div class="item-left">
           <el-form-item label="Пол">
             <el-select v-model="human.isMale" placeholder="Выберите пол" @change="updateHuman()">
-              <el-option label="Мужчина" :value="true"></el-option>
-              <el-option label="Женщина" :value="false"></el-option>
+              <el-option label="Мужчина" :value="true" />
+              <el-option label="Женщина" :value="false" />
             </el-select>
           </el-form-item>
         </div>
@@ -32,7 +32,7 @@
         </div>
       </div>
       <el-form-item label="Адрес регистрации" prop="addressRegistration">
-        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman('addressRegistration')"></el-input>
+        <el-input v-model="human.addressRegistration" placeholder="Введите адрес" @blur="updateHuman('addressRegistration')" />
       </el-form-item>
 
       <div class="tab-tools">
@@ -71,7 +71,7 @@
       </div> -->
 
       <el-form-item label="Адрес проживания" prop="addressResidential">
-        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman('addressResidential')"></el-input>
+        <el-input v-model="human.addressResidential" placeholder="Введите адрес" @blur="updateHuman('addressResidential')" />
       </el-form-item>
     </el-form>
   </div>

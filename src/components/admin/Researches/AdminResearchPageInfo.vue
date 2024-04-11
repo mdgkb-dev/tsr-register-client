@@ -4,7 +4,7 @@
       <template #right>
         <div class="container">
           <el-form-item label="Название" prop="surname">
-            <el-input v-model="event.name" placeholder="Введите название" formatter="firstLetterUpper" @blur="update" />
+            <el-input v-model="event.name" placeholder="Введите название" @blur="update" />
           </el-form-item>
         </div>
       </template>
