@@ -13,12 +13,14 @@
     title="Добавить подпункты вопроса"
     @close="questionVariantsModalOpened = false"
   >
-    <div v-for="variant in question.questionVariants" :key="variant.id">
-      <el-input v-model="variant.name" @blur="updateVariant(variant)" />
-      <Button text="Удалить" @click="removeVariant(variant.id)" />
-    </div>
-    <Button text="Добавить" @click="addVariant()" />
-
+  <div class="tools-buttons"><button class="admin-add" @click="addVariant()" >+ Добавить</button></div>
+  <div v-for="(variant, i) in question.questionVariants" :key="variant.id" class="container">
+    <button class="admin-del" @click="removeVariant(variant.id)" >
+      Удалить
+    </button>
+    <div class="list-number">{{ i + 1 }}</div>
+    <el-input v-model="variant.name" @blur="updateVariant(variant)" />
+  </div>
     <!-- <SessionConstructor :start-time="selectedSession" :session="selectedSession" @close="showEditSessionModal = false" /> -->
     <!-- <Button button-class="del-button" text="Удалить" @click="removeSession" /> -->
   </ModalWindow>
@@ -97,4 +99,98 @@ const addVariant = async () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.admin-add {
+  border: none;
+  background: inherit;
+  color: #1979cf;
+  margin: 10px;
+  padding: 0 10px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.admin-add:hover {
+  color: darken($color: #1979cf, $amount: 10%);
+  background: inherit;
+}
+
+// .admin-add2 {
+//   border: none;
+//   background: inherit;
+//   color: #00b5a4;
+//   transition: 0.3s;
+//   cursor: pointer;
+// }
+
+// .admin-add2:hover {
+//   color: darken($color: #00b5a4, $amount: 10%);
+// }
+
+.admin-del {
+  position: absolute;
+  top: 10px;
+  right: 36px;
+  border: none;
+  background: inherit;
+  color: #a3a9be;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.admin-del:hover {
+  color: darken($color: #cf3d19, $amount: 5%);
+}
+
+// .admin-del2 {
+//   border: none;
+//   background: inherit;
+//   color: #a3a9be;
+//   transition: 0.3s;
+//   cursor: pointer;
+// }
+
+// .admin-del2:hover {
+//   color: darken($color: #cf3d19, $amount: 5%);
+// }
+
+.tools-buttons {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.container {
+  position: relative;
+  width: calc(100% - 62px);
+  margin: 0px 20px 20px 20px;
+  border: 1px solid #c3c3c3;
+  border-radius: 5px;
+  padding: 40px 10px 10px 10px;
+  background: #dff2f8;
+}
+
+
+.list-number {
+  position: absolute;
+  top: 7px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: #1979cf;
+  border-radius: 20px;
+}
+
+
+@media screen and (max-width: 400px) {
+  .container {
+    width: calc(100% - 42px);
+    margin: 0px 10px 20px 10px;
+  }
+}
+</style>

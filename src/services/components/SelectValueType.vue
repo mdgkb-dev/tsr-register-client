@@ -1,4 +1,5 @@
 <template>
+  Выберите тип ответа:
   <el-select :model-value="selectedType.name" placeholder="Тип вопроса" @change="select">
     <el-option v-for="(value, type) in types" :key="value" :label="value" :value="type" />
   </el-select>

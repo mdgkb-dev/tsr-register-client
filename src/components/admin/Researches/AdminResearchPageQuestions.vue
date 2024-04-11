@@ -24,9 +24,7 @@
                   <div :id="element.getIdWithoutDashes()" class="background-container">
                     <QuestionEdit :question="element" />
                   </div>
-
                   <div>
-                    под-вопросы:
                     <QuestionChildrenEdit :question="element" />
                   </div>
                 </template>
@@ -162,10 +160,10 @@ const updateOrder = async (): Promise<void> => {
   width: auto;
   padding: 10px;
   margin: 0 10px 10px 10px;
-  background: #dff2f8;
-  background: #ffffff;
-  border-radius: 5px;
-  border: 1px solid #c3c3c3;
+  // background: #dff2f8;
+  // background: #ffffff;
+  // border-radius: 5px;
+  // border: 1px solid #c3c3c3;
 }
 
 @media screen and (max-width: 630px) {
@@ -173,4 +171,5 @@ const updateOrder = async (): Promise<void> => {
     margin: 0 0 10px 0;
   }
 }
+
 </style>
