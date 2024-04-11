@@ -5,7 +5,7 @@
   </div>
 
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
-  <hr />
+  <!-- <hr /> -->
   <component :is="component" :question="question" />
   <ModalWindow
     v-if="questionVariantsModalOpened"

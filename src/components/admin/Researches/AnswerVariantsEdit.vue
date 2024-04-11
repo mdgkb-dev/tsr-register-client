@@ -3,14 +3,14 @@
     <template #item="{ element }">
       <div class="container">
         <button class="admin-del" @click="removeAnswerVariant(element.id)" >
-          Удалить под-вопрос
+          Удалить вариант ответа
         </button>
         <el-input v-model="element.name" @blur="updateAnswerVariant(element)" />
         <!-- <Button text="удалить вариант" @click="removeAnswerVariant(element.id)" /> -->
       </div>
     </template>
   </draggable>
-  <div class="tools-buttons"><button class="admin-add" @click="addAnswerVariant()" >+ Добавить под-вопрос</button></div>
+  <div class="tools-buttons"><button class="admin-add" @click="addAnswerVariant()" >+ Добавить вариант ответа</button></div>
   <!-- <Button text="Добавить вариант" @click="addAnswerVariant()" /> -->
 
   <!-- <div v-for="(element, i) in question.children" :key="element.id" class="container"> -->
