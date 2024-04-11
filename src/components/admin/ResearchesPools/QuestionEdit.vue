@@ -1,8 +1,9 @@
 <template>
-  <SelectValueType :selected-type="question.valueType" @select="selectType" />
-
+  <!-- <SelectValueType :selected-type="question.valueType" @select="selectType" /> -->
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
-  <component :is="component" :question="question" />
+  <!-- <component :is="component" :question="question" /> -->
+
+
 </template>
 
 <script setup lang="ts">

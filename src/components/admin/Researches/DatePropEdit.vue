@@ -1,4 +1,4 @@
-<template>вопрос-дата</template>
+<template></template>
 
 <script setup lang="ts"></script>
 
