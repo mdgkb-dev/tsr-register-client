@@ -5,12 +5,11 @@
       <button class="admin-add2" @click="addChild" >+ Добавить под-вопрос</button>
     </div>
     
-  <!-- <hr /> -->
-  <!-- <draggable :list="question.children" item-key="id" @end="updateOrder"> -->
-    <!-- <template #item="{ element, index }"> -->
-    <div v-for="(element, i) in question.children" :key="element.id" class="container">
+  <draggable :list="question.children" item-key="id" @end="updateOrder">
+    <template #item="{ element, index }">
+    <div class="container">
       <div class="ch-title" >
-        <StringItem :string="'Под-вопрос ' + (i + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
+        <StringItem :string="'Под-вопрос ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
       </div>
       <el-input v-model="element.name" @blur="" placeholder="Введите текст вопроса" />
 
@@ -21,8 +20,8 @@
       <QuestionEdit :question="element" />
       <!-- <el-input v-model="variant.name" @blur="updateVariant(variant)" /> -->
     </div>
-    <!-- </template> -->
-  <!-- </draggable> -->
+    </template>
+  </draggable>
   </div>
 </template>
 

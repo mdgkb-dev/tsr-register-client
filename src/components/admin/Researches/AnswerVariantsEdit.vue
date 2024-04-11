@@ -5,10 +5,10 @@
       <button class="admin-add2" @click="addAnswerVariant()" >+ Добавить вариант ответа</button>
     </div>
     <draggable :list="question.answerVariants" item-key="id" @end="updateOrder">
-      <template #item="{ element }">
+      <template #item="{ element, index }">
         <div class="container">
           <div class="ch-title" >
-            <StringItem :string="'Вариант ' + ( + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
+            <StringItem :string="'Вариант ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
             <!-- <div class="list-number">{{ i + 1 }}</div> -->
           </div>
           <button class="admin-del" @click="removeAnswerVariant(element.id)" >
