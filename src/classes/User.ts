@@ -8,6 +8,7 @@ export default class User {
   id?: string;
   @ClassHelper.GetClassConstructor(UserAccount)
   userAccount: UserAccount = new UserAccount();
+  userAccountId?: string;
 
   @ClassHelper.GetClassConstructor(RegisterUser)
   human: Human = new Human();
@@ -26,6 +27,13 @@ export default class User {
     ClassHelper.BuildClass(this, i);
   }
 
+  static Create(): User {
+    const item = new User();
+    item.id = ClassHelper.CreateUUID();
+    item.userAccount = UserAccount.Create();
+    item.userAccountId = item.userAccount.id;
+    return item;
+  }
   addRegister(isAdd: boolean, registerId: string): void {
     if (isAdd) {
       const registerUser = new RegisterUser();

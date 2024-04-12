@@ -112,6 +112,7 @@
     "moveDown": true,
     "moveUp": true,
     "Hooks": true,
-    "ValueType": true
+    "ValueType": true,
+    "ElMessage": true
   }
 }
