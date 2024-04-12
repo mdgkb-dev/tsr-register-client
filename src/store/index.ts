@@ -1,8 +1,8 @@
 import Vuex, { StoreOptions } from 'vuex';
 
 import User from '@/classes/User';
+import * as lib from '@/services/store/index';
 import { authStateConstructor } from '@/services/store/modules/auth';
-import { valueTypes } from '@/services/store/modules/valueTypes';
 import { admin } from '@/store/modules/admin';
 import { anamneses } from '@/store/modules/anamnses';
 import { answerVariants } from '@/store/modules/answerVariants';
@@ -126,10 +126,9 @@ const store: StoreOptions<RootState> = {
     customSections,
     patientsDiagnosis,
     contacts,
-    valueTypes,
     answerVariants,
     questionVariants,
+    ...lib,
   },
 };
-
 export default new Vuex.Store<RootState>(store);

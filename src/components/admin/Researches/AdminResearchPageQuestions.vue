@@ -2,8 +2,15 @@
   <div class="research-info">
     <div class="scroll-block">
       <div class="st">
-        <StringItem :string="'Вопросов: ' + research.questions.length" font-size="14px" padding="0" justify-content="left" margin="0" width="auto"/> 
-        <button class="admin-add2" @click="addQuestion()" >+ Добавить вопрос</button>
+        <StringItem
+          :string="'Вопросов: ' + research.questions.length"
+          font-size="14px"
+          padding="0"
+          justify-content="left"
+          margin="0"
+          width="auto"
+        />
+        <button class="admin-add2" @click="addQuestion()">+ Добавить вопрос</button>
       </div>
       <CollapseContainer>
         <draggable :list="research.questions" item-key="id" @end="updateOrder">
@@ -24,8 +31,8 @@
                       <use xlink:href="#move"></use>
                     </svg>
                   </div>
-                  <div class="q-text">
-                    <el-input v-model="element.name" @blur="setName(element)" placeholder="Введите текст вопроса" />
+                  <div class="q-text" @click.stop>
+                    <el-input v-model="element.name" placeholder="Введите текст вопроса" @focus.prevent @blur="setName(element)" />
                   </div>
                   <Button button-class="del-button" icon="del" icon-class="edit-icon" @click="removeQuestion(element.id)" />
                 </template>
@@ -124,7 +131,7 @@ const updateOrder = async (): Promise<void> => {
   box-sizing: border-box;
   width: 100%;
   height: 40px;
-  background: #DFF2F8;
+  background: #dff2f8;
   border-bottom: 1px solid #c3c3c3;
   display: flex;
   justify-content: space-between;
@@ -144,7 +151,6 @@ const updateOrder = async (): Promise<void> => {
 .admin-add2:hover {
   color: darken($color: #00b5a4, $amount: 10%);
 }
-
 
 .q-text {
   width: 100%;
@@ -244,5 +250,4 @@ const updateOrder = async (): Promise<void> => {
     margin: 0 0 10px 0;
   }
 }
-
 </style>

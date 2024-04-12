@@ -1,7 +1,7 @@
 <template>
   <div class="q-container">
     <SelectValueType :selected-type="question.valueType" @select="selectType" />
-    <button v-if="question.valueType.isNumber()" class="admin-add2" @click="edit" >+ Добавить варианты ответов числового вида</button>
+    <button v-if="question.valueType.isNumber()" class="admin-add2" @click="edit">+ Добавить варианты ответов числового вида</button>
   </div>
 
   <!-- <SetSelect v-if="question.questionVariants.length" :research-result="researchResult" :question="question" @fill="fill" /> -->
@@ -13,14 +13,16 @@
     title="Варианты ответов числового вида"
     @close="questionVariantsModalOpened = false"
   >
-  <div class="tools-buttons"><button class="admin-add" @click="addVariant()" >+ Добавить</button></div>
-  <div v-for="(variant, i) in question.questionVariants" :key="variant.id" class="container">
-    <button class="admin-del" @click="removeVariant(variant.id)" >
-      Удалить
-    </button>
-    <div class="list-number">{{ i + 1 }}</div>
-    <el-input v-model="variant.name" @blur="updateVariant(variant)" />
-  </div>
+    <div class="tools-buttons">
+      <button class="admin-add" @click="addVariant()">+ Добавить</button>
+    </div>
+    <div v-for="(variant, i) in question.questionVariants" :key="variant.id" class="container">
+      <button class="admin-del" @click="removeVariant(variant.id)">Удалить</button>
+      <div class="list-number">
+        {{ i + 1 }}
+      </div>
+      <el-input v-model="variant.name" @focus.stop @blur="updateVariant(variant)" />
+    </div>
     <!-- <SessionConstructor :start-time="selectedSession" :session="selectedSession" @close="showEditSessionModal = false" /> -->
     <!-- <Button button-class="del-button" text="Удалить" @click="removeSession" /> -->
   </ModalWindow>
@@ -100,7 +102,6 @@ const addVariant = async () => {
 </script>
 
 <style lang="scss" scoped>
-
 .q-container {
   width: 100%;
   box-sizing: border-box;
@@ -165,7 +166,6 @@ const addVariant = async () => {
   background: #dff2f8;
 }
 
-
 .list-number {
   position: absolute;
   top: 7px;
@@ -179,7 +179,6 @@ const addVariant = async () => {
   background: #1979cf;
   border-radius: 20px;
 }
-
 
 @media screen and (max-width: 400px) {
   .container {

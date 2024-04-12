@@ -1,76 +1,33 @@
 <template>
-  <AdminListWrapper v-if="mounted" pagination show-header>
-    <div class="scroll-block">
-      <div class="user-count">Количество пользователей: {{ count }}</div>
-      <div v-for="user in users" :key="user.id">
-        <CollapseItem :is-collaps="false" padding="0 8px">
-          <template #inside-title>
-            <div class="flex-block" @click.prevent="() => undefined">
-              <div class="item-flex">
-                <div class="line-item-left">
-                  <ToggleInfoItem title="email" :content="user.userAccount.email" @submit="updateUserAccount(user.userAccount)">
-                    <el-input v-model="user.userAccount.email" />
-                  </ToggleInfoItem>
-                </div>
-
-                <div class="line-item-right">
-                  <ToggleInfoItem title="Должность" :content="user.position" @submit="updateUser(user)">
-                    <el-input v-model="user.position" />
-                  </ToggleInfoItem>
-                </div>
-              </div>
-              <div class="item-flex">
-                <ToggleInfoItem title="Подразделение" :content="user.division" @submit="updateUser(user)">
-                  <el-input v-model="user.division" />
-                </ToggleInfoItem>
-              </div>
-            </div>
-          </template>
-        </CollapseItem>
-      </div>
-    </div>
-  </AdminListWrapper>
-  <ModalWindow :show="showAddModal" title="Добавить пациента" @close="showAddModal = false">
-    <CreateUserForm @add="showAddModal = false" />
-  </ModalWindow>
+  <InfoItem :title="title" icon="edit-title" :with-hover="true" :close="closeToggle" width="100%" @keyup-enter="submit">
+    <StringItem v-if="content.length > 0" :string="content" />
+    <StringItem v-else string="Введите данные" color="#B0A4C0" />
+    <template #open-inside-content>
+      <GridContainer custom-class="grid">
+        <slot />
+        <Button button-class="save-button" text="Сохранить" @click="submit" />
+      </GridContainer>
+    </template>
+  </InfoItem>
 </template>
 
 <script lang="ts" setup>
-import User from '@/classes/User';
-// import UsersSortsLib from '@/libs/sorts/UsersSortsLib';
-
-const showAddModal: Ref<boolean> = ref(false);
-const users: Ref<User[]> = Store.Items('users');
-const count: Ref<number> = Store.Count('users');
-
-const mounted = ref(false);
-
-const loadUsers = async () => {
-  await Store.FTSP('users');
-  mounted.value = true;
-};
-
-const load = async () => {
-  await Promise.all([loadUsers()]);
-};
-
-const addUser = async (): Promise<void> => {
-  showAddModal.value = !showAddModal.value;
-};
-
-Hooks.onBeforeMount(load, {
-  adminHeader: {
-    title: 'Пользователи',
-    buttons: [{ text: 'Добавить', type: 'normal-button', action: addUser }],
+const props = defineProps({
+  title: {
+    type: String as PropType<string>,
+    required: true,
   },
-  pagination: { storeModule: 'users', action: 'ftsp' },
-  // sortsLib: UsersSortsLib,
+  content: {
+    type: String as PropType<string>,
+    required: true,
+  },
 });
-const updateUserAccount = async (item: UserAccount): Promise<void> => {
-  await Store.Update('usersAccounts', item);
-};
-const updateUser = async (item: User): Promise<void> => {
-  await Store.Update('users', item);
+const closeToggle: Ref<boolean> = ref(false);
+const emit = defineEmits(['submit']);
+
+const submit = async (): Promise<void> => {
+  emit('submit');
+  closeToggle.value = !closeToggle.value;
 };
 </script>
 <style lang="scss" scoped>
@@ -109,8 +66,10 @@ const updateUser = async (item: User): Promise<void> => {
 }
 
 .grid {
+  max-width: auto;
   grid-gap: 10px;
   margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
 }
 
 .plus-button {
@@ -156,7 +115,6 @@ const updateUser = async (item: User): Promise<void> => {
   border-radius: 5px;
   color: #006bb4;
   background: #dff2f8;
-  margin-right: 10px;
 }
 
 :deep(.files-buttons) {
@@ -182,7 +140,7 @@ const updateUser = async (item: User): Promise<void> => {
   }
 }
 
-.user-name {
+.patient-name {
   color: #006bb4;
   font-size: 17px;
   min-width: 150px;
@@ -195,7 +153,7 @@ const updateUser = async (item: User): Promise<void> => {
 }
 
 .scroll-block {
-  height: 100%;
+  height: 75vh;
   overflow: hidden;
   overflow-y: scroll;
   margin-left: 8px;
@@ -207,7 +165,7 @@ const updateUser = async (item: User): Promise<void> => {
   }
 }
 
-.user-link {
+.patient-link {
   &:hover {
     cursor: pointer;
     text-decoration: underline;
@@ -248,8 +206,7 @@ const updateUser = async (item: User): Promise<void> => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-right: 10px;
+  width: auto;
   padding: 0;
 }
 
@@ -257,8 +214,7 @@ const updateUser = async (item: User): Promise<void> => {
   display: flex;
   justify-content: right;
   align-items: center;
-  width: 100%;
-  min-width: 210px;
+  width: auto;
   padding: 0;
 }
 
@@ -283,7 +239,7 @@ const updateUser = async (item: User): Promise<void> => {
   cursor: pointer;
 }
 
-.user-count {
+.patient-count {
   margin-top: 10px;
   color: $site_light_pink;
   font-size: 14px;
@@ -334,7 +290,7 @@ const updateUser = async (item: User): Promise<void> => {
   .item-flex:first-child {
     display: block;
     width: 100%;
-    margin: 0 0 10px 0;
+    margin: 0 0px 10px 0;
   }
 }
 </style>
