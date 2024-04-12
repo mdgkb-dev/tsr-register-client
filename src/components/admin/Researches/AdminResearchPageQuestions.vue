@@ -18,7 +18,12 @@
                 margin-top="20px"
               >
                 <template #inside-title>
-                  <div class="number">{{ element.order + 1 }}</div>
+                  <div class="number">
+                    {{ element.order + 1 }}
+                    <svg class="icon-move">
+                      <use xlink:href="#move"></use>
+                    </svg>
+                  </div>
                   <div class="q-text">
                     <el-input v-model="element.name" @blur="setName(element)" placeholder="Введите текст вопроса" />
                   </div>
@@ -39,6 +44,7 @@
       </CollapseContainer>
     </div>
   </div>
+  <Move />
 </template>
 
 <script lang="ts" setup>
@@ -48,6 +54,7 @@ import Research from '@/classes/Research';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
+import Move from '@/services/assets/svg/Move.svg';
 
 const research: Ref<Research> = Store.Item('researches');
 
@@ -81,6 +88,34 @@ const updateOrder = async (): Promise<void> => {
 <style lang="scss" scoped>
 @import '@/assets/elements/collapse.scss';
 @import '@/assets/styles/elements/base-style.scss';
+
+.number:hover > .icon-move {
+  visibility: visible;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.15, 1.15);
+  }
+}
+
+
+.icon-move {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  visibility: hidden;
+  width: 24px;
+  height: 24px;
+  fill: #dff2f8;
+  stroke: #747474;
+  animation-name: ripple;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
 
 .st {
   position: sticky;
@@ -164,6 +199,7 @@ const updateOrder = async (): Promise<void> => {
 }
 
 .number {
+  position:relative;
   margin: 0 10px 0 0;
   display: flex;
   justify-content: center;
@@ -174,7 +210,6 @@ const updateOrder = async (): Promise<void> => {
   max-height: 40px;
   border-radius: 5px;
   background: #ffffff;
-  // color: #ffffff;
   font-size: 14px;
 }
 
