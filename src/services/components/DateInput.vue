@@ -89,6 +89,19 @@ const inputHandler = (value: string) => {
 <style scoped lang="scss">
 @import '@/assets/styles/elements/base-style.scss';
 
+:deep(.el-input__wrapper) {
+  box-shadow: none;
+  height: 36px;
+}
+
+:deep(.el-input__wrapper.is-focus) {
+  box-shadow: none;
+}
+
+:deep(.el-input__wrapper:hover) {
+  box-shadow: none;
+}
+
 :deep(.el-form-item) {
   display: block;
   margin-bottom: 16px;

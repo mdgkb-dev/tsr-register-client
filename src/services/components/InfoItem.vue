@@ -50,8 +50,8 @@
       <el-button size="small" type="success" @click="saveClickHandler">Сохранить</el-button>
     </div>
   </el-dialog>
-  <!-- <EditTitle /> -->
-  <!-- <Del /> -->
+  <EditTitle />
+  <Del />
 </template>
 
 <script lang="ts">
@@ -301,6 +301,8 @@ export default defineComponent({
   justify-content: left;
   align-items: center;
   width: 100%;
+  line-height: 16px;
+  font-size: 14px;
 }
 
 .icon-top-title {
@@ -312,7 +314,7 @@ export default defineComponent({
 .open-window {
   border-radius: $normal-border-radius;
   justify-content: center;
-  align-items: flex-start;
+  // align-items: flex-start;
   flex-direction: column;
   overflow: hidden;
   max-height: auto;

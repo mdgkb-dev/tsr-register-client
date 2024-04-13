@@ -22,7 +22,7 @@
 
                 <div class="line-item-right">
                   <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
-                  <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode">
+                  <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode" icon="edit-title">
                     <DateInput
                       v-model:model-value="patient.human.dateBirth"
                       placeholder="Выбрать"
@@ -324,9 +324,9 @@ const updateIsMale = async (human: Human): Promise<void> => {
   font-size: 14px;
 }
 
-:deep(.el-form-item) {
-  margin: 8px 0 0 0;
-}
+// :deep(.el-form-item) {
+//   margin: 8px 0 0 0;
+// }
 
 @media (max-width: 1915px) {
   .flex-block {
