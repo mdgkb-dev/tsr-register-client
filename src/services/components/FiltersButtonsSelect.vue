@@ -28,8 +28,7 @@
         background-hover="DFF2F8"
         height="auto"
         @click="setFilter(model.valueEq(filterModel) ? undefined : model)"
-      >
-      </Button>
+      />
     </GridContainer>
   </InfoItem>
 </template>
@@ -71,6 +70,8 @@ const filterModel: Ref<FilterModel | undefined> = ref(undefined);
 const setFilter = async (model?: FilterModel) => {
   Provider.ftsp.value.replaceF(model, filterModel.value);
   filterModel.value = model;
+  Provider.dropPagination();
+  Provider.getPagination().drop();
   await Provider.router.replace({ query: {} });
   emits('load');
 };

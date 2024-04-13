@@ -10,19 +10,33 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon" @click="Provider.edit(representative.id)" />
+                  <Button
+                    button-class="edit-button"
+                    color="#006bb4"
+                    icon="edit"
+                    icon-class="edit-icon"
+                    @click="Router.toAdmin('representatives/' + representative.id)"
+                  />
                   <FioToggleForm :human="representative.human" />
                 </div>
 
                 <div class="line-item-right">
-                  <Button button-class="gender-button" :text="representative.human.getGender()" @click="updateIsMale(representative.human)" />
+                  <Button
+                    button-class="gender-button"
+                    :text="representative.human.getGender()"
+                    @click="updateIsMale(representative.human)"
+                  />
                 </div>
               </div>
               <div class="item-flex">
                 <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))">
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))">
                     <InfoItem title="дата рождения" margin="0" :with-open-window="false">
-                      <SmallDatePicker v-model:model-value="representative.human.dateBirth" placeholder="Выбрать" @change="updateHuman(representative.human)" />
+                      <SmallDatePicker
+                        v-model:model-value="representative.human.dateBirth"
+                        placeholder="Выбрать"
+                        @change="updateHuman(representative.human)"
+                      />
                     </InfoItem>
                   </GridContainer>
                   <ToggleDocumentsForm :human="representative.human" />

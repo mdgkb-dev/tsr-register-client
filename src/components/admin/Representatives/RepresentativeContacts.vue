@@ -6,40 +6,17 @@
   </LeftRightContainer>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
-
+<script lang="ts" setup>
 import Representative from '@/classes/Representative';
-import ContactForm from '@/components/admin/Patients/ContactForm.vue';
-import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import Provider from '@/services/Provider/Provider';
 
-export default defineComponent({
-  name: 'RepresentativeContacts',
-  components: {
-    LeftRightContainer,
-    ContactForm,
-  },
-  setup() {
-    const checked = ref(true);
-    const notChecked = ref(false);
+const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
 
-    const representative: Ref<Representative> = computed(() => Provider.store.getters['representatives/item']);
-
-    const savePhoto = async () => {
-      await Provider.store.dispatch('fileInfos/create', representative.value.human.photo);
-      representative.value.human.photoId = representative.value.human.photo.id;
-      await Provider.store.dispatch('representatives/update');
-    };
-
-    return {
-      savePhoto,
-      representative,
-      checked,
-      notChecked,
-    };
-  },
-});
+const savePhoto = async () => {
+  await Provider.store.dispatch('fileInfos/create', representative.value.human.photo);
+  representative.value.human.photoId = representative.value.human.photo.id;
+  await Provider.store.dispatch('representatives/update');
+};
 </script>
 
 <style lang="scss" scoped>

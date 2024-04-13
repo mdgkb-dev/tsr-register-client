@@ -97,8 +97,6 @@ onBeforeMount(async () => {
 });
 </script>
 <style lang="scss" scoped>
-
-
 .registers-tooltip {
   &:hover {
     cursor: pointer;

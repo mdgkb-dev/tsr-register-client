@@ -2,8 +2,14 @@
   <div class="slider">
     <LeftRightContainer left-width="280px">
       <template #left>
-        <UploaderSingleScan :file-info="representative.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
-        <ContactForm store-module="representatives" :edit-mode="true" />
+        <UploaderSingleScan
+          :file-info="representative.human.photo"
+          :height="280"
+          :default-ratio="1"
+          :emit-crop="true"
+          @ratio="(e) => (element.ratio = e)"
+          @crop="savePhoto"
+        />
       </template>
       <template #right>
         <PassportForm store-module="representatives" :edit-mode="true" />
@@ -16,7 +22,6 @@
 import { computed, defineComponent, Ref, ref } from 'vue';
 
 import Representative from '@/classes/Representative';
-import ContactForm from '@/components/admin/Patients/ContactForm.vue';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
@@ -27,7 +32,6 @@ export default defineComponent({
     UploaderSingleScan,
     LeftRightContainer,
     PassportForm,
-    ContactForm,
   },
   setup() {
     const checked = ref(true);
