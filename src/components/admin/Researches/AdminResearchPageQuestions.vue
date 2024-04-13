@@ -22,13 +22,12 @@
                 :is-collaps="true"
                 background="#F1F2F7"
                 background-attention="#F1F2F7"
-                margin-top="20px"
               >
                 <template #inside-title>
                   <div class="number">
                     {{ element.order + 1 }}
                     <svg class="icon-move">
-                      <use xlink:href="#move"></use>
+                      <use xlink:href="#move" />
                     </svg>
                   </div>
                   <div class="q-text" @click.stop>
@@ -58,10 +57,10 @@
 import draggable from 'vuedraggable';
 
 import Research from '@/classes/Research';
+import Move from '@/services/assets/svg/Move.svg';
 import ClassHelper from '@/services/ClassHelper';
 import Provider from '@/services/Provider/Provider';
 import sort from '@/services/sort';
-import Move from '@/services/assets/svg/Move.svg';
 
 const research: Ref<Research> = Store.Item('researches');
 
@@ -108,7 +107,6 @@ const updateOrder = async (): Promise<void> => {
     transform: scale(1.15, 1.15);
   }
 }
-
 
 .icon-move {
   position: absolute;
@@ -205,7 +203,7 @@ const updateOrder = async (): Promise<void> => {
 }
 
 .number {
-  position:relative;
+  position: relative;
   margin: 0 10px 0 0;
   display: flex;
   justify-content: center;

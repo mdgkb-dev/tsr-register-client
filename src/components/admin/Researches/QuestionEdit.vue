@@ -65,6 +65,7 @@ const components = {
   date: DatePropEdit,
 };
 const component = computed(() => {
+  console.log(props.question);
   if (props.question.valueType.isNumber()) {
     return components['num'];
   }

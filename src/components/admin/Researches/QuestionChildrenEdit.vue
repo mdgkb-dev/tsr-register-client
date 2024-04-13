@@ -1,27 +1,25 @@
 <template>
   <div class="q-ch">
     <div class="tools-buttons">
-      <StringItem string="Под-вопросы:" font-size="14px" padding="0" justify-content="left" margin="0" width="auto"/> 
-      <button class="admin-add2" @click="addChild" >+ Добавить под-вопрос</button>
+      <StringItem string="Под-вопросы:" font-size="14px" padding="0" justify-content="left" margin="0" width="auto" />
+      <button class="admin-add2" @click="addChild">+ Добавить под-вопрос</button>
     </div>
-    
-  <draggable :list="question.children" item-key="id" @end="updateOrder">
-    <template #item="{ element, index }">
-    <div class="container">
-      <div class="ch-title" >
-        <StringItem :string="'Под-вопрос ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px"/> 
-      </div>
-      <el-input v-model="element.name" @blur="" placeholder="Введите текст вопроса" />
 
-      <button class="admin-del" @click="removeQuestion(element.id)" >
-        Удалить
-      </button>
-      
-      <QuestionEdit :question="element" />
-      <!-- <el-input v-model="variant.name" @blur="updateVariant(variant)" /> -->
-    </div>
-    </template>
-  </draggable>
+    <draggable :list="question.children" item-key="id" @end="updateOrder">
+      <template #item="{ element, index }">
+        <div class="container">
+          <div class="ch-title">
+            <StringItem :string="'Под-вопрос ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px" />
+          </div>
+          <el-input v-model="element.name" placeholder="Введите текст вопроса" @blur="" />
+
+          <button class="admin-del" @click="removeQuestion(element.id)">Удалить</button>
+
+          <QuestionEdit :question="element" />
+          <!-- <el-input v-model="variant.name" @blur="updateVariant(variant)" /> -->
+        </div>
+      </template>
+    </draggable>
   </div>
 </template>
 
@@ -52,12 +50,15 @@ const addChild = async () => {
   await Store.Create('questions', item);
 };
 
-
 const removeQuestion = async (id: string) => {
   await Store.Remove('questions', id);
-  console.log(id);
   ClassHelper.RemoveFromClassById(id, props.question.children);
-  console.log(id);
+  sort(props.question.children);
+  props.question.children.forEach((q: Question) => {
+    Store.Update('questions', q);
+  });
+};
+const updateOrder = async (): Promise<void> => {
   sort(props.question.children);
   props.question.children.forEach((q: Question) => {
     Store.Update('questions', q);
@@ -66,7 +67,6 @@ const removeQuestion = async (id: string) => {
 </script>
 
 <style lang="scss" scoped>
-
 .q-ch {
   width: calc(100% - 50px);
   box-sizing: border-box;
@@ -77,7 +77,6 @@ const removeQuestion = async (id: string) => {
   padding: 10px;
   margin: 30px 0 10px 40px;
 }
-
 
 .admin-add {
   border: none;
@@ -130,7 +129,7 @@ const removeQuestion = async (id: string) => {
   align-items: center;
   border: none;
   background: inherit;
-  color: #343D5B;
+  color: #343d5b;
   transition: 0.3s;
   cursor: pointer;
 }
@@ -152,11 +151,9 @@ const removeQuestion = async (id: string) => {
   background: #ffffff;
 }
 
-
 .list-number {
   margin: 0 10px;
 }
-
 
 @media screen and (max-width: 400px) {
   .container {
