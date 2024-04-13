@@ -39,12 +39,7 @@
         >
           <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
         </InfoItem>
-        <FiltersButtonsSelect
-          :filter-model="filterByDisabilities"
-          :models="createDisabilityFilters()"
-          default-label="Инвалидность"
-          @load="$emit('load')"
-        />
+        <FiltersButtonsSelect :models="createDisabilityFilters()" default-label="Инвалидность" @load="$emit('load')" />
         <StringItem string="Задайте диапазон дат рождения:" font-size="14px" padding="0" margin="20px 0 0 10px" />
         <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
         <div v-for="question in questions" :key="question.id">

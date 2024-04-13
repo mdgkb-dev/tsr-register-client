@@ -17,7 +17,7 @@ import DatesFormatter from '@/services/DatesFormatter';
 const props = defineProps({
   modelValue: {
     type: Date,
-    required: true,
+    default: undefined,
   },
   placeholder: {
     type: String,

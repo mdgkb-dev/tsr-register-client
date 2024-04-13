@@ -22,7 +22,7 @@
       </div>
       <div class="top-title" :style="topTitleStyle">
         <svg v-if="icon" class="icon-top-title" :style="iconTopTitleStyle">
-          <use :xlink:href="'#' + icon"></use>
+          <use :xlink:href="'#' + icon" />
         </svg>
         <slot name="title">
           <StringItem
@@ -46,8 +46,8 @@
     title="У вас остались несохраненные изменения, вы уверены что хотите закрыть окно?"
   >
     <div style="display: flex; justify-content: center">
-      <el-button size="small" type="danger" @click="notSaveClickHandler">Не сохранять</el-button>
-      <el-button size="small" type="success" @click="saveClickHandler">Сохранить</el-button>
+      <el-button size="small" type="danger" @click="notSaveClickHandler"> Не сохранять </el-button>
+      <el-button size="small" type="success" @click="saveClickHandler"> Сохранить </el-button>
     </div>
   </el-dialog>
   <!-- <EditTitle /> -->
@@ -79,7 +79,6 @@ export default defineComponent({
     margin: { type: String as PropType<string>, required: false, default: '' },
     height: { type: String as PropType<string>, required: false, default: '' },
     icon: { type: String as PropType<string>, required: false, default: '' },
-    // withIcon: { type: Boolean as PropType<boolean>, required: false, default: true },
     withOpenWindow: { type: Boolean as PropType<boolean>, required: false, default: true },
     colorSelected: { type: String as PropType<string>, required: false, default: '#1979CF' },
     borderColor: { type: String as PropType<string>, required: false, default: '#E3E3E3' },

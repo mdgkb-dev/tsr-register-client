@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from '@vue/runtime-core';
+import { defineComponent, watch } from 'vue';
 import { onBeforeMount, Ref, ref } from 'vue';
 
 import AdminLayout from '@/views/adminLayout/AdminLayout.vue';
@@ -23,9 +23,12 @@ export default defineComponent({
   },
   setup() {
     const mounted: Ref<boolean> = ref(false);
-    watch(Provider.route(), () => {
-      changeDocumentTitle();
-    });
+    watch(
+      () => Provider.route(),
+      () => {
+        changeDocumentTitle();
+      }
+    );
 
     const changeDocumentTitle = () => {
       const defaultTitle = 'ТСР';

@@ -3,7 +3,6 @@
   <InfoItem
     margin="5px 0 0 0px"
     :with-open-window="false"
-    :with-icon="false"
     height="auto"
     background="#F5F5F5"
     border-color="#C4C4C4"
@@ -21,7 +20,6 @@
         :key="index"
         button-class="filter-button"
         :text="model.label"
-        :with-icon="false"
         :is-toggle="model.valueEq(filterModel)"
         :toggle-mode="true"
         :inverse="inverse"

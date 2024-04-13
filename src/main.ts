@@ -39,7 +39,7 @@ app.directive('click-outside', {
         binding.value(event, el);
       }
     };
-    document.body.addEventListener('click', el.clickOutsideEvent);
+    document.body.addEventListener('click', el.clickOutsideEvent, { passive: true });
   },
   unmounted(el) {
     document.body.removeEventListener('click', el.clickOutsideEvent);
