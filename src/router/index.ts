@@ -9,28 +9,12 @@ import UserService from '@/services/User';
 import store from '@/store/index';
 
 export const isAuthorized = (next: NavigationGuardNext): void => {
-  const user = LocalStore.Get(LocalStoreKeys.User);
-  if (user) {
-    store.commit('auth/setIsAuth', true);
-  }
   next();
 };
 
 export const authGuard = async (next?: NavigationGuardNext): Promise<void> => {
   const auth = store.getters['auth/auth'];
   auth.actualize();
-  // if (next) {
-  //   // await store.dispatch('auth/setAuth');
-  //   // const isAuth: boolean = store.getters['auth/isAuth'];
-  //   // store.commit('auth/showWarning', true);
-  //   // store.commit('auth/authOnly', true);
-  //   // if (!isAuth) {
-  //   //   store.commit('auth/openModal', 'login');
-  //   // }
-  //   next();
-  //   return;
-  // }
-  //
   if (!auth.isAuth) {
     router.push('/login');
   }
