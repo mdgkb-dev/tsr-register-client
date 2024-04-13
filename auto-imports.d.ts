@@ -22,7 +22,6 @@ declare global {
   const Doctor: typeof import('@/classes/Main')['Doctor']
   const Dragger: typeof import('@/services/Main')['Dragger']
   const EffectScope: typeof import('vue')['EffectScope']
-  const ElMessage: typeof import('element-plus/es')['ElMessage']
   const ElMessageBox: typeof import('element-plus/es')['ElMessageBox']
   const Email: typeof import('@/services/Main')['Email']
   const FTSP: typeof import('@/services/Main')['FTSP']
