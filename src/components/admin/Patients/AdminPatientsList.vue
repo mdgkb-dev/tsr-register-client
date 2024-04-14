@@ -4,7 +4,7 @@
 
     <div class="scroll-block">
       <div class="patient-count">Количество пациентов: {{ count }}</div>
-      <PInput />
+      <PInput placeholder="Введите текст" value="Ввод по умолчанию"/>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
