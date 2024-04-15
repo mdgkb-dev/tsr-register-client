@@ -15,7 +15,10 @@
       :value="value" 
       :readonly="readonly"
       :disabled="disabled"
+
       >
+      <!-- @change="changeHandler" 
+      @input="inputHandler" -->
   </div>
 </template>
 
@@ -46,6 +49,8 @@ input[type="text"] {
   font-size: inherit;
   line-height: inherit;
   margin: 0;
+  font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
 .text-field {
@@ -64,7 +69,7 @@ input[type="text"] {
   height: calc(2.25rem + 2px);
   padding: 0.375rem 0.75rem;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
@@ -78,6 +83,7 @@ input[type="text"] {
 .text-field__input::placeholder {
   color: #A8ABB2;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
 .text-field__input:focus {
