@@ -116,32 +116,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 
-
-:deep(.vue-advanced-cropper__background) {
-  // display: none;
-  background: red;
-}
-
-:deep(.vue-advanced-cropper__stretcher) {
-  // display: none;
-  background: blue;
-}
-
-:deep(.vue-advanced-cropper__foreground) {
-  // display: none;
-  background: yellowgreen;
-}
-
-:deep(.vue-preview__wrapper) {
-  // display: none;
-  background: orange;
-}
-
-:deep(.vue-advanced-cropper__image-wrapper) {
-  // display: none;
-  background: green;
-}
-
 .dialog-footer {
   margin-top: 20px;
   display: flex;
@@ -167,19 +141,19 @@ export default defineComponent({
   margin-left: 20px;
 }
 
-// .foto-select {
-//   width: 280px;
-// }
+.foto-select {
+  width: 280px;
+}
 
-// .line-block {
-//   width: 280px;
-// }
+.line-block {
+  width: 280px;
+}
 
 :deep(.el-input__inner) {
   border-radius: 40px;
   padding-left: 15px;
   height: 32px;
-  // width: 270px;
+  width: 270px;
   display: flex;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 14px;

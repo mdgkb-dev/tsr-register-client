@@ -8,6 +8,7 @@
     <draggable :list="question.children" item-key="id" @end="updateOrder">
       <template #item="{ element, index }">
         <div class="container">
+          <div class="q-marker"></div>
           <div class="ch-title">
             <StringItem :string="'Под-вопрос ' + (index + 1)" font-size="14px" padding="0" justify-content="left" margin="0 0 5px 5px" />
           </div>
@@ -67,6 +68,17 @@ const updateOrder = async (): Promise<void> => {
 </script>
 
 <style lang="scss" scoped>
+
+.q-marker {
+  position:absolute;
+  left: -32px;
+  top: 13px;
+  width: 14px;
+  height: 14px;
+  border-radius: 20px;
+  background: #00b5a4;
+}
+
 .q-ch {
   width: calc(100% - 50px);
   box-sizing: border-box;
@@ -149,6 +161,7 @@ const updateOrder = async (): Promise<void> => {
   padding: 40px 10px 10px 10px;
   background: #dff2f8;
   background: #ffffff;
+  background: #C7ECEA;
 }
 
 .list-number {
