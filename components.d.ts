@@ -63,7 +63,7 @@ declare module 'vue' {
     CommissionDrugApplications: typeof import('./src/components/admin/Commissions/CommissionDrugApplications.vue')['default']
     ContactForm: typeof import('./src/services/components/ContactForm.vue')['default']
     ContextWindow: typeof import('./src/services/components/ContextWindow.vue')['default']
-    copy: typeof import('./src/services/components/Button copy.vue')['default']
+    copy: typeof import('./src/services/components/ImageCropper_old copy.vue')['default']
     CreatePatientForm: typeof import('./src/components/admin/Patients/CreatePatientForm.vue')['default']
     CreateRepresentativeForm: typeof import('./src/components/admin/Patients/CreateRepresentativeForm.vue')['default']
     CreateResearchForm: typeof import('./src/components/admin/Research/CreateResearchForm.vue')['default']
@@ -143,6 +143,8 @@ declare module 'vue' {
     HumanForm: typeof import('./src/components/HumanForm.vue')['default']
     HumanView: typeof import('./src/components/HumanView.vue')['default']
     ImageCropper: typeof import('./src/services/components/ImageCropper.vue')['default']
+    ImageCropper_old: typeof import('./src/services/components/ImageCropper_old.vue')['default']
+    ImageCropper_old_: typeof import('./src/services/components/ImageCropper_old_.vue')['default']
     InfoItem: typeof import('./src/services/components/InfoItem.vue')['default']
     InfoItemSelectButtons: typeof import('./src/services/components/InfoItemSelectButtons.vue')['default']
     InputNumber: typeof import('./src/services/components/InputNumber.vue')['default']
@@ -223,6 +225,8 @@ declare module 'vue' {
     ToggleInfoItem: typeof import('./src/services/components/ToggleInfoItem.vue')['default']
     TopSliderContainer: typeof import('./src/services/components/TopSliderContainer.vue')['default']
     UploaderSingleScan: typeof import('./src/services/components/UploaderSingleScan.vue')['default']
+    UploaderSingleScan_old: typeof import('./src/services/components/UploaderSingleScan_old.vue')['default']
+    UploaderSingleScan_old_: typeof import('./src/services/components/UploaderSingleScan_old_.vue')['default']
     VerticalCollapseContainer: typeof import('./src/services/components/Collapse/VerticalCollapseContainer.vue')['default']
   }
 }

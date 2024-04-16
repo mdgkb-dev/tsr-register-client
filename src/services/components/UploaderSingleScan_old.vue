@@ -22,11 +22,9 @@
       </div>
       <span class="el-upload-list__item-actions">
         <span class="el-upload-list__item-preview" @click="openCropper(file)">
-          увеличить
           <i class="el-icon-zoom-in"></i>
         </span>
         <span class="el-upload-list__item-delete" @click="handleRemove()">
-          удалить
           <i class="el-icon-delete"></i>
         </span>
       </span>
@@ -164,8 +162,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
-
 .hideUpload {
   .el-upload {
     display: none;
@@ -174,13 +170,6 @@ export default defineComponent({
 .avatar-uploader-cover {
   display: flex;
   justify-content: center;
-  width: 280px;
-  height: 280px;
-  min-width: 280px;
-  min-height: 280px;
-  // border: 1px solid #c3c3c3;
-  border-radius: 5px;
-  background: #ffffff;
 }
 
 .avatar-uploader-cover.hideUploader {
@@ -191,12 +180,6 @@ export default defineComponent({
   margin: 0;
 }
 
-:deep(.el-upload.el-upload--picture-card) {
-  min-width: 280px;
-  min-height: 280px;
-  overflow: hidden;
-}
-
 :deep(.el-upload) {
   max-height: var(--height);
   height: 100% !important;
@@ -204,20 +187,12 @@ export default defineComponent({
   background: white;
   text-align: center;
   line-height: var(--height);
-  height: 280px;
-  width: 280px;
 }
 
 :deep(.el-upload-list__item) {
   width: auto !important;
   max-height: var(--height) !important;
   height: 100% !important;
-  margin: 0px;
-  height: 280px;
-  width: 280px;
-}
-
-:deep(.el-upload-list__item.is-success) {
   margin: 0px;
 }
 

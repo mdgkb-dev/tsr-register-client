@@ -20,7 +20,6 @@
             margin="0 0 10px 0"
             padding="0"
             width="100%"
-            custom-class="test"
           >
             <el-form-item style="width: 100%" prop="surname" :rules="human.getValidationRules().surname" @change="setFilled">
               <el-input v-model="humanCopy.surname" />
