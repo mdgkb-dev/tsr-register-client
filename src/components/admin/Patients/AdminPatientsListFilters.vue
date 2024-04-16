@@ -19,13 +19,31 @@
       </GridContainer>
     </template>
 
+    <template #title-tools>
+      <div class="tools-field">
+        <el-form>
+          <el-form-item label="Выберите фильтр:">
+            <el-select  label="Фильтры" >
+              <el-option label="Фильтр1" :value="2 / 3" />
+              <el-option label="Фильтр2" :value="4 / 3" />
+              <el-option label="Фильтр3" :value="1" />
+              <el-option label="Фильтр4" :value="3 / 2" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <button class="admin-add2" >Добавить текущий фильтр в список фильтров</button>
+        <button class="admin-del" >Удалить выбранный фильтр из списка фильтров</button>
+      </div>
+    </template>
+
     <template #filter>
-      <GridContainer
+      <div class="filter-field">
+      <!-- <GridContainer
         max-width="1500px"
         grid-gap="10px 10px"
         grid-template-columns="repeat(auto-fit, minmax(300px, 1fr))"
-        margin="0 0 0 10px"
-      >
+        margin="0"
+      > -->
         <StringItem string="Выберите пол пациента:" font-size="14px" padding="0" margin="20px 0 0 10px" />
         <InfoItem
           title="пол"
@@ -77,7 +95,7 @@
         <!--     </GridContainer> -->
         <!--   </GridContainer> -->
         <!-- </InfoItem> -->
-      </GridContainer>
+      </div>
     </template>
     <template #download>
       <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))" margin="0 0 0 10px">
@@ -180,6 +198,57 @@ const dateBirthFilter = PatientsFiltersLib.byDateBirth();
 </script>
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
+
+// .filter-save {
+//   position: sticky;
+//   top: 0px;
+//   height: 40px;
+//   width: 100%;
+//   background: #006bb4;
+// }
+
+.admin-add2 {
+  border: none;
+  background: inherit;
+  color: #00b5a4;
+  transition: 0.3s;
+  cursor: pointer;
+  margin-left: -6px;
+}
+
+.admin-add2:hover {
+  color: darken($color: #00b5a4, $amount: 10%);
+}
+
+.admin-del {
+  border: none;
+  background: inherit;
+  color: #a3a9be;
+  transition: 0.3s;
+  cursor: pointer;
+  margin-left: -6px;
+}
+
+.admin-del:hover {
+  color: darken($color: #cf3d19, $amount: 5%);
+}
+
+.filter-field {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 0 0 10px;
+  height: calc(100% - 110px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.tools-field {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 8px 10px 10px;
+}
+
 
 .button {
   width: auto;
