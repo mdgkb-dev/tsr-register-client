@@ -32,7 +32,7 @@
           </el-form-item>
         </el-form>
         <button class="admin-add2" >Добавить текущий фильтр в список фильтров</button>
-        <button class="admin-del" >Удалить текущий фильтр из списка фильтров</button>
+        <button class="admin-del" >Удалить выбранный фильтр из списка фильтров</button>
       </div>
     </template>
 
