@@ -27,7 +27,7 @@
       />
 
       <div class="dialog-footer">
-        <el-button :loading="loading" type="success" @click="save">Сохранить</el-button>
+        <el-button :loading="loading" type="success" @click="save"> Сохранить </el-button>
       </div>
     </div>
   </el-dialog>
@@ -115,7 +115,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
-
 
 :deep(.vue-advanced-cropper__background) {
   // display: none;

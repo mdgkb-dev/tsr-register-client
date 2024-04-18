@@ -1,7 +1,7 @@
 // eslint-disable-next-line simple-import-sort/imports
 import { createApp } from 'vue';
 import App from '@/App.vue';
-import router from '@/router';
+import router from '@/router/index';
 import store from '@/store';
 import 'element-plus/dist/index.css';
 import 'dayjs/locale/ru';

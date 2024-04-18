@@ -24,7 +24,12 @@
         </div>
       </GridContainer>
 
-      <RemoteSearch key-value="mkbItem" placeholder="Начните вводить диагноз" @click.stop="() => undefined" @select="(e) => addMkbItem(e, patient)" />
+      <RemoteSearch
+        key-value="mkbItem"
+        placeholder="Начните вводить диагноз"
+        @click.stop="() => undefined"
+        @select="(e) => addMkbItem(e, patient)"
+      />
     </template>
   </InfoItem>
   <ModalWindow :show="showModal" title="Диагноз" @close="showModal = false">
@@ -41,11 +46,11 @@ import MkbItem from '@/classes/MkbItem';
 import Patient from '@/classes/Patient';
 import PatientDiagnosis from '@/classes/PatientDiagnosis';
 import PatientDiagnosisForm from '@/components/admin/Patients/PatientDiagnosis/PatientDiagnosisForm.vue';
-import ModalWindow from '@/services/components/ModalWindow.vue';
-import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import ISearchObject from '@/interfaces/ISearchObject';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
+import ModalWindow from '@/services/components/ModalWindow.vue';
+import RemoteSearch from '@/services/components/RemoteSearch.vue';
 import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
@@ -100,7 +105,6 @@ export default defineComponent({
       showModal,
       selectPatientDiagnosis,
       addMkbItem,
-      ...Provider.getAdminLib(),
     };
   },
 });

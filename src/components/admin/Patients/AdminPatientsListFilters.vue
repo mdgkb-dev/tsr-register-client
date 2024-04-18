@@ -23,22 +23,19 @@
       <div class="tools-field">
         <el-form>
           <el-form-item label="Выберите фильтр:">
-            <el-select  label="Фильтры" >
-              <el-option label="Фильтр1" :value="2 / 3" />
-              <el-option label="Фильтр2" :value="4 / 3" />
-              <el-option label="Фильтр3" :value="1" />
-              <el-option label="Фильтр4" :value="3 / 2" />
+            <el-select label="Фильтры" @change="setFilter">
+              <el-option v-for="filt in ftspFilters" :label="filt.name" :value="filt" />
             </el-select>
           </el-form-item>
         </el-form>
-        <button class="admin-add2" >Добавить текущий фильтр в список фильтров</button>
-        <button class="admin-del" >Удалить выбранный фильтр из списка фильтров</button>
+        <button class="admin-add2" @click="openFtspModal">Добавить текущий фильтр в список фильтров</button>
+        <button class="admin-del">Удалить выбранный фильтр из списка фильтров</button>
       </div>
     </template>
 
     <template #filter>
       <div class="filter-field">
-      <!-- <GridContainer
+        <!-- <GridContainer
         max-width="1500px"
         grid-gap="10px 10px"
         grid-template-columns="repeat(auto-fit, minmax(300px, 1fr))"
@@ -123,6 +120,10 @@
       </GridContainer>
     </template>
   </RSContainer>
+  <ModalWindow>
+    <el-input v-model="ftspName" />
+    <Button @click="saveFTSP" />
+  </ModalWindow>
 </template>
 
 <script setup lang="ts">
@@ -138,20 +139,36 @@ import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
+import FTSPSaveQuery from '@/services/classes/FTSPSaveQuery';
 import Provider from '@/services/Provider/Provider';
 
 defineEmits(['load']);
 const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
 
+const setFilter = async (ftspFromList: FTSP) => {
+  console.log(ftspFromList);
+};
+
 const questions: Ref<Question[]> = Store.Items('questions');
 const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
-const filterByDisabilities: Ref<FilterModel> = ref(new FilterModel());
 const registers: Ref<Register[]> = Store.Items('registers');
+const ftspFilters: Ref<Register[]> = Store.Items('ftsp');
+
 const selectSearch = async (event: ISearchObject): Promise<void> => {
   await Provider.router.push(`/admin/patients/${event.value}`);
 };
 
+const ftspName = ref('');
+
+const saveFTSP = async () => {
+  const ftspForSave = FTSPSaveQuery.Create(Provider.ftsp);
+  ftspForSave.name = ftspName;
+  await Store.Create('ftsp', ftspForSave);
+  Store.AppendToAll('ftsp', ftspForSave);
+};
+
 onBeforeMount(async () => {
+  await Store.GetAll('ftsp');
   filterByRegister.value = PatientsFiltersLib.byRegisters([]);
 
   const fq = new FilterQuery();
@@ -248,7 +265,6 @@ const dateBirthFilter = PatientsFiltersLib.byDateBirth();
   width: 100%;
   padding: 0 8px 10px 10px;
 }
-
 
 .button {
   width: auto;

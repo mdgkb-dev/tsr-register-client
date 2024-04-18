@@ -4,7 +4,6 @@
 
     <div class="scroll-block">
       <div class="patient-count">Количество пациентов: {{ count }}</div>
-      <PInput placeholder="Введите текст" value="Ввод по умолчанию"/>
       <div v-for="patient in patients" :key="patient.id">
         <CollapseItem :is-collaps="false" padding="0 8px">
           <template #inside-title>
@@ -61,9 +60,9 @@
 import Human from '@/classes/Human';
 import Patient from '@/classes/Patient';
 import PatientsSortsLib from '@/libs/sorts/PatientsSortsLib';
+import PInput from '@/services/components/PInput.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
-import PInput from '@/services/components/PInput.vue';
 
 const showAddModal: Ref<boolean> = ref(false);
 const patients: Ref<Patient[]> = Store.Items('patients');
