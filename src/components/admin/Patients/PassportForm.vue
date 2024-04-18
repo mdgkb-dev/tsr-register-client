@@ -48,6 +48,7 @@
           title="Текущий адрес проживания будет заменен"
           @confirm="toggleAddress(true)"
           @cancel="() => {}"
+          width='240px'
         >
           <template #reference>
             <div style="display: flex; align-items: center">
@@ -205,63 +206,6 @@ export default defineComponent({
     fill: #c4c4c4;
   }
 
-  // :deep(.el-form-item) {
-  //   display: block;
-  //   width: 100%;
-  //   margin-bottom: 16px;
-  // }
-
-  // :deep(.el-form-item__content) {
-  //   width: 100%;
-  // }
-
-  // :deep(.el-input__inner) {
-  //   border-radius: 40px;
-  //   padding-left: 25px;
-  //   height: 32px;
-  //   width: 100%;
-  //   display: flex;
-  //   font-family: Comfortaa, Arial, Helvetica, sans-serif;
-  //   font-size: 15px;
-  //   color: $site_dark_gray;
-  // }
-
-  // :deep(.el-input__inner::placeholder) {
-  //   color: $site_light_pink;
-  // }
-
-  // :deep(.el-select .el-input .el-select__caret) {
-  //   color: #343e5c;
-  //   font-size: 15px;
-  //   font-weight: bold;
-  //   margin-right: 5px;
-  // }
-  // :deep(.el-input__prefix) {
-  //   left: 230px;
-  //   top: -3px;
-  // }
-  // :deep(.el-input__icon) {
-  //   color: #343e5c;
-  // }
-
-  // :deep(.el-input__suffix) {
-  //   top: -3px;
-  // }
-
-  // :deep(.el-form-item__label) {
-  //   color: $site_light_pink;
-  //   padding: 0 !important;
-  //   text-transform: uppercase;
-  //   margin-left: 5px;
-  //   font-size: 14px;
-  //   margin-bottom: 6px;
-  //   justify-content: left;
-  // }
-
-  // :deep(.el-input__prefix) {
-  //   left: auto;
-  //   right: 10px;
-  // }
   .el-select {
     width: 100%;
   }
