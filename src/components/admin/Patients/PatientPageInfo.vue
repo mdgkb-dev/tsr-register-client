@@ -43,8 +43,8 @@
   </LeftRightContainer>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
+<script lang="ts" setup>
+import { computed, Ref, ref } from 'vue';
 
 import Patient from '@/classes/Patient';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
@@ -53,40 +53,22 @@ import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
 import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import Provider from '@/services/Provider/Provider';
 
-export default defineComponent({
-  name: 'PatientPageInfo',
-  components: {
-    PopoverInfo,
-    UploaderSingleScan,
-    LeftRightContainer,
-    PassportForm,
-    // ContactForm,
-  },
-  setup() {
-    const checked = ref(true);
-    const notChecked = ref(false);
 
-    const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+const checked = ref(true);
+const notChecked = ref(false);
 
-    const savePhoto = async () => {
-      await Provider.store.dispatch('fileInfos/create', patient.value.human.photo);
-      patient.value.human.photoId = patient.value.human.photo.id;
-      await update();
-    };
+const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
 
-    const update = async () => {
-      await Provider.store.dispatch('patients/update');
-    };
+const savePhoto = async () => {
+  await Provider.store.dispatch('fileInfos/create', patient.value.human.photo);
+  patient.value.human.photoId = patient.value.human.photo.id;
+  await update();
+};
 
-    return {
-      update,
-      savePhoto,
-      patient,
-      checked,
-      notChecked,
-    };
-  },
-});
+const update = async () => {
+  await Provider.store.dispatch('patients/update');
+};
+
 </script>
 
 <style lang="scss" scoped>
