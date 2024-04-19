@@ -12,9 +12,9 @@
       type="text" :name="label" 
       :id="label" 
       :placeholder="placeholder" 
-      :value="value" 
       :readonly="readonly"
       :disabled="disabled"
+      v-model="model"
 
       >
       <!-- @change="changeHandler" 
@@ -23,6 +23,8 @@
 </template>
 
 <script setup lang="ts">
+
+const model = defineModel();
 
 defineOptions({ inheritAttrs: false });
 
