@@ -60,7 +60,6 @@ export default abstract class Store {
   }
 
   static async Update(module: string, data: unknown) {
-    console.log(getStore());
     await getStore().dispatch(`${module}/${Methods.Update}`, data);
   }
 

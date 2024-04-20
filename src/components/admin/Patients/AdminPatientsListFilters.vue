@@ -1,18 +1,13 @@
 <template>
   <RSContainer :menu-width="'300px'" :mobile-width="'6000px'">
     <template #visability>
-      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))" margin="0px">
-        <InfoItem
-          title="поиск и сортировка"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          :with-hover="false"
-        >
+      <GridContainer max-width="300px" grid-gap="0 10px" grid-template-columns="repeat(auto-fit, minmax(200px, 1fr))"
+        margin="0px">
+        <InfoItem title="поиск и сортировка" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+          border-color="#C4C4C4" :with-hover="false">
           <div :style="{ width: '100%' }">
-            <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%" @select="selectSearch" />
+            <RemoteSearch key-value="patient" placeholder="Начните вводить ФИО" max-width="100%"
+              @select="selectSearch" />
             <SortList class="filters-block" :store-mode="true" label-name="" max-width="100%" @load="$emit('load')" />
           </div>
         </InfoItem>
@@ -21,15 +16,7 @@
 
     <template #title-tools>
       <div class="tools-field">
-        <el-form>
-          <el-form-item label="Выберите фильтр:">
-            <el-select label="Фильтры" @change="setFilter">
-              <el-option v-for="filt in ftspFilters" :label="filt.name" :value="filt" />
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <button class="admin-add2" @click="openFtspModal">Добавить текущий фильтр в список фильтров</button>
-        <button class="admin-del">Удалить выбранный фильтр из списка фильтров</button>
+        <FTSPPanel @change="$emit('load')" />
       </div>
     </template>
 
@@ -42,28 +29,17 @@
         margin="0"
       > -->
         <StringItem string="Выберите пол пациента:" font-size="14px" padding="0" margin="20px 0 0 10px" />
-        <InfoItem
-          title="пол"
-          margin="10px 0"
-          :with-open-window="false"
-          height="auto"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          padding="7px"
-          :with-hover="false"
-        >
-          <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол" @load="$emit('load')" />
+        <InfoItem title="пол" margin="10px 0" :with-open-window="false" height="auto" background="#F5F5F5"
+          border-color="#C4C4C4" padding="7px" :with-hover="false">
+          <Switch3Pos :first-model="onlyMaleFilter" :second-model="onlyFemaleFilter" default-label="пол"
+            @load="$emit('load')" />
         </InfoItem>
         <FiltersButtonsSelect :models="createDisabilityFilters()" default-label="Инвалидность" @load="$emit('load')" />
         <StringItem string="Задайте диапазон дат рождения:" font-size="14px" padding="0" margin="20px 0 0 10px" />
         <FilterDatesRange :model="dateBirthFilter" @load="$emit('load')" />
         <div v-for="question in questions" :key="question.id">
-          <FiltersButtonsSelect
-            :models="createCustomFilterModels(question)"
-            :default-label="question.name"
-            :inverse="true"
-            @load="$emit('load')"
-          />
+          <FiltersButtonsSelect :models="createCustomFilterModels(question)" :default-label="question.name"
+            :inverse="true" @load="$emit('load')" />
         </div>
         <!-- <InfoItem -->
         <!--   title="документы" -->
@@ -95,34 +71,22 @@
       </div>
     </template>
     <template #download>
-      <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))" margin="0 0 0 10px">
-        <InfoItem
-          title="сохранить"
-          margin="0"
-          :with-open-window="false"
-          height="98px"
-          background="#F5F5F5"
-          border-color="#C4C4C4"
-          padding="7px"
-          :with-hover="false"
-        >
-          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))" margin="0px">
-            <Button
-              v-for="exportObj in exports"
-              :key="exportObj.exportType"
-              button-class="button-download"
-              background-hover="#DFF2F8"
-              :text="exportObj.exportType"
-              @click="exportData(exportObj)"
-            />
+      <GridContainer max-width="65px" grid-gap="27px 10px" grid-template-columns="repeat(auto-fit, minmax(65px, 1fr))"
+        margin="0 0 0 10px">
+        <InfoItem title="сохранить" margin="0" :with-open-window="false" height="98px" background="#F5F5F5"
+          border-color="#C4C4C4" padding="7px" :with-hover="false">
+          <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
+            margin="0px">
+            <Button v-for="exportObj in exports" :key="exportObj.exportType" button-class="button-download"
+              background-hover="#DFF2F8" :text="exportObj.exportType" @click="exportData(exportObj)" />
           </GridContainer>
         </InfoItem>
       </GridContainer>
     </template>
   </RSContainer>
-  <ModalWindow>
-    <el-input v-model="ftspName" />
-    <Button @click="saveFTSP" />
+  <ModalWindow v-if="ftspModalOpened" :show="ftspModalOpened">
+    <PInput v-model="ftspName" />
+    <Button text="Сохранить" @click="saveFTSP" />
   </ModalWindow>
 </template>
 
@@ -132,43 +96,26 @@ import ExportOptions from '@/classes/exportOptions/ExportOptions';
 import PatientsExportOptionLib from '@/classes/exportOptions/libs/PatientsExportOptionLib';
 import ResearchesExportOptionLib from '@/classes/exportOptions/libs/ResearchesExportOptionLib';
 import Question from '@/classes/Question';
-import Register from '@/classes/Register';
 import ISearchObject from '@/interfaces/ISearchObject';
-import IOption from '@/interfaces/shared/IOption';
 import PatientsFiltersLib from '@/libs/filters/PatientsFiltersLib';
 import QuestionsFiltersLib from '@/libs/filters/QuestionsFiltersLib';
 import FilterModel from '@/services/classes/filters/FilterModel';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
-import FTSPSaveQuery from '@/services/classes/FTSPSaveQuery';
 import Provider from '@/services/Provider/Provider';
 
 defineEmits(['load']);
 const exports: ExportOptions[] = [ExportOptions.XLSX(PatientsExportOptionLib.allPatients(), ResearchesExportOptionLib.allResearches())];
 
-const setFilter = async (ftspFromList: FTSP) => {
-  console.log(ftspFromList);
-};
-
 const questions: Ref<Question[]> = Store.Items('questions');
 const filterByRegister: Ref<FilterModel> = ref(new FilterModel());
-const registers: Ref<Register[]> = Store.Items('registers');
-const ftspFilters: Ref<Register[]> = Store.Items('ftsp');
+const ftspModalOpened = ref(false);
 
 const selectSearch = async (event: ISearchObject): Promise<void> => {
   await Provider.router.push(`/admin/patients/${event.value}`);
 };
 
-const ftspName = ref('');
-
-const saveFTSP = async () => {
-  const ftspForSave = FTSPSaveQuery.Create(Provider.ftsp);
-  ftspForSave.name = ftspName;
-  await Store.Create('ftsp', ftspForSave);
-  Store.AppendToAll('ftsp', ftspForSave);
-};
-
 onBeforeMount(async () => {
-  await Store.GetAll('ftsp');
+  await Store.GetAll('ftspPresets');
   filterByRegister.value = PatientsFiltersLib.byRegisters([]);
 
   const fq = new FilterQuery();
@@ -178,12 +125,6 @@ onBeforeMount(async () => {
 
 const createDisabilityFilters = (): FilterModel[] => {
   return [PatientsFiltersLib.withDisabilities()];
-};
-
-const createRegistersOptions = (): IOption[] => {
-  const ids: IOption[] = [];
-  registers.value.forEach((r: Register) => ids.push({ value: r.id as string, label: r.name }));
-  return ids;
 };
 
 const createCustomFilterModels = (question: Question): FilterModel[] => {

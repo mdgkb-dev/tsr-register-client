@@ -14,6 +14,9 @@ const getters: GetterTree<State, RootState> = {
   filterExists(state): boolean {
     return state.filterExists;
   },
+  restore(state): boolean {
+    return state.restore;
+  },
   trigger(state): string {
     return state.trigger;
   },

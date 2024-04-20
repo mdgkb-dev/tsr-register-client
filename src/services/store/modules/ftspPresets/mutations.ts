@@ -1,12 +1,12 @@
 import { MutationTree } from 'vuex';
 
-import FTSPSaveQuery from '@/services/classes/FTSPSaveQuery';
+import FTSPPreset from '@/services/classes/FTSPPreset';
 import getBaseMutations from '@/services/store/baseModule/baseMutations';
 
 import { State } from './index';
 
 const mutations: MutationTree<State> = {
-  ...getBaseMutations<FTSPSaveQuery, State>(FTSPSaveQuery),
+  ...getBaseMutations<FTSPPreset, State>(FTSPPreset),
 };
 
 export default mutations;

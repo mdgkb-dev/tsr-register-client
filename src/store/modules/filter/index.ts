@@ -11,6 +11,7 @@ import { State } from './state';
 export const state: State = {
   trigger: 'click',
   storeModule: '',
+  restore: false,
   action: 'getAll',
   filterQuery: new FilterQuery(),
   sortModels: [],
