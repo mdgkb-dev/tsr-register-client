@@ -64,6 +64,8 @@ import PInput from '@/services/components/PInput.vue';
 import Hooks from '@/services/Hooks/Hooks';
 import Provider from '@/services/Provider/Provider';
 
+const msg = ref('Ввод выводится сюда!');
+
 const showAddModal: Ref<boolean> = ref(false);
 const patients: Ref<Patient[]> = Store.Items('patients');
 const count: Ref<number> = Store.Count('patients');

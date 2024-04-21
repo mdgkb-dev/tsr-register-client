@@ -3,22 +3,21 @@
     <label v-if="label" class="text-field__label" :for="label">
       {{ label }}
     </label>
-    <input
-      :id="label"
-      class="text-field__input"
-      type="text"
-      :name="label"
-      :placeholder="placeholder"
-      :value="value"
+    <input 
+      class="text-field__input" 
+      type="text" :name="label" 
+      :id="label" 
+      :placeholder="placeholder" 
       :readonly="readonly"
       :disabled="disabled"
-    />
-    <!-- @change="changeHandler" 
-      @input="inputHandler" -->
+      v-model="model">
   </div>
 </template>
 
 <script setup lang="ts">
+
+const model = defineModel();
+
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps({

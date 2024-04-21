@@ -38,7 +38,7 @@
         </div>
         <div v-else>Не установлена</div>
       </div>
-
+      
       <div class="left-info">
         <el-checkbox v-model="patient.isMoscow" label="Пациент из Москвы" @change="update" />
         <el-checkbox v-model="patient.agreed" label="Дано информированное согласие" @change="update" />
