@@ -10,25 +10,19 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button
-                    button-class="edit-button"
-                    color="#006bb4"
-                    icon="edit"
-                    icon-class="edit-icon"
-                    @click="Router.ToAdmin('patients/' + patient.id)"
-                  />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon"
+                    @click="Router.ToAdmin('patients/' + patient.id)" />
                   <FioToggleForm :human="patient.human" />
                 </div>
 
                 <div class="line-item-right">
-                  <Button button-class="gender-button" :text="patient.human.getGender()" @click="updateIsMale(patient.human)" />
-                  <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode" icon="edit-title">
-                    <DateInput
-                      v-model:model-value="patient.human.dateBirth"
-                      placeholder="Выбрать"
+                  <Button button-class="gender-button" :text="patient.human.getGender()"
+                    @click="updateIsMale(patient.human)" />
+                  <InfoItem title="дата рождения" margin="0" :with-open-window="false" :with-hover="editMode"
+                    icon="edit-title">
+                    <DateInput v-model:model-value="patient.human.dateBirth" placeholder="Выбрать"
                       @change="updateHuman(patient.human)"
-                      @before-change="(date) => patient.human.setDateBirth(date)"
-                    />
+                      @before-change="(date) => patient.human.setDateBirth(date)" />
                   </InfoItem>
                 </div>
               </div>
@@ -338,6 +332,7 @@ const updateIsMale = async (human: Human): Promise<void> => {
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -345,6 +340,7 @@ const updateIsMale = async (human: Human): Promise<void> => {
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

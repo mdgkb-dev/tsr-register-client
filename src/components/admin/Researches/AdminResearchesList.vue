@@ -10,13 +10,8 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button
-                    button-class="edit-button"
-                    color="#006bb4"
-                    icon="edit"
-                    icon-class="edit-icon"
-                    @click="Provider.editAdmin(research.id)"
-                  />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon"
+                    @click="Router.ToAdmin('researches/' + research.id)" />
                   <StringItem :string="research.name" />
                 </div>
               </div>
@@ -295,6 +290,7 @@ Hooks.onBeforeMount(load, {
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -302,6 +298,7 @@ Hooks.onBeforeMount(load, {
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;

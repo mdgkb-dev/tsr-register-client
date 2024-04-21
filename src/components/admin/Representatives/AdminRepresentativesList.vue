@@ -10,33 +10,23 @@
             <div class="flex-block" @click.prevent="() => undefined">
               <div class="item-flex">
                 <div class="line-item-left">
-                  <Button
-                    button-class="edit-button"
-                    color="#006bb4"
-                    icon="edit"
-                    icon-class="edit-icon"
-                    @click="Router.toAdmin('representatives/' + representative.id)"
-                  />
+                  <Button button-class="edit-button" color="#006bb4" icon="edit" icon-class="edit-icon"
+                    @click="Router.ToAdmin('representatives/' + representative.id)" />
                   <FioToggleForm :human="representative.human" />
                 </div>
 
                 <div class="line-item-right">
-                  <Button
-                    button-class="gender-button"
-                    :text="representative.human.getGender()"
-                    @click="updateIsMale(representative.human)"
-                  />
+                  <Button button-class="gender-button" :text="representative.human.getGender()"
+                    @click="updateIsMale(representative.human)" />
                 </div>
               </div>
               <div class="item-flex">
-                <GridContainer max-width="1920px" custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))">
+                <GridContainer max-width="1920px" custom-class="grid"
+                  grid-template-columns="repeat(auto-fit, minmax(220px, 1fr))">
                   <GridContainer custom-class="grid" grid-template-columns="repeat(auto-fit, minmax(80px, 1fr))">
                     <InfoItem title="дата рождения" margin="0" :with-open-window="false">
-                      <SmallDatePicker
-                        v-model:model-value="representative.human.dateBirth"
-                        placeholder="Выбрать"
-                        @change="updateHuman(representative.human)"
-                      />
+                      <SmallDatePicker v-model:model-value="representative.human.dateBirth" placeholder="Выбрать"
+                        @change="updateHuman(representative.human)" />
                     </InfoItem>
                   </GridContainer>
                   <ToggleDocumentsForm :human="representative.human" />
@@ -54,8 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, Ref, ref } from 'vue';
-
 import Human from '@/classes/Human';
 import Representative from '@/classes/Representative';
 import FioToggleForm from '@/components/admin/FioToggleForm.vue';
@@ -74,6 +62,7 @@ import Provider from '@/services/Provider/Provider';
 import AdminListWrapper from '@/views/adminLayout/AdminListWrapper.vue';
 
 import CreateRepresentativeForm from '../Patients/CreateRepresentativeForm.vue';
+
 const showAddModal: Ref<boolean> = ref(false);
 const representatives: Ref<Representative[]> = computed(() => Provider.store.getters['representatives/items']);
 const count: Ref<number> = computed(() => Provider.store.getters['representatives/count']);
@@ -343,6 +332,7 @@ const updateIsMale = async (human: Human): Promise<void> => {
     justify-content: space-between;
     align-items: center;
   }
+
   .line-item {
     display: flex;
     justify-content: space-between;
@@ -350,6 +340,7 @@ const updateIsMale = async (human: Human): Promise<void> => {
     width: 100%;
     padding: 0;
   }
+
   .item-flex {
     display: flex;
     width: 100%;
