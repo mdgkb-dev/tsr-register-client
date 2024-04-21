@@ -1,38 +1,25 @@
 <template>
-  <el-upload
-    ref="uploader"
-    :multiple="false"
-    action="#"
-    list-type="picture-card"
-    class="avatar-uploader-cover"
-    :auto-upload="false"
-    :limit="parseInt('1')"
-    :file-list="fileList"
-    :style="heightWeight"
-    :on-change="toggleUpload"
-    :class="{ hideUpload: !showUpload }"
-    accept="image/jpeg,image/png,image/jng"
-  >
+  {{ fileList }}
+  <el-upload ref="uploader" :multiple="false" action="#" list-type="picture-card" class="avatar-uploader-cover"
+    :auto-upload="false" :limit="parseInt('1')" :file-list="fileList" :style="heightWeight" :on-change="toggleUpload"
+    :class="{ hideUpload: !showUpload }" accept="image/jpeg,image/png,image/jng">
     <template #default>
-       <div class="plus-cr"
-        :style="{width: height*defaultRatio-2 + 'px', height: height + 'px'}"
-       >Добавить</div>
+      <div class="plus-cr" :style="{ width: height * defaultRatio - 2 + 'px', height: height + 'px' }">Добавить</div>
     </template>
     <template #file="{ file }">
-      <div class="div1"
-        :style="{width: height*defaultRatio-2 + 'px', height: height + 'px'}"
-      >
+      <div class="div1" :style="{ width: height * defaultRatio - 2 + 'px', height: height + 'px' }">
         <img class="el-upload-list__item-thumbnail" :src="file.url" alt="upload-image" />
       </div>
       <div class="el-upload-list__item-actions">
         <div class="inside">
-          <div class="b1" @click="openCropper(file)" >Изменить</div>
-          <div class="b2" @click="handleRemove()" >Удалить</div>
+          <div class="b1" @click="openCropper(file)">Изменить</div>
+          <div class="b2" @click="handleRemove()">Удалить</div>
         </div>
       </div>
     </template>
   </el-upload>
-  <ImageCropper v-if="withCrop" :open="cropperOpened" :default-ratio="defaultRatio" @crop="crop" @close="cropperOpened = false" />
+  <ImageCropper v-if="withCrop" :open="cropperOpened" :default-ratio="defaultRatio" @crop="crop"
+    @close="cropperOpened = false" />
 </template>
 
 <script lang="ts" setup>
@@ -46,7 +33,7 @@ import IFilesList from '@/services/interfaces/IFIlesList';
 import Cropper from '@/services/classes/Cropper';
 import ImageCropper from '@/services/components/ImageCropper.vue';
 
-const props = defineProps ({
+const props = defineProps({
   withCrop: {
     type: Boolean,
     default: true,
@@ -138,6 +125,7 @@ const crop = (file: any) => {
 };
 
 onBeforeMount(() => {
+  console.log(props.fileInfo)
   if (props.fileInfo.fileSystemPath) {
     fileList.value.push({ name: props.fileInfo.fileSystemPath, url: props.fileInfo.getImageUrl() });
     showUpload.value = false;
@@ -147,14 +135,13 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-
 .inside {
   display: block;
   margin: 0 auto;
   text-align: center;
 }
 
-.b1{
+.b1 {
   cursor: pointer;
   color: #DCDFE6;
   margin-bottom: 30px;
@@ -165,7 +152,7 @@ onBeforeMount(() => {
   color: #ffffff;
 }
 
-.b2{
+.b2 {
   cursor: pointer;
   color: #DCDFE6;
 }
@@ -188,6 +175,7 @@ onBeforeMount(() => {
     display: none;
   }
 }
+
 .avatar-uploader-cover {
   box-sizing: border-box;
   display: flex;
@@ -221,7 +209,7 @@ onBeforeMount(() => {
 
 :deep(.el-upload-list__item-thumbnail) {
   width: auto !important;
-  max-height: var(--height) !important ;
+  max-height: var(--height) !important;
   height: 100% !important;
 }
 

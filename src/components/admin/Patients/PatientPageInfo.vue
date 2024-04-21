@@ -1,7 +1,9 @@
 <template>
   <LeftRightContainer left-width="280px">
     <template #left>
-      <UploaderSingleScan :file-info="patient.human.photo" :height="280" :default-ratio="1" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
+      {{ patient.human.photo }}
+      <UploaderSingleScan :file-info="patient.human.photo" :height="280" :default-ratio="1" :emit-crop="true"
+        @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
       <div class="left-title">Диагноз</div>
       <div class="left-info">
         <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
@@ -22,9 +24,15 @@
               {{ $dateTimeFormatter.format(patient.getActuallyDisability()?.period?.dateEnd) }}
             </div>
             <el-space v-if="patient.getActuallyDisability().getActuallyEdv()" ::size="20" class="disability-circles">
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A </el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B </el-button>
-              <el-button disabled :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C </el-button>
+              <el-button disabled
+                :type="patient.getActuallyDisability().getActuallyEdv().parameter1 ? 'primary' : undefined" circle>A
+              </el-button>
+              <el-button disabled
+                :type="patient.getActuallyDisability().getActuallyEdv().parameter2 ? 'primary' : undefined" circle>B
+              </el-button>
+              <el-button disabled
+                :type="patient.getActuallyDisability().getActuallyEdv().parameter3 ? 'primary' : undefined" circle>C
+              </el-button>
             </el-space>
             <div v-else>Нет справок ЕДВ</div>
           </el-space>
