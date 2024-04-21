@@ -1,9 +1,8 @@
 <template>
   <LeftRightContainer left-width="280px">
     <template #left>
-      {{ patient.human.photo }}
-      <UploaderSingleScan :file-info="patient.human.photo" :height="280" :default-ratio="1" :emit-crop="true"
-        @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
+      <UploaderSingleScan v-if="patient.id" :file-info="patient.human.photo" :height="280" :default-ratio="1"
+        @removeFile="removePhoto" :emit-crop="true" @ratio="(e) => (element.ratio = e)" @crop="savePhoto" />
       <div class="left-title">Диагноз</div>
       <div class="left-info">
         <el-space v-if="patient.patientDiagnosis.length" direction="vertical" :size="5" alignment="start">
@@ -52,20 +51,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, Ref, ref } from 'vue';
-
 import Patient from '@/classes/Patient';
 import PassportForm from '@/components/admin/Patients/PassportForm.vue';
 import PopoverInfo from '@/components/PopoverInfo.vue';
 import LeftRightContainer from '@/services/components/LeftRightContainer.vue';
-import UploaderSingleScan from '@/services/components/UploaderSingleScan.vue';
 import Provider from '@/services/Provider/Provider';
 
-
-const checked = ref(true);
-const notChecked = ref(false);
-
-const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
+const patient: Ref<Patient> = Store.Item('patients')
 
 const savePhoto = async () => {
   await Provider.store.dispatch('fileInfos/create', patient.value.human.photo);
@@ -73,8 +65,14 @@ const savePhoto = async () => {
   await update();
 };
 
+const removePhoto = async () => {
+  // Store.Remove('fileInfos', patient.value.human.photo.id)
+  patient.value.human.removePhoto()
+  Store.Update('humans', patient.value.human)
+};
+
 const update = async () => {
-  await Provider.store.dispatch('patients/update');
+  await Store.Update('patients')
 };
 
 </script>

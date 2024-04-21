@@ -179,4 +179,8 @@ export default class Human {
     }
     return result;
   }
+  removePhoto(): void {
+    this.photo = new FileInfo()
+    this.photoId = undefined
+  }
 }

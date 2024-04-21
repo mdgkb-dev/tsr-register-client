@@ -1,5 +1,4 @@
 <template>
-  {{ fileList }}
   <el-upload ref="uploader" :multiple="false" action="#" list-type="picture-card" class="avatar-uploader-cover"
     :auto-upload="false" :limit="parseInt('1')" :file-list="fileList" :style="heightWeight" :on-change="toggleUpload"
     :class="{ hideUpload: !showUpload }" accept="image/jpeg,image/png,image/jng">
@@ -24,7 +23,6 @@
 
 <script lang="ts" setup>
 import { ElMessageBox } from 'element-plus';
-import { computed, onBeforeMount, PropType, Ref, ref } from 'vue';
 import { useStore } from 'vuex';
 
 import FileInfo from '@/services/classes/FileInfo';

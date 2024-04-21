@@ -1,5 +1,6 @@
 <template>
-  <el-select v-model="curFTSP" label="Фильтры" clearable @change="set" @clear="clear">
+  <el-select v-model="curFTSP" label="Фильтры" clearable @change="set" @clear="clear"
+    placeholder="Выберите шаблон фильтра">
     <el-option v-for="preset in ftspPresets" :key="preset" :label="preset.name" :value="preset.id" />
   </el-select>
   <button class="admin-add2" @click="openModal" v-if="ftsp.f.length > 0">
