@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :model-value="open" title="Настройка изображения" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+  <el-dialog
+    :model-value="open"
+    title="Настройка изображения"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+  >
     <div class="background-container">
       <div class="tools-line">
         <div class="line-block">
@@ -22,12 +28,12 @@
         ref="cropperRef"
         :src="cropper.src"
         :stencil-props="{ aspectRatio: cropper.ratio }"
-        style="max-height: 50vh; min-height: 50vh;" 
+        style="max-height: 50vh; min-height: 50vh"
         @change="onChange"
       />
 
       <div class="dialog-footer">
-        <el-button :loading="loading" type="success" @click="save">Сохранить</el-button>
+        <el-button :loading="loading" type="success" @click="save"> Сохранить </el-button>
       </div>
     </div>
   </el-dialog>
@@ -43,7 +49,7 @@ import ICanvasResult from '@/services/interfaces/canvas/ICanvasResult';
 import ICoordinates from '@/services/interfaces/canvas/ICoordinates';
 import Provider from '@/services/Provider/Provider';
 
-const props = defineProps ({
+const props = defineProps({
   open: {
     type: Boolean,
     required: true,
@@ -104,7 +110,6 @@ const onChange = (res: ICanvasResult) => {
   coordinates.value = res.coordinates;
   resultImage.value = res.canvas?.toDataURL();
 };
-
 </script>
 
 <style lang="scss" scoped>

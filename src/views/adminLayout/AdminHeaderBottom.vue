@@ -3,7 +3,7 @@
     <div class="flex-between">
       <h4 class="menu-title">
         {{ headerParams.title }}
-        <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger"></el-badge>
+        <el-badge v-if="headerParams.applicationsCount" :value="headerParams.applicationsCount" type="danger" />
       </h4>
       <div class="button-group">
         <div v-for="item in headerParams.buttons" :key="item" style="margin: 0 0 0 10px">
@@ -11,7 +11,7 @@
         </div>
         <div v-if="headSpinner" class="system-message">
           <StringItem string="Сохранение" font-size="20px" padding="0 10px" />
-          <span class="loader-spinner"></span>
+          <span class="loader-spinner" />
         </div>
         <div v-else-if="headSuccess" class="system-message">
           <StringItem string="Успешно сохранено" font-size="20px" padding="0 10px" color="green" />
@@ -21,46 +21,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, Ref, ref } from 'vue';
-
-import Button from '@/services/components/Button.vue';
+<script lang="ts" setup>
 import AdminHeaderParams from '@/services/classes/admin/AdminHeaderParams';
-import StringItem from '@/services/components/StringItem.vue';
 import Provider from '@/services/Provider/Provider';
 
-export default defineComponent({
-  name: 'AdminHeaderBottom',
-  components: {
-    StringItem,
-    Button,
-  },
+const headerParams: Ref<AdminHeaderParams> = Store.Item('admin', 'headerParams');
+const headSpinner: Ref<boolean> = Store.Item('admin', 'headerSpinner');
+const headSuccess: Ref<boolean> = Store.Item('admin', 'headerSuccess');
+const goBack = () => {
+  Provider.router.go(-1);
+};
+const buttonClicked: Ref<boolean> = ref(false);
 
-  setup() {
-    const headerParams: Ref<AdminHeaderParams> = computed(() => Provider.store.getters['admin/headerParams']);
-    const headSpinner: Ref<boolean> = computed(() => Provider.store.getters['admin/headSpinner']);
-    const headSuccess: Ref<boolean> = computed(() => Provider.store.getters['admin/headSuccess']);
-    const goBack = () => {
-      Provider.router.go(-1);
-    };
-    const buttonClicked: Ref<boolean> = ref(false);
-
-    const action = (f: CallableFunction) => {
-      buttonClicked.value = true;
-      f();
-      buttonClicked.value = false;
-    };
-
-    return {
-      headSpinner,
-      headSuccess,
-      action,
-      buttonClicked,
-      headerParams,
-      goBack,
-    };
-  },
-});
+const action = (f: CallableFunction) => {
+  buttonClicked.value = true;
+  f();
+  buttonClicked.value = false;
+};
 </script>
 
 <style lang="scss" scoped>

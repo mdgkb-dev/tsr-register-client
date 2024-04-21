@@ -2,7 +2,8 @@
   <MenuContainer v-if="mounted" min-menu-item-width="160px" background="#DFF2F8">
     <template #menu>
       <div v-for="menu in customSections" :key="menu.id">
-        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }" @click="changeMenu(menu.id)">
+        <div :class="{ 'selected-tab': activeMenu.id === menu.id, tab: activeMenu.id !== menu.id }"
+          @click="changeMenu(menu.id)">
           {{ menu.name }}
         </div>
       </div>
@@ -81,6 +82,7 @@ export default defineComponent({
     // ];
     const activeMenu: Ref<CustomSection> = ref(customSections.value[0]);
 
+    const mounted = ref(false)
     const patient: Ref<Patient> = computed(() => Provider.store.getters['patients/item']);
     const menusProperties = computed(() => {
       if (activeMenu.value.component === 'PatientDiagnosis') {
@@ -115,8 +117,10 @@ export default defineComponent({
     const load = async () => {
       await Provider.store.dispatch('customSections/getAll', { withCache: true });
       setMenuFromRoute();
-      if (Provider.route().params['id']) {
-        return await Provider.loadItem();
+      const id = Provider.route().params['id']
+      if (id) {
+        mounted.value = true
+        return await Store.Get('patients', id);
       }
       const patient = new Patient();
       await Provider.store.dispatch('patients/create', patient);
@@ -135,7 +139,7 @@ export default defineComponent({
 
     Hooks.onBeforeMount(load, {
       adminHeader: {
-        title: computed(() => (Provider.route().params['id'] ? patient.value?.human?.getFullName() : 'Добавить пациента')),
+        title: computed(() => patient.value?.human?.getFullName()),
         showBackButton: true,
         buttons: [{ text: 'Удалить пациента', type: 'warning-button', action: remove }],
       },
@@ -150,7 +154,7 @@ export default defineComponent({
       patient,
       form,
       // menus,
-      mounted: Provider.mounted,
+      mounted,
       rules,
       customSections,
     };
@@ -181,9 +185,12 @@ export default defineComponent({
   cursor: pointer;
   text-align: center;
 
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 
   background: #f5f5f5;
   margin: -0.5px;
@@ -207,9 +214,12 @@ export default defineComponent({
   text-align: center;
   cursor: pointer;
 
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  /* Safari */
+  -ms-user-select: none;
+  /* IE 10 and IE 11 */
+  user-select: none;
+  /* Standard syntax */
 
   background: $custom-background;
   margin: -0.5px;

@@ -1,10 +1,6 @@
 <template>
   <div class="text-field">
-    <label 
-      v-if="label" 
-      class="text-field__label" 
-      :for="label"
-    >
+    <label v-if="label" class="text-field__label" :for="label">
       {{ label }}
     </label>
     <input 
@@ -14,11 +10,7 @@
       :placeholder="placeholder" 
       :readonly="readonly"
       :disabled="disabled"
-      v-model="model"
-
-      >
-      <!-- @change="changeHandler" 
-      @input="inputHandler" -->
+      v-model="model">
   </div>
 </template>
 
@@ -36,17 +28,18 @@ const props = defineProps({
   readonly: { type: Boolean as PropType<Boolean>, default: false, required: false },
   disabled: { type: Boolean as PropType<Boolean>, default: false, required: false },
 });
-
 </script>
 
 <style lang="scss" scoped>
 @import '@/assets/styles/elements/base-style.scss';
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-input[type="text"] {
+input[type='text'] {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -79,11 +72,13 @@ input[type="text"] {
   background-clip: padding-box;
   border: 1px solid #bdbdbd;
   border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .text-field__input::placeholder {
-  color: #A8ABB2;
+  color: #a8abb2;
   font-family: Comfortaa, Arial, Helvetica, sans-serif;
   font-size: 14px;
 }
@@ -91,17 +86,15 @@ input[type="text"] {
 .text-field__input:focus {
   color: #212529;
   background-color: #fff;
-  border-color: #409EFF;
+  border-color: #409eff;
   outline: 0;
   box-shadow: 0 0 0 0.1rem rgba(64, 158, 255, 0.8);
   box-shadow: rgb(25, 121, 207) 0px 0px 1px 1px;
 }
-
 
 .text-field__input:disabled,
 .text-field__input[readonly] {
   background-color: #f5f5f5;
   opacity: 1;
 }
-
 </style>

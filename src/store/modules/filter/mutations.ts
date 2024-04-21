@@ -27,6 +27,9 @@ const mutations: MutationTree<State> = {
   setStoreModule(state, storeModule: string) {
     state.storeModule = storeModule;
   },
+  setRestore(state) {
+    state.restore = !state.restore;
+  },
   setAction(state, action: string) {
     state.action = action;
   },

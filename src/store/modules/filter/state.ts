@@ -4,6 +4,7 @@ import SortModel from '@/services/classes/SortModel';
 
 export interface State {
   trigger: string;
+  restore: boolean;
   filterQuery: FilterQuery;
   storeModule: string;
   action: string;

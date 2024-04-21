@@ -20,7 +20,7 @@
               v-if="item.link !== '/'"
               :class="{ 'selected-menu-item': item.link === activePath, 'menu-item': item.to !== activePath }"
               :index="item.link"
-              @click="$router.push(item.link)"
+              @click="Router.To(item.link)"
             >
               {{ item.name }}
             </div>
@@ -35,71 +35,51 @@
   <MenuIcon />
 </template>
 
-<script lang="ts">
-import { computed, ComputedRef, defineComponent, onBeforeMount, onBeforeUnmount, Ref, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { useStore } from 'vuex';
-
+<script lang="ts" setup>
 import MenuIcon from '@/assets/svg/Menu.svg';
 import MenusSortsLib from '@/libs/sorts/MenusSortsLib';
-import Auth from '@/services/Auth';
 import FilterQuery from '@/services/classes/filters/FilterQuery';
 import Menu from '@/services/classes/Menu';
-import Button from '@/services/components/Button.vue';
-import Provider from '@/services/Provider/Provider';
-export default defineComponent({
-  name: 'AdminSideMenu',
-  components: {
-    MenuIcon,
-    Button,
-  },
-  props: { isCollapse: { type: Boolean } },
+import Router from '@/services/Router';
+const props = defineProps({ isCollapse: { type: Boolean } });
 
-  setup() {
-    const store = useStore();
-    const isCollapseSideMenu = computed(() => store.getters['admin/isCollapseSideMenu']);
-    const closeDrawer = () => store.commit('admin/closeDrawer');
-    const route = useRoute();
-    const activePath: Ref<string> = ref('');
-    const auth = computed(() => Provider.store.getters['auth/auth']);
-    // const applicationsCounts: Ref<IApplicationsCount[]> = computed(() => store.getters['admin/applicationsCounts']);
-    const mounted = ref(false);
-    const showMenuBar: Ref<boolean> = ref(false);
-    // const userPermissions: ComputedRef<IPathPermission[]> = computed(() => store.getters['auth/userPathPermissions']);
-    const menus: ComputedRef<Menu[]> = computed<Menu[]>(() => store.getters['menus/items' + '']);
-    watch(
-      () => route.path,
-      () => {
-        activePath.value = route.path;
-      }
-    );
+const isCollapseSideMenu = Store.Item('admin', 'isCollapseSideMenu');
+const closeDrawer = () => Store.Commit('admin/closeDrawer');
+const activePath: Ref<string> = ref('');
+const auth = Store.Item('auth', 'auth');
+// const applicationsCounts: Ref<IApplicationsCount[]> = computed(() => store.getters['admin/applicationsCounts']);
+const mounted = ref(false);
+const showMenuBar: Ref<boolean> = ref(false);
+// const userPermissions: ComputedRef<IPathPermission[]> = computed(() => store.getters['auth/userPathPermissions']);
+const menus: ComputedRef<Menu[]> = Store.Items('menus');
 
-    onBeforeMount(async () => {
-      const filterQuery = new FilterQuery();
-      filterQuery.setSortModel(MenusSortsLib.byOrder());
-      await store.dispatch('menus/getAll', { withCache: true, filterQuery });
-      // await store.dispatch('meta/getApplicationsCounts');
-      // store.commit('admin/setApplicationsCounts', applicationsCounts.value);
-      // await store.dispatch('admin/subscribeApplicationsCountsGet');
-      activePath.value = route.path;
-      mounted.value = true;
-    });
+watch(
+  () => Router.Route().path,
+  () => {
+    activePath.value = Router.Route().path;
+  }
+);
 
-    onBeforeUnmount(async () => {
-      // await store.dispatch('admin/unsubscribeApplicationsCountsGet');
-    });
-
-    const openMenuBar = async () => {
-      showMenuBar.value = true;
-    };
-
-    const logout = async () => {
-      auth.value.logout();
-      await Provider.router.push('/login');
-    };
-    return { logout, menus, closeDrawer, isCollapseSideMenu, activePath, mounted, openMenuBar, showMenuBar };
-  },
+onBeforeMount(async () => {
+  const filterQuery = new FilterQuery();
+  filterQuery.setSortModel(MenusSortsLib.byOrder());
+  await Store.GetAll('menus', { withCache: true, filterQuery });
+  activePath.value = Router.Route().path;
+  mounted.value = true;
 });
+
+onBeforeUnmount(async () => {
+  // await store.dispatch('admin/unsubscribeApplicationsCountsGet');
+});
+
+const openMenuBar = async () => {
+  showMenuBar.value = true;
+};
+
+const logout = async () => {
+  // auth.value.logout();
+  await Router.To('/login');
+};
 </script>
 
 <style lang="scss" scoped>
