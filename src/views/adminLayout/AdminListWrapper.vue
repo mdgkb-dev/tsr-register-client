@@ -22,13 +22,13 @@
       <slot name="footer" />
     </div>
     <div v-if="pagination">
-      <Pagination />
+      <PPagination />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Pagination from '@/services/components/Pagination.vue';
+import PPagination from '@/services/components/PPagination.vue';
 
 defineProps({
   showHeader: {
