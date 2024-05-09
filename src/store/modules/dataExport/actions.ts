@@ -14,7 +14,7 @@ const httpClient = new HttpClient('data-export');
 const actions: ActionTree<RootState, RootState> = {
   export: async (_, opts: { exportOptions: ExportOptions; ftsp: FTSP }): Promise<void> => {
     const ftsp = new FTSP(opts.ftsp);
-    ftsp.p.offset = 1;
+    ftsp.p.offset = 0;
     ftsp.p.limit = 999999999;
     await httpClient.post<unknown, unknown>({
       isBlob: true,
