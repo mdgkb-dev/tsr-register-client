@@ -1,7 +1,12 @@
+//---------------------------------------------------------------BASE------------------------------------------------------------------
+@import '@/services/assets/style/buttons/base-button-colors.scss'; //base buttons skin colors (базовые цвета скинов кнопок)
+//-------------------------------------------------------------------------------------------------------------------------------------
+
 // FOR ANKETS
 
 $base-background: #ffffff;  //$background-color: whitesmoke;
 $custom-background: #DFF2F8;
+$transition: 0s;
 
 $menu-background: $base-background;
 
@@ -60,6 +65,17 @@ $input-readonly-background: #f5f5f5;
 //PInput
 $p-input-margin: 0;
 $p-input-padding: 0 20px;
+
+//PButton
+$p-button-width: 100%;
+$p-button-min-width: 150px;
+$p-button-max-width: 100%;
+$p-button-height: 40px;
+$p-button-margin: auto;
+$p-button-padding: 0 10px;
+$p-button-border-radius: 5px;
+$p-button-border: 1px solid #DCDFE6;
+$p-button-transition: $transition;
 
 
 

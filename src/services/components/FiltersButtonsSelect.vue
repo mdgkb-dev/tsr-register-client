@@ -9,9 +9,11 @@
 
     <GridContainer max-width="100%" grid-gap="7px" grid-template-columns="repeat(auto-fit, minmax(100%, 1fr))"
       margin="0px">
-      <Button v-for="(model, index) in models" :key="index" button-class="filter-button" :text="model.label"
+      <PButton v-for="(model, index) in models" skin="filter" :key="index" :text="model.label"
+        :type="model.valueEq(filterModel) ? 'primary' : 'neutral'"  @click="selectFilter(model.valueEq(filterModel) ? undefined : model)" />
+      <!-- <Button v-for="(model, index) in models" :key="index" button-class="filter-button" :text="model.label"
         :is-toggle="model.valueEq(filterModel)" :toggle-mode="true" :inverse="inverse" background-hover="DFF2F8"
-        height="auto" @click="selectFilter(model.valueEq(filterModel) ? undefined : model)" />
+        height="auto" @click="selectFilter(model.valueEq(filterModel) ? undefined : model)" /> -->
     </GridContainer>
   </InfoItem>
 </template>
@@ -19,6 +21,7 @@
 <script lang="ts" setup>
 import FilterModel from '@/services/classes/filters/FilterModel';
 import Button from '@/services/components/Button.vue';
+import PButton from '@/services/components/PButton.vue';
 import GridContainer from '@/services/components/GridContainer.vue';
 import InfoItem from '@/services/components/InfoItem.vue';
 import StringItem from '@/services/components/StringItem.vue';
