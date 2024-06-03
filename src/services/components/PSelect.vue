@@ -1,23 +1,33 @@
-<template>    
-  <div class="text-field" :style="{margin: margin, padding: padding}" >
+<template>
+  <div class="text-field" :style="{ margin: margin, padding: padding }">
     <label v-if="label" class="text-field__label" :for="label">
-        {{ label }}
-      </label>
+      {{ label }}
+    </label>
     <div class="field">
-      <div class="left-field"><slot name="left" /></div>
-      <select class="text-field__input" >
-        <option value disabled selected>{{ placeholder }}</option>
-        <slot />
-      </select>
-      <div class="right-field"><slot name="right" /></div>
+      <div class="left-field">
+        <slot name="left" />
+      </div>
+      <div class="sl">
+        <div class="clear" v-if="clearable" @click="clear" ><IconClose margin="0"/></div> 
+        <div v-if="ph" class="ph">{{ placeholder }}</div>
+        <select class="text-field__input" v-model="model" @change="select">
+          <slot />
+        </select>
+      </div>
+      <div class="right-field">
+        <slot name="right" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import IconClose from '@/components/Icons/IconClose.vue';
+
 
 const model = defineModel();
-
+const ph: Ref<boolean> = ref(true);
+const emits = defineEmits(['change', 'clear']);
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
@@ -29,8 +39,18 @@ const props = defineProps({
   disabled: { type: Boolean as PropType<Boolean>, default: false, required: false },
   margin: { type: String as PropType<string>, required: false, default: '' },
   padding: { type: String as PropType<string>, required: false, default: '' },
+  clearable: { type: Boolean as PropType<boolean>, required: false, default: false },
 });
 
+const select = (v: unknown) => {
+  ph.value = false;
+  emits('change', v)
+}
+const clear = () => {
+  emits('change')
+  emits('clear')
+  ph.value = true
+}
 </script>
 
 <style lang="scss" scoped>
@@ -47,15 +67,20 @@ option {
 }
 
 .field {
-  position: relative;
   display: flex;
   justify-content: left;
   align-items: center;
   background: $input-background;
-  border-radius: $border-radius;
+  border-radius: $p-input-border-radius;
+  border: $p-input-border;
   padding: $p-input-padding;
   margin: $p-input-margin;
   overflow: hidden;
+}
+
+.sl {
+  width: 100%;
+  position: relative;
 }
 
 .right-field {
@@ -99,12 +124,21 @@ option {
   margin: $input-margin;
   padding: $input-padding;
   padding: 0;
+  cursor:pointer;
 }
 
-.text-field__input::placeholder {
+.ph {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5px;
+  z-index: 0;
   font-family: $input-font;
   font-size: $input-font-size;
   color: $input-font-color;
+  white-space: nowrap;
+  pointer-events: none;
+  cursor: pointer;
 }
 
 .text-field__input:focus {
@@ -112,29 +146,28 @@ option {
   outline: 0;
 }
 
-// .text-field__input:disabled,
-// .text-field__input[readonly] {
-//   background-color: $input-readonly-background;
-//   opacity: 1;
-// }
+.text-field__input::-ms-expand {
+  display: none;
+}
 
+.text-field__input:hover {
 
-.text-field__input::-ms-expand { display: none; } 
- .text-field__input:hover { 
-  
-  border-color: #888; } 
- .text-field__input:focus { 
-    // border-color: #aaa; 
-    // box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
-    // box-shadow: 0 0 0 3px -moz-mac-focusring; 
-    // color: #222;
-    // outline: none; 
-} 
- .text-field__input option { 
-  
-  font-weight:normal; } 
-//  *[dir="rtl"] .text-field__input, :root:lang(ar) .text-field__input, :root:lang(iw) .text-field__input { 
-//     background-position: left .7em top 50%, 0 0; 
-//     padding: .6em .8em .5em 1.4em; 
-// }
+  border-color: #888;
+}
+
+.text-field__input option {
+  font-weight: normal;
+}
+
+.clear {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: - 6px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: $input-background;
+}
 </style>
