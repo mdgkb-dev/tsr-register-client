@@ -1,26 +1,62 @@
 <template>
-  <el-form v-if="mounted">
+  <el-form v-if="mounted" :model="patient">
     <div v-if="showSnilsForm">
       <div v-for="value in patient.human.getOrCreateDocument(snils).documentFieldValues" :key="value.id" class="margin-field">
-        <InfoItem title="снилс" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
+        <InfoItem
+          title="снилс"
+          icon="edit-title"
+          :with-open-window="false"
+          :with-hover="false"
+          border-color="#ffffff"
+          base-box-margin="0 0 15px 0"
+          padding="0"
+          width="100%"
+        >
           <el-input v-model="value.valueString" v-maska="{ mask: '###-###-### ##', eager: true }" />
         </InfoItem>
       </div>
       <Button button-class="save-button" text="Проверить наличие СНИЛС в системе" @click="toNameStep" />
     </div>
     <div v-else>
-      <InfoItem title="фамилия" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
-        <el-form-item style="width: 100%" prop="surname" :rules="patient.human.getValidationRules().surname">
+      <InfoItem
+        title="фамилия"
+        icon="edit-title"
+        :with-open-window="false"
+        :with-hover="false"
+        border-color="#ffffff"
+        base-box-margin="0 0 15px 0"
+        padding="0"
+        width="100%"
+      >
+        <el-form-item style="width: 100%" prop="surname">
           <el-input v-model="patient.human.surname" />
         </el-form-item>
       </InfoItem>
-      <InfoItem title="имя" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
-        <el-form-item style="width: 100%" prop="name" :rules="patient.human.getValidationRules().name">
+      <InfoItem
+        title="имя"
+        icon="edit-title"
+        :with-open-window="false"
+        :with-hover="false"
+        border-color="#ffffff"
+        base-box-margin="0 0 15px 0"
+        padding="0"
+        width="100%"
+      >
+        <el-form-item style="width: 100%" prop="name">
           <el-input v-model="patient.human.name" />
         </el-form-item>
       </InfoItem>
-      <InfoItem title="отчество" icon="edit-title" :with-open-window="false" :with-hover="false" border-color="#ffffff" base-box-margin="0 0 15px 0" padding="0" width="100%">
-        <el-form-item style="width: 100%" prop="patronymic" :rules="patient.human.getValidationRules().patronymic">
+      <InfoItem
+        title="отчество"
+        icon="edit-title"
+        :with-open-window="false"
+        :with-hover="false"
+        border-color="#ffffff"
+        base-box-margin="0 0 15px 0"
+        padding="0"
+        width="100%"
+      >
+        <el-form-item style="width: 100%" prop="patronymic">
           <el-input v-model="patient.human.patronymic" />
           <!-- <el-input :model-value="human.patronymic" @input="(e) => human.setPatronymic(e)" @click.stop="() => undefined" /> -->
         </el-form-item>
